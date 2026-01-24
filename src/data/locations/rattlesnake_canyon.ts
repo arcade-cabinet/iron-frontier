@@ -9,7 +9,7 @@ import { Location, validateLocation } from '../schemas/spatial';
 export const RattlesnakeCanyon: Location = validateLocation({
   id: 'rattlesnake_canyon',
   name: 'Rattlesnake Canyon',
-  type: 'hideout',
+  type: 'camp',
   size: 'medium',
   description: 'A notorious outlaw hideout deep in the badlands',
 

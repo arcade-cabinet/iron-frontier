@@ -78,20 +78,33 @@ describe('Interaction Flows', () => {
       const { user } = customRender(<InventoryPanel />, {
         initialState: {
           activePanel: 'inventory',
-          playerStats: { health: 50, maxHealth: 100 },
+          playerStats: { health: 50, maxHealth: 100, stamina: 100, maxStamina: 100 },
           inventory: [
-            { id: 'i1', itemId: 'medicinal_tonic', name: 'Medicinal Tonic', rarity: 'uncommon', quantity: 2, usable: true },
+            {
+              id: 'i1',
+              itemId: 'bandages', // Real item from library
+              name: 'Bandages',
+              rarity: 'common',
+              quantity: 2,
+              usable: true,
+              type: 'consumable',
+              condition: 100,
+              weight: 0.1,
+              droppable: true,
+            },
           ],
         } as any,
       });
 
+      // Select item first (new UI requires selecting)
+      await user.click(screen.getByText('Bandages'));
       // Use item
       await user.click(screen.getByRole('button', { name: 'Use' }));
 
-      // Check state updated
+      // Check state updated (bandages heal 15 HP)
       const state = getStoreState();
-      expect(state.playerStats.health).toBe(75); // Tonic heals 25 in my store implementation now
-      expect(state.inventory[0].quantity).toBe(1); // One less tonic
+      expect(state.playerStats.health).toBe(65);
+      expect(state.inventory[0].quantity).toBe(1); // One less bandage
     });
 
     it('should drop item and remove from inventory', async () => {
@@ -99,11 +112,25 @@ describe('Interaction Flows', () => {
         initialState: {
           activePanel: 'inventory',
           inventory: [
-            { id: 'i1', itemId: 'junk', name: 'Junk', rarity: 'common', quantity: 1 },
+            {
+              id: 'i1',
+              itemId: 'empty_bottle',
+              name: 'Empty Bottle',
+              rarity: 'common',
+              quantity: 1,
+              usable: false,
+              type: 'junk',
+              condition: 100,
+              weight: 0.2,
+              droppable: true,
+            },
           ],
         } as any,
       });
 
+      // Select item first (new UI requires selecting)
+      await user.click(screen.getByText('Empty Bottle'));
+      // Drop item
       await user.click(screen.getByRole('button', { name: 'Drop' }));
 
       expect(getStoreState().inventory).toHaveLength(0);

@@ -379,32 +379,24 @@ export interface WorldItem {
 // QUESTS
 // ============================================================================
 
-export type QuestStatus = 'available' | 'active' | 'completed' | 'failed';
+// Re-export quest types from the data schema for backwards compatibility
+// The authoritative quest schema is in /src/data/schemas/quest.ts
+export type {
+  Quest,
+  QuestStage,
+  Objective as QuestObjective,
+  QuestStatus,
+  QuestType,
+  ActiveQuest,
+} from '../data/schemas/quest';
 
-export interface QuestObjective {
-  id: string;
-  description: string;
-  type: 'collect' | 'talk' | 'go_to' | 'kill' | 'deliver';
-  targetId?: string;
-  targetPosition?: WorldPosition;
-  required: number;
-  current: number;
-  completed: boolean;
-}
-
-export interface Quest {
-  id: string;
-  title: string;
-  description: string;
-  giverNpcId: string;
-  status: QuestStatus;
-  objectives: QuestObjective[];
-  rewards: {
-    xp: number;
-    gold: number;
-    items?: string[];
-  };
-}
+export {
+  isStageComplete,
+  isCurrentStageComplete,
+  isQuestComplete,
+  getCurrentStage,
+  createActiveQuest,
+} from '../data/schemas/quest';
 
 // ============================================================================
 // CAMERA

@@ -6,9 +6,7 @@ import {
   CharacterAppearance,
   ChunkData,
   DEFAULT_CAMERA_STATE,
-  ItemRarity,
   NPC,
-  Quest,
   Structure,
   TimeState,
   WeatherState,
@@ -17,19 +15,49 @@ import {
 } from '../../engine/types';
 import { dbManager } from './DatabaseManager';
 import { saveGameBinary as persistBinary } from './saveManager';
+import { loadWorld, getWorldById, type LoadedWorld } from '../../data/worlds/index';
+import {
+  type DialogueNode,
+  type DialogueChoice,
+  type DialogueCondition,
+  type DialogueEffect,
+  getDialogueEntryNode,
+  getAvailableChoices,
+} from '../../data/schemas/npc';
+import {
+  getNPCById,
+  getDialogueTreeById,
+  getPrimaryDialogueTree,
+  type NPCDefinition,
+} from '../../data/npcs/index';
+import { getItem, STARTER_INVENTORY, type BaseItem } from '../../data/items/index';
+import type { ItemRarity } from '../../data/schemas/item';
+import {
+  type Quest,
+  type ActiveQuest,
+  createActiveQuest,
+  isCurrentStageComplete,
+  isQuestComplete,
+  getCurrentStage,
+} from '../../data/schemas/quest';
+import { getQuestById, QUESTS_BY_ID } from '../../data/quests/index';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export interface InventoryItem {
-  id: string;
-  itemId: string;
+  id: string;           // Unique instance ID
+  itemId: string;       // Reference to item definition
   name: string;
   rarity: ItemRarity;
   quantity: number;
   description?: string;
   usable?: boolean;
+  condition: number;    // 0-100, for weapons/armor durability
+  weight: number;       // Weight per unit
+  type: string;         // Item type from schema
+  droppable: boolean;   // Can be dropped
 }
 
 export interface PlayerStats {
@@ -40,7 +68,8 @@ export interface PlayerStats {
   xp: number;
   xpToNext: number;
   level: number;
-  gold: number;
+  gold: number;          // Dollars
+  ivrcScript: number;    // Company scrip
   reputation: number;
 }
 
@@ -51,11 +80,49 @@ export interface Notification {
   timestamp: number;
 }
 
-export interface DialogueState {
+/** Legacy dialogue state - kept for simple dialogues */
+export interface LegacyDialogueState {
   npcId: string;
   npcName: string;
   text: string;
   choices?: { text: string; action: string }[];
+}
+
+/** Enhanced dialogue state for branching conversations */
+export interface DialogueState {
+  // NPC info
+  npcId: string;
+  npcName: string;
+  npcTitle?: string;
+  npcPortraitId?: string;
+  npcExpression?: string;
+
+  // Current dialogue
+  treeId: string;
+  currentNodeId: string;
+  text: string;
+  speaker?: string;  // For multi-speaker scenes
+
+  // Available choices (filtered by conditions)
+  choices: {
+    text: string;
+    nextNodeId: string | null;
+    effects: DialogueEffect[];
+    tags: string[];
+    hint?: string;
+  }[];
+
+  // Auto-advance (for monologues)
+  autoAdvanceNodeId: string | null;
+
+  // History for back navigation
+  history: string[];
+
+  // Conversation flags (temporary, reset on conversation end)
+  conversationFlags: Record<string, boolean>;
+
+  // When dialogue started
+  startedAt: number;
 }
 
 export type GamePhase = 'title' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'inventory';
@@ -87,6 +154,12 @@ export interface GameState {
   weather: WeatherState;
   loadedChunks: Record<string, ChunkData>;
 
+  // Travel System
+  currentWorldId: string | null;
+  currentLocationId: string | null;
+  discoveredLocationIds: string[];
+  loadedWorld: LoadedWorld | null;
+
   // Player
   playerId: string;
   playerName: string;
@@ -97,9 +170,10 @@ export interface GameState {
   inventory: InventoryItem[];
   maxInventorySlots: number;
 
-  // Quests
-  activeQuests: Quest[];
-  completedQuestIds: string[];
+  // Quests (new stage-based system)
+  activeQuests: ActiveQuest[];
+  completedQuests: Quest[];  // Full quest data for completed quests
+  completedQuestIds: string[];  // Kept for backwards compatibility
 
   // NPCs
   npcs: Record<string, NPC>;
@@ -146,20 +220,39 @@ export interface GameState {
 
   // Inventory
   addItem: (item: InventoryItem) => void;
+  addItemById: (itemId: string, quantity?: number) => void;
   removeItem: (itemId: string, quantity?: number) => void;
   useItem: (id: string) => void;
   dropItem: (id: string) => void;
+  getItemCount: (itemId: string) => number;
+  getTotalWeight: () => number;
+  maxCarryWeight: number;
 
-  // Quests
-  acceptQuest: (quest: Quest) => void;
-  updateQuestProgress: (questId: string, objectiveId: string, progress: number) => void;
+  // Quests (enhanced stage-based system)
+  startQuest: (questId: string) => void;
+  updateObjective: (questId: string, objectiveId: string, progress: number) => void;
+  advanceQuestStage: (questId: string) => void;
   completeQuest: (questId: string) => void;
   failQuest: (questId: string) => void;
+  abandonQuest: (questId: string) => void;
+  getActiveQuest: (questId: string) => ActiveQuest | undefined;
+  getQuestDefinition: (questId: string) => Quest | undefined;
 
   // NPCs
   updateNPC: (npcId: string, updates: Partial<NPC>) => void;
   talkToNPC: (npcId: string) => void;
   markNPCTalked: (npcId: string) => void;
+
+  // Dialogue System (Enhanced)
+  startDialogue: (npcId: string, treeId?: string) => void;
+  selectChoice: (choiceIndex: number) => void;
+  advanceDialogue: () => void;
+  endDialogue: () => void;
+  setDialogueFlag: (flag: string, value: boolean) => void;
+  checkDialogueCondition: (condition: DialogueCondition) => boolean;
+  applyDialogueEffect: (effect: DialogueEffect) => void;
+  getActiveNPC: () => NPCDefinition | undefined;
+  dialogueHistory: string[];
 
   // World
   collectWorldItem: (itemId: string) => void;
@@ -179,6 +272,12 @@ export interface GameState {
   // Save
   saveGame: () => void;
   saveGameBinary: (saveId: string) => Promise<void>;
+
+  // Travel System
+  initWorld: (worldId: string) => void;
+  travelTo: (locationId: string) => void;
+  discoverLocation: (locationId: string) => void;
+  getConnectedLocations: () => string[];
 }
 
 // ============================================================================
@@ -194,8 +293,42 @@ const DEFAULT_PLAYER_STATS: PlayerStats = {
   xpToNext: 100,
   level: 1,
   gold: 50,
+  ivrcScript: 0,
   reputation: 0,
 };
+
+/**
+ * Create an inventory item from an item definition
+ */
+function createInventoryItem(itemDef: BaseItem, quantity: number = 1): InventoryItem {
+  return {
+    id: `inv_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    itemId: itemDef.id,
+    name: itemDef.name,
+    rarity: itemDef.rarity,
+    quantity,
+    description: itemDef.description,
+    usable: itemDef.usable,
+    condition: 100,
+    weight: itemDef.weight,
+    type: itemDef.type,
+    droppable: itemDef.droppable,
+  };
+}
+
+/**
+ * Create starter inventory from item library
+ */
+function createStarterInventory(): InventoryItem[] {
+  const items: InventoryItem[] = [];
+  for (const starter of STARTER_INVENTORY) {
+    const itemDef = getItem(starter.itemId);
+    if (itemDef) {
+      items.push(createInventoryItem(itemDef, starter.quantity));
+    }
+  }
+  return items;
+}
 
 const DEFAULT_SETTINGS: GameSettings = {
   musicVolume: 0.7,
@@ -235,6 +368,12 @@ export const useGameStore = create<GameState>()(
       time: { ...DEFAULT_TIME },
       weather: { ...DEFAULT_WEATHER },
       loadedChunks: {},
+
+      // Travel System State
+      currentWorldId: null,
+      currentLocationId: null,
+      discoveredLocationIds: [],
+      loadedWorld: null,
       playerId: '',
       playerName: 'Stranger',
       playerAppearance: null,
@@ -243,7 +382,9 @@ export const useGameStore = create<GameState>()(
       playerStats: { ...DEFAULT_PLAYER_STATS },
       inventory: [],
       maxInventorySlots: 20,
+      maxCarryWeight: 50, // 50 lbs default carry capacity
       activeQuests: [],
+      completedQuests: [],
       completedQuestIds: [],
       npcs: {},
       talkedNPCIds: [],
@@ -253,6 +394,7 @@ export const useGameStore = create<GameState>()(
       camera: { ...DEFAULT_CAMERA_STATE },
       activePanel: null,
       dialogueState: null,
+      dialogueHistory: [],
       notifications: [],
       settings: { ...DEFAULT_SETTINGS },
       saveVersion: 2,
@@ -262,6 +404,7 @@ export const useGameStore = create<GameState>()(
       // Actions
       initGame: (playerName, seed) => {
         const worldSeed = seed ?? Math.floor(Math.random() * 1000000);
+        const starterItems = createStarterInventory();
         set({
           phase: 'playing',
           initialized: true,
@@ -270,8 +413,9 @@ export const useGameStore = create<GameState>()(
           playerId: `player_${Date.now()}`,
           playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
           playerStats: { ...DEFAULT_PLAYER_STATS },
-          inventory: [],
+          inventory: starterItems,
           activeQuests: [],
+          completedQuests: [],
           completedQuestIds: [],
           collectedItemIds: [],
           talkedNPCIds: [],
@@ -298,6 +442,7 @@ export const useGameStore = create<GameState>()(
         playerStats: { ...DEFAULT_PLAYER_STATS },
         inventory: [],
         activeQuests: [],
+        completedQuests: [],
         completedQuestIds: [],
         collectedItemIds: [],
         talkedNPCIds: [],
@@ -305,6 +450,11 @@ export const useGameStore = create<GameState>()(
         activePanel: null,
         dialogueState: null,
         playTime: 0,
+        // Travel System reset
+        currentWorldId: null,
+        currentLocationId: null,
+        discoveredLocationIds: [],
+        loadedWorld: null,
       }),
 
       setPlayerPosition: (pos) => {
@@ -362,18 +512,38 @@ export const useGameStore = create<GameState>()(
           addNotification('warning', 'Inventory full!');
           return;
         }
-        const existing = inventory.find((i) => i.itemId === item.itemId);
-        if (existing) {
-          set({
-            inventory: inventory.map((i) =>
-              i.itemId === item.itemId ? { ...i, quantity: i.quantity + item.quantity } : i
-            ),
-          });
-        } else {
-          set({ inventory: [...inventory, item] });
+        // Check if item can stack
+        const itemDef = getItem(item.itemId);
+        const canStack = itemDef?.stackable ?? true;
+
+        if (canStack) {
+          const existing = inventory.find((i) => i.itemId === item.itemId);
+          if (existing) {
+            const maxStack = itemDef?.maxStack ?? 99;
+            const newQuantity = Math.min(existing.quantity + item.quantity, maxStack);
+            set({
+              inventory: inventory.map((i) =>
+                i.itemId === item.itemId ? { ...i, quantity: newQuantity } : i
+              ),
+            });
+            dbManager.saveInventory(get().inventory);
+            addNotification('item', `Found: ${item.name} x${item.quantity}`);
+            return;
+          }
         }
+        set({ inventory: [...inventory, item] });
         dbManager.saveInventory(get().inventory);
         addNotification('item', `Found: ${item.name}`);
+      },
+
+      addItemById: (itemId, quantity = 1) => {
+        const itemDef = getItem(itemId);
+        if (!itemDef) {
+          console.warn(`[GameStore] Unknown item: ${itemId}`);
+          return;
+        }
+        const newItem = createInventoryItem(itemDef, quantity);
+        get().addItem(newItem);
       },
 
       removeItem: (itemId, quantity = 1) => {
@@ -393,64 +563,278 @@ export const useGameStore = create<GameState>()(
       },
 
       useItem: (id) => {
-        const { inventory, heal, addNotification } = get();
-        const item = inventory.find((i) => i.id === id);
-        if (!item || !item.usable) return;
-        if (item.name.toLowerCase().includes('tonic')) heal(25);
-        if (item.quantity > 1) {
+        const { inventory, heal, addNotification, updatePlayerStats, playerStats } = get();
+        const invItem = inventory.find((i) => i.id === id);
+        if (!invItem || !invItem.usable) return;
+
+        // Get the item definition for effects
+        const itemDef = getItem(invItem.itemId);
+        if (itemDef?.consumableStats) {
+          const stats = itemDef.consumableStats;
+          // Apply healing
+          if (stats.healAmount > 0) {
+            heal(stats.healAmount);
+          }
+          // Apply stamina
+          if (stats.staminaAmount > 0) {
+            updatePlayerStats({
+              stamina: Math.min(playerStats.maxStamina, playerStats.stamina + stats.staminaAmount)
+            });
+          }
+        } else if (itemDef?.effects) {
+          // Fallback to basic effects
+          for (const effect of itemDef.effects) {
+            if (effect.type === 'heal' && effect.value) {
+              heal(effect.value);
+            }
+            if (effect.type === 'stamina' && effect.value) {
+              updatePlayerStats({
+                stamina: Math.min(playerStats.maxStamina, playerStats.stamina + effect.value)
+              });
+            }
+          }
+        }
+
+        // Consume the item
+        if (invItem.quantity > 1) {
           set({ inventory: inventory.map(i => i.id === id ? { ...i, quantity: i.quantity - 1 } : i) });
         } else {
           set({ inventory: inventory.filter(i => i.id !== id) });
         }
-        addNotification('info', `Used ${item.name}`);
+        dbManager.saveInventory(get().inventory);
+        addNotification('info', `Used ${invItem.name}`);
       },
 
       dropItem: (id) => {
         const { inventory, addNotification } = get();
         const item = inventory.find((i) => i.id === id);
         if (!item) return;
+        if (!item.droppable) {
+          addNotification('warning', `Cannot drop ${item.name}`);
+          return;
+        }
         set({ inventory: inventory.filter(i => i.id !== id) });
         dbManager.saveInventory(get().inventory);
         addNotification('info', `Dropped ${item.name}`);
       },
 
-      acceptQuest: (quest) => {
-        set((state) => ({ activeQuests: [...state.activeQuests, { ...quest, status: 'active' }] }));
-        get().addNotification('quest', `Quest accepted: ${quest.title}`);
+      getItemCount: (itemId) => {
+        const { inventory } = get();
+        const item = inventory.find((i) => i.itemId === itemId);
+        return item?.quantity ?? 0;
       },
 
-      updateQuestProgress: (questId, objectiveId, progress) => {
+      getTotalWeight: () => {
+        const { inventory } = get();
+        return inventory.reduce((total, item) => total + (item.weight * item.quantity), 0);
+      },
+
+      // ========== QUEST SYSTEM (Enhanced Stage-Based) ==========
+
+      startQuest: (questId: string) => {
+        const { activeQuests, completedQuestIds, addNotification } = get();
+
+        // Check if already active or completed
+        if (activeQuests.some(q => q.questId === questId)) {
+          addNotification('warning', 'Quest already active');
+          return;
+        }
+        if (completedQuestIds.includes(questId)) {
+          const quest = getQuestById(questId);
+          if (!quest?.repeatable) {
+            addNotification('warning', 'Quest already completed');
+            return;
+          }
+        }
+
+        // Get quest definition
+        const quest = getQuestById(questId);
+        if (!quest) {
+          console.error(`[GameStore] Quest not found: ${questId}`);
+          addNotification('warning', 'Quest not found');
+          return;
+        }
+
+        // Create active quest instance
+        const activeQuest = createActiveQuest(questId);
+
+        // Set time limit if applicable
+        if (quest.timeLimitHours) {
+          activeQuest.timeRemainingHours = quest.timeLimitHours;
+        }
+
         set((state) => ({
-          activeQuests: state.activeQuests.map((q) =>
-            q.id === questId
+          activeQuests: [...state.activeQuests, activeQuest],
+        }));
+
+        // Show stage start text if available
+        const firstStage = quest.stages[0];
+        if (firstStage?.onStartText) {
+          addNotification('quest', firstStage.onStartText);
+        } else {
+          addNotification('quest', `Quest accepted: ${quest.title}`);
+        }
+
+        console.log(`[GameStore] Started quest: ${quest.title}`);
+      },
+
+      updateObjective: (questId: string, objectiveId: string, progress: number) => {
+        const { activeQuests, addNotification } = get();
+        const activeQuest = activeQuests.find(q => q.questId === questId);
+        if (!activeQuest) return;
+
+        const quest = getQuestById(questId);
+        if (!quest) return;
+
+        const currentStage = quest.stages[activeQuest.currentStageIndex];
+        if (!currentStage) return;
+
+        const objective = currentStage.objectives.find(o => o.id === objectiveId);
+        if (!objective) return;
+
+        // Update progress
+        const newProgress = Math.min(progress, objective.count);
+        const wasComplete = (activeQuest.objectiveProgress[objectiveId] ?? 0) >= objective.count;
+        const isNowComplete = newProgress >= objective.count;
+
+        set((state) => ({
+          activeQuests: state.activeQuests.map(q =>
+            q.questId === questId
               ? {
                 ...q,
-                objectives: q.objectives.map((o) =>
-                  o.id === objectiveId ? { ...o, current: progress, completed: progress >= o.required } : o
-                ),
+                objectiveProgress: {
+                  ...q.objectiveProgress,
+                  [objectiveId]: newProgress,
+                },
               }
               : q
           ),
         }));
+
+        // Notify if objective just completed
+        if (!wasComplete && isNowComplete) {
+          addNotification('quest', `Objective complete: ${objective.description}`);
+        }
+
+        // Check if stage is now complete
+        const updatedActiveQuest = get().activeQuests.find(q => q.questId === questId);
+        if (updatedActiveQuest && isCurrentStageComplete(quest, updatedActiveQuest)) {
+          addNotification('info', 'Stage objectives complete!');
+        }
       },
 
-      completeQuest: (questId) => {
-        const quest = get().activeQuests.find((q) => q.id === questId);
+      advanceQuestStage: (questId: string) => {
+        const { activeQuests, addNotification, gainXP, addGold } = get();
+        const activeQuest = activeQuests.find(q => q.questId === questId);
+        if (!activeQuest) return;
+
+        const quest = getQuestById(questId);
         if (!quest) return;
+
+        const currentStage = quest.stages[activeQuest.currentStageIndex];
+        if (!currentStage) return;
+
+        // Verify current stage is complete
+        if (!isCurrentStageComplete(quest, activeQuest)) {
+          addNotification('warning', 'Stage objectives not complete');
+          return;
+        }
+
+        // Grant stage rewards
+        const rewards = currentStage.stageRewards;
+        if (rewards.xp > 0) gainXP(rewards.xp);
+        if (rewards.gold > 0) addGold(rewards.gold);
+
+        // Show completion text
+        if (currentStage.onCompleteText) {
+          addNotification('quest', currentStage.onCompleteText);
+        }
+
+        // Check if this was the last stage
+        const isLastStage = activeQuest.currentStageIndex === quest.stages.length - 1;
+
+        if (isLastStage) {
+          get().completeQuest(questId);
+        } else {
+          // Advance to next stage
+          const nextStageIndex = activeQuest.currentStageIndex + 1;
+          const nextStage = quest.stages[nextStageIndex];
+
+          set((state) => ({
+            activeQuests: state.activeQuests.map(q =>
+              q.questId === questId
+                ? {
+                  ...q,
+                  currentStageIndex: nextStageIndex,
+                  objectiveProgress: {},
+                }
+                : q
+            ),
+          }));
+
+          if (nextStage?.onStartText) {
+            addNotification('quest', nextStage.onStartText);
+          } else {
+            addNotification('quest', `New stage: ${nextStage.title}`);
+          }
+
+          console.log(`[GameStore] Advanced to stage: ${nextStage.title}`);
+        }
+      },
+
+      completeQuest: (questId: string) => {
+        const { activeQuests, addNotification, gainXP, addGold } = get();
+        const activeQuest = activeQuests.find(q => q.questId === questId);
+        if (!activeQuest) return;
+
+        const quest = getQuestById(questId);
+        if (!quest) return;
+
+        // Grant final rewards
+        const rewards = quest.rewards;
+        if (rewards.xp > 0) gainXP(rewards.xp);
+        if (rewards.gold > 0) addGold(rewards.gold);
+
         set((state) => ({
-          activeQuests: state.activeQuests.filter((q) => q.id !== questId),
+          activeQuests: state.activeQuests.filter(q => q.questId !== questId),
+          completedQuests: [...state.completedQuests, quest],
           completedQuestIds: [...state.completedQuestIds, questId],
         }));
-        get().gainXP(quest.rewards.xp);
-        get().addGold(quest.rewards.gold);
-        get().addNotification('quest', `Quest completed: ${quest.title}`);
+
+        addNotification('quest', `Quest completed: ${quest.title}`);
+        console.log(`[GameStore] Completed quest: ${quest.title}`);
       },
 
-      failQuest: (questId) => {
+      failQuest: (questId: string) => {
+        const { addNotification } = get();
+        const quest = getQuestById(questId);
+
         set((state) => ({
-          activeQuests: state.activeQuests.map((q) => q.id === questId ? { ...q, status: 'failed' } : q),
+          activeQuests: state.activeQuests.map(q =>
+            q.questId === questId ? { ...q, status: 'failed' as const } : q
+          ),
         }));
-        get().addNotification('warning', 'Quest failed');
+
+        addNotification('warning', `Quest failed: ${quest?.title ?? questId}`);
+      },
+
+      abandonQuest: (questId: string) => {
+        const { addNotification } = get();
+        const quest = getQuestById(questId);
+
+        set((state) => ({
+          activeQuests: state.activeQuests.filter(q => q.questId !== questId),
+        }));
+
+        addNotification('info', `Quest abandoned: ${quest?.title ?? questId}`);
+      },
+
+      getActiveQuest: (questId: string) => {
+        return get().activeQuests.find(q => q.questId === questId);
+      },
+
+      getQuestDefinition: (questId: string) => {
+        return getQuestById(questId);
       },
 
       updateNPC: (npcId, updates) => {
@@ -458,18 +842,8 @@ export const useGameStore = create<GameState>()(
       },
 
       talkToNPC: (npcId) => {
-        const npc = get().npcs[npcId];
-        if (!npc) return;
-        set({
-          phase: 'dialogue',
-          dialogueState: {
-            npcId,
-            npcName: npc.name,
-            text: `Howdy, stranger. Name's ${npc.name}.`,
-            choices: npc.questGiver ? [{ text: 'Work?', action: 'quest' }, { text: 'Bye', action: 'close' }] : [{ text: 'Bye', action: 'close' }],
-          },
-        });
-        get().gainXP(5);
+        // Use the enhanced dialogue system
+        get().startDialogue(npcId);
       },
 
       markNPCTalked: (npcId) => {
@@ -477,18 +851,367 @@ export const useGameStore = create<GameState>()(
         if (!talkedNPCIds.includes(npcId)) set({ talkedNPCIds: [...talkedNPCIds, npcId] });
       },
 
+      // ========== ENHANCED DIALOGUE SYSTEM ==========
+
+      startDialogue: (npcId: string, treeId?: string) => {
+        const npcDef = getNPCById(npcId);
+        if (!npcDef) {
+          console.warn(`[Dialogue] NPC not found in library: ${npcId}`);
+          // Fall back to basic dialogue with engine NPC
+          const engineNpc = get().npcs[npcId];
+          if (engineNpc) {
+            set({
+              phase: 'dialogue',
+              dialogueState: {
+                npcId,
+                npcName: engineNpc.name,
+                text: `Howdy, stranger. Name's ${engineNpc.name}.`,
+                treeId: 'fallback',
+                currentNodeId: 'fallback',
+                choices: [{ text: 'Goodbye.', nextNodeId: null, effects: [], tags: [] }],
+                autoAdvanceNodeId: null,
+                history: [],
+                conversationFlags: {},
+                startedAt: Date.now(),
+              },
+            });
+          }
+          return;
+        }
+
+        // Get the dialogue tree
+        const dialogueTreeId = treeId || npcDef.primaryDialogueId;
+        if (!dialogueTreeId) {
+          console.warn(`[Dialogue] No dialogue tree for NPC: ${npcId}`);
+          return;
+        }
+
+        const tree = getDialogueTreeById(dialogueTreeId);
+        if (!tree) {
+          console.warn(`[Dialogue] Dialogue tree not found: ${dialogueTreeId}`);
+          return;
+        }
+
+        // Get the entry node based on conditions
+        const checkCondition = get().checkDialogueCondition;
+        const entryNode = getDialogueEntryNode(tree, checkCondition);
+        if (!entryNode) {
+          console.warn(`[Dialogue] No valid entry node for tree: ${dialogueTreeId}`);
+          return;
+        }
+
+        // Apply any onEnter effects
+        for (const effect of entryNode.onEnterEffects || []) {
+          get().applyDialogueEffect(effect);
+        }
+
+        // Get available choices filtered by conditions
+        const availableChoices = getAvailableChoices(entryNode, checkCondition);
+
+        set({
+          phase: 'dialogue',
+          dialogueState: {
+            npcId,
+            npcName: npcDef.name,
+            npcTitle: npcDef.title,
+            npcPortraitId: npcDef.portraitId,
+            npcExpression: entryNode.expression,
+            treeId: dialogueTreeId,
+            currentNodeId: entryNode.id,
+            text: entryNode.text,
+            speaker: entryNode.speaker,
+            choices: availableChoices.map(c => ({
+              text: c.text,
+              nextNodeId: c.nextNodeId,
+              effects: c.effects,
+              tags: c.tags,
+              hint: c.hint,
+            })),
+            autoAdvanceNodeId: entryNode.nextNodeId,
+            history: [],
+            conversationFlags: {},
+            startedAt: Date.now(),
+          },
+        });
+
+        // Mark NPC as talked to (first meeting detection)
+        get().markNPCTalked(npcId);
+      },
+
+      selectChoice: (choiceIndex: number) => {
+        const { dialogueState } = get();
+        if (!dialogueState) return;
+
+        const choice = dialogueState.choices[choiceIndex];
+        if (!choice) return;
+
+        // Apply choice effects
+        for (const effect of choice.effects) {
+          get().applyDialogueEffect(effect);
+        }
+
+        // If no next node, end dialogue
+        if (!choice.nextNodeId) {
+          get().endDialogue();
+          return;
+        }
+
+        // Navigate to next node
+        const tree = getDialogueTreeById(dialogueState.treeId);
+        if (!tree) {
+          get().endDialogue();
+          return;
+        }
+
+        const nextNode = tree.nodes.find(n => n.id === choice.nextNodeId);
+        if (!nextNode) {
+          console.warn(`[Dialogue] Next node not found: ${choice.nextNodeId}`);
+          get().endDialogue();
+          return;
+        }
+
+        // Apply onEnter effects for new node
+        for (const effect of nextNode.onEnterEffects || []) {
+          get().applyDialogueEffect(effect);
+        }
+
+        // Get available choices for new node
+        const checkCondition = get().checkDialogueCondition;
+        const availableChoices = getAvailableChoices(nextNode, checkCondition);
+
+        set({
+          dialogueState: {
+            ...dialogueState,
+            currentNodeId: nextNode.id,
+            text: nextNode.text,
+            speaker: nextNode.speaker,
+            npcExpression: nextNode.expression,
+            choices: availableChoices.map(c => ({
+              text: c.text,
+              nextNodeId: c.nextNodeId,
+              effects: c.effects,
+              tags: c.tags,
+              hint: c.hint,
+            })),
+            autoAdvanceNodeId: nextNode.nextNodeId,
+            history: [...dialogueState.history, dialogueState.currentNodeId],
+          },
+        });
+      },
+
+      advanceDialogue: () => {
+        const { dialogueState } = get();
+        if (!dialogueState || !dialogueState.autoAdvanceNodeId) return;
+
+        // Navigate to auto-advance node
+        const tree = getDialogueTreeById(dialogueState.treeId);
+        if (!tree) {
+          get().endDialogue();
+          return;
+        }
+
+        const nextNode = tree.nodes.find(n => n.id === dialogueState.autoAdvanceNodeId);
+        if (!nextNode) {
+          get().endDialogue();
+          return;
+        }
+
+        // Apply onEnter effects
+        for (const effect of nextNode.onEnterEffects || []) {
+          get().applyDialogueEffect(effect);
+        }
+
+        const checkCondition = get().checkDialogueCondition;
+        const availableChoices = getAvailableChoices(nextNode, checkCondition);
+
+        set({
+          dialogueState: {
+            ...dialogueState,
+            currentNodeId: nextNode.id,
+            text: nextNode.text,
+            speaker: nextNode.speaker,
+            npcExpression: nextNode.expression,
+            choices: availableChoices.map(c => ({
+              text: c.text,
+              nextNodeId: c.nextNodeId,
+              effects: c.effects,
+              tags: c.tags,
+              hint: c.hint,
+            })),
+            autoAdvanceNodeId: nextNode.nextNodeId,
+            history: [...dialogueState.history, dialogueState.currentNodeId],
+          },
+        });
+      },
+
+      endDialogue: () => {
+        const { dialogueState, dialogueHistory } = get();
+
+        // Add to global dialogue history if we had a conversation
+        if (dialogueState) {
+          const entry = `${dialogueState.npcId}:${dialogueState.treeId}:${Date.now()}`;
+          set({
+            dialogueHistory: [...dialogueHistory.slice(-99), entry],
+          });
+        }
+
+        set({
+          dialogueState: null,
+          phase: 'playing',
+        });
+      },
+
+      setDialogueFlag: (flag: string, value: boolean) => {
+        const { dialogueState } = get();
+        if (!dialogueState) return;
+
+        set({
+          dialogueState: {
+            ...dialogueState,
+            conversationFlags: {
+              ...dialogueState.conversationFlags,
+              [flag]: value,
+            },
+          },
+        });
+      },
+
+      checkDialogueCondition: (condition: DialogueCondition): boolean => {
+        const state = get();
+        const { playerStats, talkedNPCIds, activeQuests, completedQuestIds, inventory, time, dialogueState } = state;
+
+        switch (condition.type) {
+          case 'quest_active':
+            return activeQuests.some(q => q.questId === condition.target);
+          case 'quest_complete':
+            return completedQuestIds.includes(condition.target || '');
+          case 'quest_not_started':
+            return !activeQuests.some(q => q.questId === condition.target) &&
+                   !completedQuestIds.includes(condition.target || '');
+          case 'has_item':
+            return inventory.some(i => i.itemId === condition.target && i.quantity > 0);
+          case 'lacks_item':
+            return !inventory.some(i => i.itemId === condition.target && i.quantity > 0);
+          case 'reputation_gte':
+            return playerStats.reputation >= (condition.value || 0);
+          case 'reputation_lte':
+            return playerStats.reputation <= (condition.value || 0);
+          case 'gold_gte':
+            return playerStats.gold >= (condition.value || 0);
+          case 'talked_to':
+            return talkedNPCIds.includes(condition.target || '');
+          case 'not_talked_to':
+            return !talkedNPCIds.includes(condition.target || '');
+          case 'time_of_day':
+            const hour = time.hour;
+            const timeOfDay = condition.stringValue;
+            if (timeOfDay === 'morning') return hour >= 6 && hour < 12;
+            if (timeOfDay === 'afternoon') return hour >= 12 && hour < 18;
+            if (timeOfDay === 'evening') return hour >= 18 && hour < 22;
+            if (timeOfDay === 'night') return hour >= 22 || hour < 6;
+            return true;
+          case 'flag_set':
+            return dialogueState?.conversationFlags[condition.target || ''] === true;
+          case 'flag_not_set':
+            return dialogueState?.conversationFlags[condition.target || ''] !== true;
+          case 'first_meeting':
+            return dialogueState ? !talkedNPCIds.includes(dialogueState.npcId) : false;
+          case 'return_visit':
+            return dialogueState ? talkedNPCIds.includes(dialogueState.npcId) : false;
+          default:
+            return true;
+        }
+      },
+
+      applyDialogueEffect: (effect: DialogueEffect) => {
+        const { playerStats, updatePlayerStats, addNotification, addItemById, removeItem, discoverLocation, startQuest, setDialogueFlag, advanceQuestStage, completeQuest } = get();
+
+        switch (effect.type) {
+          case 'start_quest':
+            if (effect.target) {
+              startQuest(effect.target);
+            }
+            break;
+          case 'complete_quest':
+            if (effect.target) {
+              completeQuest(effect.target);
+            }
+            break;
+          case 'advance_quest':
+            if (effect.target) {
+              advanceQuestStage(effect.target);
+            }
+            break;
+          case 'give_item':
+            if (effect.target) {
+              addItemById(effect.target, effect.value || 1);
+            }
+            break;
+          case 'take_item':
+            if (effect.target) {
+              removeItem(effect.target, effect.value || 1);
+            }
+            break;
+          case 'give_gold':
+            if (effect.value) {
+              updatePlayerStats({ gold: playerStats.gold + effect.value });
+              addNotification('item', `+${effect.value} gold`);
+            }
+            break;
+          case 'take_gold':
+            if (effect.value) {
+              updatePlayerStats({ gold: Math.max(0, playerStats.gold - effect.value) });
+              addNotification('info', `-${effect.value} gold`);
+            }
+            break;
+          case 'change_reputation':
+            if (effect.value) {
+              updatePlayerStats({ reputation: playerStats.reputation + effect.value });
+              if (effect.value > 0) {
+                addNotification('info', `Reputation increased`);
+              } else {
+                addNotification('warning', `Reputation decreased`);
+              }
+            }
+            break;
+          case 'set_flag':
+            if (effect.target) {
+              setDialogueFlag(effect.target, true);
+            }
+            break;
+          case 'clear_flag':
+            if (effect.target) {
+              setDialogueFlag(effect.target, false);
+            }
+            break;
+          case 'unlock_location':
+            if (effect.target) {
+              discoverLocation(effect.target);
+            }
+            break;
+          case 'change_npc_state':
+            // Future: modify NPC disposition or state
+            break;
+          case 'trigger_event':
+            // Future: trigger world events
+            addNotification('info', `Event: ${effect.target}`);
+            break;
+        }
+      },
+
+      getActiveNPC: (): NPCDefinition | undefined => {
+        const { dialogueState } = get();
+        if (!dialogueState) return undefined;
+        return getNPCById(dialogueState.npcId);
+      },
+
       collectWorldItem: (itemId) => {
-        const { worldItems, collectedItemIds, addItem } = get();
+        const { worldItems, collectedItemIds, addItemById } = get();
         const worldItem = worldItems[itemId];
         if (!worldItem || collectedItemIds.includes(itemId)) return;
         set({ collectedItemIds: [...collectedItemIds, itemId] });
-        addItem({
-          id: `inv_${Date.now()}`,
-          itemId: worldItem.itemId,
-          name: worldItem.itemId.replace(/_/g, ' '),
-          rarity: 'common',
-          quantity: worldItem.quantity,
-        });
+        // Use the item library to get full item details
+        addItemById(worldItem.itemId, worldItem.quantity);
       },
 
       updateTime: (hours) => {
@@ -528,6 +1251,99 @@ export const useGameStore = create<GameState>()(
           get().addNotification('warning', 'Binary save failed');
         }
       },
+
+      // Travel System Actions
+      initWorld: (worldId: string) => {
+        const world = getWorldById(worldId);
+        if (!world) {
+          console.error(`[GameStore] World not found: ${worldId}`);
+          get().addNotification('warning', `World not found: ${worldId}`);
+          return;
+        }
+
+        const loaded = loadWorld(world);
+        const startingLocationId = loaded.world.startingLocationId;
+
+        // Get initially discovered locations from world definition
+        const discoveredIds = loaded.world.locations
+          .filter(loc => loc.discovered)
+          .map(loc => loc.id);
+
+        set({
+          currentWorldId: worldId,
+          loadedWorld: loaded,
+          currentLocationId: startingLocationId,
+          discoveredLocationIds: discoveredIds,
+        });
+
+        console.log(`[GameStore] World initialized: ${loaded.world.name}, starting at ${startingLocationId}`);
+        get().addNotification('info', `Entered ${loaded.world.name}`);
+      },
+
+      travelTo: (locationId: string) => {
+        const { loadedWorld, currentLocationId, addNotification, discoverLocation } = get();
+
+        if (!loadedWorld) {
+          console.error('[GameStore] No world loaded');
+          addNotification('warning', 'No world loaded');
+          return;
+        }
+
+        if (!currentLocationId) {
+          console.error('[GameStore] No current location');
+          return;
+        }
+
+        // Check if travel is possible
+        if (!loadedWorld.canTravelTo(currentLocationId, locationId)) {
+          const targetLoc = loadedWorld.getLocation(locationId);
+          addNotification('warning', `Cannot travel to ${targetLoc?.ref.name ?? locationId}`);
+          return;
+        }
+
+        const targetLocation = loadedWorld.getLocation(locationId);
+        if (!targetLocation) {
+          console.error(`[GameStore] Location not found: ${locationId}`);
+          return;
+        }
+
+        // Discover the location if not already discovered
+        discoverLocation(locationId);
+
+        // Update current location
+        set({ currentLocationId: locationId });
+
+        console.log(`[GameStore] Traveled to ${targetLocation.ref.name}`);
+        addNotification('info', `Arrived at ${targetLocation.ref.name}`);
+      },
+
+      discoverLocation: (locationId: string) => {
+        const { discoveredLocationIds, loadedWorld } = get();
+
+        if (discoveredLocationIds.includes(locationId)) {
+          return; // Already discovered
+        }
+
+        const location = loadedWorld?.getLocation(locationId);
+        if (!location) {
+          return;
+        }
+
+        set({ discoveredLocationIds: [...discoveredLocationIds, locationId] });
+        get().addNotification('info', `Discovered: ${location.ref.name}`);
+        console.log(`[GameStore] Discovered location: ${location.ref.name}`);
+      },
+
+      getConnectedLocations: () => {
+        const { loadedWorld, currentLocationId } = get();
+
+        if (!loadedWorld || !currentLocationId) {
+          return [];
+        }
+
+        const connections = loadedWorld.getConnectionsFrom(currentLocationId);
+        return connections.map(loc => loc.id);
+      },
     }),
     {
       name: 'iron-frontier-save',
@@ -541,6 +1357,7 @@ export const useGameStore = create<GameState>()(
         playerStats: state.playerStats,
         inventory: state.inventory,
         activeQuests: state.activeQuests,
+        completedQuests: state.completedQuests,
         completedQuestIds: state.completedQuestIds,
         collectedItemIds: state.collectedItemIds,
         talkedNPCIds: state.talkedNPCIds,
@@ -549,6 +1366,10 @@ export const useGameStore = create<GameState>()(
         saveVersion: state.saveVersion,
         lastSaved: state.lastSaved,
         playTime: state.playTime,
+        // Travel state (note: loadedWorld is reconstructed on load via initWorld)
+        currentWorldId: state.currentWorldId,
+        currentLocationId: state.currentLocationId,
+        discoveredLocationIds: state.discoveredLocationIds,
       }),
     }
   )

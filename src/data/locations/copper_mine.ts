@@ -116,7 +116,7 @@ export const CopperMine: Location = validateLocation({
     dangerLevel: 3, // Moderate - cave-ins, bandits
     wealthLevel: 4, // Good money in mining
     populationDensity: 'sparse',
-    lawLevel: 'minimal',
+    lawLevel: 'lawless',
   },
 
   tags: ['industrial', 'mining', 'resource'],

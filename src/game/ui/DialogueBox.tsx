@@ -1,47 +1,80 @@
-// DialogueBox - FF7-style typewriter dialogue
+// DialogueBox - Enhanced FF7-style branching dialogue
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
-import { type Quest } from '../../engine/types';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { User, MessageSquare, ChevronRight } from 'lucide-react';
+
+/**
+ * Expression to color mapping for NPC portrait accents
+ */
+const EXPRESSION_COLORS: Record<string, string> = {
+  angry: 'border-red-500',
+  happy: 'border-green-500',
+  sad: 'border-blue-500',
+  suspicious: 'border-yellow-500',
+  worried: 'border-orange-500',
+  threatening: 'border-red-600',
+  curious: 'border-cyan-500',
+  friendly: 'border-emerald-500',
+  serious: 'border-slate-500',
+  thoughtful: 'border-purple-500',
+  shocked: 'border-pink-500',
+  determined: 'border-amber-500',
+  eager: 'border-lime-500',
+  bitter: 'border-rose-500',
+};
+
+/**
+ * Get border color class based on NPC expression
+ */
+function getExpressionBorder(expression?: string): string {
+  if (!expression) return 'border-amber-600';
+  return EXPRESSION_COLORS[expression] || 'border-amber-600';
+}
 
 export function DialogueBox() {
   const {
     phase,
     dialogueState,
-    npcs,
-    setDialogue,
-    acceptQuest,
-    activeQuests,
-    settings
+    selectChoice,
+    advanceDialogue,
+    endDialogue,
+    settings,
+    getActiveNPC,
   } = useGameStore();
 
   const dialogueOpen = phase === 'dialogue' && !!dialogueState;
-  const selectedNPC = dialogueState ? npcs[dialogueState.npcId] : null;
+  const activeNPC = useMemo(() => getActiveNPC(), [dialogueState?.npcId]);
 
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [showQuestPrompt, setShowQuestPrompt] = useState(false);
+  const [showChoices, setShowChoices] = useState(false);
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
 
-  // Initialize typewriter when dialogue opens
+  // Reset state when dialogue changes
   useEffect(() => {
     if (!dialogueOpen || !dialogueState) {
       setDisplayText('');
-      setShowQuestPrompt(false);
+      setShowChoices(false);
+      setSelectedChoiceIndex(null);
       return;
     }
 
     setDisplayText('');
     setIsTyping(true);
-  }, [dialogueOpen, dialogueState]);
+    setShowChoices(false);
+    setSelectedChoiceIndex(null);
+  }, [dialogueOpen, dialogueState?.currentNodeId]);
 
   // Typewriter effect
   useEffect(() => {
     if (!isTyping || !dialogueState?.text) return;
 
     let index = 0;
-    const speed = settings.reducedMotion ? 5 : 30;
+    const speed = settings.reducedMotion ? 5 : 25;
     const fullText = dialogueState.text;
 
     const interval = setInterval(() => {
@@ -52,56 +85,73 @@ export function DialogueBox() {
         setIsTyping(false);
         clearInterval(interval);
 
-        // Show quest prompt after typing completes if NPC is a quest giver and no active quest exists
-        if (selectedNPC?.questGiver && !activeQuests.find(q => q.giverNpcId === selectedNPC.id)) {
-          setTimeout(() => setShowQuestPrompt(true), 300);
-        }
+        // Show choices after typing completes
+        setTimeout(() => setShowChoices(true), 200);
       }
     }, speed);
 
     return () => clearInterval(interval);
-  }, [isTyping, dialogueState, settings.reducedMotion, selectedNPC, activeQuests]);
+  }, [isTyping, dialogueState?.text, settings.reducedMotion]);
 
-  // Handle tap
-  const handleTap = useCallback(() => {
+  // Skip typewriter on tap
+  const handleSkipTyping = useCallback(() => {
     if (settings.haptics && navigator.vibrate) {
       navigator.vibrate(20);
     }
 
-    const fullText = dialogueState?.text || '';
-
-    if (isTyping) {
-      // Skip to end
-      setDisplayText(fullText);
+    if (isTyping && dialogueState?.text) {
+      setDisplayText(dialogueState.text);
       setIsTyping(false);
-
-      if (selectedNPC?.questGiver && !activeQuests.find(q => q.giverNpcId === selectedNPC.id)) {
-        setTimeout(() => setShowQuestPrompt(true), 100);
-      }
-    } else if (showQuestPrompt) {
-      // Accept quest
-      if (selectedNPC) {
-        const quest: Quest = {
-          id: `quest_${selectedNPC.id}_${Date.now()}`,
-          title: `${selectedNPC.name}'s Request`,
-          description: `Help ${selectedNPC.name} with an important task.`,
-          giverNpcId: selectedNPC.id,
-          status: 'active',
-          objectives: [
-            { id: 'objective1', description: 'Investigate the matter', type: 'go_to', targetPosition: selectedNPC.position, required: 1, current: 0, completed: false },
-            { id: 'objective2', description: `Return to ${selectedNPC.name}`, type: 'talk', targetId: selectedNPC.id, required: 1, current: 0, completed: false },
-          ],
-          rewards: { xp: 100, gold: 50 },
-        };
-        acceptQuest(quest);
-      }
-      setDialogue(null);
-    } else {
-      setDialogue(null);
+      setTimeout(() => setShowChoices(true), 100);
     }
-  }, [isTyping, dialogueState, showQuestPrompt, selectedNPC, setDialogue, acceptQuest, activeQuests, settings.haptics]);
+  }, [isTyping, dialogueState?.text, settings.haptics]);
 
-  if (!dialogueOpen || !selectedNPC) return null;
+  // Handle choice selection
+  const handleChoiceSelect = useCallback((index: number) => {
+    if (settings.haptics && navigator.vibrate) {
+      navigator.vibrate(30);
+    }
+
+    setSelectedChoiceIndex(index);
+    setShowChoices(false);
+
+    // Small delay for visual feedback
+    setTimeout(() => {
+      selectChoice(index);
+    }, 150);
+  }, [selectChoice, settings.haptics]);
+
+  // Handle auto-advance (monologues)
+  const handleAdvance = useCallback(() => {
+    if (settings.haptics && navigator.vibrate) {
+      navigator.vibrate(20);
+    }
+
+    if (dialogueState?.autoAdvanceNodeId) {
+      advanceDialogue();
+    } else {
+      endDialogue();
+    }
+  }, [dialogueState?.autoAdvanceNodeId, advanceDialogue, endDialogue, settings.haptics]);
+
+  // Handle closing dialogue
+  const handleClose = useCallback(() => {
+    if (settings.haptics && navigator.vibrate) {
+      navigator.vibrate(20);
+    }
+    endDialogue();
+  }, [endDialogue, settings.haptics]);
+
+  if (!dialogueOpen || !dialogueState) return null;
+
+  const hasChoices = dialogueState.choices.length > 0;
+  const hasAutoAdvance = !!dialogueState.autoAdvanceNodeId;
+  const expressionBorder = getExpressionBorder(dialogueState.npcExpression);
+
+  // Determine what to show at the bottom
+  const showContinuePrompt = !isTyping && showChoices && !hasChoices && hasAutoAdvance;
+  const showClosePrompt = !isTyping && showChoices && !hasChoices && !hasAutoAdvance;
+  const showChoiceButtons = !isTyping && showChoices && hasChoices;
 
   return (
     <AnimatePresence>
@@ -109,43 +159,148 @@ export function DialogueBox() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="absolute inset-x-3 bottom-24 z-50"
-        onClick={handleTap}
+        className="absolute inset-x-3 bottom-20 z-50"
       >
-        <Card className="bg-amber-950/95 border-2 border-amber-600 shadow-lg backdrop-blur-sm">
+        <Card className={`bg-amber-950/95 border-2 ${expressionBorder} shadow-lg backdrop-blur-sm`}>
           <CardHeader className="p-3 pb-1">
             <CardTitle className="text-amber-400 text-base flex items-center justify-between">
-              <span>{selectedNPC.name}</span>
+              {/* NPC Name and Portrait */}
+              <div className="flex items-center gap-2">
+                {/* Portrait placeholder */}
+                <div className={`w-10 h-10 rounded-full bg-amber-900/50 border-2 ${expressionBorder} flex items-center justify-center overflow-hidden`}>
+                  {dialogueState.npcPortraitId ? (
+                    // Future: actual portrait image
+                    <User className="w-6 h-6 text-amber-400" />
+                  ) : (
+                    <User className="w-6 h-6 text-amber-400" />
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold">
+                    {dialogueState.npcTitle && (
+                      <span className="text-amber-500 text-sm mr-1">{dialogueState.npcTitle}</span>
+                    )}
+                    {dialogueState.npcName}
+                  </span>
+                  {dialogueState.speaker && dialogueState.speaker !== dialogueState.npcName && (
+                    <span className="text-amber-500 text-xs">Speaking: {dialogueState.speaker}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Expression/Status badges */}
               <div className="flex gap-2">
-                {selectedNPC.questGiver && !activeQuests.find(q => q.giverNpcId === selectedNPC.id) && (
-                  <Badge className="bg-yellow-600 text-yellow-100 text-xs">Quest</Badge>
+                {dialogueState.npcExpression && (
+                  <Badge variant="outline" className={`text-xs ${expressionBorder.replace('border-', 'text-').replace('-500', '-400').replace('-600', '-400')}`}>
+                    {dialogueState.npcExpression}
+                  </Badge>
                 )}
-                <Badge variant="outline" className="text-amber-500 border-amber-600 text-xs">
-                  {selectedNPC.role}
-                </Badge>
+                {activeNPC?.questGiver && (
+                  <Badge className="bg-yellow-600 text-yellow-100 text-xs">
+                    <MessageSquare className="w-3 h-3 mr-1" />
+                    Quest
+                  </Badge>
+                )}
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-3 pt-1">
-            <p className="text-amber-100 text-sm whitespace-pre-line min-h-[80px] leading-relaxed">
-              {displayText}
-              {isTyping && <span className="animate-pulse text-amber-400">|</span>}
-            </p>
 
-            {showQuestPrompt && (
+          <CardContent className="p-3 pt-2">
+            {/* Dialogue Text Area */}
+            <div
+              className="text-amber-100 text-sm whitespace-pre-line min-h-[60px] leading-relaxed cursor-pointer"
+              onClick={isTyping ? handleSkipTyping : undefined}
+            >
+              {displayText}
+              {isTyping && <span className="animate-pulse text-amber-400 ml-0.5">|</span>}
+            </div>
+
+            {/* Choice Buttons */}
+            {showChoiceButtons && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-3 p-2 bg-yellow-900/30 border border-yellow-600/50 rounded-lg"
+                className="mt-3 space-y-2"
               >
-                <p className="text-yellow-200 text-sm">
-                  {selectedNPC.name} has a task for you. Accept quest?
-                </p>
+                {dialogueState.choices.map((choice, index) => (
+                  <motion.button
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => handleChoiceSelect(index)}
+                    disabled={selectedChoiceIndex !== null}
+                    className={`w-full text-left p-2 rounded-lg border transition-all ${
+                      selectedChoiceIndex === index
+                        ? 'bg-amber-700/50 border-amber-500 text-amber-100'
+                        : 'bg-amber-900/30 border-amber-700/50 text-amber-200 hover:bg-amber-800/40 hover:border-amber-600'
+                    } ${selectedChoiceIndex !== null && selectedChoiceIndex !== index ? 'opacity-50' : ''}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ChevronRight className={`w-4 h-4 flex-shrink-0 ${
+                        selectedChoiceIndex === index ? 'text-amber-400' : 'text-amber-600'
+                      }`} />
+                      <span className="text-sm">{choice.text}</span>
+                    </div>
+                    {choice.hint && (
+                      <p className="text-amber-500 text-xs mt-1 ml-6">{choice.hint}</p>
+                    )}
+                    {/* Show tags as subtle indicators */}
+                    {choice.tags.length > 0 && (
+                      <div className="flex gap-1 mt-1 ml-6">
+                        {choice.tags.includes('aggressive') && (
+                          <span className="text-red-400 text-xs">[Aggressive]</span>
+                        )}
+                        {choice.tags.includes('kind') && (
+                          <span className="text-green-400 text-xs">[Kind]</span>
+                        )}
+                        {choice.tags.includes('main_quest') && (
+                          <span className="text-yellow-400 text-xs">[Main Quest]</span>
+                        )}
+                      </div>
+                    )}
+                  </motion.button>
+                ))}
               </motion.div>
             )}
 
-            <div className="text-amber-500 text-xs mt-3 text-right">
-              {isTyping ? 'Tap to skip' : showQuestPrompt ? 'Tap to accept' : 'Tap to close'}
+            {/* Continue prompt (for monologues) */}
+            {showContinuePrompt && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-3"
+              >
+                <Button
+                  onClick={handleAdvance}
+                  className="w-full bg-amber-700/50 hover:bg-amber-600/50 text-amber-100 border border-amber-600"
+                >
+                  Continue
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </motion.div>
+            )}
+
+            {/* Close prompt (end of conversation) */}
+            {showClosePrompt && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-3"
+              >
+                <Button
+                  onClick={handleClose}
+                  variant="outline"
+                  className="w-full border-amber-600 text-amber-400 hover:bg-amber-900/30"
+                >
+                  End Conversation
+                </Button>
+              </motion.div>
+            )}
+
+            {/* Typing indicator / instruction */}
+            <div className="text-amber-500 text-xs mt-2 text-right">
+              {isTyping && 'Tap to skip...'}
             </div>
           </CardContent>
         </Card>

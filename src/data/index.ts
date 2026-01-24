@@ -162,3 +162,132 @@ export {
   type LoadedWorld,
   type ResolvedLocation,
 } from './worlds/index';
+
+// ============================================================================
+// QUESTS
+// ============================================================================
+
+export {
+  // Quest schemas
+  ObjectiveTypeSchema,
+  ObjectiveSchema,
+  QuestStageSchema,
+  QuestStatusSchema,
+  QuestTypeSchema,
+  QuestSchema,
+  ActiveQuestSchema,
+
+  // Validators
+  validateObjective,
+  validateQuestStage,
+  validateQuest,
+  validateActiveQuest,
+
+  // Utilities
+  isStageComplete,
+  isCurrentStageComplete,
+  isQuestComplete,
+  getCurrentStage,
+  createActiveQuest,
+
+  // Types
+  type ObjectiveType,
+  type Objective,
+  type QuestStage,
+  type QuestStatus,
+  type QuestType,
+  type Quest,
+  type ActiveQuest,
+} from './schemas/quest';
+
+export {
+  // Quest definitions
+  TheInheritance,
+  MissingCattle,
+  DocsDilemma,
+
+  // Registry
+  QUESTS_BY_ID,
+  QUESTS_BY_TYPE,
+  ALL_QUEST_IDS,
+
+  // Lookup functions
+  getQuestById,
+  getQuestsByType,
+  getQuestsAtLocation,
+  getQuestsByNPC,
+  getQuestsByTag,
+  arePrerequisitesMet,
+} from './quests/index';
+
+// ============================================================================
+// NPC & DIALOGUE
+// ============================================================================
+
+export {
+  // Dialogue schemas
+  ConditionTypeSchema,
+  EffectTypeSchema,
+  DialogueConditionSchema,
+  DialogueEffectSchema,
+  DialogueChoiceSchema,
+  DialogueNodeSchema,
+  DialogueTreeSchema,
+  NPCPersonalitySchema,
+  NPCRoleSchema,
+  NPCFactionSchema,
+  NPCDefinitionSchema,
+  DialogueStateSchema,
+
+  // Validators
+  validateDialogueNode,
+  validateDialogueTree,
+  validateNPCDefinition,
+  validateDialogueTreeIntegrity,
+
+  // Utilities
+  getDialogueEntryNode,
+  getAvailableChoices,
+
+  // Types
+  type ConditionType,
+  type EffectType,
+  type DialogueCondition,
+  type DialogueEffect,
+  type DialogueChoice,
+  type DialogueNode,
+  type DialogueTree,
+  type NPCPersonality,
+  type NPCRole,
+  type NPCFaction,
+  type NPCDefinition,
+  type DialogueState as NPCDialogueState,
+} from './schemas/npc';
+
+export {
+  // NPC definitions
+  SheriffMarcusCole,
+  MayorJosephineHolt,
+  DocChenWei,
+  FatherMiguel,
+  DiamondbackDolores,
+  OldSamuelIronpick,
+
+  // Registry
+  ALL_NPCS,
+  NPCS_BY_ID,
+  NPCS_BY_LOCATION,
+  ALL_DIALOGUE_TREES,
+  DIALOGUE_TREES_BY_ID,
+
+  // Lookup functions
+  getNPCById,
+  getNPCsByLocation,
+  getNPCsByFaction,
+  getNPCsByTag,
+  getDialogueTreeById,
+  getDialogueTreesForNPC,
+  getPrimaryDialogueTree,
+  getQuestGivers,
+  getEssentialNPCs,
+} from './npcs/index';

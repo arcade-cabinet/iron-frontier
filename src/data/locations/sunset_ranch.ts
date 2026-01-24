@@ -128,8 +128,8 @@ export const SunsetRanch: Location = validateLocation({
   atmosphere: {
     dangerLevel: 1, // Safe, well-guarded
     wealthLevel: 5, // Very prosperous
-    populationDensity: 'moderate',
-    lawLevel: 'private', // Ranch has its own security
+    populationDensity: 'normal',
+    lawLevel: 'orderly', // Ranch has its own security
   },
 
   tags: ['ranch', 'wealthy', 'cattle', 'employment'],

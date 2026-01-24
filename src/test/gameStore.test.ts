@@ -78,9 +78,16 @@ describe('Game Store', () => {
       expect(inventory[0].quantity).toBe(8);
     });
 
-    it('should use items (tonic heals)', () => {
+    it('should use items (consumable heals)', () => {
       const { addItem, useItem, takeDamage } = useGameStore.getState();
-      const item = createMockItem({ id: 't1', itemId: 'medicinal_tonic', name: 'Medicinal Tonic', usable: true });
+      // Use a real consumable item from the library (bandages = 15 HP heal)
+      const item = createMockItem({
+        id: 't1',
+        itemId: 'bandages',
+        name: 'Bandages',
+        usable: true,
+        type: 'consumable',
+      });
 
       addItem(item);
       takeDamage(50);

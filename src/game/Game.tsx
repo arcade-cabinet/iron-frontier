@@ -1,13 +1,13 @@
 // Iron Frontier - Hex-Tile Based Western RPG
 // Fallout 2-style isometric view with Kenney Hexagon Kit tiles
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { HexSceneManager, type HexWorldPosition } from '../engine/hex';
 import { TitleScreen } from './screens/TitleScreen';
 import { useGameStore } from './store/gameStore';
 
-// Load test town for spatial system validation
-import { TestTown } from '../data/locations/test_town';
+// World/location data
+import { getLocationData } from '../data/worlds/index';
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
@@ -18,6 +18,7 @@ import { MenuPanel } from './ui/MenuPanel';
 import { NotificationFeed } from './ui/NotificationFeed';
 import { QuestLog } from './ui/QuestLog';
 import { SettingsPanel } from './ui/SettingsPanel';
+import { WorldMap } from './ui/WorldMap';
 
 // ============================================================================
 // GAME CANVAS - Babylon.js 3D Scene with Hex Tiles
@@ -34,11 +35,28 @@ function GameCanvas() {
     playerPosition,
     setPlayerPosition,
     phase,
+    loadedWorld,
+    currentLocationId,
+    initWorld,
   } = useGameStore();
+
+  // Initialize world on first play
+  useEffect(() => {
+    if (phase === 'playing' && !loadedWorld) {
+      console.log('[GameCanvas] Initializing world: frontier_territory');
+      initWorld('frontier_territory');
+    }
+  }, [phase, loadedWorld, initWorld]);
 
   // Initialize scene - handle React 18 StrictMode properly
   useEffect(() => {
     if (!canvasRef.current || (phase !== 'playing' && phase !== 'dialogue' && phase !== 'paused')) return;
+
+    // Wait for world to be loaded
+    if (!loadedWorld || !currentLocationId) {
+      console.log('[GameCanvas] Waiting for world to load...');
+      return;
+    }
 
     // If we already have a scene manager, don't create another
     if (sceneManagerRef.current) {
@@ -50,7 +68,7 @@ function GameCanvas() {
     let effectCancelled = false;
 
     async function initScene() {
-      if (!canvasRef.current) return;
+      if (!canvasRef.current || !loadedWorld || !currentLocationId) return;
 
       try {
         setIsLoading(true);
@@ -66,9 +84,18 @@ function GameCanvas() {
           hexSize: 1,
         });
 
-        // Initialize with test town (validates spatial system)
-        // Pass TestTown to load from Location data instead of procedural generation
-        await manager.init(TestTown);
+        // Get the current location data from the loaded world
+        const resolvedLocation = loadedWorld.getLocation(currentLocationId);
+        const locationData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+
+        // Initialize with location data (or procedural if none)
+        if (locationData) {
+          console.log(`[GameCanvas] Loading location: ${locationData.name}`);
+          await manager.init(locationData);
+        } else {
+          console.log('[GameCanvas] No location data, using procedural generation');
+          await manager.init();
+        }
 
         // Check if effect was cancelled during async init
         if (effectCancelled) {
@@ -108,7 +135,7 @@ function GameCanvas() {
       // In StrictMode, this cleanup runs but sceneManagerRef might be null
       // The next effect run will see sceneManagerRef.current and skip
     };
-  }, [worldSeed, phase]);
+  }, [worldSeed, phase, loadedWorld, currentLocationId]);
 
   // Separate cleanup effect for actual unmount
   useEffect(() => {
@@ -120,6 +147,73 @@ function GameCanvas() {
       }
     };
   }, []);
+
+  // Track previous location to detect travel
+  const prevLocationRef = useRef<string | null>(null);
+
+  // Handle location changes (travel)
+  useEffect(() => {
+    // Skip if no scene manager or world
+    if (!sceneManagerRef.current || !loadedWorld || !currentLocationId) return;
+
+    // Skip initial load (handled by scene init)
+    if (prevLocationRef.current === null) {
+      prevLocationRef.current = currentLocationId;
+      return;
+    }
+
+    // Skip if location hasn't changed
+    if (prevLocationRef.current === currentLocationId) return;
+
+    console.log(`[GameCanvas] Location changed: ${prevLocationRef.current} -> ${currentLocationId}`);
+    prevLocationRef.current = currentLocationId;
+
+    // Reload scene with new location
+    const reloadLocation = async () => {
+      if (!sceneManagerRef.current || !loadedWorld) return;
+
+      setIsLoading(true);
+
+      try {
+        // Dispose and recreate scene manager for new location
+        sceneManagerRef.current.dispose();
+
+        const manager = new HexSceneManager(canvasRef.current!, {
+          seed: worldSeed,
+          mapWidth: 32,
+          mapHeight: 32,
+          hexSize: 1,
+        });
+
+        const resolvedLocation = loadedWorld.getLocation(currentLocationId);
+        const locationData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+
+        if (locationData) {
+          console.log(`[GameCanvas] Loading new location: ${locationData.name}`);
+          await manager.init(locationData);
+        } else {
+          console.log('[GameCanvas] No location data for new location, using procedural');
+          await manager.init();
+        }
+
+        sceneManagerRef.current = manager;
+
+        manager.setGroundClickHandler((pos: HexWorldPosition) => {
+          const height = manager.getHeightAt(pos.x, pos.z);
+          setPlayerPosition({ x: pos.x, y: height, z: pos.z });
+        });
+
+        manager.start();
+        setIsLoading(false);
+      } catch (err) {
+        console.error('[GameCanvas] Failed to reload location:', err);
+        setLoadError(err instanceof Error ? err.message : 'Unknown error');
+        setIsLoading(false);
+      }
+    };
+
+    reloadLocation();
+  }, [currentLocationId, loadedWorld, worldSeed, setPlayerPosition]);
 
   // Update player position when it changes externally
   useEffect(() => {
@@ -171,7 +265,39 @@ function GameCanvas() {
 // ============================================================================
 
 export function Game() {
-  const { phase } = useGameStore();
+  const { phase, travelTo } = useGameStore();
+  const [isWorldMapOpen, setIsWorldMapOpen] = useState(false);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      // 'M' key opens world map
+      if (e.key === 'm' || e.key === 'M') {
+        if (phase === 'playing') {
+          setIsWorldMapOpen(prev => !prev);
+        }
+      }
+
+      // Escape closes world map
+      if (e.key === 'Escape' && isWorldMapOpen) {
+        setIsWorldMapOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, isWorldMapOpen]);
+
+  // Handle travel from world map
+  const handleTravelTo = useCallback((locationId: string) => {
+    travelTo(locationId);
+    setIsWorldMapOpen(false);
+  }, [travelTo]);
 
   // Show title screen
   if (phase === 'title') {
@@ -194,7 +320,7 @@ export function Game() {
       <div className="absolute inset-0 pointer-events-none">
         <div className="pointer-events-auto">
           <GameHUD />
-          <ActionBar />
+          <ActionBar onOpenMap={() => setIsWorldMapOpen(true)} />
           <DialogueBox />
           <NotificationFeed />
         </div>
@@ -205,6 +331,13 @@ export function Game() {
       <QuestLog />
       <SettingsPanel />
       <MenuPanel />
+
+      {/* World Map */}
+      <WorldMap
+        isOpen={isWorldMapOpen}
+        onClose={() => setIsWorldMapOpen(false)}
+        onTravelTo={handleTravelTo}
+      />
     </div>
   );
 }

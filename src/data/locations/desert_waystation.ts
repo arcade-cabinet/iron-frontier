@@ -9,7 +9,7 @@ import { Location, validateLocation } from '../schemas/spatial';
 export const DesertWaystation: Location = validateLocation({
   id: 'desert_waystation',
   name: "Coyote Springs",
-  type: 'waystation',
+  type: 'outpost',
   size: 'small',
   description: 'A welcome rest stop in the unforgiving desert',
 
@@ -113,7 +113,7 @@ export const DesertWaystation: Location = validateLocation({
     dangerLevel: 2, // Relatively safe rest stop
     wealthLevel: 2, // Modest
     populationDensity: 'sparse',
-    lawLevel: 'minimal',
+    lawLevel: 'frontier',
   },
 
   tags: ['desert', 'rest_stop', 'water', 'trade_route'],

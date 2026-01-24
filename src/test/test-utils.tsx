@@ -165,6 +165,10 @@ export function createMockItem(overrides: Partial<InventoryItem> = {}): Inventor
     rarity: 'common',
     quantity: 1,
     usable: false,
+    condition: 100,
+    weight: 0.1,
+    type: 'junk',
+    droppable: true,
     ...overrides,
   };
 }

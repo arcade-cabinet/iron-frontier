@@ -138,10 +138,11 @@ describe('InventoryPanel', () => {
     customRender(<InventoryPanel />, {
       initialState: {
         activePanel: 'inventory',
-        playerStats: { gold: 150 }
+        playerStats: { gold: 150, ivrcScript: 0 }
       } as any,
     });
-    expect(screen.getByText('150 Gold')).toBeInTheDocument();
+    // New UI shows "$150" format
+    expect(screen.getByText('$150')).toBeInTheDocument();
   });
 
   it('should show empty state when inventory is empty', () => {
@@ -161,8 +162,8 @@ describe('InventoryPanel', () => {
       initialState: {
         activePanel: 'inventory',
         inventory: [
-          { id: 'item1', itemId: 'health_tonic', name: 'Health Tonic', rarity: 'uncommon', quantity: 3, usable: true },
-          { id: 'item2', itemId: 'brass_gear', name: 'Brass Gear', rarity: 'common', quantity: 5 },
+          { id: 'item1', itemId: 'health_tonic', name: 'Health Tonic', rarity: 'uncommon', quantity: 3, usable: true, type: 'consumable', condition: 100, weight: 0.3, droppable: true },
+          { id: 'item2', itemId: 'brass_gear', name: 'Brass Gear', rarity: 'common', quantity: 5, usable: false, type: 'junk', condition: 100, weight: 0.1, droppable: true },
         ],
       } as any,
     });
@@ -171,16 +172,20 @@ describe('InventoryPanel', () => {
     expect(screen.getByText('Brass Gear')).toBeInTheDocument();
   });
 
-  it('should show Drop button for all items', () => {
-    customRender(<InventoryPanel />, {
+  it('should show Drop button when item is selected', async () => {
+    const { user } = customRender(<InventoryPanel />, {
       initialState: {
         activePanel: 'inventory',
         inventory: [
-          { id: 'item1', itemId: 'junk', name: 'Junk', rarity: 'common', quantity: 1 },
+          { id: 'item1', itemId: 'junk', name: 'Junk Item', rarity: 'common', quantity: 1, usable: false, type: 'junk', condition: 100, weight: 0.1, droppable: true },
         ],
       } as any,
     });
 
+    // Select item first (new UI requires selecting)
+    await user.click(screen.getByText('Junk Item'));
+
+    // Drop button should now be visible
     expect(screen.getByRole('button', { name: 'Drop' })).toBeInTheDocument();
   });
 });
@@ -243,7 +248,18 @@ describe('DialogueBox', () => {
     customRender(<DialogueBox />, {
       initialState: {
         phase: 'dialogue',
-        dialogueState: { npcId: 'npc_1', npcName: 'Sheriff Brass', text: 'Hello there.' },
+        dialogueState: {
+          npcId: 'npc_1',
+          npcName: 'Sheriff Brass',
+          text: 'Hello there.',
+          treeId: 'test_tree',
+          currentNodeId: 'test_node',
+          choices: [],
+          autoAdvanceNodeId: null,
+          history: [],
+          conversationFlags: {},
+          startedAt: Date.now(),
+        },
         npcs: { 'npc_1': mockNPC },
         settings: { reducedMotion: true },
       } as any,
@@ -259,18 +275,30 @@ describe('DialogueBox', () => {
     expect(screen.getByText('Hello there.')).toBeInTheDocument();
   });
 
-  it('should display NPC role', () => {
+  it('should display NPC expression badge', () => {
     const mockNPC = createMockNPC({ id: 'npc_1', name: 'Test NPC', role: 'sheriff' });
     customRender(<DialogueBox />, {
       initialState: {
         phase: 'dialogue',
-        dialogueState: { npcId: 'npc_1', npcName: 'Test NPC', text: 'Hello.' },
+        dialogueState: {
+          npcId: 'npc_1',
+          npcName: 'Test NPC',
+          text: 'Hello.',
+          npcExpression: 'suspicious',
+          treeId: 'test_tree',
+          currentNodeId: 'test_node',
+          choices: [],
+          autoAdvanceNodeId: null,
+          history: [],
+          conversationFlags: {},
+          startedAt: Date.now(),
+        },
         npcs: { 'npc_1': mockNPC },
         settings: { reducedMotion: true },
       } as any,
     });
 
-    expect(screen.getByText('sheriff')).toBeInTheDocument();
+    expect(screen.getByText('suspicious')).toBeInTheDocument();
   });
 });
 
