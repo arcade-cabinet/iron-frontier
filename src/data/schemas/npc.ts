@@ -58,7 +58,7 @@ export type DialogueCondition = z.infer<typeof DialogueConditionSchema>;
 /**
  * Effect types that modify game state after dialogue
  */
-export const EffectTypeSchema = z.enum([
+export const DialogueEffectTypeSchema = z.enum([
   'start_quest',       // Begin a quest
   'complete_quest',    // Mark quest complete
   'advance_quest',     // Update quest progress
@@ -74,10 +74,10 @@ export const EffectTypeSchema = z.enum([
   'trigger_event',     // Trigger a world event
   'open_shop',         // Open NPC's shop for trading
 ]);
-export type EffectType = z.infer<typeof EffectTypeSchema>;
+export type DialogueEffectType = z.infer<typeof DialogueEffectTypeSchema>;
 
 export const DialogueEffectSchema = z.object({
-  type: EffectTypeSchema,
+  type: DialogueEffectTypeSchema,
   /** Target ID (quest, item, location, flag) */
   target: z.string().optional(),
   /** Numeric value for amounts */
@@ -131,6 +131,9 @@ export const DialogueNodeSchema = z.object({
 
   /** Speaker override (for cutscenes with multiple speakers) */
   speaker: z.string().optional(),
+
+  /** Conditions required to show this node */
+  conditions: z.array(DialogueConditionSchema).default([]),
 
   /** Available player choices */
   choices: z.array(DialogueChoiceSchema).default([]),

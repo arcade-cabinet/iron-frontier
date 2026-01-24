@@ -16,6 +16,9 @@ export { SeededRandom, createSeededRandom, hashString, combineSeeds } from './se
 // All generators
 export * from './generators';
 
+// Game store integration
+export * from './integration';
+
 // Re-export schemas for convenience
 export type {
   GenerationContext,

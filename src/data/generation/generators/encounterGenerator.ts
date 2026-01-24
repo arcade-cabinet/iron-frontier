@@ -10,9 +10,16 @@ import {
   type GenerationContext,
   substituteTemplate,
 } from '../../schemas/generation';
+import {
+  type EnemyTemplate,
+  getEnemyTemplate,
+  calculateScaledStats,
+  DEFAULT_ENEMY_TEMPLATE,
+} from '../templates/enemyTemplates';
 
-// Template registry
+// Template registries
 let ENCOUNTER_TEMPLATES: EncounterTemplate[] = [];
+let ENEMY_TEMPLATES_INITIALIZED = false;
 
 /**
  * Initialize encounter templates
@@ -22,18 +29,38 @@ export function initEncounterTemplates(templates: EncounterTemplate[]): void {
 }
 
 /**
+ * Mark enemy templates as initialized (they are loaded via module import)
+ */
+export function initEnemyTemplates(): void {
+  ENEMY_TEMPLATES_INITIALIZED = true;
+}
+
+/**
+ * Check if enemy templates are initialized
+ */
+export function areEnemyTemplatesInitialized(): boolean {
+  return ENEMY_TEMPLATES_INITIALIZED;
+}
+
+/**
  * Generated enemy in encounter
  */
 export interface GeneratedEnemy {
   id: string;
   enemyType: string;
+  templateId: string;
   name: string;
   level: number;
   health: number;
   maxHealth: number;
   damage: number;
   armor: number;
-  tags: string[];
+  accuracy: number;
+  evasion: number;
+  behaviorTags: string[];
+  combatTags: string[];
+  xpValue: number;
+  lootTableId?: string;
 }
 
 /**
@@ -103,37 +130,52 @@ export function getEncountersForTime(timeOfDay: string): EncounterTemplate[] {
 }
 
 /**
- * Base enemy stats by type (would normally come from enemy definitions)
+ * Generate an enemy name from template name pools
  */
-const BASE_ENEMY_STATS: Record<string, { health: number; damage: number; armor: number }> = {
-  bandit: { health: 30, damage: 8, armor: 2 },
-  bandit_leader: { health: 50, damage: 12, armor: 5 },
-  coyote: { health: 15, damage: 5, armor: 0 },
-  rattlesnake: { health: 8, damage: 10, armor: 0 }, // Poison damage
-  bear: { health: 80, damage: 15, armor: 3 },
-  scorpion: { health: 5, damage: 8, armor: 1 },
-  rustler: { health: 25, damage: 7, armor: 2 },
-  mercenary: { health: 40, damage: 10, armor: 4 },
-  automaton: { health: 60, damage: 12, armor: 8 },
-  deputy_corrupt: { health: 35, damage: 9, armor: 3 },
-  prospector_hostile: { health: 20, damage: 6, armor: 1 },
-  default: { health: 25, damage: 8, armor: 2 },
-};
+function generateEnemyName(
+  rng: SeededRandom,
+  template: EnemyTemplate
+): string {
+  const { prefixes, titles, suffixes } = template.namePool;
+
+  // Build name from available pools
+  const parts: string[] = [];
+
+  // Add prefix (50% chance if available)
+  if (prefixes.length > 0 && rng.bool(0.5)) {
+    parts.push(rng.pick(prefixes));
+  }
+
+  // Add title if available and no prefix was added (30% chance)
+  if (parts.length === 0 && titles.length > 0 && rng.bool(0.3)) {
+    parts.push(rng.pick(titles));
+  }
+
+  // Add base name
+  parts.push(template.name);
+
+  // Add suffix (20% chance if available)
+  if (suffixes.length > 0 && rng.bool(0.2)) {
+    parts.push(rng.pick(suffixes));
+  }
+
+  return parts.join(' ');
+}
 
 /**
- * Enemy name prefixes for variety
+ * Apply random stat variation to scaled stats
  */
-const ENEMY_PREFIXES: Record<string, string[]> = {
-  bandit: ['Dusty', 'One-Eyed', 'Quick-Draw', 'Scarred', 'Mean'],
-  bandit_leader: ['Boss', 'Captain', 'Chief', 'Big'],
-  coyote: ['Mangy', 'Hungry', 'Wild', 'Gray'],
-  bear: ['Grizzled', 'Massive', 'Angry', 'Old'],
-  mercenary: ['Hired', 'Cold', 'Professional', 'Silent'],
-  default: ['Hostile', 'Aggressive', 'Wild'],
-};
+function applyStatVariation(
+  rng: SeededRandom,
+  value: number,
+  variationPercent: number = 0.1
+): number {
+  const variation = 1 + rng.float(-variationPercent, variationPercent);
+  return Math.max(1, Math.round(value * variation));
+}
 
 /**
- * Generate an enemy from template data
+ * Generate an enemy from template data using the enemy template system
  */
 function generateEnemy(
   rng: SeededRandom,
@@ -142,32 +184,52 @@ function generateEnemy(
   playerLevel: number,
   index: number
 ): GeneratedEnemy {
-  const baseStats = BASE_ENEMY_STATS[enemyIdOrTag] ?? BASE_ENEMY_STATS.default;
-  const prefixes = ENEMY_PREFIXES[enemyIdOrTag] ?? ENEMY_PREFIXES.default;
+  // Look up the enemy template
+  const template = getEnemyTemplate(enemyIdOrTag) ?? DEFAULT_ENEMY_TEMPLATE;
 
-  // Scale level based on player and template scale
-  const level = Math.max(1, Math.round(playerLevel * levelScale));
-  const levelMultiplier = 1 + (level - 1) * 0.15;
+  // Calculate actual enemy level based on player level and scale factor
+  const baseLevel = Math.max(1, Math.round(playerLevel * levelScale));
+  // Clamp to template's valid level range
+  const level = Math.max(
+    template.minLevel,
+    Math.min(template.maxLevel, baseLevel)
+  );
 
-  // Generate scaled stats
-  const health = Math.round(baseStats.health * levelMultiplier);
-  const damage = Math.round(baseStats.damage * levelMultiplier);
-  const armor = Math.round(baseStats.armor * (1 + (level - 1) * 0.1));
+  // Calculate scaled stats
+  const scaledStats = calculateScaledStats(template, level);
+
+  // Apply random variation to stats (10% variance)
+  const health = applyStatVariation(rng, scaledStats.health);
+  const damage = applyStatVariation(rng, scaledStats.damage);
+  const armor = applyStatVariation(rng, scaledStats.armor, 0.05);
+  const accuracy = Math.min(100, applyStatVariation(rng, scaledStats.accuracy, 0.05));
+  const evasion = Math.min(100, applyStatVariation(rng, scaledStats.evasion, 0.05));
 
   // Generate name
-  const prefix = rng.pick(prefixes);
-  const name = `${prefix} ${enemyIdOrTag.replace(/_/g, ' ')}`;
+  const name = generateEnemyName(rng, template);
+
+  // Calculate XP value
+  const baseXP = Math.round(
+    (health * 0.5 + damage * 2 + armor * 1.5) * template.xpModifier
+  );
+  const levelXP = Math.round(baseXP * (1 + (level - 1) * 0.15));
 
   return {
     id: `enemy_${index}_${rng.int(0, 0xffff).toString(16)}`,
     enemyType: enemyIdOrTag,
+    templateId: template.id,
     name: name.charAt(0).toUpperCase() + name.slice(1),
     level,
     health,
     maxHealth: health,
     damage,
     armor,
-    tags: [enemyIdOrTag],
+    accuracy,
+    evasion,
+    behaviorTags: [...template.behaviorTags],
+    combatTags: [...template.combatTags],
+    xpValue: levelXP,
+    lootTableId: template.lootTableId,
   };
 }
 

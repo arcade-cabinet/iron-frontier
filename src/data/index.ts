@@ -32,10 +32,6 @@ export {
   LocationSchema,
 
   // Validators
-  validateTileDef,
-  validateMarker,
-  validateZone,
-  validateSlotInstance,
   validateAssemblage,
   validateLocation,
 
@@ -227,7 +223,7 @@ export {
 export {
   // Dialogue schemas
   ConditionTypeSchema,
-  EffectTypeSchema,
+  DialogueEffectTypeSchema,
   DialogueConditionSchema,
   DialogueEffectSchema,
   DialogueChoiceSchema,
@@ -251,7 +247,7 @@ export {
 
   // Types
   type ConditionType,
-  type EffectType,
+  type DialogueEffectType,
   type DialogueCondition,
   type DialogueEffect,
   type DialogueChoice,

@@ -81,3 +81,50 @@ export {
   type GeneratedWorld,
   type WorldGenerationOptions,
 } from './worldGenerator';
+
+// Item generation
+export {
+  // Initialization
+  initItemGeneration,
+  // Core generators
+  generateWeapon,
+  generateArmor,
+  generateConsumable,
+  generateLoot,
+  generateShopInventory,
+  // Helper functions
+  scaleStatByLevel,
+  calculateItemValue,
+  // Template/pool accessors
+  getItemTemplate,
+  getItemTemplatesByType,
+  getLootTable,
+  getLootTablesByTag,
+  // Schemas
+  ItemTemplateSchema,
+  RarityWeightsSchema,
+  StatRangeSchema,
+  LootTableEntrySchema,
+  ProceduralLootTableSchema,
+  // Default pools
+  DEFAULT_MATERIALS,
+  DEFAULT_QUALITIES,
+  DEFAULT_STYLES,
+  WEAPON_PREFIXES,
+  WEAPON_SUFFIXES,
+  ARMOR_PREFIXES,
+  ARMOR_SUFFIXES,
+  CONSUMABLE_PREFIXES,
+  CONSUMABLE_SUFFIXES,
+  // Types
+  type GeneratedItem,
+  type ShopInventoryItem,
+  type ItemTemplate,
+  type RarityWeights,
+  type StatRange,
+  type LootTableEntry,
+  type ProceduralLootTable,
+  type MaterialPool,
+  type QualityPool,
+  type StylePool,
+} from './itemGenerator';

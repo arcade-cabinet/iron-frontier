@@ -53,6 +53,10 @@ export const BuffTypeSchema = z.enum([
   'damage_boost',
   'defense_boost',
   'speed_boost',
+  'damage_resist',
+  'poison_resist',
+  'heat_resist',
+  'cold_resist',
   'none',
 ]);
 export type BuffType = z.infer<typeof BuffTypeSchema>;
@@ -63,6 +67,7 @@ export const EffectTypeSchema = z.enum([
   'buff',
   'damage',
   'unlock',
+  'cure',
   'none',
 ]);
 export type EffectType = z.infer<typeof EffectTypeSchema>;
@@ -103,6 +108,7 @@ export const ArmorStatsSchema = z.object({
   defense: z.number().int().min(0),
   slot: z.enum(['head', 'body', 'legs', 'accessory']),
   movementPenalty: z.number().min(0).max(1).default(0), // 0-1 speed reduction
+  resistances: z.record(z.string(), z.number()).optional(), // Elemental/type resistances
 });
 export type ArmorStats = z.infer<typeof ArmorStatsSchema>;
 

@@ -7,6 +7,9 @@
 
 import type { BaseItem } from '../schemas/item';
 
+// Re-export types for external use
+export type { BaseItem, WeaponItem, ArmorItem, ConsumableItem } from '../schemas/item';
+
 // ============================================================================
 // WEAPONS
 // ============================================================================

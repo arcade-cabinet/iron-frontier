@@ -160,7 +160,9 @@ function GameCanvas() {
         if (currentLocationId) {
           const npcsInLocation = getNPCsByLocation(currentLocationId);
           for (const npc of npcsInLocation) {
-            manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
+            if (npc.spawnCoord && npc.spawnCoord.q !== undefined && npc.spawnCoord.r !== undefined) {
+              manager.spawnNPCMarker(npc.id, { q: npc.spawnCoord.q, r: npc.spawnCoord.r }, npc.name);
+            }
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers`);
 
@@ -301,7 +303,9 @@ function GameCanvas() {
         if (currentLocationId) {
           const npcsInLocation = getNPCsByLocation(currentLocationId);
           for (const npc of npcsInLocation) {
-            manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
+            if (npc.spawnCoord && npc.spawnCoord.q !== undefined && npc.spawnCoord.r !== undefined) {
+              manager.spawnNPCMarker(npc.id, { q: npc.spawnCoord.q, r: npc.spawnCoord.r }, npc.name);
+            }
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers for new location`);
 

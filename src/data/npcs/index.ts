@@ -7,6 +7,9 @@
 
 import type { NPCDefinition, DialogueTree } from '../schemas/npc';
 
+// Re-export types for external use
+export type { NPCDefinition, DialogueTree } from '../schemas/npc';
+
 // Import dialogue trees
 import { SheriffColeDialogues } from './dialogues/sheriff_cole';
 import { DocChenDialogues } from './dialogues/doc_chen';

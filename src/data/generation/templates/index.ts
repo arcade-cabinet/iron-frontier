@@ -15,14 +15,33 @@ export {
   getNPCTemplatesByFaction,
 } from './npcTemplates';
 
+// Enemy templates
+export {
+  ENEMY_TEMPLATES,
+  DEFAULT_ENEMY_TEMPLATE,
+  getEnemyTemplate,
+  getEnemyTemplatesByFaction,
+  getEnemyTemplatesByCombatTag,
+  getEnemyTemplatesByBehavior,
+  getEnemyTemplatesForLevel,
+  getEnemyTemplatesMatching,
+  calculateScaledStats,
+  type EnemyTemplate,
+  type EnemyStats,
+  type LevelScaling,
+  type EnemyNamePool,
+  type BehaviorTag,
+} from './enemyTemplates';
+
 // Quest templates
 export {
   QUEST_TEMPLATES,
-  getQuestTemplateById,
+  getQuestTemplate,
   getQuestTemplatesByArchetype,
   getQuestTemplatesForLevel,
   getQuestTemplatesForGiver,
   getQuestTemplatesByTag,
+  getRandomQuestTemplate,
 } from './questTemplates';
 
 // Location templates
