@@ -1720,14 +1720,14 @@ describe('ProceduralLocationManager Integration', () => {
     ref: {
       id,
       name: `Test Location ${id}`,
-      regionId: 'test_region',
-      isProcedural: true,
-      proceduralTemplate: 'settlement',
-      proceduralSeed: hashString(id),
+      type: 'town',
+      coord: { wx: 0, wy: 0 },
+      seed: hashString(id),
       tags, // Tags help infer location type for NPC generation
     },
     isProcedural: true,
-    data: null,
+    location: null,
+    seed: hashString(id),
   });
 
   beforeEach(() => {
@@ -2033,11 +2033,13 @@ describe('Unified NPC Lookup (getNPCsByLocation)', () => {
       ref: {
         id: locationId,
         name: 'Dusty Springs',
-        regionId: 'central_plains',
-        isProcedural: true, // Treat as procedural to trigger generation
+        type: 'town',
+        coord: { wx: 5, wy: 5 },
+        tags: ['town'],
       },
-      isProcedural: true,
-      data: null,
+      isProcedural: true, // Treat as procedural to trigger generation
+      location: null,
+      seed: 12345,
     };
 
     ProceduralLocationManager.generateLocationContent(mockLocation);
@@ -2087,11 +2089,13 @@ describe('Unified Item Lookup (getWorldItemsForLocation)', () => {
       ref: {
         id: locationId,
         name: 'Freeminer Hollow',
-        regionId: 'badlands',
-        isProcedural: true,
+        type: 'mine',
+        coord: { wx: 8, wy: 8 },
+        tags: ['mine', 'mining'],
       },
       isProcedural: true,
-      data: null,
+      location: null,
+      seed: 54321,
     };
 
     ProceduralLocationManager.generateLocationContent(mockLocation);

@@ -562,8 +562,8 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
             </text>
           )}
 
-          {/* Procedural indicator (small star) */}
-          {location.isProcedural && isDiscovered && (
+          {/* Procedural indicator (small star) - shown if no locationDataId */}
+          {!location.locationDataId && isDiscovered && (
             <text
               x={iconSize - 4}
               y={-iconSize + 4}

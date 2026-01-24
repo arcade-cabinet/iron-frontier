@@ -142,7 +142,7 @@ class ProceduralLocationManagerClass {
     initNamePools(NAME_POOLS, PLACE_NAME_POOLS);
     initNPCTemplates(NPC_TEMPLATES);
     initQuestTemplates(QUEST_TEMPLATES);
-    initDialogueData(DIALOGUE_SNIPPETS, DIALOGUE_TREE_TEMPLATES);
+    initDialogueData(DIALOGUE_SNIPPETS, Object.values(DIALOGUE_TREE_TEMPLATES));
 
     this.initialized = true;
     console.log('[ProceduralLocationManager] Initialized successfully');
@@ -205,7 +205,7 @@ class ProceduralLocationManagerClass {
     const context: GenerationContext = {
       worldSeed: this.worldSeed,
       locationId,
-      regionId: resolved.ref.regionId,
+      regionId: 'unknown', // Region determined at world level, not location level
       playerLevel: 1, // Default, could be passed in
       gameHour: 12,
       factionTensions: {},
@@ -554,7 +554,6 @@ class ProceduralLocationManagerClass {
         itemId: selected.id,
         coord: { q, r },
         quantity,
-        respawns: false,
       });
     }
 
