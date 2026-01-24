@@ -13,6 +13,7 @@ import { getWorldItemsForLocation, getWorldItemName } from '../data/items/worldI
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
+import { CharacterPanel } from './ui/CharacterPanel';
 import { CombatPanel } from './ui/CombatPanel';
 import { DialogueBox } from './ui/DialogueBox';
 import { GameHUD } from './ui/GameHUD';
@@ -440,6 +441,7 @@ export function Game() {
       </div>
 
       {/* Modal Panels */}
+      <CharacterPanel />
       <InventoryPanel />
       <QuestLog />
       <SettingsPanel />

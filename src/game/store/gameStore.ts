@@ -94,6 +94,17 @@ export interface PlayerStats {
   reputation: number;
 }
 
+// Equipment slot types
+export type EquipmentSlot = 'weapon' | 'offhand' | 'head' | 'body' | 'accessory';
+
+export interface EquipmentState {
+  weapon: string | null;      // Inventory item ID
+  offhand: string | null;     // Inventory item ID (pistol, knife, etc.)
+  head: string | null;        // Inventory item ID (hat, helmet)
+  body: string | null;        // Inventory item ID (armor, vest)
+  accessory: string | null;   // Inventory item ID (holster, charm, etc.)
+}
+
 export interface Notification {
   id: string;
   type: 'item' | 'xp' | 'quest' | 'level' | 'info' | 'warning';
@@ -188,6 +199,7 @@ export interface GameState {
   playerPosition: WorldPosition;
   playerRotation: number;
   playerStats: PlayerStats;
+  equipment: EquipmentState;
   inventory: InventoryItem[];
   maxInventorySlots: number;
 
@@ -254,6 +266,12 @@ export interface GameState {
   getItemCount: (itemId: string) => number;
   getTotalWeight: () => number;
   maxCarryWeight: number;
+
+  // Equipment
+  equipItem: (inventoryItemId: string, slot?: EquipmentSlot) => void;
+  unequipItem: (slot: EquipmentSlot) => void;
+  getEquippedItem: (slot: EquipmentSlot) => InventoryItem | null;
+  getEquipmentBonuses: () => { damage: number; defense: number; accuracy: number };
 
   // Quests (enhanced stage-based system)
   startQuest: (questId: string) => void;
@@ -339,6 +357,14 @@ const DEFAULT_PLAYER_STATS: PlayerStats = {
   reputation: 0,
 };
 
+const DEFAULT_EQUIPMENT: EquipmentState = {
+  weapon: null,
+  offhand: null,
+  head: null,
+  body: null,
+  accessory: null,
+};
+
 /**
  * Create an inventory item from an item definition
  */
@@ -422,6 +448,7 @@ export const useGameStore = create<GameState>()(
       playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
       playerRotation: 0,
       playerStats: { ...DEFAULT_PLAYER_STATS },
+      equipment: { ...DEFAULT_EQUIPMENT },
       inventory: [],
       maxInventorySlots: 20,
       maxCarryWeight: 50, // 50 lbs default carry capacity
@@ -457,6 +484,7 @@ export const useGameStore = create<GameState>()(
           playerId: `player_${Date.now()}`,
           playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
           playerStats: { ...DEFAULT_PLAYER_STATS },
+          equipment: { ...DEFAULT_EQUIPMENT },
           inventory: starterItems,
           activeQuests: [],
           completedQuests: [],
@@ -465,6 +493,12 @@ export const useGameStore = create<GameState>()(
           talkedNPCIds: [],
           notifications: [],
         });
+
+        // Auto-equip starting weapon
+        const startingWeapon = starterItems.find(item => item.type === 'weapon');
+        if (startingWeapon) {
+          get().equipItem(startingWeapon.id, 'weapon');
+        }
 
         // Initialize SQLite DB
         dbManager.init().then(() => {
@@ -484,6 +518,7 @@ export const useGameStore = create<GameState>()(
         playerAppearance: null,
         playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
         playerStats: { ...DEFAULT_PLAYER_STATS },
+        equipment: { ...DEFAULT_EQUIPMENT },
         inventory: [],
         activeQuests: [],
         completedQuests: [],
@@ -671,6 +706,115 @@ export const useGameStore = create<GameState>()(
       getTotalWeight: () => {
         const { inventory } = get();
         return inventory.reduce((total, item) => total + (item.weight * item.quantity), 0);
+      },
+
+      // ========== EQUIPMENT SYSTEM ==========
+
+      equipItem: (inventoryItemId: string, slot?: EquipmentSlot) => {
+        const { inventory, equipment, addNotification } = get();
+
+        // Find the item in inventory
+        const invItem = inventory.find(i => i.id === inventoryItemId);
+        if (!invItem) {
+          addNotification('warning', 'Item not found');
+          return;
+        }
+
+        // Get item definition for type info
+        const itemDef = getItem(invItem.itemId);
+        if (!itemDef) return;
+
+        // Determine slot based on item type if not specified
+        let targetSlot: EquipmentSlot | null = slot || null;
+        if (!targetSlot) {
+          if (itemDef.type === 'weapon') {
+            // Weapons go to weapon slot, or offhand if weapon is occupied
+            targetSlot = equipment.weapon ? 'offhand' : 'weapon';
+          } else if (itemDef.type === 'armor') {
+            // Check armor slot from armorStats
+            if (itemDef.armorStats?.slot === 'head') targetSlot = 'head';
+            else if (itemDef.armorStats?.slot === 'body') targetSlot = 'body';
+            else if (itemDef.armorStats?.slot === 'accessory') targetSlot = 'accessory';
+            else targetSlot = 'body'; // Default to body
+          }
+        }
+
+        if (!targetSlot) {
+          addNotification('warning', 'Cannot equip this item');
+          return;
+        }
+
+        // Unequip current item in slot if any
+        if (equipment[targetSlot]) {
+          get().unequipItem(targetSlot);
+        }
+
+        // Equip the new item
+        set((state) => ({
+          equipment: { ...state.equipment, [targetSlot!]: inventoryItemId },
+        }));
+
+        addNotification('info', `Equipped ${invItem.name}`);
+        console.log(`[Equipment] Equipped ${invItem.name} to ${targetSlot}`);
+      },
+
+      unequipItem: (slot: EquipmentSlot) => {
+        const { equipment, addNotification, inventory } = get();
+
+        const itemId = equipment[slot];
+        if (!itemId) {
+          return; // Nothing equipped in this slot
+        }
+
+        const invItem = inventory.find(i => i.id === itemId);
+
+        set((state) => ({
+          equipment: { ...state.equipment, [slot]: null },
+        }));
+
+        if (invItem) {
+          addNotification('info', `Unequipped ${invItem.name}`);
+        }
+        console.log(`[Equipment] Unequipped item from ${slot}`);
+      },
+
+      getEquippedItem: (slot: EquipmentSlot) => {
+        const { equipment, inventory } = get();
+        const itemId = equipment[slot];
+        if (!itemId) return null;
+        return inventory.find(i => i.id === itemId) || null;
+      },
+
+      getEquipmentBonuses: () => {
+        const { equipment, inventory } = get();
+        let damage = 0;
+        let defense = 0;
+        let accuracy = 0;
+
+        // Check each equipment slot
+        for (const slot of Object.keys(equipment) as EquipmentSlot[]) {
+          const itemId = equipment[slot];
+          if (!itemId) continue;
+
+          const invItem = inventory.find(i => i.id === itemId);
+          if (!invItem) continue;
+
+          const itemDef = getItem(invItem.itemId);
+          if (!itemDef) continue;
+
+          // Add weapon stats
+          if (itemDef.weaponStats) {
+            damage += itemDef.weaponStats.damage || 0;
+            accuracy += itemDef.weaponStats.accuracy || 0;
+          }
+
+          // Add armor stats
+          if (itemDef.armorStats) {
+            defense += itemDef.armorStats.defense || 0;
+          }
+        }
+
+        return { damage, defense, accuracy };
       },
 
       // ========== QUEST SYSTEM (Enhanced Stage-Based) ==========
@@ -1944,6 +2088,7 @@ export const useGameStore = create<GameState>()(
         playerAppearance: state.playerAppearance,
         playerPosition: state.playerPosition,
         playerStats: state.playerStats,
+        equipment: state.equipment,
         inventory: state.inventory,
         activeQuests: state.activeQuests,
         completedQuests: state.completedQuests,

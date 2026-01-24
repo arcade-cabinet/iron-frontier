@@ -46,6 +46,14 @@ function MapIcon() {
   );
 }
 
+function PersonIcon() {
+  return (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  );
+}
+
 function SwordIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,16 +74,16 @@ export function ActionBar({ onOpenMap }: ActionBarProps) {
       <Card className="bg-amber-950/95 border-amber-700/50 backdrop-blur-sm">
         <CardContent className="p-2">
           <div className="flex justify-around items-center">
-            {/* Menu */}
+            {/* Character */}
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => togglePanel('menu')}
-              aria-label="Menu"
+              onClick={() => togglePanel('character')}
+              aria-label="Character"
               className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
             >
-              <MenuIcon />
-              <span className="text-xs">Menu</span>
+              <PersonIcon />
+              <span className="text-xs">Stats</span>
             </Button>
 
             {/* World Map */}
@@ -146,6 +154,18 @@ export function ActionBar({ onOpenMap }: ActionBarProps) {
             >
               <SettingsIcon />
               <span className="text-xs">Settings</span>
+            </Button>
+
+            {/* Menu */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => togglePanel('menu')}
+              aria-label="Menu"
+              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
+            >
+              <MenuIcon />
+              <span className="text-xs">Menu</span>
             </Button>
           </div>
         </CardContent>
