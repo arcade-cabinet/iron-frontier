@@ -8,9 +8,10 @@ const url = new URL(window.location.href);
 const theme = url.searchParams.get("theme");
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // StrictMode temporarily disabled for Babylon.js scene management
+  // <React.StrictMode>
     <ThemeProvider defaultTheme={theme || "light"} enableSystem={true}>
       <App />
     </ThemeProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

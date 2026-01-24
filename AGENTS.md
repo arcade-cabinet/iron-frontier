@@ -1,5 +1,13 @@
 # AGENTS.md - Iron Frontier Development Guide
 
+## Deep Context (Memory Bank)
+>
+> **AI AGENTS**: Before starting work, you **MUST** read the following files in `memory-bank/` to understand the project state:
+>
+> - `memory-bank/activeContext.md` (Current focus & recent changes)
+> - `memory-bank/projectbrief.md` (Core goals)
+> - `memory-bank/systemPatterns.md` (Architecture & decisions)
+
 ## Quick Start for Agents
 
 ```bash
@@ -16,6 +24,7 @@ pnpm run tscgo --noEmit
 ## Project Overview
 
 **Iron Frontier** is a mobile-first isometric RPG set in a Steampunk American Frontier (late 1800s). Built with:
+
 - **React 19** + **Vite** + **TypeScript**
 - **Babylon.js** via **Reactylon** (declarative 3D)
 - **Zustand** for state management
@@ -36,7 +45,7 @@ pnpm run tscgo --noEmit
 
 ## Architecture
 
-```
+```text
 src/
 ├── game/
 │   ├── Game.tsx              # Root game component
@@ -64,11 +73,11 @@ src/
 ├── components/ui/            # shadcn/ui components
 ├── lib/utils.ts              # Tailwind utilities
 └── App.tsx                   # Entry point
-```
+```text
 
 ## Game Flow
 
-```
+```text
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   SPLASH    │ --> │  MAIN MENU  │ --> │   GAMEPLAY  │
 │  (2.5 sec)  │     │  New/Continue│     │  3D + HUD   │
@@ -133,6 +142,7 @@ interface GameState {
 ```
 
 Common mesh patterns:
+
 ```tsx
 // Box
 <box name="box" options={{ width, height, depth }} position={pos}>
@@ -172,12 +182,14 @@ const sector = generateSector('sector_id', 12345); // ID + seed
 ## Styling Guidelines
 
 ### Color Palette (Steampunk Frontier)
+
 - **Primary**: amber-500 to amber-700 (brass/gold)
 - **Background**: stone-900, stone-950, amber-950
 - **Accent**: orange-600, yellow-500
 - **Text**: amber-100 (light), amber-300 (muted), stone-400 (subtle)
 
 ### Component Patterns
+
 ```tsx
 // Card with game styling
 <Card className="bg-amber-950/90 border-amber-700/50 backdrop-blur-sm">
@@ -194,21 +206,25 @@ const sector = generateSector('sector_id', 12345); // ID + seed
 ## Common Tasks
 
 ### Adding a New UI Panel
+
 1. Create component in `src/game/ui/NewPanel.tsx`
 2. Add state toggle to `gameStore.ts`: `newPanelOpen: boolean`
 3. Add toggle action: `toggleNewPanel: () => void`
 4. Import and render in `Game.tsx`
 
 ### Adding New Items
+
 1. Edit `src/game/lib/items.ts` to add item definitions
 2. Update `ITEM_TYPES` in `procgen.ts` for spawning
 
 ### Adding New NPCs
+
 1. Add NPC type to `NPC_NAMES` in `procgen.ts`
 2. Add to theme's `npcTypes` array
 3. Add dialogue patterns to `DialogueBox.tsx`
 
 ### Adding New Quests
+
 1. Define quest in `src/game/lib/quests.ts`
 2. Associate with NPC's `questGiver` flag
 3. Handle quest acceptance in `DialogueBox.tsx`

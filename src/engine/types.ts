@@ -1,7 +1,8 @@
 // Core Engine Types - Iron Frontier v2
 // Modern diorama-based world with layered terrain
 
-import { Vector3, Color3 } from '@babylonjs/core/Maths/math';
+import { Color3, Vector3 } from '@babylonjs/core/Maths/math';
+import { WesternAssets } from './assets/WesternRegistry';
 
 // ============================================================================
 // COORDINATE SYSTEMS
@@ -44,7 +45,7 @@ export function chunkKey(coord: ChunkCoord): string {
 // BIOME SYSTEM
 // ============================================================================
 
-export type BiomeType = 
+export type BiomeType =
   | 'desert'      // Sandy, cacti, mesas
   | 'grassland'   // Prairie grass, wildflowers
   | 'badlands'    // Rocky, canyons, red earth
@@ -137,7 +138,7 @@ export interface TerrainConfig {
   seed: number;
   baseHeight: number;
   maxElevation: number;
-  
+
   // Noise scales
   continentalScale: number;
   erosionScale: number;
@@ -162,13 +163,13 @@ export type OverlayType = 'road' | 'track' | 'water' | 'boardwalk' | 'shadow';
 export interface SurfaceOverlay {
   id: string;
   type: OverlayType;
-  
+
   // Spline path for roads/tracks
   path?: Vector3[];
-  
+
   // Polygon for area overlays
   polygon?: Vector3[];
-  
+
   width: number;
   material: string;
   fadeEdges: boolean;
@@ -179,7 +180,7 @@ export interface SurfaceOverlay {
 // STRUCTURES
 // ============================================================================
 
-export type StructureType = 
+export type StructureType =
   | 'saloon'
   | 'sheriff_office'
   | 'general_store'
@@ -216,32 +217,33 @@ export interface StructureTemplate {
   height: number;
   hasInterior: boolean;
   entranceOffset: { x: number; z: number };
+  modelPath: string | null;
 }
 
 export const STRUCTURE_TEMPLATES: Record<StructureType, StructureTemplate> = {
-  saloon: { type: 'saloon', name: 'Saloon', width: 12, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 } },
-  sheriff_office: { type: 'sheriff_office', name: 'Sheriff Office', width: 8, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 } },
-  general_store: { type: 'general_store', name: 'General Store', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 } },
-  bank: { type: 'bank', name: 'Bank', width: 10, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 } },
-  hotel: { type: 'hotel', name: 'Hotel', width: 12, depth: 10, height: 8, hasInterior: true, entranceOffset: { x: 0, z: 5 } },
-  stable: { type: 'stable', name: 'Stable', width: 14, depth: 8, height: 5, hasInterior: false, entranceOffset: { x: 0, z: 4 } },
-  water_tower: { type: 'water_tower', name: 'Water Tower', width: 4, depth: 4, height: 12, hasInterior: false, entranceOffset: { x: 0, z: 0 } },
-  windmill: { type: 'windmill', name: 'Windmill', width: 3, depth: 3, height: 10, hasInterior: false, entranceOffset: { x: 0, z: 0 } },
-  mine_entrance: { type: 'mine_entrance', name: 'Mine Entrance', width: 6, depth: 4, height: 4, hasInterior: false, entranceOffset: { x: 0, z: 2 } },
-  train_station: { type: 'train_station', name: 'Train Station', width: 16, depth: 6, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 3 } },
-  house_small: { type: 'house_small', name: 'Small House', width: 6, depth: 6, height: 4, hasInterior: true, entranceOffset: { x: 0, z: 3 } },
-  house_large: { type: 'house_large', name: 'Large House', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 } },
-  outhouse: { type: 'outhouse', name: 'Outhouse', width: 1.5, depth: 1.5, height: 2.5, hasInterior: false, entranceOffset: { x: 0, z: 0.75 } },
-  well: { type: 'well', name: 'Well', width: 2, depth: 2, height: 2, hasInterior: false, entranceOffset: { x: 0, z: 0 } },
-  fence: { type: 'fence', name: 'Fence', width: 4, depth: 0.2, height: 1.2, hasInterior: false, entranceOffset: { x: 0, z: 0 } },
-  hitching_post: { type: 'hitching_post', name: 'Hitching Post', width: 2, depth: 0.5, height: 1, hasInterior: false, entranceOffset: { x: 0, z: 0 } },
+  saloon: { type: 'saloon', name: 'Saloon', width: 12, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: null },
+  sheriff_office: { type: 'sheriff_office', name: 'Sheriff Office', width: 8, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: null },
+  general_store: { type: 'general_store', name: 'General Store', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: null },
+  bank: { type: 'bank', name: 'Bank', width: 10, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: null },
+  hotel: { type: 'hotel', name: 'Hotel', width: 12, depth: 10, height: 8, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: null },
+  stable: { type: 'stable', name: 'Stable', width: 14, depth: 8, height: 5, hasInterior: false, entranceOffset: { x: 0, z: 4 }, modelPath: null },
+  water_tower: { type: 'water_tower', name: 'Water Tower', width: 4, depth: 4, height: 12, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: WesternAssets.WATER_TOWER },
+  windmill: { type: 'windmill', name: 'Windmill', width: 3, depth: 3, height: 10, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: null },
+  mine_entrance: { type: 'mine_entrance', name: 'Mine Entrance', width: 6, depth: 4, height: 4, hasInterior: false, entranceOffset: { x: 0, z: 2 }, modelPath: null },
+  train_station: { type: 'train_station', name: 'Train Station', width: 16, depth: 6, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 3 }, modelPath: null },
+  house_small: { type: 'house_small', name: 'Small House', width: 6, depth: 6, height: 4, hasInterior: true, entranceOffset: { x: 0, z: 3 }, modelPath: null },
+  house_large: { type: 'house_large', name: 'Large House', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: null },
+  outhouse: { type: 'outhouse', name: 'Outhouse', width: 1.5, depth: 1.5, height: 2.5, hasInterior: false, entranceOffset: { x: 0, z: 0.75 }, modelPath: null },
+  well: { type: 'well', name: 'Well', width: 2, depth: 2, height: 2, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: WesternAssets.WELL },
+  fence: { type: 'fence', name: 'Fence', width: 4, depth: 0.2, height: 1.2, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: WesternAssets.FENCE },
+  hitching_post: { type: 'hitching_post', name: 'Hitching Post', width: 2, depth: 0.5, height: 1, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: WesternAssets.RAIL }, // Placeholder usage of RAIL visual if allowed, else null
 };
 
 // ============================================================================
 // PROPS
 // ============================================================================
 
-export type PropType = 
+export type PropType =
   | 'cactus_small'
   | 'cactus_large'
   | 'cactus_saguaro'
@@ -276,13 +278,13 @@ export interface CharacterAppearance {
   bodyType: 'slim' | 'average' | 'stocky';
   height: number;
   skinTone: string;
-  
+
   faceShape: number;
   hasBeard: boolean;
   beardStyle?: 'stubble' | 'full' | 'mustache' | 'goatee';
   hasScar: boolean;
   scarPosition?: 'cheek' | 'eye' | 'chin';
-  
+
   hatStyle: 'cowboy' | 'bowler' | 'flat_cap' | 'none';
   hatColor: string;
   shirtStyle: 'work' | 'fancy' | 'vest';
@@ -290,7 +292,7 @@ export interface CharacterAppearance {
   pantsStyle: 'jeans' | 'chaps' | 'slacks';
   pantsColor: string;
   bootsStyle: 'work' | 'fancy' | 'spurs';
-  
+
   hasBandana: boolean;
   bandanaColor?: string;
   hasGunbelt: boolean;
@@ -298,7 +300,7 @@ export interface CharacterAppearance {
   ponchoColor?: string;
 }
 
-export type NPCRole = 
+export type NPCRole =
   | 'sheriff'
   | 'deputy'
   | 'merchant'
@@ -331,11 +333,11 @@ export interface NPC {
   personality: NPCPersonality;
   position: WorldPosition;
   rotation: number;
-  
+
   homeStructureId?: string;
   disposition: number;  // -100 to 100, relationship with player
   isAlive: boolean;
-  
+
   questGiver: boolean;
   questIds: string[];
 }
@@ -413,29 +415,29 @@ export interface CameraState {
   distance: number;
   azimuth: number;
   elevation: number;
-  
+
   minDistance: number;
   maxDistance: number;
   minElevation: number;
   maxElevation: number;
-  
+
   followTarget?: string;
   followLag: number;
-  
+
   isInCutscene: boolean;
 }
 
 export const DEFAULT_CAMERA_STATE: CameraState = {
-  focusPoint: new Vector3(0, 0, 0),
-  distance: 25,
-  azimuth: Math.PI / 4,
-  elevation: Math.PI / 4,
-  
-  minDistance: 10,
-  maxDistance: 50,
-  minElevation: 0.2,
-  maxElevation: Math.PI / 2.5,
-  
+  focusPoint: new Vector3(32, 5, 32),  // Start focused near player spawn
+  distance: 30,                         // Closer for better detail
+  azimuth: Math.PI * 0.75,             // Rotate to face from top-right
+  elevation: 0.4,                       // ~23° from vertical - more top-down view
+
+  minDistance: 15,
+  maxDistance: 80,
+  minElevation: 0.2,                   // Allow near top-down
+  maxElevation: 1.4,                   // Allow fairly horizontal
+
   followLag: 0.1,
   isInCutscene: false,
 };
@@ -467,11 +469,11 @@ export interface ChunkData {
   coord: ChunkCoord;
   seed: number;
   generatedAt: number;
-  
+
   // Terrain
   heightmap: Float32Array;
   biomeWeights: Map<BiomeType, Float32Array>;
-  
+
   // Content
   structures: Structure[];
   props: Prop[];

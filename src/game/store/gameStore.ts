@@ -238,7 +238,7 @@ export const useGameStore = create<GameState>()(
       playerId: '',
       playerName: 'Stranger',
       playerAppearance: null,
-      playerPosition: { x: 32, y: 0, z: 32 },
+      playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
       playerRotation: 0,
       playerStats: { ...DEFAULT_PLAYER_STATS },
       inventory: [],
@@ -268,7 +268,7 @@ export const useGameStore = create<GameState>()(
           worldSeed,
           playerName,
           playerId: `player_${Date.now()}`,
-          playerPosition: { x: 32, y: 0, z: 32 },
+          playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
           playerStats: { ...DEFAULT_PLAYER_STATS },
           inventory: [],
           activeQuests: [],
@@ -294,7 +294,7 @@ export const useGameStore = create<GameState>()(
         initialized: false,
         playerName: 'Stranger',
         playerAppearance: null,
-        playerPosition: { x: 32, y: 0, z: 32 },
+        playerPosition: { x: 128, y: 0, z: 128 },  // WORLD_CENTER for diorama
         playerStats: { ...DEFAULT_PLAYER_STATS },
         inventory: [],
         activeQuests: [],

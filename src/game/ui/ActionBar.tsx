@@ -51,6 +51,7 @@ export function ActionBar() {
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('menu')}
+              aria-label="Menu"
               className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
             >
               <MenuIcon />
@@ -62,6 +63,7 @@ export function ActionBar() {
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('inventory')}
+              aria-label="Inventory"
               className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50 relative"
             >
               <BackpackIcon />
@@ -78,6 +80,7 @@ export function ActionBar() {
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('quests')}
+              aria-label="Quests"
               className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50 relative"
             >
               <ScrollIcon />
@@ -94,6 +97,7 @@ export function ActionBar() {
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('settings')}
+              aria-label="Settings"
               className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
             >
               <SettingsIcon />

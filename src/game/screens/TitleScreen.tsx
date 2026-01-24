@@ -1,7 +1,7 @@
 // Title Screen - Iron Frontier
+import React, { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 
 // Gear SVG component
@@ -351,13 +351,19 @@ function InfoIcon() {
 export function TitleScreen() {
   const [showSplash, setShowSplash] = useState(true);
 
-  return (
-    <AnimatePresence mode="wait">
-      {showSplash ? (
-        <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />
-      ) : (
-        <MainMenu key="menu" />
-      )}
-    </AnimatePresence>
-  );
+  // Auto-transition after 2.5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log('[TitleScreen] Splash timer complete, showing main menu');
+      setShowSplash(false);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Simple conditional render without AnimatePresence complexity
+  if (showSplash) {
+    return <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />;
+  }
+
+  return <MainMenu key="menu" />;
 }

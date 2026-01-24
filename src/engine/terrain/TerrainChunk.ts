@@ -1,21 +1,21 @@
 // Terrain Chunk - Babylon.js mesh for a single terrain chunk
-import { 
+import {
   Scene,
   Mesh,
   VertexData,
   StandardMaterial,
   Color3,
-  Vector3,
-  DynamicTexture,
+  Texture,
 } from '@babylonjs/core';
-import { 
-  CHUNK_SIZE, 
-  ChunkCoord, 
-  BiomeType, 
+import {
+  CHUNK_SIZE,
+  ChunkCoord,
+  BiomeType,
   BIOME_CONFIGS,
-  chunkKey 
+  chunkKey
 } from '../types';
 import { HeightmapGenerator, HeightmapResult } from './HeightmapGenerator';
+import { TerrainTextures } from '../assets/WesternRegistry';
 
 const HEIGHTMAP_RESOLUTION = 65;
 
@@ -55,50 +55,50 @@ export class TerrainChunk {
 
   private createMesh(scene: Scene): Mesh {
     const mesh = new Mesh(`terrain_chunk`, scene);
-    
+
     const resolution = HEIGHTMAP_RESOLUTION;
     const vertexCount = resolution * resolution;
     const indexCount = (resolution - 1) * (resolution - 1) * 6;
-    
+
     // Create vertex data
     const positions = new Float32Array(vertexCount * 3);
     const normals = new Float32Array(vertexCount * 3);
     const uvs = new Float32Array(vertexCount * 2);
     const indices = new Uint32Array(indexCount);
-    
+
     const cellSize = CHUNK_SIZE / (resolution - 1);
-    
+
     // Fill positions and UVs
     for (let z = 0; z < resolution; z++) {
       for (let x = 0; x < resolution; x++) {
         const idx = z * resolution + x;
         const height = this.heightmap.heights[idx];
-        
+
         positions[idx * 3 + 0] = x * cellSize;
         positions[idx * 3 + 1] = height;
         positions[idx * 3 + 2] = z * cellSize;
-        
+
         uvs[idx * 2 + 0] = x / (resolution - 1);
         uvs[idx * 2 + 1] = z / (resolution - 1);
       }
     }
-    
+
     // Calculate normals
     for (let z = 0; z < resolution; z++) {
       for (let x = 0; x < resolution; x++) {
         const idx = z * resolution + x;
-        
+
         // Sample neighboring heights for normal calculation
         const hL = x > 0 ? this.heightmap.heights[z * resolution + (x - 1)] : this.heightmap.heights[idx];
         const hR = x < resolution - 1 ? this.heightmap.heights[z * resolution + (x + 1)] : this.heightmap.heights[idx];
         const hD = z > 0 ? this.heightmap.heights[(z - 1) * resolution + x] : this.heightmap.heights[idx];
         const hU = z < resolution - 1 ? this.heightmap.heights[(z + 1) * resolution + x] : this.heightmap.heights[idx];
-        
+
         // Calculate normal from height differences
         const nx = hL - hR;
         const nz = hD - hU;
         const ny = 2 * cellSize;
-        
+
         // Normalize
         const len = Math.sqrt(nx * nx + ny * ny + nz * nz);
         normals[idx * 3 + 0] = nx / len;
@@ -106,7 +106,7 @@ export class TerrainChunk {
         normals[idx * 3 + 2] = nz / len;
       }
     }
-    
+
     // Fill indices (two triangles per quad)
     let indexIdx = 0;
     for (let z = 0; z < resolution - 1; z++) {
@@ -115,19 +115,19 @@ export class TerrainChunk {
         const topRight = topLeft + 1;
         const bottomLeft = (z + 1) * resolution + x;
         const bottomRight = bottomLeft + 1;
-        
+
         // Triangle 1
         indices[indexIdx++] = topLeft;
         indices[indexIdx++] = bottomLeft;
         indices[indexIdx++] = topRight;
-        
+
         // Triangle 2
         indices[indexIdx++] = topRight;
         indices[indexIdx++] = bottomLeft;
         indices[indexIdx++] = bottomRight;
       }
     }
-    
+
     // Apply vertex data
     const vertexData = new VertexData();
     vertexData.positions = positions;
@@ -135,68 +135,98 @@ export class TerrainChunk {
     vertexData.uvs = uvs;
     vertexData.indices = indices;
     vertexData.applyToMesh(mesh);
-    
+
     return mesh;
   }
 
   private createMaterial(scene: Scene): StandardMaterial {
     const mat = new StandardMaterial(`terrain_mat_${chunkKey(this.coord)}`, scene);
-    
-    // Create a blended color texture based on biome weights
-    const textureSize = 256;
-    const texture = new DynamicTexture(
-      `terrain_tex_${chunkKey(this.coord)}`,
-      textureSize,
-      scene,
-      false
+
+    // Determine dominant biome for this chunk to select texture
+    const dominantBiome = this.getDominantBiome();
+
+    // Map biome to AmbientCG texture set
+    const textureSet = this.getTextureForBiome(dominantBiome);
+
+    // Load PBR textures from AmbientCG
+    const diffuseTexture = new Texture(textureSet.color, scene);
+    diffuseTexture.uScale = 8;  // Tile texture across chunk
+    diffuseTexture.vScale = 8;
+
+    mat.diffuseTexture = diffuseTexture;
+
+    // Load normal map for surface detail
+    const bumpTexture = new Texture(textureSet.normal, scene);
+    bumpTexture.uScale = 8;
+    bumpTexture.vScale = 8;
+    mat.bumpTexture = bumpTexture;
+    mat.invertNormalMapX = true;
+    mat.invertNormalMapY = true;
+
+    // Add subtle biome color tint for variation
+    const biomeConfig = BIOME_CONFIGS[dominantBiome];
+    mat.diffuseColor = new Color3(
+      0.8 + biomeConfig.groundColor.r * 0.2,
+      0.8 + biomeConfig.groundColor.g * 0.2,
+      0.8 + biomeConfig.groundColor.b * 0.2
     );
-    
-    const ctx = texture.getContext() as CanvasRenderingContext2D;
-    const imageData = ctx.createImageData(textureSize, textureSize);
-    
+
+    mat.specularColor = new Color3(0.1, 0.08, 0.06);  // Subtle warm specular
+    mat.specularPower = 32;
+    mat.backFaceCulling = true;
+
+    return mat;
+  }
+
+  /**
+   * Determine the dominant biome in this chunk based on average weights
+   */
+  private getDominantBiome(): BiomeType {
     const resolution = HEIGHTMAP_RESOLUTION;
-    
-    for (let y = 0; y < textureSize; y++) {
-      for (let x = 0; x < textureSize; x++) {
-        // Map texture coords to heightmap coords
-        const hx = Math.floor((x / textureSize) * (resolution - 1));
-        const hz = Math.floor((y / textureSize) * (resolution - 1));
-        const hidx = hz * resolution + hx;
-        
-        // Blend biome colors based on weights
-        let r = 0, g = 0, b = 0;
-        
-        for (const [biomeType, weights] of this.heightmap.biomeWeights) {
-          const weight = weights[hidx];
-          if (weight > 0.01) {
-            const config = BIOME_CONFIGS[biomeType];
-            r += config.groundColor.r * weight;
-            g += config.groundColor.g * weight;
-            b += config.groundColor.b * weight;
-          }
-        }
-        
-        // Add some noise for texture variation
-        const noise = (Math.random() - 0.5) * 0.1;
-        r = Math.max(0, Math.min(1, r + noise));
-        g = Math.max(0, Math.min(1, g + noise));
-        b = Math.max(0, Math.min(1, b + noise));
-        
-        const pixelIdx = (y * textureSize + x) * 4;
-        imageData.data[pixelIdx + 0] = Math.floor(r * 255);
-        imageData.data[pixelIdx + 1] = Math.floor(g * 255);
-        imageData.data[pixelIdx + 2] = Math.floor(b * 255);
-        imageData.data[pixelIdx + 3] = 255;
+    const totals: Record<BiomeType, number> = {
+      desert: 0, grassland: 0, badlands: 0, riverside: 0, town: 0, railyard: 0, mine: 0
+    };
+
+    // Sum weights across all vertices
+    for (const [biomeType, weights] of this.heightmap.biomeWeights) {
+      for (let i = 0; i < weights.length; i++) {
+        totals[biomeType] += weights[i];
       }
     }
-    
-    ctx.putImageData(imageData, 0, 0);
-    texture.update();
-    
-    mat.diffuseTexture = texture;
-    mat.specularColor = new Color3(0.1, 0.1, 0.1);
-    
-    return mat;
+
+    // Find dominant
+    let dominant: BiomeType = 'desert';
+    let maxWeight = 0;
+    for (const [biome, total] of Object.entries(totals)) {
+      if (total > maxWeight) {
+        maxWeight = total;
+        dominant = biome as BiomeType;
+      }
+    }
+
+    return dominant;
+  }
+
+  /**
+   * Map biome type to AmbientCG texture set
+   */
+  private getTextureForBiome(biome: BiomeType): { color: string; normal: string; roughness: string } {
+    switch (biome) {
+      case 'desert':
+        return TerrainTextures.DESERT;
+      case 'grassland':
+        return TerrainTextures.GRASSLAND;
+      case 'badlands':
+        return TerrainTextures.BADLANDS;
+      case 'riverside':
+        return TerrainTextures.RIVERSIDE;
+      case 'mine':
+        return TerrainTextures.ROCK;
+      case 'town':
+      case 'railyard':
+      default:
+        return TerrainTextures.DESERT;  // Default fallback
+    }
   }
 
   getHeightAt(localX: number, localZ: number): number {
