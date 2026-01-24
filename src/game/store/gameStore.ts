@@ -15,6 +15,8 @@ import {
   WorldItem,
   WorldPosition
 } from '../../engine/types';
+import { dbManager } from './DatabaseManager';
+import { saveGameBinary as persistBinary } from './saveManager';
 
 // ============================================================================
 // TYPES
@@ -176,6 +178,7 @@ export interface GameState {
 
   // Save
   saveGame: () => void;
+  saveGameBinary: (saveId: string) => Promise<void>;
 }
 
 // ============================================================================
@@ -274,6 +277,13 @@ export const useGameStore = create<GameState>()(
           talkedNPCIds: [],
           notifications: [],
         });
+
+        // Initialize SQLite DB
+        dbManager.init().then(() => {
+          dbManager.savePlayer(get());
+          dbManager.saveInventory(get().inventory);
+        });
+
         get().addNotification('info', `Welcome to the frontier, ${playerName}!`);
       },
 
@@ -297,9 +307,18 @@ export const useGameStore = create<GameState>()(
         playTime: 0,
       }),
 
-      setPlayerPosition: (pos) => set({ playerPosition: pos }),
-      setPlayerRotation: (rotation) => set({ playerRotation: rotation }),
-      updatePlayerStats: (stats) => set((state) => ({ playerStats: { ...state.playerStats, ...stats } })),
+      setPlayerPosition: (pos) => {
+        set({ playerPosition: pos });
+        dbManager.savePlayer(get());
+      },
+      setPlayerRotation: (rotation) => {
+        set({ playerRotation: rotation });
+        dbManager.savePlayer(get());
+      },
+      updatePlayerStats: (stats) => {
+        set((state) => ({ playerStats: { ...state.playerStats, ...stats } }));
+        dbManager.savePlayer(get());
+      },
 
       gainXP: (amount) => {
         const { playerStats, addNotification } = get();
@@ -353,6 +372,7 @@ export const useGameStore = create<GameState>()(
         } else {
           set({ inventory: [...inventory, item] });
         }
+        dbManager.saveInventory(get().inventory);
         addNotification('item', `Found: ${item.name}`);
       },
 
@@ -369,6 +389,7 @@ export const useGameStore = create<GameState>()(
             ),
           });
         }
+        dbManager.saveInventory(get().inventory);
       },
 
       useItem: (id) => {
@@ -389,6 +410,7 @@ export const useGameStore = create<GameState>()(
         const item = inventory.find((i) => i.id === id);
         if (!item) return;
         set({ inventory: inventory.filter(i => i.id !== id) });
+        dbManager.saveInventory(get().inventory);
         addNotification('info', `Dropped ${item.name}`);
       },
 
@@ -494,7 +516,18 @@ export const useGameStore = create<GameState>()(
 
       removeNotification: (id) => set((state) => ({ notifications: state.notifications.filter((n) => n.id !== id) })),
       updateSettings: (settings) => set((state) => ({ settings: { ...state.settings, ...settings } })),
-      saveGame: () => { set({ lastSaved: Date.now() }); get().addNotification('info', 'Game saved'); },
+      saveGame: () => {
+        set({ lastSaved: Date.now() });
+        get().addNotification('info', 'Game saved');
+      },
+      saveGameBinary: async (saveId: string) => {
+        const success = await persistBinary(saveId);
+        if (success) {
+          get().addNotification('info', 'Binary save successful');
+        } else {
+          get().addNotification('warning', 'Binary save failed');
+        }
+      },
     }),
     {
       name: 'iron-frontier-save',

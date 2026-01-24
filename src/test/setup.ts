@@ -97,6 +97,29 @@ HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
   clip: vi.fn(),
 });
 
+// Mock sql.js and DatabaseManager
+vi.mock('sql.js', () => ({
+  default: vi.fn().mockResolvedValue({
+    Database: class {
+      run = vi.fn();
+      exec = vi.fn().mockReturnValue([]);
+      export = vi.fn().mockReturnValue(new Uint8Array());
+      close = vi.fn();
+    },
+  }),
+}));
+
+vi.mock('@/game/store/DatabaseManager', () => ({
+  dbManager: {
+    init: vi.fn().mockResolvedValue(undefined),
+    savePlayer: vi.fn(),
+    saveInventory: vi.fn(),
+    loadGameState: vi.fn().mockReturnValue(null),
+    export: vi.fn().mockReturnValue(new Uint8Array()),
+    dispose: vi.fn(),
+  },
+}));
+
 // Reset game store before each test
 beforeEach(() => {
   vi.clearAllMocks();
