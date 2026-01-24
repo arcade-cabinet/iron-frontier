@@ -72,6 +72,7 @@ export const EffectTypeSchema = z.enum([
   'unlock_location',   // Discover a location
   'change_npc_state',  // Modify NPC disposition/state
   'trigger_event',     // Trigger a world event
+  'open_shop',         // Open NPC's shop for trading
 ]);
 export type EffectType = z.infer<typeof EffectTypeSchema>;
 

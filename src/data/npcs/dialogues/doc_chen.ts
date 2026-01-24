@@ -392,7 +392,13 @@ export const DocChenMainDialogue: DialogueTree = {
           nextNodeId: 'preparing',
         },
         {
-          text: "I'll browse. Thank you.",
+          text: "[Browse Shop] Show me what you have.",
+          nextNodeId: null,
+          effects: [{ type: 'open_shop', target: 'doc_chen_shop' }],
+          tags: ['shop'],
+        },
+        {
+          text: "Maybe later. Thank you.",
           nextNodeId: null,
         },
       ],
@@ -672,6 +678,12 @@ export const DocChenMainDialogue: DialogueTree = {
         {
           text: "I need supplies.",
           nextNodeId: 'medical_supplies',
+        },
+        {
+          text: "[Browse Shop] Let me see what you have.",
+          nextNodeId: null,
+          effects: [{ type: 'open_shop', target: 'doc_chen_shop' }],
+          tags: ['shop'],
         },
         {
           text: "Just checking in.",

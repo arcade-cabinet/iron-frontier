@@ -21,6 +21,7 @@ import { MenuPanel } from './ui/MenuPanel';
 import { NotificationFeed } from './ui/NotificationFeed';
 import { QuestLog } from './ui/QuestLog';
 import { SettingsPanel } from './ui/SettingsPanel';
+import { ShopPanel } from './ui/ShopPanel';
 import { WorldMap } from './ui/WorldMap';
 
 // ============================================================================
@@ -377,7 +378,7 @@ function GameCanvas() {
 // ============================================================================
 
 export function Game() {
-  const { phase, travelTo } = useGameStore();
+  const { phase, travelTo, shopState } = useGameStore();
   const [isWorldMapOpen, setIsWorldMapOpen] = useState(false);
 
   // Keyboard shortcuts
@@ -453,6 +454,9 @@ export function Game() {
 
       {/* Combat Panel */}
       {phase === 'combat' && <CombatPanel />}
+
+      {/* Shop Panel */}
+      {shopState && <ShopPanel />}
     </div>
   );
 }

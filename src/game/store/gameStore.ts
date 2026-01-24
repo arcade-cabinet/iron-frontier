@@ -54,6 +54,14 @@ import {
   rollHit,
 } from '../../data/schemas/combat';
 import { getEnemyById, getEncounterById } from '../../data/enemies/index';
+import {
+  getShopById,
+  calculateBuyPrice,
+  calculateSellPrice,
+  getAvailableShopItems,
+  canSellItemToShop,
+  type ShopDefinition,
+} from '../../data/shops/index';
 
 // ============================================================================
 // TYPES
@@ -210,6 +218,9 @@ export interface GameState {
   // Combat
   combatState: CombatState | null;
 
+  // Shop
+  shopState: { shopId: string; ownerId: string } | null;
+
   // Settings
   settings: GameSettings;
 
@@ -303,6 +314,12 @@ export interface GameState {
   endCombatTurn: () => void;
   attemptFlee: () => void;
   endCombat: () => void;
+
+  // Shop System
+  openShop: (shopId: string) => void;
+  closeShop: () => void;
+  buyItem: (itemId: string) => void;
+  sellItem: (inventoryId: string) => void;
 }
 
 // ============================================================================
@@ -422,6 +439,7 @@ export const useGameStore = create<GameState>()(
       dialogueHistory: [],
       notifications: [],
       combatState: null,
+      shopState: null,
       settings: { ...DEFAULT_SETTINGS },
       saveVersion: 2,
       lastSaved: Date.now(),
@@ -1222,6 +1240,13 @@ export const useGameStore = create<GameState>()(
             // Future: trigger world events
             addNotification('info', `Event: ${effect.target}`);
             break;
+          case 'open_shop':
+            if (effect.target) {
+              // Close dialogue and open shop
+              set({ dialogueState: null, phase: 'playing' });
+              get().openShop(effect.target);
+            }
+            break;
         }
       },
 
@@ -1810,6 +1835,103 @@ export const useGameStore = create<GameState>()(
 
         set({ combatState: null, phase: 'playing' });
         console.log('[Combat] Ended');
+      },
+
+      // ========== SHOP SYSTEM ==========
+
+      openShop: (shopId: string) => {
+        const shop = getShopById(shopId);
+        if (!shop) {
+          console.error(`[Shop] Shop not found: ${shopId}`);
+          return;
+        }
+
+        set({
+          shopState: { shopId, ownerId: shop.ownerId },
+          phase: 'paused', // Pause game while shopping
+        });
+        console.log(`[Shop] Opened: ${shop.name}`);
+      },
+
+      closeShop: () => {
+        set({ shopState: null, phase: 'playing' });
+        console.log('[Shop] Closed');
+      },
+
+      buyItem: (itemId: string) => {
+        const { shopState, playerStats, addItemById, addNotification, updatePlayerStats } = get();
+        if (!shopState) return;
+
+        const shop = getShopById(shopState.shopId);
+        if (!shop) return;
+
+        const shopItem = shop.inventory.find(i => i.itemId === itemId);
+        if (!shopItem) {
+          addNotification('warning', 'Item not available');
+          return;
+        }
+
+        // Check stock
+        if (shopItem.stock === 0) {
+          addNotification('warning', 'Item out of stock');
+          return;
+        }
+
+        // Calculate price
+        const price = calculateBuyPrice(shop, shopItem);
+
+        // Check if player can afford
+        if (playerStats.gold < price) {
+          addNotification('warning', 'Not enough gold!');
+          return;
+        }
+
+        // Deduct gold and add item
+        updatePlayerStats({ gold: playerStats.gold - price });
+        addItemById(itemId, 1);
+
+        // Update stock (if not infinite)
+        if (shopItem.stock > 0) {
+          shopItem.stock -= 1;
+        }
+
+        console.log(`[Shop] Bought: ${itemId} for $${price}`);
+      },
+
+      sellItem: (inventoryId: string) => {
+        const { shopState, inventory, playerStats, removeItem, addNotification, updatePlayerStats } = get();
+        if (!shopState) return;
+
+        const shop = getShopById(shopState.shopId);
+        if (!shop || !shop.canSell) {
+          addNotification('warning', 'Cannot sell items here');
+          return;
+        }
+
+        const invItem = inventory.find(i => i.id === inventoryId);
+        if (!invItem) return;
+
+        // Check if shop accepts this item type
+        if (!canSellItemToShop(shop, invItem.type)) {
+          addNotification('warning', 'Shop does not buy this type of item');
+          return;
+        }
+
+        const itemDef = getItem(invItem.itemId);
+        if (!itemDef || !itemDef.sellable) {
+          addNotification('warning', 'Cannot sell this item');
+          return;
+        }
+
+        // Calculate sell price
+        const price = calculateSellPrice(shop, itemDef);
+
+        // Remove item and add gold
+        removeItem(invItem.itemId, 1);
+        updatePlayerStats({ gold: playerStats.gold + price });
+
+        addNotification('item', `Sold ${invItem.name} for $${price}`);
+        console.log(`[Shop] Sold: ${invItem.itemId} for $${price}`);
       },
     }),
     {
