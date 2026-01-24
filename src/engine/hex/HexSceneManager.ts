@@ -123,6 +123,9 @@ export class HexSceneManager {
   // NPC markers
   private npcMarkers: Map<string, AbstractMesh> = new Map();
 
+  // World item markers
+  private itemMarkers: Map<string, AbstractMesh> = new Map();
+
   // Camera azimuth for calculating player facing direction
   // Player should face TOWARD the camera by default (Fallout 2 style)
   // Camera is at azimuth 135° (top-right looking down at player)
@@ -871,6 +874,108 @@ export class HexSceneManager {
   getNPCFromPickedMesh(mesh: AbstractMesh): string | null {
     if (mesh.metadata && mesh.metadata.npcId) {
       return mesh.metadata.npcId;
+    }
+    return null;
+  }
+
+  // ===========================================================================
+  // WORLD ITEM MARKERS
+  // ===========================================================================
+
+  /**
+   * Spawn a visual marker for a world item at the given hex coordinate
+   * Creates a floating, rotating cube to indicate collectible items
+   */
+  spawnItemMarker(itemId: string, coord: HexCoord, itemName: string): void {
+    // Remove existing marker if any
+    this.removeItemMarker(itemId);
+
+    // Get tile elevation
+    const tile = this.hexGrid?.tiles.get(hexKey(coord));
+    const elevation = tile ? tile.elevation * 0.5 : 0;
+
+    // Convert to world position
+    const worldPos = hexToWorld(coord, elevation + 0.1, DEFAULT_HEX_LAYOUT);
+
+    // Create a marker box (loot crate style)
+    const marker = MeshBuilder.CreateBox(`item_marker_${itemId}`, {
+      size: 0.5,
+    }, this.scene);
+
+    // Position marker with a slight hover
+    marker.position = new Vector3(worldPos.x, worldPos.y + 0.5, worldPos.z);
+
+    // Rotate 45 degrees for diamond shape
+    marker.rotation.y = Math.PI / 4;
+
+    // Create material - cyan/blue glow for items
+    const markerMat = new StandardMaterial(`item_marker_mat_${itemId}`, this.scene);
+    markerMat.diffuseColor = new Color3(0.2, 0.8, 1.0); // Cyan
+    markerMat.emissiveColor = new Color3(0.1, 0.4, 0.5); // Soft glow
+    markerMat.alpha = 0.85;
+    marker.material = markerMat;
+
+    // Make marker pickable
+    marker.isPickable = true;
+
+    // Store item ID in metadata for click detection
+    marker.metadata = { itemId, itemName, isWorldItem: true };
+
+    // Store marker reference
+    this.itemMarkers.set(itemId, marker);
+
+    // Add floating animation
+    this.animateItemMarker(marker);
+
+    console.log(`[HexSceneManager] Spawned item marker for ${itemName} at hex (${coord.q}, ${coord.r})`);
+  }
+
+  /**
+   * Simple floating animation for item markers
+   */
+  private animateItemMarker(marker: AbstractMesh): void {
+    const baseY = marker.position.y;
+    const startTime = performance.now();
+
+    const animate = () => {
+      if (!marker.isDisposed()) {
+        const elapsed = (performance.now() - startTime) / 1000;
+        // Gentle bobbing motion
+        marker.position.y = baseY + Math.sin(elapsed * 2) * 0.15;
+        // Slow rotation
+        marker.rotation.y += 0.01;
+        requestAnimationFrame(animate);
+      }
+    };
+    animate();
+  }
+
+  /**
+   * Remove a world item marker
+   */
+  removeItemMarker(itemId: string): void {
+    const marker = this.itemMarkers.get(itemId);
+    if (marker) {
+      marker.dispose();
+      this.itemMarkers.delete(itemId);
+    }
+  }
+
+  /**
+   * Remove all world item markers
+   */
+  clearItemMarkers(): void {
+    for (const [itemId] of this.itemMarkers) {
+      this.removeItemMarker(itemId);
+    }
+  }
+
+  /**
+   * Check if a picked mesh is a world item marker and return the item ID
+   */
+  getItemFromPickedMesh(mesh: AbstractMesh): string | null {
+    if (mesh.metadata && mesh.metadata.isWorldItem && mesh.metadata.itemId) {
+      return mesh.metadata.itemId;
     }
     return null;
   }

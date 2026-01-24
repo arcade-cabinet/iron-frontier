@@ -9,6 +9,7 @@ import { useGameStore } from './store/gameStore';
 // World/location data
 import { getLocationData } from '../data/worlds/index';
 import { getNPCsByLocation } from '../data/npcs/index';
+import { getWorldItemsForLocation, getWorldItemName } from '../data/items/worldItems';
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
@@ -40,6 +41,8 @@ function GameCanvas() {
     currentLocationId,
     initWorld,
     talkToNPC,
+    collectWorldItem,
+    collectedItemIds,
   } = useGameStore();
 
   // Initialize world on first play
@@ -109,7 +112,7 @@ function GameCanvas() {
         // Store the manager
         sceneManagerRef.current = manager;
 
-        // Handle hex clicks - check for NPCs first, then movement
+        // Handle hex clicks - check for NPCs and items first, then movement
         manager.setHexClickHandler((hexCoord, tile) => {
           // Check if there's an NPC at this hex in the current location
           if (currentLocationId) {
@@ -123,9 +126,23 @@ function GameCanvas() {
               talkToNPC(npcAtHex.id);
               return; // Don't move if clicking on NPC
             }
+
+            // Check if there's a world item at this hex
+            const worldItems = getWorldItemsForLocation(currentLocationId);
+            const itemAtHex = worldItems.find(
+              item => item.coord.q === hexCoord.q && item.coord.r === hexCoord.r &&
+                      !collectedItemIds.includes(item.id)
+            );
+
+            if (itemAtHex) {
+              console.log(`[GameCanvas] Clicked on item: ${itemAtHex.itemId}`);
+              collectWorldItem(itemAtHex.id);
+              manager.removeItemMarker(itemAtHex.id);
+              return; // Don't move if clicking on item
+            }
           }
 
-          // No NPC at this hex - move player there
+          // No NPC or item at this hex - move player there
           // Movement is handled by ground click handler
         });
 
@@ -142,6 +159,18 @@ function GameCanvas() {
             manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers`);
+
+          // Spawn world item markers (skip already collected items)
+          const worldItems = getWorldItemsForLocation(currentLocationId);
+          let itemsSpawned = 0;
+          for (const item of worldItems) {
+            if (!collectedItemIds.includes(item.id)) {
+              const itemName = getWorldItemName(item.itemId);
+              manager.spawnItemMarker(item.id, item.coord, itemName);
+              itemsSpawned++;
+            }
+          }
+          console.log(`[GameCanvas] Spawned ${itemsSpawned} world item markers`);
         }
 
         // Start render loop
@@ -229,7 +258,7 @@ function GameCanvas() {
 
         sceneManagerRef.current = manager;
 
-        // Handle hex clicks - check for NPCs first, then movement
+        // Handle hex clicks - check for NPCs and items first, then movement
         manager.setHexClickHandler((hexCoord, tile) => {
           if (currentLocationId) {
             const npcsInLocation = getNPCsByLocation(currentLocationId);
@@ -240,6 +269,20 @@ function GameCanvas() {
             if (npcAtHex) {
               console.log(`[GameCanvas] Clicked on NPC: ${npcAtHex.name}`);
               talkToNPC(npcAtHex.id);
+              return;
+            }
+
+            // Check if there's a world item at this hex
+            const worldItems = getWorldItemsForLocation(currentLocationId);
+            const itemAtHex = worldItems.find(
+              item => item.coord.q === hexCoord.q && item.coord.r === hexCoord.r &&
+                      !collectedItemIds.includes(item.id)
+            );
+
+            if (itemAtHex) {
+              console.log(`[GameCanvas] Clicked on item: ${itemAtHex.itemId}`);
+              collectWorldItem(itemAtHex.id);
+              manager.removeItemMarker(itemAtHex.id);
               return;
             }
           }
@@ -257,6 +300,18 @@ function GameCanvas() {
             manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers for new location`);
+
+          // Spawn world item markers (skip already collected items)
+          const worldItems = getWorldItemsForLocation(currentLocationId);
+          let itemsSpawned = 0;
+          for (const item of worldItems) {
+            if (!collectedItemIds.includes(item.id)) {
+              const itemName = getWorldItemName(item.itemId);
+              manager.spawnItemMarker(item.id, item.coord, itemName);
+              itemsSpawned++;
+            }
+          }
+          console.log(`[GameCanvas] Spawned ${itemsSpawned} world item markers for new location`);
         }
 
         manager.start();

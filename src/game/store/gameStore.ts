@@ -41,6 +41,7 @@ import {
   getCurrentStage,
 } from '../../data/schemas/quest';
 import { getQuestById, QUESTS_BY_ID } from '../../data/quests/index';
+import { getWorldItemsForLocation, type WorldItemSpawn } from '../../data/items/worldItems';
 
 // ============================================================================
 // TYPES
@@ -1205,13 +1206,33 @@ export const useGameStore = create<GameState>()(
         return getNPCById(dialogueState.npcId);
       },
 
-      collectWorldItem: (itemId) => {
-        const { worldItems, collectedItemIds, addItemById } = get();
-        const worldItem = worldItems[itemId];
-        if (!worldItem || collectedItemIds.includes(itemId)) return;
-        set({ collectedItemIds: [...collectedItemIds, itemId] });
-        // Use the item library to get full item details
-        addItemById(worldItem.itemId, worldItem.quantity);
+      collectWorldItem: (worldItemId) => {
+        const { currentLocationId, collectedItemIds, addItemById, addNotification } = get();
+
+        // Check if already collected
+        if (collectedItemIds.includes(worldItemId)) return;
+
+        // Look up the world item from location data
+        if (currentLocationId) {
+          const locationItems = getWorldItemsForLocation(currentLocationId);
+          const worldItem = locationItems.find(item => item.id === worldItemId);
+
+          if (worldItem) {
+            // Mark as collected
+            set({ collectedItemIds: [...collectedItemIds, worldItemId] });
+            // Add item to inventory
+            addItemById(worldItem.itemId, worldItem.quantity);
+            return;
+          }
+        }
+
+        // Fallback to checking worldItems state (for backwards compatibility)
+        const { worldItems } = get();
+        const worldItem = worldItems[worldItemId];
+        if (worldItem) {
+          set({ collectedItemIds: [...collectedItemIds, worldItemId] });
+          addItemById(worldItem.itemId, worldItem.quantity);
+        }
       },
 
       updateTime: (hours) => {
