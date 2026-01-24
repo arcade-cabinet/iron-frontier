@@ -1985,8 +1985,15 @@ export const useGameStore = create<GameState>()(
           }
         }
 
-        set({ combatState: null, phase: 'playing' });
-        console.log('[Combat] Ended');
+        // Check if player was defeated (health is 0)
+        const { playerStats } = get();
+        if (combatState.phase === 'defeat' || playerStats.health <= 0) {
+          set({ combatState: null, phase: 'game_over' });
+          console.log('[Combat] Player defeated - Game Over');
+        } else {
+          set({ combatState: null, phase: 'playing' });
+          console.log('[Combat] Ended');
+        }
       },
 
       // ========== SHOP SYSTEM ==========
