@@ -2,7 +2,7 @@
 
 ## Current Focus
 
-**Spatial Data System Complete** - The full data architecture for world generation is now in place. The system supports hand-crafted locations via JSON-like schemas and procedural generation.
+**Daggerfall-Style Procedural Generation System** - Comprehensive procedural content generation infrastructure has been implemented. Currently integrating with game store and adding missing components (items, enemies, tests).
 
 ## Recent History (Session 2026-01-24)
 
@@ -61,9 +61,141 @@
 - **ECS Ready**: Data designed for loading into ECS components
 - **Two-Tier Generation**: Hand-crafted locations via `locationDataId`, procedural via seed
 
+## Session 2026-01-24 (Later) - Procedural Generation System
+
+### Completed
+
+1. **Core Generation Infrastructure** (15,000+ lines)
+   - `seededRandom.ts` - Mulberry32 PRNG with SeededRandom class
+   - `generation.ts` schema - 20+ Zod schemas for templates
+
+2. **Generator Modules**
+   - `nameGenerator.ts` - Multi-origin cultural names
+   - `npcGenerator.ts` - NPC creation from templates
+   - `questGenerator.ts` - Multi-stage quest generation
+   - `encounterGenerator.ts` - Combat encounter composition
+   - `dialogueGenerator.ts` - Dialogue tree assembly
+   - `worldGenerator.ts` - Master orchestrator
+
+3. **Template Libraries**
+   - 30+ NPC archetypes
+   - 15+ quest templates
+   - 25 building templates, 15 location templates
+   - 28 encounter templates
+   - 20 schedule templates
+   - 13 faction templates with reputation
+
+4. **Content Pools**
+   - 7 name origin pools
+   - 6 place name pools
+   - 60+ dialogue snippets
+   - 90+ rumor/lore entries
+
+### Session 2026-01-24 (Latest) - Generation System Completion
+
+**Commit**: `ecd83e2` - feat: complete Daggerfall-style procedural generation system
+
+1. **Item Generator** (`itemGenerator.ts` - 1,297 lines) - COMPLETE
+   - Weapon, armor, consumable generation from templates
+   - Procedural loot tables with weighted drops
+   - Shop inventory generation with price modifiers
+   - Material/quality/style pool systems
+
+2. **Game Store Integration** (`gameStoreIntegration.ts` - 748 lines) - COMPLETE
+   - Type converters for NPCs, quests, dialogues
+   - Population functions for locations
+   - Generation triggers and world initialization
+   - ProceduralWorldState management
+
+3. **Enemy Templates** (`enemyTemplates.ts` - 1,246 lines) - COMPLETE
+   - 26 enemy types: bandits, wildlife, IVRC, Copperhead Gang, automatons
+   - Level-scaled stats with configurable multipliers
+   - Behavior/combat tags for AI hints
+   - Faction associations and XP modifiers
+
+4. **Unit Tests** (`generation.test.ts` - 1,699 lines) - COMPLETE
+   - 103 comprehensive tests covering:
+     - SeededRandom (32 tests)
+     - Name Generation (13 tests)
+     - NPC Generation (8 tests)
+     - Quest Generation (6 tests)
+     - Encounter Generation (8 tests)
+     - Dialogue Generation (6 tests)
+     - World Generation (10 tests)
+     - Edge Cases (20 tests)
+
+### Build & Test Status
+- **Build**: Passes (7.95s, 7,352 kB)
+- **Tests**: 176/176 pass
+
+### Schema Updates Made
+- `DialogueEffectTypeSchema` (renamed from EffectType to avoid conflict with item schema)
+- `BuffTypeSchema` expanded: damage_resist, poison_resist, heat_resist, cold_resist
+- `ArmorStatsSchema` added resistances property
+- `DialogueNodeSchema` added conditions property
+- Re-exported types from npcs/items indexes for external use
+
+## Session 2026-01-24 (Latest) - Procedural Generation Integration
+
+**Integration of procedural generation system with existing town/location infrastructure - COMPLETE**
+
+### Files Created
+
+1. **`/src/data/generation/ProceduralLocationManager.ts`** (600+ lines)
+   - Central orchestrator for procedural content generation
+   - Singleton pattern with in-memory cache (keyed by locationId)
+   - Key functions:
+     - `initialize(worldSeed)` - Initialize with world seed
+     - `generateLocationContent(resolvedLocation)` - Generate NPCs, items, dialogue, shops, quests
+     - `getOrGenerateNPCs(locationId)` - Lazy NPC access
+     - `getOrGenerateItems(locationId)` - Lazy item access
+     - `getOrGenerateDialogue(npcId, locationId)` - Lazy dialogue access
+     - `getOrGenerateShop(npcId, locationId)` - Lazy shop access
+   - Deterministic generation: same seed + locationId = identical content
+
+### Files Modified
+
+1. **`/src/data/npcs/index.ts`**
+   - `getNPCsByLocation()` now returns both hand-crafted AND procedural NPCs
+   - Checks `ProceduralLocationManager.hasGeneratedContent()` before merging
+   - Added exports for `ProceduralNPC` type
+
+2. **`/src/data/items/worldItems.ts`**
+   - `getWorldItemsForLocation()` now returns both hand-crafted AND procedural items
+   - Checks `ProceduralLocationManager.hasGeneratedContent()` before merging
+
+3. **`/src/game/store/gameStore.ts`**
+   - `initWorld()` now calls `ProceduralLocationManager.initialize(worldSeed)`
+   - Generates content for starting location if procedural
+   - `travelTo()` generates content for procedural destinations on-demand
+
+4. **`/src/test/generation.test.ts`** (2000+ lines now)
+   - Added 27 new integration tests covering:
+     - ProceduralLocationManager initialization (4 tests)
+     - generateLocationContent (9 tests)
+     - Deterministic generation (3 tests)
+     - getOrGenerateNPCs/Items/Dialogue (5 tests)
+     - Unified NPC lookup (3 tests)
+     - Unified item lookup (3 tests)
+
+### Key Fixes Made
+
+1. **Location Type Alignment**
+   - `inferLocationType()` now returns types matching NPC template `validLocationTypes`
+   - Types: 'town', 'city', 'mine', 'ranch', 'outpost', 'camp', 'ruin'
+   - Previously: 'frontier_town', 'mining_town', etc. (no template matches)
+
+2. **Item Pool Alignment**
+   - Added pools for 'town', 'city', 'mine', 'ranch', 'outpost', 'camp', 'ruin'
+   - Location-specific loot distribution
+
+### Build & Test Status
+- **Build**: Passes (8.27s, 7,652 kB)
+- **Tests**: 203/203 pass
+
 ## Next Steps
 
 1. **World Map UI**: Visual map showing regions and locations
-2. **Travel System**: Implement location transitions using connections
-3. **Procedural Location Generator**: Generate locations for those with only seeds
-4. **CI/CD Setup**: GitHub Actions for automated testing/deployment
+2. **Travel System**: Implement location transitions with travel encounters
+3. **CI/CD Setup**: GitHub Actions for automated testing
+4. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)

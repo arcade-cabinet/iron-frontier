@@ -3,10 +3,14 @@
  *
  * Defines items that can be found in the world at specific locations.
  * These are collectible items placed at hex coordinates within locations.
+ *
+ * Now supports both hand-crafted items AND procedurally generated items
+ * via the ProceduralLocationManager.
  */
 
 import type { WorldItem } from '../../engine/types';
 import type { HexCoord } from '../../engine/hex/HexTypes';
+import { ProceduralLocationManager } from '../generation/ProceduralLocationManager';
 
 export interface WorldItemSpawn {
   id: string;
@@ -108,9 +112,19 @@ export const WORLD_ITEMS_BY_LOCATION: Record<string, WorldItemSpawn[]> = {
 
 /**
  * Get world items for a specific location
+ * Combines hand-crafted items with procedurally generated ones
  */
 export function getWorldItemsForLocation(locationId: string): WorldItemSpawn[] {
-  return WORLD_ITEMS_BY_LOCATION[locationId] ?? [];
+  // Get hand-crafted items
+  const handCrafted = WORLD_ITEMS_BY_LOCATION[locationId] ?? [];
+
+  // Get procedural items if manager is initialized and has content for this location
+  if (ProceduralLocationManager.isInitialized() && ProceduralLocationManager.hasGeneratedContent(locationId)) {
+    const procedural = ProceduralLocationManager.getOrGenerateItems(locationId);
+    return [...handCrafted, ...procedural];
+  }
+
+  return handCrafted;
 }
 
 /**

@@ -15,7 +15,8 @@ import {
 } from '../../engine/types';
 import { dbManager } from './DatabaseManager';
 import { saveGameBinary as persistBinary } from './saveManager';
-import { loadWorld, getWorldById, type LoadedWorld } from '../../data/worlds/index';
+import { loadWorld, getWorldById, type LoadedWorld, type ResolvedLocation } from '../../data/worlds/index';
+import { ProceduralLocationManager } from '../../data/generation/ProceduralLocationManager';
 import {
   type DialogueNode,
   type DialogueChoice,
@@ -1486,6 +1487,10 @@ export const useGameStore = create<GameState>()(
 
         const loaded = loadWorld(world);
         const startingLocationId = loaded.world.startingLocationId;
+        const { worldSeed } = get();
+
+        // Initialize the procedural content manager with world seed
+        ProceduralLocationManager.initialize(worldSeed);
 
         // Get initially discovered locations from world definition
         const discoveredIds = loaded.world.locations
@@ -1498,6 +1503,13 @@ export const useGameStore = create<GameState>()(
           currentLocationId: startingLocationId,
           discoveredLocationIds: discoveredIds,
         });
+
+        // Generate procedural content for starting location if needed
+        const startingLocation = loaded.getLocation(startingLocationId);
+        if (startingLocation?.isProcedural) {
+          console.log(`[GameStore] Generating procedural content for starting location: ${startingLocationId}`);
+          ProceduralLocationManager.generateLocationContent(startingLocation);
+        }
 
         console.log(`[GameStore] World initialized: ${loaded.world.name}, starting at ${startingLocationId}`);
         get().addNotification('info', `Entered ${loaded.world.name}`);
@@ -1539,6 +1551,12 @@ export const useGameStore = create<GameState>()(
         if (!targetLocation) {
           console.error(`[GameStore] Location not found: ${locationId}`);
           return;
+        }
+
+        // Generate procedural content for the destination if needed
+        if (targetLocation.isProcedural && !ProceduralLocationManager.hasGeneratedContent(locationId)) {
+          console.log(`[GameStore] Generating procedural content for: ${locationId}`);
+          ProceduralLocationManager.generateLocationContent(targetLocation);
         }
 
         // Discover the location if not already discovered

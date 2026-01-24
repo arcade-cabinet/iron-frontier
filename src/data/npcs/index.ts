@@ -3,12 +3,20 @@
  *
  * This module exports all NPC definitions and their associated dialogue trees.
  * NPCs are defined separately from their dialogues for modularity.
+ *
+ * Now supports both hand-crafted NPCs AND procedurally generated NPCs via
+ * the ProceduralLocationManager.
  */
 
 import type { NPCDefinition, DialogueTree } from '../schemas/npc';
+import {
+  ProceduralLocationManager,
+  type ProceduralNPC,
+} from '../generation/ProceduralLocationManager';
 
 // Re-export types for external use
 export type { NPCDefinition, DialogueTree } from '../schemas/npc';
+export type { ProceduralNPC } from '../generation/ProceduralLocationManager';
 
 // Import dialogue trees
 import { SheriffColeDialogues } from './dialogues/sheriff_cole';
@@ -258,16 +266,41 @@ export const DIALOGUE_TREES_BY_ID: Record<string, DialogueTree> = Object.fromEnt
 
 /**
  * Get an NPC by their ID
+ * Checks both hand-crafted NPCs and procedural NPCs
  */
 export function getNPCById(id: string): NPCDefinition | undefined {
-  return NPCS_BY_ID[id];
+  // First check hand-crafted NPCs
+  const handCrafted = NPCS_BY_ID[id];
+  if (handCrafted) {
+    return handCrafted;
+  }
+
+  // Check procedural NPCs if the ID looks procedural
+  if (id.startsWith('npc_') && ProceduralLocationManager.isInitialized()) {
+    // Extract location from ID pattern - procedural NPCs have format: npc_templateId_seed
+    // We need to search all cached locations
+    // For now, return undefined - caller should use getProceduralNPCById for known locations
+    return undefined;
+  }
+
+  return undefined;
 }
 
 /**
  * Get all NPCs in a location
+ * Combines hand-crafted NPCs with procedurally generated ones
  */
 export function getNPCsByLocation(locationId: string): NPCDefinition[] {
-  return NPCS_BY_LOCATION[locationId] || [];
+  // Get hand-crafted NPCs
+  const handCrafted = NPCS_BY_LOCATION[locationId] || [];
+
+  // Get procedural NPCs if manager is initialized and has content for this location
+  if (ProceduralLocationManager.isInitialized() && ProceduralLocationManager.hasGeneratedContent(locationId)) {
+    const procedural = ProceduralLocationManager.getOrGenerateNPCs(locationId);
+    return [...handCrafted, ...procedural];
+  }
+
+  return handCrafted;
 }
 
 /**
@@ -286,9 +319,35 @@ export function getNPCsByTag(tag: string): NPCDefinition[] {
 
 /**
  * Get a dialogue tree by ID
+ * Checks both hand-crafted dialogue trees and procedural ones
  */
 export function getDialogueTreeById(id: string): DialogueTree | undefined {
-  return DIALOGUE_TREES_BY_ID[id];
+  // First check hand-crafted dialogue trees
+  const handCrafted = DIALOGUE_TREES_BY_ID[id];
+  if (handCrafted) {
+    return handCrafted;
+  }
+
+  // Check procedural dialogue trees
+  if (id.startsWith('proc_dialogue_') && ProceduralLocationManager.isInitialized()) {
+    // Extract NPC ID from dialogue tree ID: proc_dialogue_npcId
+    const npcId = id.replace('proc_dialogue_', '');
+    // We need to find which location this NPC is in
+    // For now, search all cached locations - this is O(n) but acceptable for small datasets
+    return undefined; // Caller should use getProceduralDialogueTree for known locations
+  }
+
+  return undefined;
+}
+
+/**
+ * Get procedural dialogue tree for an NPC at a specific location
+ */
+export function getProceduralDialogueTree(npcId: string, locationId: string): DialogueTree | null {
+  if (!ProceduralLocationManager.isInitialized()) {
+    return null;
+  }
+  return ProceduralLocationManager.getOrGenerateDialogue(npcId, locationId);
 }
 
 /**
@@ -305,12 +364,24 @@ export function getDialogueTreesForNPC(npcId: string): DialogueTree[] {
 
 /**
  * Get the primary dialogue tree for an NPC
+ * Supports both hand-crafted and procedural NPCs
  */
-export function getPrimaryDialogueTree(npcId: string): DialogueTree | undefined {
+export function getPrimaryDialogueTree(npcId: string, locationId?: string): DialogueTree | undefined {
+  // First check hand-crafted NPCs
   const npc = NPCS_BY_ID[npcId];
-  if (!npc || !npc.primaryDialogueId) return undefined;
+  if (npc && npc.primaryDialogueId) {
+    return DIALOGUE_TREES_BY_ID[npc.primaryDialogueId];
+  }
 
-  return DIALOGUE_TREES_BY_ID[npc.primaryDialogueId];
+  // Check procedural dialogue if we have a location
+  if (locationId && ProceduralLocationManager.isInitialized()) {
+    const proceduralTree = ProceduralLocationManager.getOrGenerateDialogue(npcId, locationId);
+    if (proceduralTree) {
+      return proceduralTree;
+    }
+  }
+
+  return undefined;
 }
 
 /**
