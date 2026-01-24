@@ -8,9 +8,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore, type TravelState } from '../store/gameStore';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 // ============================================================================
 // ICONS
@@ -58,16 +56,63 @@ function SkullIcon({ className = '' }: { className?: string }) {
   );
 }
 
+function CompassIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
+    </svg>
+  );
+}
+
+function SwordIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
+      <path d="M13 19l6-6" />
+      <path d="M16 16l4 4" />
+      <path d="M19 21l2-2" />
+    </svg>
+  );
+}
+
+function RunIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M13 4v4l3 3" />
+      <circle cx="13" cy="4" r="2" />
+      <path d="M7 21l3-9 4 2" />
+      <path d="M4 15l6 2" />
+      <path d="M18 12l2 4" />
+    </svg>
+  );
+}
+
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const DANGER_COLORS: Record<string, string> = {
-  safe: 'text-green-400 bg-green-900/30 border-green-700',
-  low: 'text-lime-400 bg-lime-900/30 border-lime-700',
-  moderate: 'text-yellow-400 bg-yellow-900/30 border-yellow-700',
-  high: 'text-orange-400 bg-orange-900/30 border-orange-700',
-  extreme: 'text-red-400 bg-red-900/30 border-red-700',
+const DANGER_STYLES: Record<string, { badge: string; text: string }> = {
+  safe: {
+    badge: 'bg-green-900/50 text-green-400 border-green-700/50',
+    text: 'text-green-400',
+  },
+  low: {
+    badge: 'bg-lime-900/50 text-lime-400 border-lime-700/50',
+    text: 'text-lime-400',
+  },
+  moderate: {
+    badge: 'bg-yellow-900/50 text-yellow-400 border-yellow-700/50',
+    text: 'text-yellow-400',
+  },
+  high: {
+    badge: 'bg-orange-900/50 text-orange-400 border-orange-700/50',
+    text: 'text-orange-400',
+  },
+  extreme: {
+    badge: 'bg-red-900/50 text-red-400 border-red-700/50',
+    text: 'text-red-400',
+  },
 };
 
 const METHOD_INFO: Record<string, { icon: typeof HorseIcon; label: string; speed: string }> = {
@@ -77,6 +122,48 @@ const METHOD_INFO: Record<string, { icon: typeof HorseIcon; label: string; speed
   wilderness: { icon: BootIcon, label: 'Wilderness', speed: 'Slow' },
   river: { icon: HorseIcon, label: 'River', speed: 'Varies' },
 };
+
+// ============================================================================
+// PROGRESS BAR
+// ============================================================================
+
+function TravelProgressBar({ progress, fromName, toName }: { progress: number; fromName: string; toName: string }) {
+  return (
+    <div className="space-y-2">
+      {/* Progress Track */}
+      <div className="relative h-4 bg-amber-900/50 rounded-full overflow-hidden border border-amber-700/50">
+        {/* Background Track Pattern */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 12px)',
+          }}
+        />
+        {/* Progress Fill */}
+        <motion.div
+          className="h-full bg-gradient-to-r from-amber-600 to-amber-500 rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        />
+        {/* Progress Marker */}
+        <motion.div
+          className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-300 rounded-full border-2 border-amber-700 shadow-lg"
+          initial={{ left: '0%' }}
+          animate={{ left: `${Math.min(progress, 97)}%` }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        />
+      </div>
+
+      {/* Labels */}
+      <div className="flex justify-between text-xs">
+        <span className="text-amber-500 truncate max-w-[40%]">{fromName}</span>
+        <span className="text-amber-400 font-mono">{Math.round(progress)}%</span>
+        <span className="text-amber-500 truncate max-w-[40%] text-right">{toName}</span>
+      </div>
+    </div>
+  );
+}
 
 // ============================================================================
 // MAIN COMPONENT
@@ -147,18 +234,13 @@ export function TravelPanel() {
     cancelTravel();
   }, [cancelTravel]);
 
-  // Handle continue after winning combat
-  const handleContinue = useCallback(() => {
-    completeTravel();
-  }, [completeTravel]);
-
   if (!travelState) {
     return null;
   }
 
   const methodInfo = METHOD_INFO[travelState.method] || METHOD_INFO.trail;
   const MethodIcon = methodInfo.icon;
-  const dangerClass = DANGER_COLORS[travelState.dangerLevel] || DANGER_COLORS.moderate;
+  const dangerStyle = DANGER_STYLES[travelState.dangerLevel] || DANGER_STYLES.moderate;
 
   return (
     <AnimatePresence>
@@ -166,24 +248,33 @@ export function TravelPanel() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/90"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/85"
       >
         <motion.div
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
-          className="w-full max-w-md mx-4 bg-stone-900 border-2 border-amber-800/50 rounded-lg shadow-2xl overflow-hidden"
+          className="w-full max-w-md mx-4 bg-amber-950 border-2 border-amber-700/60 rounded-xl shadow-2xl overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-amber-900/30 border-b border-amber-800/50 p-4">
+          <div className="bg-amber-900/40 border-b border-amber-800/50 p-4">
             <div className="flex items-center gap-3">
-              <MethodIcon className="w-8 h-8 text-amber-400" />
-              <div>
-                <h2 className="text-lg font-bold text-amber-100">
-                  {showEncounter ? 'Encounter!' : 'Traveling...'}
+              <div className="w-12 h-12 rounded-lg bg-amber-800/50 border border-amber-700/50 flex items-center justify-center">
+                {showEncounter ? (
+                  <SkullIcon className="w-7 h-7 text-red-400" />
+                ) : (
+                  <MethodIcon className="w-7 h-7 text-amber-400" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className={cn(
+                  'text-lg font-bold',
+                  showEncounter ? 'text-red-400' : 'text-amber-200'
+                )}>
+                  {showEncounter ? 'Ambush!' : 'Traveling...'}
                 </h2>
-                <p className="text-sm text-amber-400">
-                  {fromLocation?.ref.name ?? 'Unknown'} → {toLocation?.ref.name ?? 'Unknown'}
+                <p className="text-sm text-amber-400/80 truncate">
+                  {fromLocation?.ref.name ?? 'Unknown'} <span className="text-amber-500">→</span> {toLocation?.ref.name ?? 'Unknown'}
                 </p>
               </div>
             </div>
@@ -191,84 +282,103 @@ export function TravelPanel() {
 
           {/* Content */}
           <div className="p-4 space-y-4">
-            {/* Route Info */}
-            <div className="flex items-center justify-between text-sm">
+            {/* Route Info Badges */}
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-stone-800 text-amber-200 border-stone-700">
-                  {methodInfo.label}
-                </Badge>
-                <span className="text-stone-400">{travelState.travelTime}h travel time</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-900/50 border border-amber-700/50">
+                  <MethodIcon className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs text-amber-200 font-medium">{methodInfo.label}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-900/50 border border-amber-700/50">
+                  <CompassIcon className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs text-amber-300">{travelState.travelTime}h</span>
+                </div>
               </div>
-              <Badge className={`capitalize ${dangerClass}`}>
+              <div className={cn(
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-md border capitalize text-xs font-medium',
+                dangerStyle.badge
+              )}>
                 {travelState.dangerLevel} danger
-              </Badge>
+              </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="space-y-2">
-              <Progress value={progress} className="h-3 bg-stone-800" />
-              <div className="flex justify-between text-xs text-stone-500">
-                <span>{fromLocation?.ref.name ?? 'Origin'}</span>
-                <span>{Math.round(progress)}%</span>
-                <span>{toLocation?.ref.name ?? 'Destination'}</span>
-              </div>
-            </div>
+            <TravelProgressBar
+              progress={progress}
+              fromName={fromLocation?.ref.name ?? 'Origin'}
+              toName={toLocation?.ref.name ?? 'Destination'}
+            />
 
             {/* Encounter Panel */}
             {showEncounter && travelState.encounterId && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-red-950/30 border border-red-800/50 rounded-lg p-4"
+                className="bg-red-950/40 border border-red-800/50 rounded-lg p-4"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <SkullIcon className="w-8 h-8 text-red-400" />
+                  <div className="w-10 h-10 rounded-lg bg-red-900/50 border border-red-700/50 flex items-center justify-center">
+                    <SkullIcon className="w-6 h-6 text-red-400" />
+                  </div>
                   <div>
-                    <h3 className="font-bold text-red-200">Ambush!</h3>
-                    <p className="text-sm text-red-400">
+                    <h3 className="font-bold text-red-200">Road Ambush!</h3>
+                    <p className="text-sm text-red-400/80">
                       Hostiles have blocked the {travelState.method}!
                     </p>
                   </div>
                 </div>
 
-                <p className="text-stone-300 text-sm mb-4">
+                <p className="text-amber-200/70 text-sm mb-4">
                   You've been waylaid by enemies. You can fight your way through or attempt to flee
                   back the way you came.
                 </p>
 
                 <div className="flex gap-3">
-                  <Button
+                  <button
                     onClick={handleFight}
-                    className="flex-1 bg-red-800 hover:bg-red-700 text-red-100"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-800 hover:bg-red-700 text-red-100 font-medium transition-colors"
                   >
-                    Fight
-                  </Button>
-                  <Button
+                    <SwordIcon className="w-4 h-4" />
+                    Stand & Fight
+                  </button>
+                  <button
                     onClick={handleFlee}
-                    variant="outline"
-                    className="flex-1 border-stone-600 text-stone-300 hover:bg-stone-800"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-900/50 hover:bg-amber-800/50 text-amber-200 border border-amber-700/50 font-medium transition-colors"
                   >
+                    <RunIcon className="w-4 h-4" />
                     Flee
-                  </Button>
+                  </button>
                 </div>
               </motion.div>
             )}
 
-            {/* Traveling Message (no encounter) */}
+            {/* Traveling Animation (no encounter) */}
             {!showEncounter && !travelState.encounterId && (
-              <div className="text-center py-4">
+              <div className="text-center py-6">
                 <motion.div
                   animate={{ x: [0, 10, 0] }}
-                  transition={{ repeat: Infinity, duration: 1 }}
+                  transition={{ repeat: Infinity, duration: 1.2 }}
                   className="inline-block"
                 >
-                  <MethodIcon className="w-12 h-12 text-amber-500 mx-auto" />
+                  <MethodIcon className="w-16 h-16 text-amber-500 mx-auto" />
                 </motion.div>
-                <p className="text-stone-400 mt-2">
+                <p className="text-amber-400/70 mt-3 text-sm">
                   Traveling via {methodInfo.label.toLowerCase()}...
+                </p>
+                <p className="text-amber-500/50 text-xs mt-1">
+                  {methodInfo.speed} travel speed
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Footer */}
+          <div className="p-3 border-t border-amber-800/50 bg-amber-900/20">
+            <div className="text-center text-[10px] text-amber-500/50">
+              {showEncounter
+                ? 'Choose your course of action'
+                : 'The frontier stretches before you...'}
+            </div>
           </div>
         </motion.div>
       </motion.div>
