@@ -422,9 +422,18 @@ export function getAvailableChoices(
   node: DialogueNode,
   checkCondition: (condition: DialogueCondition) => boolean
 ): DialogueChoice[] {
-  return node.choices.filter(choice =>
-    choice.conditions.every(checkCondition)
-  );
+  // Guard against undefined choices array
+  if (!node.choices || !Array.isArray(node.choices)) {
+    return [];
+  }
+
+  return node.choices.filter(choice => {
+    // If no conditions, the choice is always available
+    if (!choice.conditions || !Array.isArray(choice.conditions) || choice.conditions.length === 0) {
+      return true;
+    }
+    return choice.conditions.every(checkCondition);
+  });
 }
 
 export const SCHEMA_VERSION = '1.0.0';

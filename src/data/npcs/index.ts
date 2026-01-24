@@ -23,7 +23,7 @@ export const SheriffMarcusCole: NPCDefinition = {
   role: 'sheriff',
   faction: 'neutral',
   locationId: 'dusty_springs',
-  spawnCoord: { q: 3, r: -1 },
+  spawnCoord: { q: 16, r: 18 }, // Sheriff's Office
   personality: {
     aggression: 0.4,
     friendliness: 0.6,
@@ -55,7 +55,7 @@ export const MayorJosephineHolt: NPCDefinition = {
   role: 'mayor',
   faction: 'ivrc',
   locationId: 'dusty_springs',
-  spawnCoord: { q: 0, r: 2 },
+  spawnCoord: { q: 28, r: 24 }, // Holt Mansion
   personality: {
     aggression: 0.2,
     friendliness: 0.7,
@@ -86,7 +86,7 @@ export const DocChenWei: NPCDefinition = {
   role: 'doctor',
   faction: 'neutral',
   locationId: 'dusty_springs',
-  spawnCoord: { q: -2, r: 3 },
+  spawnCoord: { q: 26, r: 18 }, // Doc Chen's Office
   personality: {
     aggression: 0.1,
     friendliness: 0.7,
@@ -119,7 +119,7 @@ export const FatherMiguel: NPCDefinition = {
   role: 'preacher',
   faction: 'neutral',
   locationId: 'dusty_springs',
-  spawnCoord: { q: 4, r: 0 },
+  spawnCoord: { q: 10, r: 26 }, // St. Michael's Church
   personality: {
     aggression: 0.0,
     friendliness: 0.9,

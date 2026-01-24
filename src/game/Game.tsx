@@ -8,6 +8,7 @@ import { useGameStore } from './store/gameStore';
 
 // World/location data
 import { getLocationData } from '../data/worlds/index';
+import { getNPCsByLocation } from '../data/npcs/index';
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
@@ -38,6 +39,7 @@ function GameCanvas() {
     loadedWorld,
     currentLocationId,
     initWorld,
+    talkToNPC,
   } = useGameStore();
 
   // Initialize world on first play
@@ -107,11 +109,40 @@ function GameCanvas() {
         // Store the manager
         sceneManagerRef.current = manager;
 
+        // Handle hex clicks - check for NPCs first, then movement
+        manager.setHexClickHandler((hexCoord, tile) => {
+          // Check if there's an NPC at this hex in the current location
+          if (currentLocationId) {
+            const npcsInLocation = getNPCsByLocation(currentLocationId);
+            const npcAtHex = npcsInLocation.find(
+              npc => npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
+            );
+
+            if (npcAtHex) {
+              console.log(`[GameCanvas] Clicked on NPC: ${npcAtHex.name}`);
+              talkToNPC(npcAtHex.id);
+              return; // Don't move if clicking on NPC
+            }
+          }
+
+          // No NPC at this hex - move player there
+          // Movement is handled by ground click handler
+        });
+
         // Handle ground clicks for movement
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
           const height = manager.getHeightAt(pos.x, pos.z);
           setPlayerPosition({ x: pos.x, y: height, z: pos.z });
         });
+
+        // Spawn NPC markers for this location
+        if (currentLocationId) {
+          const npcsInLocation = getNPCsByLocation(currentLocationId);
+          for (const npc of npcsInLocation) {
+            manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
+          }
+          console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers`);
+        }
 
         // Start render loop
         manager.start();
@@ -198,10 +229,35 @@ function GameCanvas() {
 
         sceneManagerRef.current = manager;
 
+        // Handle hex clicks - check for NPCs first, then movement
+        manager.setHexClickHandler((hexCoord, tile) => {
+          if (currentLocationId) {
+            const npcsInLocation = getNPCsByLocation(currentLocationId);
+            const npcAtHex = npcsInLocation.find(
+              npc => npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
+            );
+
+            if (npcAtHex) {
+              console.log(`[GameCanvas] Clicked on NPC: ${npcAtHex.name}`);
+              talkToNPC(npcAtHex.id);
+              return;
+            }
+          }
+        });
+
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
           const height = manager.getHeightAt(pos.x, pos.z);
           setPlayerPosition({ x: pos.x, y: height, z: pos.z });
         });
+
+        // Spawn NPC markers for this location
+        if (currentLocationId) {
+          const npcsInLocation = getNPCsByLocation(currentLocationId);
+          for (const npc of npcsInLocation) {
+            manager.spawnNPCMarker(npc.id, npc.spawnCoord, npc.name);
+          }
+          console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers for new location`);
+        }
 
         manager.start();
         setIsLoading(false);

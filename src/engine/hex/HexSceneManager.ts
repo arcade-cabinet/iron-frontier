@@ -120,6 +120,9 @@ export class HexSceneManager {
   private playerFacingAngle: number = 0; // Y rotation in radians
   private playerModelYOffset: number = 0; // Compensate for models not centered at origin
 
+  // NPC markers
+  private npcMarkers: Map<string, AbstractMesh> = new Map();
+
   // Camera azimuth for calculating player facing direction
   // Player should face TOWARD the camera by default (Fallout 2 style)
   // Camera is at azimuth 135° (top-right looking down at player)
@@ -796,6 +799,80 @@ export class HexSceneManager {
    */
   getGrid(): HexGrid | null {
     return this.hexGrid;
+  }
+
+  /**
+   * Spawn a visual NPC marker at the given hex coordinate
+   * Creates a simple colored cylinder to indicate NPC presence
+   */
+  spawnNPCMarker(npcId: string, coord: HexCoord, npcName: string): void {
+    // Remove existing marker if any
+    this.removeNPCMarker(npcId);
+
+    // Get tile elevation
+    const tile = this.hexGrid?.tiles.get(hexKey(coord));
+    const elevation = tile ? tile.elevation * 0.5 : 0;
+
+    // Convert to world position
+    const worldPos = hexToWorld(coord, elevation + 0.1, DEFAULT_HEX_LAYOUT);
+
+    // Create a marker cylinder
+    const marker = MeshBuilder.CreateCylinder(`npc_marker_${npcId}`, {
+      diameter: 0.6,
+      height: 2.0,
+      tessellation: 12,
+    }, this.scene);
+
+    // Position marker
+    marker.position = new Vector3(worldPos.x, worldPos.y + 1.0, worldPos.z);
+
+    // Create material - golden/amber color for NPCs
+    const markerMat = new StandardMaterial(`npc_marker_mat_${npcId}`, this.scene);
+    markerMat.diffuseColor = new Color3(1.0, 0.7, 0.2); // Golden amber
+    markerMat.emissiveColor = new Color3(0.5, 0.35, 0.1); // Glow effect
+    markerMat.alpha = 0.8;
+    marker.material = markerMat;
+
+    // Make marker pickable so it can be clicked
+    marker.isPickable = true;
+
+    // Store NPC ID in metadata for click detection
+    marker.metadata = { npcId, npcName };
+
+    // Store marker reference
+    this.npcMarkers.set(npcId, marker);
+
+    console.log(`[HexSceneManager] Spawned NPC marker for ${npcName} at hex (${coord.q}, ${coord.r})`);
+  }
+
+  /**
+   * Remove an NPC marker
+   */
+  removeNPCMarker(npcId: string): void {
+    const marker = this.npcMarkers.get(npcId);
+    if (marker) {
+      marker.dispose();
+      this.npcMarkers.delete(npcId);
+    }
+  }
+
+  /**
+   * Remove all NPC markers
+   */
+  clearNPCMarkers(): void {
+    for (const [npcId] of this.npcMarkers) {
+      this.removeNPCMarker(npcId);
+    }
+  }
+
+  /**
+   * Check if a picked mesh is an NPC marker and return the NPC ID
+   */
+  getNPCFromPickedMesh(mesh: AbstractMesh): string | null {
+    if (mesh.metadata && mesh.metadata.npcId) {
+      return mesh.metadata.npcId;
+    }
+    return null;
   }
 }
 
