@@ -46,12 +46,20 @@ function MapIcon() {
   );
 }
 
+function SwordIcon() {
+  return (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5l4 4m0-4l-4 4m-7 9l-4-4m4 4l-4-4m11-11L7 19l-4-4L15 3l4 4z" />
+    </svg>
+  );
+}
+
 interface ActionBarProps {
   onOpenMap?: () => void;
 }
 
 export function ActionBar({ onOpenMap }: ActionBarProps) {
-  const { togglePanel, activeQuests, inventory } = useGameStore();
+  const { togglePanel, activeQuests, inventory, startCombat } = useGameStore();
 
   return (
     <div className="absolute bottom-0 left-0 right-0 p-3 pb-safe">
@@ -80,6 +88,18 @@ export function ActionBar({ onOpenMap }: ActionBarProps) {
             >
               <MapIcon />
               <span className="text-xs">Map</span>
+            </Button>
+
+            {/* Combat (test) */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => startCombat('roadside_bandits')}
+              aria-label="Fight"
+              className="flex flex-col items-center gap-1 h-auto py-2 text-red-300 hover:text-red-100 hover:bg-red-800/50"
+            >
+              <SwordIcon />
+              <span className="text-xs">Fight</span>
             </Button>
 
             {/* Inventory */}

@@ -42,6 +42,18 @@ import {
 } from '../../data/schemas/quest';
 import { getQuestById, QUESTS_BY_ID } from '../../data/quests/index';
 import { getWorldItemsForLocation, type WorldItemSpawn } from '../../data/items/worldItems';
+import {
+  type CombatState,
+  type Combatant,
+  type CombatActionType,
+  type CombatResult,
+  AP_COSTS,
+  calculateHitChance,
+  calculateDamage,
+  rollCritical,
+  rollHit,
+} from '../../data/schemas/combat';
+import { getEnemyById, getEncounterById } from '../../data/enemies/index';
 
 // ============================================================================
 // TYPES
@@ -126,7 +138,7 @@ export interface DialogueState {
   startedAt: number;
 }
 
-export type GamePhase = 'title' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'inventory';
+export type GamePhase = 'title' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'inventory' | 'combat';
 export type PanelType = 'inventory' | 'quests' | 'settings' | 'menu' | 'character';
 
 export interface GameSettings {
@@ -194,6 +206,9 @@ export interface GameState {
   activePanel: PanelType | null;
   dialogueState: DialogueState | null;
   notifications: Notification[];
+
+  // Combat
+  combatState: CombatState | null;
 
   // Settings
   settings: GameSettings;
@@ -279,6 +294,15 @@ export interface GameState {
   travelTo: (locationId: string) => void;
   discoverLocation: (locationId: string) => void;
   getConnectedLocations: () => string[];
+
+  // Combat System
+  startCombat: (encounterId: string) => void;
+  selectCombatAction: (action: CombatActionType) => void;
+  selectCombatTarget: (targetId: string) => void;
+  executeCombatAction: () => void;
+  endCombatTurn: () => void;
+  attemptFlee: () => void;
+  endCombat: () => void;
 }
 
 // ============================================================================
@@ -397,6 +421,7 @@ export const useGameStore = create<GameState>()(
       dialogueState: null,
       dialogueHistory: [],
       notifications: [],
+      combatState: null,
       settings: { ...DEFAULT_SETTINGS },
       saveVersion: 2,
       lastSaved: Date.now(),
@@ -1375,6 +1400,416 @@ export const useGameStore = create<GameState>()(
 
         const connections = loadedWorld.getConnectionsFrom(currentLocationId);
         return connections.map(loc => loc.id);
+      },
+
+      // ========== COMBAT SYSTEM ==========
+
+      startCombat: (encounterId: string) => {
+        const encounter = getEncounterById(encounterId);
+        if (!encounter) {
+          console.error(`[Combat] Encounter not found: ${encounterId}`);
+          return;
+        }
+
+        const { playerStats, playerName, addNotification } = get();
+
+        // Create player combatant
+        const playerCombatant: Combatant = {
+          definitionId: 'player',
+          name: playerName,
+          isPlayer: true,
+          health: playerStats.health,
+          maxHealth: playerStats.maxHealth,
+          actionPoints: 4,
+          maxActionPoints: 4,
+          position: { q: 0, r: 0 },
+          statusEffects: [],
+          weaponId: 'revolver', // TODO: get from equipped weapon
+          ammoInClip: 6,
+          isActive: true,
+          hasActed: false,
+          isDead: false,
+        };
+
+        // Create enemy combatants
+        const enemyCombatants: Combatant[] = [];
+        let enemyIndex = 0;
+        for (const enemySpec of encounter.enemies) {
+          const enemyDef = getEnemyById(enemySpec.enemyId);
+          if (!enemyDef) continue;
+
+          for (let i = 0; i < enemySpec.count; i++) {
+            enemyCombatants.push({
+              definitionId: enemyDef.id,
+              name: enemySpec.count > 1 ? `${enemyDef.name} ${i + 1}` : enemyDef.name,
+              isPlayer: false,
+              health: enemyDef.maxHealth,
+              maxHealth: enemyDef.maxHealth,
+              actionPoints: enemyDef.actionPoints,
+              maxActionPoints: enemyDef.actionPoints,
+              position: { q: enemyIndex + 1, r: 0 },
+              statusEffects: [],
+              weaponId: enemyDef.weaponId,
+              ammoInClip: 6,
+              isActive: false,
+              hasActed: false,
+              isDead: false,
+            });
+            enemyIndex++;
+          }
+        }
+
+        // Create turn order (player first)
+        const allCombatants = [playerCombatant, ...enemyCombatants];
+        const turnOrder = allCombatants.map(c => c.definitionId);
+
+        const combatState: CombatState = {
+          encounterId,
+          phase: 'player_turn',
+          combatants: allCombatants,
+          turnOrder,
+          currentTurnIndex: 0,
+          round: 1,
+          log: [],
+          startedAt: Date.now(),
+          selectedAction: undefined,
+          selectedTargetId: undefined,
+        };
+
+        set({ combatState, phase: 'combat' });
+        addNotification('warning', `Combat! ${encounter.name}`);
+        console.log(`[Combat] Started: ${encounter.name}`);
+      },
+
+      selectCombatAction: (action: CombatActionType) => {
+        const { combatState } = get();
+        if (!combatState) return;
+
+        set({
+          combatState: {
+            ...combatState,
+            selectedAction: action,
+          },
+        });
+      },
+
+      selectCombatTarget: (targetId: string) => {
+        const { combatState } = get();
+        if (!combatState) return;
+
+        set({
+          combatState: {
+            ...combatState,
+            selectedTargetId: targetId,
+          },
+        });
+      },
+
+      executeCombatAction: () => {
+        const { combatState, playerStats } = get();
+        if (!combatState || !combatState.selectedAction) return;
+
+        const player = combatState.combatants.find(c => c.isPlayer);
+        if (!player) return;
+
+        const action = combatState.selectedAction;
+        const apCost = AP_COSTS[action];
+
+        // Check if player has enough AP
+        if (player.actionPoints < apCost) {
+          get().addNotification('warning', 'Not enough action points!');
+          return;
+        }
+
+        let result: CombatResult;
+
+        if (action === 'attack' || action === 'aimed_shot') {
+          // Attack action
+          const targetId = combatState.selectedTargetId;
+          if (!targetId) {
+            get().addNotification('warning', 'Select a target first!');
+            return;
+          }
+
+          const target = combatState.combatants.find(c => c.definitionId === targetId);
+          if (!target || target.isDead) {
+            get().addNotification('warning', 'Invalid target!');
+            return;
+          }
+
+          const enemyDef = getEnemyById(target.definitionId);
+          const accuracy = 75 + (action === 'aimed_shot' ? 25 : 0);
+          const evasion = enemyDef?.evasion ?? 10;
+          const hitChance = calculateHitChance(accuracy, evasion, 1, action === 'aimed_shot');
+
+          if (rollHit(hitChance)) {
+            const isCritical = rollCritical();
+            const baseDamage = 15; // TODO: get from weapon
+            const damage = calculateDamage(baseDamage, playerStats.level, enemyDef?.armor ?? 0, isCritical);
+
+            const newHealth = Math.max(0, target.health - damage);
+            const isDead = newHealth <= 0;
+
+            result = {
+              action: {
+                type: action,
+                actorId: 'player',
+                targetId,
+                apCost,
+                timestamp: Date.now(),
+              },
+              success: true,
+              damage,
+              isCritical,
+              wasDodged: false,
+              message: isCritical
+                ? `Critical hit! You deal ${damage} damage to ${target.name}!`
+                : `You hit ${target.name} for ${damage} damage.`,
+              targetHealthRemaining: newHealth,
+            };
+
+            // Update target health
+            const updatedCombatants = combatState.combatants.map(c =>
+              c.definitionId === targetId
+                ? { ...c, health: newHealth, isDead }
+                : c
+            );
+
+            // Update player AP
+            const updatedPlayer = updatedCombatants.find(c => c.isPlayer);
+            if (updatedPlayer) {
+              updatedPlayer.actionPoints -= apCost;
+            }
+
+            // Check for victory
+            const allEnemiesDead = updatedCombatants
+              .filter(c => !c.isPlayer)
+              .every(c => c.isDead);
+
+            set({
+              combatState: {
+                ...combatState,
+                combatants: updatedCombatants,
+                log: [...combatState.log, result],
+                selectedAction: undefined,
+                selectedTargetId: undefined,
+                phase: allEnemiesDead ? 'victory' : 'player_turn',
+              },
+            });
+
+            if (isDead) {
+              get().addNotification('info', `${target.name} defeated!`);
+            }
+          } else {
+            // Missed
+            result = {
+              action: {
+                type: action,
+                actorId: 'player',
+                targetId,
+                apCost,
+                timestamp: Date.now(),
+              },
+              success: false,
+              wasDodged: true,
+              message: `Your attack missed ${target.name}!`,
+            };
+
+            // Update player AP
+            const updatedCombatants = combatState.combatants.map(c =>
+              c.isPlayer ? { ...c, actionPoints: c.actionPoints - apCost } : c
+            );
+
+            set({
+              combatState: {
+                ...combatState,
+                combatants: updatedCombatants,
+                log: [...combatState.log, result],
+                selectedAction: undefined,
+                selectedTargetId: undefined,
+              },
+            });
+          }
+        } else if (action === 'defend') {
+          // Defend - reduces incoming damage (simplified: just end turn with AP bonus next round)
+          result = {
+            action: {
+              type: 'defend',
+              actorId: 'player',
+              apCost,
+              timestamp: Date.now(),
+            },
+            success: true,
+            message: 'You take a defensive stance.',
+          };
+
+          const updatedCombatants = combatState.combatants.map(c =>
+            c.isPlayer ? { ...c, actionPoints: c.actionPoints - apCost } : c
+          );
+
+          set({
+            combatState: {
+              ...combatState,
+              combatants: updatedCombatants,
+              log: [...combatState.log, result],
+              selectedAction: undefined,
+            },
+          });
+        }
+      },
+
+      endCombatTurn: () => {
+        const { combatState } = get();
+        if (!combatState) return;
+
+        // Process enemy turns
+        const updatedCombatants = [...combatState.combatants];
+        const newLogs = [...combatState.log];
+        const player = updatedCombatants.find(c => c.isPlayer);
+
+        if (!player) return;
+
+        // Simple enemy AI: each living enemy attacks the player
+        for (const enemy of updatedCombatants.filter(c => !c.isPlayer && !c.isDead)) {
+          const enemyDef = getEnemyById(enemy.definitionId);
+          if (!enemyDef) continue;
+
+          // Reset enemy AP
+          enemy.actionPoints = enemy.maxActionPoints;
+
+          // Enemy attacks if they have AP
+          while (enemy.actionPoints >= AP_COSTS.attack && !player.isDead) {
+            const accuracy = 75 + (enemyDef.accuracyMod ?? 0);
+            const playerEvasion = 10; // TODO: get from player stats
+            const hitChance = calculateHitChance(accuracy, playerEvasion, 1);
+
+            enemy.actionPoints -= AP_COSTS.attack;
+
+            if (rollHit(hitChance)) {
+              const isCritical = rollCritical();
+              const damage = calculateDamage(enemyDef.baseDamage, 1, 0, isCritical);
+              player.health = Math.max(0, player.health - damage);
+              player.isDead = player.health <= 0;
+
+              newLogs.push({
+                action: {
+                  type: 'attack',
+                  actorId: enemy.definitionId,
+                  targetId: 'player',
+                  apCost: AP_COSTS.attack,
+                  timestamp: Date.now(),
+                },
+                success: true,
+                damage,
+                isCritical,
+                wasDodged: false,
+                message: isCritical
+                  ? `Critical! ${enemy.name} hits you for ${damage} damage!`
+                  : `${enemy.name} hits you for ${damage} damage.`,
+                targetHealthRemaining: player.health,
+              });
+
+              // Update player stats
+              get().updatePlayerStats({ health: player.health });
+            } else {
+              newLogs.push({
+                action: {
+                  type: 'attack',
+                  actorId: enemy.definitionId,
+                  targetId: 'player',
+                  apCost: AP_COSTS.attack,
+                  timestamp: Date.now(),
+                },
+                success: false,
+                wasDodged: true,
+                message: `${enemy.name}'s attack missed!`,
+              });
+            }
+          }
+        }
+
+        // Reset player AP for next turn
+        player.actionPoints = player.maxActionPoints;
+
+        // Check for defeat
+        const isDefeated = player.isDead;
+
+        set({
+          combatState: {
+            ...combatState,
+            combatants: updatedCombatants,
+            log: newLogs,
+            round: combatState.round + 1,
+            phase: isDefeated ? 'defeat' : 'player_turn',
+            selectedAction: undefined,
+            selectedTargetId: undefined,
+          },
+        });
+
+        if (isDefeated) {
+          get().addNotification('warning', 'You have been defeated!');
+        }
+      },
+
+      attemptFlee: () => {
+        const { combatState } = get();
+        if (!combatState) return;
+
+        const encounter = getEncounterById(combatState.encounterId);
+        if (!encounter?.canFlee) {
+          get().addNotification('warning', 'You cannot flee from this battle!');
+          return;
+        }
+
+        // 50% chance to flee
+        if (Math.random() < 0.5) {
+          set({
+            combatState: {
+              ...combatState,
+              phase: 'fled',
+              log: [...combatState.log, {
+                action: {
+                  type: 'flee',
+                  actorId: 'player',
+                  apCost: AP_COSTS.flee,
+                  timestamp: Date.now(),
+                },
+                success: true,
+                message: 'You escaped from combat!',
+              }],
+            },
+          });
+        } else {
+          // Failed to flee - enemy gets free attacks
+          get().addNotification('warning', 'Failed to escape!');
+          get().endCombatTurn();
+        }
+      },
+
+      endCombat: () => {
+        const { combatState, gainXP, addGold, addItemById, addNotification } = get();
+        if (!combatState) return;
+
+        // Award rewards if victory
+        if (combatState.phase === 'victory') {
+          const encounter = getEncounterById(combatState.encounterId);
+          if (encounter) {
+            if (encounter.rewards.xp > 0) {
+              gainXP(encounter.rewards.xp);
+            }
+            if (encounter.rewards.gold > 0) {
+              addGold(encounter.rewards.gold);
+            }
+            for (const itemReward of encounter.rewards.items) {
+              if (Math.random() < itemReward.chance) {
+                addItemById(itemReward.itemId, itemReward.quantity);
+              }
+            }
+          }
+        }
+
+        set({ combatState: null, phase: 'playing' });
+        console.log('[Combat] Ended');
       },
     }),
     {

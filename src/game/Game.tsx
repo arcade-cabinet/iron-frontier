@@ -13,6 +13,7 @@ import { getWorldItemsForLocation, getWorldItemName } from '../data/items/worldI
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
+import { CombatPanel } from './ui/CombatPanel';
 import { DialogueBox } from './ui/DialogueBox';
 import { GameHUD } from './ui/GameHUD';
 import { InventoryPanel } from './ui/InventoryPanel';
@@ -449,6 +450,9 @@ export function Game() {
         onClose={() => setIsWorldMapOpen(false)}
         onTravelTo={handleTravelTo}
       />
+
+      {/* Combat Panel */}
+      {phase === 'combat' && <CombatPanel />}
     </div>
   );
 }
