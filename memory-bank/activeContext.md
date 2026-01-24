@@ -232,9 +232,43 @@
 - **Tests**: 203/203 pass
 - **TypeScript**: No errors
 
+## Session 2026-01-24 (Latest) - UI/UX Polish
+
+### Completed
+
+1. **ActionBar Streamlined**
+   - Reduced from 7 to 5 buttons (Outlaw, Territory, Saddlebag, Journal, Menu)
+   - Removed test "Fight" button
+   - Removed Settings button (merged into Menu)
+   - Western-themed labels
+   - Active state highlighting
+
+2. **GameHUD Unified Design**
+   - Single compact header bar instead of two cards
+   - Player avatar, name, level (Lv.X format)
+   - Color-coded health (green/yellow/red)
+   - Location indicator with compass icon
+   - Quest tracker with pulse indicator
+
+3. **MenuPanel + Settings Merged**
+   - Tabbed interface (Game/Settings)
+   - Game tab: player stats, save/load, new game
+   - Settings tab: audio, controls, display
+
+4. **InventoryPanel Improved**
+   - Filter tabs (All, Weapons, Armor, Supplies, Keys) with counts
+   - Responsive grid (2/3/4 columns)
+   - Equipped items badge (blue checkmark)
+   - Better empty state per filter type
+
+### Build & Test Status
+- **Build**: Passes (7.67 MB)
+- **Tests**: 203/203 pass
+- **TypeScript**: No errors
+
 ## Next Steps
 
-1. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
+1. **Combat Panel Polish**: Improve encounter combat flow
 2. **Save/Load System**: Persist procedural generation state
-3. **Combat Polish**: Improve encounter combat flow
-4. **Audio System**: Add western ambient music and SFX
+3. **Audio System**: Add western ambient music and SFX
+4. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
