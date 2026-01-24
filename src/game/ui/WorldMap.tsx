@@ -561,6 +561,19 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
               {location.name}
             </text>
           )}
+
+          {/* Procedural indicator (small star) */}
+          {location.isProcedural && isDiscovered && (
+            <text
+              x={iconSize - 4}
+              y={-iconSize + 4}
+              fill="#7c3aed"
+              fontSize="8"
+              fontFamily="sans-serif"
+            >
+              ✦
+            </text>
+          )}
         </g>
       );
     },
@@ -615,6 +628,10 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-emerald-600 border border-dashed border-emerald-400" />
             <span className="text-amber-300">Reachable</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-violet-400 text-sm">✦</span>
+            <span className="text-amber-300">Procedural</span>
           </div>
         </div>
 

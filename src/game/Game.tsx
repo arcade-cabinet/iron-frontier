@@ -25,6 +25,7 @@ import { QuestLog } from './ui/QuestLog';
 import { SettingsPanel } from './ui/SettingsPanel';
 import { ShopPanel } from './ui/ShopPanel';
 import { WorldMap } from './ui/WorldMap';
+import { TravelPanel } from './ui/TravelPanel';
 
 // ============================================================================
 // GAME CANVAS - Babylon.js 3D Scene with Hex Tiles
@@ -384,7 +385,7 @@ function GameCanvas() {
 // ============================================================================
 
 export function Game() {
-  const { phase, travelTo, shopState } = useGameStore();
+  const { phase, travelTo, shopState, travelState } = useGameStore();
   const [isWorldMapOpen, setIsWorldMapOpen] = useState(false);
 
   // Keyboard shortcuts
@@ -464,6 +465,9 @@ export function Game() {
 
       {/* Shop Panel */}
       {shopState && <ShopPanel />}
+
+      {/* Travel Panel */}
+      {travelState && <TravelPanel />}
 
       {/* Game Over Screen */}
       <GameOverScreen />

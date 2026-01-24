@@ -43,6 +43,15 @@ import {
 } from '../../data/schemas/quest';
 import { getQuestById, QUESTS_BY_ID } from '../../data/quests/index';
 import { getWorldItemsForLocation, type WorldItemSpawn } from '../../data/items/worldItems';
+import { SeededRandom, hashString, combineSeeds } from '../../data/generation/seededRandom';
+import {
+  initEncounterTemplates,
+  generateRandomEncounter,
+  shouldTriggerEncounter,
+  type GeneratedEncounter,
+} from '../../data/generation/generators/encounterGenerator';
+import { ENCOUNTER_TEMPLATES } from '../../data/generation/templates/encounterTemplates';
+import { getConnectionsFrom, type Connection, type DangerLevel } from '../../data/schemas/world';
 import {
   type CombatState,
   type Combatant,
@@ -172,6 +181,26 @@ export interface GameSettings {
   cameraDistance: number;
 }
 
+/** Travel state for tracking journey between locations */
+export interface TravelState {
+  /** Where traveling from */
+  fromLocationId: string;
+  /** Where traveling to */
+  toLocationId: string;
+  /** Connection method (road, trail, railroad, wilderness) */
+  method: string;
+  /** Total travel time in hours */
+  travelTime: number;
+  /** Progress (0-1) */
+  progress: number;
+  /** Danger level of the route */
+  dangerLevel: string;
+  /** When travel started */
+  startedAt: number;
+  /** If an encounter occurred during travel */
+  encounterId: string | null;
+}
+
 // ============================================================================
 // STATE INTERFACE
 // ============================================================================
@@ -233,6 +262,9 @@ export interface GameState {
 
   // Shop
   shopState: { shopId: string; ownerId: string } | null;
+
+  // Travel
+  travelState: TravelState | null;
 
   // Settings
   settings: GameSettings;
@@ -322,6 +354,8 @@ export interface GameState {
   // Travel System
   initWorld: (worldId: string) => void;
   travelTo: (locationId: string) => void;
+  completeTravel: () => void;
+  cancelTravel: () => void;
   discoverLocation: (locationId: string) => void;
   getConnectedLocations: () => string[];
 
@@ -468,6 +502,7 @@ export const useGameStore = create<GameState>()(
       notifications: [],
       combatState: null,
       shopState: null,
+      travelState: null,
       settings: { ...DEFAULT_SETTINGS },
       saveVersion: 2,
       lastSaved: Date.now(),
@@ -1527,7 +1562,7 @@ export const useGameStore = create<GameState>()(
       },
 
       travelTo: (locationId: string) => {
-        const { loadedWorld, currentLocationId, addNotification, discoverLocation } = get();
+        const { loadedWorld, currentLocationId, worldSeed, playerStats, addNotification, discoverLocation, time } = get();
 
         if (!loadedWorld) {
           console.error('[GameStore] No world loaded');
@@ -1553,20 +1588,136 @@ export const useGameStore = create<GameState>()(
           return;
         }
 
+        // Find the connection between locations
+        const connections = getConnectionsFrom(loadedWorld.world, currentLocationId);
+        const connection = connections.find(
+          c => c.to === locationId || (c.bidirectional && c.from === locationId)
+        );
+
+        if (!connection) {
+          addNotification('warning', 'No route to destination');
+          return;
+        }
+
         // Generate procedural content for the destination if needed
         if (targetLocation.isProcedural && !ProceduralLocationManager.hasGeneratedContent(locationId)) {
           console.log(`[GameStore] Generating procedural content for: ${locationId}`);
           ProceduralLocationManager.generateLocationContent(targetLocation);
         }
 
-        // Discover the location if not already discovered
+        // Discover the location
         discoverLocation(locationId);
 
-        // Update current location
-        set({ currentLocationId: locationId });
+        // Create travel state
+        const travelState: TravelState = {
+          fromLocationId: currentLocationId,
+          toLocationId: locationId,
+          method: connection.method,
+          travelTime: connection.travelTime,
+          progress: 0,
+          dangerLevel: connection.danger,
+          startedAt: Date.now(),
+          encounterId: null,
+        };
+
+        // Check for random encounter based on danger level and route
+        const dangerChances: Record<string, number> = {
+          safe: 0.05,
+          low: 0.15,
+          moderate: 0.30,
+          high: 0.50,
+          extreme: 0.70,
+        };
+        const baseChance = dangerChances[connection.danger] ?? 0.15;
+
+        // Create seeded RNG for travel encounter
+        const travelSeed = combineSeeds(worldSeed, hashString(`${currentLocationId}-${locationId}-${Date.now()}`));
+        const rng = new SeededRandom(travelSeed);
+
+        // Initialize encounter templates if needed
+        initEncounterTemplates(ENCOUNTER_TEMPLATES);
+
+        // Check if encounter should trigger
+        const context = {
+          worldSeed,
+          playerLevel: playerStats.level,
+          gameHour: time.hour,
+          factionTensions: {},
+          activeEvents: [],
+          contextTags: [connection.method, connection.danger],
+        };
+
+        const encounterTriggered = shouldTriggerEncounter(rng, context, baseChance);
+
+        if (encounterTriggered) {
+          // Generate the encounter
+          const encounter = generateRandomEncounter(rng, context);
+
+          if (encounter) {
+            console.log(`[GameStore] Travel encounter triggered: ${encounter.name}`);
+            travelState.encounterId = encounter.id;
+
+            // Store encounter data and set travel state
+            set({
+              travelState,
+              phase: 'playing', // Will switch to combat after travel panel shows
+            });
+
+            // Show notification
+            addNotification('warning', `Encounter on the ${connection.method}!`);
+
+            // Start combat with the encounter
+            // Note: Combat will be triggered from the TravelPanel after showing encounter
+            return;
+          }
+        }
+
+        // No encounter - complete travel immediately
+        set({
+          currentLocationId: locationId,
+          travelState: null,
+        });
 
         console.log(`[GameStore] Traveled to ${targetLocation.ref.name}`);
         addNotification('info', `Arrived at ${targetLocation.ref.name}`);
+      },
+
+      /** Complete travel after encounter or travel animation */
+      completeTravel: () => {
+        const { travelState, addNotification, loadedWorld } = get();
+
+        if (!travelState) {
+          return;
+        }
+
+        const targetLocation = loadedWorld?.getLocation(travelState.toLocationId);
+
+        set({
+          currentLocationId: travelState.toLocationId,
+          travelState: null,
+          phase: 'playing',
+        });
+
+        if (targetLocation) {
+          console.log(`[GameStore] Completed travel to ${targetLocation.ref.name}`);
+          addNotification('info', `Arrived at ${targetLocation.ref.name}`);
+        }
+      },
+
+      /** Cancel travel (flee back to origin) */
+      cancelTravel: () => {
+        const { travelState, addNotification } = get();
+
+        if (!travelState) {
+          return;
+        }
+
+        set({
+          travelState: null,
+          phase: 'playing',
+        });
+
+        addNotification('info', 'Returned to safety');
       },
 
       discoverLocation: (locationId: string) => {
