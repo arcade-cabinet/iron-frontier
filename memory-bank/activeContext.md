@@ -193,9 +193,48 @@
 - **Build**: Passes (8.27s, 7,652 kB)
 - **Tests**: 203/203 pass
 
+## Session 2026-01-24 (Continued) - World Map, Travel, CI/CD
+
+### Completed
+
+1. **World Map UI Enhancement**
+   - Added procedural location indicator (purple ✦)
+   - Updated legend to show procedural marker
+   - Uses `!locationDataId` check for procedural detection
+
+2. **Travel System with Random Encounters**
+   - Added `TravelState` interface to game store
+   - Updated `travelTo()` with encounter generation:
+     - Danger-based probability (5% safe to 70% extreme)
+     - Uses seeded RNG for deterministic encounters
+     - Integrates with encounterGenerator
+   - Added `completeTravel()` and `cancelTravel()` actions
+   - Created `TravelPanel.tsx` UI component:
+     - Animated progress bar
+     - Route info (method, travel time, danger)
+     - Encounter panel with fight/flee options
+
+3. **CI/CD with GitHub Actions**
+   - Created `.github/workflows/ci.yml`
+   - Runs on push to main/release branches and PRs
+   - Steps: checkout, pnpm setup, install, type check, test, build
+   - E2E tests with Playwright (PRs only)
+   - Build artifact upload
+
+4. **TypeScript Fixes**
+   - Fixed DIALOGUE_TREE_TEMPLATES (Record to array conversion)
+   - Fixed LocationRef mocks in tests (removed invalid properties)
+   - Fixed WorldItemSpawn (removed respawns property)
+   - Fixed isProcedural check in WorldMap
+
+### Build & Test Status
+- **Build**: Passes (7.67 MB)
+- **Tests**: 203/203 pass
+- **TypeScript**: No errors
+
 ## Next Steps
 
-1. **World Map UI**: Visual map showing regions and locations
-2. **Travel System**: Implement location transitions with travel encounters
-3. **CI/CD Setup**: GitHub Actions for automated testing
-4. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
+1. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
+2. **Save/Load System**: Persist procedural generation state
+3. **Combat Polish**: Improve encounter combat flow
+4. **Audio System**: Add western ambient music and SFX
