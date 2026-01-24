@@ -2,6 +2,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useGameStore } from '../store/gameStore';
+import { getQuestById } from '../../data/quests/index';
 
 // Icons
 function HeartIcon() {
@@ -94,20 +95,32 @@ export function GameHUD() {
       </div>
 
       {/* Active quest indicator */}
-      {activeQuests.length > 0 && (
-        <div className="mt-2">
-          <Card className="bg-amber-950/80 border-amber-700/30 backdrop-blur-sm inline-block">
-            <CardContent className="p-2 px-3">
-              <div className="text-amber-400 text-xs font-medium">
-                {activeQuests[0].title}
-              </div>
-              <div className="text-amber-300/70 text-xs">
-                {activeQuests[0].objectives.find(o => !o.completed)?.description || 'Complete quest'}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      {activeQuests.length > 0 && (() => {
+        const activeQuest = activeQuests[0];
+        const questDef = getQuestById(activeQuest.questId);
+        if (!questDef) return null;
+
+        const currentStage = questDef.stages[activeQuest.currentStageIndex];
+        const currentObjective = currentStage?.objectives.find(obj => {
+          const progress = activeQuest.objectiveProgress[obj.id] ?? 0;
+          return progress < obj.count;
+        });
+
+        return (
+          <div className="mt-2">
+            <Card className="bg-amber-950/80 border-amber-700/30 backdrop-blur-sm inline-block">
+              <CardContent className="p-2 px-3">
+                <div className="text-amber-400 text-xs font-medium">
+                  {questDef.title}
+                </div>
+                <div className="text-amber-300/70 text-xs">
+                  {currentObjective?.description || currentStage?.title || 'Complete quest'}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      })()}
     </div>
   );
 }

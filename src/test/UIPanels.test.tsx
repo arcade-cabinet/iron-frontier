@@ -6,6 +6,7 @@ import { act, screen } from '@testing-library/react';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockNPC, customRender, getStoreState } from './test-utils';
+import type { Quest } from '@/data/schemas/quest';
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
@@ -13,6 +14,40 @@ vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
     span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+  },
+}));
+
+// Mock the quest registry for GameHUD tests
+vi.mock('@/data/quests/index', () => ({
+  getQuestById: (id: string): Quest | undefined => {
+    const mockQuests: Record<string, Quest> = {
+      test_hud_quest: {
+        id: 'test_hud_quest',
+        title: 'Find the Lost Gear',
+        description: 'Search for the missing gear',
+        type: 'side',
+        giverNpcId: 'npc1',
+        startLocationId: 'test_location',
+        recommendedLevel: 1,
+        tags: ['test'],
+        repeatable: false,
+        timeLimitHours: null,
+        prerequisites: { completedQuests: [], factionReputation: {}, requiredItems: [] },
+        stages: [
+          {
+            id: 'stage_1',
+            title: 'Search the Workshop',
+            description: 'Look around',
+            objectives: [
+              { id: 'obj_1', description: 'Search the workshop', type: 'interact', target: 'workshop', count: 1, current: 0, optional: false, hidden: false },
+            ],
+            stageRewards: { xp: 10, gold: 0, items: [], reputation: {} },
+          },
+        ],
+        rewards: { xp: 100, gold: 50, items: [], reputation: {}, unlocksQuests: [] },
+      },
+    };
+    return mockQuests[id];
   },
 }));
 
@@ -66,13 +101,13 @@ describe('GameHUD', () => {
         playerName: 'TestPlayer',
         playerStats: { level: 1, health: 100, maxHealth: 100, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 },
         activeQuests: [{
-          id: 'quest1',
-          title: 'Find the Lost Gear',
-          description: 'Search for the missing gear',
-          giverNpcId: 'npc1',
+          questId: 'test_hud_quest',
           status: 'active',
-          objectives: [{ id: 'step1', description: 'Search the workshop', type: 'collect', required: 1, current: 0, completed: false }],
-          rewards: { xp: 100, gold: 50 },
+          currentStageIndex: 0,
+          objectiveProgress: {},
+          startedAt: Date.now(),
+          completedAt: null,
+          timeRemainingHours: null,
         }],
       } as any,
     });

@@ -1278,6 +1278,17 @@ export const useGameStore = create<GameState>()(
 
         console.log(`[GameStore] World initialized: ${loaded.world.name}, starting at ${startingLocationId}`);
         get().addNotification('info', `Entered ${loaded.world.name}`);
+
+        // Auto-start the main quest if this is a new game (no active quests)
+        const { activeQuests, completedQuestIds, startQuest } = get();
+        const mainQuestId = 'main_the_inheritance';
+        const hasMainQuest = activeQuests.some(q => q.questId === mainQuestId) ||
+                            completedQuestIds.includes(mainQuestId);
+
+        if (!hasMainQuest) {
+          console.log('[GameStore] Auto-starting main quest: The Inheritance');
+          startQuest(mainQuestId);
+        }
       },
 
       travelTo: (locationId: string) => {
