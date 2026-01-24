@@ -1,5 +1,5 @@
 /**
- * ShopPanel - Buy/Sell items with merchants
+ * ShopPanel - Western-themed buy/sell interface
  */
 
 import { useState } from 'react';
@@ -15,6 +15,73 @@ import {
 } from '../../data/shops/index';
 import { getItem } from '../../data/items/index';
 import { getRarityColor } from '../../data/schemas/item';
+import { cn } from '@/lib/utils';
+
+// ============================================================================
+// ICONS
+// ============================================================================
+
+function CoinIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}
+
+function ShoppingBagIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+    </svg>
+  );
+}
+
+function TagIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+    </svg>
+  );
+}
+
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  );
+}
+
+function InfinityIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.781 0-4.781 8 0 8 5.606 0 7.644-8 12.74-8z" />
+    </svg>
+  );
+}
+
+// ============================================================================
+// RARITY BADGE
+// ============================================================================
+
+function RarityBadge({ rarity }: { rarity: string }) {
+  const styles = {
+    legendary: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40',
+    rare: 'bg-purple-500/20 text-purple-400 border-purple-500/40',
+    uncommon: 'bg-green-500/20 text-green-400 border-green-500/40',
+    common: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
+  };
+
+  return (
+    <span className={cn(
+      'text-[9px] px-1.5 py-0.5 rounded border font-medium uppercase',
+      styles[rarity as keyof typeof styles] || styles.common
+    )}>
+      {rarity}
+    </span>
+  );
+}
 
 // ============================================================================
 // SHOP ITEM ROW
@@ -35,34 +102,66 @@ function ShopItemRow({
   if (!itemDef) return null;
 
   const price = calculateBuyPrice(shop, shopItem);
-  const stockText = shopItem.stock < 0 ? '∞' : shopItem.stock.toString();
+  const isUnlimited = shopItem.stock < 0;
+  const isOutOfStock = shopItem.stock === 0;
 
   return (
-    <div className="flex items-center justify-between p-2 bg-stone-800/50 rounded hover:bg-stone-800">
-      <div className="flex-1">
+    <div className={cn(
+      'flex items-center gap-3 p-2.5 rounded-lg border transition-all',
+      'bg-amber-900/20 border-amber-800/30',
+      isOutOfStock && 'opacity-50',
+      canAfford && !isOutOfStock && 'hover:bg-amber-900/40 hover:border-amber-700/50'
+    )}>
+      {/* Item Icon Placeholder */}
+      <div className="w-10 h-10 rounded bg-amber-800/40 border border-amber-700/30 flex items-center justify-center flex-shrink-0">
+        <TagIcon className="w-5 h-5 text-amber-500" />
+      </div>
+
+      {/* Item Info */}
+      <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span
-            className="font-medium"
+            className="font-medium text-sm truncate"
             style={{ color: getRarityColor(itemDef.rarity) }}
           >
             {itemDef.name}
           </span>
-          <span className="text-xs text-stone-500">x{stockText}</span>
+          <RarityBadge rarity={itemDef.rarity} />
         </div>
-        <div className="text-xs text-stone-400">{itemDef.description}</div>
+        <div className="text-[10px] text-amber-500/60 truncate mt-0.5">
+          {itemDef.description}
+        </div>
       </div>
-      <div className="flex items-center gap-3">
-        <span className={`text-sm ${canAfford ? 'text-amber-400' : 'text-red-400'}`}>
-          ${price}
-        </span>
+
+      {/* Stock */}
+      <div className="flex items-center gap-1 text-amber-400/60 text-xs">
+        {isUnlimited ? (
+          <InfinityIcon className="w-4 h-4" />
+        ) : isOutOfStock ? (
+          <span className="text-red-400">Sold Out</span>
+        ) : (
+          <span>x{shopItem.stock}</span>
+        )}
+      </div>
+
+      {/* Price & Buy Button */}
+      <div className="flex items-center gap-2">
+        <div className={cn(
+          'flex items-center gap-1 font-mono text-sm font-medium',
+          canAfford ? 'text-amber-400' : 'text-red-400'
+        )}>
+          <CoinIcon className="w-3 h-3" />
+          <span>{price}</span>
+        </div>
         <button
           onClick={onBuy}
-          disabled={!canAfford || shopItem.stock === 0}
-          className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-            canAfford && shopItem.stock !== 0
+          disabled={!canAfford || isOutOfStock}
+          className={cn(
+            'px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+            canAfford && !isOutOfStock
               ? 'bg-green-700 hover:bg-green-600 text-white'
-              : 'bg-stone-700 text-stone-500 cursor-not-allowed'
-          }`}
+              : 'bg-amber-900/30 text-amber-700 cursor-not-allowed'
+          )}
         >
           Buy
         </button>
@@ -91,31 +190,50 @@ function InventoryItemRow({
   const price = canSell ? calculateSellPrice(shop, itemDef) : 0;
 
   return (
-    <div className="flex items-center justify-between p-2 bg-stone-800/50 rounded hover:bg-stone-800">
-      <div className="flex-1">
+    <div className={cn(
+      'flex items-center gap-3 p-2.5 rounded-lg border transition-all',
+      'bg-amber-900/20 border-amber-800/30',
+      !canSell && 'opacity-50',
+      canSell && 'hover:bg-amber-900/40 hover:border-amber-700/50'
+    )}>
+      {/* Item Icon Placeholder */}
+      <div className="w-10 h-10 rounded bg-amber-800/40 border border-amber-700/30 flex items-center justify-center flex-shrink-0">
+        <TagIcon className="w-5 h-5 text-amber-500" />
+      </div>
+
+      {/* Item Info */}
+      <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span
-            className="font-medium"
+            className="font-medium text-sm truncate"
             style={{ color: getRarityColor(itemDef.rarity) }}
           >
             {item.name}
           </span>
-          <span className="text-xs text-stone-500">x{item.quantity}</span>
+          <RarityBadge rarity={itemDef.rarity} />
+        </div>
+        <div className="text-[10px] text-amber-500/60 mt-0.5">
+          Quantity: {item.quantity}
         </div>
       </div>
-      <div className="flex items-center gap-3">
+
+      {/* Price & Sell Button */}
+      <div className="flex items-center gap-2">
         {canSell ? (
           <>
-            <span className="text-sm text-amber-400">${price}</span>
+            <div className="flex items-center gap-1 font-mono text-sm font-medium text-amber-400">
+              <CoinIcon className="w-3 h-3" />
+              <span>{price}</span>
+            </div>
             <button
               onClick={onSell}
-              className="px-3 py-1 rounded text-sm font-medium bg-amber-700 hover:bg-amber-600 text-white transition-colors"
+              className="px-3 py-1.5 rounded-md text-xs font-medium bg-amber-700 hover:bg-amber-600 text-white transition-colors"
             >
               Sell
             </button>
           </>
         ) : (
-          <span className="text-xs text-stone-500">Cannot sell here</span>
+          <span className="text-[10px] text-amber-600/50 italic">Not accepted</span>
         )}
       </div>
     </div>
@@ -147,52 +265,88 @@ export function ShopPanel() {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-stone-900 border-2 border-amber-700 rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col">
+      <div className="bg-amber-950 border-2 border-amber-700/60 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-stone-700">
-          <div>
-            <h2 className="text-xl font-bold text-amber-500">{shop.name}</h2>
-            {shop.description && (
-              <p className="text-sm text-stone-400">{shop.description}</p>
-            )}
+        <div className="flex justify-between items-center p-4 border-b border-amber-800/50">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-lg bg-amber-800/50 border border-amber-700/50 flex items-center justify-center">
+              <ShoppingBagIcon className="w-6 h-6 text-amber-400" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-amber-200">{shop.name}</h2>
+              {shop.description && (
+                <p className="text-xs text-amber-500/70">{shop.description}</p>
+              )}
+            </div>
           </div>
-          <div className="text-right">
-            <div className="text-sm text-stone-400">Your Gold</div>
-            <div className="text-lg font-bold text-amber-400">${playerStats.gold}</div>
+          <div className="flex items-center gap-4">
+            {/* Player Gold */}
+            <div className="text-right">
+              <div className="text-[10px] text-amber-500/60 uppercase tracking-wide">Your Gold</div>
+              <div className="flex items-center gap-1 text-lg font-bold text-yellow-400">
+                <CoinIcon className="w-4 h-4" />
+                <span>${playerStats.gold}</span>
+              </div>
+            </div>
+            {/* Close Button */}
+            <button
+              onClick={closeShop}
+              className="p-2 rounded-lg bg-amber-900/50 hover:bg-amber-800/50 text-amber-400 transition-colors"
+            >
+              <CloseIcon className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-stone-700">
+        <div className="flex border-b border-amber-800/50">
           <button
             onClick={() => setActiveTab('buy')}
-            className={`flex-1 px-4 py-2 font-medium transition-colors ${
+            className={cn(
+              'flex-1 px-4 py-2.5 font-medium text-sm transition-colors',
               activeTab === 'buy'
-                ? 'text-amber-400 border-b-2 border-amber-400 bg-stone-800/50'
-                : 'text-stone-400 hover:text-stone-300'
-            }`}
+                ? 'text-amber-200 border-b-2 border-amber-500 bg-amber-900/30'
+                : 'text-amber-500/60 hover:text-amber-400'
+            )}
           >
-            Buy
+            <span className="flex items-center justify-center gap-2">
+              <ShoppingBagIcon className="w-4 h-4" />
+              Buy
+              <span className="text-[10px] bg-amber-800/50 px-1.5 py-0.5 rounded">
+                {availableItems.length}
+              </span>
+            </span>
           </button>
           <button
             onClick={() => setActiveTab('sell')}
-            className={`flex-1 px-4 py-2 font-medium transition-colors ${
+            disabled={!shop.canSell}
+            className={cn(
+              'flex-1 px-4 py-2.5 font-medium text-sm transition-colors',
+              !shop.canSell && 'opacity-50 cursor-not-allowed',
               activeTab === 'sell'
-                ? 'text-amber-400 border-b-2 border-amber-400 bg-stone-800/50'
-                : 'text-stone-400 hover:text-stone-300'
-            }`}
+                ? 'text-amber-200 border-b-2 border-amber-500 bg-amber-900/30'
+                : 'text-amber-500/60 hover:text-amber-400'
+            )}
           >
-            Sell
+            <span className="flex items-center justify-center gap-2">
+              <TagIcon className="w-4 h-4" />
+              Sell
+              <span className="text-[10px] bg-amber-800/50 px-1.5 py-0.5 rounded">
+                {inventory.length}
+              </span>
+            </span>
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-3">
           {activeTab === 'buy' ? (
             <div className="space-y-2">
               {availableItems.length === 0 ? (
-                <div className="text-center text-stone-500 py-8">
-                  No items available
+                <div className="text-center text-amber-600/50 py-12">
+                  <ShoppingBagIcon className="w-10 h-10 mx-auto mb-2 text-amber-700/30" />
+                  <p className="text-sm">No items available</p>
+                  <p className="text-xs text-amber-700/40 mt-1">Check back later</p>
                 </div>
               ) : (
                 availableItems.map((shopItem, index) => (
@@ -209,12 +363,14 @@ export function ShopPanel() {
           ) : (
             <div className="space-y-2">
               {inventory.length === 0 ? (
-                <div className="text-center text-stone-500 py-8">
-                  No items to sell
+                <div className="text-center text-amber-600/50 py-12">
+                  <TagIcon className="w-10 h-10 mx-auto mb-2 text-amber-700/30" />
+                  <p className="text-sm">Nothing to sell</p>
+                  <p className="text-xs text-amber-700/40 mt-1">Find some loot first</p>
                 </div>
               ) : !shop.canSell ? (
-                <div className="text-center text-stone-500 py-8">
-                  This merchant doesn't buy items
+                <div className="text-center text-amber-600/50 py-12">
+                  <p className="text-sm">This merchant doesn't buy items</p>
                 </div>
               ) : (
                 inventory.map((item) => (
@@ -231,13 +387,11 @@ export function ShopPanel() {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-stone-700">
-          <button
-            onClick={closeShop}
-            className="w-full px-4 py-2 bg-stone-700 hover:bg-stone-600 text-white rounded font-medium transition-colors"
-          >
-            Leave Shop
-          </button>
+        <div className="p-3 border-t border-amber-800/50 bg-amber-900/20">
+          <div className="flex items-center justify-between text-[10px] text-amber-500/50">
+            <span>Sell rate: {Math.round(shop.buyModifier * 100)}% • Haggle skill affects prices</span>
+            <span>Press ESC to leave</span>
+          </div>
         </div>
       </div>
     </div>
