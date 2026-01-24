@@ -157,7 +157,7 @@ export interface DialogueState {
   startedAt: number;
 }
 
-export type GamePhase = 'title' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'inventory' | 'combat';
+export type GamePhase = 'title' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'inventory' | 'combat' | 'game_over';
 export type PanelType = 'inventory' | 'quests' | 'settings' | 'menu' | 'character';
 
 export interface GameSettings {
@@ -572,9 +572,17 @@ export const useGameStore = create<GameState>()(
         if (amount > 0) addNotification('xp', `+${amount} XP`);
       },
 
-      takeDamage: (amount) => set((state) => ({
-        playerStats: { ...state.playerStats, health: Math.max(0, state.playerStats.health - amount) }
-      })),
+      takeDamage: (amount) => {
+        const newHealth = Math.max(0, get().playerStats.health - amount);
+        set((state) => ({
+          playerStats: { ...state.playerStats, health: newHealth }
+        }));
+        // Check for death (only outside combat - combat has its own defeat handling)
+        if (newHealth <= 0 && get().phase !== 'combat') {
+          set({ phase: 'game_over' });
+          get().addNotification('warning', 'You have died...');
+        }
+      },
 
       heal: (amount) => set((state) => ({
         playerStats: { ...state.playerStats, health: Math.min(state.playerStats.maxHealth, state.playerStats.health + amount) }

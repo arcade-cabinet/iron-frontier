@@ -17,6 +17,7 @@ import { CharacterPanel } from './ui/CharacterPanel';
 import { CombatPanel } from './ui/CombatPanel';
 import { DialogueBox } from './ui/DialogueBox';
 import { GameHUD } from './ui/GameHUD';
+import { GameOverScreen } from './ui/GameOverScreen';
 import { InventoryPanel } from './ui/InventoryPanel';
 import { MenuPanel } from './ui/MenuPanel';
 import { NotificationFeed } from './ui/NotificationFeed';
@@ -459,6 +460,9 @@ export function Game() {
 
       {/* Shop Panel */}
       {shopState && <ShopPanel />}
+
+      {/* Game Over Screen */}
+      <GameOverScreen />
     </div>
   );
 }

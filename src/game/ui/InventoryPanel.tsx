@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { useGameStore, type InventoryItem } from '../store/gameStore';
+import { useGameStore, type InventoryItem, type EquipmentSlot } from '../store/gameStore';
 import { getItem } from '../../data/items/index';
 import { getItemTypeName } from '../../data/schemas/item';
 
@@ -27,6 +27,8 @@ export function InventoryPanel() {
     inventory,
     useItem,
     dropItem,
+    equipItem,
+    equipment,
     playerStats,
     settings,
     maxInventorySlots,
@@ -84,6 +86,17 @@ export function InventoryPanel() {
     if (selectedItem?.id === id) {
       setSelectedItem(null);
     }
+  };
+
+  const handleEquipItem = (id: string) => {
+    if (settings.haptics && navigator.vibrate) {
+      navigator.vibrate(30);
+    }
+    equipItem(id);
+  };
+
+  const isItemEquipped = (id: string) => {
+    return Object.values(equipment).includes(id);
   };
 
   const handleSelectItem = (item: InventoryItem) => {
@@ -281,7 +294,7 @@ export function InventoryPanel() {
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex gap-1">
+                <div className="flex gap-1 flex-wrap">
                   {selectedItem.usable && (
                     <Button
                       size="sm"
@@ -290,6 +303,22 @@ export function InventoryPanel() {
                       className="flex-1 h-8 text-xs bg-green-900/30 border-green-700/50 text-green-300 hover:bg-green-800/50"
                     >
                       Use
+                    </Button>
+                  )}
+                  {(selectedItem.type === 'weapon' || selectedItem.type === 'armor') && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleEquipItem(selectedItem.id)}
+                      disabled={isItemEquipped(selectedItem.id)}
+                      className={cn(
+                        "flex-1 h-8 text-xs",
+                        isItemEquipped(selectedItem.id)
+                          ? "bg-blue-900/30 border-blue-700/50 text-blue-300/50 cursor-not-allowed"
+                          : "bg-blue-900/30 border-blue-700/50 text-blue-300 hover:bg-blue-800/50"
+                      )}
+                    >
+                      {isItemEquipped(selectedItem.id) ? 'Equipped' : 'Equip'}
                     </Button>
                   )}
                   {selectedItem.droppable && (
