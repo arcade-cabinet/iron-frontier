@@ -1,10 +1,11 @@
-// Action Bar - Bottom navigation
+// Action Bar - Bottom navigation (streamlined 5-button layout)
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/gameStore';
 
-// Icons
+// Icons - Western-themed
 function MenuIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,7 +14,7 @@ function MenuIcon() {
   );
 }
 
-function BackpackIcon() {
+function SaddlebagIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
@@ -21,19 +22,10 @@ function BackpackIcon() {
   );
 }
 
-function ScrollIcon() {
+function JournalIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-    </svg>
-  );
-}
-
-function SettingsIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
     </svg>
   );
 }
@@ -46,18 +38,10 @@ function MapIcon() {
   );
 }
 
-function PersonIcon() {
+function WantedPosterIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-    </svg>
-  );
-}
-
-function SwordIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5l4 4m0-4l-4 4m-7 9l-4-4m4 4l-4-4m11-11L7 19l-4-4L15 3l4 4z" />
     </svg>
   );
 }
@@ -67,23 +51,30 @@ interface ActionBarProps {
 }
 
 export function ActionBar({ onOpenMap }: ActionBarProps) {
-  const { togglePanel, activeQuests, inventory, startCombat } = useGameStore();
+  const { togglePanel, activeQuests, inventory, activePanel } = useGameStore();
+
+  // Helper to check if button is active
+  const isActive = (panel: string) => activePanel === panel;
+
+  const buttonBase = "flex flex-col items-center gap-0.5 h-auto py-2 px-3 rounded-lg transition-all";
+  const buttonNormal = "text-amber-300/80 hover:text-amber-100 hover:bg-amber-800/40";
+  const buttonActive = "text-amber-100 bg-amber-700/60";
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 p-3 pb-safe">
-      <Card className="bg-amber-950/95 border-amber-700/50 backdrop-blur-sm">
-        <CardContent className="p-2">
+    <div className="absolute bottom-0 left-0 right-0 p-2 pb-safe">
+      <Card className="bg-amber-950/95 border-amber-800/60 backdrop-blur-md shadow-lg">
+        <CardContent className="p-1.5">
           <div className="flex justify-around items-center">
-            {/* Character */}
+            {/* Character Stats */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('character')}
-              aria-label="Character"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
+              aria-label="Character Stats"
+              className={cn(buttonBase, isActive('character') ? buttonActive : buttonNormal)}
             >
-              <PersonIcon />
-              <span className="text-xs">Stats</span>
+              <WantedPosterIcon />
+              <span className="text-[10px] font-medium">Outlaw</span>
             </Button>
 
             {/* World Map */}
@@ -92,36 +83,28 @@ export function ActionBar({ onOpenMap }: ActionBarProps) {
               size="sm"
               onClick={onOpenMap}
               aria-label="World Map"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
+              className={cn(buttonBase, buttonNormal)}
             >
               <MapIcon />
-              <span className="text-xs">Map</span>
+              <span className="text-[10px] font-medium">Territory</span>
             </Button>
 
-            {/* Combat (test) */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => startCombat('roadside_bandits')}
-              aria-label="Fight"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-red-300 hover:text-red-100 hover:bg-red-800/50"
-            >
-              <SwordIcon />
-              <span className="text-xs">Fight</span>
-            </Button>
-
-            {/* Inventory */}
+            {/* Inventory - center focus */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('inventory')}
               aria-label="Inventory"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50 relative"
+              className={cn(
+                buttonBase,
+                "relative px-4",
+                isActive('inventory') ? buttonActive : buttonNormal
+              )}
             >
-              <BackpackIcon />
-              <span className="text-xs">Items</span>
+              <SaddlebagIcon />
+              <span className="text-[10px] font-medium">Saddlebag</span>
               {inventory.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-amber-600 text-white text-xs">
+                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 flex items-center justify-center bg-amber-600 text-white text-[9px] font-bold rounded-full">
                   {inventory.length}
                 </Badge>
               )}
@@ -132,40 +115,32 @@ export function ActionBar({ onOpenMap }: ActionBarProps) {
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('quests')}
-              aria-label="Quests"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50 relative"
+              aria-label="Quest Journal"
+              className={cn(
+                buttonBase,
+                "relative",
+                isActive('quests') ? buttonActive : buttonNormal
+              )}
             >
-              <ScrollIcon />
-              <span className="text-xs">Quests</span>
+              <JournalIcon />
+              <span className="text-[10px] font-medium">Journal</span>
               {activeQuests.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-yellow-600 text-white text-xs">
+                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 flex items-center justify-center bg-yellow-600 text-white text-[9px] font-bold rounded-full">
                   {activeQuests.length}
                 </Badge>
               )}
             </Button>
 
-            {/* Settings */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => togglePanel('settings')}
-              aria-label="Settings"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
-            >
-              <SettingsIcon />
-              <span className="text-xs">Settings</span>
-            </Button>
-
-            {/* Menu */}
+            {/* Menu (includes Settings) */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => togglePanel('menu')}
               aria-label="Menu"
-              className="flex flex-col items-center gap-1 h-auto py-2 text-amber-200 hover:text-amber-100 hover:bg-amber-800/50"
+              className={cn(buttonBase, isActive('menu') ? buttonActive : buttonNormal)}
             >
               <MenuIcon />
-              <span className="text-xs">Menu</span>
+              <span className="text-[10px] font-medium">Menu</span>
             </Button>
           </div>
         </CardContent>

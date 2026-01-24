@@ -22,7 +22,7 @@ import { InventoryPanel } from './ui/InventoryPanel';
 import { MenuPanel } from './ui/MenuPanel';
 import { NotificationFeed } from './ui/NotificationFeed';
 import { QuestLog } from './ui/QuestLog';
-import { SettingsPanel } from './ui/SettingsPanel';
+// SettingsPanel merged into MenuPanel
 import { ShopPanel } from './ui/ShopPanel';
 import { WorldMap } from './ui/WorldMap';
 import { TravelPanel } from './ui/TravelPanel';
@@ -450,7 +450,6 @@ export function Game() {
       <CharacterPanel />
       <InventoryPanel />
       <QuestLog />
-      <SettingsPanel />
       <MenuPanel />
 
       {/* World Map */}

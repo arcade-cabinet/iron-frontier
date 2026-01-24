@@ -40,17 +40,17 @@ describe('Interaction Flows', () => {
       await user.click(screen.getByText('Menu').closest('button')!);
       expect(getStoreState().activePanel).toBe('menu');
 
-      // Open Inventory (should close Menu)
-      await user.click(screen.getByText('Items').closest('button')!);
+      // Open Inventory (should close Menu) - now labeled "Saddlebag"
+      await user.click(screen.getByText('Saddlebag').closest('button')!);
       expect(getStoreState().activePanel).toBe('inventory');
 
-      // Open Quests (should close Inventory)
-      await user.click(screen.getByText('Quests').closest('button')!);
+      // Open Quests (should close Inventory) - now labeled "Journal"
+      await user.click(screen.getByText('Journal').closest('button')!);
       expect(getStoreState().activePanel).toBe('quests');
 
-      // Open Settings (should close Quests)
-      await user.click(screen.getByText('Settings').closest('button')!);
-      expect(getStoreState().activePanel).toBe('settings');
+      // Open Character (should close Quests) - now labeled "Outlaw"
+      await user.click(screen.getByText('Outlaw').closest('button')!);
+      expect(getStoreState().activePanel).toBe('character');
     });
 
     it('should toggle panel on second click', async () => {
@@ -61,7 +61,7 @@ describe('Interaction Flows', () => {
         } as any
       });
 
-      const itemsButton = screen.getByText('Items').closest('button')!;
+      const itemsButton = screen.getByText('Saddlebag').closest('button')!;
 
       // First click - open
       await user.click(itemsButton);

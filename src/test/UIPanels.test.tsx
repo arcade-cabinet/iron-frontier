@@ -56,8 +56,8 @@ import { ActionBar } from '@/game/ui/ActionBar';
 import { DialogueBox } from '@/game/ui/DialogueBox';
 import { GameHUD } from '@/game/ui/GameHUD';
 import { InventoryPanel } from '@/game/ui/InventoryPanel';
+import { MenuPanel } from '@/game/ui/MenuPanel';
 import { NotificationFeed } from '@/game/ui/NotificationFeed';
-import { SettingsPanel } from '@/game/ui/SettingsPanel';
 
 describe('GameHUD', () => {
   it('should display player name', () => {
@@ -80,7 +80,8 @@ describe('GameHUD', () => {
         playerStats: { level: 5, health: 100, maxHealth: 100, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 }
       } as any,
     });
-    expect(screen.getByText('Level 5')).toBeInTheDocument();
+    // New HUD uses "Lv.5" format
+    expect(screen.getByText('Lv.5')).toBeInTheDocument();
   });
 
   it('should display current health', () => {
@@ -91,7 +92,8 @@ describe('GameHUD', () => {
         playerStats: { health: 75, maxHealth: 100, level: 1, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 }
       } as any,
     });
-    expect(screen.getByText(/75\/100 HP/)).toBeInTheDocument();
+    // New HUD shows just the health value
+    expect(screen.getByText('75')).toBeInTheDocument();
   });
 
   it('should display active quest when present', () => {
@@ -125,33 +127,34 @@ describe('ActionBar', () => {
       } as any,
     });
 
+    // Updated labels: Outlaw (character), Territory (map), Saddlebag (inventory), Journal (quests), Menu
     expect(screen.getByText('Menu')).toBeInTheDocument();
-    expect(screen.getByText('Items')).toBeInTheDocument();
-    expect(screen.getByText('Quests')).toBeInTheDocument();
-    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByText('Saddlebag')).toBeInTheDocument();
+    expect(screen.getByText('Journal')).toBeInTheDocument();
+    expect(screen.getByText('Outlaw')).toBeInTheDocument();
   });
 
-  it('should toggle inventory when clicking Items', async () => {
+  it('should toggle inventory when clicking Saddlebag', async () => {
     const { user } = customRender(<ActionBar />, {
       initialState: {
         phase: 'playing',
       } as any,
     });
 
-    const itemsButton = screen.getByText('Items').closest('button');
+    const itemsButton = screen.getByText('Saddlebag').closest('button');
     await user.click(itemsButton!);
 
     expect(getStoreState().activePanel).toBe('inventory');
   });
 
-  it('should toggle quest log when clicking Quests', async () => {
+  it('should toggle quest log when clicking Journal', async () => {
     const { user } = customRender(<ActionBar />, {
       initialState: {
         phase: 'playing',
       } as any,
     });
 
-    const questsButton = screen.getByText('Quests').closest('button');
+    const questsButton = screen.getByText('Journal').closest('button');
     await user.click(questsButton!);
 
     expect(getStoreState().activePanel).toBe('quests');
@@ -225,9 +228,11 @@ describe('InventoryPanel', () => {
   });
 });
 
-describe('SettingsPanel', () => {
-  const settingsInitialState = {
-    activePanel: 'settings',
+describe('MenuPanel (includes Settings)', () => {
+  const menuInitialState = {
+    activePanel: 'menu',
+    playerName: 'TestPlayer',
+    playerStats: { level: 5, health: 100, maxHealth: 100, xp: 50, xpToNext: 100, gold: 250, reputation: 10 },
     settings: {
       musicVolume: 0.7,
       sfxVolume: 0.8,
@@ -239,20 +244,26 @@ describe('SettingsPanel', () => {
     },
   };
 
-  it('should render Settings title', () => {
-    customRender(<SettingsPanel />, { initialState: settingsInitialState as any });
-    expect(screen.getByText('Settings')).toBeInTheDocument();
+  it('should render Menu panel title', () => {
+    customRender(<MenuPanel />, { initialState: menuInitialState as any });
+    expect(screen.getByText('Iron Frontier')).toBeInTheDocument();
   });
 
-  it('should display audio section', () => {
-    customRender(<SettingsPanel />, { initialState: settingsInitialState as any });
-    expect(screen.getByText('Audio')).toBeInTheDocument();
+  it('should display Settings tab', () => {
+    customRender(<MenuPanel />, { initialState: menuInitialState as any });
+    // Menu now has Game and Settings tabs
+    expect(screen.getByRole('tab', { name: 'Settings' })).toBeInTheDocument();
   });
 
-  it('should toggle control mode', async () => {
-    const { user } = customRender(<SettingsPanel />, { initialState: settingsInitialState as any });
+  it('should toggle control mode in settings tab', async () => {
+    const { user } = customRender(<MenuPanel />, { initialState: menuInitialState as any });
 
-    const joystickButton = screen.getByRole('button', { name: 'Virtual Joystick' });
+    // Click Settings tab
+    const settingsTab = screen.getByRole('tab', { name: 'Settings' });
+    await user.click(settingsTab);
+
+    // Now click Joystick button
+    const joystickButton = screen.getByRole('button', { name: 'Joystick' });
     await user.click(joystickButton);
 
     expect(getStoreState().settings.controlMode).toBe('joystick');

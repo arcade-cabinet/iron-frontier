@@ -96,8 +96,10 @@ describe('Game Flow', () => {
       });
 
       expect(screen.getByText('Tester')).toBeInTheDocument();
-      expect(screen.getByText('Level 3')).toBeInTheDocument();
-      expect(screen.getByText('90/100 HP')).toBeInTheDocument();
+      // New HUD format: "Lv.3" instead of "Level 3"
+      expect(screen.getByText('Lv.3')).toBeInTheDocument();
+      // New HUD shows just the health value
+      expect(screen.getByText('90')).toBeInTheDocument();
     });
   });
 });
