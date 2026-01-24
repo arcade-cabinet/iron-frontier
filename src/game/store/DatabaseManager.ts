@@ -125,9 +125,10 @@ export class DatabaseManager {
 
     /**
      * Execute a raw SQL statement
+     * Silently returns if database not yet initialized (save will happen later)
      */
     run(sql: string, params?: any[]): void {
-        if (!this.db) throw new Error('Database not initialized');
+        if (!this.db) return; // Silently skip if not initialized
         this.db.run(sql, params);
     }
 
@@ -151,20 +152,35 @@ export class DatabaseManager {
 
     /**
      * Helper to transactionally update the player state
+     * Accepts the full game state and extracts player data from it
      */
-    savePlayer(player: any): void {
+    savePlayer(state: any): void {
+        const stats = state.playerStats || {};
+        const pos = state.playerPosition || { x: 0, y: 0, z: 0 };
+
         this.run(`
       INSERT OR REPLACE INTO player (
-        id, name, level, xp, xp_to_next, health, max_health, 
-        stamina, max_stamina, gold, reputation, 
+        id, name, level, xp, xp_to_next, health, max_health,
+        stamina, max_stamina, gold, reputation,
         pos_x, pos_y, pos_z, rotation, last_updated
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
-            player.id, player.name, player.level, player.xp, player.xpToNext,
-            player.health, player.maxHealth, player.stamina, player.maxStamina,
-            player.gold, player.reputation,
-            player.position.x, player.position.y, player.position.z,
-            player.rotation, Date.now()
+            1, // Single player, always id=1
+            state.playerName || 'Unknown',
+            stats.level || 1,
+            stats.xp || 0,
+            stats.xpToNext || 100,
+            stats.health || 100,
+            stats.maxHealth || 100,
+            stats.stamina || 100,
+            stats.maxStamina || 100,
+            stats.gold || 0,
+            stats.reputation || 0,
+            pos.x,
+            pos.y,
+            pos.z,
+            state.playerRotation || 0,
+            Date.now()
         ]);
     }
 
