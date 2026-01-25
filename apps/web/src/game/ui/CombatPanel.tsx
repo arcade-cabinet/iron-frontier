@@ -14,7 +14,7 @@ import type { CombatActionType } from '@iron-frontier/shared/store';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
 import { useEffect, useRef } from 'react';
-import { audioService } from '../game/services/AudioService';
+import { audioService } from '../services/AudioService';
 
 // ============================================================================
 // ICONS
