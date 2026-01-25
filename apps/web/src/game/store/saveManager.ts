@@ -21,37 +21,40 @@ export interface SaveSlot {
 export async function getSaveSlots(): Promise<SaveSlot[]> {
   try {
     const allKeys = await keys();
+    const saveKeys = (allKeys as string[]).filter((key) => key.startsWith(SAVE_PREFIX));
+    const binaryKeys = (allKeys as string[]).filter((key) => key.startsWith(BINARY_SAVE_PREFIX));
+
+    // Fetch all JSON saves in parallel
+    const jsonSaves = await Promise.all(saveKeys.map((key) => get<any>(key)));
+
     const slots: SaveSlot[] = [];
 
-    for (const key of allKeys) {
-      if (typeof key !== 'string') continue;
-
-      if (key.startsWith(SAVE_PREFIX)) {
-        const save = await get<any>(key);
-        if (save) {
-          slots.push({
-            id: save.id,
-            playerName: save.playerName || 'Stranger',
-            playTime: save.playTime || 0,
-            timestamp: save.timestamp || Date.now(),
-            level: save.playerStats?.level || 1,
-            isBinary: false,
-          });
-        }
-      } else if (key.startsWith(BINARY_SAVE_PREFIX)) {
-        const id = key.replace(BINARY_SAVE_PREFIX, '');
-        // For binary saves, we'd ideally store metadata separately or peek the DB
-        // For now, let's assume we have a metadata store or just use defaults
+    // Process JSON saves
+    jsonSaves.forEach((save) => {
+      if (save) {
         slots.push({
-          id,
-          playerName: 'Persistent Hero', // TODO: Load from separate metadata store
-          playTime: 0,
-          timestamp: Date.now(),
-          level: 1,
-          isBinary: true,
+          id: save.id,
+          playerName: save.playerName || 'Stranger',
+          playTime: save.playTime || 0,
+          timestamp: save.timestamp || Date.now(),
+          level: save.playerStats?.level || 1,
+          isBinary: false,
         });
       }
-    }
+    });
+
+    // Process Binary saves (just identifiers for now)
+    binaryKeys.forEach((key) => {
+      const id = key.replace(BINARY_SAVE_PREFIX, '');
+      slots.push({
+        id,
+        playerName: 'Persistent Hero', // TODO: Load from separate metadata store
+        playTime: 0,
+        timestamp: Date.now(),
+        level: 1,
+        isBinary: true,
+      });
+    });
 
     return slots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {

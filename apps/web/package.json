@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm run sync-assets && tsc && vite build",
-    "sync-assets": "rsync -av --delete ../../packages/assets/models/ ./public/assets/models/ && rsync -av --delete ../../packages/assets/textures/ ./public/assets/textures/",
+    "sync-assets": "rimraf ./public/assets/models ./public/assets/textures && cpy \"../../packages/assets/models/**\" \"./public/assets/models/\" && cpy \"../../packages/assets/textures/**\" \"./public/assets/textures/\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview --port 8080",
     "typecheck": "tsc --noEmit",
@@ -15,7 +15,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "clean": "rm -rf dist .vite"
+    "clean": "rimraf dist .vite"
   },
   "dependencies": {
     "@babylonjs/core": "^8.47.0",

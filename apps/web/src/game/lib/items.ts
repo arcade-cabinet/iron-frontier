@@ -219,8 +219,15 @@ export const ITEMS: Record<string, Item> = {
   },
 };
 
+interface LootEntry {
+  itemId: string;
+  weight: number;
+  minQty: number;
+  maxQty: number;
+}
+
 // Loot tables by rarity weights
-export const LOOT_TABLES = {
+export const LOOT_TABLES: Record<string, LootEntry[]> = {
   common_container: [
     { itemId: 'cogwheel_cookie', weight: 30, minQty: 1, maxQty: 3 },
     { itemId: 'copper_gear', weight: 25, minQty: 1, maxQty: 5 },

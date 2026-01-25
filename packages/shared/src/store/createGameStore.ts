@@ -757,13 +757,31 @@ export function createGameStore({
 
         // UI Actions
         togglePanel: (panel: PanelType) => {
-          set((s) => ({
-            activePanel: s.activePanel === panel ? null : panel,
-          }));
+          const state = get();
+          if (state.activePanel === panel) {
+            state.closePanel();
+          } else {
+            state.openPanel(panel);
+          }
         },
 
-        openPanel: (panel: PanelType) => set({ activePanel: panel }),
-        closePanel: () => set({ activePanel: null }),
+        openPanel: (panel: PanelType) => {
+          const state = get();
+          // Don't pause if already in a non-playing state that should persist (like combat)
+          // But for now, simple implementation:
+          set({
+            activePanel: panel,
+            phase: state.phase === 'playing' ? 'paused' : state.phase,
+          });
+        },
+
+        closePanel: () => {
+          const state = get();
+          set({
+            activePanel: null,
+            phase: state.phase === 'paused' ? 'playing' : state.phase,
+          });
+        },
         setDialogue: (dialogue: any) => set({ dialogueState: dialogue }),
 
         addNotification: (type: Notification['type'], message: string) => {

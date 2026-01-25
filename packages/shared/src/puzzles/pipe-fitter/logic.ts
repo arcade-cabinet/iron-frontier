@@ -13,19 +13,24 @@ const CONNECTIONS: Record<PipeType, [number, number, number, number]> = {
   sink: [1, 0, 0, 0],     // Treated effectively as a cap that accepts flow
 };
 
+/**
+ * Utility class containing the core logic for the pipe fitting puzzle.
+ * Handles connectivity checks, cell rotations, and flow calculations.
+ */
 export class PipeLogic {
   /**
    * Get connections for a specific pipe type and rotation.
-   * Returns [N, E, S, W] booleans.
+   * 
+   * @param type - The type of pipe (straight, corner, etc.)
+   * @param rotation - The clockwise rotation (0-3)
+   * @returns A tuple of booleans [North, East, South, West] indicating if that side has a connection.
    */
   static getConnections(type: PipeType, rotation: Direction): [boolean, boolean, boolean, boolean] {
     const base = CONNECTIONS[type];
     // Rotate the array right by `rotation` steps
     // e.g. rot 1 (East) means index 0 moves to index 1
-    // Wait, physically:
-    // If a pipe points N (index 0) and we rotate it 90deg CW (rot 1):
+    // Physically: If a pipe points N (index 0) and we rotate it 90deg CW (rot 1):
     // The connection that WAS North is now East.
-    // So the connections array shifts RIGHT.
     
     const rotated: [number, number, number, number] = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
@@ -42,6 +47,9 @@ export class PipeLogic {
 
   /**
    * Rotates a cell 90 degrees clockwise.
+   * 
+   * @param cell - The pipe cell to rotate.
+   * @returns A new cell object with the updated rotation, or the same cell if it is fixed.
    */
   static rotateCell(cell: PipeCell): PipeCell {
     if (cell.fixed) return cell;
@@ -52,8 +60,11 @@ export class PipeLogic {
   }
 
   /**
-   * Checks flow connectivity starting from source.
-   * Updates 'active' state of cells and returns true if sink is reached.
+   * Checks flow connectivity starting from the source point.
+   * Performs a breadth-first search to find all reachable pipes and checks if the sink is reached.
+   * 
+   * @param state - The current state of the pipe puzzle grid.
+   * @returns An object containing the solved status and the updated grid with 'active' flags set on reachable pipes.
    */
   static checkFlow(state: PipePuzzleState): { solved: boolean; newGrid: PipeCell[][] } {
     const width = state.width;

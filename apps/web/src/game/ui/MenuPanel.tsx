@@ -176,8 +176,9 @@ export function MenuPanel() {
 
   const menuOpen = activePanel === 'menu';
 
-  const xpPercent = (playerStats.xp / playerStats.xpToNext) * 100;
-  const healthPercent = (playerStats.health / playerStats.maxHealth) * 100;
+  const xpPercent = playerStats.xpToNext > 0 ? (playerStats.xp / playerStats.xpToNext) * 100 : 0;
+  const healthPercent =
+    playerStats.maxHealth > 0 ? (playerStats.health / playerStats.maxHealth) * 100 : 0;
 
   const handleSave = () => {
     saveGame();
@@ -188,6 +189,7 @@ export function MenuPanel() {
 
   const handleNewGame = () => {
     if (confirm('Start a new journey? Current progress will be saved but you will start fresh.')) {
+      saveGame();
       resetGame();
     }
   };

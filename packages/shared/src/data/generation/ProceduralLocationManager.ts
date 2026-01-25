@@ -323,7 +323,11 @@ class ProceduralLocationManagerClass {
   }
 
   /**
-   * Get procedural shop inventory for an NPC
+   * Get procedural shop inventory for an NPC.
+   * 
+   * @param npcId - The ID of the merchant NPC.
+   * @param locationId - The ID of the location where the shop is located.
+   * @returns The shop inventory or null if not found.
    */
   getOrGenerateShop(npcId: string, locationId: string): ShopInventory | null {
     const cached = this.cache.get(locationId);
@@ -334,7 +338,11 @@ class ProceduralLocationManagerClass {
   }
 
   /**
-   * Get procedural dialogue tree for an NPC
+   * Get procedural dialogue tree for an NPC.
+   * 
+   * @param npcId - The ID of the NPC.
+   * @param locationId - The ID of the location.
+   * @returns The dialogue tree or null if not found.
    */
   getOrGenerateDialogue(npcId: string, locationId: string): DialogueTree | null {
     const cached = this.cache.get(locationId);
@@ -345,7 +353,11 @@ class ProceduralLocationManagerClass {
   }
 
   /**
-   * Get structure state at a coordinate (generates if needed)
+   * Get structure state at a coordinate (generates if needed).
+   * 
+   * @param locationId - The ID of the location.
+   * @param hexKey - The key of the hex coordinate ("q,r").
+   * @returns The status of the structure ('functional', 'broken', or 'locked').
    */
   getOrGenerateStructureState(locationId: string, hexKey: string): 'functional' | 'broken' | 'locked' {
     // Ensure content exists
