@@ -1,143 +1,99 @@
-import { Howl, Howler } from 'howler';
+import * as Tone from 'tone';
 import { useGameStore } from '../store/webGameStore';
-
-// Audio asset map (placeholders for now)
-const AUDIO_ASSETS: Record<string, string> = {
-  // Music
-  title_theme: '/assets/audio/music/title_theme.mp3',
-  exploration_day: '/assets/audio/music/exploration_day.mp3',
-  exploration_night: '/assets/audio/music/exploration_night.mp3',
-  combat_theme: '/assets/audio/music/combat_theme.mp3',
-  town_theme: '/assets/audio/music/town_theme.mp3',
-
-  // SFX
-  ui_click: '/assets/audio/sfx/ui_click.mp3',
-  footstep_dirt: '/assets/audio/sfx/footstep_dirt.mp3',
-  gunshot: '/assets/audio/sfx/gunshot.mp3',
-};
+import { MusicManager } from './audio/MusicManager';
+import { AmbienceManager } from './audio/AmbienceManager';
+import { SoundManager } from './audio/SoundManager';
 
 class AudioService {
-  private music: Howl | null = null;
-  private currentTrackId: string | null = null;
-  private sfx: Map<string, Howl> = new Map();
+  private musicManager: MusicManager;
+  private ambienceManager: AmbienceManager;
+  private soundManager: SoundManager;
   private initialized = false;
 
   constructor() {
+    this.musicManager = new MusicManager();
+    this.ambienceManager = new AmbienceManager();
+    this.soundManager = new SoundManager();
+
     // Subscribe to store changes
     useGameStore.subscribe((state, prevState) => {
-      // Volume changes
+      // Volume changes (Global listener for now, can be granular)
       if (state.settings.musicVolume !== prevState.settings.musicVolume) {
-        this.updateMusicVolume(state.settings.musicVolume);
-      }
-      if (state.settings.sfxVolume !== prevState.settings.sfxVolume) {
-        // SFX volume is global for now, or per instance
-        // Howler.volume() sets global, but we want separate channels
-        // We handle this when playing SFX
+        Tone.Destination.volume.rampTo(Tone.gainToDb(state.settings.musicVolume), 0.1);
       }
 
-      // Track changes
-      if (state.audio.currentTrack !== this.currentTrackId) {
+      // Track changes -> Map track IDs to "States" or just ensure playing
+      if (state.audio.currentTrack !== prevState.audio.currentTrack) {
         if (state.audio.currentTrack) {
-          this.playMusic(state.audio.currentTrack);
+           // For now, any track ID triggers the generative loop
+           // In future, map 'combat_theme' to musicManager.setState('combat')
+           this.musicManager.start(); 
+           this.ambienceManager.start();
         } else {
-          this.stopMusic();
+           this.musicManager.stop();
+           this.ambienceManager.stop();
         }
       }
 
       // Play/Pause state
       if (state.audio.isPlaying !== prevState.audio.isPlaying) {
         if (state.audio.isPlaying) {
-          if (this.music && !this.music.playing()) {
-            this.music.play();
-          }
+             if (Tone.context.state === 'suspended') Tone.start();
+             Tone.Transport.start();
+             this.musicManager.start();
+             this.ambienceManager.start();
         } else {
-          if (this.music && this.music.playing()) {
-            this.music.pause();
-          }
+             Tone.Transport.pause();
+             this.musicManager.stop();
+             this.ambienceManager.stop();
         }
       }
     });
   }
 
-  public initialize() {
+  public async initialize() {
     if (this.initialized) return;
     
-    // Set initial volumes
+    // Tone.js requires a user interaction to start the context.
+    // This method should be called from a UI event handler (e.g. "Enter Game" button).
+    await Tone.start();
+    
     const settings = useGameStore.getState().settings;
-    this.updateMusicVolume(settings.musicVolume);
+    Tone.Destination.volume.value = Tone.gainToDb(settings.musicVolume); // utilizing music volume as master for now
     
     this.initialized = true;
-    console.log('[AudioService] Initialized');
+    console.log('[AudioService] Initialized (Tone.js)');
   }
 
-  public playMusic(trackId: string) {
-    if (this.currentTrackId === trackId && this.music?.playing()) return;
-
-    // Fade out old music
-    if (this.music) {
-      const oldMusic = this.music;
-      oldMusic.fade(oldMusic.volume(), 0, 1000);
-      setTimeout(() => oldMusic.stop(), 1000);
-    }
-
-    const src = AUDIO_ASSETS[trackId];
-    if (!src) {
-      console.warn(`[AudioService] Track not found: ${trackId}`);
-      return;
-    }
-
-    const volume = useGameStore.getState().settings.musicVolume;
-
-    this.music = new Howl({
-      src: [src],
-      html5: true, // Use HTML5 Audio for music (streaming)
-      loop: true,
-      volume: 0, // Start at 0 for fade-in
-      onload: () => {
-        this.music?.fade(0, volume, 1000);
-      },
-      onloaderror: (_id, err) => {
-        console.warn(`[AudioService] Failed to load music: ${trackId}`, err);
-      },
-    });
-
-    this.music.play();
-    this.currentTrackId = trackId;
+  public playMusic(_trackId: string) {
+    // Generative system doesn't play "tracks", it enters states.
+    // We ignore the specific ID for this v1 implementation.
+    this.musicManager.start();
+    this.ambienceManager.start();
   }
 
   public stopMusic() {
-    if (this.music) {
-      this.music.fade(this.music.volume(), 0, 1000);
-      setTimeout(() => {
-        this.music?.stop();
-        this.music = null;
-        this.currentTrackId = null;
-      }, 1000);
-    }
+    this.musicManager.stop();
+    this.ambienceManager.stop();
   }
 
   public playSfx(sfxId: string) {
-    const src = AUDIO_ASSETS[sfxId];
-    if (!src) return;
-
-    let sound = this.sfx.get(sfxId);
-    if (!sound) {
-      sound = new Howl({
-        src: [src],
-        volume: useGameStore.getState().settings.sfxVolume,
-      });
-      this.sfx.set(sfxId, sound);
-    } else {
-      // Update volume in case settings changed
-      sound.volume(useGameStore.getState().settings.sfxVolume);
-    }
-
-    sound.play();
-  }
-
-  private updateMusicVolume(vol: number) {
-    if (this.music) {
-      this.music.volume(vol);
+    // Map legacy IDs to procedural sounds
+    switch (sfxId) {
+        case 'ui_click':
+            this.soundManager.playClick();
+            break;
+        case 'footstep_dirt':
+            this.soundManager.playFootstep();
+            break;
+        case 'gunshot':
+            // Placeholder for now
+            this.soundManager.playError(); 
+            break;
+        default:
+            // Fallback for unmapped sounds
+            this.soundManager.playClick(); 
+            break;
     }
   }
 }
