@@ -11,6 +11,7 @@ Iron Frontier aims to restore the "soul" of exploration-focused RPGs by:
 1. **Focusing on Atmosphere**: Using lighting, fog, and sound to create immersion.
 2. **Respecting Mobile**: Designing UI and controls specifically for small touch screens.
 3. **Procedural Depth**: Using seeded generation to create infinite but meaningful content (not just random noise).
+4. **Cross-Platform**: Single shared codebase (Zod schemas, data, generators) with platform-optimized rendering (Babylon.js for web, Filament for mobile).
 
 ## User Experience Timeline
 

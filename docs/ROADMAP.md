@@ -1,27 +1,26 @@
 # Iron Frontier - Development Roadmap
 
-## Current State: Alpha v0.2
+## Current State: v0.1 Release Candidate
 
-The game has core infrastructure working with comprehensive test coverage.
+The game has complete monorepo infrastructure with DRY cross-platform architecture.
 
 ### What Works
-- [x] Project scaffolding (Vite + React + TypeScript)
-- [x] Babylon.js integration via Reactylon
-- [x] Zustand state management with persistence
-- [x] Procedural sector generation (deterministic)
-- [x] Basic 3D scene rendering
-- [x] Title screen with splash animation
-- [x] Complete game store with all actions
-- [x] All UI components implemented
-- [x] TypeScript compiles with zero errors
-- [x] Comprehensive test suite (100+ tests)
-- [x] No JavaScript files - pure TypeScript/TSX
+- [x] **Monorepo Architecture** - pnpm workspaces with apps/packages structure
+- [x] **Web App** - Vite + React 19 + Babylon.js 8 (WebGPU)
+- [x] **Mobile App** - Expo SDK 54 + React Native 0.81 + Filament
+- [x] **Shared Package** - Zod v4 schemas, 15,000+ lines of generation code
+- [x] **CI/CD Pipelines** - GitHub Actions for web, mobile, and docs
+- [x] **Documentation Site** - Astro + Starlight
+- [x] **203 Tests Passing** - Vitest unit + Playwright E2E
+- [x] **SQLite Persistence** - sql.js (web) + expo-sqlite (mobile)
+- [x] **Responsive UI** - Mobile-first with breakpoint scaling (320px-1920px)
+- [x] **Procedural Generation** - Daggerfall-style seeded content
 
 ### What Needs Testing/Refinement
 - [ ] Mobile touch controls need real device testing
-- [ ] Performance optimization for complex sectors
-- [ ] Quest system integration (framework exists)
-- [ ] Item effects need balancing
+- [ ] Performance optimization for 60fps on mobile
+- [ ] Audio system (western ambient music and SFX)
+- [ ] PWA manifest for offline support
 
 ---
 
@@ -235,26 +234,32 @@ The game has core infrastructure working with comprehensive test coverage.
 
 ## Test Coverage Summary
 
-| Test File | Tests | Status |
+| Test Suite | Tests | Status |
 |-----------|-------|--------|
-| gameStore.test.ts | 39 | Passing |
-| UIPanels.test.tsx | 42 | Passing |
-| VisualInteractions.test.tsx | 25 | Passing |
-| QuestLog.test.tsx | ~15 | Passing |
-| GameFlow.test.tsx | ~20 | Passing |
-| TitleScreen.test.tsx | ~20 | Mostly Passing |
+| Web App (apps/web) | ~150 | Passing |
+| Shared Package (packages/shared) | ~50 | Passing |
+| Playwright E2E | ~3 | Passing |
 
-**Total**: 150+ tests
+**Total**: 203 tests passing
 
 ---
 
 ## Immediate Next Steps (For Any Agent)
 
-1. **Verify game runs**: `pnpm dev` and check browser
-2. **Run tests**: `pnpm test` - all should pass
-3. **Check TypeScript**: `pnpm run tscgo --noEmit` - zero errors
-4. **Test mobile viewport**: 360px width in DevTools
-5. **Add content**: More items, quests, NPC dialogue
-6. **Performance test**: Profile on mobile device
+1. **Verify game runs**: `pnpm dev` and check browser at http://localhost:8080
+2. **Run tests**: `pnpm test` - all 203 should pass
+3. **Check TypeScript**: `pnpm typecheck` - zero errors
+4. **Test mobile viewport**: 320px-414px widths in DevTools
+5. **Review PR #1**: All AI review comments resolved
+6. **Deploy to Render.com**: Blueprint configured
 
-The game infrastructure is solid. Focus should now shift to **content creation** and **mobile testing**.
+### Key Commands
+```bash
+pnpm dev              # Web dev server (port 8080)
+pnpm test             # All tests
+pnpm typecheck        # TypeScript check all packages
+pnpm build            # Production build (7.7 MB)
+pnpm lint             # Biome linting
+```
+
+The monorepo infrastructure is complete. Focus should now shift to **v0.1 release** and **mobile device testing**.

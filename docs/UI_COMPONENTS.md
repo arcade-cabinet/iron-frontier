@@ -2,11 +2,12 @@
 
 ## Component Overview
 
-All UI components live in `src/game/ui/` and follow these principles:
-- Mobile-first responsive design
+All UI components live in `apps/web/src/game/ui/` and follow these principles:
+- Mobile-first responsive design (320px - 1920px)
 - Consistent steampunk/frontier theming
 - shadcn/ui base components with custom styling
 - Zustand store integration
+- Touch targets minimum 44px (iOS HIG)
 
 ---
 
@@ -17,24 +18,27 @@ All UI components live in `src/game/ui/` and follow these principles:
 | Component | File | Purpose | Store Dependencies |
 |-----------|------|---------|-------------------|
 | GameHUD | `GameHUD.tsx` | Top stats display | player, currentSector, activeQuests |
-| ActionBar | `ActionBar.tsx` | Bottom navigation | toggles, inventory.length, activeQuests.length |
-| DialogueBox | `DialogueBox.tsx` | NPC conversations | dialogueOpen, selectedNPC, dialogueText |
-| InventoryPanel | `InventoryPanel.tsx` | Item management | inventoryOpen, inventory, player |
-| QuestLog | `QuestLog.tsx` | Quest tracking | questLogOpen, activeQuests, completedQuests |
-| SettingsPanel | `SettingsPanel.tsx` | Game settings | settingsOpen, settings |
-| MenuPanel | `MenuPanel.tsx` | Main menu (in-game) | menuOpen, player |
+| ActionBar | `ActionBar.tsx` | Bottom navigation (5 buttons) | toggles, inventory.length, activeQuests.length |
+| DialogueBox | `DialogueBox.tsx` | FF7-style branching dialogue | dialogueOpen, selectedNPC, dialogueText |
+| InventoryPanel | `InventoryPanel.tsx` | Grid with categories/filters | inventoryOpen, inventory, player |
+| QuestLog | `QuestLog.tsx` | Active/completed quests | questLogOpen, activeQuests, completedQuests |
+| MenuPanel | `MenuPanel.tsx` | Game/Settings tabs | menuOpen, player |
+| CharacterPanel | `CharacterPanel.tsx` | Stats and equipment | characterOpen, player, equipment |
+| CombatPanel | `CombatPanel.tsx` | Turn-based combat UI | combatState, enemies, abilities |
+| ShopPanel | `ShopPanel.tsx` | Buy/sell interface | shopOpen, inventory, gold |
+| WorldMap | `WorldMap.tsx` | Region navigation | worldMapOpen, regions, currentLocation |
+| TravelPanel | `TravelPanel.tsx` | Route progress and encounters | travelState, currentRoute |
+| GameOverScreen | `GameOverScreen.tsx` | Death/restart UI | gameOver |
 | NotificationFeed | `NotificationFeed.tsx` | Toast messages | notifications |
 
-### Needed (Not Yet Implemented)
+### Planned / Backlog
 
 | Component | Purpose | Priority |
 |-----------|---------|----------|
-| VirtualJoystick | Alternative movement control | High |
-| Minimap | Sector overview | Medium |
-| ContextMenu | Long-press actions | Medium |
-| ShopPanel | Buy/sell interface | Low |
+| VirtualJoystick | Alternative movement control | Medium |
+| Minimap | Sector overview | Low |
+| ContextMenu | Long-press actions | Low |
 | CraftingPanel | Item creation | Low |
-| CharacterSheet | Detailed stats | Low |
 
 ---
 

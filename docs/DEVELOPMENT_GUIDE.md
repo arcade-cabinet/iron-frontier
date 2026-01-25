@@ -3,30 +3,44 @@
 ## Environment Setup
 
 ### Prerequisites
-- Node.js 18+
-- pnpm (preferred) or npm
+- Node.js 22.11.0 (see `.nvmrc`)
+- pnpm 10.20.0+
 
 ### Installation
 ```bash
 # Clone and install
 pnpm install
 
-# Start development server
+# Start development server (web)
 pnpm dev
 
 # Type checking
-pnpm run tscgo --noEmit
+pnpm typecheck
+
+# Run tests
+pnpm test
 
 # Build for production
 pnpm build
 ```
 
-### Environment Variables (Optional)
-```env
-# For future AI content integration
-AI_BASE_URL=https://api.openai.com/v1
-AI_API_KEY=your-key
-AI_MODEL=gpt-4
+### Monorepo Commands
+```bash
+# Web app only
+pnpm --filter @iron-frontier/web dev
+pnpm --filter @iron-frontier/web test
+
+# Mobile app
+pnpm --filter @iron-frontier/mobile start
+pnpm --filter @iron-frontier/mobile android
+pnpm --filter @iron-frontier/mobile ios
+
+# Shared package
+pnpm --filter @iron-frontier/shared build
+
+# Documentation
+pnpm --filter @iron-frontier/docs dev
+pnpm --filter @iron-frontier/docs build
 ```
 
 ---
@@ -34,49 +48,62 @@ AI_MODEL=gpt-4
 ## Project Structure
 
 ```
-src/
-├── game/                    # Game-specific code
-│   ├── Game.tsx            # Main game component
-│   ├── components/         # 3D scene components
-│   │   └── GameScene.tsx   # Babylon.js scene
-│   ├── screens/            # Full-screen views
-│   │   └── TitleScreen.tsx # Splash + menu
-│   ├── ui/                 # UI components
-│   │   ├── GameHUD.tsx
-│   │   ├── ActionBar.tsx
-│   │   ├── DialogueBox.tsx
-│   │   ├── InventoryPanel.tsx
-│   │   ├── QuestLog.tsx
-│   │   ├── SettingsPanel.tsx
-│   │   ├── MenuPanel.tsx
-│   │   └── NotificationFeed.tsx
-│   ├── store/              # State management
-│   │   ├── gameStore.ts    # Main Zustand store
-│   │   └── saveManager.ts  # Save/load helpers
-│   └── lib/                # Utilities
-│       ├── procgen.ts      # Procedural generation
-│       ├── prng.ts         # Random number generator
-│       ├── types.ts        # TypeScript types
-│       ├── items.ts        # Item definitions
-│       └── quests.ts       # Quest definitions
-├── components/ui/          # shadcn/ui components
-├── lib/                    # General utilities
-│   └── utils.ts           # Tailwind cn() helper
-├── App.tsx                # App entry
-├── main.tsx               # React entry
-└── index.css              # Tailwind config
+iron-frontier/
+├── apps/
+│   ├── web/                     # Vite + React + Babylon.js (WebGPU)
+│   │   ├── src/
+│   │   │   ├── game/            # Game-specific code
+│   │   │   │   ├── Game.tsx     # Main game component
+│   │   │   │   ├── components/  # 3D scene components
+│   │   │   │   ├── screens/     # Full-screen views
+│   │   │   │   ├── ui/          # UI components (ActionBar, GameHUD, etc.)
+│   │   │   │   └── store/       # Zustand state management
+│   │   │   ├── engine/          # Babylon.js rendering engine
+│   │   │   └── components/ui/   # shadcn/ui components
+│   │   └── public/assets/       # 3D models, textures
+│   ├── mobile/                  # Expo + React Native + Filament
+│   │   ├── src/
+│   │   └── app.json
+│   └── docs/                    # Astro + Starlight documentation
+├── packages/
+│   └── shared/                  # DRY schemas, data, types
+│       ├── src/
+│       │   ├── data/            # Items, NPCs, quests, dialogue
+│       │   ├── schemas/         # Zod validation schemas
+│       │   ├── generation/      # Procedural generators
+│       │   └── types/           # TypeScript type definitions
+│       └── package.json
+├── .github/workflows/           # CI/CD pipelines
+└── memory-bank/                 # AI agent context files
 ```
 
 ---
 
 ## Key Technologies
 
-### React 19
-- Uses latest React features
-- Concurrent rendering support
-- Automatic batching
+### Cross-Platform Architecture
 
-### Babylon.js via Reactylon
+| Layer | Web | Mobile |
+|-------|-----|--------|
+| **Framework** | React 19 | React Native 0.81 |
+| **3D Engine** | Babylon.js 8 (WebGPU) | React Native Filament |
+| **State** | Zustand | Zustand |
+| **Persistence** | sql.js + IndexedDB | expo-sqlite |
+| **Styling** | Tailwind CSS v4 | NativeWind |
+| **Build** | Vite 7 | Expo SDK 54 |
+
+### Shared Package (`@iron-frontier/shared`)
+
+All game data and validation schemas live in the shared package:
+
+```typescript
+// Import from shared package
+import { ItemSchema, type Item } from '@iron-frontier/shared/data/schemas/item';
+import { getItem } from '@iron-frontier/shared/data/items';
+import { generateNPC } from '@iron-frontier/shared/generation/npc-generator';
+```
+
+### Babylon.js via Reactylon (Web)
 Reactylon provides declarative JSX for Babylon.js:
 
 ```tsx
@@ -90,28 +117,38 @@ box.position = new Vector3(0, 1, 0);
 
 **Important**: Mesh parameters go in `options` prop, not as direct props.
 
-### Zustand
-Lightweight state management with persistence:
+### Zustand State Management
+Lightweight state with SQLite persistence:
 
 ```tsx
-// Define store
-const useStore = create(persist(
-  (set, get) => ({
-    count: 0,
-    increment: () => set(s => ({ count: s.count + 1 })),
-  }),
-  { name: 'storage-key' }
-));
+// Platform-specific store extensions
+interface BaseGameState {
+  phase: GamePhase;
+  playerStats: PlayerStats;
+  inventory: InventoryItem[];
+}
 
-// Use in components
-const count = useStore(s => s.count);
-const increment = useStore(s => s.increment);
+// Web extends with Babylon.js specifics
+interface WebGameState extends BaseGameState {
+  sceneManager: HexSceneManager | null;
+}
 ```
 
-### Tailwind CSS 4
-- New configuration syntax
-- CSS-native features
-- Faster compilation
+### Zod v4 Schemas
+
+All data validated with Zod:
+
+```typescript
+// Optional arrays with empty default
+tags: z.array(z.string()).optional().default([])
+
+// Required objects with function default
+rewards: z.object({...}).default(() => ({
+  xp: 0,
+  gold: 0,
+  items: [],
+}))
+```
 
 ---
 
@@ -331,14 +368,18 @@ console.log('Items:', sector.items);
 
 ### Running Tests
 ```bash
-# Run all tests
+# Run all tests (203 tests)
 pnpm test
 
 # Run tests once (no watch)
 pnpm vitest run
 
-# Run specific test file
-pnpm vitest run src/test/gameStore.test.ts
+# Run specific workspace
+pnpm --filter @iron-frontier/web test
+pnpm --filter @iron-frontier/shared test
+
+# Run E2E tests (Playwright)
+pnpm --filter @iron-frontier/web test:e2e
 
 # Run with coverage
 pnpm vitest run --coverage
@@ -346,15 +387,23 @@ pnpm vitest run --coverage
 
 ### Test Structure
 ```
-src/test/
-├── setup.ts              # Test setup and global mocks
-├── test-utils.tsx        # Custom render, store helpers
-├── gameStore.test.ts     # Store action tests
-├── UIPanels.test.tsx     # UI component tests
+apps/web/src/test/
+├── setup.ts                     # Test setup and global mocks
+├── test-utils.tsx               # Custom render, store helpers
+├── gameStore.test.ts            # Store action tests
+├── UIPanels.test.tsx            # UI component tests
 ├── VisualInteractions.test.tsx  # Interaction tests
-├── QuestLog.test.tsx     # Quest UI tests
-├── GameFlow.test.tsx     # Game state flow tests
-└── TitleScreen.test.tsx  # Title screen tests
+├── QuestLog.test.tsx            # Quest UI tests
+├── GameFlow.test.tsx            # Game state flow tests
+└── TitleScreen.test.tsx         # Title screen tests
+
+packages/shared/src/
+├── data/__tests__/              # Data validation tests
+├── generation/__tests__/        # Generator tests
+└── schemas/__tests__/           # Schema tests
+
+tests/                           # Playwright E2E tests
+└── game.spec.ts
 ```
 
 ### Writing Tests
@@ -452,7 +501,7 @@ vi.mock('@/components/ui/sheet', () => ({
 
 ### Type Checking
 ```bash
-pnpm run tscgo --noEmit
+pnpm typecheck
 ```
 
 Fix all TypeScript errors before committing.
@@ -511,7 +560,7 @@ docs: update component specifications
 ### Pre-commit Checks
 ```bash
 # Type check
-pnpm run tscgo --noEmit
+pnpm typecheck
 
 # Build test
 pnpm build

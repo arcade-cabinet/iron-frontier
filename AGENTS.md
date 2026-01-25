@@ -1,260 +1,300 @@
 # AGENTS.md - Iron Frontier Development Guide
 
 ## Deep Context (Memory Bank)
->
-> **AI AGENTS**: Before starting work, you **MUST** read the following files in `memory-bank/` to understand the project state:
+
+> **AI AGENTS**: Before starting work, read these files in `memory-bank/`:
 >
 > - `memory-bank/activeContext.md` (Current focus & recent changes)
 > - `memory-bank/projectbrief.md` (Core goals)
 > - `memory-bank/systemPatterns.md` (Architecture & decisions)
 
-## Quick Start for Agents
+## Quick Start
 
 ```bash
 # Install dependencies
 pnpm install
 
-# Start dev server (already running in sandbox)
+# Start web dev server
 pnpm dev
 
-# Type check
+# Run tests (203 tests)
+pnpm test
+
+# Type check all packages
 pnpm typecheck
+
+# Build for production
+pnpm build
 ```
 
 ## Project Overview
 
-**Iron Frontier** is a mobile-first isometric RPG set in a Steampunk American Frontier (late 1800s). Built with:
+**Iron Frontier** is a cross-platform isometric RPG set in a Steampunk American Frontier (late 1800s).
 
-- **React 19** + **Vite** + **TypeScript**
-- **Babylon.js** via **Reactylon** (declarative 3D)
-- **Zustand** for state management
-- **Tailwind CSS 4** + **shadcn/ui** components
-- **Framer Motion** for UI animations
+### Tech Stack
 
-## Critical Files to Understand
+| Layer | Web | Mobile |
+|-------|-----|--------|
+| **Framework** | React 19 + Vite | Expo SDK 54 + React Native |
+| **3D Engine** | Babylon.js (WebGPU) | React Native Filament |
+| **State** | Zustand | Zustand |
+| **Persistence** | sql.js + IndexedDB | expo-sqlite |
+| **Styling** | Tailwind CSS v4 | NativeWind |
+
+### Shared Code
+
+All game logic, schemas, and data live in `packages/shared/`:
+- **Schemas**: Zod-validated types for items, NPCs, quests, combat, etc.
+- **Data**: Item definitions, quest templates, dialogue trees
+- **Generation**: Procedural content generators (Daggerfall-style)
+
+## Monorepo Structure
+
+```
+iron-frontier/
+├── apps/
+│   ├── web/                      # Web game client
+│   │   ├── src/
+│   │   │   ├── game/
+│   │   │   │   ├── Game.tsx              # Root game component
+│   │   │   │   ├── components/
+│   │   │   │   │   └── GameScene.tsx     # Babylon.js 3D scene
+│   │   │   │   ├── screens/
+│   │   │   │   │   └── TitleScreen.tsx   # Splash + menu
+│   │   │   │   ├── ui/                   # UI components
+│   │   │   │   │   ├── ActionBar.tsx     # Bottom navigation
+│   │   │   │   │   ├── DialogueBox.tsx   # NPC dialogue
+│   │   │   │   │   ├── InventoryPanel.tsx
+│   │   │   │   │   ├── CombatPanel.tsx
+│   │   │   │   │   ├── ShopPanel.tsx
+│   │   │   │   │   └── ...
+│   │   │   │   ├── store/
+│   │   │   │   │   └── webGameStore.ts   # Web-specific store
+│   │   │   │   └── lib/
+│   │   │   │       ├── procgen.ts        # Sector generator
+│   │   │   │       └── prng.ts           # Seeded RNG
+│   │   │   ├── engine/                   # Babylon.js rendering
+│   │   │   │   ├── hex/                  # Hex grid system
+│   │   │   │   ├── rendering/            # SceneManager
+│   │   │   │   └── terrain/              # Heightmap, chunks
+│   │   │   └── components/ui/            # shadcn/ui
+│   │   └── public/assets/                # 3D models (Git LFS)
+│   │
+│   ├── mobile/                   # Mobile game client
+│   │   ├── app/                  # Expo Router pages
+│   │   └── src/components/       # Filament renderer
+│   │
+│   └── docs/                     # Astro documentation site
+│       └── src/content/docs/     # MDX documentation
+│
+├── packages/
+│   └── shared/                   # Shared code (DRY)
+│       └── src/
+│           ├── data/
+│           │   ├── schemas/      # Zod schemas
+│           │   │   ├── item.ts
+│           │   │   ├── npc.ts
+│           │   │   ├── quest.ts
+│           │   │   ├── combat.ts
+│           │   │   └── ...
+│           │   ├── items/        # Item definitions
+│           │   ├── npcs/         # NPC definitions
+│           │   ├── quests/       # Quest definitions
+│           │   └── generation/   # Procedural generators
+│           ├── store/            # Shared store types
+│           └── index.ts          # Package exports
+│
+├── .github/workflows/            # CI/CD (pinned to SHAs)
+├── .maestro/                     # Mobile E2E tests
+└── memory-bank/                  # AI context files
+```
+
+## Critical Files
 
 | File | Purpose |
 |------|---------|
-| `src/game/Game.tsx` | Main game component, routes between title/gameplay |
-| `src/game/store/gameStore.ts` | **Central state** - player, inventory, quests, UI |
-| `src/game/lib/procgen.ts` | Procedural sector generation |
-| `src/game/lib/prng.ts` | Deterministic random number generator |
-| `src/game/components/GameScene.tsx` | Babylon.js 3D scene |
-| `src/game/screens/TitleScreen.tsx` | Splash + main menu |
-| `src/game/ui/*.tsx` | All UI components (HUD, dialogs, panels) |
-
-## Architecture
-
-```text
-src/
-├── game/
-│   ├── Game.tsx              # Root game component
-│   ├── components/
-│   │   └── GameScene.tsx     # Babylon.js scene with Reactylon
-│   ├── screens/
-│   │   └── TitleScreen.tsx   # Splash + Menu flow
-│   ├── ui/                   # UI components
-│   │   ├── GameHUD.tsx       # Top stats bar
-│   │   ├── ActionBar.tsx     # Bottom navigation
-│   │   ├── DialogueBox.tsx   # NPC dialogue (FF7-style)
-│   │   ├── InventoryPanel.tsx
-│   │   ├── QuestLog.tsx
-│   │   ├── SettingsPanel.tsx
-│   │   ├── MenuPanel.tsx
-│   │   └── NotificationFeed.tsx
-│   ├── store/
-│   │   └── gameStore.ts      # Zustand store (persisted)
-│   └── lib/
-│       ├── procgen.ts        # Sector generator
-│       ├── prng.ts           # Seeded RNG
-│       ├── types.ts          # Type definitions
-│       ├── items.ts          # Item database
-│       └── quests.ts         # Quest definitions
-├── components/ui/            # shadcn/ui components
-├── lib/utils.ts              # Tailwind utilities
-└── App.tsx                   # Entry point
-```text
+| `apps/web/src/game/Game.tsx` | Main game component, phase routing |
+| `apps/web/src/game/store/webGameStore.ts` | Web-specific Zustand store |
+| `packages/shared/src/store/index.ts` | Shared store types and actions |
+| `packages/shared/src/data/schemas/*.ts` | All Zod schemas |
+| `packages/shared/src/data/generation/*.ts` | Procedural generators |
+| `apps/web/src/engine/hex/HexSceneManager.ts` | Babylon.js scene orchestration |
 
 ## Game Flow
 
-```text
+```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   SPLASH    │ --> │  MAIN MENU  │ --> │   GAMEPLAY  │
-│  (2.5 sec)  │     │  New/Continue│     │  3D + HUD   │
+│   SPLASH    │ --> │  MAIN MENU  │ --> │   PLAYING   │
+│  (2.5 sec)  │     │ New/Continue│     │  3D + HUD   │
 └─────────────┘     └─────────────┘     └─────────────┘
-                           │                    │
-                           │                    v
-                           │            ┌─────────────┐
-                           └----------->│   PANELS    │
-                                        │ Inv/Quest/  │
-                                        │ Settings    │
-                                        └─────────────┘
+                                              │
+                    ┌─────────────────────────┼─────────────────────────┐
+                    v                         v                         v
+             ┌─────────────┐          ┌─────────────┐          ┌─────────────┐
+             │   DIALOGUE  │          │   COMBAT    │          │   TRAVEL    │
+             │  NPC Talks  │          │ Turn-Based  │          │  Encounters │
+             └─────────────┘          └─────────────┘          └─────────────┘
 ```
 
-## State Management (Zustand)
+## State Management
 
-The `gameStore.ts` is the **single source of truth**. Key state slices:
+**Zustand** is the single source of truth. Key concepts:
 
 ```typescript
+// Game phases
+type GamePhase = 'title' | 'playing' | 'dialogue' | 'combat' | 'travel' | 'game_over';
+
+// Core state slices
 interface GameState {
-  // Game phase
-  gamePhase: 'title' | 'playing' | 'paused';
-  
-  // World
-  currentSector: SectorData | null;
-  currentSectorId: string;
-  
-  // Player
-  player: PlayerState;        // name, level, xp, health, gold, position
+  phase: GamePhase;
+  playerStats: PlayerStats;
   inventory: InventoryItem[];
-  
-  // Progress
-  activeQuests: Quest[];
-  completedQuests: string[];
-  collectedItems: string[];   // IDs of picked up items
-  talkedNPCs: string[];       // IDs of NPCs spoken to
-  
-  // UI toggles
-  dialogueOpen: boolean;
-  inventoryOpen: boolean;
-  questLogOpen: boolean;
-  settingsOpen: boolean;
-  menuOpen: boolean;
-  
-  // Notifications
-  notifications: Notification[];
-  
-  // Settings
-  settings: GameSettings;
+  activeQuests: ActiveQuest[];
+  currentLocationId: string;
+  loadedWorld: LoadedWorld | null;
+  activePanel: PanelType | null;
+  // ... and more
 }
-```
-
-## Reactylon (Babylon.js) Patterns
-
-**CRITICAL**: Reactylon uses `options` prop for mesh creation:
-
-```tsx
-// CORRECT
-<box name="myBox" options={{ width: 1, height: 2, depth: 1 }} position={new Vector3(0, 1, 0)} />
-
-// WRONG - will cause TypeScript errors
-<box name="myBox" width={1} height={2} depth={1} />
-```
-
-Common mesh patterns:
-
-```tsx
-// Box
-<box name="box" options={{ width, height, depth }} position={pos}>
-  <standardMaterial name="mat" diffuseColor={color} />
-</box>
-
-// Sphere
-<sphere name="sphere" options={{ diameter: 1 }} position={pos} />
-
-// Cylinder
-<cylinder name="cyl" options={{ diameter: 1, height: 2 }} position={pos} />
-
-// Ground
-<ground name="ground" options={{ width: 100, height: 100 }} />
-
-// Torus
-<torus name="ring" options={{ diameter: 1, thickness: 0.1 }} />
 ```
 
 ## Procedural Generation
 
-`procgen.ts` generates deterministic sectors:
+The game uses Daggerfall-style seeded generation:
 
 ```typescript
-const sector = generateSector('sector_id', 12345); // ID + seed
+// All generation is deterministic from seed
+const worldSeed = 12345;
+const locationSeed = hashCombine(worldSeed, locationId);
 
-// SectorData includes:
-// - grid: GridCell[][] (walkable tiles)
-// - props: PropPlacement[] (decorative objects)
-// - npcs: NPCSpawn[] (characters)
-// - items: ItemSpawn[] (collectibles)
-// - landmarks: LandmarkAnchor[] (buildings)
-// - playerSpawn: { x, y }
-// - exits: SectorExit[]
+// Generators in packages/shared/src/data/generation/
+- nameGenerator.ts      // NPC names from cultural pools
+- npcGenerator.ts       // NPCs from archetypes
+- questGenerator.ts     // Multi-stage quests
+- encounterGenerator.ts // Combat encounters
+- dialogueGenerator.ts  // Dialogue trees
+- itemGenerator.ts      // Weapons, armor, consumables
+- worldGenerator.ts     // Master orchestrator
 ```
 
 ## Styling Guidelines
 
 ### Color Palette (Steampunk Frontier)
 
-- **Primary**: amber-500 to amber-700 (brass/gold)
-- **Background**: stone-900, stone-950, amber-950
-- **Accent**: orange-600, yellow-500
-- **Text**: amber-100 (light), amber-300 (muted), stone-400 (subtle)
+```css
+/* Primary (brass/gold) */
+amber-500 to amber-700
 
-### Component Patterns
+/* Backgrounds */
+stone-900, stone-950, amber-950
 
-```tsx
-// Card with game styling
-<Card className="bg-amber-950/90 border-amber-700/50 backdrop-blur-sm">
+/* Accents */
+orange-600, yellow-500
 
-// Button with game styling
-<Button className="bg-amber-700 hover:bg-amber-600 text-white">
-
-// Text hierarchy
-<h1 className="text-amber-100 font-bold">  // Primary
-<p className="text-amber-300">              // Secondary
-<span className="text-stone-400">          // Muted
+/* Text */
+amber-100 (primary), amber-300 (muted), stone-400 (subtle)
 ```
+
+### Responsive Breakpoints
+
+```css
+xs: 0-479px    /* Mobile portrait - icon-only, large touch targets */
+sm: 480px+     /* Mobile landscape - labels visible */
+md: 768px+     /* Tablet - multi-column */
+lg: 1024px+    /* Desktop - full layouts */
+```
+
+### Touch Targets
+
+All interactive elements: `min-h-[44px]` minimum (iOS HIG)
 
 ## Common Tasks
 
-### Adding a New UI Panel
-
-1. Create component in `src/game/ui/NewPanel.tsx`
-2. Add state toggle to `gameStore.ts`: `newPanelOpen: boolean`
-3. Add toggle action: `toggleNewPanel: () => void`
-4. Import and render in `Game.tsx`
-
 ### Adding New Items
 
-1. Edit `src/game/lib/items.ts` to add item definitions
-2. Update `ITEM_TYPES` in `procgen.ts` for spawning
+1. Add item schema to `packages/shared/src/data/schemas/item.ts`
+2. Add item definition to `packages/shared/src/data/items/`
+3. Export from `packages/shared/src/data/items/index.ts`
 
 ### Adding New NPCs
 
-1. Add NPC type to `NPC_NAMES` in `procgen.ts`
-2. Add to theme's `npcTypes` array
-3. Add dialogue patterns to `DialogueBox.tsx`
+1. Add NPC definition to `packages/shared/src/data/npcs/`
+2. Create dialogue tree in `packages/shared/src/data/dialogues/`
+3. Link via `dialogueTreeIds` in NPC definition
 
 ### Adding New Quests
 
-1. Define quest in `src/game/lib/quests.ts`
-2. Associate with NPC's `questGiver` flag
-3. Handle quest acceptance in `DialogueBox.tsx`
+1. Define quest in `packages/shared/src/data/quests/`
+2. Associate with NPC via `questIds` array
+3. Export from `packages/shared/src/data/quests/index.ts`
 
-## Known Issues / TODOs
+### Adding UI Panels
 
-- [ ] Many UI components have type mismatches with store
-- [ ] Virtual joystick not implemented
-- [ ] Sector transitions not implemented
-- [ ] Combat/encounters not implemented
-- [ ] Sound system not implemented
-- [ ] PWA manifest not added
+1. Create component in `apps/web/src/game/ui/NewPanel.tsx`
+2. Add panel type to store: `activePanel: 'new_panel' | ...`
+3. Render in `Game.tsx` based on `activePanel`
 
-## Testing Commands
+## Testing
 
 ```bash
-# Type check
-pnpm typecheck
-
-# Build
-pnpm run build
-
-# Preview production build
-pnpm run preview
+pnpm test              # Run all 203 tests
+pnpm test --watch      # Watch mode
+pnpm test:e2e          # Playwright E2E (web)
 ```
 
-## Mobile Considerations
+Test structure mirrors source:
+- `apps/web/src/test/` - Web-specific tests
+- Unit tests for store, UI components, game flow
 
-- All touch targets minimum 44x44px
-- Use `pb-safe` for bottom elements (safe area)
-- Support haptic feedback via `navigator.vibrate()`
-- Test on viewport widths 360px - 800px
-- Respect `settings.reducedMotion` for animations
+## CI/CD
+
+GitHub Actions workflows (`.github/workflows/`):
+- `ci.yml` - Lint, typecheck, test, build, E2E
+- `mobile.yml` - Android APK build, Maestro E2E
+
+All actions pinned to exact SHAs for reproducibility.
+
+## Mobile Development
+
+```bash
+# Start Expo dev server
+pnpm dev:mobile
+
+# Build debug APK
+pnpm build:android
+
+# Run Maestro E2E tests
+maestro test .maestro/
+```
+
+## Known Patterns
+
+### Reactylon (Babylon.js)
+
+```tsx
+// CORRECT - use options prop
+<box name="myBox" options={{ width: 1, height: 2 }} position={pos} />
+
+// WRONG - will cause TypeScript errors
+<box name="myBox" width={1} height={2} />
+```
+
+### Import from Shared Package
+
+```typescript
+// Import schemas
+import { ItemSchema, type Item } from '@iron-frontier/shared/data/schemas/item';
+
+// Import data
+import { getItem, getAllItems } from '@iron-frontier/shared/data/items';
+
+// Import store types
+import type { GameState } from '@iron-frontier/shared/store';
+```
+
+## Current Status (v0.1-candidate)
+
+- **203 tests passing**
+- **Build succeeds** (7.7 MB single-file output)
+- **PR #1 open** with all AI review comments resolved
+- **Monorepo complete** with DRY architecture
+- **Responsive UI** implemented across all panels

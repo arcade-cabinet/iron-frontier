@@ -331,7 +331,10 @@ interface CameraState {
 
 ---
 
-## Persistence (SQLite via sql.js)
+## Persistence (SQLite)
+
+**Web**: sql.js (WASM) + IndexedDB for binary storage
+**Mobile**: expo-sqlite (native)
 
 ### Schema
 
@@ -531,49 +534,63 @@ interface GameState {
 
 ---
 
-## File Structure (New)
+## File Structure (Monorepo)
 
 ```text
-src/
-├── engine/
-│   ├── terrain/
-│   │   ├── TerrainChunk.ts
-│   │   ├── BiomeBlender.ts
-│   │   ├── HeightmapGenerator.ts
-│   │   └── DecalSystem.ts
-│   ├── rendering/
-│   │   ├── SceneManager.ts
-│   │   ├── CameraController.ts
-│   │   ├── SkyDome.ts
-│   │   └── PostProcessing.ts
-│   ├── entities/
-│   │   ├── Entity.ts
-│   │   ├── Character.ts
-│   │   ├── Structure.ts
-│   │   └── Prop.ts
-│   ├── ai/
-│   │   ├── BehaviorTree.ts
-│   │   ├── NavMesh.ts
-│   │   └── Perception.ts
-│   └── physics/
-│       ├── CollisionSystem.ts
-│       └── MovementController.ts
-├── generation/
-│   ├── WorldGenerator.ts
-│   ├── ChunkGenerator.ts
-│   ├── StructurePlacer.ts
-│   ├── RoadGenerator.ts
-│   └── CharacterGenerator.ts
-├── data/
-│   ├── Database.ts
-│   ├── schemas/
-│   └── migrations/
-├── game/
-│   ├── Game.tsx
-│   ├── store/
-│   │   └── gameStore.ts
-│   ├── ui/
-│   └── screens/
-└── types/
-    └── index.ts
+iron-frontier/
+├── apps/
+│   ├── web/                          # Vite + React + Babylon.js
+│   │   ├── src/
+│   │   │   ├── engine/               # Babylon.js rendering
+│   │   │   │   ├── rendering/
+│   │   │   │   │   ├── SceneManager.ts
+│   │   │   │   │   └── HexSceneManager.ts
+│   │   │   │   └── types.ts
+│   │   │   ├── game/
+│   │   │   │   ├── Game.tsx
+│   │   │   │   ├── store/
+│   │   │   │   │   └── gameStore.ts
+│   │   │   │   ├── ui/               # All UI panels
+│   │   │   │   └── screens/
+│   │   │   └── components/ui/        # shadcn/ui
+│   │   └── public/assets/            # 3D models, textures
+│   ├── mobile/                       # Expo + React Native + Filament
+│   │   ├── src/
+│   │   └── app.json
+│   └── docs/                         # Astro + Starlight
+├── packages/
+│   └── shared/                       # DRY code shared across platforms
+│       ├── src/
+│       │   ├── data/                 # Items, NPCs, quests, dialogue
+│       │   │   ├── items/
+│       │   │   ├── npcs/
+│       │   │   ├── quests/
+│       │   │   └── templates/        # Generation templates
+│       │   ├── schemas/              # Zod validation schemas
+│       │   │   ├── item.ts
+│       │   │   ├── npc.ts
+│       │   │   ├── quest.ts
+│       │   │   ├── combat.ts
+│       │   │   └── dialogue.ts
+│       │   ├── generation/           # Procedural generators
+│       │   │   ├── name-generator.ts
+│       │   │   ├── npc-generator.ts
+│       │   │   ├── quest-generator.ts
+│       │   │   ├── item-generator.ts
+│       │   │   ├── encounter-generator.ts
+│       │   │   └── world-generator.ts
+│       │   └── types/                # TypeScript types
+│       └── package.json
+├── .github/workflows/                # CI/CD
+│   ├── ci.yml                        # Lint, test, build
+│   └── mobile.yml                    # Android/iOS builds
+└── memory-bank/                      # AI agent context
 ```
+
+### Key Principle: Shared Everything Possible
+
+- **Schemas**: All Zod schemas in `packages/shared/`
+- **Data**: Items, NPCs, quests, dialogues in `packages/shared/`
+- **Types**: All TypeScript types exported from `packages/shared/`
+- **Generation**: Procedural generators in `packages/shared/`
+- **Platform-specific**: Only rendering and persistence differ
