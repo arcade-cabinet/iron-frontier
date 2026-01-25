@@ -901,15 +901,198 @@ export function createGameStore({
         },
 
         executeCombatAction: () => {
-          // Combat logic
+          const state = get();
+          const { combatState } = state;
+          if (!combatState || !combatState.selectedAction) return;
+
+          const actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity? 
+          // Actually combatant.definitionId might not be unique if multiple same enemies. 
+          // Combatant interface doesn't have a unique instance ID in the schema I saw?
+          // Let's assume index is the source of truth for now.
+          const actorIndex = combatState.currentTurnIndex;
+          const actor = combatState.combatants[actorIndex];
+          
+          // Determine target
+          const targetId = combatState.selectedTargetId;
+          const targetIndex = combatState.combatants.findIndex(c => c.definitionId === targetId);
+          const target = combatState.combatants[targetIndex];
+
+          const actionType = combatState.selectedAction;
+          const apCost = dataAccess.AP_COSTS[actionType];
+
+          // Check AP
+          if (actor.actionPoints < apCost) {
+             state.addNotification('warning', 'Not enough Action Points!');
+             return;
+          }
+
+          // Deduct AP
+          const newCombatants = [...combatState.combatants];
+          newCombatants[actorIndex] = { ...actor, actionPoints: actor.actionPoints - apCost, hasActed: true };
+
+          let resultMessage = '';
+          let success = true;
+          let damage = 0;
+          let isCritical = false;
+
+          // Process Action
+          if (actionType === 'attack' || actionType === 'aimed_shot') {
+             if (!target) return;
+
+             const hitChance = dataAccess.calculateHitChance(actor, target, { type: actionType });
+             const hit = dataAccess.rollHit(hitChance);
+
+             if (hit) {
+                 isCritical = dataAccess.rollCritical(actor);
+                 damage = dataAccess.calculateDamage(actor, target, { type: actionType }, isCritical);
+                 
+                 // Apply Damage
+                 const newHealth = Math.max(0, target.health - damage);
+                 newCombatants[targetIndex] = { 
+                     ...target, 
+                     health: newHealth,
+                     isDead: newHealth === 0
+                 };
+
+                 resultMessage = `${actor.name} hit ${target.name} for ${damage} damage!${isCritical ? ' (Critical!)' : ''}`;
+                 
+                 // Check Death
+                 if (newHealth === 0) {
+                     resultMessage += ` ${target.name} was defeated!`;
+                     if (target.isPlayer) {
+                         // Player died
+                         setTimeout(() => get().setPhase('game_over'), 1500);
+                     }
+                 }
+             } else {
+                 success = false;
+                 resultMessage = `${actor.name} missed ${target.name}!`;
+             }
+          } else if (actionType === 'defend') {
+              // Add buff? For now just message
+              resultMessage = `${actor.name} takes a defensive stance.`;
+          } else if (actionType === 'use_item') {
+              // Placeholder
+              resultMessage = `${actor.name} used an item.`;
+          }
+
+          // Update State
+          const result: any = {
+              action: { type: actionType, actorId: actor.definitionId, targetId, apCost, timestamp: Date.now() },
+              success,
+              damage: damage > 0 ? damage : undefined,
+              isCritical,
+              message: resultMessage
+          };
+
+          set({
+              combatState: {
+                  ...combatState,
+                  combatants: newCombatants,
+                  log: [...combatState.log, result],
+                  selectedAction: undefined,
+                  selectedTargetId: undefined
+              }
+          });
+
+          // If AI turn, continue acting if possible
+          if (!actor.isPlayer && !newCombatants[actorIndex].isDead) {
+              // Delay next action for pacing
+              setTimeout(() => {
+                  const currentState = get().combatState;
+                  // If turn hasn't changed (e.g. combat didn't end), continue AI
+                  if (currentState && currentState.currentTurnIndex === actorIndex) {
+                      get().endCombatTurn(); // Simple AI: One action per turn or just end for now
+                      // TODO: Improved AI loop to use all AP
+                  }
+              }, 1000);
+          }
         },
 
         endCombatTurn: () => {
-          // Next turn
+          const state = get();
+          const { combatState } = state;
+          if (!combatState) return;
+
+          // Check Victory/Defeat conditions
+          const playerAlive = combatState.combatants.some(c => c.isPlayer && !c.isDead);
+          const enemiesAlive = combatState.combatants.some(c => !c.isPlayer && !c.isDead);
+
+          if (!playerAlive) {
+              set({ combatState: { ...combatState, phase: 'defeat' } });
+              return;
+          }
+          if (!enemiesAlive) {
+              set({ combatState: { ...combatState, phase: 'victory' } });
+              // Grant Rewards
+              const encounter = dataAccess.getEncounterById(combatState.encounterId);
+              if (encounter && encounter.rewards) {
+                  if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
+                  if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
+              }
+              return;
+          }
+
+          // Cycle Turn
+          let nextIndex = (combatState.currentTurnIndex + 1) % combatState.combatants.length;
+          let round = combatState.round;
+          
+          if (nextIndex === 0) round++;
+
+          // Skip dead combatants
+          let loopCount = 0;
+          while (combatState.combatants[nextIndex].isDead && loopCount < combatState.combatants.length) {
+              nextIndex = (nextIndex + 1) % combatState.combatants.length;
+              if (nextIndex === 0) round++;
+              loopCount++;
+          }
+
+          // Reset AP for the new active combatant
+          const newCombatants = [...combatState.combatants];
+          const nextCombatant = newCombatants[nextIndex];
+          newCombatants[nextIndex] = { ...nextCombatant, actionPoints: nextCombatant.maxActionPoints, hasActed: false };
+
+          const nextPhase = nextCombatant.isPlayer ? 'player_turn' : 'enemy_turn';
+
+          set({
+              combatState: {
+                  ...combatState,
+                  currentTurnIndex: nextIndex,
+                  round,
+                  phase: nextPhase as any,
+                  combatants: newCombatants
+              }
+          });
+
+          // Trigger AI if Enemy Turn
+          if (!nextCombatant.isPlayer) {
+              setTimeout(() => {
+                  // AI Logic: Attack Player
+                  const playerDef = newCombatants.find(c => c.isPlayer);
+                  if (playerDef && !playerDef.isDead) {
+                      set(s => ({
+                          combatState: {
+                              ...s.combatState!,
+                              selectedAction: 'attack',
+                              selectedTargetId: playerDef.definitionId
+                          }
+                      }));
+                      get().executeCombatAction();
+                  } else {
+                      get().endCombatTurn();
+                  }
+              }, 1000);
+          }
         },
 
         attemptFlee: () => {
-          get().endCombat(); // Success for now
+          // 50% chance
+          if (Math.random() > 0.5) {
+              set(s => ({ combatState: { ...s.combatState!, phase: 'fled' } }));
+          } else {
+              get().addNotification('warning', 'Failed to escape!');
+              get().endCombatTurn();
+          }
         },
 
         endCombat: () => {

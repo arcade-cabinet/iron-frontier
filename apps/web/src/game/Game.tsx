@@ -2,6 +2,12 @@
 // Fallout 2-style isometric view with Kenney Hexagon Kit tiles
 
 import {
+  generateRandomEncounter,
+  shouldTriggerEncounter,
+} from '@iron-frontier/shared/data/generation/generators/encounterGenerator';
+import { ProceduralLocationManager } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
+import { SeededRandom } from '@iron-frontier/shared/data/generation/seededRandom';
+import {
   getWorldItemName,
   getWorldItemsForLocation,
 } from '@iron-frontier/shared/data/items/worldItems';
@@ -55,6 +61,7 @@ function GameCanvas() {
     collectWorldItem,
     collectedItemIds,
     startPuzzle,
+    startCombat,
     addNotification,
   } = useGameStore();
 
@@ -180,8 +187,40 @@ function GameCanvas() {
           // Movement is handled by ground click handler
         });
 
-        // Handle ground clicks for movement
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
+          // Check for Random Encounter
+          if (loadedLocation) {
+              const locData = getLocationData(loadedLocation);
+              // Safe zones - no encounters in towns/cities
+              const isSafe = locData.type === 'town' || locData.type === 'city' || locData.type === 'village';
+              
+              if (!isSafe) {
+                  const rng = new SeededRandom(Date.now()); // Dynamic seed for encounters
+                  // 10% chance per move in wild areas
+                  if (shouldTriggerEncounter(rng, { contextTags: [] }, 0.1)) {
+                      console.log('[GameCanvas] Random Encounter Triggered!');
+                      
+                      // Generate a random encounter
+                      const encounter = generateRandomEncounter(rng, {
+                          playerLevel: 1, // Get from store ideally
+                          locationId: currentLocationId,
+                          contextTags: ['wild'],
+                          worldSeed: worldSeed,
+                          regionId: 'unknown',
+                          gameHour: 12,
+                          factionTensions: {},
+                          activeEvents: []
+                      }, {});
+
+                      if (encounter) {
+                          addNotification('warning', 'Ambush! Prepare for combat!');
+                          startCombat(encounter.id);
+                          return; // Stop movement
+                      }
+                  }
+              }
+          }
+
           const height = manager.getHeightAt(pos.x, pos.z);
           setPlayerPosition({ x: pos.x, y: height, z: pos.z });
         });
