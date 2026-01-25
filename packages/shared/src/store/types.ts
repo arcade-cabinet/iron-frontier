@@ -6,6 +6,7 @@
  */
 
 import type { ActiveQuest, DialogueCondition, DialogueEffect, NPCDefinition, Quest } from '../data';
+import type { PipePuzzleState } from '../puzzles/pipe-fitter';
 
 // ============================================================================
 // COMMON TYPES
@@ -291,7 +292,8 @@ export type GamePhase =
   | 'dialogue'
   | 'inventory'
   | 'combat'
-  | 'game_over';
+  | 'game_over'
+  | 'puzzle';
 
 /**
  * Panel types
@@ -493,6 +495,9 @@ export interface GameStateData {
   // Combat
   combatState: CombatState | null;
 
+  // Puzzle
+  activePuzzle: PipePuzzleState | null;
+
   // Shop
   shopState: { shopId: string; ownerId: string } | null;
 
@@ -605,6 +610,11 @@ export interface GameStateActions {
   endCombatTurn: () => void;
   attemptFlee: () => void;
   endCombat: () => void;
+
+  // Puzzles
+  startPuzzle: (width: number, height: number) => void;
+  updatePuzzle: (newGrid: PipePuzzleState['grid']) => void;
+  closePuzzle: (success: boolean) => void;
 
   // Shop
   openShop: (shopId: string) => void;

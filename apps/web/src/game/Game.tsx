@@ -28,6 +28,7 @@ import { QuestLog } from './ui/QuestLog';
 import { ShopPanel } from './ui/ShopPanel';
 import { TravelPanel } from './ui/TravelPanel';
 import { WorldMap } from './ui/WorldMap';
+import { PipePuzzle } from './ui/PipePuzzle';
 import { audioService } from './services/AudioService';
 
 // ============================================================================
@@ -518,6 +519,9 @@ export function Game() {
 
       {/* Combat Panel */}
       {phase === 'combat' && <CombatPanel />}
+
+      {/* Puzzle Interface */}
+      {phase === 'puzzle' && <PipePuzzle />}
 
       {/* Shop Panel */}
       {shopState && <ShopPanel />}

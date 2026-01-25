@@ -12,6 +12,7 @@ import {
   SAVE_VERSION,
 } from './defaults';
 import { persistStorage } from './persistStorage';
+import { PuzzleGenerator, PipeLogic } from '../puzzles/pipe-fitter';
 import type { StorageAdapter } from './StorageAdapter';
 import type {
   CombatActionType,
@@ -166,6 +167,9 @@ export function createGameStore({
 
         // Combat
         combatState: null,
+
+        // Puzzle
+        activePuzzle: null,
 
         // Shop
         shopState: null,
@@ -913,6 +917,51 @@ export function createGameStore({
             phase: 'playing',
             combatState: null,
           });
+        },
+
+        // Puzzle Actions
+        startPuzzle: (width: number, height: number) => {
+          const puzzle = PuzzleGenerator.generate(width, height);
+          set({
+            phase: 'puzzle',
+            activePuzzle: puzzle,
+          });
+        },
+
+        updatePuzzle: (newGrid) => {
+          const state = get();
+          if (!state.activePuzzle) return;
+
+          const newState = {
+            ...state.activePuzzle,
+            grid: newGrid,
+          };
+
+          // Check for solution
+          const { solved, newGrid: checkedGrid } = PipeLogic.checkFlow(newState);
+          
+          set({
+            activePuzzle: {
+              ...newState,
+              grid: checkedGrid,
+              solved,
+            },
+          });
+        },
+
+        closePuzzle: (success: boolean) => {
+          const state = get();
+          set({
+            phase: 'playing',
+            activePuzzle: null,
+          });
+
+          if (success) {
+            state.addNotification('info', 'Puzzle Solved!');
+            // TODO: Trigger actual success callback (e.g. unlock door)
+          } else {
+            state.addNotification('warning', 'Puzzle Failed');
+          }
         },
 
         // Shop Actions
