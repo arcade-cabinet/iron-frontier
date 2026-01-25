@@ -91,6 +91,9 @@ export class DatabaseManager {
    * Initialize SQL.js and create/open the database
    */
   async init(binaryData?: Uint8Array): Promise<void> {
+    // Close existing connection if any
+    this.dispose();
+
     if (!SQL) {
       SQL = await initSqlJs({
         locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
@@ -154,9 +157,11 @@ export class DatabaseManager {
    * Helper to transactionally update the player state
    * Accepts the full game state and extracts player data from it
    */
-  savePlayer(state: any): void {
-    const stats = state.playerStats || {};
-    const pos = state.playerPosition || { x: 0, y: 0, z: 0 };
+  savePlayer(gameState: any): void {
+    if (!this.db) return;
+
+    const stats = gameState.playerStats || {};
+    const pos = gameState.playerPosition || { x: 0, y: 0, z: 0 };
 
     this.run(
       `
@@ -168,7 +173,7 @@ export class DatabaseManager {
     `,
       [
         1, // Single player, always id=1
-        state.playerName || 'Unknown',
+        gameState.playerName || 'Unknown',
         stats.level || 1,
         stats.xp || 0,
         stats.xpToNext || 100,
@@ -181,7 +186,7 @@ export class DatabaseManager {
         pos.x,
         pos.y,
         pos.z,
-        state.playerRotation || 0,
+        gameState.playerRotation || 0,
         Date.now(),
       ]
     );
