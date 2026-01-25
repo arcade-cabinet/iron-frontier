@@ -18,7 +18,7 @@ pnpm install
 pnpm dev
 
 # Type check
-pnpm run tscgo --noEmit
+pnpm typecheck
 ```
 
 ## Project Overview
@@ -242,7 +242,7 @@ const sector = generateSector('sector_id', 12345); // ID + seed
 
 ```bash
 # Type check
-pnpm run tscgo --noEmit
+pnpm typecheck
 
 # Build
 pnpm run build
