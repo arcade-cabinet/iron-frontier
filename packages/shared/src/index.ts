@@ -18,9 +18,13 @@ export * from './data';
 // Generation exports
 export * from './generation';
 
-// Note: hex, store, rendering, and types have conflicting exports with data
+// Note: hex, store, rendering, types, systems, and input have conflicting exports with data
 // Use direct imports for these modules:
 // - '@iron-frontier/shared/hex'
 // - '@iron-frontier/shared/store'
 // - '@iron-frontier/shared/rendering'
 // - '@iron-frontier/shared/types'
+// - '@iron-frontier/shared/systems'
+// - '@iron-frontier/shared/input'
+// - '@iron-frontier/shared/controllers'
+// - '@iron-frontier/shared/hooks'

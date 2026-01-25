@@ -1,21 +1,93 @@
 /**
  * Iron Frontier - Quest Library
  *
- * All quest definitions for the game.
- * Quests are organized by type (main, side, faction).
+ * Complete quest system for the game including:
+ * - Main Quest Arc: 10 quests across 3 acts (~3 hours playtime)
+ * - Side Quests: 9 optional quests across all towns
+ * - Legacy Quests: Original quest definitions for backward compatibility
  *
- * Main Quest: "The Inheritance" - 4 acts following the story bible
- * Side Quests: Optional adventures that enrich the world
+ * Architecture:
+ * - questTypes.ts: Location, NPC, and flag constants
+ * - mainQuests.ts: 10 main story quests (Act 1-3)
+ * - sideQuests.ts: 9 side quests (2-3 per town)
  */
 
 import type { Quest } from '../schemas/quest';
 
+// Re-export all quest-related types and constants
+export * from './questTypes';
+
+// Import new quest system
+import {
+  MAIN_QUESTS,
+  MAIN_QUESTS_BY_ACT,
+  MAIN_QUESTS_BY_ID,
+  MQ1_AStrangerArrives,
+  MQ2_TheMissingProspector,
+  MQ3_DeepTrouble,
+  MQ4_TheEngineersSecret,
+  MQ5_Confrontation,
+  MQ6A_HonorAmongThieves,
+  MQ6B_TheRanchersPlight,
+  MQ7_PiecesOfThePuzzle,
+  MQ8_TheFinalTrail,
+  MQ9_SalvationsSecret,
+  MQ10_Reckoning,
+} from './mainQuests';
+
+import {
+  SIDE_QUESTS,
+  SIDE_QUESTS_BY_ID,
+  SIDE_QUESTS_BY_LOCATION,
+  SQ1_OldTimersTales,
+  SQ2_SheriffsBounty,
+  SQ3_SaloonBrawl,
+  SQ4_DocsDilemma,
+  SQ5_TheInformant,
+  SQ6_TheInformantsPrice,
+  SQ7_BountyHuntersMark,
+  SQ8_CattleRustlers,
+  SQ9_TheWanderersTale,
+} from './sideQuests';
+
+// Re-export all new quests
+export {
+  // Main quests
+  MAIN_QUESTS,
+  MAIN_QUESTS_BY_ACT,
+  MAIN_QUESTS_BY_ID,
+  MQ1_AStrangerArrives,
+  MQ2_TheMissingProspector,
+  MQ3_DeepTrouble,
+  MQ4_TheEngineersSecret,
+  MQ5_Confrontation,
+  MQ6A_HonorAmongThieves,
+  MQ6B_TheRanchersPlight,
+  MQ7_PiecesOfThePuzzle,
+  MQ8_TheFinalTrail,
+  MQ9_SalvationsSecret,
+  MQ10_Reckoning,
+  // Side quests
+  SIDE_QUESTS,
+  SIDE_QUESTS_BY_ID,
+  SIDE_QUESTS_BY_LOCATION,
+  SQ1_OldTimersTales,
+  SQ2_SheriffsBounty,
+  SQ3_SaloonBrawl,
+  SQ4_DocsDilemma,
+  SQ5_TheInformant,
+  SQ6_TheInformantsPrice,
+  SQ7_BountyHuntersMark,
+  SQ8_CattleRustlers,
+  SQ9_TheWanderersTale,
+};
+
 // ============================================================================
-// MAIN QUEST: THE INHERITANCE
+// LEGACY QUESTS (Original Definitions - Backward Compatibility)
 // ============================================================================
 
 /**
- * The Inheritance - Main storyline quest
+ * The Inheritance - Main storyline quest (Legacy)
  *
  * The player arrives in Dusty Springs with a mysterious letter,
  * leading them to uncover a conspiracy involving IVRC and their
@@ -27,10 +99,10 @@ export const TheInheritance: Quest = {
   description:
     'A mysterious letter summoned you to Dusty Springs to "claim what\'s rightfully yours" at an address that doesn\'t seem to exist. The letter is signed only with a gear symbol.',
   type: 'main',
-  giverNpcId: null, // Auto-triggered on game start
+  giverNpcId: null,
   startLocationId: 'dusty_springs',
   recommendedLevel: 1,
-  tags: ['main', 'mystery', 'ivrc', 'freeminers'],
+  tags: ['main', 'mystery', 'ivrc', 'freeminers', 'legacy'],
   repeatable: false,
   timeLimitHours: null,
 
@@ -41,7 +113,6 @@ export const TheInheritance: Quest = {
   },
 
   stages: [
-    // Stage 1: Arrival
     {
       id: 'stage_1_arrival',
       title: 'Arrive in Dusty Springs',
@@ -86,8 +157,6 @@ export const TheInheritance: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 2: Investigation
     {
       id: 'stage_2_investigation',
       title: 'Investigate the Burned Building',
@@ -117,7 +186,7 @@ export const TheInheritance: Quest = {
           count: 1,
           current: 0,
           optional: false,
-          hidden: true, // Revealed after searching
+          hidden: true,
           hint: 'Check beneath the floorboards.',
         },
       ],
@@ -128,8 +197,6 @@ export const TheInheritance: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 3: The Sheriff
     {
       id: 'stage_3_sheriff',
       title: 'Talk to Sheriff Cole',
@@ -173,8 +240,6 @@ export const TheInheritance: Quest = {
         reputation: { law: 10 },
       },
     },
-
-    // Stage 4: Follow the Leads
     {
       id: 'stage_4_freeminers',
       title: "Travel to Freeminer's Hollow",
@@ -225,19 +290,12 @@ export const TheInheritance: Quest = {
     gold: 100,
     items: [],
     reputation: { freeminers: 50 },
-    unlocksQuests: ['main_the_reclamation'],
+    unlocksQuests: [], // Legacy quest - no longer unlocks subsequent quests
   },
 };
 
-// ============================================================================
-// SIDE QUEST: MISSING CATTLE
-// ============================================================================
-
 /**
- * Missing Cattle - Side quest from Silas Blackwood
- *
- * Silas Blackwood's cattle are being stolen. Investigation reveals
- * a connection to the Copperhead Gang.
+ * Missing Cattle - Side quest (Legacy)
  */
 export const MissingCattle: Quest = {
   id: 'side_missing_cattle',
@@ -248,7 +306,7 @@ export const MissingCattle: Quest = {
   giverNpcId: 'npc_silas_blackwood',
   startLocationId: 'sunset_ranch',
   recommendedLevel: 2,
-  tags: ['side', 'investigation', 'copperhead', 'ranch'],
+  tags: ['side', 'investigation', 'copperhead', 'ranch', 'legacy'],
   repeatable: false,
   timeLimitHours: null,
 
@@ -259,7 +317,6 @@ export const MissingCattle: Quest = {
   },
 
   stages: [
-    // Stage 1: Investigation
     {
       id: 'stage_cattle_investigate',
       title: 'Investigate the Rustling',
@@ -309,8 +366,6 @@ export const MissingCattle: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 2: Confrontation
     {
       id: 'stage_cattle_confront',
       title: 'Confront the Rustlers',
@@ -349,8 +404,6 @@ export const MissingCattle: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 3: Resolution
     {
       id: 'stage_cattle_resolve',
       title: 'Report to Blackwood',
@@ -394,15 +447,8 @@ export const MissingCattle: Quest = {
   },
 };
 
-// ============================================================================
-// SIDE QUEST: DOC'S DILEMMA
-// ============================================================================
-
 /**
- * Doc's Dilemma - Side quest from Doc Chen Wei
- *
- * The town doctor needs medical supplies that are hard to come by.
- * Player must retrieve them from Junction City or Coppertown.
+ * Doc's Dilemma - Side quest (Legacy)
  */
 export const DocsDilemma: Quest = {
   id: 'side_docs_dilemma',
@@ -413,7 +459,7 @@ export const DocsDilemma: Quest = {
   giverNpcId: 'npc_doc_chen_wei',
   startLocationId: 'dusty_springs',
   recommendedLevel: 2,
-  tags: ['side', 'delivery', 'choice', 'medical'],
+  tags: ['side', 'delivery', 'choice', 'medical', 'legacy'],
   repeatable: false,
   timeLimitHours: null,
 
@@ -424,7 +470,6 @@ export const DocsDilemma: Quest = {
   },
 
   stages: [
-    // Stage 1: Get the List
     {
       id: 'stage_doc_list',
       title: 'Get the Supply List',
@@ -467,8 +512,6 @@ export const DocsDilemma: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 2: Acquire Supplies (choose path)
     {
       id: 'stage_doc_acquire',
       title: 'Acquire Medical Supplies',
@@ -517,8 +560,6 @@ export const DocsDilemma: Quest = {
         reputation: {},
       },
     },
-
-    // Stage 3: Delivery
     {
       id: 'stage_doc_deliver',
       title: 'Deliver to Doc',
@@ -562,26 +603,42 @@ export const DocsDilemma: Quest = {
 };
 
 // ============================================================================
-// QUEST REGISTRY
+// UNIFIED QUEST REGISTRY
 // ============================================================================
 
 /**
- * All quests indexed by ID for quick lookup.
+ * All quests (new + legacy) indexed by ID for quick lookup.
  */
 export const QUESTS_BY_ID: Record<string, Quest> = {
+  // New main quests
+  ...MAIN_QUESTS_BY_ID,
+  // New side quests
+  ...SIDE_QUESTS_BY_ID,
+  // Legacy quests
   [TheInheritance.id]: TheInheritance,
   [MissingCattle.id]: MissingCattle,
   [DocsDilemma.id]: DocsDilemma,
 };
 
 /**
+ * All quests combined (new + legacy).
+ */
+export const ALL_QUESTS: Quest[] = [
+  ...MAIN_QUESTS,
+  ...SIDE_QUESTS,
+  TheInheritance,
+  MissingCattle,
+  DocsDilemma,
+];
+
+/**
  * Quests organized by type.
  */
 export const QUESTS_BY_TYPE: Record<string, Quest[]> = {
-  main: [TheInheritance],
-  side: [MissingCattle, DocsDilemma],
+  main: [...MAIN_QUESTS, TheInheritance],
+  side: [...SIDE_QUESTS, MissingCattle, DocsDilemma],
   faction: [],
-  bounty: [],
+  bounty: [SQ2_SheriffsBounty],
   delivery: [],
   exploration: [],
 };
@@ -631,6 +688,20 @@ export function getQuestsByTag(tag: string): Quest[] {
 }
 
 /**
+ * Get all main quests for a specific act.
+ */
+export function getMainQuestsByAct(act: 'act1' | 'act2' | 'act3'): Quest[] {
+  return MAIN_QUESTS_BY_ACT[act] ?? [];
+}
+
+/**
+ * Get all side quests for a specific location.
+ */
+export function getSideQuestsByLocation(locationId: string): Quest[] {
+  return SIDE_QUESTS_BY_LOCATION[locationId] ?? [];
+}
+
+/**
  * Check if a quest's prerequisites are met.
  */
 export function arePrerequisitesMet(
@@ -659,4 +730,31 @@ export function arePrerequisitesMet(
   }
 
   return true;
+}
+
+/**
+ * Get the next available main quest based on completed quests.
+ */
+export function getNextMainQuest(completedQuestIds: string[]): Quest | undefined {
+  for (const quest of MAIN_QUESTS) {
+    if (completedQuestIds.includes(quest.id)) continue;
+    if (arePrerequisitesMet(quest, completedQuestIds, 1, {})) {
+      return quest;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Calculate total estimated playtime for all quests (in minutes).
+ */
+export function getEstimatedPlaytime(): { main: number; side: number; total: number } {
+  // Rough estimates: main quest stages ~5min, side quest stages ~3min
+  const mainTime = MAIN_QUESTS.reduce((sum, q) => sum + q.stages.length * 5, 0);
+  const sideTime = SIDE_QUESTS.reduce((sum, q) => sum + q.stages.length * 3, 0);
+  return {
+    main: mainTime,
+    side: sideTime,
+    total: mainTime + sideTime,
+  };
 }

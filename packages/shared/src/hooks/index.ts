@@ -7,3 +7,18 @@
 
 export { useMediaQuery } from './useMediaQuery';
 export { MOBILE_BREAKPOINT_PX, useIsMobile } from './useMobile';
+export {
+  useGameInput,
+  useInputAction,
+  useMovementInput,
+  type UseGameInputOptions,
+  type UseGameInputReturn,
+} from './useGameInput';
+
+export {
+  useGameControllers,
+  usePlayerPosition,
+  useGameMode,
+  type UseGameControllersConfig,
+  type UseGameControllersReturn,
+} from './useGameControllers';

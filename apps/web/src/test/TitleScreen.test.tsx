@@ -3,7 +3,7 @@
  * Tests for visual elements and interactions on the title/splash screens
  */
 
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import type React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TitleScreen } from '@/game/screens/TitleScreen';
@@ -91,7 +91,10 @@ describe('TitleScreen', () => {
       expect(screen.getByRole('button', { name: /Start/i })).toBeInTheDocument();
     });
 
-    it('should start game with entered name when clicking Start', () => {
+    it('should start game with entered name when clicking Start', async () => {
+      // Switch to real timers for this test since initGame is async
+      vi.useRealTimers();
+
       fireEvent.click(screen.getByRole('button', { name: /Begin Adventure/i }));
 
       const input = screen.getByPlaceholderText(/Enter your name/i);
@@ -99,9 +102,15 @@ describe('TitleScreen', () => {
 
       fireEvent.click(screen.getByRole('button', { name: /Start/i }));
 
-      const state = getStoreState();
-      expect(state.phase).toBe('playing');
-      expect(state.playerName).toBe('NewPlayer');
+      // initGame is async, so wait for the state to update
+      await waitFor(() => {
+        const state = getStoreState();
+        expect(state.phase).toBe('playing');
+        expect(state.playerName).toBe('NewPlayer');
+      });
+
+      // Restore fake timers for cleanup
+      vi.useFakeTimers();
     });
   });
 

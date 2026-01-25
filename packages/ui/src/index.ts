@@ -22,6 +22,11 @@
  * import { colors, spacing, theme } from '@iron-frontier/ui/tokens';
  * ```
  *
+ * For combat UI components:
+ * ```ts
+ * import { CombatScreen, ActionButtons } from '@iron-frontier/ui/combat';
+ * ```
+ *
  * For shared types and utilities:
  * ```ts
  * import { cn, type ButtonProps } from '@iron-frontier/ui';
@@ -38,3 +43,4 @@ export * from './tokens';
 // their respective entry points:
 // - '@iron-frontier/ui/web' for web components
 // - '@iron-frontier/ui/native' for React Native components
+// - '@iron-frontier/ui/combat' for combat UI components

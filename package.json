@@ -9,6 +9,7 @@
     "build": "pnpm --filter @iron-frontier/web build",
     "test": "pnpm --filter @iron-frontier/web test",
     "test:all": "pnpm -r test",
+    "e2e": "pnpm --filter @iron-frontier/web test:e2e",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",

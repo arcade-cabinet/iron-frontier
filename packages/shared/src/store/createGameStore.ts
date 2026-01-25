@@ -67,20 +67,20 @@ export interface DataAccess {
 
   // Shops
   getShopById: (shopId: string) => any;
-  calculateBuyPrice: (baseValue: number, reputation: number) => number;
-  calculateSellPrice: (baseValue: number, reputation: number) => number;
+  calculateBuyPrice: (shop: any, item: any) => number;
+  calculateSellPrice: (shop: any, itemDef: any) => number;
   canSellItemToShop: (item: any, shopType: string) => boolean;
 
   // Generation
-  initEncounterTemplates: () => void;
+  initEncounterTemplates: (templates: any[]) => void;
   generateRandomEncounter: (rng: any, context: any, options: any) => any;
   shouldTriggerEncounter: (rng: any, context: any, baseChance?: number) => boolean;
   ENCOUNTER_TEMPLATES: any;
 
   // Procedural
   ProceduralLocationManager: {
-    initialize: (seed: number) => Promise<any>;
-    generateLocationContent: (location: any) => Promise<any>;
+    initialize: (seed: number) => void;
+    generateLocationContent: (location: any) => any;
     hasGeneratedContent: (locationId: string) => boolean;
   };
 
@@ -110,7 +110,7 @@ export function createGameStore({
   dataAccess,
 }: CreateGameStoreOptions) {
   // Initialize data
-  dataAccess.initEncounterTemplates();
+  dataAccess.initEncounterTemplates(dataAccess.ENCOUNTER_TEMPLATES);
 
   return create<GameState>()(
     persist(
@@ -405,17 +405,25 @@ export function createGameStore({
           if (!item || !item.usable) return;
 
           const def = dataAccess.getItem(item.itemId);
-          if (!def || !def.effect) return;
+          if (!def) return;
 
-          // Apply effect
-          const { effect } = def;
-          switch (effect.type) {
-            case 'heal':
-              state.heal(effect.value);
-              break;
-            case 'buff':
-              // Not implemented
-              break;
+          // Check for effects array (new format) or effect (old format)
+          const effects = def.effects || (def.effect ? [def.effect] : []);
+          if (effects.length === 0) return;
+
+          // Apply all effects
+          for (const effect of effects) {
+            switch (effect.type) {
+              case 'heal':
+                state.heal(effect.value);
+                break;
+              case 'stamina':
+                // Not implemented yet
+                break;
+              case 'buff':
+                // Not implemented
+                break;
+            }
           }
 
           // Consume item

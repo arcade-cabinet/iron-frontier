@@ -1,349 +1,164 @@
 /**
  * Enemy Library - Iron Frontier
  *
- * Defines all enemy types and combat encounters in the game.
+ * Exports all enemy definitions and combat encounters.
+ * The complete enemy database is in enemies.ts.
  */
 
-import type { CombatEncounter, EnemyDefinition } from '../schemas/combat';
+import type { CombatEncounter } from '../schemas/combat';
 
-// ============================================================================
-// ENEMY DEFINITIONS
-// ============================================================================
-
-// --- BANDITS / RAIDERS ---
-
-export const BanditThug: EnemyDefinition = {
-  id: 'bandit_thug',
-  name: 'Bandit Thug',
-  type: 'bandit',
-  faction: 'raiders',
-  maxHealth: 30,
-  actionPoints: 4,
-  baseDamage: 8,
-  armor: 0,
-  accuracyMod: -10,
-  evasion: 5,
-  weaponId: 'rusty_knife',
-  xpReward: 15,
-  goldReward: 5,
-  behavior: 'aggressive',
-  description: 'A desperate criminal with little to lose.',
-  tags: ['melee', 'common'],
-};
-
-export const BanditGunman: EnemyDefinition = {
-  id: 'bandit_gunman',
-  name: 'Bandit Gunman',
-  type: 'gunslinger',
-  faction: 'raiders',
-  maxHealth: 25,
-  actionPoints: 4,
-  baseDamage: 12,
-  armor: 0,
-  accuracyMod: 0,
-  evasion: 10,
-  weaponId: 'worn_revolver',
-  xpReward: 20,
-  goldReward: 8,
-  behavior: 'ranged',
-  description: 'A pistol-wielding outlaw.',
-  tags: ['ranged', 'common'],
-};
-
-export const BanditSharpshooter: EnemyDefinition = {
-  id: 'bandit_sharpshooter',
-  name: 'Bandit Sharpshooter',
-  type: 'sharpshooter',
-  faction: 'raiders',
-  maxHealth: 20,
-  actionPoints: 3,
-  baseDamage: 18,
-  armor: 0,
-  accuracyMod: 15,
-  evasion: 5,
-  weaponId: 'hunting_rifle',
-  xpReward: 30,
-  goldReward: 12,
-  behavior: 'ranged',
-  description: 'A deadly accurate rifleman who prefers to keep distance.',
-  tags: ['ranged', 'uncommon'],
-};
-
-// --- COPPERHEAD GANG ---
-
-export const CopperheadEnforcer: EnemyDefinition = {
-  id: 'copperhead_enforcer',
-  name: 'Copperhead Enforcer',
-  type: 'brute',
-  faction: 'copperhead',
-  maxHealth: 50,
-  actionPoints: 3,
-  baseDamage: 15,
-  armor: 5,
-  accuracyMod: -5,
-  evasion: 5,
-  weaponId: 'shotgun',
-  xpReward: 40,
-  goldReward: 15,
-  behavior: 'aggressive',
-  description: 'A tough gang member who does the dirty work.',
-  tags: ['melee', 'uncommon', 'copperhead'],
-};
-
-export const CopperheadGunslinger: EnemyDefinition = {
-  id: 'copperhead_gunslinger',
-  name: 'Copperhead Gunslinger',
-  type: 'gunslinger',
-  faction: 'copperhead',
-  maxHealth: 35,
-  actionPoints: 5,
-  baseDamage: 14,
-  armor: 2,
-  accuracyMod: 10,
-  evasion: 15,
-  weaponId: 'revolver',
-  xpReward: 45,
-  goldReward: 20,
-  behavior: 'ranged',
-  description: 'A quick-draw artist loyal to the gang.',
-  tags: ['ranged', 'uncommon', 'copperhead'],
-};
-
-export const CopperheadDynamiter: EnemyDefinition = {
-  id: 'copperhead_dynamiter',
-  name: 'Copperhead Dynamiter',
-  type: 'dynamiter',
-  faction: 'copperhead',
-  maxHealth: 25,
-  actionPoints: 4,
-  baseDamage: 25,
-  armor: 0,
-  accuracyMod: -15,
-  evasion: 10,
-  weaponId: 'dynamite',
-  xpReward: 50,
-  goldReward: 25,
-  behavior: 'ranged',
-  description: 'A demolitions expert who loves making things go boom.',
-  tags: ['explosives', 'rare', 'copperhead'],
-};
-
-// --- IVRC GUARDS ---
-
-export const IVRCGuard: EnemyDefinition = {
-  id: 'ivrc_guard',
-  name: 'IVRC Guard',
-  type: 'gunslinger',
-  faction: 'ivrc_guards',
-  maxHealth: 40,
-  actionPoints: 4,
-  baseDamage: 12,
-  armor: 3,
-  accuracyMod: 5,
-  evasion: 8,
-  weaponId: 'revolver',
-  xpReward: 35,
-  goldReward: 10,
-  behavior: 'defensive',
-  description: 'A company security guard protecting IVRC interests.',
-  tags: ['ranged', 'common', 'ivrc'],
-};
-
-export const IVRCMarksman: EnemyDefinition = {
-  id: 'ivrc_marksman',
-  name: 'IVRC Marksman',
-  type: 'sharpshooter',
-  faction: 'ivrc_guards',
-  maxHealth: 30,
-  actionPoints: 4,
-  baseDamage: 20,
-  armor: 2,
-  accuracyMod: 20,
-  evasion: 5,
-  weaponId: 'rifle',
-  xpReward: 50,
-  goldReward: 15,
-  behavior: 'ranged',
-  description: 'An elite company sniper.',
-  tags: ['ranged', 'uncommon', 'ivrc'],
-};
-
-export const IVRCCaptain: EnemyDefinition = {
-  id: 'ivrc_captain',
-  name: 'IVRC Captain',
-  type: 'gunslinger',
-  faction: 'ivrc_guards',
-  maxHealth: 60,
-  actionPoints: 5,
-  baseDamage: 16,
-  armor: 5,
-  accuracyMod: 15,
-  evasion: 12,
-  weaponId: 'revolver',
-  xpReward: 75,
-  goldReward: 30,
-  behavior: 'defensive',
-  description: 'A seasoned commander of IVRC security forces.',
-  tags: ['ranged', 'rare', 'ivrc', 'mini_boss'],
-};
-
-// --- WILDLIFE ---
-
-export const DesertWolf: EnemyDefinition = {
-  id: 'desert_wolf',
-  name: 'Desert Wolf',
-  type: 'animal',
-  faction: 'wildlife',
-  maxHealth: 20,
-  actionPoints: 5,
-  baseDamage: 10,
-  armor: 0,
-  accuracyMod: 0,
-  evasion: 20,
-  xpReward: 12,
-  goldReward: 0,
-  behavior: 'aggressive',
-  description: 'A lean, hungry predator of the wastes.',
-  tags: ['melee', 'common', 'animal'],
-};
-
-export const Rattlesnake: EnemyDefinition = {
-  id: 'rattlesnake',
-  name: 'Rattlesnake',
-  type: 'animal',
-  faction: 'wildlife',
-  maxHealth: 10,
-  actionPoints: 6,
-  baseDamage: 6,
-  armor: 0,
-  accuracyMod: 10,
-  evasion: 30,
-  xpReward: 8,
-  goldReward: 0,
-  behavior: 'defensive',
-  description: 'A venomous serpent that strikes without warning.',
-  tags: ['melee', 'common', 'animal', 'poison'],
-};
-
-export const MountainLion: EnemyDefinition = {
-  id: 'mountain_lion',
-  name: 'Mountain Lion',
-  type: 'animal',
-  faction: 'wildlife',
-  maxHealth: 35,
-  actionPoints: 5,
-  baseDamage: 15,
-  armor: 2,
-  accuracyMod: 5,
-  evasion: 25,
-  xpReward: 25,
-  goldReward: 0,
-  behavior: 'aggressive',
-  description: 'A powerful feline ambush predator.',
-  tags: ['melee', 'uncommon', 'animal'],
-};
-
-// --- THE REMNANT (Automatons) ---
-
-export const RemnantSentry: EnemyDefinition = {
-  id: 'remnant_sentry',
-  name: 'Sentry Automaton',
-  type: 'automaton',
-  faction: 'remnant',
-  maxHealth: 50,
-  actionPoints: 3,
-  baseDamage: 12,
-  armor: 8,
-  accuracyMod: 0,
-  evasion: 0,
-  xpReward: 40,
-  goldReward: 5,
-  lootTableId: 'automaton_scrap',
-  behavior: 'defensive',
-  description: 'A mechanical guardian from a forgotten age.',
-  tags: ['ranged', 'uncommon', 'automaton'],
-};
-
-export const RemnantScout: EnemyDefinition = {
-  id: 'remnant_scout',
-  name: 'Scout Automaton',
-  type: 'automaton',
-  faction: 'remnant',
-  maxHealth: 30,
-  actionPoints: 5,
-  baseDamage: 10,
-  armor: 4,
-  accuracyMod: 10,
-  evasion: 15,
-  xpReward: 35,
-  goldReward: 5,
-  lootTableId: 'automaton_scrap',
-  behavior: 'ranged',
-  description: 'A fast, agile reconnaissance machine.',
-  tags: ['ranged', 'uncommon', 'automaton'],
-};
-
-export const RemnantJuggernaut: EnemyDefinition = {
-  id: 'remnant_juggernaut',
-  name: 'Juggernaut Automaton',
-  type: 'automaton',
-  faction: 'remnant',
-  maxHealth: 100,
-  actionPoints: 2,
-  baseDamage: 25,
-  armor: 15,
-  accuracyMod: -10,
-  evasion: 0,
-  xpReward: 100,
-  goldReward: 20,
-  lootTableId: 'automaton_rare',
-  behavior: 'aggressive',
-  description: 'A massive, heavily armored war machine.',
-  tags: ['melee', 'rare', 'automaton', 'mini_boss'],
-};
-
-// ============================================================================
-// ENEMY REGISTRY
-// ============================================================================
-
-export const ALL_ENEMIES: EnemyDefinition[] = [
+// Re-export all enemies from the complete database
+export {
+  // Wildlife - Easy
+  Coyote,
+  Rattlesnake,
+  Scorpion,
+  Buzzard,
+  // Wildlife - Medium
+  Wolf,
+  MountainLion,
+  Bear,
+  GiantScorpion,
+  DesertWolf,
   // Bandits
+  LoneBandit,
+  BanditGunner,
+  BanditBrute,
+  BanditLeader,
   BanditThug,
   BanditGunman,
   BanditSharpshooter,
-  // Copperhead
+  // Outlaws (Copperhead)
+  OutlawGunslinger,
+  OutlawEnforcer,
+  RedEyesLieutenant,
   CopperheadEnforcer,
   CopperheadGunslinger,
   CopperheadDynamiter,
-  // IVRC
+  // IVRC Guards
   IVRCGuard,
   IVRCMarksman,
   IVRCCaptain,
-  // Wildlife
-  DesertWolf,
-  Rattlesnake,
-  MountainLion,
-  // Remnant
+  // Steampunk/Corrupted
+  ClockworkDrone,
+  SteamGolem,
+  CorruptedProspector,
+  MechanicalHorror,
+  // Remnant Automatons
   RemnantSentry,
   RemnantScout,
   RemnantJuggernaut,
-];
-
-export const ENEMIES_BY_ID: Record<string, EnemyDefinition> = Object.fromEntries(
-  ALL_ENEMIES.map((e) => [e.id, e])
-);
+  // Bosses
+  BanditKing,
+  TheSaboteur,
+  IronTyrant,
+  // Registry
+  ALL_ENEMIES,
+  ENEMIES_BY_ID,
+  // Utility functions
+  getEnemyById,
+  getEnemiesByFaction,
+  getEnemiesByTag,
+  getEnemiesByType,
+  getEnemiesByDifficulty,
+  getRandomEnemy,
+} from './enemies';
 
 // ============================================================================
 // COMBAT ENCOUNTERS
 // ============================================================================
+
+// --- WILDLIFE ENCOUNTERS ---
+
+export const CoyotePack: CombatEncounter = {
+  id: 'coyote_pack',
+  name: 'Coyote Pack',
+  description: 'A pack of scrappy desert coyotes circles around you.',
+  enemies: [{ enemyId: 'coyote', count: 3 }],
+  minLevel: 1,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 30,
+    gold: 0,
+    items: [{ itemId: 'coyote_pelt', quantity: 1, chance: 0.5 }],
+  },
+  tags: ['random', 'wildlife', 'easy'],
+};
+
+export const SnakeNest: CombatEncounter = {
+  id: 'snake_nest',
+  name: 'Snake Nest',
+  description: 'You stumbled upon a nest of rattlesnakes!',
+  enemies: [{ enemyId: 'rattlesnake', count: 2 }],
+  minLevel: 1,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 20,
+    gold: 0,
+    items: [{ itemId: 'snake_venom', quantity: 1, chance: 0.6 }],
+  },
+  tags: ['random', 'wildlife', 'easy', 'poison'],
+};
+
+export const WolfPack: CombatEncounter = {
+  id: 'wolf_pack',
+  name: 'Wolf Pack',
+  description: 'A pack of hungry wolves has caught your scent.',
+  enemies: [{ enemyId: 'wolf', count: 3 }],
+  minLevel: 2,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 60,
+    gold: 0,
+    items: [{ itemId: 'wolf_pelt', quantity: 1, chance: 0.4 }],
+  },
+  tags: ['random', 'wildlife', 'medium'],
+};
+
+export const MountainPredator: CombatEncounter = {
+  id: 'mountain_predator',
+  name: 'Mountain Predator',
+  description: 'A mountain lion stalks you from the rocks above.',
+  enemies: [{ enemyId: 'mountain_lion', count: 1 }],
+  minLevel: 3,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 40,
+    gold: 0,
+    items: [{ itemId: 'mountain_lion_claw', quantity: 2, chance: 0.5 }],
+  },
+  tags: ['random', 'wildlife', 'medium'],
+};
+
+export const GrizzlyAttack: CombatEncounter = {
+  id: 'grizzly_attack',
+  name: 'Grizzly Attack',
+  description: 'A massive grizzly bear charges out of the brush!',
+  enemies: [{ enemyId: 'bear', count: 1 }],
+  minLevel: 4,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 60,
+    gold: 0,
+    items: [{ itemId: 'bear_pelt', quantity: 1, chance: 0.7 }],
+  },
+  tags: ['random', 'wildlife', 'hard'],
+};
+
+// --- BANDIT ENCOUNTERS ---
 
 export const RoadsideBandits: CombatEncounter = {
   id: 'roadside_bandits',
   name: 'Roadside Ambush',
   description: 'Bandits have set up an ambush on the trail.',
   enemies: [
-    { enemyId: 'bandit_thug', count: 2 },
-    { enemyId: 'bandit_gunman', count: 1 },
+    { enemyId: 'lone_bandit', count: 2 },
+    { enemyId: 'bandit_gunner', count: 1 },
   ],
   minLevel: 1,
   isBoss: false,
@@ -353,27 +168,59 @@ export const RoadsideBandits: CombatEncounter = {
     gold: 20,
     items: [
       { itemId: 'bandages', quantity: 1, chance: 0.5 },
-      { itemId: 'revolver_ammo', quantity: 6, chance: 0.7 },
+      { itemId: 'pistol_ammo', quantity: 6, chance: 0.7 },
     ],
   },
-  tags: ['random', 'roadside'],
+  tags: ['random', 'roadside', 'bandit'],
 };
 
-export const WolfPack: CombatEncounter = {
-  id: 'wolf_pack',
-  name: 'Wolf Pack',
-  description: 'A pack of hungry desert wolves.',
-  enemies: [{ enemyId: 'desert_wolf', count: 3 }],
-  minLevel: 1,
+export const BanditCamp: CombatEncounter = {
+  id: 'bandit_camp',
+  name: 'Bandit Camp',
+  description: 'You found a bandit hideout.',
+  enemies: [
+    { enemyId: 'lone_bandit', count: 2 },
+    { enemyId: 'bandit_gunner', count: 2 },
+    { enemyId: 'bandit_brute', count: 1 },
+  ],
+  minLevel: 2,
   isBoss: false,
   canFlee: true,
   rewards: {
-    xp: 35,
-    gold: 0,
-    items: [{ itemId: 'wolf_pelt', quantity: 1, chance: 0.3 }],
+    xp: 100,
+    gold: 40,
+    items: [
+      { itemId: 'bandits_pouch', quantity: 2, chance: 0.8 },
+      { itemId: 'pistol_ammo', quantity: 12, chance: 0.9 },
+    ],
   },
-  tags: ['random', 'wildlife'],
+  tags: ['bandit', 'camp'],
 };
+
+export const BanditBoss: CombatEncounter = {
+  id: 'bandit_boss',
+  name: 'Bandit Leader Showdown',
+  description: 'The local bandit leader has come to deal with you personally.',
+  enemies: [
+    { enemyId: 'bandit_leader', count: 1 },
+    { enemyId: 'bandit_gunner', count: 2 },
+    { enemyId: 'bandit_brute', count: 1 },
+  ],
+  minLevel: 3,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 150,
+    gold: 60,
+    items: [
+      { itemId: 'bandits_pouch', quantity: 3, chance: 1.0 },
+      { itemId: 'health_potion', quantity: 2, chance: 0.8 },
+    ],
+  },
+  tags: ['bandit', 'mini_boss'],
+};
+
+// --- OUTLAW (COPPERHEAD) ENCOUNTERS ---
 
 export const CopperheadPatrol: CombatEncounter = {
   id: 'copperhead_patrol',
@@ -387,15 +234,62 @@ export const CopperheadPatrol: CombatEncounter = {
   isBoss: false,
   canFlee: true,
   rewards: {
-    xp: 100,
-    gold: 45,
+    xp: 120,
+    gold: 50,
     items: [
       { itemId: 'whiskey', quantity: 1, chance: 0.4 },
-      { itemId: 'revolver_ammo', quantity: 12, chance: 0.8 },
+      { itemId: 'pistol_ammo', quantity: 12, chance: 0.8 },
+      { itemId: 'outlaw_badge', quantity: 1, chance: 0.5 },
     ],
   },
-  tags: ['copperhead', 'patrol'],
+  tags: ['copperhead', 'patrol', 'outlaw'],
 };
+
+export const OutlawAmbush: CombatEncounter = {
+  id: 'outlaw_ambush',
+  name: 'Outlaw Ambush',
+  description: 'Copperhead outlaws have sprung a trap!',
+  enemies: [
+    { enemyId: 'outlaw_gunslinger', count: 2 },
+    { enemyId: 'outlaw_enforcer', count: 1 },
+  ],
+  minLevel: 4,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 150,
+    gold: 70,
+    items: [
+      { itemId: 'bandits_pouch', quantity: 2, chance: 0.9 },
+      { itemId: 'shotgun_ammo', quantity: 8, chance: 0.7 },
+    ],
+  },
+  tags: ['copperhead', 'ambush', 'outlaw'],
+};
+
+export const LieutenantShowdown: CombatEncounter = {
+  id: 'lieutenant_showdown',
+  name: "Red Eye's Lieutenant",
+  description: "One of Red Eye's trusted lieutenants blocks your path.",
+  enemies: [
+    { enemyId: 'red_eyes_lieutenant', count: 1 },
+    { enemyId: 'outlaw_gunslinger', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 200,
+    gold: 100,
+    items: [
+      { itemId: 'health_potion_greater', quantity: 1, chance: 0.8 },
+      { itemId: 'outlaw_badge', quantity: 2, chance: 1.0 },
+    ],
+  },
+  tags: ['copperhead', 'mini_boss', 'outlaw'],
+};
+
+// --- IVRC ENCOUNTERS ---
 
 export const IVRCCheckpoint: CombatEncounter = {
   id: 'ivrc_checkpoint',
@@ -406,12 +300,58 @@ export const IVRCCheckpoint: CombatEncounter = {
   isBoss: false,
   canFlee: true,
   rewards: {
-    xp: 80,
+    xp: 90,
     gold: 30,
     items: [{ itemId: 'ivrc_scrip', quantity: 15, chance: 0.6 }],
   },
   tags: ['ivrc', 'checkpoint'],
 };
+
+export const IVRCPatrol: CombatEncounter = {
+  id: 'ivrc_patrol',
+  name: 'IVRC Patrol',
+  description: 'A heavily armed company patrol.',
+  enemies: [
+    { enemyId: 'ivrc_guard', count: 2 },
+    { enemyId: 'ivrc_marksman', count: 1 },
+  ],
+  minLevel: 3,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 120,
+    gold: 40,
+    items: [
+      { itemId: 'rifle_rounds', quantity: 10, chance: 0.7 },
+      { itemId: 'ivrc_scrip', quantity: 25, chance: 0.8 },
+    ],
+  },
+  tags: ['ivrc', 'patrol'],
+};
+
+export const IVRCCaptainEncounter: CombatEncounter = {
+  id: 'ivrc_captain_encounter',
+  name: 'IVRC Captain',
+  description: 'An IVRC security captain with his elite guards.',
+  enemies: [
+    { enemyId: 'ivrc_captain', count: 1 },
+    { enemyId: 'ivrc_marksman', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 180,
+    gold: 60,
+    items: [
+      { itemId: 'ivrc_scrip', quantity: 50, chance: 1.0 },
+      { itemId: 'health_potion', quantity: 2, chance: 0.8 },
+    ],
+  },
+  tags: ['ivrc', 'mini_boss'],
+};
+
+// --- AUTOMATON ENCOUNTERS ---
 
 export const RemnantAwakening: CombatEncounter = {
   id: 'remnant_awakening',
@@ -425,14 +365,55 @@ export const RemnantAwakening: CombatEncounter = {
   isBoss: false,
   canFlee: true,
   rewards: {
-    xp: 120,
+    xp: 130,
     gold: 15,
     items: [
-      { itemId: 'scrap_metal', quantity: 3, chance: 0.8 },
+      { itemId: 'mechanical_parts', quantity: 3, chance: 0.8 },
       { itemId: 'oil_can', quantity: 1, chance: 0.5 },
     ],
   },
-  tags: ['remnant', 'old_works'],
+  tags: ['remnant', 'old_works', 'automaton'],
+};
+
+export const ClockworkSwarm: CombatEncounter = {
+  id: 'clockwork_swarm',
+  name: 'Clockwork Swarm',
+  description: 'A swarm of clockwork drones attacks!',
+  enemies: [{ enemyId: 'clockwork_drone', count: 4 }],
+  minLevel: 4,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 160,
+    gold: 20,
+    items: [
+      { itemId: 'mechanical_parts', quantity: 5, chance: 0.9 },
+      { itemId: 'copper_wire', quantity: 3, chance: 0.7 },
+    ],
+  },
+  tags: ['remnant', 'automaton'],
+};
+
+export const SteamGolemEncounter: CombatEncounter = {
+  id: 'steam_golem_encounter',
+  name: 'Steam Golem',
+  description: 'A massive steam-powered golem blocks the passage.',
+  enemies: [
+    { enemyId: 'steam_golem', count: 1 },
+    { enemyId: 'clockwork_drone', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 180,
+    gold: 30,
+    items: [
+      { itemId: 'steam_valve', quantity: 1, chance: 0.6 },
+      { itemId: 'mechanical_parts', quantity: 5, chance: 1.0 },
+    ],
+  },
+  tags: ['remnant', 'automaton', 'hard'],
 };
 
 export const JuggernautBoss: CombatEncounter = {
@@ -447,14 +428,90 @@ export const JuggernautBoss: CombatEncounter = {
   isBoss: true,
   canFlee: false,
   rewards: {
-    xp: 250,
+    xp: 300,
     gold: 50,
     items: [
       { itemId: 'automaton_core', quantity: 1, chance: 1.0 },
-      { itemId: 'scrap_metal', quantity: 5, chance: 1.0 },
+      { itemId: 'automaton_plating', quantity: 2, chance: 0.8 },
     ],
   },
-  tags: ['boss', 'remnant', 'old_works'],
+  tags: ['boss', 'remnant', 'old_works', 'automaton'],
+};
+
+// --- BOSS ENCOUNTERS ---
+
+export const BanditKingBattle: CombatEncounter = {
+  id: 'bandit_king_battle',
+  name: 'The Bandit King',
+  description: 'The ruthless Bandit King awaits in his throne room.',
+  enemies: [
+    { enemyId: 'bandit_king', count: 1 },
+    { enemyId: 'bandit_leader', count: 2 },
+    { enemyId: 'bandit_brute', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_bandit',
+  rewards: {
+    xp: 400,
+    gold: 150,
+    items: [
+      { itemId: 'revolver_fancy', quantity: 1, chance: 1.0 },
+      { itemId: 'health_potion_greater', quantity: 3, chance: 1.0 },
+      { itemId: 'gold_nugget', quantity: 2, chance: 0.8 },
+    ],
+  },
+  tags: ['boss', 'act1', 'bandit'],
+};
+
+export const SaboteurBattle: CombatEncounter = {
+  id: 'saboteur_battle',
+  name: 'The Saboteur',
+  description: 'The master of explosives has rigged the entire room.',
+  enemies: [
+    { enemyId: 'the_saboteur', count: 1 },
+    { enemyId: 'outlaw_gunslinger', count: 2 },
+    { enemyId: 'copperhead_dynamiter', count: 1 },
+  ],
+  minLevel: 7,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_saboteur',
+  rewards: {
+    xp: 500,
+    gold: 200,
+    items: [
+      { itemId: 'dynamite', quantity: 10, chance: 1.0 },
+      { itemId: 'quickdraw_holster', quantity: 1, chance: 0.7 },
+      { itemId: 'evidence_documents', quantity: 1, chance: 1.0 },
+    ],
+  },
+  tags: ['boss', 'act2', 'copperhead'],
+};
+
+export const IronTyrantBattle: CombatEncounter = {
+  id: 'iron_tyrant_battle',
+  name: 'The Iron Tyrant',
+  description: 'The ancient war machine awakens for the final battle.',
+  enemies: [
+    { enemyId: 'iron_tyrant', count: 1 },
+    { enemyId: 'steam_golem', count: 2 },
+  ],
+  minLevel: 10,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_final',
+  rewards: {
+    xp: 1000,
+    gold: 500,
+    items: [
+      { itemId: 'automaton_core', quantity: 1, chance: 1.0 },
+      { itemId: 'steam_plated_armor', quantity: 1, chance: 1.0 },
+      { itemId: 'steampunk_blade', quantity: 1, chance: 0.8 },
+    ],
+  },
+  tags: ['boss', 'final', 'remnant', 'automaton'],
 };
 
 // ============================================================================
@@ -462,12 +519,33 @@ export const JuggernautBoss: CombatEncounter = {
 // ============================================================================
 
 export const ALL_ENCOUNTERS: CombatEncounter[] = [
-  RoadsideBandits,
+  // Wildlife
+  CoyotePack,
+  SnakeNest,
   WolfPack,
+  MountainPredator,
+  GrizzlyAttack,
+  // Bandits
+  RoadsideBandits,
+  BanditCamp,
+  BanditBoss,
+  // Outlaws
   CopperheadPatrol,
+  OutlawAmbush,
+  LieutenantShowdown,
+  // IVRC
   IVRCCheckpoint,
+  IVRCPatrol,
+  IVRCCaptainEncounter,
+  // Automatons
   RemnantAwakening,
+  ClockworkSwarm,
+  SteamGolemEncounter,
   JuggernautBoss,
+  // Bosses
+  BanditKingBattle,
+  SaboteurBattle,
+  IronTyrantBattle,
 ];
 
 export const ENCOUNTERS_BY_ID: Record<string, CombatEncounter> = Object.fromEntries(
@@ -475,23 +553,11 @@ export const ENCOUNTERS_BY_ID: Record<string, CombatEncounter> = Object.fromEntr
 );
 
 // ============================================================================
-// UTILITY FUNCTIONS
+// ENCOUNTER UTILITY FUNCTIONS
 // ============================================================================
-
-export function getEnemyById(id: string): EnemyDefinition | undefined {
-  return ENEMIES_BY_ID[id];
-}
 
 export function getEncounterById(id: string): CombatEncounter | undefined {
   return ENCOUNTERS_BY_ID[id];
-}
-
-export function getEnemiesByFaction(faction: string): EnemyDefinition[] {
-  return ALL_ENEMIES.filter((e) => e.faction === faction);
-}
-
-export function getEnemiesByTag(tag: string): EnemyDefinition[] {
-  return ALL_ENEMIES.filter((e) => e.tags.includes(tag));
 }
 
 export function getEncountersByTag(tag: string): CombatEncounter[] {
@@ -511,4 +577,23 @@ export function getRandomEncounter(
   if (candidates.length === 0) return undefined;
 
   return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+export function getBossEncounters(): CombatEncounter[] {
+  return ALL_ENCOUNTERS.filter((e) => e.isBoss);
+}
+
+export function getEncountersByDifficulty(
+  difficulty: 'easy' | 'medium' | 'hard' | 'boss'
+): CombatEncounter[] {
+  switch (difficulty) {
+    case 'easy':
+      return ALL_ENCOUNTERS.filter((e) => e.minLevel <= 2 && !e.isBoss);
+    case 'medium':
+      return ALL_ENCOUNTERS.filter((e) => e.minLevel > 2 && e.minLevel <= 5 && !e.isBoss);
+    case 'hard':
+      return ALL_ENCOUNTERS.filter((e) => e.minLevel > 5 && !e.isBoss);
+    case 'boss':
+      return ALL_ENCOUNTERS.filter((e) => e.isBoss);
+  }
 }

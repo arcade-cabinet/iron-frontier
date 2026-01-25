@@ -98,34 +98,21 @@ const webDataAccess: DataAccess = {
 
   // Shops
   getShopById: (shopId: string) => getShopById(shopId),
-  // Simple price calculations using base value and reputation (DataAccess signature)
-  calculateBuyPrice: (baseValue: number, reputation: number) => {
-    // Buy price: base value + 10% markup, slight discount for high reputation
-    const reputationDiscount = Math.max(0, (reputation - 50) * 0.002); // 0-10% discount
-    return Math.round(baseValue * 1.1 * (1 - reputationDiscount));
-  },
-  calculateSellPrice: (baseValue: number, reputation: number) => {
-    // Sell price: 50% of base value, slight bonus for high reputation
-    const reputationBonus = Math.max(0, (reputation - 50) * 0.001); // 0-5% bonus
-    return Math.round(baseValue * 0.5 * (1 + reputationBonus));
-  },
+  calculateBuyPrice,
+  calculateSellPrice,
   canSellItemToShop,
 
   // Generation
-  initEncounterTemplates: () => initEncounterTemplates(ENCOUNTER_TEMPLATES),
+  initEncounterTemplates,
   generateRandomEncounter,
   shouldTriggerEncounter,
   ENCOUNTER_TEMPLATES,
 
-  // Procedural (wrapped to match async interface)
+  // Procedural
   ProceduralLocationManager: {
-    initialize: async (seed: number) => {
-      ProceduralLocationManager.initialize(seed);
-      return Promise.resolve();
-    },
-    generateLocationContent: async (location: any) => {
-      return Promise.resolve(ProceduralLocationManager.generateLocationContent(location));
-    },
+    initialize: (seed: number) => ProceduralLocationManager.initialize(seed),
+    generateLocationContent: (location: any) =>
+      ProceduralLocationManager.generateLocationContent(location),
     hasGeneratedContent: (locationId: string) =>
       ProceduralLocationManager.hasGeneratedContent(locationId),
   },

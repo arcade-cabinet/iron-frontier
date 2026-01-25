@@ -9,7 +9,11 @@
     ".": "./src/index.ts",
     "./web": "./src/web/index.ts",
     "./native": "./src/native/index.ts",
-    "./tokens": "./src/tokens/index.ts"
+    "./tokens": "./src/tokens/index.ts",
+    "./combat": "./src/combat/index.ts",
+    "./dialogue": "./src/dialogue/index.ts",
+    "./hud": "./src/hud/index.ts",
+    "./menus": "./src/menus/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

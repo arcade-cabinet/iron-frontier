@@ -263,3 +263,270 @@ export {
   validateDialogueTreeIntegrity,
   validateNPCDefinition,
 } from './schemas/npc';
+
+// ============================================================================
+// ENEMIES
+// ============================================================================
+
+export {
+  // Wildlife
+  Coyote,
+  Rattlesnake,
+  Scorpion,
+  Buzzard,
+  Wolf,
+  MountainLion,
+  Bear,
+  GiantScorpion,
+  DesertWolf,
+  // Bandits
+  LoneBandit,
+  BanditGunner,
+  BanditBrute,
+  BanditLeader,
+  BanditThug,
+  BanditGunman,
+  BanditSharpshooter,
+  // Outlaws
+  OutlawGunslinger,
+  OutlawEnforcer,
+  RedEyesLieutenant,
+  CopperheadEnforcer,
+  CopperheadGunslinger,
+  CopperheadDynamiter,
+  // IVRC
+  IVRCGuard,
+  IVRCMarksman,
+  IVRCCaptain,
+  // Automatons
+  ClockworkDrone,
+  SteamGolem,
+  CorruptedProspector,
+  MechanicalHorror,
+  RemnantSentry,
+  RemnantScout,
+  RemnantJuggernaut,
+  // Bosses
+  BanditKing,
+  TheSaboteur,
+  IronTyrant,
+  // Registry
+  ALL_ENEMIES,
+  ENEMIES_BY_ID,
+  // Utility functions
+  getEnemyById,
+  getEnemiesByFaction,
+  getEnemiesByTag,
+  getEnemiesByType,
+  getEnemiesByDifficulty,
+  getRandomEnemy,
+  // Encounters
+  CoyotePack,
+  SnakeNest,
+  WolfPack,
+  MountainPredator,
+  GrizzlyAttack,
+  RoadsideBandits,
+  BanditCamp as BanditCampEncounter,
+  BanditBoss,
+  CopperheadPatrol,
+  OutlawAmbush,
+  LieutenantShowdown,
+  IVRCCheckpoint,
+  IVRCPatrol,
+  IVRCCaptainEncounter,
+  RemnantAwakening,
+  ClockworkSwarm,
+  SteamGolemEncounter,
+  JuggernautBoss,
+  BanditKingBattle,
+  SaboteurBattle,
+  IronTyrantBattle,
+  ALL_ENCOUNTERS,
+  ENCOUNTERS_BY_ID,
+  getEncounterById,
+  getEncountersByTag,
+  getRandomEncounter,
+  getBossEncounters,
+  getEncountersByDifficulty,
+} from './enemies/index';
+
+// ============================================================================
+// ITEMS (Extended)
+// ============================================================================
+
+export {
+  // Healing Items
+  HEALING_ITEMS,
+  // Food Items
+  FOOD_ITEMS,
+  // Weapons
+  MELEE_WEAPONS,
+  RANGED_WEAPONS,
+  // Armor
+  BODY_ARMOR,
+  // Key Items
+  KEY_ITEMS as NEW_KEY_ITEMS,
+  // Loot
+  ANIMAL_LOOT,
+  BANDIT_LOOT,
+  MECHANICAL_LOOT,
+  // Ammunition
+  AMMUNITION,
+  // Registry
+  ALL_NEW_ITEMS,
+  NEW_ITEMS_BY_ID,
+  // Utility functions
+  getNewItemById,
+  getNewItemsByType,
+  getNewItemsByTag,
+  getNewItemsByRarity,
+  getHealingItems,
+  getWeaponsByType,
+  getArmorBySlot,
+  getLootItems,
+} from './items/items';
+
+// ============================================================================
+// LOOT TABLES
+// ============================================================================
+
+export {
+  // Rarity system
+  LOOT_RARITY_WEIGHTS,
+  type LootRarity,
+  // Wildlife loot tables
+  WildlifeCommonLoot,
+  WildlifeVenomLoot,
+  WildlifePeltsLoot,
+  WildlifeRareLoot,
+  // Bandit loot tables
+  BanditCommonLoot,
+  BanditLeaderLoot,
+  // Outlaw loot tables
+  OutlawCommonLoot,
+  OutlawLeaderLoot,
+  // IVRC loot tables
+  IVRCCommonLoot,
+  IVRCLeaderLoot,
+  // Automaton loot tables
+  AutomatonScrapLoot,
+  AutomatonRareLoot,
+  // Corrupted loot tables
+  CorruptedHumanLoot,
+  // Boss loot tables
+  BossBanditKingLoot,
+  BossSaboteurLoot,
+  BossFinalLoot,
+  // Container loot tables
+  ChestCommonLoot,
+  ChestUncommonLoot,
+  ChestRareLoot,
+  SafeLoot,
+  // Money drops
+  MONEY_DROPS,
+  type MoneyDrop,
+  // Registry
+  ALL_LOOT_TABLES,
+  LOOT_TABLES_BY_ID,
+  // Utility functions
+  getLootTableById,
+  rollLootTable,
+  rollMoneyDrop,
+  getLootTableForEnemy,
+} from './lootTables';
+
+// ============================================================================
+// AUTHORED WORLD DATA (Towns, Routes, World)
+// ============================================================================
+
+export {
+  // Town schemas
+  TownSchema,
+  TownSizeSchema,
+  TownThemeSchema,
+  TownBuildingTypeSchema,
+  TownPositionSchema,
+  TownShopSchema,
+  TownBuildingSchema,
+  TownUnlockConditionSchema,
+  type Town,
+  type TownSize,
+  type TownTheme,
+  type TownBuildingType,
+  type TownPosition,
+  type TownShop,
+  type TownBuilding,
+  type TownUnlockCondition,
+  // Town utilities
+  validateTown,
+  safeParseTown,
+  validateTownIntegrity,
+  isTownUnlocked,
+  getShopsByType,
+  getBuildingsByType,
+  calculateTownDistance,
+  TOWN_SCHEMA_VERSION,
+  // Route schemas
+  RouteSchema,
+  RouteTerrainSchema,
+  RouteConditionSchema,
+  RouteEncounterSchema,
+  RouteEventSchema,
+  RouteLandmarkSchema,
+  EncounterTriggerSchema,
+  EventTriggerTypeSchema,
+  LandmarkTypeSchema,
+  type Route,
+  type RouteTerrain,
+  type RouteCondition,
+  type RouteEncounter,
+  type RouteEvent,
+  type RouteLandmark,
+  type EncounterTrigger,
+  type EventTriggerType,
+  type LandmarkType,
+  // Route utilities
+  validateRoute,
+  safeParseRoute,
+  validateRouteIntegrity,
+  selectRandomEncounter,
+  getLandmarksInRange,
+  calculateTravelTime,
+  isRoutePassable,
+  ROUTE_SCHEMA_VERSION,
+  // World schemas
+  WorldDefinitionSchema,
+  WorldConfigSchema,
+  TimeConfigSchema,
+  DifficultyConfigSchema,
+  DifficultyPresetSchema,
+  SurvivalConfigSchema,
+  FactionSchema,
+  StartingConditionsSchema,
+  type WorldDefinition,
+  type WorldConfig,
+  type TimeConfig,
+  type DifficultyConfig,
+  type DifficultyPreset,
+  type SurvivalConfig,
+  type Faction,
+  type StartingConditions,
+  // World utilities
+  validateWorld as validateAuthoredWorld,
+  safeParseWorld,
+  validateWorldIntegrity,
+  getTownById,
+  getRouteById,
+  getFactionById,
+  getRoutesForTown,
+  getConnectedTowns,
+  findRoute,
+  calculateRouteTravelTime,
+  getTimeOfDay,
+  getDifficultyModifiers,
+  WORLD_SCHEMA_VERSION,
+  // Combined validation
+  validateWorldComplete,
+  DATA_WORLD_SCHEMA_VERSION,
+} from './world/index';

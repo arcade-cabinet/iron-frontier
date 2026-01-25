@@ -2,6 +2,103 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
+// Mock Tone.js for testing - must be before any imports that use it
+vi.mock('tone', () => {
+  const createMockVolume = () => ({
+    value: 0,
+    rampTo: vi.fn(),
+  });
+
+  // Create mock synth class
+  class MockSynth {
+    volume = createMockVolume();
+    toDestination = vi.fn().mockReturnThis();
+    connect = vi.fn().mockReturnThis();
+    disconnect = vi.fn().mockReturnThis();
+    triggerAttackRelease = vi.fn();
+    triggerAttack = vi.fn();
+    triggerRelease = vi.fn();
+    dispose = vi.fn();
+    set = vi.fn();
+  }
+
+  // Create mock volume class
+  class MockVolume {
+    volume = createMockVolume();
+    toDestination = vi.fn().mockReturnThis();
+    connect = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+    constructor(_db?: number) {}
+  }
+
+  // Create mock noise class
+  class MockNoise {
+    volume = createMockVolume();
+    start = vi.fn().mockReturnThis();
+    stop = vi.fn().mockReturnThis();
+    connect = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+  }
+
+  // Create mock loop class
+  class MockLoop {
+    start = vi.fn().mockReturnThis();
+    stop = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+    constructor(_callback?: (time: number) => void, _interval?: string) {}
+  }
+
+  // Create mock filter class
+  class MockAutoFilter {
+    toDestination = vi.fn().mockReturnThis();
+    start = vi.fn().mockReturnThis();
+    stop = vi.fn().mockReturnThis();
+    connect = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+  }
+
+  const MockTransport = {
+    start: vi.fn(),
+    stop: vi.fn(),
+    pause: vi.fn(),
+    bpm: { value: 120 },
+    state: 'stopped',
+  };
+
+  const MockDestination = {
+    volume: createMockVolume(),
+  };
+
+  return {
+    start: vi.fn().mockResolvedValue(undefined),
+    context: { state: 'running' },
+    Transport: MockTransport,
+    Destination: MockDestination,
+    gainToDb: vi.fn((val) => val * 60 - 60),
+    Frequency: vi.fn().mockReturnValue({
+      toFrequency: vi.fn().mockReturnValue(440),
+    }),
+    now: vi.fn().mockReturnValue(0),
+    // Synth classes
+    Synth: MockSynth,
+    PolySynth: MockSynth,
+    PluckSynth: MockSynth,
+    MetalSynth: MockSynth,
+    MembraneSynth: MockSynth,
+    NoiseSynth: MockSynth,
+    AMSynth: MockSynth,
+    FMSynth: MockSynth,
+    // Effects
+    Volume: MockVolume,
+    Noise: MockNoise,
+    AutoFilter: MockAutoFilter,
+    Loop: MockLoop,
+    Filter: MockAutoFilter,
+    Reverb: MockAutoFilter,
+    Delay: MockAutoFilter,
+  };
+});
+
 // Declare global for Node.js environment in tests
 declare const global: typeof globalThis;
 
