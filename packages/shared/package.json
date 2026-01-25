@@ -32,6 +32,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@iron-frontier/assets": "workspace:*",
     "alea": "^1.0.1",
     "clsx": "^2.1.1",
     "miniplex": "^2.0.0",

@@ -348,6 +348,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@iron-frontier/assets':
+        specifier: workspace:*
+        version: link:../assets
       alea:
         specifier: ^1.0.1
         version: 1.0.1
