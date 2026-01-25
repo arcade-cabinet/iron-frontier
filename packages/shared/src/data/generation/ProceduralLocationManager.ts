@@ -69,6 +69,9 @@ export interface ProceduralLocationContent {
 
   /** Generated quests for this location */
   quests: GeneratedQuest[];
+
+  /** Structure states (broken/locked) keyed by hex coordinate key */
+  structureStates: Map<string, 'functional' | 'broken' | 'locked'>;
 }
 
 /**
@@ -241,6 +244,12 @@ class ProceduralLocationManagerClass {
     // Generate quests
     const quests = this.generateLocationQuests(rng, npcs, context);
 
+    // Generate structure states
+    const structureStates = new Map<string, 'functional' | 'broken' | 'locked'>();
+    // We don't know exact building locations here without running HexMapGenerator, 
+    // so we'll lazily generate them when requested or generate a "broken map" based on noise.
+    // For now, empty map, populated on demand.
+
     const content: ProceduralLocationContent = {
       locationId,
       seed: locationSeed,
@@ -250,6 +259,7 @@ class ProceduralLocationManagerClass {
       dialogueTrees,
       shopInventories,
       quests,
+      structureStates,
     };
 
     // Cache the content
@@ -323,6 +333,38 @@ class ProceduralLocationManagerClass {
       return cached.dialogueTrees.get(npcId) || null;
     }
     return null;
+  }
+
+  /**
+   * Get structure state at a coordinate (generates if needed)
+   */
+  getOrGenerateStructureState(locationId: string, hexKey: string): 'functional' | 'broken' | 'locked' {
+    // Ensure content exists
+    let content = this.cache.get(locationId);
+    if (!content) {
+        // We can't generate full content without a resolved location object usually,
+        // but for structure state we just need the seed.
+        // If we are here, something is out of order or we need to support lazy init without full resolve.
+        // For now, return functional if not init.
+        return 'functional';
+    }
+
+    if (content.structureStates.has(hexKey)) {
+        return content.structureStates.get(hexKey)!;
+    }
+
+    // Deterministically decide state
+    const stateSeed = combineSeeds(content.seed, hashString(hexKey));
+    const rng = new SeededRandom(stateSeed);
+    
+    // 20% chance of being broken/locked
+    let state: 'functional' | 'broken' | 'locked' = 'functional';
+    if (rng.float(0, 1) < 0.2) {
+        state = rng.bool() ? 'broken' : 'locked';
+    }
+
+    content.structureStates.set(hexKey, state);
+    return state;
   }
 
   /**

@@ -957,10 +957,11 @@ export function createGameStore({
           });
 
           if (success) {
-            state.addNotification('info', 'Puzzle Solved!');
-            // TODO: Trigger actual success callback (e.g. unlock door)
+            state.addNotification('info', 'Systems restored!');
+            state.gainXP(50);
+            state.addGold(10); // Payment for services
           } else {
-            state.addNotification('warning', 'Puzzle Failed');
+            state.addNotification('warning', 'Repair failed.');
           }
         },
 

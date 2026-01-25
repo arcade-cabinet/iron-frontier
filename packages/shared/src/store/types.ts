@@ -233,6 +233,7 @@ export interface Structure {
   footprint: { x: number; z: number }[];
   condition: number;
   ownerNpcId?: string;
+  status?: 'functional' | 'broken' | 'locked';
 }
 
 // ============================================================================

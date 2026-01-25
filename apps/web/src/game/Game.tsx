@@ -6,12 +6,14 @@ import {
   getWorldItemsForLocation,
 } from '@iron-frontier/shared/data/items/worldItems';
 import { getNPCsByLocation } from '@iron-frontier/shared/data/npcs';
+import { ProceduralLocationManager } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
 // World/location data
 import { getLocationData } from '@iron-frontier/shared/data/worlds';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { HexSceneManager, type HexWorldPosition } from '../engine/hex';
+import { HexBuildingType, hexKey } from '../engine/hex/HexTypes';
 import { TitleScreen } from './screens/TitleScreen';
-import { useGameStore } from './store/gameStore';
+import { useGameStore } from './store/webGameStore';
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
@@ -52,6 +54,8 @@ function GameCanvas() {
     talkToNPC,
     collectWorldItem,
     collectedItemIds,
+    startPuzzle,
+    addNotification,
   } = useGameStore();
 
   // Initialize world on first play
@@ -124,6 +128,23 @@ function GameCanvas() {
 
         // Handle hex clicks - check for NPCs and items first, then movement
         manager.setHexClickHandler((hexCoord, tile) => {
+          // Check for buildings first (Puzzle Trigger)
+          if (tile && tile.building && tile.building !== HexBuildingType.None) {
+             const key = hexKey(hexCoord);
+             const status = ProceduralLocationManager.getOrGenerateStructureState(currentLocationId, key);
+             
+             console.log(`[GameCanvas] Clicked building: ${tile.building} (Status: ${status})`);
+
+             if (status === 'broken' || status === 'locked') {
+                 addNotification('info', `This ${tile.building} is ${status}. Starting bypass...`);
+                 startPuzzle(5, 5); // 5x5 grid
+                 return;
+             } else {
+                 addNotification('info', `This ${tile.building} is functioning normally.`);
+                 // Proceed to move there (or maybe enter?)
+             }
+          }
+
           // Check if there's an NPC at this hex in the current location
           if (currentLocationId) {
             const npcsInLocation = getNPCsByLocation(currentLocationId);
