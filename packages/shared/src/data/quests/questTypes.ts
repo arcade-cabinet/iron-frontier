@@ -71,6 +71,10 @@ export const LOCATION_MARKERS = {
   IG_DOC_OFFICE: 'iron_gulch_doc_office',
   IG_WORKSHOP: 'iron_gulch_workshop',
   IG_MINE_DEEP_SECTION: 'iron_gulch_mine_deep',
+  IG_POKER_ROOM: 'iron_gulch_poker_room',
+  IG_COGSWORTH_LAB: 'iron_gulch_cogsworth_lab',
+  IG_WIDOWS_COTTAGE: 'iron_gulch_widows_cottage',
+  IG_COLLAPSED_SHAFT: 'iron_gulch_collapsed_shaft',
 
   // Mesa Point
   MP_BLACK_MARKET: 'mesa_point_black_market',
@@ -85,6 +89,8 @@ export const LOCATION_MARKERS = {
   // Salvation
   SV_CHURCH: 'salvation_church',
   SV_FINAL_DUNGEON: 'salvation_underground',
+  SV_PADRE_QUARTERS: 'salvation_padre_quarters',
+  SV_IVRC_CAMP: 'salvation_ivrc_camp',
 } as const;
 
 // ============================================================================
@@ -112,11 +118,17 @@ export const NPC_IDS = {
   MINER_SILAS: 'npc_miner_silas', // Red herring suspect
   SABOTEUR_VANCE: 'npc_saboteur_vance', // True saboteur
   INFORMANT_RAT: 'npc_informant_rat',
+  LUCKY_LOU: 'npc_lucky_lou', // Gambler with stolen winnings
+  CARDSHARK_CHARLIE: 'npc_cardshark_charlie', // Cheating card player
+  PROFESSOR_COGSWORTH: 'npc_professor_cogsworth', // Inventor needing parts
+  WIDOW_MARGARET: 'npc_widow_margaret', // Lost her locket
+  MINE_FOREMAN_JENKINS: 'npc_mine_foreman_jenkins', // Mine shaft rescue
 
   // Mesa Point NPCs
   REYNA_RED_EYE: 'npc_reyna_red_eye', // Gang leader
   WHISPER: 'npc_whisper', // Informant
   BOUNTY_HUNTER_COLE: 'npc_bounty_hunter_cole',
+  BLACK_BELLE: 'npc_black_belle', // Bounty hunter partner
 
   // Coldwater NPCs
   RANCHER_MCGRAW: 'npc_rancher_mcgraw',
@@ -126,6 +138,8 @@ export const NPC_IDS = {
   // Salvation NPCs
   PREACHER_SOLOMON: 'npc_preacher_solomon',
   SISTER_MERCY: 'npc_sister_mercy',
+  FATHER_MIGUEL: 'npc_father_miguel', // Preacher with a secret past
+  IVRC_AGENT_SHAW: 'npc_ivrc_agent_shaw', // Blackmailing the preacher
 } as const;
 
 // ============================================================================
@@ -196,6 +210,16 @@ export const QUEST_FLAGS = {
   GOOD_ENDING: 'ending_good',
   NEUTRAL_ENDING: 'ending_neutral',
   DARK_ENDING: 'ending_dark',
+
+  // Side quest flags
+  GAMBLERS_DEBT_COMPLETE: 'gamblers_debt_complete',
+  COGSWORTH_GADGET_OBTAINED: 'cogsworth_gadget_obtained',
+  DOYLE_CAPTURED_ALIVE: 'doyle_captured_alive',
+  DOYLE_KILLED: 'doyle_killed',
+  LOCKET_TRUTH_REVEALED: 'locket_truth_revealed',
+  MINERS_RESCUED: 'miners_rescued',
+  MIGUEL_PROTECTED: 'miguel_protected',
+  MIGUEL_EXPOSED: 'miguel_exposed',
 } as const;
 
 // ============================================================================
@@ -226,6 +250,20 @@ export const QUEST_ITEM_IDS = {
   MEDICAL_SUPPLIES: 'item_medical_supplies',
   BOUNTY_POSTER: 'item_bounty_poster',
   WHISPERS_INFO: 'item_whispers_info',
+  STOLEN_WINNINGS: 'item_stolen_winnings',
+  CHEATING_EVIDENCE: 'item_cheating_evidence',
+  STEAM_VALVE: 'item_steam_valve',
+  PRESSURE_GAUGE: 'item_pressure_gauge',
+  COPPER_COIL: 'item_copper_coil',
+  COGSWORTH_GADGET: 'item_cogsworth_gadget',
+  BELLE_BOUNTY_POSTER: 'item_belle_bounty_poster',
+  OUTLAW_DOYLE: 'item_outlaw_doyle',
+  WIDOWS_LOCKET: 'item_widows_locket',
+  FAMILY_LETTER: 'item_family_letter',
+  MINE_SHAFT_KEY: 'item_mine_shaft_key',
+  RESCUE_SUPPLIES: 'item_rescue_supplies',
+  MIGUELS_CONFESSION: 'item_miguels_confession',
+  BLACKMAIL_LETTER: 'item_blackmail_letter',
 } as const;
 
 // ============================================================================
@@ -259,6 +297,9 @@ export const QUEST_ENEMY_IDS = {
   // Side quest enemies
   BANDIT: 'enemy_bandit',
   BAR_BRAWLER: 'enemy_bar_brawler',
+  CARDSHARK_THUG: 'enemy_cardshark_thug',
+  NOTORIOUS_OUTLAW_DOYLE: 'enemy_outlaw_doyle',
+  IVRC_THUG: 'enemy_ivrc_thug',
 } as const;
 
 // ============================================================================

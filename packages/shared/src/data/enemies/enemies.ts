@@ -429,8 +429,344 @@ export const MechanicalHorror: EnemyDefinition = {
 };
 
 // ============================================================================
+// ELITE VARIANTS
+// ============================================================================
+
+/**
+ * IVRC Elite Captain - Elite version of IVRC Guard
+ * Found: IVRC headquarters, high-security areas, escorting VIPs
+ * AI: Defensive, uses cover, calls for reinforcements, buffs nearby guards
+ */
+export const IVRCEliteCaptain: EnemyDefinition = {
+  id: 'ivrc_elite_captain',
+  name: 'IVRC Elite Captain',
+  type: 'gunslinger',
+  faction: 'ivrc_guards',
+  maxHealth: 90,
+  actionPoints: 6,
+  baseDamage: 20,
+  armor: 8,
+  accuracyMod: 18,
+  evasion: 14,
+  weaponId: 'navy_revolver',
+  xpReward: 100,
+  goldReward: 50,
+  lootTableId: 'ivrc_elite',
+  behavior: 'defensive',
+  description:
+    'A decorated IVRC security captain with elite training. Commands guards and carries company-issued gear. Ability: Commanding Presence (nearby IVRC units deal +25% damage).',
+  spriteId: 'ivrc_elite_captain',
+  tags: ['ranged', 'rare', 'ivrc', 'elite', 'leader', 'buffs'],
+};
+
+/**
+ * Copperhead Viper - Elite gang member
+ * Found: Copperhead hideouts, assassination missions, VIP protection
+ * AI: Aggressive, dual-wields, applies poison on attacks
+ */
+export const CopperheadViper: EnemyDefinition = {
+  id: 'copperhead_viper',
+  name: 'Copperhead Viper',
+  type: 'gunslinger',
+  faction: 'copperhead',
+  maxHealth: 55,
+  actionPoints: 7,
+  baseDamage: 16,
+  armor: 4,
+  accuracyMod: 20,
+  evasion: 18,
+  weaponId: 'dual_revolvers',
+  xpReward: 85,
+  goldReward: 40,
+  lootTableId: 'outlaw_elite',
+  behavior: 'aggressive',
+  description:
+    'An elite Copperhead assassin who dual-wields poisoned revolvers. Strikes fast and vanishes. Ability: Venom Rounds (attacks apply poison DoT for 3 turns).',
+  spriteId: 'copperhead_viper',
+  tags: ['ranged', 'rare', 'copperhead', 'elite', 'fast', 'poison', 'dual_wield'],
+};
+
+/**
+ * Armored Prospector - Elite bandit with mining equipment
+ * Found: Abandoned mines, claim disputes, bandit strongholds
+ * AI: Aggressive tank, charges into melee, high damage absorption
+ */
+export const ArmoredProspector: EnemyDefinition = {
+  id: 'armored_prospector',
+  name: 'Armored Prospector',
+  type: 'brute',
+  faction: 'raiders',
+  maxHealth: 85,
+  actionPoints: 3,
+  baseDamage: 22,
+  armor: 14,
+  accuracyMod: -5,
+  evasion: 4,
+  weaponId: 'reinforced_pickaxe',
+  xpReward: 70,
+  goldReward: 35,
+  lootTableId: 'bandit_elite',
+  behavior: 'aggressive',
+  description:
+    'A bandit who has fashioned mining equipment into makeshift armor. Slow but nearly impenetrable. Ability: Ore Plating (first hit each turn deals 50% reduced damage).',
+  spriteId: 'armored_prospector',
+  tags: ['melee', 'rare', 'elite', 'tank', 'armored', 'slow'],
+};
+
+/**
+ * Freeminer Defender - Elite Freeminer fighter (hostile path)
+ * Found: Freeminer camps (if player opposed them), defensive positions
+ * AI: Defensive, uses terrain, protects allies
+ */
+export const FreeminerDefender: EnemyDefinition = {
+  id: 'freeminer_defender',
+  name: 'Freeminer Defender',
+  type: 'brute',
+  faction: 'raiders', // Uses raiders since no freeminer faction
+  maxHealth: 75,
+  actionPoints: 5,
+  baseDamage: 18,
+  armor: 10,
+  accuracyMod: 5,
+  evasion: 8,
+  weaponId: 'war_pickaxe',
+  xpReward: 80,
+  goldReward: 30,
+  lootTableId: 'freeminer_elite',
+  behavior: 'defensive',
+  description:
+    'A hardened Freeminer warrior fighting for their claim. Expert with a pickaxe and fiercely protective of allies. Ability: Stand Your Ground (reduces damage to nearby allies by 30%).',
+  spriteId: 'freeminer_defender',
+  tags: ['melee', 'rare', 'elite', 'tank', 'freeminer', 'protector'],
+};
+
+/**
+ * Steam Automaton - Elite mechanical enemy
+ * Found: Old Works, IVRC facilities, ancient ruins
+ * AI: Ranged preference, self-repairs when damaged, methodical
+ */
+export const SteamAutomaton: EnemyDefinition = {
+  id: 'steam_automaton',
+  name: 'Steam Automaton',
+  type: 'automaton',
+  faction: 'remnant',
+  maxHealth: 80,
+  actionPoints: 4,
+  baseDamage: 20,
+  armor: 12,
+  accuracyMod: 10,
+  evasion: 6,
+  xpReward: 90,
+  goldReward: 20,
+  lootTableId: 'automaton_elite',
+  behavior: 'ranged',
+  description:
+    'An advanced steam-powered automaton with self-repair protocols. Fires pressurized steam at range. Ability: Self-Repair (heals 15 HP at end of turn if not attacked).',
+  spriteId: 'steam_automaton',
+  tags: ['ranged', 'rare', 'automaton', 'elite', 'armored', 'self_heal'],
+};
+
+/**
+ * Canyon Stalker - Elite predator
+ * Found: Canyons, wilderness, night encounters
+ * AI: Ambush tactics, pack coordination, hits hard from stealth
+ */
+export const CanyonStalker: EnemyDefinition = {
+  id: 'canyon_stalker',
+  name: 'Canyon Stalker',
+  type: 'animal',
+  faction: 'wildlife',
+  maxHealth: 60,
+  actionPoints: 6,
+  baseDamage: 24,
+  armor: 5,
+  accuracyMod: 15,
+  evasion: 20,
+  xpReward: 65,
+  goldReward: 0,
+  lootTableId: 'wildlife_rare',
+  behavior: 'aggressive',
+  description:
+    'A terrifying apex predator of the canyon system. Coordinates with pack members for devastating ambushes. Ability: Pack Tactics (+50% damage when other stalkers are present), Ambush (+30% damage on first attack).',
+  spriteId: 'canyon_stalker',
+  tags: ['melee', 'rare', 'animal', 'elite', 'fast', 'pack', 'ambush'],
+};
+
+// ============================================================================
 // BOSSES
 // ============================================================================
+
+/**
+ * CORNELIUS THORNE - IVRC Director (Final Boss Potential)
+ * Found: IVRC Headquarters, final confrontation
+ * AI: Stays protected, summons guards, uses powerful single-target abilities
+ *
+ * Abilities:
+ * - Executive Order: Buffs all IVRC guards, increasing damage and accuracy
+ * - Iron Grip: Stuns a target for 1 turn, preventing action
+ * - Corporate Might: Devastating single-target attack with bonus damage
+ *
+ * Encounter Context: Final boss of IVRC storyline. Found in his office at
+ * IVRC HQ, protected by elite guards. Multiple phases as he calls reinforcements.
+ */
+export const CorneliusThorne: EnemyDefinition = {
+  id: 'cornelius_thorne',
+  name: 'Cornelius Thorne',
+  type: 'gunslinger',
+  faction: 'ivrc_guards',
+  maxHealth: 200,
+  actionPoints: 7,
+  baseDamage: 28,
+  armor: 12,
+  accuracyMod: 20,
+  evasion: 15,
+  weaponId: 'executive_revolver',
+  xpReward: 400,
+  goldReward: 300,
+  lootTableId: 'boss_thorne',
+  behavior: 'defensive',
+  description:
+    'Director of the Iron Valley Railroad Company. A ruthless businessman who will stop at nothing to maintain his grip on the frontier. Commands absolute loyalty from his guards. ABILITIES: Executive Order (buff guards), Iron Grip (stun), Corporate Might (heavy damage).',
+  spriteId: 'cornelius_thorne',
+  tags: ['ranged', 'legendary', 'human', 'boss', 'ivrc', 'final_boss', 'summons'],
+};
+
+/**
+ * THE RATTLESNAKE KING - Giant Mutated Rattlesnake
+ * Found: Deep canyons, Snake's Hollow, ancient nesting grounds
+ * AI: Aggressive, area attacks, applies poison liberally
+ *
+ * Abilities:
+ * - Venomous Strike: Powerful bite that applies stacking poison DoT
+ * - Coil Crush: Constricts target, disabling them for 1 turn and dealing damage
+ * - Rattling Fear: Intimidating rattle that debuffs entire party (reduced accuracy)
+ *
+ * Encounter Context: Optional boss in the canyon region. Guards a valuable
+ * treasure hoard. Can be bypassed with enough Snake Venom or Reptile Lore.
+ */
+export const RattlesnakeKing: EnemyDefinition = {
+  id: 'rattlesnake_king',
+  name: 'The Rattlesnake King',
+  type: 'animal',
+  faction: 'wildlife',
+  maxHealth: 180,
+  actionPoints: 5,
+  baseDamage: 32,
+  armor: 10,
+  accuracyMod: 15,
+  evasion: 12,
+  xpReward: 350,
+  goldReward: 0,
+  lootTableId: 'boss_rattlesnake_king',
+  behavior: 'aggressive',
+  description:
+    'A monstrous rattlesnake of impossible size, mutated by exposure to strange minerals in the deep canyons. Its venom can kill a horse in seconds. ABILITIES: Venomous Strike (poison DoT), Coil Crush (disable), Rattling Fear (party debuff).',
+  spriteId: 'rattlesnake_king',
+  tags: ['melee', 'legendary', 'animal', 'boss', 'poison', 'aoe', 'debuff'],
+};
+
+/**
+ * IRON GOLEM - IVRC Steam-Powered Enforcer
+ * Found: IVRC industrial facilities, Thorne's inner sanctum, prototype lab
+ * AI: Aggressive tank, uses AoE, reflects damage when overheated
+ *
+ * Abilities:
+ * - Steam Blast: Cone AoE attack that damages all targets in front
+ * - Iron Fist: Massive melee strike that knocks target back
+ * - Overheat: Enters overheated state, reflecting 50% damage for 2 turns
+ *
+ * Encounter Context: IVRC's ultimate weapon, a steam-powered war machine.
+ * Found protecting critical IVRC assets or as Thorne's last line of defense.
+ */
+export const IronGolem: EnemyDefinition = {
+  id: 'iron_golem',
+  name: 'Iron Golem',
+  type: 'automaton',
+  faction: 'ivrc_guards',
+  maxHealth: 220,
+  actionPoints: 4,
+  baseDamage: 35,
+  armor: 18,
+  accuracyMod: 5,
+  evasion: 3,
+  xpReward: 380,
+  goldReward: 100,
+  lootTableId: 'boss_iron_golem',
+  behavior: 'aggressive',
+  description:
+    'A massive steam-powered enforcer built by IVRC engineers. Belches smoke and steam as it lumbers toward its targets. Nearly impervious to small arms fire. ABILITIES: Steam Blast (AoE), Iron Fist (knockback), Overheat (damage reflection).',
+  spriteId: 'iron_golem',
+  tags: ['melee', 'legendary', 'automaton', 'boss', 'ivrc', 'tank', 'aoe', 'knockback'],
+};
+
+/**
+ * GHOST OF THE GALLOWS - Spectral Outlaw
+ * Found: Old Gallows Hill, abandoned execution site, haunted areas
+ * AI: Phases in/out, uses pull attacks, silences casters
+ *
+ * Abilities:
+ * - Phase Shift: Becomes incorporeal, immune to physical damage for 1 turn
+ * - Hangman's Rope: Spectral noose pulls target adjacent and deals damage
+ * - Wail of the Damned: Horrifying scream that silences all targets for 1 turn
+ *
+ * Encounter Context: The restless spirit of an outlaw executed decades ago.
+ * Appears during certain story missions or can be sought out for unique loot.
+ */
+export const GhostOfTheGallows: EnemyDefinition = {
+  id: 'ghost_of_the_gallows',
+  name: 'Ghost of the Gallows',
+  type: 'bandit', // Spectral outlaw, closest type
+  faction: 'remnant', // Uses remnant as "otherworldly" faction
+  maxHealth: 140,
+  actionPoints: 6,
+  baseDamage: 26,
+  armor: 5,
+  accuracyMod: 18,
+  evasion: 25,
+  xpReward: 320,
+  goldReward: 50,
+  lootTableId: 'boss_ghost',
+  behavior: 'aggressive',
+  description:
+    'The vengeful spirit of a notorious outlaw, hanged at Gallows Hill a generation ago. Immune to conventional weapons during its phased state. ABILITIES: Phase Shift (damage immunity), Hangman\'s Rope (pull + damage), Wail (silence).',
+  spriteId: 'ghost_of_the_gallows',
+  tags: ['melee', 'legendary', 'undead', 'boss', 'spectral', 'phase', 'pull', 'silence'],
+};
+
+/**
+ * DIAMONDBACK - Copperhead Leader (Hostile Path)
+ * Found: Copperhead stronghold (if player opposes them)
+ * AI: Fast, aggressive, uses interrupts and multi-hit attacks
+ *
+ * Abilities:
+ * - Quick Draw: Interrupts enemy action, dealing damage and canceling their turn
+ * - Viper's Kiss: Applies potent poison that stacks and spreads
+ * - Serpent Strike: Rapid multi-hit attack (3 strikes at reduced damage)
+ *
+ * Encounter Context: Leader of the Copperhead Gang. Only fought if player
+ * sides against the Copperheads. Master gunslinger and cunning tactician.
+ */
+export const Diamondback: EnemyDefinition = {
+  id: 'diamondback',
+  name: 'Diamondback',
+  type: 'gunslinger',
+  faction: 'copperhead',
+  maxHealth: 160,
+  actionPoints: 8,
+  baseDamage: 24,
+  armor: 8,
+  accuracyMod: 25,
+  evasion: 20,
+  weaponId: 'diamondback_revolvers',
+  xpReward: 400,
+  goldReward: 200,
+  lootTableId: 'boss_diamondback',
+  behavior: 'aggressive',
+  description:
+    'The legendary leader of the Copperhead Gang, known for lightning-fast draws and deadly accuracy. Only becomes an enemy if the player opposes the Copperheads. ABILITIES: Quick Draw (interrupt), Viper\'s Kiss (poison), Serpent Strike (multi-hit).',
+  spriteId: 'diamondback',
+  tags: ['ranged', 'legendary', 'human', 'boss', 'copperhead', 'fast', 'poison', 'interrupt', 'conditional'],
+};
 
 export const BanditKing: EnemyDefinition = {
   id: 'bandit_king',
@@ -816,10 +1152,22 @@ export const ALL_ENEMIES: EnemyDefinition[] = [
   RemnantSentry,
   RemnantScout,
   RemnantJuggernaut,
+  // Elite Variants
+  IVRCEliteCaptain,
+  CopperheadViper,
+  ArmoredProspector,
+  FreeminerDefender,
+  SteamAutomaton,
+  CanyonStalker,
   // Bosses
   BanditKing,
   TheSaboteur,
   IronTyrant,
+  CorneliusThorne,
+  RattlesnakeKing,
+  IronGolem,
+  GhostOfTheGallows,
+  Diamondback,
 ];
 
 export const ENEMIES_BY_ID: Record<string, EnemyDefinition> = Object.fromEntries(

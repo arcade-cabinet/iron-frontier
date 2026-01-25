@@ -695,6 +695,21 @@ export * from './item';
 // NPC and Dialogue schemas
 export * from './npc';
 
+// Lore Codex schemas
+export * from './lore';
+
+// Crafting schemas
+export * from './crafting';
+
+// Environment schemas (weather, hazards, time)
+export * from './environment';
+
+// Ending schemas
+export * from './ending';
+
+// Faction schemas
+export * from './faction';
+
 // ============================================================================
 // EXPORTS FOR SUBAGENT GENERATION
 // ============================================================================

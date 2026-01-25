@@ -507,27 +507,42 @@ export const TelegraphPennyDialogue: DialogueTree = {
 export const DustySpringsGeneralStore: ShopDefinition = {
   id: 'dusty_springs_general',
   name: 'Dusty Springs General Store',
-  description: 'A well-stocked general store serving the growing town.',
+  description: 'A well-stocked general store serving the growing town. Wide variety, mid-tier prices.',
   ownerId: 'shop_keeper',
   inventory: [
+    // Food & provisions - good variety
     { itemId: 'trail_biscuits', stock: 25, priceModifier: 1.0 },
     { itemId: 'dried_jerky', stock: 20, priceModifier: 1.0 },
+    { itemId: 'beans', stock: 15, priceModifier: 1.0 },
     { itemId: 'coffee_beans', stock: 15, priceModifier: 1.0 },
-    { itemId: 'water_canteen', stock: 8, priceModifier: 1.0 },
-    { itemId: 'whiskey', stock: 15, priceModifier: 1.0 },
+    { itemId: 'water_canteen', stock: 10, priceModifier: 1.0 },
+    { itemId: 'hot_meal', stock: 8, priceModifier: 1.0 },
 
-    { itemId: 'bandages', stock: 12, priceModifier: 1.0 },
-    { itemId: 'herbal_remedy', stock: 8, priceModifier: 1.0 },
+    // Basic medical
+    { itemId: 'bandages', stock: 15, priceModifier: 1.0 },
+    { itemId: 'herbal_remedy', stock: 10, priceModifier: 1.0 },
 
-    { itemId: 'rope', stock: 6, priceModifier: 1.0 },
-    { itemId: 'lantern', stock: 4, priceModifier: 1.0 },
-    { itemId: 'oil_can', stock: 10, priceModifier: 1.0 },
+    // Equipment & supplies
+    { itemId: 'rope', stock: 8, priceModifier: 1.0 },
+    { itemId: 'lantern', stock: 5, priceModifier: 1.0 },
+    { itemId: 'oil_can', stock: 12, priceModifier: 1.0 },
+    { itemId: 'scrap_metal', stock: 6, priceModifier: 1.0 },
 
-    { itemId: 'revolver_ammo', stock: 60, priceModifier: 1.0 },
-    { itemId: 'rifle_ammo', stock: 40, priceModifier: 1.0 },
-    { itemId: 'shotgun_shells', stock: 30, priceModifier: 1.0 },
+    // Ammo
+    { itemId: 'revolver_ammo', stock: 80, priceModifier: 1.0 },
+    { itemId: 'rifle_ammo', stock: 60, priceModifier: 1.0 },
+    { itemId: 'shotgun_shells', stock: 40, priceModifier: 1.0 },
 
-    { itemId: 'hunting_knife', stock: 3, priceModifier: 1.0 },
+    // Basic weapons
+    { itemId: 'hunting_knife', stock: 4, priceModifier: 1.0 },
+    { itemId: 'bowie_knife', stock: 2, priceModifier: 1.0 },
+
+    // Basic armor
+    { itemId: 'leather_vest', stock: 3, priceModifier: 1.0 },
+
+    // Misc
+    { itemId: 'tobacco_pouch', stock: 5, priceModifier: 1.0 },
+    { itemId: 'playing_cards', stock: 3, priceModifier: 1.0 },
   ],
   buyModifier: 0.5,
   canSell: true,
@@ -538,14 +553,22 @@ export const DustySpringsGeneralStore: ShopDefinition = {
 export const DustySpringsStable: ShopDefinition = {
   id: 'dusty_springs_stable',
   name: 'Cooper Stables',
-  description: 'Horse supplies and travel provisions.',
+  description: 'Horse supplies and travel provisions. Slight discount for travelers.',
   ownerId: 'stablehand_jim',
   inventory: [
-    { itemId: 'water_canteen', stock: 10, priceModifier: 0.95 },
-    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.95 },
-    { itemId: 'dried_jerky', stock: 12, priceModifier: 0.95 },
-    { itemId: 'rope', stock: 8, priceModifier: 0.95 },
-    { itemId: 'lantern', stock: 3, priceModifier: 1.0 },
+    // Travel supplies - discounted
+    { itemId: 'water_canteen', stock: 12, priceModifier: 0.9 },
+    { itemId: 'trail_biscuits', stock: 20, priceModifier: 0.9 },
+    { itemId: 'dried_jerky', stock: 15, priceModifier: 0.9 },
+    { itemId: 'beans', stock: 10, priceModifier: 0.9 },
+
+    // Equipment
+    { itemId: 'rope', stock: 10, priceModifier: 0.9 },
+    { itemId: 'lantern', stock: 4, priceModifier: 0.95 },
+    { itemId: 'oil_can', stock: 8, priceModifier: 0.95 },
+
+    // Basic medical for the road
+    { itemId: 'bandages', stock: 6, priceModifier: 1.0 },
   ],
   buyModifier: 0.4,
   canSell: true,
@@ -556,23 +579,91 @@ export const DustySpringsStable: ShopDefinition = {
 export const DustySpringsGunsmith: ShopDefinition = {
   id: 'dusty_springs_gunsmith',
   name: "Pete's Firearms",
-  description: 'Quality firearms and ammunition.',
+  description: 'Quality firearms and ammunition. Discounted ammo for regulars.',
   ownerId: 'gunsmith_pete',
   inventory: [
+    // Handguns
     { itemId: 'revolver', stock: 4, priceModifier: 1.0 },
     { itemId: 'navy_revolver', stock: 2, priceModifier: 1.0 },
-    { itemId: 'hunting_rifle', stock: 3, priceModifier: 1.0 },
-    { itemId: 'repeater', stock: 2, priceModifier: 1.1 },
-    { itemId: 'shotgun', stock: 2, priceModifier: 1.0 },
+    { itemId: 'schofield', stock: 1, priceModifier: 1.1 },
 
-    { itemId: 'revolver_ammo', stock: 100, priceModifier: 0.9 },
-    { itemId: 'rifle_ammo', stock: 80, priceModifier: 0.9 },
-    { itemId: 'shotgun_shells', stock: 60, priceModifier: 0.9 },
+    // Rifles
+    { itemId: 'hunting_rifle', stock: 3, priceModifier: 1.0 },
+    { itemId: 'repeater', stock: 2, priceModifier: 1.05 },
+
+    // Shotguns
+    { itemId: 'shotgun', stock: 2, priceModifier: 1.0 },
+    { itemId: 'shotgun_coach', stock: 1, priceModifier: 1.1 },
+
+    // Melee
+    { itemId: 'hunting_knife', stock: 3, priceModifier: 1.0 },
+    { itemId: 'bowie_knife', stock: 2, priceModifier: 1.0 },
+    { itemId: 'machete', stock: 2, priceModifier: 1.0 },
+
+    // Ammo - discounted at gunsmith
+    { itemId: 'revolver_ammo', stock: 120, priceModifier: 0.85 },
+    { itemId: 'rifle_ammo', stock: 100, priceModifier: 0.85 },
+    { itemId: 'shotgun_shells', stock: 80, priceModifier: 0.85 },
+
+    // Accessories
+    { itemId: 'quickdraw_holster', stock: 1, priceModifier: 1.0 },
   ],
   buyModifier: 0.55,
   canSell: true,
   acceptedTypes: ['weapon'],
   tags: ['firearms', 'gunsmith', 'dusty_springs'],
+};
+
+export const DocChenShop: ShopDefinition = {
+  id: 'doc_chen_shop',
+  name: "Doc Chen's Medicine",
+  description: 'Medical supplies and treatments. The best healing supplies in town.',
+  ownerId: 'doc_chen',
+  inventory: [
+    // Medical supplies - comprehensive
+    { itemId: 'bandages', stock: 20, priceModifier: 0.95 },
+    { itemId: 'medical_kit', stock: 5, priceModifier: 1.0 },
+    { itemId: 'herbal_remedy', stock: 15, priceModifier: 0.95 },
+    { itemId: 'laudanum', stock: 8, priceModifier: 1.0 },
+    { itemId: 'antivenom', stock: 6, priceModifier: 1.0 },
+    { itemId: 'stimulant', stock: 4, priceModifier: 1.1 },
+
+    // Potions
+    { itemId: 'health_potion', stock: 6, priceModifier: 1.0 },
+    { itemId: 'health_potion_greater', stock: 2, priceModifier: 1.1 },
+    { itemId: 'antidote', stock: 4, priceModifier: 1.0 },
+  ],
+  buyModifier: 0.4,
+  canSell: true,
+  acceptedTypes: ['consumable'],
+  tags: ['medical', 'doctor', 'dusty_springs'],
+};
+
+export const DustySpringsSaloon: ShopDefinition = {
+  id: 'dusty_springs_saloon',
+  name: 'Dusty Springs Saloon',
+  description: 'Drinks, hot food, and local gossip. Pull up a stool.',
+  ownerId: 'saloon_keeper',
+  inventory: [
+    // Drinks
+    { itemId: 'whiskey', stock: -1, priceModifier: 1.0 },
+    { itemId: 'beer', stock: -1, priceModifier: 0.9 },
+    { itemId: 'moonshine', stock: 10, priceModifier: 1.2 },
+    { itemId: 'coffee', stock: -1, priceModifier: 0.8 },
+
+    // Food
+    { itemId: 'hot_meal', stock: -1, priceModifier: 1.0 },
+    { itemId: 'dried_jerky', stock: 10, priceModifier: 1.1 },
+    { itemId: 'trail_biscuits', stock: 15, priceModifier: 1.1 },
+
+    // Entertainment items
+    { itemId: 'playing_cards', stock: 5, priceModifier: 1.0 },
+    { itemId: 'tobacco_pouch', stock: 8, priceModifier: 1.0 },
+  ],
+  buyModifier: 0.3,
+  canSell: false,
+  acceptedTypes: [],
+  tags: ['saloon', 'drinks', 'dusty_springs'],
 };
 
 // ============================================================================
@@ -900,6 +991,8 @@ export const DUSTY_SPRINGS_SHOPS: ShopDefinition[] = [
   DustySpringsGeneralStore,
   DustySpringsStable,
   DustySpringsGunsmith,
+  DocChenShop,
+  DustySpringsSaloon,
 ];
 
 export const DUSTY_SPRINGS_QUESTS: Quest[] = [

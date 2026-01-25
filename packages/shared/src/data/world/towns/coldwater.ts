@@ -824,20 +824,33 @@ export const InnkeeperRoseDialogue: DialogueTree = {
 export const ColdwaterRanchSupply: ShopDefinition = {
   id: 'coldwater_ranch_supply',
   name: 'McGraw Ranch Supply',
-  description: 'Provisions, tools, and ranching equipment.',
+  description: 'Provisions, tools, and ranching equipment. Fair prices for honest folk.',
   ownerId: 'ranch_hand',
   inventory: [
-    { itemId: 'trail_biscuits', stock: 25, priceModifier: 0.9 },
-    { itemId: 'dried_jerky', stock: 20, priceModifier: 0.9 },
-    { itemId: 'coffee_beans', stock: 15, priceModifier: 0.9 },
-    { itemId: 'water_canteen', stock: 10, priceModifier: 0.9 },
+    // Food - discounted (ranching town, plenty of supplies)
+    { itemId: 'trail_biscuits', stock: 30, priceModifier: 0.85 },
+    { itemId: 'dried_jerky', stock: 25, priceModifier: 0.85 },
+    { itemId: 'beans', stock: 20, priceModifier: 0.8 },
+    { itemId: 'coffee_beans', stock: 15, priceModifier: 0.85 },
+    { itemId: 'water_canteen', stock: 12, priceModifier: 0.9 },
 
-    { itemId: 'rope', stock: 8, priceModifier: 0.9 },
-    { itemId: 'lantern', stock: 5, priceModifier: 0.95 },
-    { itemId: 'oil_can', stock: 10, priceModifier: 0.9 },
+    // Equipment
+    { itemId: 'rope', stock: 12, priceModifier: 0.85 },
+    { itemId: 'lantern', stock: 6, priceModifier: 0.9 },
+    { itemId: 'oil_can', stock: 12, priceModifier: 0.85 },
 
-    { itemId: 'hunting_rifle', stock: 2, priceModifier: 0.95 },
-    { itemId: 'rifle_ammo', stock: 50, priceModifier: 0.9 },
+    // Basic weapons
+    { itemId: 'hunting_rifle', stock: 3, priceModifier: 0.9 },
+    { itemId: 'hunting_knife', stock: 4, priceModifier: 0.85 },
+    { itemId: 'revolver', stock: 2, priceModifier: 0.95 },
+
+    // Ammo - good stock
+    { itemId: 'rifle_ammo', stock: 80, priceModifier: 0.85 },
+    { itemId: 'revolver_ammo', stock: 60, priceModifier: 0.9 },
+    { itemId: 'shotgun_shells', stock: 40, priceModifier: 0.9 },
+
+    // Basic armor
+    { itemId: 'leather_vest', stock: 2, priceModifier: 0.9 },
   ],
   buyModifier: 0.55,
   canSell: true,
@@ -848,14 +861,19 @@ export const ColdwaterRanchSupply: ShopDefinition = {
 export const ColdwaterInn: ShopDefinition = {
   id: 'coldwater_inn',
   name: 'Coldwater Inn',
-  description: 'The best rest and meals in the territory.',
+  description: 'The best rest and meals in the territory. Warm hospitality in a cold land.',
   ownerId: 'innkeeper_rose',
   inventory: [
-    { itemId: 'hot_meal', stock: -1, priceModifier: 0.8 },
+    // Food - cheap home cooking
+    { itemId: 'hot_meal', stock: -1, priceModifier: 0.75 },
     { itemId: 'coffee', stock: -1, priceModifier: 0.7 },
-    { itemId: 'beer', stock: -1, priceModifier: 0.9 },
-    { itemId: 'whiskey', stock: 10, priceModifier: 1.0 },
-    { itemId: 'trail_biscuits', stock: 10, priceModifier: 0.9 },
+    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.85 },
+    { itemId: 'dried_jerky', stock: 10, priceModifier: 0.85 },
+
+    // Drinks
+    { itemId: 'beer', stock: -1, priceModifier: 0.85 },
+    { itemId: 'whiskey', stock: 15, priceModifier: 0.95 },
+    { itemId: 'coffee_beans', stock: 8, priceModifier: 0.85 },
   ],
   buyModifier: 0.3,
   canSell: false,
@@ -865,19 +883,104 @@ export const ColdwaterInn: ShopDefinition = {
 
 export const ColdwaterVet: ShopDefinition = {
   id: 'coldwater_vet',
-  name: "Nell's Veterinary Supplies",
-  description: 'Animal medicines and general healing supplies.',
+  name: "Nell's Veterinary & Apothecary",
+  description:
+    'Animal medicines and general healing supplies. Nell treats both horses and humans.',
   ownerId: 'vet_nell',
   inventory: [
-    { itemId: 'bandages', stock: 15, priceModifier: 0.9 },
-    { itemId: 'herbal_remedy', stock: 12, priceModifier: 0.85 },
-    { itemId: 'antivenom', stock: 8, priceModifier: 0.9 },
-    { itemId: 'medical_kit', stock: 3, priceModifier: 0.95 },
+    // Medical supplies - well stocked and discounted
+    { itemId: 'bandages', stock: 20, priceModifier: 0.85 },
+    { itemId: 'herbal_remedy', stock: 15, priceModifier: 0.8 },
+    { itemId: 'antivenom', stock: 10, priceModifier: 0.85 },
+    { itemId: 'medical_kit', stock: 5, priceModifier: 0.9 },
+    { itemId: 'antidote', stock: 6, priceModifier: 0.85 },
+
+    // Potions
+    { itemId: 'health_potion', stock: 6, priceModifier: 0.9 },
+    { itemId: 'health_potion_greater', stock: 2, priceModifier: 0.95 },
+
+    // Laudanum for the cold nights
+    { itemId: 'laudanum', stock: 8, priceModifier: 0.9 },
   ],
   buyModifier: 0.45,
   canSell: true,
   acceptedTypes: ['consumable'],
   tags: ['medical', 'veterinary', 'coldwater'],
+};
+
+export const ColdwaterHuntingLodge: ShopDefinition = {
+  id: 'coldwater_hunting_lodge',
+  name: 'Mountain Hunter Lodge',
+  description: 'Furs, pelts, hunting gear, and cold weather supplies. For those who brave the heights.',
+  ownerId: 'hunting_lodge_keeper',
+  inventory: [
+    // Furs and pelts - buying and selling
+    { itemId: 'coyote_pelt', stock: 8, priceModifier: 0.85 },
+    { itemId: 'wolf_pelt', stock: 5, priceModifier: 0.85 },
+    { itemId: 'bear_pelt', stock: 2, priceModifier: 0.9 },
+    { itemId: 'mountain_lion_claw', stock: 3, priceModifier: 0.9 },
+
+    // Hunting weapons
+    { itemId: 'hunting_rifle', stock: 4, priceModifier: 0.9 },
+    { itemId: 'repeater', stock: 2, priceModifier: 0.95 },
+    { itemId: 'hunting_knife', stock: 5, priceModifier: 0.85 },
+    { itemId: 'bowie_knife', stock: 3, priceModifier: 0.9 },
+
+    // Ammo for hunting
+    { itemId: 'rifle_ammo', stock: 100, priceModifier: 0.8 },
+    { itemId: 'shotgun_shells', stock: 60, priceModifier: 0.85 },
+
+    // Cold weather supplies
+    { itemId: 'lantern', stock: 6, priceModifier: 0.9 },
+    { itemId: 'oil_can', stock: 10, priceModifier: 0.85 },
+    { itemId: 'rope', stock: 8, priceModifier: 0.9 },
+
+    // Food for mountain expeditions
+    { itemId: 'dried_jerky', stock: 20, priceModifier: 0.85 },
+    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.85 },
+    { itemId: 'coffee_beans', stock: 10, priceModifier: 0.9 },
+  ],
+  buyModifier: 0.6, // Pays well for pelts and hunting loot
+  canSell: true,
+  acceptedTypes: ['weapon', 'junk', 'consumable'],
+  tags: ['hunting', 'furs', 'coldwater', 'mountain'],
+};
+
+export const CogsworthWorkshop: ShopDefinition = {
+  id: 'cogsworth_workshop',
+  name: "Cogsworth's Mechanical Workshop",
+  description:
+    'Gadgets, inventions, and technological marvels. The old inventor tinkers with strange devices.',
+  ownerId: 'inventor_cogsworth',
+  inventory: [
+    // Mechanical parts - core business
+    { itemId: 'mechanical_parts', stock: 15, priceModifier: 0.85 },
+    { itemId: 'copper_wire', stock: 12, priceModifier: 0.85 },
+    { itemId: 'steam_valve', stock: 8, priceModifier: 0.9 },
+    { itemId: 'automaton_plating', stock: 4, priceModifier: 0.95 },
+    { itemId: 'scrap_metal', stock: 20, priceModifier: 0.8 },
+
+    // Steampunk weapons - unique to this shop
+    { itemId: 'steampunk_blade', stock: 1, priceModifier: 1.0 },
+    { itemId: 'steam_pistol', stock: 1, priceModifier: 1.0 },
+
+    // Tech armor
+    { itemId: 'steam_plated_armor', stock: 1, priceModifier: 1.0, minReputation: 15 },
+
+    // Equipment
+    { itemId: 'lantern', stock: 5, priceModifier: 0.9 },
+    { itemId: 'oil_can', stock: 15, priceModifier: 0.8 },
+
+    // Unique gadgets
+    { itemId: 'lucky_charm', stock: 2, priceModifier: 0.95 },
+
+    // Mining dynamite - for his experiments
+    { itemId: 'dynamite', stock: 10, priceModifier: 1.0 },
+  ],
+  buyModifier: 0.55, // Pays well for mechanical components
+  canSell: true,
+  acceptedTypes: ['weapon', 'junk'],
+  tags: ['gadgets', 'tech', 'coldwater', 'workshop', 'mechanical'],
 };
 
 // ============================================================================
@@ -1307,6 +1410,8 @@ export const COLDWATER_SHOPS: ShopDefinition[] = [
   ColdwaterRanchSupply,
   ColdwaterInn,
   ColdwaterVet,
+  ColdwaterHuntingLodge,
+  CogsworthWorkshop,
 ];
 
 export const COLDWATER_QUESTS: Quest[] = [

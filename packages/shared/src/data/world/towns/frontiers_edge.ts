@@ -746,30 +746,37 @@ export const OldTimerGusDialogue: DialogueTree = {
 export const FrontiersEdgeGeneralStore: ShopDefinition = {
   id: 'frontiers_edge_general',
   name: "Hawkins General Store",
-  description: "The only store in Frontier's Edge. Basic supplies for the road ahead.",
+  description:
+    "The only store in Frontier's Edge. Basic supplies for the road ahead. Small and limited, but fair prices.",
   ownerId: 'martha_hawkins',
   inventory: [
-    // Basic supplies
-    { itemId: 'trail_biscuits', stock: 15, priceModifier: 1.0 },
-    { itemId: 'dried_jerky', stock: 10, priceModifier: 1.0 },
+    // Basic food & provisions - cheap and limited (starter town)
+    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.95 },
+    { itemId: 'dried_jerky', stock: 10, priceModifier: 0.95 },
+    { itemId: 'beans', stock: 8, priceModifier: 0.9 },
     { itemId: 'water_canteen', stock: 5, priceModifier: 1.0 },
     { itemId: 'coffee_beans', stock: 5, priceModifier: 1.0 },
 
-    // Medical
-    { itemId: 'bandages', stock: 8, priceModifier: 1.0 },
-    { itemId: 'herbal_remedy', stock: 3, priceModifier: 1.1 },
+    // Medical - basic only
+    { itemId: 'bandages', stock: 10, priceModifier: 0.95 },
+    { itemId: 'herbal_remedy', stock: 4, priceModifier: 1.0 },
 
-    // Basic equipment
+    // Basic equipment & supplies
     { itemId: 'rope', stock: 3, priceModifier: 1.0 },
     { itemId: 'lantern', stock: 2, priceModifier: 1.0 },
     { itemId: 'oil_can', stock: 5, priceModifier: 1.0 },
 
-    // Ammo
+    // Ammo - limited stock for starter area
     { itemId: 'revolver_ammo', stock: 30, priceModifier: 1.0 },
     { itemId: 'rifle_ammo', stock: 20, priceModifier: 1.0 },
 
-    // Basic weapons
+    // Basic starter weapons
     { itemId: 'hunting_knife', stock: 2, priceModifier: 1.0 },
+    { itemId: 'revolver_basic', stock: 1, priceModifier: 1.0 },
+
+    // Junk items for flavor
+    { itemId: 'tobacco_pouch', stock: 3, priceModifier: 0.9 },
+    { itemId: 'playing_cards', stock: 2, priceModifier: 1.0 },
   ],
   buyModifier: 0.4,
   canSell: true,

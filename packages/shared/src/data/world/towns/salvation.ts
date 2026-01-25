@@ -1070,20 +1070,132 @@ export const FinalAllyDialogue: DialogueTree = {
 export const SalvationProvisions: ShopDefinition = {
   id: 'salvation_provisions',
   name: 'Salvation Community Store',
-  description: 'Simple provisions shared by the community.',
+  description: 'Simple provisions shared by the community. Fair prices, honest goods.',
   ownerId: 'community_store',
   inventory: [
-    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.7 },
-    { itemId: 'dried_jerky', stock: 10, priceModifier: 0.7 },
-    { itemId: 'water_canteen', stock: 8, priceModifier: 0.8 },
-    { itemId: 'bandages', stock: 10, priceModifier: 0.8 },
-    { itemId: 'herbal_remedy', stock: 8, priceModifier: 0.8 },
-    { itemId: 'lantern', stock: 3, priceModifier: 0.9 },
+    // Food - community grown, cheap
+    { itemId: 'trail_biscuits', stock: 20, priceModifier: 0.65 },
+    { itemId: 'dried_jerky', stock: 15, priceModifier: 0.65 },
+    { itemId: 'beans', stock: 15, priceModifier: 0.6 },
+    { itemId: 'hot_meal', stock: 10, priceModifier: 0.7 },
+    { itemId: 'water_canteen', stock: 10, priceModifier: 0.75 },
+    { itemId: 'coffee_beans', stock: 8, priceModifier: 0.7 },
+
+    // Medical - community healer
+    { itemId: 'bandages', stock: 15, priceModifier: 0.75 },
+    { itemId: 'herbal_remedy', stock: 12, priceModifier: 0.7 },
+    { itemId: 'antidote', stock: 5, priceModifier: 0.8 },
+    { itemId: 'health_potion', stock: 4, priceModifier: 0.85 },
+
+    // Basic equipment
+    { itemId: 'lantern', stock: 4, priceModifier: 0.85 },
+    { itemId: 'rope', stock: 5, priceModifier: 0.8 },
+    { itemId: 'oil_can', stock: 6, priceModifier: 0.8 },
   ],
   buyModifier: 0.4,
   canSell: true,
   acceptedTypes: ['consumable', 'junk'],
   tags: ['provisions', 'salvation', 'community'],
+};
+
+export const SalvationIVRCMegastore: ShopDefinition = {
+  id: 'salvation_ivrc_megastore',
+  name: 'IVRC Frontier Outpost',
+  description:
+    'The IVRC has established a presence here. Premium prices for company goods. IVRC script accepted.',
+  ownerId: 'ivrc_megastore_clerk',
+  inventory: [
+    // Food - HEAVILY overpriced (1.5-1.8x)
+    { itemId: 'trail_biscuits', stock: 30, priceModifier: 1.6 },
+    { itemId: 'dried_jerky', stock: 25, priceModifier: 1.6 },
+    { itemId: 'beans', stock: 20, priceModifier: 1.5 },
+    { itemId: 'coffee_beans', stock: 15, priceModifier: 1.7 },
+    { itemId: 'water_canteen', stock: 15, priceModifier: 1.5 },
+    { itemId: 'hot_meal', stock: 10, priceModifier: 1.8 },
+
+    // Medical - OVERPRICED
+    { itemId: 'bandages', stock: 25, priceModifier: 1.5 },
+    { itemId: 'medical_kit', stock: 8, priceModifier: 1.6 },
+    { itemId: 'laudanum', stock: 10, priceModifier: 1.7 },
+    { itemId: 'herbal_remedy', stock: 15, priceModifier: 1.5 },
+
+    // Equipment - OVERPRICED
+    { itemId: 'lantern', stock: 10, priceModifier: 1.5 },
+    { itemId: 'rope', stock: 12, priceModifier: 1.4 },
+    { itemId: 'oil_can', stock: 15, priceModifier: 1.4 },
+
+    // Weapons - premium prices
+    { itemId: 'revolver', stock: 3, priceModifier: 1.5 },
+    { itemId: 'hunting_rifle', stock: 2, priceModifier: 1.5 },
+    { itemId: 'shotgun', stock: 2, priceModifier: 1.5 },
+    { itemId: 'hunting_knife', stock: 4, priceModifier: 1.4 },
+
+    // Ammo - marked up
+    { itemId: 'revolver_ammo', stock: 100, priceModifier: 1.4 },
+    { itemId: 'rifle_ammo', stock: 80, priceModifier: 1.4 },
+    { itemId: 'shotgun_shells', stock: 60, priceModifier: 1.4 },
+
+    // IVRC exclusive gear
+    { itemId: 'ivrc_executive_suit', stock: 1, priceModifier: 1.2, minReputation: 25 },
+    { itemId: 'reinforced_leather', stock: 2, priceModifier: 1.5 },
+
+    // Mining supplies
+    { itemId: 'pickaxe', stock: 8, priceModifier: 1.4 },
+    { itemId: 'dynamite', stock: 15, priceModifier: 1.6 },
+  ],
+  buyModifier: 0.3, // Pays poorly for goods
+  canSell: true,
+  acceptedTypes: ['weapon', 'armor', 'consumable', 'junk'],
+  tags: ['ivrc', 'salvation', 'megastore', 'overpriced'],
+};
+
+export const SalvationBlackMarket: ShopDefinition = {
+  id: 'salvation_black_market',
+  name: 'The Underground',
+  description:
+    'Hidden resistance supplies. Weapons, intel, and hope for those fighting IVRC. Find it in the church basement.',
+  ownerId: 'resistance_supplier',
+  inventory: [
+    // Weapons - resistance arsenal
+    { itemId: 'revolver', stock: 3, priceModifier: 0.8, hidden: true },
+    { itemId: 'navy_revolver', stock: 2, priceModifier: 0.8, hidden: true },
+    { itemId: 'schofield', stock: 1, priceModifier: 0.85, hidden: true },
+    { itemId: 'repeater', stock: 2, priceModifier: 0.85, hidden: true },
+    { itemId: 'hunting_rifle', stock: 2, priceModifier: 0.8, hidden: true },
+    { itemId: 'shotgun', stock: 2, priceModifier: 0.8, hidden: true },
+    { itemId: 'shotgun_coach', stock: 1, priceModifier: 0.85, hidden: true },
+    { itemId: 'bowie_knife', stock: 4, priceModifier: 0.75, hidden: true },
+
+    // Explosives for sabotage
+    { itemId: 'dynamite', stock: 30, priceModifier: 0.7, hidden: true },
+
+    // Ammo - heavily discounted for the cause
+    { itemId: 'revolver_ammo', stock: 150, priceModifier: 0.6, hidden: true },
+    { itemId: 'rifle_ammo', stock: 120, priceModifier: 0.6, hidden: true },
+    { itemId: 'shotgun_shells', stock: 80, priceModifier: 0.6, hidden: true },
+
+    // Medical supplies for wounded
+    { itemId: 'bandages', stock: 30, priceModifier: 0.7, hidden: true },
+    { itemId: 'medical_kit', stock: 10, priceModifier: 0.8, hidden: true },
+    { itemId: 'health_potion', stock: 8, priceModifier: 0.85, hidden: true },
+    { itemId: 'health_potion_greater', stock: 4, priceModifier: 0.9, hidden: true },
+    { itemId: 'stimulant', stock: 10, priceModifier: 0.85, hidden: true },
+
+    // Special resistance gear - requires high reputation
+    { itemId: 'freeminers_harness', stock: 2, priceModifier: 0.8, minReputation: 20, hidden: true },
+    { itemId: 'preachers_vestments', stock: 1, priceModifier: 0.9, minReputation: 25, hidden: true },
+
+    // Unique weapons for trusted allies
+    { itemId: 'thornes_judgment', stock: 1, priceModifier: 1.0, minReputation: 35, hidden: true },
+    { itemId: 'ironpicks_legacy', stock: 1, priceModifier: 1.0, minReputation: 40, hidden: true },
+
+    // Stolen IVRC intel
+    { itemId: 'ivrc_pass', stock: 2, priceModifier: 1.5, minReputation: 15, hidden: true },
+  ],
+  buyModifier: 0.6, // Pays well for IVRC loot
+  canSell: true,
+  acceptedTypes: ['weapon', 'armor', 'consumable', 'junk', 'key_item'],
+  tags: ['black_market', 'salvation', 'resistance', 'hidden'],
 };
 
 // ============================================================================
@@ -1458,6 +1570,8 @@ export const SALVATION_DIALOGUES: DialogueTree[] = [
 
 export const SALVATION_SHOPS: ShopDefinition[] = [
   SalvationProvisions,
+  SalvationIVRCMegastore,
+  SalvationBlackMarket,
 ];
 
 export const SALVATION_QUESTS: Quest[] = [

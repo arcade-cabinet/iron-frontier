@@ -1055,30 +1055,43 @@ export const TheFenceDialogue: DialogueTree = {
 export const MesaPointBlackMarket: ShopDefinition = {
   id: 'mesa_point_black_market',
   name: "Solomon's Emporium",
-  description: "Rare and 'liberated' goods. No questions asked.",
+  description: "Rare and 'liberated' goods. No questions asked. Best prices for outlaws.",
   ownerId: 'the_fence',
   inventory: [
-    // Weapons - better than normal stores
-    { itemId: 'schofield', stock: 1, priceModifier: 0.8 },
-    { itemId: 'repeater', stock: 2, priceModifier: 0.85 },
-    { itemId: 'shotgun_coach', stock: 1, priceModifier: 0.8 },
+    // Weapons - stolen goods, cheap
+    { itemId: 'schofield', stock: 2, priceModifier: 0.75 },
+    { itemId: 'navy_revolver', stock: 2, priceModifier: 0.75 },
+    { itemId: 'repeater', stock: 3, priceModifier: 0.8 },
+    { itemId: 'shotgun_coach', stock: 2, priceModifier: 0.75 },
+    { itemId: 'hunting_rifle', stock: 2, priceModifier: 0.8 },
 
-    // Explosives
-    { itemId: 'dynamite', stock: 15, priceModifier: 0.9 },
+    // Melee weapons
+    { itemId: 'bowie_knife', stock: 4, priceModifier: 0.7 },
+    { itemId: 'machete', stock: 3, priceModifier: 0.7 },
+    { itemId: 'brass_knuckles', stock: 2, priceModifier: 0.75 },
+
+    // Explosives - plenty available
+    { itemId: 'dynamite', stock: 25, priceModifier: 0.85 },
 
     // Rare consumables
-    { itemId: 'stimulant', stock: 5, priceModifier: 1.0 },
-    { itemId: 'snake_oil', stock: 3, priceModifier: 0.9 },
+    { itemId: 'stimulant', stock: 8, priceModifier: 0.95 },
+    { itemId: 'snake_oil', stock: 5, priceModifier: 0.85 },
+    { itemId: 'laudanum', stock: 6, priceModifier: 0.9 },
 
-    // Ammo - cheap here
-    { itemId: 'revolver_ammo', stock: 100, priceModifier: 0.7 },
-    { itemId: 'rifle_ammo', stock: 80, priceModifier: 0.7 },
-    { itemId: 'shotgun_shells', stock: 60, priceModifier: 0.7 },
+    // Ammo - very cheap
+    { itemId: 'revolver_ammo', stock: 150, priceModifier: 0.6 },
+    { itemId: 'rifle_ammo', stock: 120, priceModifier: 0.6 },
+    { itemId: 'shotgun_shells', stock: 80, priceModifier: 0.6 },
 
-    // Special
-    { itemId: 'ivrc_pass', stock: 1, priceModifier: 3.0, minReputation: 20, hidden: true },
+    // Outlaw gear
+    { itemId: 'outlaws_duster', stock: 1, priceModifier: 0.85, minReputation: 10 },
+    { itemId: 'quickdraw_holster', stock: 2, priceModifier: 0.8 },
+
+    // Special - requires high Copperhead reputation
+    { itemId: 'ivrc_pass', stock: 1, priceModifier: 2.5, minReputation: 20, hidden: true },
+    { itemId: 'widows_vengeance', stock: 1, priceModifier: 1.0, minReputation: 30, hidden: true },
   ],
-  buyModifier: 0.6, // Pays better for stolen goods
+  buyModifier: 0.65, // Pays well for stolen goods
   canSell: true,
   acceptedTypes: ['weapon', 'armor', 'consumable', 'junk', 'key_item'],
   tags: ['black_market', 'mesa_point', 'fence'],
@@ -1087,13 +1100,119 @@ export const MesaPointBlackMarket: ShopDefinition = {
 export const MesaPointFence: ShopDefinition = {
   id: 'mesa_point_fence',
   name: "Solomon's Buying Counter",
-  description: "Sell anything - absolutely anything. No questions asked.",
+  description: 'Sell anything - absolutely anything. No questions asked. Best fence prices in the territory.',
   ownerId: 'the_fence',
   inventory: [],
-  buyModifier: 0.7, // Pays 70% of value - better than most
+  buyModifier: 0.7, // Pays 70% of value - best in territory
   canSell: true,
   acceptedTypes: ['weapon', 'armor', 'consumable', 'junk', 'key_item', 'currency'],
   tags: ['fence', 'mesa_point', 'sell_only'],
+};
+
+export const MesaPointTradingPost: ShopDefinition = {
+  id: 'mesa_point_trading_post',
+  name: "Desert Crossroads Trading Post",
+  description: 'Exotic goods from distant lands. Rare items you wont find elsewhere.',
+  ownerId: 'trading_post_merchant',
+  inventory: [
+    // Exotic weapons
+    { itemId: 'steampunk_blade', stock: 1, priceModifier: 1.1 },
+    { itemId: 'steam_pistol', stock: 1, priceModifier: 1.15 },
+
+    // Unique gear
+    { itemId: 'lucky_charm', stock: 2, priceModifier: 1.0 },
+
+    // Animal goods - rare pelts and materials
+    { itemId: 'coyote_pelt', stock: 5, priceModifier: 0.9 },
+    { itemId: 'wolf_pelt', stock: 3, priceModifier: 0.9 },
+    { itemId: 'snake_venom', stock: 6, priceModifier: 1.0 },
+    { itemId: 'scorpion_stinger', stock: 4, priceModifier: 1.0 },
+
+    // Rare consumables
+    { itemId: 'antivenom', stock: 8, priceModifier: 0.95 },
+    { itemId: 'herbal_remedy', stock: 10, priceModifier: 0.9 },
+    { itemId: 'stimulant', stock: 4, priceModifier: 1.0 },
+
+    // Mechanical parts - hard to find
+    { itemId: 'mechanical_parts', stock: 5, priceModifier: 1.1 },
+    { itemId: 'copper_wire', stock: 8, priceModifier: 1.05 },
+    { itemId: 'automaton_plating', stock: 2, priceModifier: 1.2 },
+  ],
+  buyModifier: 0.55,
+  canSell: true,
+  acceptedTypes: ['junk', 'consumable'],
+  tags: ['trading_post', 'mesa_point', 'exotic'],
+};
+
+export const MesaPointWaterMerchant: ShopDefinition = {
+  id: 'mesa_point_water_merchant',
+  name: "Dusty's Desert Supplies",
+  description: 'Survival supplies for the harsh desert. Water is life out here.',
+  ownerId: 'water_merchant',
+  inventory: [
+    // Water - essential in the desert
+    { itemId: 'water_canteen', stock: 20, priceModifier: 1.3 },
+    { itemId: 'canteen_refill', stock: -1, priceModifier: 1.4 },
+
+    // Food for desert travel
+    { itemId: 'trail_biscuits', stock: 30, priceModifier: 1.2 },
+    { itemId: 'dried_jerky', stock: 25, priceModifier: 1.2 },
+    { itemId: 'beans', stock: 20, priceModifier: 1.15 },
+
+    // Medical for desert hazards
+    { itemId: 'antivenom', stock: 10, priceModifier: 1.1 },
+    { itemId: 'bandages', stock: 15, priceModifier: 1.1 },
+    { itemId: 'herbal_remedy', stock: 8, priceModifier: 1.15 },
+
+    // Desert equipment
+    { itemId: 'lantern', stock: 5, priceModifier: 1.15 },
+    { itemId: 'oil_can', stock: 10, priceModifier: 1.1 },
+    { itemId: 'rope', stock: 8, priceModifier: 1.1 },
+  ],
+  buyModifier: 0.4,
+  canSell: true,
+  acceptedTypes: ['junk', 'consumable'],
+  tags: ['survival', 'mesa_point', 'desert'],
+};
+
+export const MesaPointProspectorSupplies: ShopDefinition = {
+  id: 'mesa_point_prospector_supplies',
+  name: "Lucky Strike Prospector Outfitters",
+  description: 'Everything an independent prospector needs. Outfitting treasure hunters since 1872.',
+  ownerId: 'prospector_merchant',
+  inventory: [
+    // Mining tools
+    { itemId: 'pickaxe', stock: 8, priceModifier: 0.95 },
+    { itemId: 'lantern', stock: 6, priceModifier: 0.9 },
+    { itemId: 'rope', stock: 10, priceModifier: 0.9 },
+    { itemId: 'oil_can', stock: 12, priceModifier: 0.85 },
+
+    // Explosives - for clearing
+    { itemId: 'dynamite', stock: 15, priceModifier: 1.0 },
+
+    // Supplies for the road
+    { itemId: 'water_canteen', stock: 8, priceModifier: 1.0 },
+    { itemId: 'trail_biscuits', stock: 15, priceModifier: 0.95 },
+    { itemId: 'dried_jerky', stock: 12, priceModifier: 0.95 },
+    { itemId: 'coffee_beans', stock: 8, priceModifier: 0.95 },
+
+    // Basic medical
+    { itemId: 'bandages', stock: 10, priceModifier: 1.0 },
+    { itemId: 'herbal_remedy', stock: 5, priceModifier: 1.0 },
+
+    // Mechanical parts for equipment repair
+    { itemId: 'mechanical_parts', stock: 4, priceModifier: 1.0 },
+    { itemId: 'scrap_metal', stock: 8, priceModifier: 0.9 },
+
+    // Ammo for protection
+    { itemId: 'revolver_ammo', stock: 50, priceModifier: 1.0 },
+    { itemId: 'rifle_ammo', stock: 40, priceModifier: 1.0 },
+    { itemId: 'shotgun_shells', stock: 30, priceModifier: 1.0 },
+  ],
+  buyModifier: 0.5,
+  canSell: true,
+  acceptedTypes: ['weapon', 'junk'],
+  tags: ['prospector', 'mesa_point', 'mining'],
 };
 
 // ============================================================================
@@ -1463,6 +1582,9 @@ export const MESA_POINT_DIALOGUES: DialogueTree[] = [
 export const MESA_POINT_SHOPS: ShopDefinition[] = [
   MesaPointBlackMarket,
   MesaPointFence,
+  MesaPointTradingPost,
+  MesaPointWaterMerchant,
+  MesaPointProspectorSupplies,
 ];
 
 export const MESA_POINT_QUESTS: Quest[] = [

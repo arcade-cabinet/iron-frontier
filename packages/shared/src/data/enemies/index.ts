@@ -48,10 +48,22 @@ export {
   RemnantSentry,
   RemnantScout,
   RemnantJuggernaut,
+  // Elite Variants
+  IVRCEliteCaptain,
+  CopperheadViper,
+  ArmoredProspector,
+  FreeminerDefender,
+  SteamAutomaton,
+  CanyonStalker,
   // Bosses
   BanditKing,
   TheSaboteur,
   IronTyrant,
+  CorneliusThorne,
+  RattlesnakeKing,
+  IronGolem,
+  GhostOfTheGallows,
+  Diamondback,
   // Registry
   ALL_ENEMIES,
   ENEMIES_BY_ID,
@@ -514,6 +526,287 @@ export const IronTyrantBattle: CombatEncounter = {
   tags: ['boss', 'final', 'remnant', 'automaton'],
 };
 
+// --- ELITE ENCOUNTERS ---
+
+export const IVRCEliteSquad: CombatEncounter = {
+  id: 'ivrc_elite_squad',
+  name: 'IVRC Elite Squad',
+  description: 'An elite IVRC security team led by a decorated captain.',
+  enemies: [
+    { enemyId: 'ivrc_elite_captain', count: 1 },
+    { enemyId: 'ivrc_marksman', count: 2 },
+    { enemyId: 'ivrc_guard', count: 2 },
+  ],
+  minLevel: 6,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 250,
+    gold: 100,
+    items: [
+      { itemId: 'ivrc_scrip', quantity: 75, chance: 1.0 },
+      { itemId: 'health_potion_greater', quantity: 1, chance: 0.7 },
+      { itemId: 'elite_ivrc_badge', quantity: 1, chance: 0.5 },
+    ],
+  },
+  tags: ['ivrc', 'elite', 'hard'],
+};
+
+export const ViperAmbush: CombatEncounter = {
+  id: 'viper_ambush',
+  name: 'Viper Ambush',
+  description: 'Copperhead Vipers strike from the shadows!',
+  enemies: [
+    { enemyId: 'copperhead_viper', count: 2 },
+    { enemyId: 'copperhead_gunslinger', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 200,
+    gold: 80,
+    items: [
+      { itemId: 'snake_venom', quantity: 3, chance: 0.9 },
+      { itemId: 'dual_holster', quantity: 1, chance: 0.4 },
+      { itemId: 'outlaw_badge', quantity: 2, chance: 0.8 },
+    ],
+  },
+  tags: ['copperhead', 'elite', 'ambush', 'poison'],
+};
+
+export const MineDefenders: CombatEncounter = {
+  id: 'mine_defenders',
+  name: 'Mine Defenders',
+  description: 'Armored prospectors guard their claim with lethal force.',
+  enemies: [
+    { enemyId: 'armored_prospector', count: 2 },
+    { enemyId: 'bandit_gunner', count: 2 },
+  ],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 180,
+    gold: 70,
+    items: [
+      { itemId: 'gold_nugget', quantity: 2, chance: 0.8 },
+      { itemId: 'iron_ore', quantity: 5, chance: 1.0 },
+      { itemId: 'mining_helmet', quantity: 1, chance: 0.3 },
+    ],
+  },
+  tags: ['bandit', 'elite', 'mine'],
+};
+
+export const FreeminerLastStand: CombatEncounter = {
+  id: 'freeminer_last_stand',
+  name: 'Freeminer Last Stand',
+  description: 'The Freeminers make their final stand against you.',
+  enemies: [
+    { enemyId: 'freeminer_defender', count: 2 },
+    { enemyId: 'bandit_sharpshooter', count: 2 },
+    { enemyId: 'bandit_brute', count: 1 },
+  ],
+  minLevel: 6,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 220,
+    gold: 60,
+    items: [
+      { itemId: 'freeminer_manifest', quantity: 1, chance: 1.0 },
+      { itemId: 'war_pickaxe', quantity: 1, chance: 0.5 },
+      { itemId: 'health_potion', quantity: 3, chance: 0.8 },
+    ],
+  },
+  tags: ['freeminer', 'elite', 'conditional'],
+};
+
+export const AutomatonPatrol: CombatEncounter = {
+  id: 'automaton_patrol',
+  name: 'Automaton Patrol',
+  description: 'Advanced steam automatons patrol the ancient corridors.',
+  enemies: [
+    { enemyId: 'steam_automaton', count: 2 },
+    { enemyId: 'clockwork_drone', count: 3 },
+  ],
+  minLevel: 6,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 240,
+    gold: 40,
+    items: [
+      { itemId: 'mechanical_parts', quantity: 8, chance: 1.0 },
+      { itemId: 'steam_core', quantity: 1, chance: 0.6 },
+      { itemId: 'copper_wire', quantity: 5, chance: 0.9 },
+    ],
+  },
+  tags: ['remnant', 'elite', 'automaton', 'old_works'],
+};
+
+export const StalkerPack: CombatEncounter = {
+  id: 'stalker_pack',
+  name: 'Stalker Pack',
+  description: 'Canyon stalkers have surrounded you!',
+  enemies: [{ enemyId: 'canyon_stalker', count: 3 }],
+  minLevel: 5,
+  isBoss: false,
+  canFlee: true,
+  rewards: {
+    xp: 200,
+    gold: 0,
+    items: [
+      { itemId: 'stalker_hide', quantity: 2, chance: 0.8 },
+      { itemId: 'stalker_fang', quantity: 3, chance: 0.7 },
+      { itemId: 'predator_trophy', quantity: 1, chance: 0.3 },
+    ],
+  },
+  tags: ['wildlife', 'elite', 'canyon', 'pack'],
+};
+
+// --- NEW BOSS ENCOUNTERS ---
+
+export const CorneliusThorneBattle: CombatEncounter = {
+  id: 'cornelius_thorne_battle',
+  name: 'The Director',
+  description:
+    'Cornelius Thorne awaits in his office, surrounded by his most loyal guards. The fate of Iron Valley will be decided here.',
+  enemies: [
+    { enemyId: 'cornelius_thorne', count: 1 },
+    { enemyId: 'ivrc_elite_captain', count: 2 },
+    { enemyId: 'ivrc_marksman', count: 2 },
+  ],
+  minLevel: 10,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_thorne',
+  arenaId: 'ivrc_office',
+  rewards: {
+    xp: 800,
+    gold: 500,
+    items: [
+      { itemId: 'executive_revolver', quantity: 1, chance: 1.0 },
+      { itemId: 'ivrc_master_key', quantity: 1, chance: 1.0 },
+      { itemId: 'thornes_signet_ring', quantity: 1, chance: 1.0 },
+      { itemId: 'gold_nugget', quantity: 5, chance: 1.0 },
+    ],
+  },
+  tags: ['boss', 'ivrc', 'final_boss', 'story'],
+};
+
+export const RattlesnakeKingBattle: CombatEncounter = {
+  id: 'rattlesnake_king_battle',
+  name: 'The Rattlesnake King',
+  description:
+    'Deep in the canyon, a monstrous serpent guards its ancient lair. Its rattling echoes through the stone.',
+  enemies: [
+    { enemyId: 'rattlesnake_king', count: 1 },
+    { enemyId: 'giant_scorpion', count: 2 },
+    { enemyId: 'rattlesnake', count: 4 },
+  ],
+  minLevel: 7,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_beast',
+  arenaId: 'snake_hollow',
+  rewards: {
+    xp: 600,
+    gold: 0,
+    items: [
+      { itemId: 'king_serpent_fang', quantity: 1, chance: 1.0 },
+      { itemId: 'royal_venom_sac', quantity: 1, chance: 1.0 },
+      { itemId: 'serpent_scale_armor', quantity: 1, chance: 0.7 },
+      { itemId: 'canyon_treasure', quantity: 1, chance: 1.0 },
+    ],
+  },
+  tags: ['boss', 'wildlife', 'canyon', 'optional'],
+};
+
+export const IronGolemBattle: CombatEncounter = {
+  id: 'iron_golem_battle',
+  name: 'The Iron Golem',
+  description:
+    "IVRC's ultimate weapon activates. Steam hisses from its joints as it lumbers toward you.",
+  enemies: [
+    { enemyId: 'iron_golem', count: 1 },
+    { enemyId: 'steam_automaton', count: 2 },
+    { enemyId: 'ivrc_guard', count: 2 },
+  ],
+  minLevel: 8,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_machine',
+  arenaId: 'ivrc_factory',
+  rewards: {
+    xp: 650,
+    gold: 200,
+    items: [
+      { itemId: 'golem_heart', quantity: 1, chance: 1.0 },
+      { itemId: 'steam_plated_armor', quantity: 1, chance: 0.8 },
+      { itemId: 'mechanical_parts', quantity: 10, chance: 1.0 },
+      { itemId: 'ivrc_blueprint', quantity: 1, chance: 0.6 },
+    ],
+  },
+  tags: ['boss', 'ivrc', 'automaton', 'story'],
+};
+
+export const GhostOfTheGallowsBattle: CombatEncounter = {
+  id: 'ghost_of_the_gallows_battle',
+  name: 'The Hanged Man',
+  description:
+    'At midnight on Gallows Hill, the spirit of a long-dead outlaw manifests, seeking vengeance.',
+  enemies: [
+    { enemyId: 'ghost_of_the_gallows', count: 1 },
+    { enemyId: 'corrupted_prospector', count: 3 },
+  ],
+  minLevel: 7,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_ghost',
+  arenaId: 'gallows_hill',
+  rewards: {
+    xp: 550,
+    gold: 100,
+    items: [
+      { itemId: 'spectral_noose', quantity: 1, chance: 1.0 },
+      { itemId: 'ectoplasm', quantity: 3, chance: 1.0 },
+      { itemId: 'haunted_revolver', quantity: 1, chance: 0.5 },
+      { itemId: 'outlaws_last_letter', quantity: 1, chance: 1.0 },
+    ],
+  },
+  tags: ['boss', 'undead', 'optional', 'night'],
+};
+
+export const DiamondbackBattle: CombatEncounter = {
+  id: 'diamondback_battle',
+  name: 'Diamondback Showdown',
+  description:
+    "The leader of the Copperhead Gang steps forward. There's no talking your way out of this one.",
+  enemies: [
+    { enemyId: 'diamondback', count: 1 },
+    { enemyId: 'copperhead_viper', count: 2 },
+    { enemyId: 'copperhead_dynamiter', count: 1 },
+    { enemyId: 'outlaw_enforcer', count: 1 },
+  ],
+  minLevel: 9,
+  isBoss: true,
+  canFlee: false,
+  musicId: 'boss_diamondback',
+  arenaId: 'copperhead_stronghold',
+  rewards: {
+    xp: 700,
+    gold: 350,
+    items: [
+      { itemId: 'diamondback_revolvers', quantity: 1, chance: 1.0 },
+      { itemId: 'copperhead_banner', quantity: 1, chance: 1.0 },
+      { itemId: 'gang_treasury_key', quantity: 1, chance: 1.0 },
+      { itemId: 'quickdraw_holster', quantity: 1, chance: 0.8 },
+    ],
+  },
+  tags: ['boss', 'copperhead', 'conditional', 'story'],
+};
+
 // ============================================================================
 // ENCOUNTER REGISTRY
 // ============================================================================
@@ -542,10 +835,22 @@ export const ALL_ENCOUNTERS: CombatEncounter[] = [
   ClockworkSwarm,
   SteamGolemEncounter,
   JuggernautBoss,
+  // Elite Encounters
+  IVRCEliteSquad,
+  ViperAmbush,
+  MineDefenders,
+  FreeminerLastStand,
+  AutomatonPatrol,
+  StalkerPack,
   // Bosses
   BanditKingBattle,
   SaboteurBattle,
   IronTyrantBattle,
+  CorneliusThorneBattle,
+  RattlesnakeKingBattle,
+  IronGolemBattle,
+  GhostOfTheGallowsBattle,
+  DiamondbackBattle,
 ];
 
 export const ENCOUNTERS_BY_ID: Record<string, CombatEncounter> = Object.fromEntries(

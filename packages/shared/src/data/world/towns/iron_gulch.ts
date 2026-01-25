@@ -1404,28 +1404,35 @@ export const BartenderMollyDialogue: DialogueTree = {
 
 export const IronGulchMiningSupply: ShopDefinition = {
   id: 'iron_gulch_mining_supply',
-  name: "Iron Valley Mining Supply",
-  description: "IVRC-owned supply depot. Mining tools, explosives, and equipment.",
+  name: 'Iron Valley Mining Supply',
+  description: 'IVRC-owned supply depot. Mining tools, explosives, and equipment for company workers.',
   ownerId: 'mining_supply_clerk',
   inventory: [
-    // Mining equipment
-    { itemId: 'pickaxe', stock: 10, priceModifier: 1.0 },
-    { itemId: 'lantern', stock: 8, priceModifier: 1.0 },
-    { itemId: 'rope', stock: 10, priceModifier: 1.0 },
-    { itemId: 'oil_can', stock: 15, priceModifier: 0.9 },
+    // Mining equipment - core business
+    { itemId: 'pickaxe', stock: 15, priceModifier: 1.0 },
+    { itemId: 'lantern', stock: 12, priceModifier: 1.0 },
+    { itemId: 'rope', stock: 15, priceModifier: 1.0 },
+    { itemId: 'oil_can', stock: 20, priceModifier: 0.9 },
+    { itemId: 'scrap_metal', stock: 10, priceModifier: 0.95 },
 
-    // Explosives
-    { itemId: 'dynamite', stock: 20, priceModifier: 1.2 },
+    // Explosives - key mining supplies
+    { itemId: 'dynamite', stock: 25, priceModifier: 1.15 },
 
-    // Supplies
+    // Mechanical parts for repairs
+    { itemId: 'mechanical_parts', stock: 8, priceModifier: 1.1 },
+    { itemId: 'copper_wire', stock: 10, priceModifier: 1.1 },
+    { itemId: 'steam_valve', stock: 4, priceModifier: 1.2 },
+
+    // Basic supplies
     { itemId: 'water_canteen', stock: 10, priceModifier: 1.1 },
-    { itemId: 'trail_biscuits', stock: 20, priceModifier: 1.0 },
-    { itemId: 'dried_jerky', stock: 15, priceModifier: 1.0 },
+    { itemId: 'trail_biscuits', stock: 20, priceModifier: 1.05 },
+    { itemId: 'dried_jerky', stock: 15, priceModifier: 1.05 },
+    { itemId: 'bandages', stock: 10, priceModifier: 1.1 },
 
     // Ammo
-    { itemId: 'revolver_ammo', stock: 50, priceModifier: 1.0 },
-    { itemId: 'rifle_ammo', stock: 40, priceModifier: 1.0 },
-    { itemId: 'shotgun_shells', stock: 30, priceModifier: 1.0 },
+    { itemId: 'revolver_ammo', stock: 60, priceModifier: 1.0 },
+    { itemId: 'rifle_ammo', stock: 50, priceModifier: 1.0 },
+    { itemId: 'shotgun_shells', stock: 40, priceModifier: 1.0 },
   ],
   buyModifier: 0.5,
   canSell: true,
@@ -1433,17 +1440,68 @@ export const IronGulchMiningSupply: ShopDefinition = {
   tags: ['mining', 'iron_gulch', 'ivrc'],
 };
 
+export const IronGulchCompanyStore: ShopDefinition = {
+  id: 'iron_gulch_company_store',
+  name: 'IVRC Company Store',
+  description:
+    'The official IVRC general store. Overpriced goods with IVRC branding. Workers pay with company script.',
+  ownerId: 'company_store_clerk',
+  inventory: [
+    // Food & provisions - OVERPRICED (1.3-1.5x modifier)
+    { itemId: 'trail_biscuits', stock: 30, priceModifier: 1.4 },
+    { itemId: 'dried_jerky', stock: 25, priceModifier: 1.4 },
+    { itemId: 'beans', stock: 20, priceModifier: 1.35 },
+    { itemId: 'coffee_beans', stock: 15, priceModifier: 1.45 },
+    { itemId: 'water_canteen', stock: 12, priceModifier: 1.3 },
+    { itemId: 'hot_meal', stock: 10, priceModifier: 1.5 },
+
+    // Medical - OVERPRICED
+    { itemId: 'bandages', stock: 20, priceModifier: 1.35 },
+    { itemId: 'herbal_remedy', stock: 10, priceModifier: 1.4 },
+    { itemId: 'laudanum', stock: 5, priceModifier: 1.5 },
+
+    // Equipment - OVERPRICED
+    { itemId: 'lantern', stock: 8, priceModifier: 1.35 },
+    { itemId: 'rope', stock: 10, priceModifier: 1.3 },
+    { itemId: 'oil_can', stock: 15, priceModifier: 1.25 },
+
+    // IVRC-branded clothing and gear
+    { itemId: 'leather_vest', stock: 5, priceModifier: 1.4 },
+
+    // Ammo - standard markup
+    { itemId: 'revolver_ammo', stock: 80, priceModifier: 1.2 },
+    { itemId: 'rifle_ammo', stock: 60, priceModifier: 1.2 },
+    { itemId: 'shotgun_shells', stock: 40, priceModifier: 1.2 },
+
+    // Special: IVRC Executive Suit - requires reputation
+    { itemId: 'ivrc_executive_suit', stock: 1, priceModifier: 1.0, minReputation: 30 },
+  ],
+  buyModifier: 0.35, // Pays poorly for goods
+  canSell: true,
+  acceptedTypes: ['weapon', 'armor', 'consumable', 'junk'],
+  tags: ['general', 'iron_gulch', 'ivrc', 'company_store', 'overpriced'],
+};
+
 export const IronGulchSaloon: ShopDefinition = {
   id: 'iron_gulch_saloon',
-  name: "Lucky Strike Saloon",
-  description: "The social center of Iron Gulch. Drinks, food, and rumors.",
+  name: 'Lucky Strike Saloon',
+  description: 'The social center of Iron Gulch. Drinks, food, and rumors. Miners gather after shift.',
   ownerId: 'bartender_molly',
   inventory: [
+    // Drinks
     { itemId: 'whiskey', stock: -1, priceModifier: 1.0 },
-    { itemId: 'beer', stock: -1, priceModifier: 0.9 },
-    { itemId: 'moonshine', stock: 10, priceModifier: 1.3 },
-    { itemId: 'hot_meal', stock: 15, priceModifier: 1.0 },
-    { itemId: 'coffee', stock: -1, priceModifier: 0.8 },
+    { itemId: 'beer', stock: -1, priceModifier: 0.85 },
+    { itemId: 'moonshine', stock: 15, priceModifier: 1.25 },
+    { itemId: 'coffee', stock: -1, priceModifier: 0.75 },
+
+    // Food
+    { itemId: 'hot_meal', stock: -1, priceModifier: 1.0 },
+    { itemId: 'dried_jerky', stock: 15, priceModifier: 1.05 },
+    { itemId: 'trail_biscuits', stock: 20, priceModifier: 1.05 },
+
+    // Entertainment
+    { itemId: 'playing_cards', stock: 5, priceModifier: 1.0 },
+    { itemId: 'tobacco_pouch', stock: 10, priceModifier: 1.0 },
   ],
   buyModifier: 0.3,
   canSell: false,
@@ -1454,20 +1512,71 @@ export const IronGulchSaloon: ShopDefinition = {
 export const IronGulchApothecary: ShopDefinition = {
   id: 'iron_gulch_apothecary',
   name: "Doc Holloway's Medicine",
-  description: "Medical supplies and treatments for mining injuries.",
+  description: 'Medical supplies and treatments for mining injuries. Doc knows his trade.',
   ownerId: 'doc_holloway',
   inventory: [
-    { itemId: 'bandages', stock: 20, priceModifier: 1.0 },
-    { itemId: 'laudanum', stock: 10, priceModifier: 1.1 },
-    { itemId: 'medical_kit', stock: 5, priceModifier: 1.0 },
-    { itemId: 'herbal_remedy', stock: 12, priceModifier: 1.0 },
-    { itemId: 'antivenom', stock: 5, priceModifier: 1.2 },
-    { itemId: 'stimulant', stock: 3, priceModifier: 1.5, minReputation: 10 },
+    // Basic medical
+    { itemId: 'bandages', stock: 25, priceModifier: 1.0 },
+    { itemId: 'herbal_remedy', stock: 15, priceModifier: 1.0 },
+
+    // Advanced medical
+    { itemId: 'medical_kit', stock: 6, priceModifier: 1.0 },
+    { itemId: 'laudanum', stock: 12, priceModifier: 1.1 },
+    { itemId: 'antivenom', stock: 8, priceModifier: 1.15 },
+
+    // Potions
+    { itemId: 'health_potion', stock: 8, priceModifier: 1.0 },
+    { itemId: 'health_potion_greater', stock: 3, priceModifier: 1.1 },
+    { itemId: 'antidote', stock: 5, priceModifier: 1.0 },
+
+    // Special items - requires trust
+    { itemId: 'stimulant', stock: 5, priceModifier: 1.3, minReputation: 10 },
+
+    // Snake oil for the gullible
+    { itemId: 'snake_oil', stock: 3, priceModifier: 0.8 },
   ],
   buyModifier: 0.4,
   canSell: true,
   acceptedTypes: ['consumable'],
   tags: ['medical', 'iron_gulch'],
+};
+
+export const IronGulchBlackMarket: ShopDefinition = {
+  id: 'iron_gulch_black_market',
+  name: 'The Back Room',
+  description:
+    'Hidden black market operating behind the mining supply store. Contraband and resistance supplies.',
+  ownerId: 'black_market_dealer',
+  inventory: [
+    // Weapons - discounted stolen goods
+    { itemId: 'revolver', stock: 2, priceModifier: 0.75, hidden: true },
+    { itemId: 'navy_revolver', stock: 1, priceModifier: 0.8, hidden: true },
+    { itemId: 'hunting_rifle', stock: 2, priceModifier: 0.8, hidden: true },
+    { itemId: 'shotgun', stock: 1, priceModifier: 0.75, hidden: true },
+    { itemId: 'bowie_knife', stock: 3, priceModifier: 0.7, hidden: true },
+
+    // Explosives - cheaper than company store
+    { itemId: 'dynamite', stock: 20, priceModifier: 0.8, hidden: true },
+
+    // Ammo - discount
+    { itemId: 'revolver_ammo', stock: 100, priceModifier: 0.65, hidden: true },
+    { itemId: 'rifle_ammo', stock: 80, priceModifier: 0.65, hidden: true },
+    { itemId: 'shotgun_shells', stock: 60, priceModifier: 0.65, hidden: true },
+
+    // Contraband medical
+    { itemId: 'stimulant', stock: 8, priceModifier: 0.9, hidden: true },
+    { itemId: 'laudanum', stock: 10, priceModifier: 0.85, hidden: true },
+
+    // Freeminer supplies - requires reputation
+    { itemId: 'freeminers_harness', stock: 1, priceModifier: 0.9, minReputation: 15, hidden: true },
+
+    // Stolen company goods
+    { itemId: 'ivrc_pass', stock: 1, priceModifier: 2.5, minReputation: 25, hidden: true },
+  ],
+  buyModifier: 0.65, // Pays well for contraband
+  canSell: true,
+  acceptedTypes: ['weapon', 'armor', 'consumable', 'junk', 'key_item'],
+  tags: ['black_market', 'iron_gulch', 'hidden', 'resistance'],
 };
 
 // ============================================================================
@@ -1928,8 +2037,10 @@ export const IRON_GULCH_DIALOGUES: DialogueTree[] = [
 
 export const IRON_GULCH_SHOPS: ShopDefinition[] = [
   IronGulchMiningSupply,
+  IronGulchCompanyStore,
   IronGulchSaloon,
   IronGulchApothecary,
+  IronGulchBlackMarket,
 ];
 
 export const IRON_GULCH_QUESTS: Quest[] = [

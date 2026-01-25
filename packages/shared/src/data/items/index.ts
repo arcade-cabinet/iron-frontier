@@ -141,9 +141,9 @@ const WEAPONS: BaseItem[] = [
     effects: [],
     weaponStats: {
       weaponType: 'revolver',
-      damage: 20,
+      damage: 24,
       range: 35,
-      accuracy: 80,
+      accuracy: 85,
       fireRate: 1.8,
       ammoType: 'pistol',
       clipSize: 6,
@@ -1716,6 +1716,401 @@ const AMMO: BaseItem[] = [
 ];
 
 // ============================================================================
+// UNIQUE WEAPONS - Legendary & Rare named items for quest rewards and special finds
+// ============================================================================
+
+const UNIQUE_WEAPONS: BaseItem[] = [
+  // --- LEGENDARY WEAPONS ---
+  {
+    id: 'diamondbacks_fang',
+    name: "Diamondback's Fang",
+    description:
+      'An ornate revolver with rattlesnake-skin grips and fanged cylinder. Legend says it belonged to a notorious gunslinger who died from his own snake bite. The venom never left the barrel.',
+    type: 'weapon',
+    rarity: 'legendary',
+    value: 500,
+    weight: 2.8,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'revolver_legendary',
+    tags: ['weapon', 'firearm', 'pistol', 'unique', 'legendary', 'quest_reward', 'poison'],
+    effects: [
+      { type: 'buff', value: 15, buffType: 'damage_boost' }, // +15% crit
+      { type: 'damage', value: 5 }, // poison damage over time
+    ],
+    weaponStats: {
+      weaponType: 'revolver',
+      damage: 28,
+      range: 38,
+      accuracy: 85,
+      fireRate: 1.9,
+      ammoType: 'pistol',
+      clipSize: 6,
+      reloadTime: 2.2,
+    },
+    // Obtain: Reward for completing "The Serpent's Trail" quest in Rattlesnake Gulch
+  },
+  {
+    id: 'ironpicks_legacy',
+    name: "Ironpick's Legacy",
+    description:
+      "An ancient mining pick reforged into a devastating weapon by the first prospector of Iron Valley. The head is made of meteorite iron, and it still hungers for ore - and armor. Grants bonus mining speed when equipped.",
+    type: 'weapon',
+    rarity: 'legendary',
+    value: 450,
+    weight: 4.5,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'pickaxe_legendary',
+    tags: ['weapon', 'melee', 'tool', 'mining', 'unique', 'legendary', 'quest_reward', 'armor_pierce'],
+    effects: [
+      { type: 'buff', value: 20, buffType: 'damage_boost' }, // +20% vs armored
+      { type: 'buff', value: 25, buffType: 'speed_boost' }, // mining speed bonus
+    ],
+    weaponStats: {
+      weaponType: 'melee',
+      damage: 32,
+      range: 0,
+      accuracy: 78,
+      fireRate: 0.9,
+      ammoType: 'none',
+      clipSize: 0,
+      reloadTime: 0,
+    },
+    // Obtain: Found in the deepest shaft of the Abandoned Ironpick Mine after solving the miner's ghost puzzle
+  },
+  {
+    id: 'thornes_judgment',
+    name: "Thorne's Judgment",
+    description:
+      "The signature cane-sword of Cornelius Thorne, former IVRC executive who 'retired' his rivals. The silver-capped cane conceals a razor-thin blade that causes wounds that never stop bleeding. A gentleman's weapon for ungentlemanly business.",
+    type: 'weapon',
+    rarity: 'legendary',
+    value: 600,
+    weight: 1.8,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'sword_legendary',
+    tags: ['weapon', 'melee', 'blade', 'unique', 'legendary', 'quest_reward', 'bleed', 'intimidation'],
+    effects: [
+      { type: 'buff', value: 10, buffType: 'damage_boost' }, // +10% intimidation in dialogue
+      { type: 'damage', value: 8 }, // bleed damage over time
+    ],
+    weaponStats: {
+      weaponType: 'knife',
+      damage: 22,
+      range: 0,
+      accuracy: 92,
+      fireRate: 2.5,
+      ammoType: 'none',
+      clipSize: 0,
+      reloadTime: 0,
+    },
+    // Obtain: Reward for exposing Thorne's conspiracy in "The Executive's Secret" quest
+  },
+
+  // --- RARE WEAPONS ---
+  {
+    id: 'widows_vengeance',
+    name: "Widow's Vengeance",
+    description:
+      "A double-barrel shotgun with a dark history etched into its stock - thirteen notches, one for each man who wronged Mary Holloway. She's long gone, but the gun remembers. Devastating power, but the cursed weapon pulls slightly off-target.",
+    type: 'weapon',
+    rarity: 'rare',
+    value: 200,
+    weight: 4.0,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'shotgun_rare',
+    tags: ['weapon', 'firearm', 'shotgun', 'unique', 'rare', 'quest_reward', 'cursed'],
+    effects: [
+      { type: 'buff', value: 25, buffType: 'damage_boost' }, // +25% damage
+    ],
+    weaponStats: {
+      weaponType: 'shotgun',
+      damage: 55, // High base damage
+      range: 14,
+      accuracy: 50, // -10% accuracy (base shotgun is 60)
+      fireRate: 0.45,
+      ammoType: 'shotgun',
+      clipSize: 2,
+      reloadTime: 2.8,
+    },
+    // Obtain: Found in the Holloway Homestead ruins during "The Widow's Tale" side quest
+  },
+  {
+    id: 'the_persuader',
+    name: 'The Persuader',
+    description:
+      'A silver-plated rifle blessed by a traveling preacher after a vampire incident in Silver Creek. The holy inscriptions along the barrel glow faintly in moonlight. Particularly effective against supernatural threats and has exceptional range.',
+    type: 'weapon',
+    rarity: 'rare',
+    value: 250,
+    weight: 4.8,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'rifle_rare',
+    tags: ['weapon', 'firearm', 'rifle', 'unique', 'rare', 'purchase', 'holy', 'supernatural'],
+    effects: [
+      { type: 'buff', value: 15, buffType: 'damage_boost' }, // +15% vs supernatural
+    ],
+    weaponStats: {
+      weaponType: 'rifle',
+      damage: 30,
+      range: 140, // Extended range
+      accuracy: 88,
+      fireRate: 0.55,
+      ammoType: 'rifle',
+      clipSize: 6,
+      reloadTime: 4.5,
+    },
+    // Obtain: Purchase from the mysterious merchant in Salvation for 250 dollars (only available at night)
+  },
+  {
+    id: 'knuckleduster_special',
+    name: 'Knuckleduster Special',
+    description:
+      'Brass knuckles fitted with a spring-loaded blade between the fingers. A brawler\'s weapon perfected by the fighting pits of Dusty Springs. Deals both blunt and piercing damage, making it effective against any foe.',
+    type: 'weapon',
+    rarity: 'rare',
+    value: 120,
+    weight: 0.8,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'knuckles_rare',
+    tags: ['weapon', 'melee', 'blade', 'unique', 'rare', 'found', 'dual_damage'],
+    effects: [
+      { type: 'damage', value: 6 }, // Additional piercing damage
+    ],
+    weaponStats: {
+      weaponType: 'melee',
+      damage: 14, // Blunt damage
+      range: 0,
+      accuracy: 90,
+      fireRate: 2.8, // Fast attack speed
+      ammoType: 'none',
+      clipSize: 0,
+      reloadTime: 0,
+    },
+    // Obtain: Win the underground fighting tournament in Dusty Springs or loot from champion fighter
+  },
+  {
+    id: 'steam_pistol',
+    name: 'Steam Pistol',
+    description:
+      "One of Clara Cogsworth's experimental inventions - a pistol powered by compressed steam instead of gunpowder. Never runs out of ammo but requires cooling between shots. The brass fittings whistle when it's ready to fire again.",
+    type: 'weapon',
+    rarity: 'rare',
+    value: 300,
+    weight: 3.2,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'pistol_steampunk',
+    tags: ['weapon', 'firearm', 'pistol', 'unique', 'rare', 'quest_reward', 'steampunk', 'infinite_ammo'],
+    effects: [
+      { type: 'buff', value: 100, buffType: 'heat_resist' }, // Represents infinite ammo / overheat mechanic
+    ],
+    weaponStats: {
+      weaponType: 'revolver',
+      damage: 18,
+      range: 28,
+      accuracy: 72,
+      fireRate: 0.8, // Slower due to pressure buildup
+      ammoType: 'none', // Infinite ammo
+      clipSize: 0, // No clip - pressure based
+      reloadTime: 4, // Cooldown/pressure rebuild time
+    },
+    // Obtain: Reward from Clara for completing "The Inventor's Dilemma" quest line
+  },
+];
+
+// ============================================================================
+// UNIQUE ARMOR - Legendary & Rare named items for quest rewards and special finds
+// ============================================================================
+
+const UNIQUE_ARMOR: BaseItem[] = [
+  // --- LEGENDARY ARMOR ---
+  {
+    id: 'sheriffs_star',
+    name: "Sheriff's Star",
+    description:
+      "The enchanted badge of Sheriff Samuel Justice, who brought law to the lawless frontier. Those who wear it speak with the authority of the law itself. The star pulses with a warm light that strengthens the wearer's resolve.",
+    type: 'armor',
+    rarity: 'legendary',
+    value: 400,
+    weight: 0.2,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: false,
+    icon: 'badge_legendary',
+    tags: ['armor', 'accessory', 'unique', 'legendary', 'quest_reward', 'authority', 'dialogue_boost'],
+    effects: [
+      { type: 'buff', value: 20, buffType: 'damage_boost' }, // +20% to law-related dialogue
+      { type: 'heal', value: 10 }, // +10 max HP (applied as passive bonus)
+    ],
+    armorStats: {
+      defense: 5,
+      slot: 'accessory',
+      movementPenalty: 0,
+      resistances: {
+        intimidation: 20,
+        fear: 15,
+      },
+    },
+    // Obtain: Reward for completing the main "Justice in Iron Valley" quest line with lawful choices
+  },
+  {
+    id: 'preachers_vestments',
+    name: "Preacher's Vestments",
+    description:
+      "Blessed robes worn by Father Morrison during the Salvation plague. His prayers saved many, and his faith lingers in every thread. The wearer feels an unshakeable calm and heals faster from all wounds. Evil cannot take root in the heart of the faithful.",
+    type: 'armor',
+    rarity: 'legendary',
+    value: 450,
+    weight: 2.0,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: false,
+    icon: 'robes_legendary',
+    tags: ['armor', 'body', 'unique', 'legendary', 'quest_reward', 'holy', 'healing_boost'],
+    effects: [
+      { type: 'buff', value: 30, buffType: 'health_regen' }, // +30% healing received
+    ],
+    armorStats: {
+      defense: 8,
+      slot: 'body',
+      movementPenalty: 0,
+      resistances: {
+        fear: 100, // Immunity to fear
+        curse: 50,
+        poison: 20,
+      },
+    },
+    // Obtain: Given by the ghost of Father Morrison after laying the plague victims to rest in "Salvation's Redemption"
+  },
+
+  // --- RARE ARMOR ---
+  {
+    id: 'freeminers_harness',
+    name: "Freeminer's Harness",
+    description:
+      "Heavy-duty mining gear modified for combat by the Free Miners' Union. Reinforced leather and iron plating protect against cave-ins and company thugs alike. The rope and anchor system prevents fatal falls.",
+    type: 'armor',
+    rarity: 'rare',
+    value: 180,
+    weight: 6.5,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'harness_rare',
+    tags: ['armor', 'body', 'unique', 'rare', 'purchase', 'mining', 'fall_immunity'],
+    effects: [
+      { type: 'buff', value: 15, buffType: 'damage_resist' }, // +15% physical resist
+    ],
+    armorStats: {
+      defense: 18,
+      slot: 'body',
+      movementPenalty: 0.1,
+      resistances: {
+        physical: 15,
+        fall: 100, // Fall damage immunity
+        crushing: 25,
+      },
+    },
+    // Obtain: Purchase from the Free Miners' Union quartermaster after reaching "Trusted" reputation
+  },
+  {
+    id: 'ivrc_executive_suit',
+    name: 'IVRC Executive Suit',
+    description:
+      "A tailored three-piece suit of the finest eastern fabric, with steel-threaded lining hidden beneath the silk. IVRC executives don't just look important - they're protected like it. The mere sight of this suit opens doors and loosens tongues.",
+    type: 'armor',
+    rarity: 'rare',
+    value: 350,
+    weight: 2.5,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'suit_rare',
+    tags: ['armor', 'body', 'unique', 'rare', 'found', 'corporate', 'intimidation', 'hidden_armor'],
+    effects: [
+      { type: 'buff', value: 10, buffType: 'damage_resist' }, // +10% all resist
+      { type: 'buff', value: 20, buffType: 'damage_boost' }, // +20% intimidation
+    ],
+    armorStats: {
+      defense: 12,
+      slot: 'body',
+      movementPenalty: 0,
+      resistances: {
+        physical: 10,
+        fire: 10,
+        cold: 10,
+      },
+    },
+    // Obtain: Found in the IVRC headquarters safe during "Corporate Espionage" quest or looted from Executive Thorne
+  },
+  {
+    id: 'outlaws_duster',
+    name: "Outlaw's Duster",
+    description:
+      "The iconic long coat of the legendary outlaw Black Jack McGraw. Countless bullet holes have been patched, each one a story of narrow escapes. Hidden pockets throughout can conceal weapons of all sizes. They say the coat chooses its next owner.",
+    type: 'armor',
+    rarity: 'rare',
+    value: 200,
+    weight: 3.0,
+    stackable: false,
+    maxStack: 1,
+    usable: false,
+    droppable: true,
+    sellable: true,
+    icon: 'duster_rare',
+    tags: ['armor', 'body', 'unique', 'rare', 'quest_reward', 'outlaw', 'dodge', 'concealment'],
+    effects: [
+      { type: 'buff', value: 10, buffType: 'speed_boost' }, // +10% dodge
+    ],
+    armorStats: {
+      defense: 10,
+      slot: 'body',
+      movementPenalty: 0,
+      resistances: {
+        cold: 20,
+        detection: -30, // Harder to spot with concealed weapons
+      },
+    },
+    // Obtain: Reward for completing "The Ballad of Black Jack" quest by following the outlaw's trail
+  },
+];
+
+// ============================================================================
 // ITEM LIBRARY
 // ============================================================================
 
@@ -1723,7 +2118,7 @@ const AMMO: BaseItem[] = [
 export const ITEM_LIBRARY: Record<string, BaseItem> = {};
 
 // Populate the library
-[...WEAPONS, ...CONSUMABLES, ...KEY_ITEMS, ...CURRENCY, ...SUPPLIES, ...JUNK, ...AMMO].forEach(
+[...WEAPONS, ...UNIQUE_WEAPONS, ...UNIQUE_ARMOR, ...CONSUMABLES, ...KEY_ITEMS, ...CURRENCY, ...SUPPLIES, ...JUNK, ...AMMO].forEach(
   (item) => {
     ITEM_LIBRARY[item.id] = item;
   }
@@ -1773,12 +2168,28 @@ export function itemExists(itemId: string): boolean {
 
 // Export categorized arrays for convenience
 export const ALL_WEAPONS = WEAPONS;
+export const ALL_UNIQUE_WEAPONS = UNIQUE_WEAPONS;
+export const ALL_UNIQUE_ARMOR = UNIQUE_ARMOR;
 export const ALL_CONSUMABLES = CONSUMABLES;
 export const ALL_KEY_ITEMS = KEY_ITEMS;
 export const ALL_CURRENCY = CURRENCY;
 export const ALL_SUPPLIES = SUPPLIES;
 export const ALL_JUNK = JUNK;
 export const ALL_AMMO = AMMO;
+
+/**
+ * Get all unique/named items (legendary and rare special items)
+ */
+export function getUniqueItems(): BaseItem[] {
+  return [...UNIQUE_WEAPONS, ...UNIQUE_ARMOR];
+}
+
+/**
+ * Get unique items by rarity
+ */
+export function getUniqueItemsByRarity(rarity: 'legendary' | 'rare'): BaseItem[] {
+  return getUniqueItems().filter((item) => item.rarity === rarity);
+}
 
 // Default starter inventory for new games
 export const STARTER_INVENTORY = [
