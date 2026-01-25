@@ -87,14 +87,30 @@ class AudioService {
             this.soundManager.playFootstep();
             break;
         case 'gunshot':
-            // Placeholder for now
-            this.soundManager.playError(); 
+            this.soundManager.playGunshot(); 
             break;
         default:
             // Fallback for unmapped sounds
             this.soundManager.playClick(); 
             break;
     }
+  }
+
+  public playCombatSound(type: 'attack' | 'reload' | 'hit' | 'miss') {
+      switch (type) {
+          case 'attack':
+              this.soundManager.playGunshot();
+              break;
+          case 'reload':
+              this.soundManager.playReload();
+              break;
+          case 'hit':
+              this.soundManager.playHit();
+              break;
+          case 'miss':
+              this.soundManager.playMiss();
+              break;
+      }
   }
 }
 

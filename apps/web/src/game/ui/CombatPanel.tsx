@@ -13,6 +13,8 @@ import { AP_COSTS } from '@iron-frontier/shared/data/schemas/combat';
 import type { CombatActionType } from '@iron-frontier/shared/store';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
+import { useEffect, useRef } from 'react';
+import { audioService } from '../game/services/AudioService';
 
 // ============================================================================
 // ICONS
@@ -453,6 +455,28 @@ export function CombatPanel() {
     endCombatTurn,
     attemptFlee,
   } = useGameStore();
+
+  const prevLogLength = useRef(0);
+
+  useEffect(() => {
+      if (!combatState) return;
+      
+      if (combatState.log.length > prevLogLength.current) {
+          const lastEntry = combatState.log[combatState.log.length - 1];
+          const action = lastEntry.action.type;
+
+          if (action === 'attack' || action === 'aimed_shot') {
+              audioService.playCombatSound('attack');
+              // Slight delay for impact sound
+              setTimeout(() => {
+                  audioService.playCombatSound(lastEntry.success ? 'hit' : 'miss');
+              }, 200);
+          } else if (action === 'reload') {
+              audioService.playCombatSound('reload');
+          }
+      }
+      prevLogLength.current = combatState.log.length;
+  }, [combatState?.log.length]);
 
   if (!combatState) return null;
 
