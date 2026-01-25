@@ -98,21 +98,34 @@ const webDataAccess: DataAccess = {
 
   // Shops
   getShopById: (shopId: string) => getShopById(shopId),
-  calculateBuyPrice,
-  calculateSellPrice,
+  // Simple price calculations using base value and reputation (DataAccess signature)
+  calculateBuyPrice: (baseValue: number, reputation: number) => {
+    // Buy price: base value + 10% markup, slight discount for high reputation
+    const reputationDiscount = Math.max(0, (reputation - 50) * 0.002); // 0-10% discount
+    return Math.round(baseValue * 1.1 * (1 - reputationDiscount));
+  },
+  calculateSellPrice: (baseValue: number, reputation: number) => {
+    // Sell price: 50% of base value, slight bonus for high reputation
+    const reputationBonus = Math.max(0, (reputation - 50) * 0.001); // 0-5% bonus
+    return Math.round(baseValue * 0.5 * (1 + reputationBonus));
+  },
   canSellItemToShop,
 
   // Generation
-  initEncounterTemplates,
+  initEncounterTemplates: () => initEncounterTemplates(ENCOUNTER_TEMPLATES),
   generateRandomEncounter,
   shouldTriggerEncounter,
   ENCOUNTER_TEMPLATES,
 
-  // Procedural
+  // Procedural (wrapped to match async interface)
   ProceduralLocationManager: {
-    initialize: (seed: number) => ProceduralLocationManager.initialize(seed),
-    generateLocationContent: (location: any) =>
-      ProceduralLocationManager.generateLocationContent(location),
+    initialize: async (seed: number) => {
+      ProceduralLocationManager.initialize(seed);
+      return Promise.resolve();
+    },
+    generateLocationContent: async (location: any) => {
+      return Promise.resolve(ProceduralLocationManager.generateLocationContent(location));
+    },
     hasGeneratedContent: (locationId: string) =>
       ProceduralLocationManager.hasGeneratedContent(locationId),
   },
@@ -132,6 +145,11 @@ export const useGameStore = createGameStore({
   databaseManager: dbManager,
   dataAccess: webDataAccess,
 });
+
+// Expose store for E2E testing
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as any).__gameStore = useGameStore;
+}
 
 // Re-export types for convenience
 export type { GameState };

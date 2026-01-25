@@ -20,12 +20,19 @@
     "docs:dev": "pnpm --filter @iron-frontier/docs dev",
     "docs:build": "pnpm --filter @iron-frontier/docs build",
     "docs:preview": "pnpm --filter @iron-frontier/docs preview",
-    "upgrade:all": "pnpm -r update --latest"
+    "upgrade:all": "pnpm -r update --latest",
+    "compile:tiles": "tsx scripts/compile-tiles.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.12",
+    "@gltf-transform/core": "^4.1.1",
+    "@gltf-transform/extensions": "^4.1.1",
+    "@gltf-transform/functions": "^4.1.1",
     "cpy-cli": "^6.0.0",
+    "draco3dgltf": "^1.5.7",
     "rimraf": "^6.1.2",
+    "sharp": "^0.33.5",
+    "tsx": "^4.19.2",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.20.0",

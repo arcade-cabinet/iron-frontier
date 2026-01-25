@@ -43,78 +43,104 @@ export interface TerrainTextureConfig {
 // ============================================================================
 
 /**
- * Western-themed terrain textures
- * Using paths that expect textures in /public/assets/textures/terrain/
+ * Western-themed terrain textures using AmbientCG PBR materials
+ * Textures located in /public/assets/textures/terrain/
  */
 export const TERRAIN_TEXTURES: Record<string, TerrainTextureConfig> = {
-  // Sandy desert terrain
-  sand_western: {
-    id: 'sand_western',
-    name: 'Western Desert Sand',
+  // Sandy desert terrain (Ground044 - sandy/dusty ground)
+  sand: {
+    id: 'sand',
+    name: 'Desert Sand',
     textures: {
-      diffuse: '/assets/textures/terrain/sand_diffuse.jpg',
-      normal: '/assets/textures/terrain/sand_normal.jpg',
-      roughness: '/assets/textures/terrain/sand_roughness.jpg',
+      diffuse: '/assets/textures/terrain/ground044_color.jpg',
+      normal: '/assets/textures/terrain/ground044_normal.jpg',
+      roughness: '/assets/textures/terrain/ground044_roughness.jpg',
     },
     uvScale: 2,
     roughnessValue: 0.9,
     tintColor: new Color3(0.95, 0.85, 0.7), // Warm sand tint
   },
 
-  // Packed dirt/earth
-  dirt_packed: {
-    id: 'dirt_packed',
-    name: 'Packed Dirt Road',
+  // Packed dirt/earth (Ground043 - packed earth)
+  dirt: {
+    id: 'dirt',
+    name: 'Packed Dirt',
     textures: {
-      diffuse: '/assets/textures/terrain/dirt_diffuse.jpg',
-      normal: '/assets/textures/terrain/dirt_normal.jpg',
-      roughness: '/assets/textures/terrain/dirt_roughness.jpg',
+      diffuse: '/assets/textures/terrain/ground043_color.jpg',
+      normal: '/assets/textures/terrain/ground043_normal.jpg',
+      roughness: '/assets/textures/terrain/ground043_roughness.jpg',
     },
     uvScale: 2,
     roughnessValue: 0.85,
     tintColor: new Color3(0.75, 0.55, 0.35), // Brown dirt
   },
 
-  // Dry grass
-  grass_dry: {
-    id: 'grass_dry',
-    name: 'Dry Western Grass',
+  // Dry grass (Grass003 - natural grass)
+  grass: {
+    id: 'grass',
+    name: 'Western Grass',
     textures: {
-      diffuse: '/assets/textures/terrain/grass_dry_diffuse.jpg',
-      normal: '/assets/textures/terrain/grass_dry_normal.jpg',
-      roughness: '/assets/textures/terrain/grass_dry_roughness.jpg',
+      diffuse: '/assets/textures/terrain/grass003_color.jpg',
+      normal: '/assets/textures/terrain/grass003_normal.jpg',
+      roughness: '/assets/textures/terrain/grass003_roughness.jpg',
     },
     uvScale: 3,
     roughnessValue: 0.8,
-    tintColor: new Color3(0.7, 0.65, 0.4), // Yellowed grass
+    tintColor: new Color3(0.75, 0.7, 0.45), // Yellowed western grass
   },
 
-  // Rocky ground
-  stone_ground: {
-    id: 'stone_ground',
+  // Rocky ground (Rock018 - natural rock)
+  stone: {
+    id: 'stone',
     name: 'Rocky Ground',
     textures: {
-      diffuse: '/assets/textures/terrain/stone_diffuse.jpg',
-      normal: '/assets/textures/terrain/stone_normal.jpg',
-      roughness: '/assets/textures/terrain/stone_roughness.jpg',
+      diffuse: '/assets/textures/terrain/rock018_color.jpg',
+      normal: '/assets/textures/terrain/rock018_normal.jpg',
+      roughness: '/assets/textures/terrain/rock018_roughness.jpg',
     },
     uvScale: 2,
     roughnessValue: 0.7,
-    tintColor: new Color3(0.6, 0.55, 0.5), // Gray stone
+    tintColor: new Color3(0.65, 0.6, 0.55), // Gray stone
   },
 
-  // Cracked clay/badlands
-  clay_cracked: {
-    id: 'clay_cracked',
+  // Cracked clay/badlands (Clay002 - clay/terracotta)
+  clay: {
+    id: 'clay',
     name: 'Cracked Clay',
     textures: {
-      diffuse: '/assets/textures/terrain/clay_diffuse.jpg',
-      normal: '/assets/textures/terrain/clay_normal.jpg',
-      roughness: '/assets/textures/terrain/clay_roughness.jpg',
+      diffuse: '/assets/textures/terrain/clay002_color.jpg',
+      normal: '/assets/textures/terrain/clay002_normal.jpg',
+      roughness: '/assets/textures/terrain/clay002_roughness.jpg',
     },
     uvScale: 2,
     roughnessValue: 0.95,
-    tintColor: new Color3(0.8, 0.6, 0.45), // Reddish clay
+    tintColor: new Color3(0.8, 0.55, 0.4), // Reddish clay
+  },
+
+  // Rough ground/badlands (Ground088 - rough terrain)
+  badlands: {
+    id: 'badlands',
+    name: 'Badlands',
+    textures: {
+      diffuse: '/assets/textures/terrain/ground088_color.jpg',
+      normal: '/assets/textures/terrain/ground088_normal.jpg',
+      roughness: '/assets/textures/terrain/ground088_roughness.jpg',
+    },
+    uvScale: 2,
+    roughnessValue: 0.9,
+    tintColor: new Color3(0.7, 0.5, 0.35), // Dusty brown
+  },
+
+  // Water (simple blue - no texture needed for water surface)
+  water: {
+    id: 'water',
+    name: 'Water',
+    textures: {
+      diffuse: '/assets/textures/terrain/ground044_color.jpg', // Placeholder - water uses special shader
+    },
+    uvScale: 4,
+    roughnessValue: 0.1,
+    tintColor: new Color3(0.25, 0.45, 0.65), // Blue water tint
   },
 };
 

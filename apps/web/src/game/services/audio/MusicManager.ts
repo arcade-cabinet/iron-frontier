@@ -4,20 +4,21 @@ type MusicState = 'exploration_day' | 'exploration_night' | 'combat' | 'town';
 
 export class MusicManager {
   private currentState: MusicState = 'exploration_day';
-  private guitar: Tone.PolySynth;
+  private guitar: Tone.PluckSynth;
   private ambience: Tone.PolySynth;
   private loop: Tone.Loop | null = null;
   private isPlaying = false;
 
   // E Minor Pentatonic
   private scale = ['E3', 'G3', 'A3', 'B3', 'D4', 'E4', 'G4'];
-  
+
   constructor() {
-    this.guitar = new Tone.PolySynth(Tone.PluckSynth as any, {
+    // Use PluckSynth directly (not with PolySynth - PluckSynth doesn't extend Monophonic)
+    this.guitar = new Tone.PluckSynth({
       attackNoise: 1,
       dampening: 4000,
       resonance: 0.98
-    } as any).toDestination();
+    }).toDestination();
     this.guitar.volume.value = -12;
 
     this.ambience = new Tone.PolySynth(Tone.AMSynth).toDestination();

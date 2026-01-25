@@ -11,13 +11,13 @@ import {
   DEFAULT_WORLD_POSITION,
   SAVE_VERSION,
 } from './defaults';
-import { persistStorage } from './persistStorage';
+import { createStateStorage } from './persistStorage';
 import { PuzzleGenerator, PipeLogic } from '../puzzles/pipe-fitter';
 import type { StorageAdapter } from './StorageAdapter';
+import type { DialogueCondition, DialogueEffect } from '../data';
 import type {
+  Combatant,
   CombatActionType,
-  DialogueCondition,
-  DialogueEffect,
   EquipmentSlot,
   GamePhase,
   GameSettings,
@@ -196,18 +196,26 @@ export function createGameStore({
           // Initialize procedural generation
           await dataAccess.ProceduralLocationManager.initialize(worldSeed);
 
-          // Get starting items
-          const starterItems = dataAccess.getStarterInventory().map((def) => ({
-            id: `starter_${def.id}_${Date.now()}_${Math.random()}`,
-            itemId: def.id,
-            name: def.name,
-            rarity: def.rarity,
-            quantity: 1,
-            condition: 100,
-            weight: 0.1,
-            type: def.category,
-            droppable: true,
-          }));
+          // Get starting items - look up full item definitions for each starter item
+          const starterItems = dataAccess.getStarterInventory()
+            .map((starterItem) => {
+              const itemDef = dataAccess.getItem(starterItem.itemId);
+              if (!itemDef) return null;
+              return {
+                id: `starter_${starterItem.itemId}_${Date.now()}_${Math.random()}`,
+                itemId: starterItem.itemId,
+                name: itemDef.name,
+                description: itemDef.description,
+                rarity: itemDef.rarity,
+                quantity: starterItem.quantity,
+                usable: itemDef.usable,
+                condition: 100,
+                weight: itemDef.weight || 0.1,
+                type: itemDef.category,
+                droppable: true,
+              };
+            })
+            .filter((item): item is NonNullable<typeof item> => item !== null);
 
           set({
             phase: 'playing', // Skip loading for now or set 'loading' then 'playing'
@@ -515,7 +523,7 @@ export function createGameStore({
         updateObjective: (questId: string, objectiveId: string, progress: number) => {
           set((state) => ({
             activeQuests: state.activeQuests.map((q) => {
-              if (q.id !== questId) return q;
+              if (q.questId !== questId) return q;
               // Deep update objective
               // Implementation skipped for brevity, assumes immutable update structure
               return q;
@@ -529,13 +537,13 @@ export function createGameStore({
 
         completeQuest: (questId: string) => {
           const state = get();
-          const quest = state.activeQuests.find((q) => q.id === questId);
+          const quest = state.activeQuests.find((q) => q.questId === questId);
           if (!quest) return;
 
           const def = dataAccess.getQuestById(questId);
 
           set((s) => ({
-            activeQuests: s.activeQuests.filter((q) => q.id !== questId),
+            activeQuests: s.activeQuests.filter((q) => q.questId !== questId),
             completedQuests: [...s.completedQuests, def],
             completedQuestIds: [...s.completedQuestIds, questId],
           }));
@@ -550,7 +558,7 @@ export function createGameStore({
         failQuest: (questId: string) => {},
         abandonQuest: (questId: string) => {},
 
-        getActiveQuest: (questId: string) => get().activeQuests.find((q) => q.id === questId),
+        getActiveQuest: (questId: string) => get().activeQuests.find((q) => q.questId === questId),
         getQuestDefinition: (questId: string) => dataAccess.getQuestById(questId),
 
         // NPC Actions
@@ -694,6 +702,7 @@ export function createGameStore({
 
         applyDialogueEffect: (effect: DialogueEffect) => {
           // Implement effects
+          if (!effect.target) return;
           switch (effect.type) {
             case 'give_item':
               get().addItemById(effect.target, effect.value || 1);
@@ -878,9 +887,9 @@ export function createGameStore({
           activeQuests.forEach(quest => {
               const def = dataAccess.getQuestById(quest.questId);
               if (!def) return;
-              
+
               const stage = def.stages[quest.currentStageIndex];
-              stage.objectives.forEach(obj => {
+              stage.objectives.forEach((obj: { type: string; target?: string; id: string }) => {
                   if (obj.type === 'visit' && obj.target === destinationId) {
                       get().updateObjective(quest.questId, obj.id, 1);
                   }
@@ -906,15 +915,81 @@ export function createGameStore({
           return dataAccess.getConnectionsFrom(loadedWorld, currentLocationId).map((c) => c.to);
         },
 
-        // Combat Actions (Placeholder)
-        startCombat: (encounterId: string) => {
+        // Combat Actions
+        startCombat: (encounterIdOrData: string | { id: string; enemies: Array<{ id: string; name: string; health: number; maxHealth: number; damage: number; armor: number; accuracy: number; evasion: number }> }) => {
+          const state = get();
+          const { playerStats, playerName } = state;
+
+          // Create combatants array
+          const combatants: Combatant[] = [];
+
+          // Add player as first combatant
+          combatants.push({
+            definitionId: 'player',
+            name: playerName,
+            isPlayer: true,
+            health: playerStats.health,
+            maxHealth: playerStats.maxHealth,
+            actionPoints: 6,
+            maxActionPoints: 6,
+            position: { q: 0, r: 0 },
+            statusEffects: [],
+            weaponId: 'fists',
+            ammoInClip: 0,
+            isActive: true,
+            hasActed: false,
+            isDead: false,
+          });
+
+          // If encounter data with enemies is provided, add them
+          if (typeof encounterIdOrData !== 'string' && encounterIdOrData.enemies) {
+            for (const enemy of encounterIdOrData.enemies) {
+              combatants.push({
+                definitionId: enemy.id,
+                name: enemy.name,
+                isPlayer: false,
+                health: enemy.health,
+                maxHealth: enemy.maxHealth,
+                actionPoints: 4,
+                maxActionPoints: 4,
+                position: { q: 1, r: 0 },
+                statusEffects: [],
+                weaponId: 'enemy_weapon',
+                ammoInClip: 6,
+                isActive: true,
+                hasActed: false,
+                isDead: false,
+              });
+            }
+          } else {
+            // Fallback: create a default enemy for testing
+            combatants.push({
+              definitionId: 'bandit_1',
+              name: 'Dusty Bandit',
+              isPlayer: false,
+              health: 30,
+              maxHealth: 30,
+              actionPoints: 4,
+              maxActionPoints: 4,
+              position: { q: 1, r: 0 },
+              statusEffects: [],
+              weaponId: 'revolver',
+              ammoInClip: 6,
+              isActive: true,
+              hasActed: false,
+              isDead: false,
+            });
+          }
+
+          const encounterId = typeof encounterIdOrData === 'string' ? encounterIdOrData : encounterIdOrData.id;
+
           set({
             phase: 'combat',
             combatState: {
               encounterId,
               phase: 'player_turn',
-              combatants: [],
-              turnOrder: [],
+              combatants,
+              turnOrder: combatants.map(c => c.definitionId),
               currentTurnIndex: 0,
               round: 1,
               log: [],
@@ -1246,8 +1321,10 @@ export function createGameStore({
       }),
       {
         name: storageKey,
-        storage: persistStorage(storageAdapter),
-        partialize: (state) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        storage: createStateStorage(storageAdapter) as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        partialize: (state): any => ({
           // Select fields to persist
           initialized: state.initialized,
           worldSeed: state.worldSeed,

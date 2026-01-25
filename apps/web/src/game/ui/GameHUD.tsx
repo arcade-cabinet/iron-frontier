@@ -58,9 +58,19 @@ export function GameHUD() {
   const healthPercent = (playerStats.health / playerStats.maxHealth) * 100;
   const xpPercent = (playerStats.xp / playerStats.xpToNext) * 100;
 
-  // Get current location name
-  const currentLocation = currentLocationId ? loadedWorld?.locations.get(currentLocationId) : null;
-  const locationName = currentLocation?.ref.name || 'Unknown Territory';
+  // Get current location name - locations may be stored as array or object with numeric keys
+  const currentLocation = currentLocationId && loadedWorld?.locations
+    ? (() => {
+        const locations = loadedWorld.locations;
+        if (locations instanceof Map) {
+          return locations.get(currentLocationId);
+        }
+        // Locations stored as array or object - find by id property
+        const values = Object.values(locations);
+        return values.find((loc: any) => loc?.id === currentLocationId);
+      })()
+    : null;
+  const locationName = currentLocation?.name || 'Unknown Territory';
 
   // Get health color based on percentage
   const getHealthColor = () => {

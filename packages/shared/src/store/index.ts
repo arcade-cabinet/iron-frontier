@@ -8,10 +8,8 @@
 // Store factory
 export {
   createGameStore,
+  type CreateGameStoreOptions,
   type DataAccess,
-  type DatabaseManager,
-  type GameStore,
-  type GameStoreConfig,
 } from './createGameStore';
 // Default values
 export {

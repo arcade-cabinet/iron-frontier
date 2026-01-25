@@ -12,10 +12,40 @@ import {
   getWorldItemsForLocation,
 } from '@iron-frontier/shared/data/items/worldItems';
 import { getNPCsByLocation } from '@iron-frontier/shared/data/npcs';
-import { ProceduralLocationManager } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
 // World/location data
-import { getLocationData } from '@iron-frontier/shared/data/worlds';
+import type { LoadedWorld, ResolvedLocation } from '@iron-frontier/shared/data/worlds';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+/**
+ * Get location data from a loaded world by ID.
+ * Handles both Map (before persistence) and plain object (after persistence).
+ */
+function getLocationFromWorld(
+  loadedWorld: LoadedWorld | null,
+  locationId: string | null
+): ResolvedLocation | null {
+  if (!loadedWorld || !locationId) return null;
+
+  const locations = loadedWorld.locations;
+
+  // Check if locations is a Map (before persistence)
+  if (locations instanceof Map) {
+    return locations.get(locationId) ?? null;
+  }
+
+  // After persistence, locations is a plain object
+  const locationsObj = locations as unknown as Record<string, ResolvedLocation>;
+
+  // Try direct key access first
+  if (locationsObj[locationId]) {
+    return locationsObj[locationId];
+  }
+
+  // Fall back to searching by id property (in case stored as array-like object)
+  const values = Object.values(locationsObj);
+  const found = values.find((loc) => loc?.ref?.id === locationId);
+  return found ?? null;
+}
 import { HexSceneManager, type HexWorldPosition } from '../engine/hex';
 import { HexBuildingType, hexKey } from '../engine/hex/HexTypes';
 import { TitleScreen } from './screens/TitleScreen';
@@ -132,8 +162,9 @@ function GameCanvas() {
         });
 
         // Get the current location data from the loaded world
-        const resolvedLocation = loadedWorld.getLocation(currentLocationId);
-        const locationData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+        // Note: After Zustand persistence, loadedWorld is a plain object without methods
+        const resolvedLocation = getLocationFromWorld(loadedWorld, currentLocationId);
+        const locationData = resolvedLocation?.location ?? null;
 
         // Initialize with location data (or procedural if none)
         if (locationData) {
@@ -210,15 +241,24 @@ function GameCanvas() {
 
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
           // Check for Random Encounter
-          if (loadedLocation) {
-              const locData = getLocationData(loadedLocation);
+          if (currentLocationId) {
+              const resolvedLoc = getLocationFromWorld(loadedWorld, currentLocationId);
+              const locData = resolvedLoc?.location;
               // Safe zones - no encounters in towns/cities
-              const isSafe = locData.type === 'town' || locData.type === 'city' || locData.type === 'village';
+              const isSafe = locData?.type === 'town' || locData?.type === 'city' || locData?.type === 'village';
               
               if (!isSafe) {
                   const rng = new SeededRandom(Date.now()); // Dynamic seed for encounters
                   // 10% chance per move in wild areas
-                  if (shouldTriggerEncounter(rng, { contextTags: [] }, 0.1)) {
+                  if (shouldTriggerEncounter(rng, {
+                    worldSeed: worldSeed,
+                    playerLevel: 1,
+                    gameHour: 12,
+                    factionTensions: {},
+                    activeEvents: [],
+                    contextTags: ['wild'],
+                    locationId: currentLocationId,
+                  }, 0.1)) {
                       console.log('[GameCanvas] Random Encounter Triggered!');
                       
                       // Generate a random encounter
@@ -362,8 +402,9 @@ function GameCanvas() {
           hexSize: 1,
         });
 
-        const resolvedLocation = loadedWorld.getLocation(currentLocationId);
-        const locationData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+        // Note: After Zustand persistence, loadedWorld is a plain object without methods
+        const resolvedLocation = getLocationFromWorld(loadedWorld, currentLocationId);
+        const locationData = resolvedLocation?.location ?? null;
 
         if (locationData) {
           console.log(`[GameCanvas] Loading new location: ${locationData.name}`);

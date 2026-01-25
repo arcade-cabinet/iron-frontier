@@ -32,6 +32,11 @@ import {
   type HexTileType as LoaderTileType,
 } from './HexTileLoader';
 import {
+  getTexturedHexTileFactory,
+  TERRAIN_TEXTURES,
+  type TexturedHexTileFactory,
+} from './TexturedHexTile';
+import {
   DEFAULT_HEX_LAYOUT,
   HexBuildingType,
   type HexChunkData,
@@ -230,6 +235,69 @@ function buildingToLoaderType(building: HexBuildingType): LoaderTileType | null 
 }
 
 // ============================================================================
+// TERRAIN TYPE TO TEXTURE ID MAPPING (for PBR textured tiles)
+// ============================================================================
+
+/**
+ * Maps HexTerrainType to TexturedHexTileFactory texture IDs.
+ * Returns null for terrain types that should use Kenney GLB models (with features).
+ */
+function terrainToTextureId(terrain: HexTerrainType): string | null {
+  const mapping: Partial<Record<HexTerrainType, string>> = {
+    // Grass variants -> grass texture
+    [HexTerrainType.Grass]: 'grass',
+    [HexTerrainType.GrassHill]: 'grass',
+    [HexTerrainType.GrassForest]: 'grass', // Use GLB for forest features
+
+    // Sand variants -> sand texture
+    [HexTerrainType.Sand]: 'sand',
+    [HexTerrainType.SandHill]: 'sand',
+    [HexTerrainType.SandDunes]: 'sand',
+
+    // Dirt variants -> dirt texture
+    [HexTerrainType.Dirt]: 'dirt',
+    [HexTerrainType.DirtHill]: 'dirt',
+
+    // Stone variants -> stone texture
+    [HexTerrainType.Stone]: 'stone',
+    [HexTerrainType.StoneHill]: 'stone',
+    [HexTerrainType.StoneMountain]: 'stone',
+    [HexTerrainType.StoneRocks]: 'stone',
+
+    // Water variants -> water texture
+    [HexTerrainType.Water]: 'water',
+    [HexTerrainType.WaterShallow]: 'water',
+    [HexTerrainType.WaterDeep]: 'water',
+
+    // Western terrain
+    [HexTerrainType.Mesa]: 'clay',
+    [HexTerrainType.Canyon]: 'badlands',
+    [HexTerrainType.Badlands]: 'badlands',
+
+    // Special terrain (fallbacks)
+    [HexTerrainType.Lava]: 'stone', // Will have orange tint
+    [HexTerrainType.Snow]: 'stone', // Will have white tint
+    [HexTerrainType.Ice]: 'water', // Will have light blue tint
+  };
+
+  return mapping[terrain] ?? null;
+}
+
+/**
+ * Checks if a terrain type should use PBR textured tiles.
+ * Returns false for terrain with complex 3D features (forests, hills with props).
+ */
+function shouldUsePBRTerrain(terrain: HexTerrainType): boolean {
+  // Terrain types with 3D props should use Kenney GLB
+  const glbOnlyTerrains = [
+    HexTerrainType.GrassForest,
+    HexTerrainType.StoneRocks,
+    HexTerrainType.StoneMountain,
+  ];
+  return !glbOnlyTerrains.includes(terrain);
+}
+
+// ============================================================================
 // HEX GRID RENDERER CLASS
 // ============================================================================
 
@@ -240,6 +308,7 @@ function buildingToLoaderType(building: HexBuildingType): LoaderTileType | null 
 export class HexGridRenderer {
   private scene: Scene;
   private tileLoader: HexTileLoader;
+  private texturedTileFactory: TexturedHexTileFactory;
   private config: HexGridRendererConfig;
   private layout: HexLayout;
 
@@ -268,8 +337,11 @@ export class HexGridRenderer {
     this.layout = this.config.layout ?? DEFAULT_HEX_LAYOUT;
     this.cameraConfig = { ...DEFAULT_ISOMETRIC_CONFIG };
 
-    // Get the tile loader for this scene
+    // Get the tile loader for this scene (used for buildings and 3D feature tiles)
     this.tileLoader = getHexTileLoader(this.scene);
+
+    // Get the textured tile factory for PBR terrain tiles
+    this.texturedTileFactory = getTexturedHexTileFactory(this.scene);
 
     // Create root node for all tiles
     this.tileRoot = new TransformNode('hexGridRoot', this.scene);
@@ -421,7 +493,8 @@ export class HexGridRenderer {
 
   /**
    * Rebuilds or creates a mesh for a single tile.
-   * If the tile has a building, renders the building tile instead of terrain.
+   * Uses TexturedHexTileFactory for terrain and HexTileLoader for buildings.
+   * NO FALLBACKS - errors are exposed for debugging.
    */
   private async rebuildTileMesh(key: string, data: HexTileData): Promise<void> {
     // Dispose existing mesh if any
@@ -432,54 +505,74 @@ export class HexGridRenderer {
 
     // Get elevation in world units
     const elevation = this.getElevationHeight(data.elevation);
+    const worldPos = hexToWorld(data.coord, elevation, this.layout);
 
-    // Check if tile has a building - if so, use building tile instead of terrain
+    // Check if tile has a building - buildings use Kenney GLB tiles
     const hasBuilding = data.building && data.building !== HexBuildingType.None;
-    const buildingType = hasBuilding ? buildingToLoaderType(data.building) : null;
-    const terrainType = terrainToLoaderType(data.terrain);
+    let mesh: AbstractMesh | InstancedMesh | Mesh | null = null;
 
-    // Prefer building tile, fall back to terrain tile
-    const loaderType = buildingType ?? terrainType;
+    if (hasBuilding) {
+      // Use HexTileLoader for building tiles (Kenney GLB models) - NO FALLBACK
+      const buildingType = buildingToLoaderType(data.building);
+      if (!buildingType) {
+        throw new Error(`[HexGridRenderer] No GLB mapping for building type: ${data.building} at ${key}`);
+      }
+      if (!this.tileLoader.isLoaded(buildingType)) {
+        await this.tileLoader.loadTile(buildingType);
+      }
+      mesh = await this.tileLoader.getInstance(buildingType);
+      console.log(`[HexGridRenderer] Loaded building tile: ${buildingType} at ${key}`);
+    } else {
+      // Terrain tile - use PBR textures for most terrain, GLB only for 3D features
+      const usePBR = shouldUsePBRTerrain(data.terrain);
+      const textureId = terrainToTextureId(data.terrain);
 
-    let mesh: AbstractMesh | InstancedMesh | null = null;
+      if (usePBR) {
+        // MUST use PBR textures - NO FALLBACK to GLB
+        if (!textureId) {
+          throw new Error(`[HexGridRenderer] No texture ID mapping for terrain: ${data.terrain} at ${key}`);
+        }
+        if (!TERRAIN_TEXTURES[textureId]) {
+          throw new Error(`[HexGridRenderer] Texture config not found for ID: ${textureId} at ${key}`);
+        }
 
-    if (loaderType) {
-      // Try to load the tile - will throw if it fails
-      try {
-        // Ensure tile is loaded first
+        console.log(`[HexGridRenderer] Creating PBR tile: ${textureId} at ${key}`);
+        mesh = this.texturedTileFactory.createTile(
+          textureId,
+          worldPos,
+          data.rotationOffset * (Math.PI / 3), // Convert rotation step to radians
+          2.0 // Match Kenney tile scale
+        );
+        console.log(`[HexGridRenderer] Created PBR tile: ${textureId} at ${key}`);
+      } else {
+        // Terrain with 3D features - MUST use GLB - NO FALLBACK
+        const loaderType = terrainToLoaderType(data.terrain);
+        if (!loaderType) {
+          throw new Error(`[HexGridRenderer] No GLB mapping for terrain: ${data.terrain} at ${key}`);
+        }
         if (!this.tileLoader.isLoaded(loaderType)) {
           await this.tileLoader.loadTile(loaderType);
         }
         mesh = await this.tileLoader.getInstance(loaderType);
-
-        if (hasBuilding) {
-          console.log(`[HexGridRenderer] Loaded building tile: ${loaderType} at ${key}`);
-        }
-      } catch (err) {
-        // NO FALLBACKS - fail loudly
-        const errorMsg = `[HexGridRenderer] FATAL: Failed to load tile ${loaderType} for hex ${key}`;
-        console.error(errorMsg, err);
-        throw new Error(`${errorMsg}: ${err instanceof Error ? err.message : String(err)}`);
+        console.log(`[HexGridRenderer] Loaded GLB terrain tile: ${loaderType} at ${key}`);
       }
-    } else if (this.config.usePlaceholders) {
-      // Only use placeholders for unmapped terrain types, not for load failures
-      console.log(`[HexGridRenderer] Using placeholder for unmapped terrain: ${data.terrain}`);
-      mesh = this.createPlaceholderHex(data.terrain, key);
     }
 
     if (!mesh) {
       throw new Error(
-        `[HexGridRenderer] FATAL: No mesh available for tile ${key} with terrain ${data.terrain}`
+        `[HexGridRenderer] FATAL: No mesh created for tile ${key} with terrain ${data.terrain}`
       );
     }
 
-    // Position and rotate
-    const worldPos = hexToWorld(data.coord, elevation, this.layout);
-    mesh.position = worldPos;
-
-    // Apply rotation - use buildingRotation if building, else terrainRotation
-    const totalRotation = hasBuilding ? data.buildingRotation : data.rotationOffset;
-    mesh.rotation.y = rotationToRadians(totalRotation);
+    // For non-PBR tiles (GLB), set position and rotation
+    // PBR tiles from TexturedHexTileFactory already have these set
+    const isPBRTile = mesh.name.startsWith('textured_hex_');
+    if (!isPBRTile) {
+      mesh.position = worldPos;
+      // Apply rotation - use buildingRotation if building, else terrainRotation
+      const totalRotation = hasBuilding ? data.buildingRotation : data.rotationOffset;
+      mesh.rotation.y = rotationToRadians(totalRotation);
+    }
 
     mesh.parent = this.tileRoot;
 

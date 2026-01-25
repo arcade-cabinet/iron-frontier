@@ -306,7 +306,7 @@ function MainMenu() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-stone-800 rounded-xl p-6 max-w-sm border border-amber-700/30"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <h2 className="text-xl font-bold text-amber-300 mb-3">About Iron Frontier</h2>
               <p className="text-stone-300 text-sm mb-4">

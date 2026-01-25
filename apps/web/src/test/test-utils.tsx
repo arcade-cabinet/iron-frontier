@@ -244,7 +244,6 @@ export function assertStoreState(expected: PartialGameState) {
         expect(state.settings[settingKey as keyof typeof state.settings]).toEqual(settingValue);
       }
     } else {
-      // @ts-expect-error
       expect(state[key as keyof typeof state]).toEqual(value);
     }
   }
