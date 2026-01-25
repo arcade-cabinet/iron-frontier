@@ -37,6 +37,11 @@ import {
 } from './generators/questGenerator';
 import { DIALOGUE_SNIPPETS } from './pools/dialogueSnippets';
 
+// Integration
+import { ITEM_LIBRARY } from '../items';
+import { convertItemsToTemplates } from './integration/itemIntegration';
+import { initItemGeneration } from './generators/itemGenerator';
+
 // Import templates and pools
 import { NAME_POOLS, PLACE_NAME_POOLS } from './pools/index';
 import { combineSeeds, hashString, SeededRandom } from './seededRandom';
@@ -141,6 +146,10 @@ class ProceduralLocationManagerClass {
     initNPCTemplates(NPC_TEMPLATES);
     initQuestTemplates(QUEST_TEMPLATES);
     initDialogueData(DIALOGUE_SNIPPETS, Object.values(DIALOGUE_TREE_TEMPLATES));
+    
+    // Register items
+    const itemTemplates = convertItemsToTemplates(Object.values(ITEM_LIBRARY));
+    initItemGeneration(itemTemplates);
 
     this.initialized = true;
     console.log('[ProceduralLocationManager] Initialized successfully');
