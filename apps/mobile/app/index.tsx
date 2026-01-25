@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FilamentRenderer } from '../src/components/FilamentRenderer';
+import { useMobileGameStore } from '../src/game/store/mobileGameStore';
+import { MobileGameHUD } from '../src/game/ui/MobileGameHUD';
 
 // Test model - a cactus from our western asset pack
 const TEST_MODEL = require('../assets/models/cactus1.glb');
@@ -10,6 +12,15 @@ export default function HomeScreen() {
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showModel, setShowModel] = useState(true);
+  
+  const initGame = useMobileGameStore(state => state.initGame);
+  const initialized = useMobileGameStore(state => state.initialized);
+
+  useEffect(() => {
+      if (!initialized) {
+          initGame('Mobile Player');
+      }
+  }, [initialized]);
 
   const handleReady = () => {
     setIsReady(true);
@@ -40,12 +51,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Iron Frontier</Text>
-        <Text style={styles.subtitle}>Steampunk Western RPG</Text>
-      </View>
-
+    <View style={styles.container}>
       <View style={styles.sceneContainer}>
         {showModel && (
           <FilamentRenderer
@@ -58,14 +64,15 @@ export default function HomeScreen() {
         )}
       </View>
 
-      <View style={styles.footer}>
-        <View style={styles.statusRow}>
-          <View style={[styles.statusDot, { backgroundColor: isReady ? '#4ade80' : '#f59e0b' }]} />
-          <Text style={styles.footerText}>{isReady ? 'Filament Ready' : 'Initializing...'}</Text>
-        </View>
-        <Text style={styles.versionText}>v0.1.0 - Filament</Text>
-      </View>
-    </SafeAreaView>
+      {/* Game HUD Overlay */}
+      {isReady && <MobileGameHUD />}
+      
+      {!isReady && (
+          <View style={styles.loadingOverlay}>
+              <Text style={styles.loadingText}>Loading Frontier...</Text>
+          </View>
+      )}
+    </View>
   );
 }
 
@@ -74,59 +81,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1a1a2e',
   },
-  header: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#d4a574',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#8b7355',
-    marginTop: 4,
-  },
   sceneContainer: {
     flex: 1,
-    margin: 16,
-    borderRadius: 12,
-    overflow: 'hidden',
     backgroundColor: '#0f0f1a',
-    borderWidth: 2,
-    borderColor: '#2a2a4e',
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#2a2a4e',
+  loadingOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#1a1a2e',
   },
-  statusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  footerText: {
-    color: '#6b6b8d',
-    fontSize: 12,
-  },
-  versionText: {
-    color: '#4a4a6a',
-    fontSize: 11,
+  loadingText: {
+      color: '#d4a574',
+      fontSize: 20,
+      fontWeight: 'bold',
   },
   errorContainer: {
     flex: 1,
