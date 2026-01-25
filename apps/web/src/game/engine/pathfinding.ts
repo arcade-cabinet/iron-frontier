@@ -26,22 +26,22 @@ function getNeighbors(
   const neighbors: GridPos[] = [];
   const directions = [
     { x: 0, y: -1 }, // Up
-    { x: 0, y: 1 },  // Down
+    { x: 0, y: 1 }, // Down
     { x: -1, y: 0 }, // Left
-    { x: 1, y: 0 },  // Right
+    { x: 1, y: 0 }, // Right
   ];
-  
+
   for (const dir of directions) {
     const nx = pos.x + dir.x;
     const ny = pos.y + dir.y;
-    
+
     if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
       if (grid[ny][nx].walkable) {
         neighbors.push({ x: nx, y: ny });
       }
     }
   }
-  
+
   return neighbors;
 }
 
@@ -57,15 +57,15 @@ export function findPath(
   if (!grid[goal.y]?.[goal.x]?.walkable) {
     return [];
   }
-  
+
   // Check if start equals goal
   if (start.x === goal.x && start.y === goal.y) {
     return [start];
   }
-  
+
   const openSet: PathNode[] = [];
   const closedSet = new Set<string>();
-  
+
   const startNode: PathNode = {
     x: start.x,
     y: start.y,
@@ -74,9 +74,9 @@ export function findPath(
     f: heuristic(start, goal),
     parent: null,
   };
-  
+
   openSet.push(startNode);
-  
+
   while (openSet.length > 0) {
     // Find node with lowest f cost
     let lowestIdx = 0;
@@ -85,9 +85,9 @@ export function findPath(
         lowestIdx = i;
       }
     }
-    
+
     const current = openSet[lowestIdx];
-    
+
     // Check if we reached the goal
     if (current.x === goal.x && current.y === goal.y) {
       // Reconstruct path
@@ -99,30 +99,25 @@ export function findPath(
       }
       return path;
     }
-    
+
     // Move current from open to closed
     openSet.splice(lowestIdx, 1);
     closedSet.add(`${current.x},${current.y}`);
-    
+
     // Check neighbors
-    const neighbors = getNeighbors(
-      { x: current.x, y: current.y },
-      grid,
-      width,
-      height
-    );
-    
+    const neighbors = getNeighbors({ x: current.x, y: current.y }, grid, width, height);
+
     for (const neighbor of neighbors) {
       const key = `${neighbor.x},${neighbor.y}`;
-      
+
       // Skip if already evaluated
       if (closedSet.has(key)) continue;
-      
+
       const g = current.g + 1; // Cost is 1 per tile
-      
+
       // Check if this path is better
-      let neighborNode = openSet.find(n => n.x === neighbor.x && n.y === neighbor.y);
-      
+      let neighborNode = openSet.find((n) => n.x === neighbor.x && n.y === neighbor.y);
+
       if (!neighborNode) {
         // New node
         neighborNode = {
@@ -142,7 +137,7 @@ export function findPath(
       }
     }
   }
-  
+
   // No path found
   return [];
 }
@@ -156,11 +151,11 @@ export function getNextStep(
   height: number
 ): GridPos | null {
   const path = findPath(current, goal, grid, width, height);
-  
+
   if (path.length < 2) {
     return null; // No path or already at goal
   }
-  
+
   return path[1]; // Return the next step (index 0 is current position)
 }
 
@@ -188,16 +183,16 @@ export function findNearestWalkable(
   if (grid[pos.y]?.[pos.x]?.walkable) {
     return pos;
   }
-  
+
   // Spiral search outward
   for (let radius = 1; radius <= maxRadius; radius++) {
     for (let dx = -radius; dx <= radius; dx++) {
       for (let dy = -radius; dy <= radius; dy++) {
         if (Math.abs(dx) !== radius && Math.abs(dy) !== radius) continue;
-        
+
         const nx = pos.x + dx;
         const ny = pos.y + dy;
-        
+
         if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
           if (grid[ny][nx].walkable) {
             return { x: nx, y: ny };
@@ -206,6 +201,6 @@ export function findNearestWalkable(
       }
     }
   }
-  
+
   return null;
 }

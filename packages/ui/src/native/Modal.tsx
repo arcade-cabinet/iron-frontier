@@ -6,20 +6,20 @@
 
 import * as React from 'react';
 import {
-  Modal as RNModal,
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
   Animated,
   Dimensions,
-  type ViewStyle,
+  Pressable,
+  Modal as RNModal,
   type ModalProps as RNModalProps,
+  StyleSheet,
+  Text,
+  View,
+  type ViewStyle,
 } from 'react-native';
 import type { ModalProps, SheetProps, SheetSide } from '../primitives/types';
 import { colors } from '../tokens/colors';
-import { spacing } from '../tokens/spacing';
 import { radius } from '../tokens/radius';
+import { spacing } from '../tokens/spacing';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -55,7 +55,9 @@ export const ModalHeader: React.FC<{
   );
 };
 
-export interface NativeModalProps extends ModalProps, Omit<RNModalProps, 'visible' | 'onRequestClose'> {
+export interface NativeModalProps
+  extends ModalProps,
+    Omit<RNModalProps, 'visible' | 'onRequestClose'> {
   /** Container style */
   containerStyle?: ViewStyle;
   /** Content style */
@@ -91,10 +93,7 @@ export const Modal: React.FC<NativeModalProps> = ({
         style={[styles.overlay, containerStyle]}
         onPress={closeOnOverlayClick ? onClose : undefined}
       >
-        <Pressable
-          style={[styles.modalContent, contentStyle]}
-          onPress={(e) => e.stopPropagation()}
-        >
+        <Pressable style={[styles.modalContent, contentStyle]} onPress={(e) => e.stopPropagation()}>
           {showCloseButton && <CloseButton onPress={onClose} />}
           <ModalHeader title={title} description={description} />
           {children}
@@ -104,7 +103,9 @@ export const Modal: React.FC<NativeModalProps> = ({
   );
 };
 
-export interface NativeSheetProps extends SheetProps, Omit<RNModalProps, 'visible' | 'onRequestClose'> {
+export interface NativeSheetProps
+  extends SheetProps,
+    Omit<RNModalProps, 'visible' | 'onRequestClose'> {
   /** Container style */
   containerStyle?: ViewStyle;
   /** Content style */

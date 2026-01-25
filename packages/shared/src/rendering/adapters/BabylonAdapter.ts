@@ -47,9 +47,7 @@ export const DEFAULT_BABYLON_OPTIONS: BabylonAdapterOptions = {
 /**
  * Type guard for Babylon adapter options
  */
-export function isBabylonAdapterOptions(
-  options: unknown
-): options is BabylonAdapterOptions {
+export function isBabylonAdapterOptions(options: unknown): options is BabylonAdapterOptions {
   if (!options || typeof options !== 'object') return false;
   const opt = options as BabylonAdapterOptions;
   return (

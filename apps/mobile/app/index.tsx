@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { FilamentRenderer } from "../src/components/FilamentRenderer";
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FilamentRenderer } from '../src/components/FilamentRenderer';
 
 // Test model - a cactus from our western asset pack
-const TEST_MODEL = require("../assets/models/cactus1.glb");
+const TEST_MODEL = require('../assets/models/cactus1.glb');
 
 export default function HomeScreen() {
   const [isReady, setIsReady] = useState(false);
@@ -60,15 +60,8 @@ export default function HomeScreen() {
 
       <View style={styles.footer}>
         <View style={styles.statusRow}>
-          <View
-            style={[
-              styles.statusDot,
-              { backgroundColor: isReady ? "#4ade80" : "#f59e0b" },
-            ]}
-          />
-          <Text style={styles.footerText}>
-            {isReady ? "Filament Ready" : "Initializing..."}
-          </Text>
+          <View style={[styles.statusDot, { backgroundColor: isReady ? '#4ade80' : '#f59e0b' }]} />
+          <Text style={styles.footerText}>{isReady ? 'Filament Ready' : 'Initializing...'}</Text>
         </View>
         <Text style={styles.versionText}>v0.1.0 - Filament</Text>
       </View>
@@ -79,47 +72,47 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
   },
   header: {
     paddingVertical: 20,
     paddingHorizontal: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
-    color: "#d4a574",
-    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    fontWeight: 'bold',
+    color: '#d4a574',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: "#8b7355",
+    color: '#8b7355',
     marginTop: 4,
   },
   sceneContainer: {
     flex: 1,
     margin: 16,
     borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "#0f0f1a",
+    overflow: 'hidden',
+    backgroundColor: '#0f0f1a',
     borderWidth: 2,
-    borderColor: "#2a2a4e",
+    borderColor: '#2a2a4e',
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderTopWidth: 1,
-    borderTopColor: "#2a2a4e",
+    borderTopColor: '#2a2a4e',
   },
   statusRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   statusDot: {
@@ -128,40 +121,40 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   footerText: {
-    color: "#6b6b8d",
+    color: '#6b6b8d',
     fontSize: 12,
   },
   versionText: {
-    color: "#4a4a6a",
+    color: '#4a4a6a',
     fontSize: 11,
   },
   errorContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   errorTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#e74c3c",
+    fontWeight: 'bold',
+    color: '#e74c3c',
     marginBottom: 12,
   },
   errorMessage: {
     fontSize: 14,
-    color: "#8b7355",
-    textAlign: "center",
+    color: '#8b7355',
+    textAlign: 'center',
     marginBottom: 24,
   },
   retryButton: {
-    backgroundColor: "#d4a574",
+    backgroundColor: '#d4a574',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: "#1a1a2e",
-    fontWeight: "600",
+    color: '#1a1a2e',
+    fontWeight: '600',
     fontSize: 16,
   },
 });

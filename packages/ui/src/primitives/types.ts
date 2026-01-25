@@ -98,7 +98,16 @@ export type TextVariant =
 /**
  * Text color types
  */
-export type TextColor = 'primary' | 'secondary' | 'tertiary' | 'muted' | 'inverse' | 'link' | 'error' | 'success' | 'warning';
+export type TextColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'muted'
+  | 'inverse'
+  | 'link'
+  | 'error'
+  | 'success'
+  | 'warning';
 
 /**
  * Text alignment

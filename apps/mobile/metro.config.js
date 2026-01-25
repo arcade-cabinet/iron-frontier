@@ -1,8 +1,8 @@
-const { getDefaultConfig } = require("expo/metro-config");
-const path = require("path");
+const { getDefaultConfig } = require('expo/metro-config');
+const path = require('node:path');
 
 const projectRoot = __dirname;
-const monorepoRoot = path.resolve(projectRoot, "../..");
+const monorepoRoot = path.resolve(projectRoot, '../..');
 
 const config = getDefaultConfig(projectRoot);
 
@@ -11,20 +11,14 @@ config.watchFolders = [monorepoRoot];
 
 // Let Metro know where to resolve packages from
 config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, "node_modules"),
-  path.resolve(monorepoRoot, "node_modules"),
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(monorepoRoot, 'node_modules'),
 ];
 
 // Force resolving nested packages from the root node_modules
 config.resolver.disableHierarchicalLookup = true;
 
 // Support additional asset extensions for 3D models (required for Filament GLB loading)
-config.resolver.assetExts = [
-  ...config.resolver.assetExts,
-  "glb",
-  "gltf",
-  "bin",
-  "hdr",
-];
+config.resolver.assetExts = [...config.resolver.assetExts, 'glb', 'gltf', 'bin', 'hdr'];
 
 module.exports = config;

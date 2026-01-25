@@ -6,26 +6,23 @@
 
 import * as React from 'react';
 import {
-  Pressable,
-  Text,
-  StyleSheet,
   ActivityIndicator,
+  Pressable,
   type PressableProps,
-  type ViewStyle,
+  StyleSheet,
+  Text,
   type TextStyle,
+  type ViewStyle,
 } from 'react-native';
-import type { ButtonProps, ButtonVariant, ButtonSize } from '../primitives/types';
+import type { ButtonProps, ButtonSize, ButtonVariant } from '../primitives/types';
 import { colors } from '../tokens/colors';
-import { spacing } from '../tokens/spacing';
 import { radius } from '../tokens/radius';
+import { spacing } from '../tokens/spacing';
 
 /**
  * Button color configurations by variant
  */
-const variantColors: Record<
-  ButtonVariant,
-  { bg: string; bgPressed: string; text: string }
-> = {
+const variantColors: Record<ButtonVariant, { bg: string; bgPressed: string; text: string }> = {
   primary: {
     bg: colors.rust[600],
     bgPressed: colors.rust[700],
@@ -65,7 +62,8 @@ const sizeStyles: Record<
   lg: { height: 48, paddingHorizontal: spacing[6], fontSize: 16, iconSize: 20 },
 };
 
-export interface NativeButtonProps extends Omit<ButtonProps, 'onPress' | 'onPressIn' | 'onPressOut'> {
+export interface NativeButtonProps
+  extends Omit<ButtonProps, 'onPress' | 'onPressIn' | 'onPressOut'> {
   /** Additional style for the button container */
   style?: ViewStyle;
   /** Additional style for the button text */
@@ -143,10 +141,7 @@ export const Button: React.FC<NativeButtonProps> = ({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={colorConfig.text}
-        />
+        <ActivityIndicator size="small" color={colorConfig.text} />
       ) : (
         <>
           {leftIcon}

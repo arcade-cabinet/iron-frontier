@@ -16,65 +16,58 @@
 // ============================================================================
 
 export {
+  type Assemblage,
+  type AssemblageRef,
+  AssemblageSchema,
+  EdgeTypeSchema,
+  FeatureTypeSchema,
+  // Types
+  type HexCoord,
   // Spatial primitives
   HexCoordSchema,
-  TerrainTypeSchema,
-  FeatureTypeSchema,
-  EdgeTypeSchema,
+  type Location,
+  LocationSchema,
+  type Marker,
+  MarkerSchema,
+  type SlotInstance,
+  SlotInstanceSchema,
   StructureTypeSchema,
-
+  TerrainTypeSchema,
+  type TileDef,
   // Spatial composites
   TileDefSchema,
-  MarkerSchema,
-  ZoneSchema,
-  SlotInstanceSchema,
-  AssemblageSchema,
-  LocationSchema,
-
   // Validators
   validateAssemblage,
   validateLocation,
-
-  // Types
-  type HexCoord,
-  type TileDef,
-  type Marker,
   type Zone,
-  type SlotInstance,
-  type Assemblage,
-  type AssemblageRef,
-  type Location,
+  ZoneSchema,
 } from './schemas/spatial';
 
 export {
-  // World primitives
-  WorldCoordSchema,
-  RegionBiomeSchema,
-  DangerLevelSchema,
-  LocationTypeSchema,
-  TravelMethodSchema,
-
-  // World composites
-  RegionSchema,
-  LocationRefSchema,
+  type Connection,
   ConnectionSchema,
-  WorldSchema,
-
-  // Validators
-  validateWorld,
-
+  DangerLevelSchema,
+  getConnectionsFrom,
+  getLocationAt,
   // Utilities
   getLocationsInRegion,
-  getConnectionsFrom,
   getRegionAt,
-  getLocationAt,
-
+  type LocationRef,
+  LocationRefSchema,
+  LocationTypeSchema,
+  type Region,
+  RegionBiomeSchema,
+  // World composites
+  RegionSchema,
+  TravelMethodSchema,
+  // Validators
+  validateWorld,
+  type World,
   // Types
   type WorldCoord,
-  type Region,
-  type LocationRef,
-  type Connection,
-  type World,
+  // World primitives
+  WorldCoordSchema,
+  WorldSchema,
 } from './schemas/world';
 
 // ============================================================================
@@ -82,39 +75,38 @@ export {
 // ============================================================================
 
 export {
-  // Individual assemblages
-  Saloon,
-  SmallTavern,
-  GeneralStore,
-  Gunsmith,
-  Bank,
-  SheriffOffice,
-  Church,
-  TrainStation,
-  Cabin,
-  House,
-  Mansion,
-  Well,
-  Stable,
-  MineEntrance,
-  Campfire,
-  TentCamp,
-  BanditCamp,
-  SmallFarm,
-  CattleRanch,
   AbandonedCabin,
-  GhostTown,
-  Oasis,
-  RockFormation,
-  CanyonPass,
-  Waystation,
-  TelegraphPost,
-
   // Library and utilities
   ASSEMBLAGE_LIBRARY,
   ASSEMBLAGES_BY_ID,
+  BanditCamp,
+  Bank,
+  Cabin,
+  Campfire,
+  CanyonPass,
+  CattleRanch,
+  Church,
+  GeneralStore,
+  GhostTown,
+  Gunsmith,
   getAssemblagesBySlot,
   getAssemblagesByTag,
+  House,
+  Mansion,
+  MineEntrance,
+  Oasis,
+  RockFormation,
+  // Individual assemblages
+  Saloon,
+  SheriffOffice,
+  SmallFarm,
+  SmallTavern,
+  Stable,
+  TelegraphPost,
+  TentCamp,
+  TrainStation,
+  Waystation,
+  Well,
 } from './assemblages/library';
 
 // ============================================================================
@@ -122,17 +114,16 @@ export {
 // ============================================================================
 
 export {
-  // Individual locations
-  TestTown,
   CopperMine,
   DesertWaystation,
-  SunsetRanch,
-  RattlesnakeCanyon,
-
+  getAllLocationIds,
+  getLocationById,
   // Registry
   LOCATIONS_BY_ID,
-  getLocationById,
-  getAllLocationIds,
+  RattlesnakeCanyon,
+  SunsetRanch,
+  // Individual locations
+  TestTown,
 } from './locations/index';
 
 // ============================================================================
@@ -142,21 +133,18 @@ export {
 export {
   // World definitions
   FrontierTerritory,
-
-  // World loader
-  loadWorld,
-  getLocationData,
-  validateWorldReferences,
-  getTravelInfo,
-
-  // Registry
-  WORLDS_BY_ID,
-  getWorldById,
   getAllWorldIds,
-
+  getLocationData,
+  getTravelInfo,
+  getWorldById,
   // Types
   type LoadedWorld,
+  // World loader
+  loadWorld,
   type ResolvedLocation,
+  validateWorldReferences,
+  // Registry
+  WORLDS_BY_ID,
 } from './worlds/index';
 
 // ============================================================================
@@ -164,126 +152,114 @@ export {
 // ============================================================================
 
 export {
-  // Quest schemas
-  ObjectiveTypeSchema,
-  ObjectiveSchema,
-  QuestStageSchema,
-  QuestStatusSchema,
-  QuestTypeSchema,
-  QuestSchema,
-  ActiveQuestSchema,
-
-  // Validators
-  validateObjective,
-  validateQuestStage,
-  validateQuest,
-  validateActiveQuest,
-
-  // Utilities
-  isStageComplete,
-  isCurrentStageComplete,
-  isQuestComplete,
-  getCurrentStage,
-  createActiveQuest,
-
-  // Types
-  type ObjectiveType,
-  type Objective,
-  type QuestStage,
-  type QuestStatus,
-  type QuestType,
-  type Quest,
-  type ActiveQuest,
-} from './schemas/quest';
-
-export {
-  // Quest definitions
-  TheInheritance,
-  MissingCattle,
-  DocsDilemma,
-
-  // Registry
-  QUESTS_BY_ID,
-  QUESTS_BY_TYPE,
   ALL_QUEST_IDS,
-
+  arePrerequisitesMet,
+  DocsDilemma,
   // Lookup functions
   getQuestById,
-  getQuestsByType,
   getQuestsAtLocation,
   getQuestsByNPC,
   getQuestsByTag,
-  arePrerequisitesMet,
+  getQuestsByType,
+  MissingCattle,
+  // Registry
+  QUESTS_BY_ID,
+  QUESTS_BY_TYPE,
+  // Quest definitions
+  TheInheritance,
 } from './quests/index';
+export {
+  type ActiveQuest,
+  ActiveQuestSchema,
+  createActiveQuest,
+  getCurrentStage,
+  isCurrentStageComplete,
+  isQuestComplete,
+  // Utilities
+  isStageComplete,
+  type Objective,
+  ObjectiveSchema,
+  // Types
+  type ObjectiveType,
+  // Quest schemas
+  ObjectiveTypeSchema,
+  type Quest,
+  QuestSchema,
+  type QuestStage,
+  QuestStageSchema,
+  type QuestStatus,
+  QuestStatusSchema,
+  type QuestType,
+  QuestTypeSchema,
+  validateActiveQuest,
+  // Validators
+  validateObjective,
+  validateQuest,
+  validateQuestStage,
+} from './schemas/quest';
 
 // ============================================================================
 // NPC & DIALOGUE
 // ============================================================================
 
 export {
+  ALL_DIALOGUE_TREES,
+  // Registry
+  ALL_NPCS,
+  DIALOGUE_TREES_BY_ID,
+  DiamondbackDolores,
+  DocChenWei,
+  FatherMiguel,
+  getDialogueTreeById,
+  getDialogueTreesForNPC,
+  getEssentialNPCs,
+  // Lookup functions
+  getNPCById,
+  getNPCsByFaction,
+  getNPCsByLocation,
+  getNPCsByTag,
+  getPrimaryDialogueTree,
+  getQuestGivers,
+  MayorJosephineHolt,
+  NPCS_BY_ID,
+  NPCS_BY_LOCATION,
+  OldSamuelIronpick,
+  // NPC definitions
+  SheriffMarcusCole,
+} from './npcs/index';
+export {
+  // Types
+  type ConditionType,
   // Dialogue schemas
   ConditionTypeSchema,
-  DialogueEffectTypeSchema,
-  DialogueConditionSchema,
-  DialogueEffectSchema,
+  type DialogueChoice,
   DialogueChoiceSchema,
+  type DialogueCondition,
+  DialogueConditionSchema,
+  type DialogueEffect,
+  DialogueEffectSchema,
+  type DialogueEffectType,
+  DialogueEffectTypeSchema,
+  type DialogueNode,
   DialogueNodeSchema,
-  DialogueTreeSchema,
-  NPCPersonalitySchema,
-  NPCRoleSchema,
-  NPCFactionSchema,
-  NPCDefinitionSchema,
+  type DialogueState as NPCDialogueState,
   DialogueStateSchema,
-
+  type DialogueTree,
+  DialogueTreeSchema,
+  getAvailableChoices,
+  // Utilities
+  getDialogueEntryNode,
+  type NPCDefinition,
+  NPCDefinitionSchema,
+  type NPCFaction,
+  NPCFactionSchema,
+  type NPCPersonality,
+  NPCPersonalitySchema,
+  type NPCRole,
+  NPCRoleSchema,
   // Validators
   validateDialogueNode,
   validateDialogueTree,
-  validateNPCDefinition,
   validateDialogueTreeIntegrity,
-
-  // Utilities
-  getDialogueEntryNode,
-  getAvailableChoices,
-
-  // Types
-  type ConditionType,
-  type DialogueEffectType,
-  type DialogueCondition,
-  type DialogueEffect,
-  type DialogueChoice,
-  type DialogueNode,
-  type DialogueTree,
-  type NPCPersonality,
-  type NPCRole,
-  type NPCFaction,
-  type NPCDefinition,
-  type DialogueState as NPCDialogueState,
+  validateNPCDefinition,
 } from './schemas/npc';
-
-export {
-  // NPC definitions
-  SheriffMarcusCole,
-  MayorJosephineHolt,
-  DocChenWei,
-  FatherMiguel,
-  DiamondbackDolores,
-  OldSamuelIronpick,
-
-  // Registry
-  ALL_NPCS,
-  NPCS_BY_ID,
-  NPCS_BY_LOCATION,
-  ALL_DIALOGUE_TREES,
-  DIALOGUE_TREES_BY_ID,
-
-  // Lookup functions
-  getNPCById,
-  getNPCsByLocation,
-  getNPCsByFaction,
-  getNPCsByTag,
-  getDialogueTreeById,
-  getDialogueTreesForNPC,
-  getPrimaryDialogueTree,
-  getQuestGivers,
-  getEssentialNPCs,
-} from './npcs/index';

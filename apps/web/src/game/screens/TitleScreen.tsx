@@ -1,7 +1,8 @@
 // Title Screen - Iron Frontier
+
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '../store/webGameStore';
 
 // Gear SVG component
@@ -156,8 +157,8 @@ function MainMenu() {
         transition={{ delay: 0.3, duration: 0.8 }}
         className="text-stone-400 text-center max-w-sm mb-12 text-sm relative z-10"
       >
-        The year is 1887. Steam and brass have conquered the frontier.
-        Fortune awaits those brave enough to claim it.
+        The year is 1887. Steam and brass have conquered the frontier. Fortune awaits those brave
+        enough to claim it.
       </motion.p>
 
       {/* Main actions */}
@@ -260,7 +261,9 @@ function MainMenu() {
                   'transition-all active:scale-[0.98]'
                 )}
               >
-                {hasSaveData ? 'New Game' : (
+                {hasSaveData ? (
+                  'New Game'
+                ) : (
                   <>
                     <PlayIcon />
                     Begin Adventure
@@ -307,13 +310,13 @@ function MainMenu() {
             >
               <h2 className="text-xl font-bold text-amber-300 mb-3">About Iron Frontier</h2>
               <p className="text-stone-300 text-sm mb-4">
-                A mobile-first isometric RPG set in a steampunk American frontier.
-                Explore procedurally generated towns, meet quirky NPCs, and uncover
-                the mysteries of the steam age.
+                A mobile-first isometric RPG set in a steampunk American frontier. Explore
+                procedurally generated towns, meet quirky NPCs, and uncover the mysteries of the
+                steam age.
               </p>
               <p className="text-stone-500 text-xs mb-4">
-                Built with React, Babylon.js, and Reactylon.
-                Procedural generation ensures every playthrough is unique.
+                Built with React, Babylon.js, and Reactylon. Procedural generation ensures every
+                playthrough is unique.
               </p>
               <button
                 onClick={() => setShowAbout(false)}

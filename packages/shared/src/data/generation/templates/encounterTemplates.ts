@@ -130,7 +130,7 @@ export const BanditCampAssault: EncounterTemplate = {
   id: 'bandit_camp_assault',
   name: 'Bandit Camp',
   descriptionTemplate:
-    'You\'ve found their camp. Tents, a smoldering fire, and {{count}} bandits who don\'t take kindly to visitors.',
+    "You've found their camp. Tents, a smoldering fire, and {{count}} bandits who don't take kindly to visitors.",
   enemies: [
     {
       enemyIdOrTag: 'bandit_thug',
@@ -398,7 +398,7 @@ export const ClaimJumpers: EncounterTemplate = {
   id: 'claim_jumpers',
   name: 'Claim Jumpers',
   descriptionTemplate:
-    'Prospectors with more guns than picks have set up on someone else\'s claim. They don\'t plan on sharing.',
+    "Prospectors with more guns than picks have set up on someone else's claim. They don't plan on sharing.",
   enemies: [
     {
       enemyIdOrTag: 'bandit_gunman',
@@ -597,7 +597,7 @@ export const CaveCreatures: EncounterTemplate = {
   id: 'cave_creatures',
   name: 'Cave Dwellers',
   descriptionTemplate:
-    'The darkness stirs. {{creature}} eyes gleam in the torchlight as the cave\'s inhabitants defend their territory.',
+    "The darkness stirs. {{creature}} eyes gleam in the torchlight as the cave's inhabitants defend their territory.",
   enemies: [
     {
       enemyIdOrTag: 'rattlesnake',
@@ -653,7 +653,7 @@ export const StormDanger: EncounterTemplate = {
   id: 'storm_danger',
   name: 'Storm Stalkers',
   descriptionTemplate:
-    'Lightning cracks overhead. Something has been driven from shelter by the storm - and it\'s heading your way.',
+    "Lightning cracks overhead. Something has been driven from shelter by the storm - and it's heading your way.",
   enemies: [
     {
       enemyIdOrTag: 'desert_wolf',
@@ -875,7 +875,7 @@ export const ENCOUNTER_TEMPLATES: EncounterTemplate[] = [
 ];
 
 const TEMPLATES_BY_ID: Map<string, EncounterTemplate> = new Map(
-  ENCOUNTER_TEMPLATES.map(t => [t.id, t])
+  ENCOUNTER_TEMPLATES.map((t) => [t.id, t])
 );
 
 // ============================================================================
@@ -894,19 +894,16 @@ export function getEncounterTemplate(id: string): EncounterTemplate | undefined 
  */
 export function getEncountersForBiome(biome: string): EncounterTemplate[] {
   return ENCOUNTER_TEMPLATES.filter(
-    t => t.validBiomes.length === 0 || t.validBiomes.includes(biome)
+    (t) => t.validBiomes.length === 0 || t.validBiomes.includes(biome)
   );
 }
 
 /**
  * Get all encounter templates within a difficulty range
  */
-export function getEncountersForDifficulty(
-  minDiff: number,
-  maxDiff: number
-): EncounterTemplate[] {
+export function getEncountersForDifficulty(minDiff: number, maxDiff: number): EncounterTemplate[] {
   return ENCOUNTER_TEMPLATES.filter(
-    t => t.difficultyRange[0] <= maxDiff && t.difficultyRange[1] >= minDiff
+    (t) => t.difficultyRange[0] <= maxDiff && t.difficultyRange[1] >= minDiff
   );
 }
 
@@ -922,7 +919,7 @@ export function getEncountersMatching(criteria: {
   factionTag?: string;
   tags?: string[];
 }): EncounterTemplate[] {
-  return ENCOUNTER_TEMPLATES.filter(t => {
+  return ENCOUNTER_TEMPLATES.filter((t) => {
     // Check biome
     if (criteria.biome && t.validBiomes.length > 0) {
       if (!t.validBiomes.includes(criteria.biome)) return false;
@@ -953,7 +950,7 @@ export function getEncountersMatching(criteria: {
 
     // Check tags (must match ALL specified tags)
     if (criteria.tags && criteria.tags.length > 0) {
-      if (!criteria.tags.every(tag => t.tags.includes(tag))) return false;
+      if (!criteria.tags.every((tag) => t.tags.includes(tag))) return false;
     }
 
     return true;
@@ -964,14 +961,14 @@ export function getEncountersMatching(criteria: {
  * Get encounter templates by tag
  */
 export function getEncountersByTag(tag: string): EncounterTemplate[] {
-  return ENCOUNTER_TEMPLATES.filter(t => t.tags.includes(tag));
+  return ENCOUNTER_TEMPLATES.filter((t) => t.tags.includes(tag));
 }
 
 /**
  * Get encounter templates by faction
  */
 export function getEncountersByFaction(faction: string): EncounterTemplate[] {
-  return ENCOUNTER_TEMPLATES.filter(t => t.factionTags.includes(faction));
+  return ENCOUNTER_TEMPLATES.filter((t) => t.factionTags.includes(faction));
 }
 
 /**

@@ -20,18 +20,7 @@
       "@iron-frontier/shared/*": ["../../packages/shared/src/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "android",
-    "ios"
-  ],
-  "references": [
-    { "path": "../../packages/shared" }
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules", "android", "ios"],
+  "references": [{ "path": "../../packages/shared" }]
 }

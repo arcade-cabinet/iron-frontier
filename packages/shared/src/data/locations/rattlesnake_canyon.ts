@@ -4,7 +4,7 @@
  * A dangerous outlaw camp hidden in a canyon. Combat-focused location.
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const RattlesnakeCanyon: Location = validateLocation({
   id: 'rattlesnake_canyon',

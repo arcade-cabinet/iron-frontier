@@ -12,7 +12,7 @@ export function createSeededRandom(seed: number): () => number {
   let state = seed >>> 0; // Ensure unsigned 32-bit
 
   return function mulberry32(): number {
-    state = (state + 0x6D2B79F5) >>> 0;
+    state = (state + 0x6d2b79f5) >>> 0;
     let t = state;
     t = Math.imul(t ^ (t >>> 15), t | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
@@ -147,10 +147,16 @@ export class SeededRandom {
   uuid(): string {
     const hex = () => Math.floor(this.rng() * 16).toString(16);
     return (
-      Array(8).fill(0).map(hex).join('') + '-' +
-      Array(4).fill(0).map(hex).join('') + '-' +
-      '4' + Array(3).fill(0).map(hex).join('') + '-' +
-      ['8', '9', 'a', 'b'][this.int(0, 3)] + Array(3).fill(0).map(hex).join('') + '-' +
+      Array(8).fill(0).map(hex).join('') +
+      '-' +
+      Array(4).fill(0).map(hex).join('') +
+      '-' +
+      '4' +
+      Array(3).fill(0).map(hex).join('') +
+      '-' +
+      ['8', '9', 'a', 'b'][this.int(0, 3)] +
+      Array(3).fill(0).map(hex).join('') +
+      '-' +
       Array(12).fill(0).map(hex).join('')
     );
   }

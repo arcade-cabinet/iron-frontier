@@ -4,14 +4,14 @@
  * Typography component with pre-defined variants.
  */
 
-import * as React from 'react';
+import type * as React from 'react';
 import {
   Text as RNText,
+  type TextProps as RNTextProps,
   StyleSheet,
   type TextStyle,
-  type TextProps as RNTextProps,
 } from 'react-native';
-import type { TextProps, TextVariant, TextColor } from '../primitives/types';
+import type { TextColor, TextProps, TextVariant } from '../primitives/types';
 import { colors } from '../tokens/colors';
 import { fontSizes, fontWeights, lineHeights } from '../tokens/typography';
 

@@ -1,12 +1,10 @@
-import {
-  ChunkData,
-  NPC
-} from '@/engine/types';
-import { GameState, useGameStore, type InventoryItem } from '@/game/store/webGameStore';
-import { render, RenderOptions } from '@testing-library/react';
+import { type RenderOptions, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { Children, cloneElement, isValidElement, ReactElement, useState } from 'react';
+import type React from 'react';
+import { Children, cloneElement, isValidElement, type ReactElement, useState } from 'react';
 import { expect, vi } from 'vitest';
+import type { ChunkData, NPC } from '@/engine/types';
+import { type GameState, type InventoryItem, useGameStore } from '@/game/store/webGameStore';
 
 // Mock Sheet components for testing - needs to be before imports
 vi.mock('@/components/ui/sheet', () => ({
@@ -14,25 +12,53 @@ vi.mock('@/components/ui/sheet', () => ({
     open ? <div data-testid="sheet">{children}</div> : null,
   SheetTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   SheetClose: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  SheetContent: ({ children, className }: { children: React.ReactNode; className?: string; side?: string }) =>
-    <div className={className} data-testid="sheet-content">{children}</div>,
-  SheetHeader: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-    <div className={className} data-testid="sheet-header">{children}</div>,
-  SheetFooter: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-    <div className={className}>{children}</div>,
-  SheetTitle: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-    <h2 className={className}>{children}</h2>,
-  SheetDescription: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-    <p className={className}>{children}</p>,
+  SheetContent: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+    side?: string;
+  }) => (
+    <div className={className} data-testid="sheet-content">
+      {children}
+    </div>
+  ),
+  SheetHeader: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className} data-testid="sheet-header">
+      {children}
+    </div>
+  ),
+  SheetFooter: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  ),
+  SheetTitle: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <h2 className={className}>{children}</h2>
+  ),
+  SheetDescription: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+  }) => <p className={className}>{children}</p>,
 }));
 
 // Mock Tabs for testing with proper state handling
 vi.mock('@/components/ui/tabs', () => ({
-  Tabs: ({ children, defaultValue, className }: { children: React.ReactNode; defaultValue?: string; className?: string }) => {
+  Tabs: ({
+    children,
+    defaultValue,
+    className,
+  }: {
+    children: React.ReactNode;
+    defaultValue?: string;
+    className?: string;
+  }) => {
     const [activeTab, setActiveTab] = useState(defaultValue || 'active');
     return (
       <div data-testid="tabs" data-active={activeTab} className={className}>
-        {Children.map(children, child => {
+        {Children.map(children, (child) => {
           if (isValidElement(child)) {
             return cloneElement(child as React.ReactElement<any>, { activeTab, setActiveTab });
           }
@@ -43,7 +69,7 @@ vi.mock('@/components/ui/tabs', () => ({
   },
   TabsList: ({ children, className, activeTab, setActiveTab }: any) => (
     <div role="tablist" className={className}>
-      {Children.map(children, child => {
+      {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child as React.ReactElement<any>, { activeTab, setActiveTab });
         }
@@ -62,7 +88,11 @@ vi.mock('@/components/ui/tabs', () => ({
     </button>
   ),
   TabsContent: ({ children, value, className, activeTab }: any) =>
-    activeTab === value ? <div role="tabpanel" className={className}>{children}</div> : null,
+    activeTab === value ? (
+      <div role="tabpanel" className={className}>
+        {children}
+      </div>
+    ) : null,
 }));
 
 // Type for partial state override
@@ -178,10 +208,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   initialState?: PartialGameState;
 }
 
-export function customRender(
-  ui: ReactElement,
-  options: CustomRenderOptions = {}
-) {
+export function customRender(ui: ReactElement, options: CustomRenderOptions = {}) {
   const { initialState, ...renderOptions } = options;
 
   if (initialState) {
@@ -198,7 +225,7 @@ export function customRender(
 
 // Helper for waiting
 export const waitForTimeout = async (ms: number) =>
-  new Promise(resolve => setTimeout(resolve, ms));
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 // Helper to get current store state
 export const getStoreState = () => useGameStore.getState();
@@ -217,7 +244,7 @@ export function assertStoreState(expected: PartialGameState) {
         expect(state.settings[settingKey as keyof typeof state.settings]).toEqual(settingValue);
       }
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       expect(state[key as keyof typeof state]).toEqual(value);
     }
   }
@@ -226,4 +253,3 @@ export function assertStoreState(expected: PartialGameState) {
 // Re-export everything from testing library
 export * from '@testing-library/react';
 export { userEvent };
-

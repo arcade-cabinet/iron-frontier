@@ -9,19 +9,19 @@
 export { Button, type NativeButtonProps } from './Button';
 export {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
   type NativeCardProps,
 } from './Card';
-export { Text, type NativeTextProps } from './Text';
 export { Input, type NativeInputProps } from './Input';
 export {
   Modal,
-  Sheet,
   ModalHeader,
   type NativeModalProps,
   type NativeSheetProps,
+  Sheet,
 } from './Modal';
-export { Spinner, LoadingOverlay, type NativeSpinnerProps } from './Spinner';
+export { LoadingOverlay, type NativeSpinnerProps, Spinner } from './Spinner';
+export { type NativeTextProps, Text } from './Text';

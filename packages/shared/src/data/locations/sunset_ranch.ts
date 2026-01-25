@@ -4,7 +4,7 @@
  * A prosperous cattle ranch with main house, bunkhouse, and extensive pastures.
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const SunsetRanch: Location = validateLocation({
   id: 'sunset_ranch',
@@ -61,26 +61,90 @@ export const SunsetRanch: Location = validateLocation({
 
   baseTiles: [
     // Main ranch road
-    { coord: { q: 10, r: 16 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 15 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 14 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 12 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 11 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 10 }, terrain: 'dirt', edges: ['road', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 10, r: 16 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 15 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 14 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 12 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 11 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // Branch to bunkhouse
-    { coord: { q: 9, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 8, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 7, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 6, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 9, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 8, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 7, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 6, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // Branch to horse stable
-    { coord: { q: 11, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 12, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 13, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 14, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 15, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 11, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 12, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 14, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // Pasture fencing (represented by grass tiles)
     // West pasture

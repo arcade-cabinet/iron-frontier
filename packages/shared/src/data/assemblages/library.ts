@@ -6,7 +6,7 @@
  * assemblages from this library.
  */
 
-import { Assemblage, validateAssemblage } from '../schemas/spatial';
+import { type Assemblage, validateAssemblage } from '../schemas/spatial';
 
 // ============================================================================
 // TAVERNS & SOCIAL
@@ -22,31 +22,102 @@ export const Saloon: Assemblage = validateAssemblage({
 
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'saloon_building', structureRotation: 0 },
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },  // Front porch
+    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' }, // Front porch
     { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
     { coord: { q: -1, r: 1 }, terrain: 'dirt', feature: 'none' },
-    { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },  // Back area
+    { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' }, // Back area
     { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none' },
   ],
 
   markers: [
-    { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'public'] },
-    { type: 'exit', name: 'back_door', offset: { q: -1, r: 0 }, facing: 3, tags: ['service', 'escape'] },
-    { type: 'counter', name: 'bar_counter', offset: { q: 0, r: 0 }, facing: 0, tags: ['service', 'drinks'] },
+    {
+      type: 'entrance',
+      name: 'front_door',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'public'],
+    },
+    {
+      type: 'exit',
+      name: 'back_door',
+      offset: { q: -1, r: 0 },
+      facing: 3,
+      tags: ['service', 'escape'],
+    },
+    {
+      type: 'counter',
+      name: 'bar_counter',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['service', 'drinks'],
+    },
     { type: 'table', name: 'corner_table', offset: { q: 0, r: -1 }, tags: ['seating', 'private'] },
     { type: 'table', name: 'center_table', offset: { q: 0, r: 1 }, tags: ['seating', 'public'] },
-    { type: 'stage', name: 'performance_stage', offset: { q: -1, r: 1 }, facing: 0, tags: ['entertainment'] },
-    { type: 'spawn_point', name: 'bartender', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'staff'] },
+    {
+      type: 'stage',
+      name: 'performance_stage',
+      offset: { q: -1, r: 1 },
+      facing: 0,
+      tags: ['entertainment'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'bartender',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['npc', 'staff'],
+    },
     { type: 'spawn_point', name: 'patron_1', offset: { q: 0, r: 1 }, tags: ['npc', 'patron'] },
-    { type: 'conversation_spot', name: 'private_booth', offset: { q: 0, r: -1 }, tags: ['quest', 'private'] },
-    { type: 'evidence_spot', name: 'behind_bar', offset: { q: -1, r: 0 }, tags: ['hidden', 'clue'] },
+    {
+      type: 'conversation_spot',
+      name: 'private_booth',
+      offset: { q: 0, r: -1 },
+      tags: ['quest', 'private'],
+    },
+    {
+      type: 'evidence_spot',
+      name: 'behind_bar',
+      offset: { q: -1, r: 0 },
+      tags: ['hidden', 'clue'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'main_floor', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }], tags: ['social'] },
-    { type: 'restricted_area', name: 'staff_area', tiles: [{ q: -1, r: 0 }], priority: 1, tags: ['staff_only'] },
-    { type: 'npc_area', name: 'patron_zone', tiles: [{ q: 0, r: 1 }, { q: 0, r: -1 }], tags: ['patrons'] },
-    { type: 'event_stage', name: 'brawl_zone', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }], tags: ['combat'] },
+    {
+      type: 'public_area',
+      name: 'main_floor',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 0, r: 1 },
+        { q: 1, r: 0 },
+      ],
+      tags: ['social'],
+    },
+    {
+      type: 'restricted_area',
+      name: 'staff_area',
+      tiles: [{ q: -1, r: 0 }],
+      priority: 1,
+      tags: ['staff_only'],
+    },
+    {
+      type: 'npc_area',
+      name: 'patron_zone',
+      tiles: [
+        { q: 0, r: 1 },
+        { q: 0, r: -1 },
+      ],
+      tags: ['patrons'],
+    },
+    {
+      type: 'event_stage',
+      name: 'brawl_zone',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: ['combat'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -75,7 +146,15 @@ export const SmallTavern: Assemblage = validateAssemblage({
   ],
 
   zones: [
-    { type: 'public_area', name: 'interior', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'interior',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: [],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -95,23 +174,60 @@ export const GeneralStore: Assemblage = validateAssemblage({
 
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'store_building', structureRotation: 0 },
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },  // Entrance
+    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' }, // Entrance
     { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' }, // Storage
     { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
   ],
 
   markers: [
-    { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'public'] },
+    {
+      type: 'entrance',
+      name: 'front_door',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'public'],
+    },
     { type: 'counter', name: 'shop_counter', offset: { q: 0, r: 0 }, tags: ['service', 'trade'] },
     { type: 'display', name: 'goods_display', offset: { q: 0, r: 1 }, tags: ['merchandise'] },
-    { type: 'storage', name: 'back_storage', offset: { q: -1, r: 0 }, tags: ['inventory', 'private'] },
-    { type: 'spawn_point', name: 'shopkeeper', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'merchant'] },
+    {
+      type: 'storage',
+      name: 'back_storage',
+      offset: { q: -1, r: 0 },
+      tags: ['inventory', 'private'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'shopkeeper',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['npc', 'merchant'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'shop_floor', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 0 }], tags: [] },
-    { type: 'loot_area', name: 'storage', tiles: [{ q: -1, r: 0 }], tags: ['containers', 'valuables'] },
-    { type: 'restricted_area', name: 'back_room', tiles: [{ q: -1, r: 0 }], priority: 1, tags: ['private'] },
+    {
+      type: 'public_area',
+      name: 'shop_floor',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 0, r: 1 },
+        { q: 1, r: 0 },
+      ],
+      tags: [],
+    },
+    {
+      type: 'loot_area',
+      name: 'storage',
+      tiles: [{ q: -1, r: 0 }],
+      tags: ['containers', 'valuables'],
+    },
+    {
+      type: 'restricted_area',
+      name: 'back_room',
+      tiles: [{ q: -1, r: 0 }],
+      priority: 1,
+      tags: ['private'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -127,7 +243,12 @@ export const Gunsmith: Assemblage = validateAssemblage({
   primarySlot: 'gunsmith',
 
   tiles: [
-    { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'workshop_building', structureRotation: 0 },
+    {
+      coord: { q: 0, r: 0 },
+      terrain: 'dirt',
+      structure: 'workshop_building',
+      structureRotation: 0,
+    },
     { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
     { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
   ],
@@ -135,13 +256,26 @@ export const Gunsmith: Assemblage = validateAssemblage({
   markers: [
     { type: 'entrance', name: 'door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
     { type: 'counter', name: 'gun_counter', offset: { q: 0, r: 0 }, tags: ['service', 'weapons'] },
-    { type: 'display', name: 'weapon_rack', offset: { q: 0, r: 1 }, tags: ['merchandise', 'weapons'] },
+    {
+      type: 'display',
+      name: 'weapon_rack',
+      offset: { q: 0, r: 1 },
+      tags: ['merchandise', 'weapons'],
+    },
     { type: 'workbench', name: 'repair_bench', offset: { q: 0, r: 0 }, tags: ['crafting'] },
     { type: 'spawn_point', name: 'gunsmith', offset: { q: 0, r: 0 }, tags: ['npc', 'merchant'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'shop', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'shop',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+      ],
+      tags: [],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -165,17 +299,49 @@ export const Bank: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'guarded'] },
-    { type: 'counter', name: 'teller_window', offset: { q: 0, r: 0 }, tags: ['service', 'finance'] },
+    {
+      type: 'entrance',
+      name: 'front_door',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'guarded'],
+    },
+    {
+      type: 'counter',
+      name: 'teller_window',
+      offset: { q: 0, r: 0 },
+      tags: ['service', 'finance'],
+    },
     { type: 'vault', name: 'bank_vault', offset: { q: -1, r: 0 }, tags: ['secure', 'valuables'] },
     { type: 'desk', name: 'manager_desk', offset: { q: 0, r: -1 }, tags: ['private', 'important'] },
     { type: 'spawn_point', name: 'teller', offset: { q: 0, r: 0 }, tags: ['npc', 'staff'] },
-    { type: 'spawn_point', name: 'guard', offset: { q: 1, r: 0 }, facing: 3, tags: ['npc', 'security'] },
+    {
+      type: 'spawn_point',
+      name: 'guard',
+      offset: { q: 1, r: 0 },
+      facing: 3,
+      tags: ['npc', 'security'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'lobby', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
-    { type: 'restricted_area', name: 'vault_room', tiles: [{ q: -1, r: 0 }], priority: 2, tags: ['secure'] },
+    {
+      type: 'public_area',
+      name: 'lobby',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: [],
+    },
+    {
+      type: 'restricted_area',
+      name: 'vault_room',
+      tiles: [{ q: -1, r: 0 }],
+      priority: 2,
+      tags: ['secure'],
+    },
     { type: 'loot_area', name: 'vault_interior', tiles: [{ q: -1, r: 0 }], tags: ['high_value'] },
   ],
 
@@ -198,24 +364,72 @@ export const SheriffOffice: Assemblage = validateAssemblage({
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'office_building', structureRotation: 0 },
     { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
-    { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },  // Jail cell area
+    { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' }, // Jail cell area
     { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },
   ],
 
   markers: [
-    { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'public'] },
+    {
+      type: 'entrance',
+      name: 'front_door',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'public'],
+    },
     { type: 'desk', name: 'sheriff_desk', offset: { q: 0, r: 0 }, tags: ['work', 'important'] },
     { type: 'cell', name: 'jail_cell_1', offset: { q: 0, r: 1 }, tags: ['prisoner', 'secure'] },
-    { type: 'storage', name: 'evidence_locker', offset: { q: -1, r: 0 }, tags: ['secure', 'evidence'] },
-    { type: 'spawn_point', name: 'sheriff', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'law', 'important'] },
-    { type: 'spawn_point', name: 'deputy', offset: { q: 1, r: 0 }, facing: 3, tags: ['npc', 'law'] },
-    { type: 'conversation_spot', name: 'bounty_board', offset: { q: 1, r: 0 }, tags: ['quest', 'bounties'] },
+    {
+      type: 'storage',
+      name: 'evidence_locker',
+      offset: { q: -1, r: 0 },
+      tags: ['secure', 'evidence'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'sheriff',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['npc', 'law', 'important'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'deputy',
+      offset: { q: 1, r: 0 },
+      facing: 3,
+      tags: ['npc', 'law'],
+    },
+    {
+      type: 'conversation_spot',
+      name: 'bounty_board',
+      offset: { q: 1, r: 0 },
+      tags: ['quest', 'bounties'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'office', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }], tags: [] },
-    { type: 'restricted_area', name: 'jail', tiles: [{ q: 0, r: 1 }], priority: 1, tags: ['secure'] },
-    { type: 'restricted_area', name: 'evidence', tiles: [{ q: -1, r: 0 }], priority: 1, tags: ['secure'] },
+    {
+      type: 'public_area',
+      name: 'office',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+      ],
+      tags: [],
+    },
+    {
+      type: 'restricted_area',
+      name: 'jail',
+      tiles: [{ q: 0, r: 1 }],
+      priority: 1,
+      tags: ['secure'],
+    },
+    {
+      type: 'restricted_area',
+      name: 'evidence',
+      tiles: [{ q: -1, r: 0 }],
+      priority: 1,
+      tags: ['secure'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -232,7 +446,7 @@ export const Church: Assemblage = validateAssemblage({
 
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'grass', structure: 'church_building', structureRotation: 0 },
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },  // Path
+    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' }, // Path
     { coord: { q: 0, r: 1 }, terrain: 'grass', feature: 'bush' },
     { coord: { q: -1, r: 0 }, terrain: 'grass', feature: 'tree' },
     { coord: { q: 0, r: -1 }, terrain: 'grass', feature: 'none' }, // Graveyard
@@ -240,14 +454,38 @@ export const Church: Assemblage = validateAssemblage({
 
   markers: [
     { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
-    { type: 'altar', name: 'altar', offset: { q: 0, r: 0 }, facing: 3, tags: ['religious', 'important'] },
+    {
+      type: 'altar',
+      name: 'altar',
+      offset: { q: 0, r: 0 },
+      facing: 3,
+      tags: ['religious', 'important'],
+    },
     { type: 'spawn_point', name: 'preacher', offset: { q: 0, r: 0 }, tags: ['npc', 'religious'] },
-    { type: 'conversation_spot', name: 'confessional', offset: { q: -1, r: 0 }, tags: ['private', 'quest'] },
-    { type: 'hiding_spot', name: 'bell_tower', offset: { q: 0, r: 0 }, tags: ['elevated', 'vantage'] },
+    {
+      type: 'conversation_spot',
+      name: 'confessional',
+      offset: { q: -1, r: 0 },
+      tags: ['private', 'quest'],
+    },
+    {
+      type: 'hiding_spot',
+      name: 'bell_tower',
+      offset: { q: 0, r: 0 },
+      tags: ['elevated', 'vantage'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'nave', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }], tags: ['sanctuary'] },
+    {
+      type: 'public_area',
+      name: 'nave',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+      ],
+      tags: ['sanctuary'],
+    },
     { type: 'event_stage', name: 'service_area', tiles: [{ q: 0, r: 0 }], tags: ['ceremony'] },
   ],
 
@@ -264,23 +502,52 @@ export const TrainStation: Assemblage = validateAssemblage({
 
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'station_building', structureRotation: 0 },
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['railroad', 'none', 'none', 'none', 'none', 'railroad'] },
-    { coord: { q: 2, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 1, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['railroad', 'none', 'none', 'none', 'none', 'railroad'],
+    },
+    {
+      coord: { q: 2, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
     { coord: { q: -1, r: 0 }, terrain: 'dirt', structure: 'water_tower', structureRotation: 0 },
-    { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },  // Cargo area
+    { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' }, // Cargo area
     { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none' },
   ],
 
   markers: [
-    { type: 'entrance', name: 'platform', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'travel'] },
+    {
+      type: 'entrance',
+      name: 'platform',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'travel'],
+    },
     { type: 'counter', name: 'ticket_window', offset: { q: 0, r: 0 }, tags: ['service', 'travel'] },
     { type: 'storage', name: 'cargo_area', offset: { q: 0, r: 1 }, tags: ['freight'] },
     { type: 'spawn_point', name: 'station_master', offset: { q: 0, r: 0 }, tags: ['npc', 'staff'] },
-    { type: 'spawn_point', name: 'traveler_spawn', offset: { q: 1, r: 0 }, tags: ['npc', 'transient'] },
+    {
+      type: 'spawn_point',
+      name: 'traveler_spawn',
+      offset: { q: 1, r: 0 },
+      tags: ['npc', 'transient'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'platform', tiles: [{ q: 1, r: 0 }, { q: 2, r: 0 }], tags: ['travel'] },
+    {
+      type: 'public_area',
+      name: 'platform',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 2, r: 0 },
+      ],
+      tags: ['travel'],
+    },
     { type: 'loot_area', name: 'cargo', tiles: [{ q: 0, r: 1 }], tags: ['containers'] },
   ],
 
@@ -313,7 +580,15 @@ export const Cabin: Assemblage = validateAssemblage({
   ],
 
   zones: [
-    { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'yard',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: [],
+    },
     { type: 'restricted_area', name: 'interior', tiles: [{ q: 0, r: 0 }], tags: ['private'] },
   ],
 
@@ -338,14 +613,28 @@ export const House: Assemblage = validateAssemblage({
 
   markers: [
     { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
-    { type: 'entrance', name: 'back_door', offset: { q: -1, r: 0 }, facing: 3, tags: ['secondary'] },
+    {
+      type: 'entrance',
+      name: 'back_door',
+      offset: { q: -1, r: 0 },
+      facing: 3,
+      tags: ['secondary'],
+    },
     { type: 'bed', name: 'bedroom', offset: { q: 0, r: 0 }, tags: ['rest'] },
     { type: 'storage', name: 'wardrobe', offset: { q: 0, r: 0 }, tags: ['personal'] },
     { type: 'spawn_point', name: 'resident', offset: { q: 0, r: 0 }, tags: ['npc', 'civilian'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'yard',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: [],
+    },
     { type: 'restricted_area', name: 'interior', tiles: [{ q: 0, r: 0 }], tags: ['private'] },
     { type: 'loot_area', name: 'home_goods', tiles: [{ q: 0, r: 0 }], tags: ['low_value'] },
   ],
@@ -373,18 +662,51 @@ export const Mansion: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'grand'] },
-    { type: 'entrance', name: 'servants_entrance', offset: { q: -1, r: 0 }, facing: 3, tags: ['service'] },
+    {
+      type: 'entrance',
+      name: 'front_door',
+      offset: { q: 1, r: 0 },
+      facing: 0,
+      tags: ['main', 'grand'],
+    },
+    {
+      type: 'entrance',
+      name: 'servants_entrance',
+      offset: { q: -1, r: 0 },
+      facing: 3,
+      tags: ['service'],
+    },
     { type: 'desk', name: 'study', offset: { q: 0, r: 0 }, tags: ['work', 'important'] },
     { type: 'bed', name: 'master_bedroom', offset: { q: 0, r: 0 }, tags: ['rest', 'luxury'] },
     { type: 'vault', name: 'safe', offset: { q: 0, r: 0 }, tags: ['secure', 'valuables'] },
-    { type: 'spawn_point', name: 'owner', offset: { q: 0, r: 0 }, tags: ['npc', 'wealthy', 'important'] },
+    {
+      type: 'spawn_point',
+      name: 'owner',
+      offset: { q: 0, r: 0 },
+      tags: ['npc', 'wealthy', 'important'],
+    },
     { type: 'spawn_point', name: 'servant', offset: { q: -1, r: 0 }, tags: ['npc', 'staff'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'grounds', tiles: [{ q: 1, r: 0 }, { q: 2, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }], tags: ['garden'] },
-    { type: 'restricted_area', name: 'interior', tiles: [{ q: 0, r: 0 }], priority: 1, tags: ['private'] },
+    {
+      type: 'public_area',
+      name: 'grounds',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 2, r: 0 },
+        { q: 0, r: 1 },
+        { q: 1, r: 1 },
+      ],
+      tags: ['garden'],
+    },
+    {
+      type: 'restricted_area',
+      name: 'interior',
+      tiles: [{ q: 0, r: 0 }],
+      priority: 1,
+      tags: ['private'],
+    },
     { type: 'loot_area', name: 'valuables', tiles: [{ q: 0, r: 0 }], tags: ['high_value'] },
   ],
 
@@ -412,13 +734,44 @@ export const Well: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'spawn_point', name: 'gathering_spot', offset: { q: 0, r: 1 }, tags: ['npc', 'social'] },
-    { type: 'conversation_spot', name: 'gossip_spot', offset: { q: 1, r: 0 }, tags: ['dialogue', 'rumors'] },
+    {
+      type: 'spawn_point',
+      name: 'gathering_spot',
+      offset: { q: 0, r: 1 },
+      tags: ['npc', 'social'],
+    },
+    {
+      type: 'conversation_spot',
+      name: 'gossip_spot',
+      offset: { q: 1, r: 0 },
+      tags: ['dialogue', 'rumors'],
+    },
   ],
 
   zones: [
-    { type: 'npc_area', name: 'loitering', tiles: [{ q: 1, r: 0 }, { q: -1, r: 0 }, { q: 0, r: 1 }, { q: 0, r: -1 }], tags: ['social'] },
-    { type: 'public_area', name: 'plaza', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: -1, r: 0 }, { q: 0, r: 1 }, { q: 0, r: -1 }], tags: [] },
+    {
+      type: 'npc_area',
+      name: 'loitering',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: -1, r: 0 },
+        { q: 0, r: 1 },
+        { q: 0, r: -1 },
+      ],
+      tags: ['social'],
+    },
+    {
+      type: 'public_area',
+      name: 'plaza',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: -1, r: 0 },
+        { q: 0, r: 1 },
+        { q: 0, r: -1 },
+      ],
+      tags: [],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -435,7 +788,7 @@ export const Stable: Assemblage = validateAssemblage({
   tiles: [
     { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'stable', structureRotation: 0 },
     { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
-    { coord: { q: 0, r: 1 }, terrain: 'grass', feature: 'none' },  // Paddock
+    { coord: { q: 0, r: 1 }, terrain: 'grass', feature: 'none' }, // Paddock
     { coord: { q: 1, r: 1 }, terrain: 'grass', feature: 'none' },
     { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },
   ],
@@ -448,7 +801,15 @@ export const Stable: Assemblage = validateAssemblage({
 
   zones: [
     { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }], tags: [] },
-    { type: 'npc_area', name: 'paddock', tiles: [{ q: 0, r: 1 }, { q: 1, r: 1 }], tags: ['animals'] },
+    {
+      type: 'npc_area',
+      name: 'paddock',
+      tiles: [
+        { q: 0, r: 1 },
+        { q: 1, r: 1 },
+      ],
+      tags: ['animals'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -475,14 +836,28 @@ export const MineEntrance: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'entrance', name: 'mine_shaft', offset: { q: 0, r: 0 }, facing: 0, tags: ['main', 'dungeon_entrance'] },
+    {
+      type: 'entrance',
+      name: 'mine_shaft',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['main', 'dungeon_entrance'],
+    },
     { type: 'storage', name: 'ore_pile', offset: { q: 1, r: 0 }, tags: ['resources'] },
     { type: 'workbench', name: 'equipment', offset: { q: -1, r: 0 }, tags: ['tools'] },
     { type: 'spawn_point', name: 'foreman', offset: { q: 1, r: 0 }, tags: ['npc', 'worker'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'work_area', tiles: [{ q: 1, r: 0 }, { q: 0, r: -1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'work_area',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: -1 },
+      ],
+      tags: [],
+    },
     { type: 'loot_area', name: 'ore_storage', tiles: [{ q: 0, r: 1 }], tags: ['resources'] },
   ],
 
@@ -511,12 +886,27 @@ export const Campfire: Assemblage = validateAssemblage({
   markers: [
     { type: 'spawn_point', name: 'camper_1', offset: { q: 1, r: 0 }, tags: ['npc', 'traveler'] },
     { type: 'spawn_point', name: 'camper_2', offset: { q: 0, r: 1 }, tags: ['npc', 'traveler'] },
-    { type: 'conversation_spot', name: 'fireside', offset: { q: 0, r: 0 }, tags: ['dialogue', 'rest'] },
+    {
+      type: 'conversation_spot',
+      name: 'fireside',
+      offset: { q: 0, r: 0 },
+      tags: ['dialogue', 'rest'],
+    },
     { type: 'rest_spot', name: 'bedroll_area', offset: { q: -1, r: 1 }, tags: ['rest'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'campsite', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'campsite',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+        { q: -1, r: 1 },
+      ],
+      tags: [],
+    },
     { type: 'loot_area', name: 'supplies', tiles: [{ q: -1, r: 1 }], tags: ['low_value'] },
   ],
 
@@ -547,7 +937,16 @@ export const TentCamp: Assemblage = validateAssemblage({
   ],
 
   zones: [
-    { type: 'public_area', name: 'campsite', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'campsite',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+        { q: 1, r: 1 },
+      ],
+      tags: [],
+    },
     { type: 'restricted_area', name: 'tent_interior', tiles: [{ q: 0, r: 0 }], tags: ['private'] },
   ],
 
@@ -572,18 +971,52 @@ export const BanditCamp: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'entrance', name: 'hideout_entrance', offset: { q: 0, r: 0 }, facing: 0, tags: ['main'] },
-    { type: 'spawn_point', name: 'bandit_leader', offset: { q: 0, r: 0 }, tags: ['npc', 'hostile', 'leader'] },
+    {
+      type: 'entrance',
+      name: 'hideout_entrance',
+      offset: { q: 0, r: 0 },
+      facing: 0,
+      tags: ['main'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'bandit_leader',
+      offset: { q: 0, r: 0 },
+      tags: ['npc', 'hostile', 'leader'],
+    },
     { type: 'spawn_point', name: 'bandit_1', offset: { q: 1, r: 0 }, tags: ['npc', 'hostile'] },
-    { type: 'spawn_point', name: 'lookout', offset: { q: 2, r: 0 }, tags: ['npc', 'hostile', 'sniper'] },
+    {
+      type: 'spawn_point',
+      name: 'lookout',
+      offset: { q: 2, r: 0 },
+      tags: ['npc', 'hostile', 'sniper'],
+    },
     { type: 'storage', name: 'loot_stash', offset: { q: -1, r: 0 }, tags: ['valuables', 'hidden'] },
     { type: 'hiding_spot', name: 'behind_rock', offset: { q: -1, r: 0 }, tags: ['cover'] },
   ],
 
   zones: [
-    { type: 'restricted_area', name: 'camp', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 0, r: 1 }], priority: 1, tags: ['hostile'] },
+    {
+      type: 'restricted_area',
+      name: 'camp',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      priority: 1,
+      tags: ['hostile'],
+    },
     { type: 'loot_area', name: 'stash', tiles: [{ q: -1, r: 0 }], tags: ['high_value', 'hidden'] },
-    { type: 'combat_zone', name: 'ambush_area', tiles: [{ q: 0, r: 1 }, { q: 2, r: 0 }], tags: ['dangerous'] },
+    {
+      type: 'combat_zone',
+      name: 'ambush_area',
+      tiles: [
+        { q: 0, r: 1 },
+        { q: 2, r: 0 },
+      ],
+      tags: ['dangerous'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -614,15 +1047,43 @@ export const SmallFarm: Assemblage = validateAssemblage({
 
   markers: [
     { type: 'entrance', name: 'farmhouse_door', offset: { q: 0, r: 0 }, facing: 0, tags: ['main'] },
-    { type: 'entrance', name: 'barn_door', offset: { q: -1, r: 0 }, facing: 0, tags: ['secondary'] },
+    {
+      type: 'entrance',
+      name: 'barn_door',
+      offset: { q: -1, r: 0 },
+      facing: 0,
+      tags: ['secondary'],
+    },
     { type: 'spawn_point', name: 'farmer', offset: { q: 1, r: 0 }, tags: ['npc', 'farmer'] },
     { type: 'spawn_point', name: 'farmhand', offset: { q: 2, r: 0 }, tags: ['npc', 'worker'] },
-    { type: 'storage', name: 'barn_storage', offset: { q: -1, r: 0 }, tags: ['supplies', 'animals'] },
+    {
+      type: 'storage',
+      name: 'barn_storage',
+      offset: { q: -1, r: 0 },
+      tags: ['supplies', 'animals'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
-    { type: 'npc_area', name: 'fields', tiles: [{ q: 2, r: 0 }, { q: 2, r: 1 }, { q: 1, r: 1 }], tags: ['work'] },
+    {
+      type: 'public_area',
+      name: 'yard',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+      ],
+      tags: [],
+    },
+    {
+      type: 'npc_area',
+      name: 'fields',
+      tiles: [
+        { q: 2, r: 0 },
+        { q: 2, r: 1 },
+        { q: 1, r: 1 },
+      ],
+      tags: ['work'],
+    },
     { type: 'restricted_area', name: 'farmhouse', tiles: [{ q: 0, r: 0 }], tags: ['private'] },
   ],
 
@@ -653,16 +1114,45 @@ export const CattleRanch: Assemblage = validateAssemblage({
   markers: [
     { type: 'entrance', name: 'ranch_gate', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
     { type: 'entrance', name: 'house_door', offset: { q: 0, r: 0 }, facing: 0, tags: ['private'] },
-    { type: 'spawn_point', name: 'rancher', offset: { q: 0, r: 0 }, tags: ['npc', 'owner', 'important'] },
+    {
+      type: 'spawn_point',
+      name: 'rancher',
+      offset: { q: 0, r: 0 },
+      tags: ['npc', 'owner', 'important'],
+    },
     { type: 'spawn_point', name: 'cowboy_1', offset: { q: 1, r: -1 }, tags: ['npc', 'worker'] },
     { type: 'spawn_point', name: 'cowboy_2', offset: { q: 2, r: 0 }, tags: ['npc', 'worker'] },
     { type: 'storage', name: 'tack_room', offset: { q: 2, r: 0 }, tags: ['equipment'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }, { q: 0, r: -1 }], tags: [] },
-    { type: 'npc_area', name: 'pasture', tiles: [{ q: -1, r: 1 }, { q: 0, r: 1 }, { q: 1, r: 1 }, { q: 2, r: 1 }], tags: ['animals'] },
-    { type: 'restricted_area', name: 'ranch_house', tiles: [{ q: 0, r: 0 }], priority: 1, tags: ['private'] },
+    {
+      type: 'public_area',
+      name: 'yard',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: -1 },
+      ],
+      tags: [],
+    },
+    {
+      type: 'npc_area',
+      name: 'pasture',
+      tiles: [
+        { q: -1, r: 1 },
+        { q: 0, r: 1 },
+        { q: 1, r: 1 },
+        { q: 2, r: 1 },
+      ],
+      tags: ['animals'],
+    },
+    {
+      type: 'restricted_area',
+      name: 'ranch_house',
+      tiles: [{ q: 0, r: 0 }],
+      priority: 1,
+      tags: ['private'],
+    },
     { type: 'loot_area', name: 'valuables', tiles: [{ q: 0, r: 0 }], tags: ['medium_value'] },
   ],
 
@@ -697,7 +1187,16 @@ export const AbandonedCabin: Assemblage = validateAssemblage({
   ],
 
   zones: [
-    { type: 'public_area', name: 'exterior', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 0 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'exterior',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+        { q: -1, r: 0 },
+      ],
+      tags: [],
+    },
     { type: 'loot_area', name: 'interior', tiles: [{ q: 0, r: 0 }], tags: ['low_value', 'hidden'] },
   ],
 
@@ -725,16 +1224,52 @@ export const GhostTown: Assemblage = validateAssemblage({
 
   markers: [
     { type: 'entrance', name: 'main_street', offset: { q: 1, r: 1 }, facing: 0, tags: ['main'] },
-    { type: 'spawn_point', name: 'ghost_spawn', offset: { q: 0, r: 0 }, tags: ['npc', 'encounter', 'random'] },
-    { type: 'storage', name: 'buried_treasure', offset: { q: 2, r: 1 }, tags: ['hidden', 'valuables'] },
+    {
+      type: 'spawn_point',
+      name: 'ghost_spawn',
+      offset: { q: 0, r: 0 },
+      tags: ['npc', 'encounter', 'random'],
+    },
+    {
+      type: 'storage',
+      name: 'buried_treasure',
+      offset: { q: 2, r: 1 },
+      tags: ['hidden', 'valuables'],
+    },
     { type: 'evidence_spot', name: 'old_sign', offset: { q: 1, r: 0 }, tags: ['clue', 'lore'] },
     { type: 'evidence_spot', name: 'grave', offset: { q: -1, r: 0 }, tags: ['clue', 'dark'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'ruins', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }, { q: 2, r: 1 }], tags: ['dangerous'] },
-    { type: 'loot_area', name: 'hidden_goods', tiles: [{ q: 0, r: 0 }, { q: 2, r: 0 }, { q: 2, r: 1 }], tags: ['medium_value'] },
-    { type: 'event_stage', name: 'encounter_zone', tiles: [{ q: 1, r: 1 }], tags: ['random_encounter'] },
+    {
+      type: 'public_area',
+      name: 'ruins',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 2, r: 0 },
+        { q: 0, r: 1 },
+        { q: 1, r: 1 },
+        { q: 2, r: 1 },
+      ],
+      tags: ['dangerous'],
+    },
+    {
+      type: 'loot_area',
+      name: 'hidden_goods',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 2, r: 0 },
+        { q: 2, r: 1 },
+      ],
+      tags: ['medium_value'],
+    },
+    {
+      type: 'event_stage',
+      name: 'encounter_zone',
+      tiles: [{ q: 1, r: 1 }],
+      tags: ['random_encounter'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -765,12 +1300,36 @@ export const Oasis: Assemblage = validateAssemblage({
   markers: [
     { type: 'rest_spot', name: 'water_edge', offset: { q: 0, r: 1 }, tags: ['rest', 'water'] },
     { type: 'spawn_point', name: 'wildlife', offset: { q: 1, r: 0 }, tags: ['animal', 'random'] },
-    { type: 'conversation_spot', name: 'shade', offset: { q: -1, r: 0 }, tags: ['rest', 'dialogue'] },
+    {
+      type: 'conversation_spot',
+      name: 'shade',
+      offset: { q: -1, r: 0 },
+      tags: ['rest', 'dialogue'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'oasis', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: -1, r: 0 }, { q: 0, r: 1 }, { q: 0, r: -1 }], tags: ['safe', 'water'] },
-    { type: 'npc_area', name: 'wildlife_area', tiles: [{ q: 1, r: 0 }, { q: -1, r: 0 }], tags: ['animals'] },
+    {
+      type: 'public_area',
+      name: 'oasis',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: -1, r: 0 },
+        { q: 0, r: 1 },
+        { q: 0, r: -1 },
+      ],
+      tags: ['safe', 'water'],
+    },
+    {
+      type: 'npc_area',
+      name: 'wildlife_area',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: -1, r: 0 },
+      ],
+      tags: ['animals'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -792,14 +1351,42 @@ export const RockFormation: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'hiding_spot', name: 'behind_boulder', offset: { q: 0, r: 0 }, tags: ['cover', 'ambush'] },
+    {
+      type: 'hiding_spot',
+      name: 'behind_boulder',
+      offset: { q: 0, r: 0 },
+      tags: ['cover', 'ambush'],
+    },
     { type: 'hiding_spot', name: 'rock_shadow', offset: { q: 1, r: 0 }, tags: ['cover'] },
-    { type: 'vantage_point', name: 'rock_top', offset: { q: 0, r: 0 }, tags: ['elevated', 'lookout'] },
+    {
+      type: 'vantage_point',
+      name: 'rock_top',
+      offset: { q: 0, r: 0 },
+      tags: ['elevated', 'lookout'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'rocks', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 }], tags: ['cover'] },
-    { type: 'combat_zone', name: 'ambush_spot', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }], tags: ['tactical'] },
+    {
+      type: 'public_area',
+      name: 'rocks',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+        { q: -1, r: 1 },
+      ],
+      tags: ['cover'],
+    },
+    {
+      type: 'combat_zone',
+      name: 'ambush_spot',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+      ],
+      tags: ['tactical'],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -824,15 +1411,51 @@ export const CanyonPass: Assemblage = validateAssemblage({
   ],
 
   markers: [
-    { type: 'entrance', name: 'west_entrance', offset: { q: 0, r: 0 }, facing: 3, tags: ['passage'] },
-    { type: 'entrance', name: 'east_entrance', offset: { q: 2, r: 0 }, facing: 0, tags: ['passage'] },
-    { type: 'spawn_point', name: 'ambush_point', offset: { q: 1, r: 0 }, tags: ['encounter', 'ambush'] },
-    { type: 'vantage_point', name: 'cliff_ledge', offset: { q: 1, r: -1 }, tags: ['sniper', 'elevated'] },
+    {
+      type: 'entrance',
+      name: 'west_entrance',
+      offset: { q: 0, r: 0 },
+      facing: 3,
+      tags: ['passage'],
+    },
+    {
+      type: 'entrance',
+      name: 'east_entrance',
+      offset: { q: 2, r: 0 },
+      facing: 0,
+      tags: ['passage'],
+    },
+    {
+      type: 'spawn_point',
+      name: 'ambush_point',
+      offset: { q: 1, r: 0 },
+      tags: ['encounter', 'ambush'],
+    },
+    {
+      type: 'vantage_point',
+      name: 'cliff_ledge',
+      offset: { q: 1, r: -1 },
+      tags: ['sniper', 'elevated'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'pass', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }], tags: ['passage'] },
-    { type: 'combat_zone', name: 'kill_zone', tiles: [{ q: 1, r: 0 }], tags: ['ambush', 'dangerous'] },
+    {
+      type: 'public_area',
+      name: 'pass',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+        { q: 2, r: 0 },
+      ],
+      tags: ['passage'],
+    },
+    {
+      type: 'combat_zone',
+      name: 'kill_zone',
+      tiles: [{ q: 1, r: 0 }],
+      tags: ['ambush', 'dangerous'],
+    },
   ],
 
   validRotations: [0, 3], // Only horizontal orientations
@@ -861,13 +1484,27 @@ export const Waystation: Assemblage = validateAssemblage({
   markers: [
     { type: 'entrance', name: 'door', offset: { q: 0, r: 0 }, facing: 0, tags: ['main'] },
     { type: 'spawn_point', name: 'keeper', offset: { q: 0, r: 0 }, tags: ['npc', 'merchant'] },
-    { type: 'counter', name: 'service_counter', offset: { q: 0, r: 0 }, tags: ['service', 'rest', 'supplies'] },
+    {
+      type: 'counter',
+      name: 'service_counter',
+      offset: { q: 0, r: 0 },
+      tags: ['service', 'rest', 'supplies'],
+    },
     { type: 'rest_spot', name: 'bed', offset: { q: 0, r: 0 }, tags: ['rest', 'paid'] },
     { type: 'storage', name: 'horse_post', offset: { q: -1, r: 0 }, tags: ['mounts'] },
   ],
 
   zones: [
-    { type: 'public_area', name: 'yard', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }, { q: 0, r: -1 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'yard',
+      tiles: [
+        { q: 1, r: 0 },
+        { q: 0, r: 1 },
+        { q: 0, r: -1 },
+      ],
+      tags: [],
+    },
     { type: 'npc_area', name: 'stable', tiles: [{ q: -1, r: 0 }], tags: ['animals'] },
   ],
 
@@ -884,7 +1521,12 @@ export const TelegraphPost: Assemblage = validateAssemblage({
   primarySlot: 'telegraph',
 
   tiles: [
-    { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'telegraph_building', structureRotation: 0 },
+    {
+      coord: { q: 0, r: 0 },
+      terrain: 'dirt',
+      structure: 'telegraph_building',
+      structureRotation: 0,
+    },
     { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
     { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
   ],
@@ -892,12 +1534,30 @@ export const TelegraphPost: Assemblage = validateAssemblage({
   markers: [
     { type: 'entrance', name: 'door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
     { type: 'spawn_point', name: 'operator', offset: { q: 0, r: 0 }, tags: ['npc', 'staff'] },
-    { type: 'counter', name: 'service_desk', offset: { q: 0, r: 0 }, tags: ['service', 'communication'] },
-    { type: 'evidence_spot', name: 'message_log', offset: { q: 0, r: 0 }, tags: ['clue', 'information'] },
+    {
+      type: 'counter',
+      name: 'service_desk',
+      offset: { q: 0, r: 0 },
+      tags: ['service', 'communication'],
+    },
+    {
+      type: 'evidence_spot',
+      name: 'message_log',
+      offset: { q: 0, r: 0 },
+      tags: ['clue', 'information'],
+    },
   ],
 
   zones: [
-    { type: 'public_area', name: 'office', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }], tags: [] },
+    {
+      type: 'public_area',
+      name: 'office',
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 1, r: 0 },
+      ],
+      tags: [],
+    },
   ],
 
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -950,15 +1610,15 @@ export const ASSEMBLAGE_LIBRARY: Assemblage[] = [
 
 /** Map for quick lookup by ID */
 export const ASSEMBLAGES_BY_ID = new Map<string, Assemblage>(
-  ASSEMBLAGE_LIBRARY.map(a => [a.id, a])
+  ASSEMBLAGE_LIBRARY.map((a) => [a.id, a])
 );
 
 /** Get assemblages by slot type */
 export function getAssemblagesBySlot(slotType: string): Assemblage[] {
-  return ASSEMBLAGE_LIBRARY.filter(a => a.primarySlot === slotType);
+  return ASSEMBLAGE_LIBRARY.filter((a) => a.primarySlot === slotType);
 }
 
 /** Get assemblages by tag */
 export function getAssemblagesByTag(tag: string): Assemblage[] {
-  return ASSEMBLAGE_LIBRARY.filter(a => a.tags.includes(tag));
+  return ASSEMBLAGE_LIBRARY.filter((a) => a.tags.includes(tag));
 }

@@ -2,23 +2,50 @@
  * Visual and Interaction Tests
  * Comprehensive tests for visual elements and user interactions across the game
  */
+
+import { act, screen } from '@testing-library/react';
+import type React from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useGameStore } from '@/game/store/webGameStore';
 import { ActionBar } from '@/game/ui/ActionBar';
 import { InventoryPanel } from '@/game/ui/InventoryPanel';
-import { act, screen } from '@testing-library/react';
-import React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createMockItem, customRender, getStoreState, resetGameStore, setupGameStore } from './test-utils';
+import {
+  createMockItem,
+  customRender,
+  getStoreState,
+  resetGameStore,
+  setupGameStore,
+} from './test-utils';
 
 // Mocks
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   motion: {
-    div: ({ children, className, ...props }: any) => <div className={className} {...props}>{children}</div>,
-    h1: ({ children, className, ...props }: any) => <h1 className={className} {...props}>{children}</h1>,
-    p: ({ children, className, ...props }: any) => <p className={className} {...props}>{children}</p>,
-    button: ({ children, className, ...props }: any) => <button className={className} {...props}>{children}</button>,
-    span: ({ children, className, ...props }: any) => <span className={className} {...props}>{children}</span>,
+    div: ({ children, className, ...props }: any) => (
+      <div className={className} {...props}>
+        {children}
+      </div>
+    ),
+    h1: ({ children, className, ...props }: any) => (
+      <h1 className={className} {...props}>
+        {children}
+      </h1>
+    ),
+    p: ({ children, className, ...props }: any) => (
+      <p className={className} {...props}>
+        {children}
+      </p>
+    ),
+    button: ({ children, className, ...props }: any) => (
+      <button className={className} {...props}>
+        {children}
+      </button>
+    ),
+    span: ({ children, className, ...props }: any) => (
+      <span className={className} {...props}>
+        {children}
+      </span>
+    ),
   },
 }));
 
@@ -33,7 +60,7 @@ describe('Interaction Flows', () => {
         initialState: {
           phase: 'playing',
           initialized: true,
-        } as any
+        } as any,
       });
 
       // Open Menu
@@ -58,7 +85,7 @@ describe('Interaction Flows', () => {
         initialState: {
           phase: 'playing',
           initialized: true,
-        } as any
+        } as any,
       });
 
       const itemsButton = screen.getByText('Saddlebag').closest('button')!;

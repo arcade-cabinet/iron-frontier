@@ -9,42 +9,39 @@
  */
 
 import {
-  AbstractMesh,
+  type AbstractMesh,
   ArcRotateCamera,
   Color3,
-  InstancedMesh,
-  Mesh,
+  type InstancedMesh,
+  type Mesh,
   MeshBuilder,
-  Scene,
+  type Scene,
   StandardMaterial,
   TransformNode,
   Vector3,
 } from '@babylonjs/core';
-
 import {
-  HexCoord,
-  HexLayout,
-  HexTileData,
-  HexTerrainType,
-  HexBuildingType,
-  HexChunkData,
+  hexDistance,
+  hexNeighbors,
+  hexToWorld as hexToWorldPos,
+  worldToHex as worldToHexCoord,
+} from './HexCoord';
+import {
+  getHexTileLoader,
+  type HexTileLoader,
+  type HexTileType as LoaderTileType,
+} from './HexTileLoader';
+import {
   DEFAULT_HEX_LAYOUT,
+  HexBuildingType,
+  type HexChunkData,
+  type HexCoord,
+  type HexLayout,
+  HexTerrainType,
+  type HexTileData,
   hexKey,
   parseHexKey,
 } from './HexTypes';
-
-import {
-  hexToWorld as hexToWorldPos,
-  worldToHex as worldToHexCoord,
-  hexDistance,
-  hexNeighbors,
-} from './HexCoord';
-
-import {
-  HexTileLoader,
-  HexTileType as LoaderTileType,
-  getHexTileLoader,
-} from './HexTileLoader';
 
 // ============================================================================
 // HEX GEOMETRY CONSTANTS
@@ -85,10 +82,7 @@ export function hexToWorld(
  * Converts Babylon.js Vector3 to the nearest hex coordinate.
  * Wraps HexCoord.worldToHex for Vector3 input.
  */
-export function worldToHex(
-  worldPos: Vector3,
-  layout: HexLayout = DEFAULT_HEX_LAYOUT
-): HexCoord {
+export function worldToHex(worldPos: Vector3, layout: HexLayout = DEFAULT_HEX_LAYOUT): HexCoord {
   return worldToHexCoord({ x: worldPos.x, y: worldPos.y, z: worldPos.z }, layout);
 }
 
@@ -474,7 +468,9 @@ export class HexGridRenderer {
     }
 
     if (!mesh) {
-      throw new Error(`[HexGridRenderer] FATAL: No mesh available for tile ${key} with terrain ${data.terrain}`);
+      throw new Error(
+        `[HexGridRenderer] FATAL: No mesh available for tile ${key} with terrain ${data.terrain}`
+      );
     }
 
     // Position and rotate
@@ -482,9 +478,7 @@ export class HexGridRenderer {
     mesh.position = worldPos;
 
     // Apply rotation - use buildingRotation if building, else terrainRotation
-    const totalRotation = hasBuilding
-      ? data.buildingRotation
-      : data.rotationOffset;
+    const totalRotation = hasBuilding ? data.buildingRotation : data.rotationOffset;
     mesh.rotation.y = rotationToRadians(totalRotation);
 
     mesh.parent = this.tileRoot;
@@ -630,11 +624,7 @@ export class HexGridRenderer {
     if (!this.camera) return;
 
     // Lerp toward target
-    this.cameraTarget = Vector3.Lerp(
-      this.cameraTarget,
-      targetPos,
-      this.cameraConfig.followSpeed
-    );
+    this.cameraTarget = Vector3.Lerp(this.cameraTarget, targetPos, this.cameraConfig.followSpeed);
 
     this.camera.target = this.cameraTarget;
   }

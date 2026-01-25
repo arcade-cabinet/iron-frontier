@@ -13,13 +13,13 @@ import { HexCoordSchema } from './spatial';
 // ============================================================================
 
 export const EnemyTypeSchema = z.enum([
-  'bandit',         // Generic outlaw
-  'gunslinger',     // Fast, accurate shooter
-  'brute',          // High HP, melee focused
-  'sharpshooter',   // Long range, high damage
-  'dynamiter',      // Explosives user
-  'automaton',      // Mechanical enemies (The Remnant)
-  'animal',         // Wildlife (wolves, snakes, etc.)
+  'bandit', // Generic outlaw
+  'gunslinger', // Fast, accurate shooter
+  'brute', // High HP, melee focused
+  'sharpshooter', // Long range, high damage
+  'dynamiter', // Explosives user
+  'automaton', // Mechanical enemies (The Remnant)
+  'animal', // Wildlife (wolves, snakes, etc.)
 ]);
 export type EnemyType = z.infer<typeof EnemyTypeSchema>;
 
@@ -28,11 +28,11 @@ export type EnemyType = z.infer<typeof EnemyTypeSchema>;
 // ============================================================================
 
 export const EnemyFactionSchema = z.enum([
-  'copperhead',     // Copperhead Gang
-  'ivrc_guards',    // IVRC Security
-  'wildlife',       // Animals
-  'remnant',        // Automatons
-  'raiders',        // Generic bandits
+  'copperhead', // Copperhead Gang
+  'ivrc_guards', // IVRC Security
+  'wildlife', // Animals
+  'remnant', // Automatons
+  'raiders', // Generic bandits
 ]);
 export type EnemyFaction = z.infer<typeof EnemyFactionSchema>;
 
@@ -127,11 +127,15 @@ export const CombatantSchema = z.object({
   position: HexCoordSchema,
 
   /** Current status effects */
-  statusEffects: z.array(z.object({
-    type: z.enum(['bleeding', 'stunned', 'poisoned', 'burning', 'buffed']),
-    turnsRemaining: z.number().int(),
-    value: z.number().int().optional(),
-  })).default([]),
+  statusEffects: z
+    .array(
+      z.object({
+        type: z.enum(['bleeding', 'stunned', 'poisoned', 'burning', 'buffed']),
+        turnsRemaining: z.number().int(),
+        value: z.number().int().optional(),
+      })
+    )
+    .default([]),
 
   /** Weapon currently equipped */
   weaponId: z.string().optional(),
@@ -155,14 +159,14 @@ export type Combatant = z.infer<typeof CombatantSchema>;
 // ============================================================================
 
 export const CombatActionTypeSchema = z.enum([
-  'attack',       // Basic attack
-  'aimed_shot',   // Accurate but costly
-  'move',         // Move to hex
-  'reload',       // Reload weapon
-  'use_item',     // Use consumable
-  'defend',       // Reduce incoming damage
-  'flee',         // Attempt to escape
-  'end_turn',     // End turn early
+  'attack', // Basic attack
+  'aimed_shot', // Accurate but costly
+  'move', // Move to hex
+  'reload', // Reload weapon
+  'use_item', // Use consumable
+  'defend', // Reduce incoming damage
+  'flee', // Attempt to escape
+  'end_turn', // End turn early
 ]);
 export type CombatActionType = z.infer<typeof CombatActionTypeSchema>;
 
@@ -233,11 +237,15 @@ export const CombatEncounterSchema = z.object({
   description: z.string().optional(),
 
   /** Enemies in this encounter */
-  enemies: z.array(z.object({
-    enemyId: z.string(),
-    count: z.number().int().min(1).default(1),
-    level: z.number().int().min(1).optional(), // Level scaling
-  })).min(1),
+  enemies: z
+    .array(
+      z.object({
+        enemyId: z.string(),
+        count: z.number().int().min(1).default(1),
+        level: z.number().int().min(1).optional(), // Level scaling
+      })
+    )
+    .min(1),
 
   /** Required player level (minimum) */
   minLevel: z.number().int().min(1).default(1),
@@ -258,11 +266,15 @@ export const CombatEncounterSchema = z.object({
   rewards: z.object({
     xp: z.number().int().min(0).default(0),
     gold: z.number().int().min(0).default(0),
-    items: z.array(z.object({
-      itemId: z.string(),
-      quantity: z.number().int().min(1).default(1),
-      chance: z.number().min(0).max(1).default(1),
-    })).default([]),
+    items: z
+      .array(
+        z.object({
+          itemId: z.string(),
+          quantity: z.number().int().min(1).default(1),
+          chance: z.number().min(0).max(1).default(1),
+        })
+      )
+      .default([]),
   }),
 
   /** Tags for triggering */

@@ -8,9 +8,9 @@
  * For locations with seed only: provides seed for procedural generation
  */
 
-import { World, LocationRef } from '../schemas/world';
-import { Location } from '../schemas/spatial';
-import { getLocationById, getAllLocationIds } from '../locations/index';
+import { getAllLocationIds, getLocationById } from '../locations/index';
+import type { Location } from '../schemas/spatial';
+import type { LocationRef, World } from '../schemas/world';
 
 // ============================================================================
 // TYPES
@@ -83,7 +83,9 @@ export function loadWorld(world: World): LoadedWorld {
         seed = handCrafted.seed;
         console.log(`[WorldLoader] Resolved ${ref.id} -> ${ref.locationDataId} (hand-crafted)`);
       } else {
-        console.warn(`[WorldLoader] Location data not found for ${ref.locationDataId}, falling back to procedural`);
+        console.warn(
+          `[WorldLoader] Location data not found for ${ref.locationDataId}, falling back to procedural`
+        );
       }
     } else {
       console.log(`[WorldLoader] ${ref.id} is procedural (seed: ${seed})`);
@@ -97,7 +99,9 @@ export function loadWorld(world: World): LoadedWorld {
     });
   }
 
-  console.log(`[WorldLoader] Loaded ${locations.size} locations (${[...locations.values()].filter(l => !l.isProcedural).length} hand-crafted)`);
+  console.log(
+    `[WorldLoader] Loaded ${locations.size} locations (${[...locations.values()].filter((l) => !l.isProcedural).length} hand-crafted)`
+  );
 
   // Get starting location
   const startingLocation = locations.get(world.startingLocationId);
@@ -113,15 +117,17 @@ export function loadWorld(world: World): LoadedWorld {
 
     getConnectionsFrom(locationId: string): LocationRef[] {
       const connections = world.connections.filter(
-        c => c.from === locationId || (c.bidirectional && c.to === locationId)
+        (c) => c.from === locationId || (c.bidirectional && c.to === locationId)
       );
 
       // Resolve to LocationRefs
-      return connections.map(c => {
-        const targetId = c.from === locationId ? c.to : c.from;
-        const targetRef = world.locations.find(l => l.id === targetId);
-        return targetRef!;
-      }).filter(Boolean);
+      return connections
+        .map((c) => {
+          const targetId = c.from === locationId ? c.to : c.from;
+          const targetRef = world.locations.find((l) => l.id === targetId);
+          return targetRef!;
+        })
+        .filter(Boolean);
     },
 
     getLocation(locationId: string): ResolvedLocation | undefined {
@@ -129,13 +135,14 @@ export function loadWorld(world: World): LoadedWorld {
     },
 
     getDiscoveredLocations(): ResolvedLocation[] {
-      return [...locations.values()].filter(l => l.ref.discovered);
+      return [...locations.values()].filter((l) => l.ref.discovered);
     },
 
     canTravelTo(fromId: string, toId: string): boolean {
       const connection = world.connections.find(
-        c => (c.from === fromId && c.to === toId) ||
-             (c.bidirectional && c.from === toId && c.to === fromId)
+        (c) =>
+          (c.from === fromId && c.to === toId) ||
+          (c.bidirectional && c.from === toId && c.to === fromId)
       );
 
       if (!connection) return false;
@@ -174,7 +181,7 @@ export function validateWorldReferences(world: World): string[] {
   }
 
   // Check connections reference valid locations
-  const locationIds = new Set(world.locations.map(l => l.id));
+  const locationIds = new Set(world.locations.map((l) => l.id));
   for (const conn of world.connections) {
     if (!locationIds.has(conn.from)) {
       errors.push(`Connection references unknown location: ${conn.from}`);
@@ -201,8 +208,9 @@ export function getTravelInfo(
   toId: string
 ): { travelTime: number; danger: string; method: string } | null {
   const connection = loadedWorld.world.connections.find(
-    c => (c.from === fromId && c.to === toId) ||
-         (c.bidirectional && c.from === toId && c.to === fromId)
+    (c) =>
+      (c.from === fromId && c.to === toId) ||
+      (c.bidirectional && c.from === toId && c.to === fromId)
   );
 
   if (!connection) return null;

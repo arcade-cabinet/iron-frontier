@@ -9,8 +9,9 @@
  */
 
 import {
-  AbstractMesh,
+  type AbstractMesh,
   ArcRotateCamera,
+  Ray as BabylonRay,
   Color3,
   Color4,
   DirectionalLight,
@@ -19,7 +20,6 @@ import {
   Mesh,
   MeshBuilder,
   PointLight,
-  Ray as BabylonRay,
   Scene,
   SceneLoader,
   ShadowGenerator,
@@ -31,41 +31,36 @@ import {
 import '@babylonjs/loaders/glTF';
 
 import type {
+  AnimationConfig,
+  BabylonAdapterOptions,
+  CameraConfig,
+  EnvironmentConfig,
+  IBabylonSceneManager,
+  ICameraHandle,
+  ILightHandle,
+  IMeshHandle,
   IScene,
   ISceneManager,
-  IMeshHandle,
-  ILightHandle,
-  ICameraHandle,
-  MeshConfig,
   LightConfig,
-  CameraConfig,
-  SceneConfig,
-  EnvironmentConfig,
-  RenderQuality,
+  MeshConfig,
+  PartialTransform,
   PickResult,
   Ray,
+  RenderQuality,
+  SceneConfig,
   SceneEvent,
   SceneEventHandler,
   SceneEventType,
   Transform,
-  PartialTransform,
-  AnimationConfig,
   Vector3Tuple,
 } from '@iron-frontier/shared/rendering';
-
 import {
-  SceneManagerBase,
+  createTransform,
+  DEFAULT_BABYLON_OPTIONS,
   DEFAULT_CAMERA_CONFIG,
   IDENTITY_TRANSFORM,
-  createTransform,
+  SceneManagerBase,
 } from '@iron-frontier/shared/rendering';
-
-import type {
-  BabylonAdapterOptions,
-  IBabylonSceneManager,
-} from '@iron-frontier/shared/rendering';
-
-import { DEFAULT_BABYLON_OPTIONS } from '@iron-frontier/shared/rendering';
 
 // ============================================================================
 // BABYLON MESH HANDLE
@@ -148,12 +143,10 @@ class BabylonMeshHandle implements IMeshHandle {
   }
 
   playAnimation(config: AnimationConfig): void {
-    const animGroups = this.scene.animationGroups.filter(
-      (ag) => ag.targetedAnimations.some((ta) => ta.target === this.mesh)
+    const animGroups = this.scene.animationGroups.filter((ag) =>
+      ag.targetedAnimations.some((ta) => ta.target === this.mesh)
     );
-    const anim = animGroups.find(
-      (ag) => ag.name.toLowerCase().includes(config.name.toLowerCase())
-    );
+    const anim = animGroups.find((ag) => ag.name.toLowerCase().includes(config.name.toLowerCase()));
     if (anim) {
       anim.play(config.loop ?? true);
       if (config.speed !== undefined) {
@@ -163,27 +156,25 @@ class BabylonMeshHandle implements IMeshHandle {
   }
 
   stopAnimation(name: string): void {
-    const animGroups = this.scene.animationGroups.filter(
-      (ag) => ag.targetedAnimations.some((ta) => ta.target === this.mesh)
+    const animGroups = this.scene.animationGroups.filter((ag) =>
+      ag.targetedAnimations.some((ta) => ta.target === this.mesh)
     );
-    const anim = animGroups.find(
-      (ag) => ag.name.toLowerCase().includes(name.toLowerCase())
-    );
+    const anim = animGroups.find((ag) => ag.name.toLowerCase().includes(name.toLowerCase()));
     if (anim) {
       anim.stop();
     }
   }
 
   stopAllAnimations(): void {
-    const animGroups = this.scene.animationGroups.filter(
-      (ag) => ag.targetedAnimations.some((ta) => ta.target === this.mesh)
+    const animGroups = this.scene.animationGroups.filter((ag) =>
+      ag.targetedAnimations.some((ta) => ta.target === this.mesh)
     );
     animGroups.forEach((ag) => ag.stop());
   }
 
   getAnimationNames(): string[] {
-    const animGroups = this.scene.animationGroups.filter(
-      (ag) => ag.targetedAnimations.some((ta) => ta.target === this.mesh)
+    const animGroups = this.scene.animationGroups.filter((ag) =>
+      ag.targetedAnimations.some((ta) => ta.target === this.mesh)
     );
     return animGroups.map((ag) => ag.name);
   }
@@ -537,11 +528,7 @@ class BabylonScene implements IScene {
 
     switch (config.type) {
       case 'directional':
-        light = new DirectionalLight(
-          id,
-          new Vector3(...(config as any).direction),
-          this.scene
-        );
+        light = new DirectionalLight(id, new Vector3(...(config as any).direction), this.scene);
         break;
       case 'hemisphere':
         light = new HemisphericLight(
@@ -552,11 +539,7 @@ class BabylonScene implements IScene {
         (light as HemisphericLight).groundColor = new Color3(...(config as any).groundColor);
         break;
       case 'point':
-        light = new PointLight(
-          id,
-          new Vector3(...(config as any).position),
-          this.scene
-        );
+        light = new PointLight(id, new Vector3(...(config as any).position), this.scene);
         break;
       case 'spot':
         light = new SpotLight(
@@ -645,10 +628,7 @@ class BabylonScene implements IScene {
   }
 
   raycast(ray: Ray): PickResult {
-    const babylonRay = new BabylonRay(
-      new Vector3(...ray.origin),
-      new Vector3(...ray.direction)
-    );
+    const babylonRay = new BabylonRay(new Vector3(...ray.origin), new Vector3(...ray.direction));
     const pickResult = this.scene.pickWithRay(babylonRay);
     if (pickResult?.hit && pickResult.pickedPoint) {
       return {
@@ -736,10 +716,7 @@ export class BabylonSceneManager extends SceneManagerBase implements IBabylonSce
     this.options = { ...DEFAULT_BABYLON_OPTIONS, ...options };
   }
 
-  protected async createScene(
-    surface: unknown,
-    config?: SceneConfig
-  ): Promise<IScene> {
+  protected async createScene(surface: unknown, config?: SceneConfig): Promise<IScene> {
     if (!(surface instanceof HTMLCanvasElement)) {
       throw new Error('BabylonSceneManager requires an HTMLCanvasElement');
     }

@@ -95,10 +95,12 @@ export const ObjectiveSchema = z.object({
    * Map marker information for this objective.
    * If provided, shows on minimap/world map when objective is active.
    */
-  mapMarker: z.object({
-    locationId: z.string(),
-    markerLabel: z.string().optional(),
-  }).optional(),
+  mapMarker: z
+    .object({
+      locationId: z.string(),
+      markerLabel: z.string().optional(),
+    })
+    .optional(),
 });
 export type Objective = z.infer<typeof ObjectiveSchema>;
 
@@ -138,20 +140,26 @@ export const QuestStageSchema = z.object({
    * Rewards granted when this stage completes.
    * Main quest reward is granted on final stage.
    */
-  stageRewards: z.object({
-    xp: z.number().int().min(0).default(0),
-    gold: z.number().int().min(0).default(0),
-    items: z.array(z.object({
-      itemId: z.string(),
-      quantity: z.number().int().min(1).default(1),
-    })).default([]),
-    reputation: z.record(z.string(), z.number().int()).default({}),
-  }).default(() => ({
-    xp: 0,
-    gold: 0,
-    items: [],
-    reputation: {},
-  })),
+  stageRewards: z
+    .object({
+      xp: z.number().int().min(0).default(0),
+      gold: z.number().int().min(0).default(0),
+      items: z
+        .array(
+          z.object({
+            itemId: z.string(),
+            quantity: z.number().int().min(1).default(1),
+          })
+        )
+        .default([]),
+      reputation: z.record(z.string(), z.number().int()).default({}),
+    })
+    .default(() => ({
+      xp: 0,
+      gold: 0,
+      items: [],
+      reputation: {},
+    })),
 });
 export type QuestStage = z.infer<typeof QuestStageSchema>;
 
@@ -160,11 +168,11 @@ export type QuestStage = z.infer<typeof QuestStageSchema>;
 // ============================================================================
 
 export const QuestStatusSchema = z.enum([
-  'available',    // Can be started
-  'active',       // Currently in progress
-  'completed',    // Successfully finished
-  'failed',       // Failed (time limit, wrong choice, etc.)
-  'abandoned',    // Player dropped it
+  'available', // Can be started
+  'active', // Currently in progress
+  'completed', // Successfully finished
+  'failed', // Failed (time limit, wrong choice, etc.)
+  'abandoned', // Player dropped it
 ]);
 export type QuestStatus = z.infer<typeof QuestStatusSchema>;
 
@@ -173,12 +181,12 @@ export type QuestStatus = z.infer<typeof QuestStatusSchema>;
 // ============================================================================
 
 export const QuestTypeSchema = z.enum([
-  'main',         // Main storyline quest
-  'side',         // Optional side quest
-  'faction',      // Faction reputation quest
-  'bounty',       // Kill target for reward
-  'delivery',     // Fetch/deliver quest
-  'exploration',  // Discover locations
+  'main', // Main storyline quest
+  'side', // Optional side quest
+  'faction', // Faction reputation quest
+  'bounty', // Kill target for reward
+  'delivery', // Fetch/deliver quest
+  'exploration', // Discover locations
 ]);
 export type QuestType = z.infer<typeof QuestTypeSchema>;
 
@@ -219,42 +227,50 @@ export const QuestSchema = z.object({
    * Prerequisites to start this quest.
    * All must be satisfied.
    */
-  prerequisites: z.object({
-    /** Quests that must be completed first */
-    completedQuests: z.array(z.string()).default([]),
-    /** Minimum player level */
-    minLevel: z.number().int().min(1).optional(),
-    /** Required faction reputation (factionId -> min rep) */
-    factionReputation: z.record(z.string(), z.number().int()).default({}),
-    /** Required items in inventory */
-    requiredItems: z.array(z.string()).default([]),
-  }).default(() => ({
-    completedQuests: [],
-    factionReputation: {},
-    requiredItems: [],
-  })),
+  prerequisites: z
+    .object({
+      /** Quests that must be completed first */
+      completedQuests: z.array(z.string()).default([]),
+      /** Minimum player level */
+      minLevel: z.number().int().min(1).optional(),
+      /** Required faction reputation (factionId -> min rep) */
+      factionReputation: z.record(z.string(), z.number().int()).default({}),
+      /** Required items in inventory */
+      requiredItems: z.array(z.string()).default([]),
+    })
+    .default(() => ({
+      completedQuests: [],
+      factionReputation: {},
+      requiredItems: [],
+    })),
 
   /**
    * Final rewards granted on quest completion.
    * These are IN ADDITION to any stage rewards.
    */
-  rewards: z.object({
-    xp: z.number().int().min(0).default(0),
-    gold: z.number().int().min(0).default(0),
-    items: z.array(z.object({
-      itemId: z.string(),
-      quantity: z.number().int().min(1).default(1),
-    })).default([]),
-    reputation: z.record(z.string(), z.number().int()).default({}),
-    /** Unlocks new quests */
-    unlocksQuests: z.array(z.string()).default([]),
-  }).default(() => ({
-    xp: 0,
-    gold: 0,
-    items: [],
-    reputation: {},
-    unlocksQuests: [],
-  })),
+  rewards: z
+    .object({
+      xp: z.number().int().min(0).default(0),
+      gold: z.number().int().min(0).default(0),
+      items: z
+        .array(
+          z.object({
+            itemId: z.string(),
+            quantity: z.number().int().min(1).default(1),
+          })
+        )
+        .default([]),
+      reputation: z.record(z.string(), z.number().int()).default({}),
+      /** Unlocks new quests */
+      unlocksQuests: z.array(z.string()).default([]),
+    })
+    .default(() => ({
+      xp: 0,
+      gold: 0,
+      items: [],
+      reputation: {},
+      unlocksQuests: [],
+    })),
 
   /**
    * Tags for categorization and filtering.
@@ -332,22 +348,16 @@ export function validateActiveQuest(data: unknown): ActiveQuest {
 /**
  * Check if all required objectives in a stage are complete.
  */
-export function isStageComplete(
-  stage: QuestStage,
-  progress: Record<string, number>
-): boolean {
+export function isStageComplete(stage: QuestStage, progress: Record<string, number>): boolean {
   return stage.objectives
-    .filter(obj => !obj.optional)
-    .every(obj => (progress[obj.id] ?? 0) >= obj.count);
+    .filter((obj) => !obj.optional)
+    .every((obj) => (progress[obj.id] ?? 0) >= obj.count);
 }
 
 /**
  * Check if a quest's current stage is complete.
  */
-export function isCurrentStageComplete(
-  quest: Quest,
-  activeQuest: ActiveQuest
-): boolean {
+export function isCurrentStageComplete(quest: Quest, activeQuest: ActiveQuest): boolean {
   const currentStage = quest.stages[activeQuest.currentStageIndex];
   if (!currentStage) return false;
   return isStageComplete(currentStage, activeQuest.objectiveProgress);
@@ -356,10 +366,7 @@ export function isCurrentStageComplete(
 /**
  * Check if the entire quest is complete.
  */
-export function isQuestComplete(
-  quest: Quest,
-  activeQuest: ActiveQuest
-): boolean {
+export function isQuestComplete(quest: Quest, activeQuest: ActiveQuest): boolean {
   // Must be on the last stage and that stage must be complete
   const isLastStage = activeQuest.currentStageIndex === quest.stages.length - 1;
   return isLastStage && isCurrentStageComplete(quest, activeQuest);
@@ -368,10 +375,7 @@ export function isQuestComplete(
 /**
  * Get the current stage of an active quest.
  */
-export function getCurrentStage(
-  quest: Quest,
-  activeQuest: ActiveQuest
-): QuestStage | null {
+export function getCurrentStage(quest: Quest, activeQuest: ActiveQuest): QuestStage | null {
   return quest.stages[activeQuest.currentStageIndex] ?? null;
 }
 

@@ -5,55 +5,58 @@
  * the web-specific data access layer and storage adapter.
  */
 
+import { getEncounterById, getEnemyById } from '@iron-frontier/shared/data/enemies';
 import {
-  createGameStore,
-  WebStorageAdapter,
-  type DataAccess,
-  type GameState,
-} from '@iron-frontier/shared/store';
-
+  generateRandomEncounter,
+  initEncounterTemplates,
+  shouldTriggerEncounter,
+} from '@iron-frontier/shared/data/generation/generators/encounterGenerator';
+import { ProceduralLocationManager } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
+import {
+  combineSeeds,
+  hashString,
+  SeededRandom,
+} from '@iron-frontier/shared/data/generation/seededRandom';
+import { ENCOUNTER_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/encounterTemplates';
 // Import data access functions from the shared data layer
-import { getItem, STARTER_INVENTORY, type BaseItem } from '@iron-frontier/shared/data/items';
+import { type BaseItem, getItem, STARTER_INVENTORY } from '@iron-frontier/shared/data/items';
+import { getWorldItemsForLocation } from '@iron-frontier/shared/data/items/worldItems';
 import {
-  getNPCById,
   getDialogueTreeById,
+  getNPCById,
   getPrimaryDialogueTree,
 } from '@iron-frontier/shared/data/npcs';
+import { getQuestById } from '@iron-frontier/shared/data/quests';
+import {
+  AP_COSTS,
+  calculateDamage,
+  calculateHitChance,
+  rollCritical,
+  rollHit,
+} from '@iron-frontier/shared/data/schemas/combat';
 import {
   type DialogueNode,
-  getDialogueEntryNode,
   getAvailableChoices,
+  getDialogueEntryNode,
 } from '@iron-frontier/shared/data/schemas/npc';
-import { getQuestById } from '@iron-frontier/shared/data/quests';
 import {
   createActiveQuest,
   isCurrentStageComplete as isStageComplete,
 } from '@iron-frontier/shared/data/schemas/quest';
-import { getWorldById, loadWorld } from '@iron-frontier/shared/data/worlds';
 import { getConnectionsFrom } from '@iron-frontier/shared/data/schemas/world';
-import { getWorldItemsForLocation } from '@iron-frontier/shared/data/items/worldItems';
-import { getEnemyById, getEncounterById } from '@iron-frontier/shared/data/enemies';
 import {
-  calculateHitChance,
-  calculateDamage,
-  rollHit,
-  rollCritical,
-  AP_COSTS,
-} from '@iron-frontier/shared/data/schemas/combat';
-import {
-  getShopById,
   calculateBuyPrice,
   calculateSellPrice,
   canSellItemToShop,
+  getShopById,
 } from '@iron-frontier/shared/data/shops';
+import { getWorldById, loadWorld } from '@iron-frontier/shared/data/worlds';
 import {
-  initEncounterTemplates,
-  generateRandomEncounter,
-  shouldTriggerEncounter,
-} from '@iron-frontier/shared/data/generation/generators/encounterGenerator';
-import { ENCOUNTER_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/encounterTemplates';
-import { ProceduralLocationManager } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
-import { SeededRandom, hashString, combineSeeds } from '@iron-frontier/shared/data/generation/seededRandom';
+  createGameStore,
+  type DataAccess,
+  type GameState,
+  WebStorageAdapter,
+} from '@iron-frontier/shared/store';
 import { dbManager } from './DatabaseManager';
 
 /**
@@ -76,14 +79,12 @@ const webDataAccess: DataAccess = {
   // Quests
   getQuestById: (questId: string) => getQuestById(questId),
   createActiveQuest: (questId: string) => createActiveQuest(questId),
-  isCurrentStageComplete: (quest: any, activeQuest: any) =>
-    isStageComplete(quest, activeQuest),
+  isCurrentStageComplete: (quest: any, activeQuest: any) => isStageComplete(quest, activeQuest),
 
   // World
   getWorldById: (worldId: string) => getWorldById(worldId),
   loadWorld: (world: any) => loadWorld(world),
-  getConnectionsFrom: (world: any, locationId: string) =>
-    getConnectionsFrom(world, locationId),
+  getConnectionsFrom: (world: any, locationId: string) => getConnectionsFrom(world, locationId),
   getWorldItemsForLocation: (locationId: string) => getWorldItemsForLocation(locationId),
 
   // Combat
@@ -135,25 +136,25 @@ export const useGameStore = createGameStore({
 // Re-export types for convenience
 export type { GameState };
 export type {
-  InventoryItem,
+  CharacterAppearance,
+  CombatActionType,
+  Combatant,
+  CombatPhase,
+  CombatResult,
+  CombatState,
+  DialogueState,
   EquipmentSlot,
   GamePhase,
-  PanelType,
-  DialogueState,
-  TravelState,
-  Notification,
-  PlayerStats,
   GameSettings,
-  CombatState,
-  Combatant,
-  CombatActionType,
-  CombatResult,
-  CombatPhase,
-  CharacterAppearance,
-  WorldPosition,
-  TimeState,
-  WeatherState,
+  InventoryItem,
+  Notification,
   NPC,
+  PanelType,
+  PlayerStats,
   Structure,
+  TimeState,
+  TravelState,
+  WeatherState,
   WorldItem,
+  WorldPosition,
 } from '@iron-frontier/shared/store';

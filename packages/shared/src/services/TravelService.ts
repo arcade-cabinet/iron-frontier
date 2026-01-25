@@ -7,8 +7,8 @@
  * This is a platform-agnostic service that can be used with any game store.
  */
 
-import { getTravelInfo, type LoadedWorld, type ResolvedLocation } from '../data/worlds';
 import type { DangerLevel } from '../data/schemas/world';
+import { getTravelInfo, type LoadedWorld, type ResolvedLocation } from '../data/worlds';
 
 // ============================================================================
 // TYPES
@@ -54,11 +54,7 @@ export interface TravelGameState {
  * @param loadedWorld - The loaded world data
  * @returns true if travel is possible
  */
-export function canTravel(
-  fromId: string,
-  toId: string,
-  loadedWorld: LoadedWorld | null
-): boolean {
+export function canTravel(fromId: string, toId: string, loadedWorld: LoadedWorld | null): boolean {
   if (!loadedWorld) {
     console.warn('[TravelService] No world loaded');
     return false;
@@ -158,10 +154,7 @@ export function getReachableLocations(
  * @param gameState - The game state with travel-related methods
  * @returns Travel result with success status and message
  */
-export function executeTravel(
-  toId: string,
-  gameState: TravelGameState
-): TravelResult {
+export function executeTravel(toId: string, gameState: TravelGameState): TravelResult {
   const { loadedWorld, currentLocationId, updateTime, travelTo } = gameState;
 
   if (!loadedWorld) {
@@ -211,7 +204,9 @@ export function executeTravel(
   // Execute the travel (updates currentLocationId, discovers location)
   travelTo(toId);
 
-  console.log(`[TravelService] Traveled to ${destination.ref.name} in ${cost.time} hours via ${cost.method}`);
+  console.log(
+    `[TravelService] Traveled to ${destination.ref.name} in ${cost.time} hours via ${cost.method}`
+  );
 
   return {
     success: true,

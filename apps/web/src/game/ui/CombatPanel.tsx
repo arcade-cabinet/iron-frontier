@@ -8,11 +8,11 @@
  * - Victory/defeat/fled outcome screens
  */
 
-import { useGameStore } from '../store/webGameStore';
 import type { Combatant } from '@iron-frontier/shared/data/schemas/combat';
-import type { CombatActionType } from '@iron-frontier/shared/store';
 import { AP_COSTS } from '@iron-frontier/shared/data/schemas/combat';
+import type { CombatActionType } from '@iron-frontier/shared/store';
 import { cn } from '@/lib/utils';
+import { useGameStore } from '../store/webGameStore';
 
 // ============================================================================
 // ICONS
@@ -33,7 +33,12 @@ function CrosshairIcon({ className }: { className?: string }) {
 function ShieldIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+      />
     </svg>
   );
 }
@@ -41,7 +46,12 @@ function ShieldIcon({ className }: { className?: string }) {
 function FlaskIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3h6v4l4 8a2 2 0 01-2 2H7a2 2 0 01-2-2l4-8V3z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 3h6v4l4 8a2 2 0 01-2 2H7a2 2 0 01-2-2l4-8V3z"
+      />
       <line x1="9" y1="3" x2="15" y2="3" strokeWidth={2} />
     </svg>
   );
@@ -50,7 +60,12 @@ function FlaskIcon({ className }: { className?: string }) {
 function RunIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M13 10V3L4 14h7v7l9-11h-7z"
+      />
     </svg>
   );
 }
@@ -76,7 +91,12 @@ function SkullIcon({ className }: { className?: string }) {
 // HEALTH BAR
 // ============================================================================
 
-function HealthBar({ current, max, name, isPlayer = false }: {
+function HealthBar({
+  current,
+  max,
+  name,
+  isPlayer = false,
+}: {
   current: number;
   max: number;
   name: string;
@@ -93,10 +113,16 @@ function HealthBar({ current, max, name, isPlayer = false }: {
     <div className="mb-1">
       <div className="flex justify-between text-xs mb-0.5">
         <span className={isPlayer ? 'text-amber-300 font-medium' : 'text-stone-300'}>{name}</span>
-        <span className={cn(
-          'font-mono',
-          percentage > 60 ? 'text-green-400' : percentage > 30 ? 'text-yellow-400' : 'text-red-400'
-        )}>
+        <span
+          className={cn(
+            'font-mono',
+            percentage > 60
+              ? 'text-green-400'
+              : percentage > 30
+                ? 'text-yellow-400'
+                : 'text-red-400'
+          )}
+        >
           {current}/{max}
         </span>
       </div>
@@ -122,9 +148,7 @@ function APBar({ current, max }: { current: number; max: number }) {
           key={i}
           className={cn(
             'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm border',
-            i < current
-              ? 'bg-amber-500 border-amber-400'
-              : 'bg-stone-800 border-stone-700'
+            i < current ? 'bg-amber-500 border-amber-400' : 'bg-stone-800 border-stone-700'
           )}
         />
       ))}
@@ -143,7 +167,7 @@ function ActionButton({
   currentAP,
   disabled,
   onClick,
-  variant = 'default'
+  variant = 'default',
 }: {
   label: string;
   icon: React.ReactNode;
@@ -182,10 +206,12 @@ function ActionButton({
       <div className="w-4 h-4 sm:w-5 sm:h-5">{icon}</div>
       <span className="text-[9px] sm:text-[10px] font-medium">{label}</span>
       {apCost > 0 && (
-        <span className={cn(
-          'text-[8px] sm:text-[9px] font-mono',
-          canAfford ? 'text-amber-400' : 'text-red-400'
-        )}>
+        <span
+          className={cn(
+            'text-[8px] sm:text-[9px] font-mono',
+            canAfford ? 'text-amber-400' : 'text-red-400'
+          )}
+        >
           {apCost} AP
         </span>
       )}
@@ -197,7 +223,12 @@ function ActionButton({
 // ENEMY CARD
 // ============================================================================
 
-function EnemyCard({ combatant, isSelected, isTargetable, onSelect }: {
+function EnemyCard({
+  combatant,
+  isSelected,
+  isTargetable,
+  onSelect,
+}: {
   combatant: Combatant;
   isSelected: boolean;
   isTargetable: boolean;
@@ -229,15 +260,12 @@ function EnemyCard({ combatant, isSelected, isTargetable, onSelect }: {
       )}
 
       {/* Name & Threat */}
-      <div className="text-xs sm:text-sm font-bold text-red-300 mb-1.5 sm:mb-2 truncate">{combatant.name}</div>
+      <div className="text-xs sm:text-sm font-bold text-red-300 mb-1.5 sm:mb-2 truncate">
+        {combatant.name}
+      </div>
 
       {/* Health */}
-      <HealthBar
-        current={combatant.health}
-        max={combatant.maxHealth}
-        name=""
-        isPlayer={false}
-      />
+      <HealthBar current={combatant.health} max={combatant.maxHealth} name="" isPlayer={false} />
 
       {/* Status */}
       <div className="flex items-center justify-between mt-1.5 sm:mt-2">
@@ -259,12 +287,24 @@ function PlayerCard({ combatant }: { combatant: Combatant }) {
     <div className="p-2.5 sm:p-4 rounded-lg border-2 border-amber-600/50 bg-amber-950/90 backdrop-blur-sm min-w-[150px] sm:min-w-[180px]">
       <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-800/60 border border-amber-600/50 flex items-center justify-center">
-          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <svg
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
           </svg>
         </div>
         <div className="min-w-0">
-          <div className="text-amber-200 font-bold text-xs sm:text-sm truncate">{combatant.name}</div>
+          <div className="text-amber-200 font-bold text-xs sm:text-sm truncate">
+            {combatant.name}
+          </div>
           <div className="text-amber-500/70 text-[9px] sm:text-[10px]">Outlaw</div>
         </div>
       </div>
@@ -289,7 +329,7 @@ function PlayerCard({ combatant }: { combatant: Combatant }) {
 // ============================================================================
 
 function CombatLog() {
-  const combatState = useGameStore(state => state.combatState);
+  const combatState = useGameStore((state) => state.combatState);
 
   if (!combatState) return null;
 
@@ -297,7 +337,9 @@ function CombatLog() {
 
   return (
     <div className="bg-stone-900/80 rounded-lg p-2 sm:p-3 border border-stone-700/50 backdrop-blur-sm">
-      <div className="text-[9px] sm:text-[10px] font-medium text-amber-500/70 uppercase tracking-wide mb-1.5 sm:mb-2">Combat Log</div>
+      <div className="text-[9px] sm:text-[10px] font-medium text-amber-500/70 uppercase tracking-wide mb-1.5 sm:mb-2">
+        Combat Log
+      </div>
       <div className="space-y-0.5 sm:space-y-1 min-h-[40px] sm:min-h-[60px]">
         {recentLogs.length === 0 ? (
           <div className="text-stone-500 text-[10px] sm:text-xs italic">The standoff begins...</div>
@@ -308,7 +350,9 @@ function CombatLog() {
               className={cn(
                 'text-[10px] sm:text-xs',
                 entry.success
-                  ? entry.isCritical ? 'text-yellow-400 font-medium' : 'text-stone-300'
+                  ? entry.isCritical
+                    ? 'text-yellow-400 font-medium'
+                    : 'text-stone-300'
                   : 'text-red-400'
               )}
             >
@@ -326,7 +370,10 @@ function CombatLog() {
 // OUTCOME SCREEN
 // ============================================================================
 
-function OutcomeScreen({ type, onContinue }: {
+function OutcomeScreen({
+  type,
+  onContinue,
+}: {
   type: 'victory' | 'defeat' | 'fled';
   onContinue: () => void;
 }) {
@@ -361,14 +408,14 @@ function OutcomeScreen({ type, onContinue }: {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className={cn(
-        'rounded-lg border-2 p-6 sm:p-8 text-center max-w-xs sm:max-w-sm mx-4',
-        borderColor,
-        bgColor
-      )}>
-        <div className="flex justify-center mb-3 sm:mb-4">
-          {icon}
-        </div>
+      <div
+        className={cn(
+          'rounded-lg border-2 p-6 sm:p-8 text-center max-w-xs sm:max-w-sm mx-4',
+          borderColor,
+          bgColor
+        )}
+      >
+        <div className="flex justify-center mb-3 sm:mb-4">{icon}</div>
         <h2 className="text-xl sm:text-2xl font-bold text-amber-100 mb-1.5 sm:mb-2">{title}</h2>
         <p className="text-stone-400 text-xs sm:text-sm mb-4 sm:mb-6">{subtitle}</p>
         <button
@@ -409,8 +456,8 @@ export function CombatPanel() {
 
   if (!combatState) return null;
 
-  const player = combatState.combatants.find(c => c.isPlayer);
-  const enemies = combatState.combatants.filter(c => !c.isPlayer && !c.isDead);
+  const player = combatState.combatants.find((c) => c.isPlayer);
+  const enemies = combatState.combatants.filter((c) => !c.isPlayer && !c.isDead);
   const currentCombatant = combatState.combatants[combatState.currentTurnIndex];
   const isPlayerTurn = combatState.phase === 'player_turn';
   const playerAP = player?.actionPoints ?? 0;
@@ -450,14 +497,18 @@ export function CombatPanel() {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-amber-400">Showdown</h2>
-            <div className="text-[10px] sm:text-xs text-amber-500/60">Round {combatState.round}</div>
+            <div className="text-[10px] sm:text-xs text-amber-500/60">
+              Round {combatState.round}
+            </div>
           </div>
-          <div className={cn(
-            'px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium',
-            isPlayerTurn
-              ? 'bg-green-900/60 text-green-400 border border-green-700/50'
-              : 'bg-red-900/60 text-red-400 border border-red-700/50'
-          )}>
+          <div
+            className={cn(
+              'px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium',
+              isPlayerTurn
+                ? 'bg-green-900/60 text-green-400 border border-green-700/50'
+                : 'bg-red-900/60 text-red-400 border border-red-700/50'
+            )}
+          >
             {isPlayerTurn ? 'Your Move' : 'Enemy Turn'}
           </div>
         </div>
@@ -467,7 +518,7 @@ export function CombatPanel() {
       <div className="flex-1 flex flex-col p-2 sm:p-4 gap-2 sm:gap-4 overflow-hidden">
         {/* Enemies - horizontal scroll on mobile */}
         <div className="flex justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto pb-1 scrollbar-hide">
-          {enemies.map(enemy => (
+          {enemies.map((enemy) => (
             <EnemyCard
               key={enemy.definitionId + enemy.name}
               combatant={enemy}
@@ -486,9 +537,7 @@ export function CombatPanel() {
         </div>
 
         {/* Player */}
-        <div className="flex justify-center">
-          {player && <PlayerCard combatant={player} />}
-        </div>
+        <div className="flex justify-center">{player && <PlayerCard combatant={player} />}</div>
       </div>
 
       {/* Action Bar */}
@@ -558,9 +607,8 @@ export function CombatPanel() {
       {!isPlayerTurn && combatState.phase === 'enemy_turn' && (
         <div className="bg-red-950/90 border-t border-red-800/50 p-2 sm:p-4 backdrop-blur-sm">
           <div className="text-center text-red-300 text-xs sm:text-sm">
-            <span className="animate-pulse">⚔</span>{' '}
-            {currentCombatant?.name ?? 'Enemy'} is making their move...{' '}
-            <span className="animate-pulse">⚔</span>
+            <span className="animate-pulse">⚔</span> {currentCombatant?.name ?? 'Enemy'} is making
+            their move... <span className="animate-pulse">⚔</span>
           </div>
         </div>
       )}

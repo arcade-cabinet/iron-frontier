@@ -3,7 +3,7 @@
  * Displayed when the player dies
  */
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '../store/webGameStore';
 
 // ============================================================================
@@ -20,7 +20,13 @@ function SkullIcon({ className }: { className?: string }) {
 
 function CrossIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+    >
       <path d="M12 2v20M8 6h8M6 22h12" />
     </svg>
   );
@@ -28,16 +34,36 @@ function CrossIcon({ className }: { className?: string }) {
 
 function RiseIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"
+      />
     </svg>
   );
 }
 
 function HomeIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+      />
     </svg>
   );
 }
@@ -76,7 +102,8 @@ export function GameOverScreen() {
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%)',
+              background:
+                'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%)',
             }}
           />
           {/* Dust particles */}
@@ -129,8 +156,10 @@ export function GameOverScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h1 className="text-3xl sm:text-4xl font-bold text-red-500 tracking-wider mb-2 sm:mb-3"
-                  style={{ fontFamily: 'serif', textShadow: '0 0 20px rgba(239, 68, 68, 0.4)' }}>
+              <h1
+                className="text-3xl sm:text-4xl font-bold text-red-500 tracking-wider mb-2 sm:mb-3"
+                style={{ fontFamily: 'serif', textShadow: '0 0 20px rgba(239, 68, 68, 0.4)' }}
+              >
                 DEAD
               </h1>
 
@@ -152,7 +181,9 @@ export function GameOverScreen() {
               <div className="flex items-end gap-2 sm:gap-3 text-amber-800/40">
                 <CrossIcon className="w-5 h-8 sm:w-6 sm:h-10" />
                 <div className="bg-amber-900/30 border border-amber-800/30 rounded-t-lg px-3 sm:px-4 py-1.5 sm:py-2">
-                  <div className="text-[9px] sm:text-[10px] text-amber-500/50 uppercase tracking-widest">R.I.P.</div>
+                  <div className="text-[9px] sm:text-[10px] text-amber-500/50 uppercase tracking-widest">
+                    R.I.P.
+                  </div>
                   <div className="text-[10px] sm:text-xs text-amber-400/60">{playerName}</div>
                 </div>
                 <CrossIcon className="w-5 h-8 sm:w-6 sm:h-10" />

@@ -1,12 +1,24 @@
 // Procedural Generation - Steampunk American Frontier Theme
-import { PRNG, SimplexNoise, hashString } from './prng';
+import { hashString, PRNG, SimplexNoise } from './prng';
 
 export const GENERATOR_VERSION = 1;
 export const CELL_SIZE = 2;
 export const SECTOR_SIZE = 24;
 
 export type CellType = 'dirt' | 'wood' | 'stone' | 'water' | 'rail' | 'sand' | 'grass' | 'wall';
-export type PropType = 'crate' | 'barrel' | 'wagon' | 'lamp' | 'cactus' | 'rock' | 'post' | 'trough' | 'gear' | 'pipe' | 'anvil' | 'windmill';
+export type PropType =
+  | 'crate'
+  | 'barrel'
+  | 'wagon'
+  | 'lamp'
+  | 'cactus'
+  | 'rock'
+  | 'post'
+  | 'trough'
+  | 'gear'
+  | 'pipe'
+  | 'anvil'
+  | 'windmill';
 export type ItemRarity = 'common' | 'uncommon' | 'rare' | 'legendary';
 
 export interface GridCell {
@@ -97,7 +109,10 @@ export interface SectorData {
 const SECTOR_THEMES = {
   town: {
     names: ['Rustwater', 'Cogsville', 'Brass Gulch', 'Steamhaven', 'Iron Springs'],
-    descriptions: ['A frontier boomtown powered by steam and ambition', 'Where progress meets the wild west'],
+    descriptions: [
+      'A frontier boomtown powered by steam and ambition',
+      'Where progress meets the wild west',
+    ],
     groundColor: '#8B7355',
     ambientColor: '#FFE4B5',
     propWeights: { crate: 2, barrel: 3, wagon: 1, lamp: 3, post: 2, trough: 2, gear: 1 },
@@ -106,7 +121,10 @@ const SECTOR_THEMES = {
   },
   desert: {
     names: ['Scorched Flats', 'Copper Canyon', 'The Dustbowl', 'Mesa Mechanica'],
-    descriptions: ['Sun-baked earth scarred by mining operations', 'Where steam engines brave the endless sand'],
+    descriptions: [
+      'Sun-baked earth scarred by mining operations',
+      'Where steam engines brave the endless sand',
+    ],
     groundColor: '#C19A6B',
     ambientColor: '#FFDAB9',
     propWeights: { cactus: 4, rock: 3, pipe: 2, gear: 2, windmill: 1 },
@@ -245,7 +263,7 @@ export class SectorGenerator {
         if (this.theme === 'railyard' && y >= SECTOR_SIZE / 2 - 1 && y <= SECTOR_SIZE / 2 + 1) {
           type = 'rail';
         } else if (edge < 2 && this.prng.chance(0.5)) {
-          type = this.theme === 'mine' ? 'stone' : 'rock' as CellType;
+          type = this.theme === 'mine' ? 'stone' : ('rock' as CellType);
           type = 'wall';
           walkable = false;
           height = 1.5;
@@ -347,7 +365,10 @@ export class SectorGenerator {
     }
   }
 
-  private generateProps(grid: GridCell[][], themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]): PropPlacement[] {
+  private generateProps(
+    grid: GridCell[][],
+    themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]
+  ): PropPlacement[] {
     const props: PropPlacement[] = [];
     const weights = Object.entries(themeData.propWeights);
     const totalWeight = weights.reduce((s, [, w]) => s + w, 0);
@@ -385,15 +406,24 @@ export class SectorGenerator {
   }
 
   private isNearType(grid: GridCell[][], x: number, y: number, type: CellType): boolean {
-    for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
-      const nx = x + dx, ny = y + dy;
+    for (const [dx, dy] of [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ]) {
+      const nx = x + dx,
+        ny = y + dy;
       if (nx < 0 || nx >= SECTOR_SIZE || ny < 0 || ny >= SECTOR_SIZE) return true;
       if (grid[ny][nx].type === type) return true;
     }
     return false;
   }
 
-  private spawnNPCs(landmarks: LandmarkAnchor[], themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]): NPCSpawn[] {
+  private spawnNPCs(
+    landmarks: LandmarkAnchor[],
+    themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]
+  ): NPCSpawn[] {
     const npcs: NPCSpawn[] = [];
 
     for (const landmark of landmarks) {
@@ -422,7 +452,12 @@ export class SectorGenerator {
 
   private spawnItems(grid: GridCell[][], landmarks: LandmarkAnchor[]): ItemSpawn[] {
     const items: ItemSpawn[] = [];
-    const rarityRolls: [ItemRarity, number][] = [['common', 55], ['uncommon', 30], ['rare', 12], ['legendary', 3]];
+    const rarityRolls: [ItemRarity, number][] = [
+      ['common', 55],
+      ['uncommon', 30],
+      ['rare', 12],
+      ['legendary', 3],
+    ];
 
     for (const landmark of landmarks) {
       const count = this.prng.nextInt(2, 5);
@@ -435,7 +470,10 @@ export class SectorGenerator {
         let rarity: ItemRarity = 'common';
         for (const [r, w] of rarityRolls) {
           roll -= w;
-          if (roll <= 0) { rarity = r; break; }
+          if (roll <= 0) {
+            rarity = r;
+            break;
+          }
         }
 
         const itemPool = ITEM_TYPES[rarity];
@@ -455,7 +493,10 @@ export class SectorGenerator {
     return items;
   }
 
-  private spawnEncounters(landmarks: LandmarkAnchor[], themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]): EncounterSpawn[] {
+  private spawnEncounters(
+    landmarks: LandmarkAnchor[],
+    themeData: (typeof SECTOR_THEMES)[keyof typeof SECTOR_THEMES]
+  ): EncounterSpawn[] {
     const encounters: EncounterSpawn[] = [];
     const count = Math.min(this.prng.nextInt(1, 3), landmarks.length);
 
@@ -474,20 +515,24 @@ export class SectorGenerator {
     return encounters;
   }
 
-  private findPlayerSpawn(grid: GridCell[][], landmarks: LandmarkAnchor[]): { x: number; y: number } {
+  private findPlayerSpawn(
+    grid: GridCell[][],
+    landmarks: LandmarkAnchor[]
+  ): { x: number; y: number } {
     if (landmarks.length > 0) {
       const l = landmarks[0];
       return { x: (l.x + l.width / 2) * CELL_SIZE, y: (l.y + l.height / 2) * CELL_SIZE };
     }
     for (let r = 0; r < SECTOR_SIZE; r++) {
       for (let d = -r; d <= r; d++) {
-        const cx = SECTOR_SIZE / 2 + d, cy = SECTOR_SIZE / 2 + (r - Math.abs(d));
+        const cx = SECTOR_SIZE / 2 + d,
+          cy = SECTOR_SIZE / 2 + (r - Math.abs(d));
         if (cx >= 0 && cx < SECTOR_SIZE && cy >= 0 && cy < SECTOR_SIZE && grid[cy][cx].walkable) {
           return { x: cx * CELL_SIZE, y: cy * CELL_SIZE };
         }
       }
     }
-    return { x: SECTOR_SIZE * CELL_SIZE / 2, y: SECTOR_SIZE * CELL_SIZE / 2 };
+    return { x: (SECTOR_SIZE * CELL_SIZE) / 2, y: (SECTOR_SIZE * CELL_SIZE) / 2 };
   }
 
   private generateExits(grid: GridCell[][]): SectorExit[] {
@@ -499,10 +544,22 @@ export class SectorGenerator {
       const pos = this.prng.nextInt(4, SECTOR_SIZE - 4);
 
       switch (dir) {
-        case 'north': x = pos * CELL_SIZE; y = 0; break;
-        case 'south': x = pos * CELL_SIZE; y = (SECTOR_SIZE - 1) * CELL_SIZE; break;
-        case 'east': x = (SECTOR_SIZE - 1) * CELL_SIZE; y = pos * CELL_SIZE; break;
-        case 'west': x = 0; y = pos * CELL_SIZE; break;
+        case 'north':
+          x = pos * CELL_SIZE;
+          y = 0;
+          break;
+        case 'south':
+          x = pos * CELL_SIZE;
+          y = (SECTOR_SIZE - 1) * CELL_SIZE;
+          break;
+        case 'east':
+          x = (SECTOR_SIZE - 1) * CELL_SIZE;
+          y = pos * CELL_SIZE;
+          break;
+        case 'west':
+          x = 0;
+          y = pos * CELL_SIZE;
+          break;
       }
 
       exits.push({ targetSector: `${this.sectorId}_${dir}`, x, y, direction: dir });

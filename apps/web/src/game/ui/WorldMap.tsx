@@ -5,22 +5,22 @@
  * with regions, locations, connections, and fog of war.
  */
 
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import {
+  type Connection,
+  type DangerLevel,
+  getConnectionsFrom,
+  type LocationRef,
+  type Region,
+  type TravelMethod,
+  type World,
+} from '@iron-frontier/shared/data/schemas/world';
+import { FrontierTerritory } from '@iron-frontier/shared/data/worlds/frontier_territory';
+import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useGameStore } from '../store/webGameStore';
-import { FrontierTerritory } from '@iron-frontier/shared/data/worlds/frontier_territory';
-import {
-  World,
-  LocationRef,
-  Connection,
-  Region,
-  TravelMethod,
-  DangerLevel,
-  getConnectionsFrom,
-} from '@iron-frontier/shared/data/schemas/world';
 
 // ============================================================================
 // TYPES
@@ -54,9 +54,9 @@ const PADDING = 40;
 
 // Scale world coordinates to map coordinates
 const scaleX = (wx: number, world: World) =>
-  PADDING + ((wx / world.dimensions.width) * (MAP_WIDTH - 2 * PADDING));
+  PADDING + (wx / world.dimensions.width) * (MAP_WIDTH - 2 * PADDING);
 const scaleY = (wy: number, world: World) =>
-  PADDING + ((wy / world.dimensions.height) * (MAP_HEIGHT - 2 * PADDING));
+  PADDING + (wy / world.dimensions.height) * (MAP_HEIGHT - 2 * PADDING);
 
 // Biome colors (muted western palette)
 const BIOME_COLORS: Record<string, string> = {
@@ -103,9 +103,18 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Building cluster icon
       return (
         <g>
-          <rect x={-half + 2} y={-half + 4} width={size - 8} height={size - 6} fill="currentColor" />
+          <rect
+            x={-half + 2}
+            y={-half + 4}
+            width={size - 8}
+            height={size - 6}
+            fill="currentColor"
+          />
           <rect x={half - 8} y={-half + 2} width={6} height={size - 4} fill="currentColor" />
-          <polygon points={`${-half + 2},${-half + 4} ${-half + half - 2},${-half - 2} ${half - 6},${-half + 4}`} fill="currentColor" />
+          <polygon
+            points={`${-half + 2},${-half + 4} ${-half + half - 2},${-half - 2} ${half - 6},${-half + 4}`}
+            fill="currentColor"
+          />
         </g>
       );
 
@@ -114,8 +123,18 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Pickaxe icon
       return (
         <g>
-          <line x1={-half + 2} y1={half - 2} x2={half - 2} y2={-half + 2} stroke="currentColor" strokeWidth="3" />
-          <polygon points={`${half - 4},${-half} ${half},${-half + 4} ${half - 2},${-half + 6} ${half - 8},${-half + 2}`} fill="currentColor" />
+          <line
+            x1={-half + 2}
+            y1={half - 2}
+            x2={half - 2}
+            y2={-half + 2}
+            stroke="currentColor"
+            strokeWidth="3"
+          />
+          <polygon
+            points={`${half - 4},${-half} ${half},${-half + 4} ${half - 2},${-half + 6} ${half - 8},${-half + 2}`}
+            fill="currentColor"
+          />
         </g>
       );
 
@@ -124,8 +143,17 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Barn icon
       return (
         <g>
-          <rect x={-half + 2} y={-half + 6} width={size - 4} height={size - 8} fill="currentColor" />
-          <polygon points={`${-half},${-half + 6} 0,${-half} ${half},${-half + 6}`} fill="currentColor" />
+          <rect
+            x={-half + 2}
+            y={-half + 6}
+            width={size - 4}
+            height={size - 8}
+            fill="currentColor"
+          />
+          <polygon
+            points={`${-half},${-half + 6} 0,${-half} ${half},${-half + 6}`}
+            fill="currentColor"
+          />
         </g>
       );
 
@@ -133,7 +161,14 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Train icon
       return (
         <g>
-          <rect x={-half + 2} y={-half + 4} width={size - 4} height={size - 8} rx="2" fill="currentColor" />
+          <rect
+            x={-half + 2}
+            y={-half + 4}
+            width={size - 4}
+            height={size - 8}
+            rx="2"
+            fill="currentColor"
+          />
           <circle cx={-half + 5} cy={half - 3} r="3" fill="currentColor" />
           <circle cx={half - 5} cy={half - 3} r="3" fill="currentColor" />
           <rect x={half - 6} y={-half + 2} width="4" height="4" fill="currentColor" />
@@ -145,8 +180,18 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Campfire/rest icon
       return (
         <g>
-          <polygon points={`0,${-half + 2} ${-half + 4},${half - 2} ${half - 4},${half - 2}`} fill="currentColor" />
-          <line x1={-half + 2} y1={half - 4} x2={half - 2} y2={half - 4} stroke="currentColor" strokeWidth="2" />
+          <polygon
+            points={`0,${-half + 2} ${-half + 4},${half - 2} ${half - 4},${half - 2}`}
+            fill="currentColor"
+          />
+          <line
+            x1={-half + 2}
+            y1={half - 4}
+            x2={half - 2}
+            y2={half - 4}
+            stroke="currentColor"
+            strokeWidth="2"
+          />
         </g>
       );
 
@@ -167,7 +212,10 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
         <g>
           <rect x={-half + 3} y={-half + 6} width="4" height={size - 8} fill="currentColor" />
           <rect x={half - 7} y={-half + 4} width="4" height={size - 10} fill="currentColor" />
-          <polygon points={`${-half + 3},${-half + 6} ${-half + 5},${-half + 2} ${-half + 7},${-half + 6}`} fill="currentColor" />
+          <polygon
+            points={`${-half + 3},${-half + 6} ${-half + 5},${-half + 2} ${-half + 7},${-half + 6}`}
+            fill="currentColor"
+          />
         </g>
       );
 
@@ -175,7 +223,10 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Rock/mountain icon
       return (
         <g>
-          <polygon points={`0,${-half + 2} ${-half + 2},${half - 2} ${half - 2},${half - 2}`} fill="currentColor" />
+          <polygon
+            points={`0,${-half + 2} ${-half + 2},${half - 2} ${half - 2},${half - 2}`}
+            fill="currentColor"
+          />
         </g>
       );
 
@@ -183,7 +234,10 @@ function getLocationIcon(type: string, size: number = 20): ReactNode {
       // Tree icon
       return (
         <g>
-          <polygon points={`0,${-half + 2} ${-half + 4},${half - 4} ${half - 4},${half - 4}`} fill="currentColor" />
+          <polygon
+            points={`0,${-half + 2} ${-half + 4},${half - 4} ${half - 4},${half - 4}`}
+            fill="currentColor"
+          />
           <rect x="-2" y={half - 6} width="4" height="4" fill="currentColor" />
         </g>
       );
@@ -351,9 +405,10 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
 
   // Use store values with fallbacks for when world not yet initialized
   const currentLocationId = storeLocationId ?? 'loc_dusty_springs';
-  const discoveredLocationIds = storeDiscoveredIds.length > 0
-    ? storeDiscoveredIds
-    : FrontierTerritory.locations.filter(l => l.discovered).map(l => l.id);
+  const discoveredLocationIds =
+    storeDiscoveredIds.length > 0
+      ? storeDiscoveredIds
+      : FrontierTerritory.locations.filter((l) => l.discovered).map((l) => l.id);
 
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredLocation, setHoveredLocation] = useState<string | null>(null);
@@ -362,10 +417,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
   const world = useMemo(() => FrontierTerritory, []);
 
   // Create a set for faster lookups
-  const discoveredIds = useMemo(
-    () => new Set(discoveredLocationIds),
-    [discoveredLocationIds]
-  );
+  const discoveredIds = useMemo(() => new Set(discoveredLocationIds), [discoveredLocationIds]);
 
   // Get discovered regions
   const discoveredRegions = useMemo(() => {
@@ -440,7 +492,16 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
       onTravelTo?.(location.id);
       onClose();
     },
-    [currentLocationId, discoveredIds, getConnectionTo, travelTo, onTravelTo, onClose, addNotification, settings.haptics]
+    [
+      currentLocationId,
+      discoveredIds,
+      getConnectionTo,
+      travelTo,
+      onTravelTo,
+      onClose,
+      addNotification,
+      settings.haptics,
+    ]
   );
 
   // Handle location hover
@@ -618,7 +679,13 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
             <span className="text-amber-300">Trail</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 sm:w-4 h-1 bg-gray-600" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #4b5563 0px, #4b5563 2px, transparent 2px, transparent 6px)' }} />
+            <div
+              className="w-3 sm:w-4 h-1 bg-gray-600"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(90deg, #4b5563 0px, #4b5563 2px, transparent 2px, transparent 6px)',
+              }}
+            />
             <span className="text-amber-300">Rail</span>
           </div>
           <div className="flex items-center gap-1">
@@ -676,9 +743,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
               </g>
 
               {/* Locations */}
-              <g className="locations">
-                {world.locations.map((loc) => renderLocation(loc))}
-              </g>
+              <g className="locations">{world.locations.map((loc) => renderLocation(loc))}</g>
 
               {/* Compass Rose */}
               <g transform={`translate(${MAP_WIDTH - 60}, 60)`}>
@@ -742,7 +807,9 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                   {currentConnections
-                    .filter((conn) => discoveredIds.has(conn.to === currentLocationId ? conn.from : conn.to))
+                    .filter((conn) =>
+                      discoveredIds.has(conn.to === currentLocationId ? conn.from : conn.to)
+                    )
                     .slice(0, 4)
                     .map((conn) => {
                       const targetId = conn.to === currentLocationId ? conn.from : conn.to;
@@ -758,7 +825,9 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
                           onClick={() => handleLocationClick(target)}
                         >
                           <div className="flex flex-col">
-                            <span className="font-medium truncate text-xs sm:text-sm">{target.name}</span>
+                            <span className="font-medium truncate text-xs sm:text-sm">
+                              {target.name}
+                            </span>
                             <span className="text-[10px] sm:text-xs text-amber-400">
                               {conn.travelTime}h via {conn.method}
                             </span>
@@ -826,12 +895,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
 
 function MapIcon() {
   return (
-    <svg
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

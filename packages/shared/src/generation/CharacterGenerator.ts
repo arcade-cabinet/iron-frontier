@@ -1,62 +1,207 @@
 // Procedural Character Generator - Old West Gunslinger
 import Alea from 'alea';
-import { CharacterAppearance, NPCRole, NPCPersonality, NPC, WorldPosition } from '../engine/types';
+import type {
+  CharacterAppearance,
+  NPC,
+  NPCPersonality,
+  NPCRole,
+  WorldPosition,
+} from '../types/engine';
 
 // Name pools for procedural generation
 const FIRST_NAMES_MALE = [
-  'Wyatt', 'Jesse', 'Billy', 'Doc', 'Wild Bill', 'Butch', 'Sundance', 'Cole',
-  'Frank', 'John', 'James', 'Henry', 'William', 'Thomas', 'Samuel', 'Robert',
-  'Amos', 'Ezekiel', 'Silas', 'Caleb', 'Josiah', 'Elijah', 'Nathaniel', 'Isaiah',
-  'Rufus', 'Cornelius', 'Jebediah', 'Obadiah', 'Zachariah', 'Bartholomew',
-  'Colt', 'Maverick', 'Dusty', 'Tex', 'Buck', 'Hank', 'Slim', 'Red',
+  'Wyatt',
+  'Jesse',
+  'Billy',
+  'Doc',
+  'Wild Bill',
+  'Butch',
+  'Sundance',
+  'Cole',
+  'Frank',
+  'John',
+  'James',
+  'Henry',
+  'William',
+  'Thomas',
+  'Samuel',
+  'Robert',
+  'Amos',
+  'Ezekiel',
+  'Silas',
+  'Caleb',
+  'Josiah',
+  'Elijah',
+  'Nathaniel',
+  'Isaiah',
+  'Rufus',
+  'Cornelius',
+  'Jebediah',
+  'Obadiah',
+  'Zachariah',
+  'Bartholomew',
+  'Colt',
+  'Maverick',
+  'Dusty',
+  'Tex',
+  'Buck',
+  'Hank',
+  'Slim',
+  'Red',
 ];
 
 const FIRST_NAMES_FEMALE = [
-  'Annie', 'Calamity Jane', 'Belle', 'Pearl', 'Ruby', 'Sadie', 'Clara', 'Rose',
-  'Abigail', 'Martha', 'Sarah', 'Elizabeth', 'Mary', 'Catherine', 'Margaret',
-  'Josephine', 'Henrietta', 'Cordelia', 'Evangeline', 'Prudence', 'Patience',
+  'Annie',
+  'Calamity Jane',
+  'Belle',
+  'Pearl',
+  'Ruby',
+  'Sadie',
+  'Clara',
+  'Rose',
+  'Abigail',
+  'Martha',
+  'Sarah',
+  'Elizabeth',
+  'Mary',
+  'Catherine',
+  'Margaret',
+  'Josephine',
+  'Henrietta',
+  'Cordelia',
+  'Evangeline',
+  'Prudence',
+  'Patience',
 ];
 
 const LAST_NAMES = [
-  'Earp', 'James', 'Cassidy', 'Holiday', 'Hickok', 'Garrett', 'Masterson',
-  'Cody', 'Carson', 'Crockett', 'Boone', 'Bridger', 'Houston', 'Travis',
-  'Smith', 'Johnson', 'Brown', 'Miller', 'Wilson', 'Davis', 'Jones', 'Taylor',
-  'Blackwood', 'Ironside', 'Copperfield', 'Steele', 'Stone', 'Rivers', 'Wells',
-  'McAllister', 'O\'Brien', 'McGraw', 'Sullivan', 'Murphy', 'Kelly', 'Walsh',
-  'Hawkins', 'Thornton', 'Callahan', 'Brennan', 'Fletcher', 'Crawford', 'Barrett',
+  'Earp',
+  'James',
+  'Cassidy',
+  'Holiday',
+  'Hickok',
+  'Garrett',
+  'Masterson',
+  'Cody',
+  'Carson',
+  'Crockett',
+  'Boone',
+  'Bridger',
+  'Houston',
+  'Travis',
+  'Smith',
+  'Johnson',
+  'Brown',
+  'Miller',
+  'Wilson',
+  'Davis',
+  'Jones',
+  'Taylor',
+  'Blackwood',
+  'Ironside',
+  'Copperfield',
+  'Steele',
+  'Stone',
+  'Rivers',
+  'Wells',
+  'McAllister',
+  "O'Brien",
+  'McGraw',
+  'Sullivan',
+  'Murphy',
+  'Kelly',
+  'Walsh',
+  'Hawkins',
+  'Thornton',
+  'Callahan',
+  'Brennan',
+  'Fletcher',
+  'Crawford',
+  'Barrett',
 ];
 
 const SKIN_TONES = [
-  '#F5DEB3', '#DEB887', '#D2B48C', '#C4A574', '#B8860B', 
-  '#A0522D', '#8B4513', '#6B4423', '#5D4037', '#4E342E',
+  '#F5DEB3',
+  '#DEB887',
+  '#D2B48C',
+  '#C4A574',
+  '#B8860B',
+  '#A0522D',
+  '#8B4513',
+  '#6B4423',
+  '#5D4037',
+  '#4E342E',
 ];
 
 const HAT_COLORS = [
-  '#2F1810', '#3D2314', '#4A2C17', '#5C3A21', '#6B4423',
-  '#8B7355', '#A89078', '#C4A882', '#D4B896', '#E8D4B8',
-  '#1A1A1A', '#2D2D2D', '#404040', '#595959',
+  '#2F1810',
+  '#3D2314',
+  '#4A2C17',
+  '#5C3A21',
+  '#6B4423',
+  '#8B7355',
+  '#A89078',
+  '#C4A882',
+  '#D4B896',
+  '#E8D4B8',
+  '#1A1A1A',
+  '#2D2D2D',
+  '#404040',
+  '#595959',
 ];
 
 const SHIRT_COLORS = [
-  '#F5F5DC', '#FAF0E6', '#FFFAF0', '#FFF8DC', '#FAEBD7', // Light
-  '#8B0000', '#A52A2A', '#B22222', '#CD5C5C', // Red
-  '#191970', '#000080', '#00008B', '#4169E1', // Blue
-  '#2F4F4F', '#556B2F', '#6B8E23', '#808000', // Green/Olive
-  '#1A1A1A', '#2D2D2D', '#404040', '#595959', // Dark
+  '#F5F5DC',
+  '#FAF0E6',
+  '#FFFAF0',
+  '#FFF8DC',
+  '#FAEBD7', // Light
+  '#8B0000',
+  '#A52A2A',
+  '#B22222',
+  '#CD5C5C', // Red
+  '#191970',
+  '#000080',
+  '#00008B',
+  '#4169E1', // Blue
+  '#2F4F4F',
+  '#556B2F',
+  '#6B8E23',
+  '#808000', // Green/Olive
+  '#1A1A1A',
+  '#2D2D2D',
+  '#404040',
+  '#595959', // Dark
 ];
 
 const PANTS_COLORS = [
-  '#1A1A1A', '#2D2D2D', '#404040', // Black/Dark
-  '#2F4F4F', '#556B2F', '#4A4A3A', // Dark earth
-  '#6B4423', '#8B4513', '#A0522D', // Brown
-  '#4169E1', '#000080', '#191970', // Blue (denim)
+  '#1A1A1A',
+  '#2D2D2D',
+  '#404040', // Black/Dark
+  '#2F4F4F',
+  '#556B2F',
+  '#4A4A3A', // Dark earth
+  '#6B4423',
+  '#8B4513',
+  '#A0522D', // Brown
+  '#4169E1',
+  '#000080',
+  '#191970', // Blue (denim)
 ];
 
 const BANDANA_COLORS = [
-  '#8B0000', '#B22222', '#DC143C', // Red
-  '#191970', '#4169E1', '#6495ED', // Blue
-  '#2F4F4F', '#228B22', '#006400', // Green
-  '#1A1A1A', '#FFD700', '#FF8C00', // Black/Gold/Orange
+  '#8B0000',
+  '#B22222',
+  '#DC143C', // Red
+  '#191970',
+  '#4169E1',
+  '#6495ED', // Blue
+  '#2F4F4F',
+  '#228B22',
+  '#006400', // Green
+  '#1A1A1A',
+  '#FFD700',
+  '#FF8C00', // Black/Gold/Orange
 ];
 
 export class CharacterGenerator {
@@ -127,7 +272,7 @@ export class CharacterGenerator {
   // Generate personality traits
   generatePersonality(role?: NPCRole): NPCPersonality {
     // Base random personality
-    let personality: NPCPersonality = {
+    const personality: NPCPersonality = {
       aggression: this.random(0, 1),
       friendliness: this.random(0, 1),
       curiosity: this.random(0, 1),
@@ -179,14 +324,23 @@ export class CharacterGenerator {
     const firstNames = isMale ? FIRST_NAMES_MALE : FIRST_NAMES_FEMALE;
     const firstName = this.pick(firstNames);
     const lastName = this.pick(LAST_NAMES);
-    
+
     // Sometimes add a nickname
     if (this.prng() > 0.8) {
-      const nicknames = ['Lucky', 'Quick', 'Dead-Eye', 'One-Shot', 'Iron', 'Copper', 'Gold', 'Silver'];
+      const nicknames = [
+        'Lucky',
+        'Quick',
+        'Dead-Eye',
+        'One-Shot',
+        'Iron',
+        'Copper',
+        'Gold',
+        'Silver',
+      ];
       const nickname = this.pick(nicknames);
       return `${firstName} "${nickname}" ${lastName}`;
     }
-    
+
     return `${firstName} ${lastName}`;
   }
 
@@ -201,7 +355,7 @@ export class CharacterGenerator {
     } = {}
   ): NPC {
     const isMale = options.isMale ?? this.prng() > 0.3;
-    
+
     return {
       id: this.generateId('npc'),
       name: this.generateName(isMale),
@@ -240,7 +394,7 @@ export class CharacterGenerator {
 let defaultGenerator: CharacterGenerator | null = null;
 
 export function getCharacterGenerator(seed?: number): CharacterGenerator {
-  if (!defaultGenerator || (seed !== undefined)) {
+  if (!defaultGenerator || seed !== undefined) {
     defaultGenerator = new CharacterGenerator(seed ?? Date.now());
   }
   return defaultGenerator;

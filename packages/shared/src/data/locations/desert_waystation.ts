@@ -4,11 +4,11 @@
  * A small waystation in the desert with oasis, rest facilities, and stables.
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const DesertWaystation: Location = validateLocation({
   id: 'desert_waystation',
-  name: "Coyote Springs",
+  name: 'Coyote Springs',
   type: 'outpost',
   size: 'small',
   description: 'A welcome rest stop in the unforgiving desert',
@@ -62,18 +62,66 @@ export const DesertWaystation: Location = validateLocation({
 
   baseTiles: [
     // Main trail through the waystation
-    { coord: { q: 2, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 3, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 4, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 5, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 6, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 7, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 8, r: 8 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 9, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 10, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 11, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 12, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 13, r: 8 }, terrain: 'sand', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 2, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 3, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 4, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 5, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 6, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 7, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 8, r: 8 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 9, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 10, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 12, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 8 },
+      terrain: 'sand',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // Desert decorations - cacti and rocks
     { coord: { q: 2, r: 3 }, terrain: 'sand', feature: 'cactus' },

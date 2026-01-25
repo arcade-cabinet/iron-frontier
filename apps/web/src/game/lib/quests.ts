@@ -1,14 +1,15 @@
 // Quest definitions for Cogsworth Station
 
-import type { Quest, Item } from './types';
 import { ITEMS } from './items';
+import type { Item, Quest } from './types';
 
 export const QUESTS: Record<string, Quest> = {
   // Main storyline quests
   welcome_aboard: {
     id: 'welcome_aboard',
     name: 'Welcome Aboard',
-    description: 'You\'ve just arrived at Cogsworth Station. Find the Dockmaster to register your arrival.',
+    description:
+      "You've just arrived at Cogsworth Station. Find the Dockmaster to register your arrival.",
     status: 'available',
     objectives: [
       {
@@ -28,7 +29,8 @@ export const QUESTS: Record<string, Quest> = {
   missing_manifest: {
     id: 'missing_manifest',
     name: 'The Missing Manifest',
-    description: 'The Dockmaster is in a panic - an important shipping manifest has gone missing. Help find it.',
+    description:
+      'The Dockmaster is in a panic - an important shipping manifest has gone missing. Help find it.',
     status: 'available',
     objectives: [
       {
@@ -59,8 +61,8 @@ export const QUESTS: Record<string, Quest> = {
         completed: false,
       },
     ],
-    rewards: { 
-      xp: 100, 
+    rewards: {
+      xp: 100,
       currency: 50,
       item: ITEMS.brass_goggles,
     },
@@ -71,7 +73,8 @@ export const QUESTS: Record<string, Quest> = {
   broken_compass_quest: {
     id: 'broken_compass_quest',
     name: 'True North',
-    description: 'A mysterious woman approaches you with a broken compass. She says it belonged to her father, a famous airship captain.',
+    description:
+      'A mysterious woman approaches you with a broken compass. She says it belonged to her father, a famous airship captain.',
     status: 'available',
     objectives: [
       {
@@ -132,7 +135,8 @@ export const QUESTS: Record<string, Quest> = {
   engine_trouble: {
     id: 'engine_trouble',
     name: 'Engine Trouble',
-    description: 'Strange noises echo from the Engine Room. The Chief Engineer needs someone brave enough to investigate.',
+    description:
+      'Strange noises echo from the Engine Room. The Chief Engineer needs someone brave enough to investigate.',
     status: 'available',
     objectives: [
       {
@@ -255,7 +259,7 @@ export const QUESTS: Record<string, Quest> = {
     objectives: [
       {
         id: 'find_wrench',
-        description: 'Find the Engineer\'s Wrench',
+        description: "Find the Engineer's Wrench",
         type: 'collect',
         target: 'engineers_wrench',
         current: 0,
@@ -283,20 +287,16 @@ export const QUESTS: Record<string, Quest> = {
 
 // Get quests available to player based on completed prerequisites
 export function getAvailableQuests(completedQuests: string[]): Quest[] {
-  return Object.values(QUESTS).filter(quest => {
+  return Object.values(QUESTS).filter((quest) => {
     if (completedQuests.includes(quest.id)) return false;
     if (!quest.prerequisiteQuests) return true;
-    return quest.prerequisiteQuests.every(prereq => completedQuests.includes(prereq));
+    return quest.prerequisiteQuests.every((prereq) => completedQuests.includes(prereq));
   });
 }
 
 // Check if a quest objective is complete
-export function checkObjective(
-  quest: Quest,
-  objectiveId: string,
-  increment: number = 1
-): Quest {
-  const updatedObjectives = quest.objectives.map(obj => {
+export function checkObjective(quest: Quest, objectiveId: string, increment: number = 1): Quest {
+  const updatedObjectives = quest.objectives.map((obj) => {
     if (obj.id === objectiveId && !obj.completed) {
       const newCurrent = Math.min(obj.current + increment, obj.required);
       return {
@@ -308,8 +308,8 @@ export function checkObjective(
     return obj;
   });
 
-  const allComplete = updatedObjectives.every(obj => obj.completed);
-  
+  const allComplete = updatedObjectives.every((obj) => obj.completed);
+
   return {
     ...quest,
     objectives: updatedObjectives,

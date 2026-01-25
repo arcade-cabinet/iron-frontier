@@ -7,23 +7,20 @@
  */
 
 import { z } from 'zod';
-import { SeededRandom } from '../seededRandom';
+import { type GenerationContext, substituteTemplate } from '../../schemas/generation';
 import {
-  type GenerationContext,
-  substituteTemplate,
-} from '../../schemas/generation';
-import {
-  type BaseItem,
-  type WeaponItem,
+  type AmmoType,
+  AmmoTypeSchema,
   type ArmorItem,
+  type BaseItem,
   type ConsumableItem,
   type ItemRarity,
-  type WeaponType,
-  type AmmoType,
   ItemRaritySchema,
+  type WeaponItem,
+  type WeaponType,
   WeaponTypeSchema,
-  AmmoTypeSchema,
 } from '../../schemas/item';
+import { SeededRandom } from '../seededRandom';
 import { getShopTemplate } from '../templates/shopTemplates';
 
 // ============================================================================
@@ -215,34 +212,188 @@ export interface StylePool {
 // ============================================================================
 
 export const DEFAULT_MATERIALS: MaterialPool[] = [
-  { id: 'iron', name: 'Iron', valueMultiplier: 1.0, statMultiplier: 1.0, minRarity: 'common', tags: ['metal', 'basic'] },
-  { id: 'steel', name: 'Steel', valueMultiplier: 1.5, statMultiplier: 1.2, minRarity: 'common', tags: ['metal', 'refined'] },
-  { id: 'brass', name: 'Brass', valueMultiplier: 1.3, statMultiplier: 1.1, minRarity: 'uncommon', tags: ['metal', 'steampunk'] },
-  { id: 'silver', name: 'Silver', valueMultiplier: 2.5, statMultiplier: 1.3, minRarity: 'rare', tags: ['metal', 'precious'] },
-  { id: 'gold', name: 'Gold', valueMultiplier: 5.0, statMultiplier: 1.0, minRarity: 'rare', tags: ['metal', 'precious', 'decorative'] },
-  { id: 'leather', name: 'Leather', valueMultiplier: 0.8, statMultiplier: 0.9, minRarity: 'common', tags: ['organic', 'flexible'] },
-  { id: 'cloth', name: 'Cloth', valueMultiplier: 0.5, statMultiplier: 0.7, minRarity: 'common', tags: ['organic', 'light'] },
-  { id: 'reinforced_leather', name: 'Reinforced Leather', valueMultiplier: 1.4, statMultiplier: 1.1, minRarity: 'uncommon', tags: ['organic', 'reinforced'] },
-  { id: 'damascus_steel', name: 'Damascus Steel', valueMultiplier: 3.0, statMultiplier: 1.5, minRarity: 'rare', tags: ['metal', 'premium', 'exotic'] },
-  { id: 'clockwork_alloy', name: 'Clockwork Alloy', valueMultiplier: 4.0, statMultiplier: 1.4, minRarity: 'legendary', tags: ['metal', 'steampunk', 'exotic'] },
+  {
+    id: 'iron',
+    name: 'Iron',
+    valueMultiplier: 1.0,
+    statMultiplier: 1.0,
+    minRarity: 'common',
+    tags: ['metal', 'basic'],
+  },
+  {
+    id: 'steel',
+    name: 'Steel',
+    valueMultiplier: 1.5,
+    statMultiplier: 1.2,
+    minRarity: 'common',
+    tags: ['metal', 'refined'],
+  },
+  {
+    id: 'brass',
+    name: 'Brass',
+    valueMultiplier: 1.3,
+    statMultiplier: 1.1,
+    minRarity: 'uncommon',
+    tags: ['metal', 'steampunk'],
+  },
+  {
+    id: 'silver',
+    name: 'Silver',
+    valueMultiplier: 2.5,
+    statMultiplier: 1.3,
+    minRarity: 'rare',
+    tags: ['metal', 'precious'],
+  },
+  {
+    id: 'gold',
+    name: 'Gold',
+    valueMultiplier: 5.0,
+    statMultiplier: 1.0,
+    minRarity: 'rare',
+    tags: ['metal', 'precious', 'decorative'],
+  },
+  {
+    id: 'leather',
+    name: 'Leather',
+    valueMultiplier: 0.8,
+    statMultiplier: 0.9,
+    minRarity: 'common',
+    tags: ['organic', 'flexible'],
+  },
+  {
+    id: 'cloth',
+    name: 'Cloth',
+    valueMultiplier: 0.5,
+    statMultiplier: 0.7,
+    minRarity: 'common',
+    tags: ['organic', 'light'],
+  },
+  {
+    id: 'reinforced_leather',
+    name: 'Reinforced Leather',
+    valueMultiplier: 1.4,
+    statMultiplier: 1.1,
+    minRarity: 'uncommon',
+    tags: ['organic', 'reinforced'],
+  },
+  {
+    id: 'damascus_steel',
+    name: 'Damascus Steel',
+    valueMultiplier: 3.0,
+    statMultiplier: 1.5,
+    minRarity: 'rare',
+    tags: ['metal', 'premium', 'exotic'],
+  },
+  {
+    id: 'clockwork_alloy',
+    name: 'Clockwork Alloy',
+    valueMultiplier: 4.0,
+    statMultiplier: 1.4,
+    minRarity: 'legendary',
+    tags: ['metal', 'steampunk', 'exotic'],
+  },
 ];
 
 export const DEFAULT_QUALITIES: QualityPool[] = [
-  { id: 'rusty', name: 'Rusty', adjective: 'Rusty', valueMultiplier: 0.5, statMultiplier: 0.7, rarity: 'common', weight: 15 },
-  { id: 'worn', name: 'Worn', adjective: 'Worn', valueMultiplier: 0.7, statMultiplier: 0.85, rarity: 'common', weight: 25 },
-  { id: 'standard', name: 'Standard', adjective: '', valueMultiplier: 1.0, statMultiplier: 1.0, rarity: 'common', weight: 35 },
-  { id: 'fine', name: 'Fine', adjective: 'Fine', valueMultiplier: 1.5, statMultiplier: 1.15, rarity: 'uncommon', weight: 18 },
-  { id: 'masterwork', name: 'Masterwork', adjective: 'Masterwork', valueMultiplier: 2.5, statMultiplier: 1.3, rarity: 'rare', weight: 6 },
-  { id: 'legendary', name: 'Legendary', adjective: 'Legendary', valueMultiplier: 5.0, statMultiplier: 1.5, rarity: 'legendary', weight: 1 },
+  {
+    id: 'rusty',
+    name: 'Rusty',
+    adjective: 'Rusty',
+    valueMultiplier: 0.5,
+    statMultiplier: 0.7,
+    rarity: 'common',
+    weight: 15,
+  },
+  {
+    id: 'worn',
+    name: 'Worn',
+    adjective: 'Worn',
+    valueMultiplier: 0.7,
+    statMultiplier: 0.85,
+    rarity: 'common',
+    weight: 25,
+  },
+  {
+    id: 'standard',
+    name: 'Standard',
+    adjective: '',
+    valueMultiplier: 1.0,
+    statMultiplier: 1.0,
+    rarity: 'common',
+    weight: 35,
+  },
+  {
+    id: 'fine',
+    name: 'Fine',
+    adjective: 'Fine',
+    valueMultiplier: 1.5,
+    statMultiplier: 1.15,
+    rarity: 'uncommon',
+    weight: 18,
+  },
+  {
+    id: 'masterwork',
+    name: 'Masterwork',
+    adjective: 'Masterwork',
+    valueMultiplier: 2.5,
+    statMultiplier: 1.3,
+    rarity: 'rare',
+    weight: 6,
+  },
+  {
+    id: 'legendary',
+    name: 'Legendary',
+    adjective: 'Legendary',
+    valueMultiplier: 5.0,
+    statMultiplier: 1.5,
+    rarity: 'legendary',
+    weight: 1,
+  },
 ];
 
 export const DEFAULT_STYLES: StylePool[] = [
-  { id: 'frontier', name: 'Frontier', descriptionSuffix: 'Made for the harsh frontier life.', valueMultiplier: 1.0, tags: ['western', 'practical'] },
-  { id: 'military', name: 'Military', descriptionSuffix: 'Standard military issue.', valueMultiplier: 1.2, tags: ['military', 'regulation'] },
-  { id: 'ornate', name: 'Ornate', descriptionSuffix: 'Decorated with intricate engravings.', valueMultiplier: 1.8, tags: ['decorative', 'fancy'] },
-  { id: 'rugged', name: 'Rugged', descriptionSuffix: 'Built to last in the toughest conditions.', valueMultiplier: 1.1, tags: ['durable', 'practical'] },
-  { id: 'elegant', name: 'Elegant', descriptionSuffix: 'A refined piece of craftsmanship.', valueMultiplier: 2.0, tags: ['fancy', 'sophisticated'] },
-  { id: 'steampunk', name: 'Steampunk', descriptionSuffix: 'Enhanced with brass gears and steam mechanisms.', valueMultiplier: 2.5, tags: ['steampunk', 'mechanical'] },
+  {
+    id: 'frontier',
+    name: 'Frontier',
+    descriptionSuffix: 'Made for the harsh frontier life.',
+    valueMultiplier: 1.0,
+    tags: ['western', 'practical'],
+  },
+  {
+    id: 'military',
+    name: 'Military',
+    descriptionSuffix: 'Standard military issue.',
+    valueMultiplier: 1.2,
+    tags: ['military', 'regulation'],
+  },
+  {
+    id: 'ornate',
+    name: 'Ornate',
+    descriptionSuffix: 'Decorated with intricate engravings.',
+    valueMultiplier: 1.8,
+    tags: ['decorative', 'fancy'],
+  },
+  {
+    id: 'rugged',
+    name: 'Rugged',
+    descriptionSuffix: 'Built to last in the toughest conditions.',
+    valueMultiplier: 1.1,
+    tags: ['durable', 'practical'],
+  },
+  {
+    id: 'elegant',
+    name: 'Elegant',
+    descriptionSuffix: 'A refined piece of craftsmanship.',
+    valueMultiplier: 2.0,
+    tags: ['fancy', 'sophisticated'],
+  },
+  {
+    id: 'steampunk',
+    name: 'Steampunk',
+    descriptionSuffix: 'Enhanced with brass gears and steam mechanisms.',
+    valueMultiplier: 2.5,
+    tags: ['steampunk', 'mechanical'],
+  },
 ];
 
 // ============================================================================
@@ -250,10 +401,38 @@ export const DEFAULT_STYLES: StylePool[] = [
 // ============================================================================
 
 export const WEAPON_PREFIXES: Record<string, string[]> = {
-  revolver: ['Peacemaker', 'Six-Shooter', 'Colt', 'Remington', 'Schofield', 'Navy', 'Army', 'Frontier', 'Gunslinger\'s'],
-  rifle: ['Repeater', 'Carbine', 'Sharps', 'Winchester', 'Henry', 'Lever-Action', 'Bolt-Action', 'Buffalo', 'Scout\'s'],
-  shotgun: ['Scattergun', 'Coach Gun', 'Double-Barrel', 'Pump-Action', 'Buckshot', 'Sawed-Off', 'Fowling'],
-  knife: ['Bowie', 'Hunting', 'Skinning', 'Fighting', 'Frontier', 'Camp', 'Trapper\'s', 'Ranger\'s'],
+  revolver: [
+    'Peacemaker',
+    'Six-Shooter',
+    'Colt',
+    'Remington',
+    'Schofield',
+    'Navy',
+    'Army',
+    'Frontier',
+    "Gunslinger's",
+  ],
+  rifle: [
+    'Repeater',
+    'Carbine',
+    'Sharps',
+    'Winchester',
+    'Henry',
+    'Lever-Action',
+    'Bolt-Action',
+    'Buffalo',
+    "Scout's",
+  ],
+  shotgun: [
+    'Scattergun',
+    'Coach Gun',
+    'Double-Barrel',
+    'Pump-Action',
+    'Buckshot',
+    'Sawed-Off',
+    'Fowling',
+  ],
+  knife: ['Bowie', 'Hunting', 'Skinning', 'Fighting', 'Frontier', 'Camp', "Trapper's", "Ranger's"],
   explosive: ['Dynamite', 'Blasting', 'Mining', 'Demolition'],
   melee: ['Hatchet', 'Tomahawk', 'Club', 'Pickaxe', 'Shovel', 'Crowbar', 'Hammer'],
 };
@@ -275,7 +454,7 @@ export const WEAPON_SUFFIXES: string[] = [
 // ============================================================================
 
 export const ARMOR_PREFIXES: Record<string, string[]> = {
-  head: ['Cowboy Hat', 'Stetson', 'Bandana', 'Cavalry Hat', 'Derby', 'Miner\'s Helmet', 'Goggles'],
+  head: ['Cowboy Hat', 'Stetson', 'Bandana', 'Cavalry Hat', 'Derby', "Miner's Helmet", 'Goggles'],
   body: ['Duster', 'Vest', 'Poncho', 'Jacket', 'Coat', 'Shirt', 'Overalls', 'Chaps'],
   legs: ['Trousers', 'Chaps', 'Dungarees', 'Riding Pants', 'Work Pants'],
   accessory: ['Belt', 'Holster', 'Bandolier', 'Gloves', 'Boots', 'Spurs', 'Watch', 'Charm'],
@@ -296,7 +475,7 @@ export const ARMOR_SUFFIXES: string[] = [
 // ============================================================================
 
 export const CONSUMABLE_PREFIXES: Record<string, string[]> = {
-  healing: ['Dr. Thornton\'s', 'Snake Oil', 'Miracle', 'Patent', 'Frontier', 'Healing'],
+  healing: ["Dr. Thornton's", 'Snake Oil', 'Miracle', 'Patent', 'Frontier', 'Healing'],
   food: ['Trail', 'Camp', 'Frontier', 'Cowboy', 'Ranch', 'Homemade'],
   drink: ['Strong', 'Smooth', 'Aged', 'Local', 'Imported', 'Frontier'],
   buff: ['Invigorating', 'Fortifying', 'Energizing', 'Stimulating', 'Potent'],
@@ -410,9 +589,7 @@ function getQualityForRarity(rng: SeededRandom, rarity: ItemRarity): QualityPool
  */
 function getStyleForItem(rng: SeededRandom, tags: string[]): StylePool {
   // Prefer styles matching item tags
-  const matchingStyles = STYLE_POOL.filter((style) =>
-    tags.some((tag) => style.tags.includes(tag))
-  );
+  const matchingStyles = STYLE_POOL.filter((style) => tags.some((tag) => style.tags.includes(tag)));
 
   if (matchingStyles.length > 0 && rng.bool(0.7)) {
     return rng.pick(matchingStyles);
@@ -439,7 +616,7 @@ export function scaleStatByLevel(
   scalingFactor: number = 0.15
 ): number {
   // Exponential scaling: value * (1 + scalingFactor)^(level-1)
-  return Math.round(baseValue * Math.pow(1 + scalingFactor, level - 1));
+  return Math.round(baseValue * (1 + scalingFactor) ** (level - 1));
 }
 
 /**
@@ -460,7 +637,8 @@ export function calculateItemValue(
   };
 
   const scaledBase = scaleStatByLevel(baseValue, level, 0.2);
-  const finalValue = scaledBase * rarityMultipliers[rarity] * material.valueMultiplier * quality.valueMultiplier;
+  const finalValue =
+    scaledBase * rarityMultipliers[rarity] * material.valueMultiplier * quality.valueMultiplier;
 
   return Math.round(finalValue);
 }
@@ -522,7 +700,8 @@ export function generateWeapon(
   if (!template) {
     // Pick random weapon template
     const weaponTemplates = ITEM_TEMPLATES.filter((t) => t.itemType === 'weapon');
-    template = weaponTemplates.length > 0 ? itemRng.pick(weaponTemplates) : getDefaultWeaponTemplate();
+    template =
+      weaponTemplates.length > 0 ? itemRng.pick(weaponTemplates) : getDefaultWeaponTemplate();
   }
 
   // Roll rarity
@@ -549,7 +728,10 @@ export function generateWeapon(
   const damage = scaleStatByLevel(Math.round(baseDamage * statMult), level);
 
   const baseAccuracy = template.accuracyRange ? randomInRange(itemRng, template.accuracyRange) : 70;
-  const accuracy = Math.min(100, Math.round(baseAccuracy * (1 + (quality.statMultiplier - 1) * 0.5)));
+  const accuracy = Math.min(
+    100,
+    Math.round(baseAccuracy * (1 + (quality.statMultiplier - 1) * 0.5))
+  );
 
   const range = template.rangeRange ? randomIntInRange(itemRng, template.rangeRange) : 30;
   const fireRate = template.fireRateRange ? randomInRange(itemRng, template.fireRateRange) : 1.0;
@@ -597,7 +779,7 @@ export function generateWeapon(
       fireRate,
       ammoType: template.ammoType ?? 'pistol',
       clipSize,
-      reloadTime: clipSize > 0 ? 2 + (clipSize / 6) : 0,
+      reloadTime: clipSize > 0 ? 2 + clipSize / 6 : 0,
     },
   };
 
@@ -655,7 +837,8 @@ export function generateArmor(
   const suffix = itemRng.pick(ARMOR_SUFFIXES);
 
   const qualityAdj = quality.adjective ? `${quality.adjective} ` : '';
-  const materialName = material.id !== 'leather' && material.id !== 'cloth' ? `${material.name} ` : '';
+  const materialName =
+    material.id !== 'leather' && material.id !== 'cloth' ? `${material.name} ` : '';
   const name = `${qualityAdj}${materialName}${prefix}${suffix ? ' ' + suffix : ''}`.trim();
 
   // Calculate stats
@@ -735,16 +918,21 @@ export function generateConsumable(
   // Find appropriate template
   let template: ItemTemplate | undefined;
   if (options.templateId) {
-    template = ITEM_TEMPLATES.find((t) => t.id === options.templateId && t.itemType === 'consumable');
+    template = ITEM_TEMPLATES.find(
+      (t) => t.id === options.templateId && t.itemType === 'consumable'
+    );
   }
   if (!template && options.consumableType) {
-    template = ITEM_TEMPLATES.find((t) =>
-      t.itemType === 'consumable' && t.tags.includes(options.consumableType!)
+    template = ITEM_TEMPLATES.find(
+      (t) => t.itemType === 'consumable' && t.tags.includes(options.consumableType!)
     );
   }
   if (!template) {
     const consumableTemplates = ITEM_TEMPLATES.filter((t) => t.itemType === 'consumable');
-    template = consumableTemplates.length > 0 ? itemRng.pick(consumableTemplates) : getDefaultConsumableTemplate();
+    template =
+      consumableTemplates.length > 0
+        ? itemRng.pick(consumableTemplates)
+        : getDefaultConsumableTemplate();
   }
 
   // Roll rarity
@@ -756,15 +944,23 @@ export function generateConsumable(
   const material = MATERIAL_POOL[0]; // Consumables don't really have materials
 
   // Determine consumable type from tags
-  const consumableType = options.consumableType ??
-    (template.tags.includes('healing') ? 'healing' :
-     template.tags.includes('food') ? 'food' :
-     template.tags.includes('drink') ? 'drink' : 'buff');
+  const consumableType =
+    options.consumableType ??
+    (template.tags.includes('healing')
+      ? 'healing'
+      : template.tags.includes('food')
+        ? 'food'
+        : template.tags.includes('drink')
+          ? 'drink'
+          : 'buff');
 
   // Build name
   const prefixes = CONSUMABLE_PREFIXES[consumableType] ?? CONSUMABLE_PREFIXES.healing;
   const prefix = itemRng.pick(prefixes);
-  const suffix = consumableType === 'food' || consumableType === 'drink' ? '' : itemRng.pick(CONSUMABLE_SUFFIXES);
+  const suffix =
+    consumableType === 'food' || consumableType === 'drink'
+      ? ''
+      : itemRng.pick(CONSUMABLE_SUFFIXES);
 
   const qualityAdj = quality.adjective && rarity !== 'common' ? `${quality.adjective} ` : '';
   const name = `${qualityAdj}${prefix}${suffix ? ' ' + suffix : ''}`.trim();
@@ -799,7 +995,12 @@ export function generateConsumable(
 
   // Calculate value
   const baseValue = template.valueRange ? randomIntInRange(itemRng, template.valueRange) : 5;
-  const rarityMult: Record<ItemRarity, number> = { common: 1, uncommon: 1.5, rare: 2.5, legendary: 5 };
+  const rarityMult: Record<ItemRarity, number> = {
+    common: 1,
+    uncommon: 1.5,
+    rare: 2.5,
+    legendary: 5,
+  };
   const value = Math.round(baseValue * quality.valueMultiplier * rarityMult[rarity]);
 
   const item: ConsumableItem = {
@@ -951,7 +1152,11 @@ export function generateShopInventory(
         generated = generateWeapon(rng, level, pool.tags, { forceRarity: rarity });
       } else if (pool.tags.some((t) => ['armor', 'clothing', 'apparel'].includes(t))) {
         generated = generateArmor(rng, level, pool.tags, { forceRarity: rarity });
-      } else if (pool.tags.some((t) => ['consumable', 'food', 'drink', 'medicine', 'tonic', 'healing'].includes(t))) {
+      } else if (
+        pool.tags.some((t) =>
+          ['consumable', 'food', 'drink', 'medicine', 'tonic', 'healing'].includes(t)
+        )
+      ) {
         generated = generateConsumable(rng, pool.tags, { forceRarity: rarity });
       }
 
@@ -1229,10 +1434,38 @@ function getDefaultLootTables(): ProceduralLootTable[] {
       id: 'common_enemy_loot',
       name: 'Common Enemy Loot',
       entries: [
-        { templateOrItemId: 'healing_tonic_template', isTemplate: true, weight: 30, quantityRange: [1, 2], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'food_template', isTemplate: true, weight: 25, quantityRange: [1, 3], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'knife_template', isTemplate: true, weight: 10, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'revolver_template', isTemplate: true, weight: 5, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
+        {
+          templateOrItemId: 'healing_tonic_template',
+          isTemplate: true,
+          weight: 30,
+          quantityRange: [1, 2],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'food_template',
+          isTemplate: true,
+          weight: 25,
+          quantityRange: [1, 3],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'knife_template',
+          isTemplate: true,
+          weight: 10,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'revolver_template',
+          isTemplate: true,
+          weight: 5,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
       ],
       rolls: 2,
       emptyChance: 0.2,
@@ -1242,11 +1475,46 @@ function getDefaultLootTables(): ProceduralLootTable[] {
       id: 'outlaw_loot',
       name: 'Outlaw Loot',
       entries: [
-        { templateOrItemId: 'revolver_template', isTemplate: true, weight: 25, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'knife_template', isTemplate: true, weight: 20, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'healing_tonic_template', isTemplate: true, weight: 20, quantityRange: [1, 2], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'buff_elixir_template', isTemplate: true, weight: 10, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'body_armor_template', isTemplate: true, weight: 5, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
+        {
+          templateOrItemId: 'revolver_template',
+          isTemplate: true,
+          weight: 25,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'knife_template',
+          isTemplate: true,
+          weight: 20,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'healing_tonic_template',
+          isTemplate: true,
+          weight: 20,
+          quantityRange: [1, 2],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'buff_elixir_template',
+          isTemplate: true,
+          weight: 10,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'body_armor_template',
+          isTemplate: true,
+          weight: 5,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
       ],
       rolls: 3,
       emptyChance: 0.1,
@@ -1256,12 +1524,54 @@ function getDefaultLootTables(): ProceduralLootTable[] {
       id: 'treasure_chest',
       name: 'Treasure Chest',
       entries: [
-        { templateOrItemId: 'revolver_template', isTemplate: true, weight: 20, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'rifle_template', isTemplate: true, weight: 15, quantityRange: [1, 1], levelRange: [3, 10], tags: [] },
-        { templateOrItemId: 'body_armor_template', isTemplate: true, weight: 15, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'accessory_template', isTemplate: true, weight: 20, quantityRange: [1, 1], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'buff_elixir_template', isTemplate: true, weight: 15, quantityRange: [1, 2], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'healing_tonic_template', isTemplate: true, weight: 15, quantityRange: [2, 4], levelRange: [1, 10], tags: [] },
+        {
+          templateOrItemId: 'revolver_template',
+          isTemplate: true,
+          weight: 20,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'rifle_template',
+          isTemplate: true,
+          weight: 15,
+          quantityRange: [1, 1],
+          levelRange: [3, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'body_armor_template',
+          isTemplate: true,
+          weight: 15,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'accessory_template',
+          isTemplate: true,
+          weight: 20,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'buff_elixir_template',
+          isTemplate: true,
+          weight: 15,
+          quantityRange: [1, 2],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'healing_tonic_template',
+          isTemplate: true,
+          weight: 15,
+          quantityRange: [2, 4],
+          levelRange: [1, 10],
+          tags: [],
+        },
       ],
       rolls: 4,
       emptyChance: 0,
@@ -1271,9 +1581,30 @@ function getDefaultLootTables(): ProceduralLootTable[] {
       id: 'mining_loot',
       name: 'Mining Area Loot',
       entries: [
-        { templateOrItemId: 'healing_tonic_template', isTemplate: true, weight: 25, quantityRange: [1, 2], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'food_template', isTemplate: true, weight: 30, quantityRange: [1, 3], levelRange: [1, 10], tags: [] },
-        { templateOrItemId: 'knife_template', isTemplate: true, weight: 15, quantityRange: [1, 1], levelRange: [1, 10], tags: ['mining'] },
+        {
+          templateOrItemId: 'healing_tonic_template',
+          isTemplate: true,
+          weight: 25,
+          quantityRange: [1, 2],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'food_template',
+          isTemplate: true,
+          weight: 30,
+          quantityRange: [1, 3],
+          levelRange: [1, 10],
+          tags: [],
+        },
+        {
+          templateOrItemId: 'knife_template',
+          isTemplate: true,
+          weight: 15,
+          quantityRange: [1, 1],
+          levelRange: [1, 10],
+          tags: ['mining'],
+        },
       ],
       rolls: 2,
       emptyChance: 0.3,

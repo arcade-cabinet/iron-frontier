@@ -1,11 +1,12 @@
 // DialogueBox - Enhanced FF7-style branching dialogue
+
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronRight, MessageSquare, User } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useGameStore } from '../store/webGameStore';
-import { User, MessageSquare, ChevronRight } from 'lucide-react';
 
 /**
  * Expression to color mapping for NPC portrait accents
@@ -107,19 +108,22 @@ export function DialogueBox() {
   }, [isTyping, dialogueState?.text, settings.haptics]);
 
   // Handle choice selection
-  const handleChoiceSelect = useCallback((index: number) => {
-    if (settings.haptics && navigator.vibrate) {
-      navigator.vibrate(30);
-    }
+  const handleChoiceSelect = useCallback(
+    (index: number) => {
+      if (settings.haptics && navigator.vibrate) {
+        navigator.vibrate(30);
+      }
 
-    setSelectedChoiceIndex(index);
-    setShowChoices(false);
+      setSelectedChoiceIndex(index);
+      setShowChoices(false);
 
-    // Small delay for visual feedback
-    setTimeout(() => {
-      selectChoice(index);
-    }, 150);
-  }, [selectChoice, settings.haptics]);
+      // Small delay for visual feedback
+      setTimeout(() => {
+        selectChoice(index);
+      }, 150);
+    },
+    [selectChoice, settings.haptics]
+  );
 
   // Handle auto-advance (monologues)
   const handleAdvance = useCallback(() => {
@@ -167,7 +171,9 @@ export function DialogueBox() {
               {/* NPC Name and Portrait */}
               <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                 {/* Portrait placeholder */}
-                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-900/50 border-2 ${expressionBorder} flex items-center justify-center overflow-hidden flex-shrink-0`}>
+                <div
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-900/50 border-2 ${expressionBorder} flex items-center justify-center overflow-hidden flex-shrink-0`}
+                >
                   {dialogueState.npcPortraitId ? (
                     // Future: actual portrait image
                     <User className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
@@ -178,12 +184,16 @@ export function DialogueBox() {
                 <div className="flex flex-col min-w-0">
                   <span className="font-semibold truncate">
                     {dialogueState.npcTitle && (
-                      <span className="text-amber-500 text-xs sm:text-sm mr-1">{dialogueState.npcTitle}</span>
+                      <span className="text-amber-500 text-xs sm:text-sm mr-1">
+                        {dialogueState.npcTitle}
+                      </span>
                     )}
                     {dialogueState.npcName}
                   </span>
                   {dialogueState.speaker && dialogueState.speaker !== dialogueState.npcName && (
-                    <span className="text-amber-500 text-[10px] sm:text-xs truncate">Speaking: {dialogueState.speaker}</span>
+                    <span className="text-amber-500 text-[10px] sm:text-xs truncate">
+                      Speaking: {dialogueState.speaker}
+                    </span>
                   )}
                 </div>
               </div>
@@ -191,7 +201,10 @@ export function DialogueBox() {
               {/* Expression/Status badges - hidden on xs for space */}
               <div className="hidden sm:flex gap-2 flex-shrink-0">
                 {dialogueState.npcExpression && (
-                  <Badge variant="outline" className={`text-xs ${expressionBorder.replace('border-', 'text-').replace('-500', '-400').replace('-600', '-400')}`}>
+                  <Badge
+                    variant="outline"
+                    className={`text-xs ${expressionBorder.replace('border-', 'text-').replace('-500', '-400').replace('-600', '-400')}`}
+                  >
                     {dialogueState.npcExpression}
                   </Badge>
                 )}
@@ -237,13 +250,17 @@ export function DialogueBox() {
                     } ${selectedChoiceIndex !== null && selectedChoiceIndex !== index ? 'opacity-50' : ''}`}
                   >
                     <div className="flex items-center gap-2">
-                      <ChevronRight className={`w-4 h-4 flex-shrink-0 ${
-                        selectedChoiceIndex === index ? 'text-amber-400' : 'text-amber-600'
-                      }`} />
+                      <ChevronRight
+                        className={`w-4 h-4 flex-shrink-0 ${
+                          selectedChoiceIndex === index ? 'text-amber-400' : 'text-amber-600'
+                        }`}
+                      />
                       <span className="text-xs sm:text-sm">{choice.text}</span>
                     </div>
                     {choice.hint && (
-                      <p className="text-amber-500 text-[10px] sm:text-xs mt-1 ml-6">{choice.hint}</p>
+                      <p className="text-amber-500 text-[10px] sm:text-xs mt-1 ml-6">
+                        {choice.hint}
+                      </p>
                     )}
                     {/* Show tags as subtle indicators */}
                     {choice.tags.length > 0 && (
@@ -255,7 +272,9 @@ export function DialogueBox() {
                           <span className="text-green-400 text-[10px] sm:text-xs">[Kind]</span>
                         )}
                         {choice.tags.includes('main_quest') && (
-                          <span className="text-yellow-400 text-[10px] sm:text-xs">[Main Quest]</span>
+                          <span className="text-yellow-400 text-[10px] sm:text-xs">
+                            [Main Quest]
+                          </span>
                         )}
                       </div>
                     )}

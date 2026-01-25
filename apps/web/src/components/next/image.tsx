@@ -1,4 +1,4 @@
-import React from "react";
+import type React from 'react';
 
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;

@@ -45,40 +45,40 @@
 // ============================================================================
 
 export type {
-  Vector3Tuple,
-  Vector4Tuple,
+  AmbientLightConfig,
+  AnimationConfig,
+  CameraConfig,
+  CameraProjection,
   ColorRGB,
   ColorRGBA,
-  Transform,
-  PartialTransform,
-  MaterialConfig,
-  AnimationConfig,
-  MeshConfig,
-  CameraProjection,
-  CameraConfig,
-  LightType,
-  LightConfigBase,
   DirectionalLightConfig,
-  PointLightConfig,
-  SpotLightConfig,
-  AmbientLightConfig,
+  EnvironmentConfig,
   HemisphereLightConfig,
   LightConfig,
-  EnvironmentConfig,
-  SceneConfig,
-  QualityPreset,
-  RenderQuality,
+  LightConfigBase,
+  LightType,
+  MaterialConfig,
+  MeshConfig,
+  PartialTransform,
   PickResult,
+  PointLightConfig,
+  QualityPreset,
   Ray,
-  SceneEventType,
+  RenderQuality,
+  SceneConfig,
   SceneEvent,
   SceneEventHandler,
+  SceneEventType,
+  SpotLightConfig,
+  Transform,
+  Vector3Tuple,
+  Vector4Tuple,
 } from './types';
 
 export {
-  IDENTITY_TRANSFORM,
   createTransform,
   DEFAULT_CAMERA_CONFIG,
+  IDENTITY_TRANSFORM,
   QUALITY_PRESETS,
 } from './types';
 
@@ -87,9 +87,9 @@ export {
 // ============================================================================
 
 export type {
-  IMeshHandle,
-  ILightHandle,
   ICameraHandle,
+  ILightHandle,
+  IMeshHandle,
   IScene,
   ISceneManager,
   ISceneManagerFactory,
@@ -100,11 +100,11 @@ export type {
 // ============================================================================
 
 export {
+  createTransformGetter,
+  type EntityWithRenderable,
+  type EntityWithTransform,
   SceneManagerBase,
   syncEntitiesToScene,
-  createTransformGetter,
-  type EntityWithTransform,
-  type EntityWithRenderable,
 } from './SceneManagerBase';
 
 // ============================================================================
@@ -112,23 +112,23 @@ export {
 // ============================================================================
 
 export {
+  BABYLON_ADAPTER_TOKEN,
   // Babylon (web)
   type BabylonAdapterOptions,
-  type IBabylonSceneManagerFactory,
-  type IBabylonSceneManager,
   DEFAULT_BABYLON_OPTIONS,
-  isBabylonAdapterOptions,
-  isBabylonAvailable,
-  BABYLON_ADAPTER_TOKEN,
+  DEFAULT_FILAMENT_OPTIONS,
+  FILAMENT_ADAPTER_TOKEN,
   // Filament (mobile)
   type FilamentAdapterOptions,
-  type IFilamentSceneManagerFactory,
+  type IBabylonSceneManager,
+  type IBabylonSceneManagerFactory,
   type IFilamentSceneManager,
-  DEFAULT_FILAMENT_OPTIONS,
+  type IFilamentSceneManagerFactory,
+  isBabylonAdapterOptions,
+  isBabylonAvailable,
   isFilamentAdapterOptions,
   isFilamentAvailable,
   isWebGPUAvailable,
-  FILAMENT_ADAPTER_TOKEN,
 } from './adapters';
 
 // ============================================================================
@@ -139,20 +139,20 @@ export {
   // Context
   SceneManagerContext,
   type SceneManagerContextValue,
-  // Core hooks
-  useSceneManager,
-  useSceneManagerSafe,
-  useScene,
-  useSceneSafe,
-  useSceneManagerReady,
-  useSceneManagerError,
+  useEntityMeshMapping,
+  useEntitySync,
   // Mesh hooks
   useMesh,
   useMeshTransformSync,
-  useEntityMeshMapping,
   // Utility hooks
   usePreloadModels,
-  useEntitySync,
   useRenderLoop,
+  useScene,
+  // Core hooks
+  useSceneManager,
+  useSceneManagerError,
+  useSceneManagerReady,
+  useSceneManagerSafe,
   useScenePicking,
+  useSceneSafe,
 } from './hooks';

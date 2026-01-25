@@ -42,7 +42,8 @@ export class WebStorageAdapter implements StorageAdapter {
 
   constructor(storage?: Storage) {
     // Allow injection for testing, or use globalThis.localStorage in browser
-    this.storage = storage ?? (typeof globalThis !== 'undefined' && (globalThis as any).localStorage);
+    this.storage =
+      storage ?? (typeof globalThis !== 'undefined' && (globalThis as any).localStorage);
     if (!this.storage) {
       throw new Error('[WebStorageAdapter] localStorage not available');
     }
@@ -53,7 +54,8 @@ export class WebStorageAdapter implements StorageAdapter {
       return this.storage.getItem(key);
     } catch (error) {
       // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined') console.error('[WebStorageAdapter] Failed to get item:', key, error);
+      if (typeof console !== 'undefined')
+        console.error('[WebStorageAdapter] Failed to get item:', key, error);
       return null;
     }
   }
@@ -63,7 +65,8 @@ export class WebStorageAdapter implements StorageAdapter {
       this.storage.setItem(key, value);
     } catch (error) {
       // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined') console.error('[WebStorageAdapter] Failed to set item:', key, error);
+      if (typeof console !== 'undefined')
+        console.error('[WebStorageAdapter] Failed to set item:', key, error);
       throw error;
     }
   }
@@ -73,7 +76,8 @@ export class WebStorageAdapter implements StorageAdapter {
       this.storage.removeItem(key);
     } catch (error) {
       // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined') console.error('[WebStorageAdapter] Failed to remove item:', key, error);
+      if (typeof console !== 'undefined')
+        console.error('[WebStorageAdapter] Failed to remove item:', key, error);
       throw error;
     }
   }

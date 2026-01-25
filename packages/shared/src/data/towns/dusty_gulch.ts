@@ -5,7 +5,7 @@
  * This is what subagents would generate - fully validated Town data.
  */
 
-import { Town, validateTown } from '../schemas';
+import { type Town, validateTown } from '../schemas';
 
 export const DustyGulch: Town = validateTown({
   id: 'dusty_gulch',
@@ -51,17 +51,61 @@ an iron fist, though rumors persist of bandit activity in the surrounding hills.
   // Custom terrain overrides (roads connecting everything)
   overrideTiles: [
     // Main street - east-west road through town
-    { coord: { q: 8, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 9, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 10, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 11, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 13, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 14, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 15, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 16, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 17, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 18, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 19, r: 11 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 8, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 9, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 10, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 14, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 16, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 18, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 11 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
   ],
 
   // NPCs

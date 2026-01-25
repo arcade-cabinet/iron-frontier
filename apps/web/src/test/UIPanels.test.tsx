@@ -2,11 +2,12 @@
  * UI Panel Tests
  * Tests for Inventory, Quest Log, Settings, and Menu panels
  */
+
+import type { Quest } from '@iron-frontier/shared/data/schemas/quest';
 import { act, screen } from '@testing-library/react';
-import React from 'react';
+import type React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockNPC, customRender, getStoreState } from './test-utils';
-import type { Quest } from '@iron-frontier/shared/data/schemas/quest';
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
@@ -39,7 +40,16 @@ vi.mock('@iron-frontier/shared/data/quests', () => ({
             title: 'Search the Workshop',
             description: 'Look around',
             objectives: [
-              { id: 'obj_1', description: 'Search the workshop', type: 'interact', target: 'workshop', count: 1, current: 0, optional: false, hidden: false },
+              {
+                id: 'obj_1',
+                description: 'Search the workshop',
+                type: 'interact',
+                target: 'workshop',
+                count: 1,
+                current: 0,
+                optional: false,
+                hidden: false,
+              },
             ],
             stageRewards: { xp: 10, gold: 0, items: [], reputation: {} },
           },
@@ -66,7 +76,17 @@ describe('GameHUD', () => {
         phase: 'playing',
         initialized: true,
         playerName: 'TestPlayer',
-        playerStats: { health: 75, maxHealth: 100, xp: 45, xpToNext: 150, level: 5, gold: 250, stamina: 100, maxStamina: 100, reputation: 0 }
+        playerStats: {
+          health: 75,
+          maxHealth: 100,
+          xp: 45,
+          xpToNext: 150,
+          level: 5,
+          gold: 250,
+          stamina: 100,
+          maxStamina: 100,
+          reputation: 0,
+        },
       } as any,
     });
     expect(screen.getByText('TestPlayer')).toBeInTheDocument();
@@ -77,7 +97,17 @@ describe('GameHUD', () => {
       initialState: {
         phase: 'playing',
         playerName: 'TestPlayer',
-        playerStats: { level: 5, health: 100, maxHealth: 100, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 }
+        playerStats: {
+          level: 5,
+          health: 100,
+          maxHealth: 100,
+          xp: 0,
+          xpToNext: 100,
+          gold: 0,
+          stamina: 100,
+          maxStamina: 100,
+          reputation: 0,
+        },
       } as any,
     });
     // New HUD uses "Lv.5" format
@@ -89,7 +119,17 @@ describe('GameHUD', () => {
       initialState: {
         phase: 'playing',
         playerName: 'TestPlayer',
-        playerStats: { health: 75, maxHealth: 100, level: 1, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 }
+        playerStats: {
+          health: 75,
+          maxHealth: 100,
+          level: 1,
+          xp: 0,
+          xpToNext: 100,
+          gold: 0,
+          stamina: 100,
+          maxStamina: 100,
+          reputation: 0,
+        },
       } as any,
     });
     // New HUD shows just the health value
@@ -101,16 +141,28 @@ describe('GameHUD', () => {
       initialState: {
         phase: 'playing',
         playerName: 'TestPlayer',
-        playerStats: { level: 1, health: 100, maxHealth: 100, xp: 0, xpToNext: 100, gold: 0, stamina: 100, maxStamina: 100, reputation: 0 },
-        activeQuests: [{
-          questId: 'test_hud_quest',
-          status: 'active',
-          currentStageIndex: 0,
-          objectiveProgress: {},
-          startedAt: Date.now(),
-          completedAt: null,
-          timeRemainingHours: null,
-        }],
+        playerStats: {
+          level: 1,
+          health: 100,
+          maxHealth: 100,
+          xp: 0,
+          xpToNext: 100,
+          gold: 0,
+          stamina: 100,
+          maxStamina: 100,
+          reputation: 0,
+        },
+        activeQuests: [
+          {
+            questId: 'test_hud_quest',
+            status: 'active',
+            currentStageIndex: 0,
+            objectiveProgress: {},
+            startedAt: Date.now(),
+            completedAt: null,
+            timeRemainingHours: null,
+          },
+        ],
       } as any,
     });
 
@@ -166,7 +218,7 @@ describe('InventoryPanel', () => {
     customRender(<InventoryPanel />, {
       initialState: {
         activePanel: 'inventory',
-        playerStats: { gold: 150 }
+        playerStats: { gold: 150 },
       } as any,
     });
     expect(screen.getByText('Saddlebag')).toBeInTheDocument();
@@ -176,7 +228,7 @@ describe('InventoryPanel', () => {
     customRender(<InventoryPanel />, {
       initialState: {
         activePanel: 'inventory',
-        playerStats: { gold: 150, ivrcScript: 0 }
+        playerStats: { gold: 150, ivrcScript: 0 },
       } as any,
     });
     // New UI shows "$150" format
@@ -200,8 +252,30 @@ describe('InventoryPanel', () => {
       initialState: {
         activePanel: 'inventory',
         inventory: [
-          { id: 'item1', itemId: 'health_tonic', name: 'Health Tonic', rarity: 'uncommon', quantity: 3, usable: true, type: 'consumable', condition: 100, weight: 0.3, droppable: true },
-          { id: 'item2', itemId: 'brass_gear', name: 'Brass Gear', rarity: 'common', quantity: 5, usable: false, type: 'junk', condition: 100, weight: 0.1, droppable: true },
+          {
+            id: 'item1',
+            itemId: 'health_tonic',
+            name: 'Health Tonic',
+            rarity: 'uncommon',
+            quantity: 3,
+            usable: true,
+            type: 'consumable',
+            condition: 100,
+            weight: 0.3,
+            droppable: true,
+          },
+          {
+            id: 'item2',
+            itemId: 'brass_gear',
+            name: 'Brass Gear',
+            rarity: 'common',
+            quantity: 5,
+            usable: false,
+            type: 'junk',
+            condition: 100,
+            weight: 0.1,
+            droppable: true,
+          },
         ],
       } as any,
     });
@@ -215,7 +289,18 @@ describe('InventoryPanel', () => {
       initialState: {
         activePanel: 'inventory',
         inventory: [
-          { id: 'item1', itemId: 'junk', name: 'Junk Item', rarity: 'common', quantity: 1, usable: false, type: 'junk', condition: 100, weight: 0.1, droppable: true },
+          {
+            id: 'item1',
+            itemId: 'junk',
+            name: 'Junk Item',
+            rarity: 'common',
+            quantity: 1,
+            usable: false,
+            type: 'junk',
+            condition: 100,
+            weight: 0.1,
+            droppable: true,
+          },
         ],
       } as any,
     });
@@ -232,7 +317,15 @@ describe('MenuPanel (includes Settings)', () => {
   const menuInitialState = {
     activePanel: 'menu',
     playerName: 'TestPlayer',
-    playerStats: { level: 5, health: 100, maxHealth: 100, xp: 50, xpToNext: 100, gold: 250, reputation: 10 },
+    playerStats: {
+      level: 5,
+      health: 100,
+      maxHealth: 100,
+      xp: 50,
+      xpToNext: 100,
+      gold: 250,
+      reputation: 10,
+    },
     settings: {
       musicVolume: 0.7,
       sfxVolume: 0.8,
@@ -306,7 +399,7 @@ describe('DialogueBox', () => {
           conversationFlags: {},
           startedAt: Date.now(),
         },
-        npcs: { 'npc_1': mockNPC },
+        npcs: { npc_1: mockNPC },
         settings: { reducedMotion: true },
       } as any,
     });
@@ -339,7 +432,7 @@ describe('DialogueBox', () => {
           conversationFlags: {},
           startedAt: Date.now(),
         },
-        npcs: { 'npc_1': mockNPC },
+        npcs: { npc_1: mockNPC },
         settings: { reducedMotion: true },
       } as any,
     });

@@ -10,7 +10,7 @@
  * Level: 1-2 (Dry Creek Valley)
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const Prospect: Location = validateLocation({
   id: 'prospect',
@@ -176,12 +176,30 @@ export const Prospect: Location = validateLocation({
       ],
       markers: [
         { type: 'entrance', name: 'silo_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
-        { type: 'storage', name: 'grain_storage', offset: { q: 0, r: 0 }, tags: ['grain', 'agricultural'] },
+        {
+          type: 'storage',
+          name: 'grain_storage',
+          offset: { q: 0, r: 0 },
+          tags: ['grain', 'agricultural'],
+        },
         { type: 'spawn_point', name: 'worker', offset: { q: 0, r: 1 }, tags: ['npc', 'farmer'] },
       ],
       zones: [
-        { type: 'public_area', name: 'loading_area', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
-        { type: 'loot_area', name: 'storage', tiles: [{ q: 0, r: 0 }], tags: ['grain', 'supplies'] },
+        {
+          type: 'public_area',
+          name: 'loading_area',
+          tiles: [
+            { q: 1, r: 0 },
+            { q: 0, r: 1 },
+          ],
+          tags: [],
+        },
+        {
+          type: 'loot_area',
+          name: 'storage',
+          tiles: [{ q: 0, r: 0 }],
+          tags: ['grain', 'supplies'],
+        },
       ],
       tags: ['agricultural', 'new_economy', 'hope'],
       importance: 4,
@@ -193,36 +211,132 @@ export const Prospect: Location = validateLocation({
   // =========================================================================
   baseTiles: [
     // Main street - runs through town center (east-west)
-    { coord: { q: 8, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 9, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 11, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 12, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 13, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 15, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 16, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 17, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 19, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 20, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 21, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 23, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 8, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 9, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 12, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 16, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 20, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 21, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 23, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // Entry roads
-    { coord: { q: 4, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 5, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 6, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 7, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 25, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 26, r: 15 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 4, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 5, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 6, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 7, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 25, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 26, r: 15 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // Path to well (north-south)
-    { coord: { q: 15, r: 12 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 15, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 15, r: 14 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 15, r: 12 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 15, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 15, r: 14 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // Path to church
-    { coord: { q: 10, r: 11 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 12 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 10, r: 11 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 12 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // Trail to old mine
     { coord: { q: 7, r: 10 }, terrain: 'dirt', feature: 'none' },

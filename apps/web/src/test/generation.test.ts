@@ -5,71 +5,77 @@
  * Encounter Generation, Dialogue Generation, and World Generation.
  */
 
-import { describe, it, expect, beforeEach, beforeAll, vi } from 'vitest';
 import {
-  SeededRandom,
-  createSeededRandom,
-  hashString,
-  combineSeeds,
-} from '@iron-frontier/shared/data/generation/seededRandom';
+  type GeneratedDialogueTree,
+  generateSimpleDialogueTree,
+  getSnippetsByCategory,
+  getSnippetsForNPC,
+  initDialogueData,
+} from '@iron-frontier/shared/data/generation/generators/dialogueGenerator';
 import {
-  initNamePools,
-  generateName,
-  generateNameWeighted,
-  generateUniqueName,
-  generateOutlawAlias,
-  generateAutomatonDesignation,
-  generatePlaceName,
-  type GeneratedName,
-  type NameGender,
-} from '@iron-frontier/shared/data/generation/generators/nameGenerator';
-import {
-  initNPCTemplates,
-  generateNPC,
-  generateNPCsForLocation,
-  getNPCTemplate,
-  getNPCTemplatesByRole,
-  type GeneratedNPC,
-} from '@iron-frontier/shared/data/generation/generators/npcGenerator';
-import {
-  initQuestTemplates,
-  generateQuest,
-  generateRandomQuest,
-  getQuestTemplate,
-  getQuestTemplatesForLevel,
-  type GeneratedQuest,
-  type QuestGenerationContext,
-} from '@iron-frontier/shared/data/generation/generators/questGenerator';
-import {
-  initEncounterTemplates,
+  type GeneratedEncounter,
   generateEncounter,
   generateRandomEncounter,
   getEncountersForBiome,
   getEncountersForTime,
+  initEncounterTemplates,
   shouldTriggerEncounter,
-  type GeneratedEncounter,
 } from '@iron-frontier/shared/data/generation/generators/encounterGenerator';
 import {
-  initDialogueData,
-  getSnippetsByCategory,
-  getSnippetsForNPC,
-  generateSimpleDialogueTree,
-  type GeneratedDialogueTree,
-} from '@iron-frontier/shared/data/generation/generators/dialogueGenerator';
+  type GeneratedName,
+  generateAutomatonDesignation,
+  generateName,
+  generateNameWeighted,
+  generateOutlawAlias,
+  generatePlaceName,
+  generateUniqueName,
+  initNamePools,
+  type NameGender,
+} from '@iron-frontier/shared/data/generation/generators/nameGenerator';
 import {
-  WorldGenerator,
-  type GeneratedWorld,
-  type GeneratedRegion,
+  type GeneratedNPC,
+  generateNPC,
+  generateNPCsForLocation,
+  getNPCTemplate,
+  getNPCTemplatesByRole,
+  initNPCTemplates,
+} from '@iron-frontier/shared/data/generation/generators/npcGenerator';
+import {
+  type GeneratedQuest,
+  generateQuest,
+  generateRandomQuest,
+  getQuestTemplate,
+  getQuestTemplatesForLevel,
+  initQuestTemplates,
+  type QuestGenerationContext,
+} from '@iron-frontier/shared/data/generation/generators/questGenerator';
+import {
   type GeneratedLocation,
+  type GeneratedRegion,
+  type GeneratedWorld,
+  WorldGenerator,
 } from '@iron-frontier/shared/data/generation/generators/worldGenerator';
-import type { GenerationContext, NPCTemplate, QuestTemplate, EncounterTemplate, NameOrigin } from '@iron-frontier/shared/data/schemas/generation';
+import { DIALOGUE_SNIPPETS } from '@iron-frontier/shared/data/generation/pools/dialogueSnippets';
 import { NAME_POOLS } from '@iron-frontier/shared/data/generation/pools/namePools';
 import { PLACE_NAME_POOLS } from '@iron-frontier/shared/data/generation/pools/placeNamePools';
+import {
+  combineSeeds,
+  createSeededRandom,
+  hashString,
+  SeededRandom,
+} from '@iron-frontier/shared/data/generation/seededRandom';
+import { DIALOGUE_TREE_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/dialogueTreeTemplates';
+import { ENCOUNTER_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/encounterTemplates';
 import { NPC_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/npcTemplates';
 import { QUEST_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/questTemplates';
-import { ENCOUNTER_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/encounterTemplates';
-import { DIALOGUE_SNIPPETS } from '@iron-frontier/shared/data/generation/pools/dialogueSnippets';
-import { DIALOGUE_TREE_TEMPLATES } from '@iron-frontier/shared/data/generation/templates/dialogueTreeTemplates';
+import type {
+  EncounterTemplate,
+  GenerationContext,
+  NameOrigin,
+  NPCTemplate,
+  QuestTemplate,
+} from '@iron-frontier/shared/data/schemas/generation';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ============================================================================
 // SEEDED RANDOM TESTS
@@ -864,15 +870,11 @@ describe('Quest Generation', () => {
           { id: 'npc1', name: 'John Smith', role: 'sheriff', tags: ['lawman'] },
           { id: 'npc2', name: 'Billy the Kid', role: 'outlaw', tags: ['outlaw', 'bandit'] },
         ],
-        availableItems: [
-          { id: 'item1', name: 'Gold Watch', tags: ['valuable'] },
-        ],
+        availableItems: [{ id: 'item1', name: 'Gold Watch', tags: ['valuable'] }],
         availableLocations: [
           { id: 'loc1', name: 'Dusty Gulch', type: 'hideout', tags: ['bandit_camp', 'hideout'] },
         ],
-        availableEnemies: [
-          { id: 'enemy1', name: 'Bandit', tags: ['outlaw', 'bandit'] },
-        ],
+        availableEnemies: [{ id: 'enemy1', name: 'Bandit', tags: ['outlaw', 'bandit'] }],
       };
 
       const quest = generateQuest(rng, template!, context);
@@ -897,9 +899,7 @@ describe('Quest Generation', () => {
         ],
         availableItems: [],
         availableLocations: [],
-        availableEnemies: [
-          { id: 'bandit_1', name: 'Bad Bob', tags: ['outlaw', 'bandit'] },
-        ],
+        availableEnemies: [{ id: 'bandit_1', name: 'Bad Bob', tags: ['outlaw', 'bandit'] }],
       };
 
       const quest = generateQuest(rng, template!, context, {
@@ -965,9 +965,7 @@ describe('Quest Generation', () => {
         activeEvents: [],
         contextTags: [],
         regionId: 'test_region',
-        availableNPCs: [
-          { id: 'outlaw1', name: 'Dirty Dan', role: 'outlaw', tags: ['outlaw'] },
-        ],
+        availableNPCs: [{ id: 'outlaw1', name: 'Dirty Dan', role: 'outlaw', tags: ['outlaw'] }],
         availableItems: [],
         availableLocations: [],
         availableEnemies: [],
@@ -1299,7 +1297,13 @@ describe('Dialogue Generation', () => {
         expect(sheriffSpecific.every((s) => (s.validRoles ?? []).includes('sheriff'))).toBe(true);
       }
       if (bartenderSpecific.length > 0) {
-        expect(bartenderSpecific.every((s) => (s.validRoles ?? []).includes('bartender') || (s.validRoles ?? []).includes('saloon_keeper'))).toBe(true);
+        expect(
+          bartenderSpecific.every(
+            (s) =>
+              (s.validRoles ?? []).includes('bartender') ||
+              (s.validRoles ?? []).includes('saloon_keeper')
+          )
+        ).toBe(true);
       }
     });
   });
@@ -1703,12 +1707,15 @@ describe('Edge Cases', () => {
 // ============================================================================
 
 import {
+  type ProceduralLocationContent,
   ProceduralLocationManager,
   type ProceduralNPC,
-  type ProceduralLocationContent,
 } from '@iron-frontier/shared/data/generation/ProceduralLocationManager';
+import {
+  getWorldItemsForLocation,
+  WORLD_ITEMS_BY_LOCATION,
+} from '@iron-frontier/shared/data/items/worldItems';
 import { getNPCsByLocation, NPCS_BY_LOCATION } from '@iron-frontier/shared/data/npcs';
-import { getWorldItemsForLocation, WORLD_ITEMS_BY_LOCATION } from '@iron-frontier/shared/data/items/worldItems';
 import type { ResolvedLocation } from '@iron-frontier/shared/data/worlds/WorldLoader';
 
 describe('ProceduralLocationManager Integration', () => {
@@ -1716,7 +1723,10 @@ describe('ProceduralLocationManager Integration', () => {
 
   // Mock a procedural location reference
   // Note: Location types must match NPC template validLocationTypes: 'town', 'city', 'outpost', 'camp', 'ranch', 'mine'
-  const createMockProceduralLocation = (id: string, tags: string[] = ['town']): ResolvedLocation => ({
+  const createMockProceduralLocation = (
+    id: string,
+    tags: string[] = ['town']
+  ): ResolvedLocation => ({
     ref: {
       id,
       name: `Test Location ${id}`,
@@ -1914,8 +1924,8 @@ describe('ProceduralLocationManager Integration', () => {
 
       // NPCs should be different (at least one name should differ if there are any)
       if (content1.npcs.length > 0 && content2.npcs.length > 0) {
-        const names1 = content1.npcs.map(n => n.name).sort();
-        const names2 = content2.npcs.map(n => n.name).sort();
+        const names1 = content1.npcs.map((n) => n.name).sort();
+        const names2 = content2.npcs.map((n) => n.name).sort();
         expect(names1).not.toEqual(names2);
       }
     });
@@ -1988,7 +1998,10 @@ describe('ProceduralLocationManager Integration', () => {
 
       if (content.npcs.length > 0) {
         const firstNpc = content.npcs[0];
-        const dialogue = ProceduralLocationManager.getOrGenerateDialogue(firstNpc.id, 'dialogue_test_loc');
+        const dialogue = ProceduralLocationManager.getOrGenerateDialogue(
+          firstNpc.id,
+          'dialogue_test_loc'
+        );
         expect(dialogue).not.toBeNull();
         expect(dialogue?.id).toBeDefined();
         expect(dialogue?.nodes).toBeDefined();

@@ -5,103 +5,88 @@
  * for persistence across different platforms (web, mobile native).
  */
 
-// Storage adapters
+// Store factory
 export {
-  type StorageAdapter,
-  WebStorageAdapter,
-  MemoryStorageAdapter,
-  NativeStorageAdapter,
-  NoopStorageAdapter,
-} from './StorageAdapter';
-
-// Persist storage utilities
-export {
-  createStateStorage,
-  preloadStorage,
-  AsyncStateStorage,
-} from './persistStorage';
-
-// Store types
-export type {
-  // Common types
-  ItemRarity,
-  WorldPosition,
-  CameraState,
-  TimeState,
-  WeatherType,
-  WeatherState,
-  CharacterAppearance,
-
-  // Inventory types
-  InventoryItem,
-  EquipmentSlot,
-  EquipmentState,
-
-  // Player types
-  PlayerStats,
-
-  // NPC types
-  NPCRole,
-  NPCPersonality,
-  NPC,
-
-  // Structure types
-  StructureType,
-  Structure,
-
-  // World types
-  WorldItem,
-  ChunkCoord,
-  BiomeType,
-  ChunkData,
-
-  // UI types
-  GamePhase,
-  PanelType,
-  Notification,
-
-  // Dialogue types
-  DialogueState,
-
-  // Combat types
-  CombatActionType,
-  Combatant,
-  CombatAction,
-  CombatResult,
-  CombatPhase,
-  CombatState,
-
-  // Travel types
-  TravelState,
-
-  // Settings types
-  GameSettings,
-
-  // State types
-  GameStateData,
-  GameStateActions,
-  GameState,
-  PersistedGameState,
-} from './types';
-
+  createGameStore,
+  type DataAccess,
+  type DatabaseManager,
+  type GameStore,
+  type GameStoreConfig,
+} from './createGameStore';
 // Default values
 export {
-  DEFAULT_PLAYER_STATS,
+  DEFAULT_CAMERA_STATE,
   DEFAULT_EQUIPMENT,
+  DEFAULT_PLAYER_STATS,
   DEFAULT_SETTINGS,
   DEFAULT_TIME,
   DEFAULT_WEATHER,
-  DEFAULT_CAMERA_STATE,
   DEFAULT_WORLD_POSITION,
   SAVE_VERSION,
   STORAGE_KEY,
 } from './defaults';
-
-// Store factory
+// Persist storage utilities
 export {
-  createGameStore,
-  type GameStoreConfig,
-  type DatabaseManager,
-  type DataAccess,
-  type GameStore,
-} from './createGameStore';
+  AsyncStateStorage,
+  createStateStorage,
+  preloadStorage,
+} from './persistStorage';
+// Storage adapters
+export {
+  MemoryStorageAdapter,
+  NativeStorageAdapter,
+  NoopStorageAdapter,
+  type StorageAdapter,
+  WebStorageAdapter,
+} from './StorageAdapter';
+// Store types
+export type {
+  BiomeType,
+  CameraState,
+  CharacterAppearance,
+  ChunkCoord,
+  ChunkData,
+  CombatAction,
+  // Combat types
+  CombatActionType,
+  Combatant,
+  CombatPhase,
+  CombatResult,
+  CombatState,
+  // Dialogue types
+  DialogueState,
+  EquipmentSlot,
+  EquipmentState,
+  // UI types
+  GamePhase,
+  // Settings types
+  GameSettings,
+  GameState,
+  GameStateActions,
+  // State types
+  GameStateData,
+  // Inventory types
+  InventoryItem,
+  // Common types
+  ItemRarity,
+  Notification,
+  NPC,
+  NPCPersonality,
+  // NPC types
+  NPCRole,
+  PanelType,
+  PersistedGameState,
+  // Player types
+  PlayerStats,
+  Structure,
+  // Structure types
+  StructureType,
+  TimeState,
+  // Travel types
+  TravelState,
+  WeatherState,
+  WeatherType,
+  // World types
+  WorldItem,
+  WorldPosition,
+} from './types';

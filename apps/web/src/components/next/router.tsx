@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode } from "react";
+import type React from 'react';
+import { createContext, type ReactNode, useContext } from 'react';
 
 interface RouterContextType {
   pathname: string;
@@ -7,7 +8,7 @@ interface RouterContextType {
 }
 
 const RouterContext = createContext<RouterContextType>({
-  pathname: "/",
+  pathname: '/',
   push: () => {},
   replace: () => {},
 });
@@ -25,7 +26,7 @@ interface RouterProviderProps {
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const router: RouterContextType = {
-    pathname: "/",
+    pathname: '/',
     push: (url: string) => {
       console.log(`Navigating to ${url}`);
     },
@@ -34,7 +35,5 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     },
   };
 
-  return (
-    <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
-  );
+  return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>;
 };

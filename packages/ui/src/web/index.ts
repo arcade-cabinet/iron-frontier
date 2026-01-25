@@ -5,36 +5,35 @@
  * These components are designed for React DOM (browser) usage.
  */
 
+// Re-export utilities
+export { cn } from '../primitives/utils';
 // Core components
 export { Button, buttonVariants, type WebButtonProps } from './Button';
 export {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
   cardVariants,
   type WebCardProps,
 } from './Card';
-export { Text, textVariants, type WebTextProps } from './Text';
 export { Input, inputVariants, type WebInputProps } from './Input';
 export {
   Modal,
-  Sheet,
   ModalHeader,
-  overlayVariants,
   modalContentVariants,
+  overlayVariants,
+  Sheet,
   sheetContentVariants,
   type WebModalProps,
   type WebSheetProps,
 } from './Modal';
 export {
-  Spinner,
   LoadingOverlay,
+  Spinner,
   spinnerVariants,
   type WebSpinnerProps,
 } from './Spinner';
-
-// Re-export utilities
-export { cn } from '../primitives/utils';
+export { Text, textVariants, type WebTextProps } from './Text';

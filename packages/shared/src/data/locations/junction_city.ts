@@ -8,7 +8,7 @@
  * "The Iron Valley Railroad Company thanks you for your patronage."
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const JunctionCity: Location = validateLocation({
   id: 'junction_city',
@@ -271,11 +271,24 @@ export const JunctionCity: Location = validateLocation({
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
       ],
       markers: [
-        { type: 'vantage_point', name: 'tower_top', offset: { q: 0, r: 0 }, tags: ['elevated', 'sniper'] },
+        {
+          type: 'vantage_point',
+          name: 'tower_top',
+          offset: { q: 0, r: 0 },
+          tags: ['elevated', 'sniper'],
+        },
         { type: 'hiding_spot', name: 'tower_base', offset: { q: 0, r: 1 }, tags: ['cover'] },
       ],
       zones: [
-        { type: 'public_area', name: 'base', tiles: [{ q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
+        {
+          type: 'public_area',
+          name: 'base',
+          tiles: [
+            { q: 1, r: 0 },
+            { q: 0, r: 1 },
+          ],
+          tags: [],
+        },
       ],
       tags: ['ivrc', 'industrial', 'landmark'],
       importance: 3,
@@ -300,13 +313,45 @@ export const JunctionCity: Location = validateLocation({
       ],
       markers: [
         { type: 'entrance', name: 'yard_gate', offset: { q: 2, r: 1 }, facing: 0, tags: ['main'] },
-        { type: 'spawn_point', name: 'coal_worker', offset: { q: 1, r: 0 }, tags: ['npc', 'worker'] },
-        { type: 'storage', name: 'coal_pile', offset: { q: 0, r: 1 }, tags: ['fuel', 'industrial'] },
-        { type: 'evidence_spot', name: 'manifest', offset: { q: 2, r: 0 }, tags: ['clue', 'documents'] },
+        {
+          type: 'spawn_point',
+          name: 'coal_worker',
+          offset: { q: 1, r: 0 },
+          tags: ['npc', 'worker'],
+        },
+        {
+          type: 'storage',
+          name: 'coal_pile',
+          offset: { q: 0, r: 1 },
+          tags: ['fuel', 'industrial'],
+        },
+        {
+          type: 'evidence_spot',
+          name: 'manifest',
+          offset: { q: 2, r: 0 },
+          tags: ['clue', 'documents'],
+        },
       ],
       zones: [
-        { type: 'public_area', name: 'yard', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }], tags: [] },
-        { type: 'loot_area', name: 'supplies', tiles: [{ q: 0, r: 2 }, { q: 1, r: 2 }], tags: ['low_value'] },
+        {
+          type: 'public_area',
+          name: 'yard',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 1, r: 0 },
+            { q: 2, r: 0 },
+          ],
+          tags: [],
+        },
+        {
+          type: 'loot_area',
+          name: 'supplies',
+          tiles: [
+            { q: 0, r: 2 },
+            { q: 1, r: 2 },
+          ],
+          tags: ['low_value'],
+        },
       ],
       tags: ['ivrc', 'industrial', 'fuel'],
       importance: 3,
@@ -320,16 +365,35 @@ export const JunctionCity: Location = validateLocation({
       anchor: { q: 42, r: 17 },
       rotation: 0,
       tiles: [
-        { coord: { q: 0, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+        {
+          coord: { q: 0, r: 0 },
+          terrain: 'dirt',
+          feature: 'none',
+          edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+        },
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: 1, r: 1 }, terrain: 'dirt', feature: 'none' },
       ],
       markers: [
-        { type: 'spawn_point', name: 'yard_worker', offset: { q: 0, r: 1 }, tags: ['npc', 'worker'] },
+        {
+          type: 'spawn_point',
+          name: 'yard_worker',
+          offset: { q: 0, r: 1 },
+          tags: ['npc', 'worker'],
+        },
         { type: 'storage', name: 'tools', offset: { q: 1, r: 1 }, tags: ['equipment'] },
       ],
       zones: [
-        { type: 'public_area', name: 'yard', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }], tags: ['work'] },
+        {
+          type: 'public_area',
+          name: 'yard',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 0, r: 1 },
+            { q: 1, r: 1 },
+          ],
+          tags: ['work'],
+        },
       ],
       tags: ['ivrc', 'industrial'],
       importance: 2,
@@ -344,140 +408,552 @@ export const JunctionCity: Location = validateLocation({
     // MAIN RAILROAD LINE (East-West through center, row 17)
     // ======================================================================
     // Western approach
-    { coord: { q: 0, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 1, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 2, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 3, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 4, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 5, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 0, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 1, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 2, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 3, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 4, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 5, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
     // Skip 6-8 for coal yard
-    { coord: { q: 9, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 10, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 11, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 12, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 13, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 14, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 15, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 16, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 17, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 18, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 19, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 20, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 21, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 22, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 23, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 24, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 9, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 10, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 12, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 14, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 16, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 18, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 20, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 21, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 22, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 23, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 24, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
     // Station area (25-27 handled by assemblage)
-    { coord: { q: 28, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 29, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 30, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 31, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 32, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 33, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 34, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 35, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 36, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 37, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 28, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 29, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 30, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 31, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 32, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 33, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 34, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 35, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 36, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 37, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
     // Roundhouse area (38-41)
-    { coord: { q: 46, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 47, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 48, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 49, r: 17 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 46, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 47, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 48, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 49, r: 17 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
 
     // ======================================================================
     // SECONDARY SIDING (Railyard spur, slightly south)
     // ======================================================================
-    { coord: { q: 36, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 37, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 38, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 39, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 40, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 41, r: 18 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'none', 'none', 'none'] },
+    {
+      coord: { q: 36, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 37, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 38, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 39, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 40, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 41, r: 18 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'none', 'none', 'none'],
+    },
 
     // ======================================================================
     // MAIN STREET (North-South through town center)
     // ======================================================================
     // From south entry to tracks
-    { coord: { q: 25, r: 34 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 33 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 32 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 31 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 30 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 29 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 28 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 27 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 26 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 25 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 24 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 23 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 22 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 21 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 20 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 19 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 18 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 25, r: 34 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 33 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 32 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 31 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 30 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 29 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 28 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 27 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 26 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 25 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 24 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 23 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 22 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 21 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 20 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 19 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 18 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
     // Crosses tracks at 17 (handled above)
     // Continues north to company district
-    { coord: { q: 25, r: 16 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 15 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 14 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 12 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 11 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 25, r: 10 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 25, r: 16 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 15 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 14 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 12 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 11 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 25, r: 10 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // ======================================================================
     // COMPANY DISTRICT ROAD (East-West, row 10)
     // ======================================================================
-    { coord: { q: 10, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 11, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 10, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Pinkerton office at 12
-    { coord: { q: 14, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 15, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 16, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 17, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 14, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 16, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Bank at 18
-    { coord: { q: 20, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 21, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 22, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 23, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 24, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 20, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 21, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 22, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 23, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 24, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Intersects main street at 25
-    { coord: { q: 26, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 27, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 28, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 29, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 30, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 31, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 26, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 27, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 28, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 29, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 30, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 31, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Hotel at 32
-    { coord: { q: 34, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 35, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 36, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 37, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 34, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 35, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 36, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 37, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Company store at 38
-    { coord: { q: 40, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 41, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 42, r: 10 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 40, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 41, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 42, r: 10 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // ======================================================================
     // WORKERS' DISTRICT ROAD (East-West, row 26)
     // ======================================================================
-    { coord: { q: 8, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 9, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 8, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 9, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Barracks/well area 10-14
-    { coord: { q: 16, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 17, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 18, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 19, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 16, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 18, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Saloon at 20
-    { coord: { q: 24, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 24, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Intersects main street at 25
-    { coord: { q: 26, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 27, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 28, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 29, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 26, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 27, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 28, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 29, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
     // Warehouse at 30
-    { coord: { q: 32, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 33, r: 26 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 32, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 33, r: 26 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // ======================================================================
     // DECORATIVE TERRAIN & ATMOSPHERE

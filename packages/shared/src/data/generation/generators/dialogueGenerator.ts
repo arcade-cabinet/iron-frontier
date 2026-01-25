@@ -4,13 +4,13 @@
  * Assembles dialogue trees from templates and snippets.
  */
 
-import { SeededRandom } from '../seededRandom';
 import {
   type DialogueSnippet,
   type DialogueTreeTemplate,
   type GenerationContext,
   substituteTemplate,
 } from '../../schemas/generation';
+import { SeededRandom } from '../seededRandom';
 import type { GeneratedNPC } from './npcGenerator';
 
 // Registries
@@ -71,9 +71,7 @@ export interface GeneratedDialogueTree {
 /**
  * Get snippets by category
  */
-export function getSnippetsByCategory(
-  category: DialogueSnippet['category']
-): DialogueSnippet[] {
+export function getSnippetsByCategory(category: DialogueSnippet['category']): DialogueSnippet[] {
   return DIALOGUE_SNIPPETS.filter((s) => s.category === category);
 }
 
@@ -128,9 +126,7 @@ export function getDialogueTreesForRole(role: string): DialogueTreeTemplate[] {
 /**
  * Get dialogue tree template by ID
  */
-export function getDialogueTreeTemplate(
-  id: string
-): DialogueTreeTemplate | undefined {
+export function getDialogueTreeTemplate(id: string): DialogueTreeTemplate | undefined {
   return DIALOGUE_TREE_TEMPLATES.find((t) => t.id === id);
 }
 
@@ -206,10 +202,10 @@ function buildDialogueVariables(
       context.gameHour < 6
         ? 'night'
         : context.gameHour < 12
-        ? 'morning'
-        : context.gameHour < 18
-        ? 'afternoon'
-        : 'evening',
+          ? 'morning'
+          : context.gameHour < 18
+            ? 'afternoon'
+            : 'evening',
     ...extras,
   };
 }
@@ -232,13 +228,13 @@ function generateNode(
   if (!snippet) {
     // Fallback text
     const fallbackTexts: Record<string, string> = {
-      greeting: "Howdy.",
+      greeting: 'Howdy.',
       farewell: "Be seein' ya.",
       rumor: "Ain't heard nothin' interesting.",
       quest: "Got nothin' for ya right now.",
-      shop: "Take a look around.",
+      shop: 'Take a look around.',
     };
-    const speakerText = fallbackTexts[nodePattern.role] ?? "...";
+    const speakerText = fallbackTexts[nodePattern.role] ?? '...';
 
     return {
       id: `node_${nodeIndex}`,
@@ -259,9 +255,7 @@ function generateNode(
     (choicePattern, choiceIndex) => ({
       id: `choice_${nodeIndex}_${choiceIndex}`,
       text: substituteTemplate(choicePattern.textTemplate, variables),
-      nextNodeId: choicePattern.nextRole
-        ? `node_${choicePattern.nextRole}`
-        : null,
+      nextNodeId: choicePattern.nextRole ? `node_${choicePattern.nextRole}` : null,
       tags: choicePattern.tags,
     })
   );
@@ -359,7 +353,7 @@ export function generateSimpleDialogueTree(
   const greetingSnippet = selectSnippet(treeRng, 'greeting', npc);
   const greetingText = greetingSnippet
     ? substituteTemplate(treeRng.pick(greetingSnippet.textTemplates), variables)
-    : "Howdy, stranger.";
+    : 'Howdy, stranger.';
 
   const greetingChoices: GeneratedDialogueChoice[] = [];
 
@@ -466,7 +460,7 @@ export function generateSimpleDialogueTree(
     const shopSnippet = selectSnippet(treeRng, 'shop_welcome', npc);
     const shopText = shopSnippet
       ? substituteTemplate(treeRng.pick(shopSnippet.textTemplates), variables)
-      : "Take a look at what I got.";
+      : 'Take a look at what I got.';
 
     nodes.set('node_shop', {
       id: 'node_shop',

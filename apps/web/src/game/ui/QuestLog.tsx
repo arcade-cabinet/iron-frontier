@@ -1,5 +1,13 @@
 // Quest Log - Journal of active and completed quests
 // Updated to support the stage-based quest system
+
+import { getQuestById } from '@iron-frontier/shared/data/quests';
+import type {
+  ActiveQuest,
+  Objective,
+  Quest,
+  QuestStage,
+} from '@iron-frontier/shared/data/schemas/quest';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -8,8 +16,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
-import { getQuestById } from '@iron-frontier/shared/data/quests';
-import type { ActiveQuest, Quest, QuestStage, Objective } from '@iron-frontier/shared/data/schemas/quest';
 
 // ============================================================================
 // ICONS
@@ -17,7 +23,12 @@ import type { ActiveQuest, Quest, QuestStage, Objective } from '@iron-frontier/s
 
 function CheckIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-4 h-4 text-green-400', className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className={cn('w-4 h-4 text-green-400', className)}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
     </svg>
   );
@@ -25,7 +36,12 @@ function CheckIcon({ className }: { className?: string }) {
 
 function CircleIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-4 h-4 text-amber-500', className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className={cn('w-4 h-4 text-amber-500', className)}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <circle cx="12" cy="12" r="8" strokeWidth={2} />
     </svg>
   );
@@ -42,8 +58,18 @@ function StarIcon({ className }: { className?: string }) {
 function MapPinIcon({ className }: { className?: string }) {
   return (
     <svg className={cn('w-3 h-3', className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+      />
     </svg>
   );
 }
@@ -88,14 +114,19 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
       <CardHeader className="p-2 sm:p-3 pb-1.5 sm:pb-2">
         <CardTitle className="text-amber-100 text-sm sm:text-base flex items-center justify-between gap-1.5 sm:gap-2">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-            {quest.type === 'main' && <StarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 flex-shrink-0" />}
+            {quest.type === 'main' && (
+              <StarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 flex-shrink-0" />
+            )}
             <span className="truncate">{quest.title}</span>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <Badge className={cn(typeBadge.bg, typeBadge.text, 'text-[9px] sm:text-xs')}>
               {typeBadge.label}
             </Badge>
-            <Badge variant="outline" className="border-amber-600 text-amber-400 text-[9px] sm:text-xs hidden sm:inline-flex">
+            <Badge
+              variant="outline"
+              className="border-amber-600 text-amber-400 text-[9px] sm:text-xs hidden sm:inline-flex"
+            >
               Stage {stageProgress}
             </Badge>
           </div>
@@ -103,9 +134,7 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
       </CardHeader>
       <CardContent className="p-2 sm:p-3 pt-0">
         {/* Quest Description */}
-        <p className="text-amber-300/80 text-sm mb-2">
-          {quest.description}
-        </p>
+        <p className="text-amber-300/80 text-sm mb-2">{quest.description}</p>
 
         <Separator className="bg-amber-700/30 my-2" />
 
@@ -117,16 +146,17 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
                 Current Stage: {currentStage.title}
               </div>
             </div>
-            <p className="text-amber-200/70 text-xs mb-3 italic">
-              {currentStage.description}
-            </p>
+            <p className="text-amber-200/70 text-xs mb-3 italic">{currentStage.description}</p>
 
             {/* Objectives */}
             <div className="text-xs text-amber-500 mb-2">Objectives:</div>
             <div className="space-y-2">
               {currentStage.objectives.map((objective) => {
                 // Skip hidden objectives that haven't been revealed
-                if (objective.hidden && !isObjectiveComplete(objective, activeQuest.objectiveProgress)) {
+                if (
+                  objective.hidden &&
+                  !isObjectiveComplete(objective, activeQuest.objectiveProgress)
+                ) {
                   return null;
                 }
 
@@ -143,7 +173,11 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
                       objective.optional && 'opacity-75'
                     )}
                   >
-                    {completed ? <CheckIcon className="mt-0.5 flex-shrink-0" /> : <CircleIcon className="mt-0.5 flex-shrink-0" />}
+                    {completed ? (
+                      <CheckIcon className="mt-0.5 flex-shrink-0" />
+                    ) : (
+                      <CircleIcon className="mt-0.5 flex-shrink-0" />
+                    )}
                     <div className="flex-1 min-w-0">
                       <span className={completed ? 'line-through opacity-60' : ''}>
                         {objective.description}
@@ -155,7 +189,9 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
                       {objective.mapMarker && (
                         <div className="flex items-center gap-1 text-xs text-amber-400/60 mt-0.5">
                           <MapPinIcon />
-                          <span>{objective.mapMarker.markerLabel || objective.mapMarker.locationId}</span>
+                          <span>
+                            {objective.mapMarker.markerLabel || objective.mapMarker.locationId}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -171,9 +207,7 @@ function ActiveQuestCard({ activeQuest, quest }: ActiveQuestCardProps) {
         {/* Rewards Preview */}
         <div className="flex items-center gap-4 text-xs text-amber-500">
           <span>Rewards:</span>
-          {quest.rewards.xp > 0 && (
-            <span className="text-amber-300">+{quest.rewards.xp} XP</span>
-          )}
+          {quest.rewards.xp > 0 && <span className="text-amber-300">+{quest.rewards.xp} XP</span>}
           {quest.rewards.gold > 0 && (
             <span className="text-yellow-400">+{quest.rewards.gold} Gold</span>
           )}
@@ -226,16 +260,12 @@ function CompletedQuestCard({ quest }: CompletedQuestCardProps) {
           <CheckIcon className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-amber-300/80 text-sm font-medium truncate">
-                {quest.title}
-              </span>
+              <span className="text-amber-300/80 text-sm font-medium truncate">{quest.title}</span>
               <Badge className={cn(typeBadge.bg, typeBadge.text, 'text-xs opacity-60')}>
                 {typeBadge.label}
               </Badge>
             </div>
-            <p className="text-amber-500/50 text-xs mt-0.5 line-clamp-1">
-              {quest.description}
-            </p>
+            <p className="text-amber-500/50 text-xs mt-0.5 line-clamp-1">{quest.description}</p>
           </div>
         </div>
       </CardContent>
@@ -248,13 +278,14 @@ function CompletedQuestCard({ quest }: CompletedQuestCardProps) {
 // ============================================================================
 
 export function QuestLog() {
-  const { activePanel, togglePanel, activeQuests, completedQuests, completedQuestIds } = useGameStore();
+  const { activePanel, togglePanel, activeQuests, completedQuests, completedQuestIds } =
+    useGameStore();
 
   const questLogOpen = activePanel === 'quests';
 
   // Build active quests with their definitions
   const activeQuestsWithDefs = activeQuests
-    .map(aq => ({
+    .map((aq) => ({
       activeQuest: aq,
       quest: getQuestById(aq.questId),
     }))
@@ -268,9 +299,10 @@ export function QuestLog() {
   });
 
   // For completed quests, use the full quest data if available, otherwise look up by ID
-  const completedQuestsDisplay = completedQuests.length > 0
-    ? completedQuests
-    : completedQuestIds.map(id => getQuestById(id)).filter((q): q is Quest => q !== undefined);
+  const completedQuestsDisplay =
+    completedQuests.length > 0
+      ? completedQuests
+      : completedQuestIds.map((id) => getQuestById(id)).filter((q): q is Quest => q !== undefined);
 
   return (
     <Sheet open={questLogOpen} onOpenChange={() => togglePanel('quests')}>
@@ -295,15 +327,30 @@ export function QuestLog() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active" className="h-[calc(100%-46px)] sm:h-[calc(100%-50px)] mt-3 sm:mt-4">
+          <TabsContent
+            value="active"
+            className="h-[calc(100%-46px)] sm:h-[calc(100%-50px)] mt-3 sm:mt-4"
+          >
             <ScrollArea className="h-full pr-2">
               {activeQuestsWithDefs.length === 0 ? (
                 <div className="text-amber-400/60 text-center py-8 sm:py-12">
-                  <svg className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 text-amber-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                   <p className="text-sm">No active quests</p>
-                  <p className="text-xs sm:text-sm mt-1 text-amber-500/50">Talk to folks around town!</p>
+                  <p className="text-xs sm:text-sm mt-1 text-amber-500/50">
+                    Talk to folks around town!
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2 sm:space-y-3">
@@ -319,15 +366,30 @@ export function QuestLog() {
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="completed" className="h-[calc(100%-46px)] sm:h-[calc(100%-50px)] mt-3 sm:mt-4">
+          <TabsContent
+            value="completed"
+            className="h-[calc(100%-46px)] sm:h-[calc(100%-50px)] mt-3 sm:mt-4"
+          >
             <ScrollArea className="h-full pr-2">
               {completedQuestsDisplay.length === 0 ? (
                 <div className="text-amber-400/60 text-center py-8 sm:py-12">
-                  <svg className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 text-amber-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   <p className="text-sm">No completed quests yet</p>
-                  <p className="text-xs sm:text-sm mt-1 text-amber-500/50">Your deeds will be recorded here</p>
+                  <p className="text-xs sm:text-sm mt-1 text-amber-500/50">
+                    Your deeds will be recorded here
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-1.5 sm:space-y-2">

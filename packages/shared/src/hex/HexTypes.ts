@@ -60,12 +60,12 @@ export enum HexTerrainType {
  * Each level represents a discrete height step.
  */
 export enum HexElevation {
-  Water = -1,      // Below ground level (rivers, lakes)
-  Ground = 0,      // Base ground level
-  Low = 1,         // Slight elevation (small hills)
-  Medium = 2,      // Medium elevation (hills)
-  High = 3,        // High elevation (large hills, plateaus)
-  Mountain = 4,    // Mountain peaks
+  Water = -1, // Below ground level (rivers, lakes)
+  Ground = 0, // Base ground level
+  Low = 1, // Slight elevation (small hills)
+  Medium = 2, // Medium elevation (hills)
+  High = 3, // High elevation (large hills, plateaus)
+  Mountain = 4, // Mountain peaks
 }
 
 /**
@@ -79,7 +79,7 @@ export enum HexEdgeType {
   Railroad = 'railroad',
   Cliff = 'cliff',
   Bridge = 'bridge',
-  Ford = 'ford',            // Shallow river crossing
+  Ford = 'ford', // Shallow river crossing
   Fence = 'fence',
 }
 
@@ -175,8 +175,8 @@ export enum HexBuildingType {
  * This is the primary coordinate system used throughout the game.
  */
 export interface HexCoord {
-  readonly q: number;  // Column
-  readonly r: number;  // Row
+  readonly q: number; // Column
+  readonly r: number; // Row
 }
 
 /**
@@ -226,12 +226,12 @@ export interface WorldPosition {
  */
 export interface HexEdges {
   readonly edges: readonly [
-    HexEdgeType,  // 0: E
-    HexEdgeType,  // 1: SE
-    HexEdgeType,  // 2: SW
-    HexEdgeType,  // 3: W
-    HexEdgeType,  // 4: NW
-    HexEdgeType,  // 5: NE
+    HexEdgeType, // 0: E
+    HexEdgeType, // 1: SE
+    HexEdgeType, // 2: SW
+    HexEdgeType, // 3: W
+    HexEdgeType, // 4: NW
+    HexEdgeType, // 5: NE
   ];
 }
 
@@ -245,7 +245,7 @@ export interface HexTileData {
   readonly edges: HexEdges;
   readonly feature: HexFeatureType;
   readonly building: HexBuildingType;
-  readonly buildingRotation: number;  // 0-5 for 60-degree increments
+  readonly buildingRotation: number; // 0-5 for 60-degree increments
 
   // Flags
   readonly isPassable: boolean;
@@ -253,8 +253,8 @@ export interface HexTileData {
   readonly isBuildable: boolean;
 
   // Rendering hints
-  readonly modelVariant: number;      // 0-3 for random model variation
-  readonly rotationOffset: number;    // 0-5 for visual rotation variety
+  readonly modelVariant: number; // 0-3 for random model variation
+  readonly rotationOffset: number; // 0-5 for visual rotation variety
 }
 
 /**
@@ -303,9 +303,9 @@ export interface HexChunkCoord {
  * Configuration for the hex chunk system.
  */
 export interface HexChunkConfig {
-  readonly chunkRadius: number;       // Hex tiles per chunk radius (default: 8)
-  readonly viewDistance: number;      // Chunks to load around player (default: 2)
-  readonly unloadDistance: number;    // Distance at which to unload chunks (default: 4)
+  readonly chunkRadius: number; // Hex tiles per chunk radius (default: 8)
+  readonly viewDistance: number; // Chunks to load around player (default: 2)
+  readonly unloadDistance: number; // Distance at which to unload chunks (default: 4)
 }
 
 export const DEFAULT_HEX_CHUNK_CONFIG: HexChunkConfig = {
@@ -319,9 +319,9 @@ export const DEFAULT_HEX_CHUNK_CONFIG: HexChunkConfig = {
  */
 export interface HexChunkData {
   readonly coord: HexChunkCoord;
-  readonly tiles: Map<string, HexTileData>;  // Key: "q,r"
-  readonly generatedAt: number;               // Timestamp
-  readonly seed: number;                      // Generation seed
+  readonly tiles: Map<string, HexTileData>; // Key: "q,r"
+  readonly generatedAt: number; // Timestamp
+  readonly seed: number; // Generation seed
 }
 
 // ============================================================================
@@ -332,7 +332,7 @@ export interface HexChunkData {
  * Hex grid orientation.
  */
 export enum HexOrientation {
-  FlatTop = 'flat',     // Flat sides on top/bottom (pointy sides E/W)
+  FlatTop = 'flat', // Flat sides on top/bottom (pointy sides E/W)
   PointyTop = 'pointy', // Pointy sides on top/bottom (flat sides E/W)
 }
 
@@ -341,9 +341,9 @@ export enum HexOrientation {
  */
 export interface HexLayout {
   readonly orientation: HexOrientation;
-  readonly size: number;              // Distance from center to corner (meters)
-  readonly origin: WorldPosition;     // World origin for hex (0, 0)
-  readonly spacing: number;           // Additional spacing between tiles (default: 0)
+  readonly size: number; // Distance from center to corner (meters)
+  readonly origin: WorldPosition; // World origin for hex (0, 0)
+  readonly spacing: number; // Additional spacing between tiles (default: 0)
 }
 
 /**
@@ -355,7 +355,7 @@ export interface HexLayout {
  */
 export const DEFAULT_HEX_LAYOUT: HexLayout = {
   orientation: HexOrientation.FlatTop,
-  size: 1.0,  // Base unit size - tiles will be scaled to match
+  size: 1.0, // Base unit size - tiles will be scaled to match
   origin: { x: 0, y: 0, z: 0 },
   spacing: 0,
 };
@@ -369,12 +369,12 @@ export const DEFAULT_HEX_LAYOUT: HexLayout = {
  * For flat-top hexes, direction 0 is East.
  */
 export enum HexDirection {
-  E = 0,   // East
-  SE = 1,  // Southeast
-  SW = 2,  // Southwest
-  W = 3,   // West
-  NW = 4,  // Northwest
-  NE = 5,  // Northeast
+  E = 0, // East
+  SE = 1, // Southeast
+  SW = 2, // Southwest
+  W = 3, // West
+  NW = 4, // Northwest
+  NE = 5, // Northeast
 }
 
 /**
@@ -399,7 +399,7 @@ export const HEX_DIRECTIONS: readonly HexDirection[] = [
  */
 export interface BuildingFootprint {
   readonly buildingType: HexBuildingType;
-  readonly tiles: readonly HexCoord[];  // Offsets from center tile
+  readonly tiles: readonly HexCoord[]; // Offsets from center tile
   readonly entranceDirection: HexDirection;
   readonly size: 'small' | 'medium' | 'large';
 }

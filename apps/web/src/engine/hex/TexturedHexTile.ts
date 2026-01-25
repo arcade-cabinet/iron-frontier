@@ -11,7 +11,7 @@ import {
   Mesh,
   MeshBuilder,
   PBRMaterial,
-  Scene,
+  type Scene,
   Texture,
   Vector3,
   VertexData,
@@ -22,10 +22,10 @@ import {
 // ============================================================================
 
 export interface TextureSet {
-  diffuse: string;      // Base color texture
-  normal?: string;      // Normal map
-  roughness?: string;   // Roughness map
-  ao?: string;          // Ambient occlusion
+  diffuse: string; // Base color texture
+  normal?: string; // Normal map
+  roughness?: string; // Roughness map
+  ao?: string; // Ambient occlusion
   displacement?: string; // Displacement/height map
 }
 
@@ -33,9 +33,9 @@ export interface TerrainTextureConfig {
   id: string;
   name: string;
   textures: TextureSet;
-  uvScale?: number;      // How many times texture repeats across tile
+  uvScale?: number; // How many times texture repeats across tile
   roughnessValue?: number; // Fallback roughness if no roughness map
-  tintColor?: Color3;   // Optional color tint
+  tintColor?: Color3; // Optional color tint
 }
 
 // ============================================================================
@@ -146,7 +146,7 @@ function createHexGeometry(size: number, height: number = 0.1): VertexData {
   const uvs: number[] = [];
 
   // Flat-topped hexagon angles (starting from right, going counter-clockwise)
-  const angles = [0, 60, 120, 180, 240, 300].map(a => a * Math.PI / 180);
+  const angles = [0, 60, 120, 180, 240, 300].map((a) => (a * Math.PI) / 180);
 
   // Top face vertices (center + 6 corners)
   const topY = height / 2;
@@ -216,8 +216,8 @@ function createHexGeometry(size: number, height: number = 0.1): VertexData {
     const baseIdx = sideStartIndex + i * 4;
 
     // Four vertices per side
-    positions.push(tlX, topY, tlZ);    // Top-left
-    positions.push(trX, topY, trZ);    // Top-right
+    positions.push(tlX, topY, tlZ); // Top-left
+    positions.push(trX, topY, trZ); // Top-right
     positions.push(trX, bottomY, trZ); // Bottom-right
     positions.push(tlX, bottomY, tlZ); // Bottom-left
 

@@ -4,13 +4,13 @@
  * Uses name pools and patterns to generate contextually appropriate names.
  */
 
-import { SeededRandom } from '../seededRandom';
 import {
   type NameOrigin,
   type NamePool,
   type PlaceNamePool,
   substituteTemplate,
 } from '../../schemas/generation';
+import type { SeededRandom } from '../seededRandom';
 
 // These will be populated by the pool files
 let NAME_POOLS: Record<NameOrigin, NamePool> | null = null;
@@ -81,9 +81,7 @@ export function generateName(
     if (pool.neutralFirst.length > 0) {
       firstName = rng.pick(pool.neutralFirst);
     } else {
-      firstName = rng.bool(0.5)
-        ? rng.pick(pool.maleFirst)
-        : rng.pick(pool.femaleFirst);
+      firstName = rng.bool(0.5) ? rng.pick(pool.maleFirst) : rng.pick(pool.femaleFirst);
     }
   }
 
@@ -160,10 +158,7 @@ export interface GeneratedPlaceName {
 /**
  * Generate a place name
  */
-export function generatePlaceName(
-  rng: SeededRandom,
-  poolType: string
-): GeneratedPlaceName {
+export function generatePlaceName(rng: SeededRandom, poolType: string): GeneratedPlaceName {
   if (!PLACE_NAME_POOLS) {
     throw new Error('Place name pools not initialized. Call initNamePools first.');
   }

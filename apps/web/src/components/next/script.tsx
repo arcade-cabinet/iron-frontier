@@ -1,8 +1,8 @@
-import React from "react";
+import type React from 'react';
 
 interface ScriptProps extends React.ScriptHTMLAttributes<HTMLScriptElement> {
   src?: string;
-  strategy?: "beforeInteractive" | "afterInteractive" | "lazyOnload";
+  strategy?: 'beforeInteractive' | 'afterInteractive' | 'lazyOnload';
   children?: React.ReactNode;
 }
 

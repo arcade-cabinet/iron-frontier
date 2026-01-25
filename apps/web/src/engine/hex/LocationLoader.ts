@@ -5,28 +5,28 @@
  * that HexGridRenderer can display.
  */
 
-import {
-  Location,
-  SlotInstance,
-  TileDef,
-  AssemblageRef,
-  HexCoord as SpatialHexCoord,
-  TerrainTypeSchema,
-} from '@iron-frontier/shared/data/schemas/spatial';
 import { ASSEMBLAGES_BY_ID } from '@iron-frontier/shared/data/assemblages/library';
 import {
-  HexTileData,
-  HexTerrainType,
-  HexElevation,
-  HexEdgeType,
-  HexFeatureType,
-  HexBuildingType,
-  HexCoord,
-  hexKey,
+  type AssemblageRef,
+  type Location,
+  type SlotInstance,
+  HexCoord as SpatialHexCoord,
+  TerrainTypeSchema,
+  type TileDef,
+} from '@iron-frontier/shared/data/schemas/spatial';
+import { createEmptyGrid, type HexGrid } from './HexGridRenderer';
+import {
   createEmptyTile,
   DEFAULT_HEX_LAYOUT,
+  HexBuildingType,
+  type HexCoord,
+  HexEdgeType,
+  HexElevation,
+  HexFeatureType,
+  HexTerrainType,
+  type HexTileData,
+  hexKey,
 } from './HexTypes';
-import { HexGrid, createEmptyGrid } from './HexGridRenderer';
 
 // ============================================================================
 // TERRAIN MAPPING
@@ -37,24 +37,24 @@ import { HexGrid, createEmptyGrid } from './HexGridRenderer';
  */
 function mapTerrain(terrain: string): HexTerrainType {
   const mapping: Record<string, HexTerrainType> = {
-    'grass': HexTerrainType.Grass,
-    'grass_hill': HexTerrainType.GrassHill,
-    'grass_forest': HexTerrainType.GrassForest,
-    'sand': HexTerrainType.Sand,
-    'sand_hill': HexTerrainType.SandHill,
-    'sand_dunes': HexTerrainType.SandDunes,
-    'dirt': HexTerrainType.Dirt,
-    'dirt_hill': HexTerrainType.DirtHill,
-    'stone': HexTerrainType.Stone,
-    'stone_hill': HexTerrainType.StoneHill,
-    'stone_mountain': HexTerrainType.StoneMountain,
-    'stone_rocks': HexTerrainType.StoneRocks,
-    'water': HexTerrainType.Water,
-    'water_shallow': HexTerrainType.WaterShallow,
-    'water_deep': HexTerrainType.WaterDeep,
-    'mesa': HexTerrainType.Mesa,
-    'canyon': HexTerrainType.Canyon,
-    'badlands': HexTerrainType.Badlands,
+    grass: HexTerrainType.Grass,
+    grass_hill: HexTerrainType.GrassHill,
+    grass_forest: HexTerrainType.GrassForest,
+    sand: HexTerrainType.Sand,
+    sand_hill: HexTerrainType.SandHill,
+    sand_dunes: HexTerrainType.SandDunes,
+    dirt: HexTerrainType.Dirt,
+    dirt_hill: HexTerrainType.DirtHill,
+    stone: HexTerrainType.Stone,
+    stone_hill: HexTerrainType.StoneHill,
+    stone_mountain: HexTerrainType.StoneMountain,
+    stone_rocks: HexTerrainType.StoneRocks,
+    water: HexTerrainType.Water,
+    water_shallow: HexTerrainType.WaterShallow,
+    water_deep: HexTerrainType.WaterDeep,
+    mesa: HexTerrainType.Mesa,
+    canyon: HexTerrainType.Canyon,
+    badlands: HexTerrainType.Badlands,
   };
   return mapping[terrain] ?? HexTerrainType.Dirt;
 }
@@ -64,29 +64,29 @@ function mapTerrain(terrain: string): HexTerrainType {
  */
 function mapStructure(structure: string): HexBuildingType {
   const mapping: Record<string, HexBuildingType> = {
-    'none': HexBuildingType.None,
-    'cabin': HexBuildingType.Cabin,
-    'house': HexBuildingType.House,
-    'mansion': HexBuildingType.Mansion,
-    'saloon_building': HexBuildingType.Saloon,
-    'store_building': HexBuildingType.GeneralStore,
-    'bank_building': HexBuildingType.Bank,
-    'hotel_building': HexBuildingType.Hotel,
-    'mine_building': HexBuildingType.Mine,
-    'smelter_building': HexBuildingType.Smelter,
-    'workshop_building': HexBuildingType.Workshop,
-    'windmill': HexBuildingType.Windmill,
-    'water_tower': HexBuildingType.WaterTower,
-    'office_building': HexBuildingType.SheriffOffice,
-    'church_building': HexBuildingType.Church,
-    'station_building': HexBuildingType.TrainStation,
-    'telegraph_building': HexBuildingType.Telegraph,
-    'well': HexBuildingType.Well,
-    'stable': HexBuildingType.Stable,
-    'warehouse': HexBuildingType.Warehouse,
-    'dock': HexBuildingType.Dock,
-    'watch_tower': HexBuildingType.WatchTower,
-    'fort': HexBuildingType.Fort,
+    none: HexBuildingType.None,
+    cabin: HexBuildingType.Cabin,
+    house: HexBuildingType.House,
+    mansion: HexBuildingType.Mansion,
+    saloon_building: HexBuildingType.Saloon,
+    store_building: HexBuildingType.GeneralStore,
+    bank_building: HexBuildingType.Bank,
+    hotel_building: HexBuildingType.Hotel,
+    mine_building: HexBuildingType.Mine,
+    smelter_building: HexBuildingType.Smelter,
+    workshop_building: HexBuildingType.Workshop,
+    windmill: HexBuildingType.Windmill,
+    water_tower: HexBuildingType.WaterTower,
+    office_building: HexBuildingType.SheriffOffice,
+    church_building: HexBuildingType.Church,
+    station_building: HexBuildingType.TrainStation,
+    telegraph_building: HexBuildingType.Telegraph,
+    well: HexBuildingType.Well,
+    stable: HexBuildingType.Stable,
+    warehouse: HexBuildingType.Warehouse,
+    dock: HexBuildingType.Dock,
+    watch_tower: HexBuildingType.WatchTower,
+    fort: HexBuildingType.Fort,
   };
   return mapping[structure] ?? HexBuildingType.None;
 }
@@ -96,37 +96,37 @@ function mapStructure(structure: string): HexBuildingType {
  */
 function mapFeature(feature: string): HexFeatureType {
   const mapping: Record<string, HexFeatureType> = {
-    'none': HexFeatureType.None,
+    none: HexFeatureType.None,
     // Vegetation
-    'tree': HexFeatureType.Tree,
-    'tree_dead': HexFeatureType.TreeDead,
-    'bush': HexFeatureType.Bush,
-    'cactus': HexFeatureType.Cactus,
-    'cactus_tall': HexFeatureType.CactusTall,
-    'stump': HexFeatureType.Stump,
-    'log': HexFeatureType.Log,
+    tree: HexFeatureType.Tree,
+    tree_dead: HexFeatureType.TreeDead,
+    bush: HexFeatureType.Bush,
+    cactus: HexFeatureType.Cactus,
+    cactus_tall: HexFeatureType.CactusTall,
+    stump: HexFeatureType.Stump,
+    log: HexFeatureType.Log,
     // Rocks
-    'rock_small': HexFeatureType.RockSmall,
-    'rock_large': HexFeatureType.RockLarge,
-    'boulder': HexFeatureType.Boulder,
+    rock_small: HexFeatureType.RockSmall,
+    rock_large: HexFeatureType.RockLarge,
+    boulder: HexFeatureType.Boulder,
     // Resources
-    'ore_vein': HexFeatureType.OreDeposit,
-    'ore_deposit': HexFeatureType.OreDeposit,
-    'oil_seep': HexFeatureType.OilSeep,
-    'spring': HexFeatureType.Spring,
+    ore_vein: HexFeatureType.OreDeposit,
+    ore_deposit: HexFeatureType.OreDeposit,
+    oil_seep: HexFeatureType.OilSeep,
+    spring: HexFeatureType.Spring,
     // Western Props
-    'barrel': HexFeatureType.Barrel,
-    'barrel_water': HexFeatureType.BarrelWater,
-    'barrel_hay': HexFeatureType.BarrelHay,
-    'fence': HexFeatureType.Fence,
-    'bench': HexFeatureType.Bench,
-    'cart': HexFeatureType.Cart,
-    'wanted_poster': HexFeatureType.WantedPoster,
-    'signpost': HexFeatureType.Signpost,
+    barrel: HexFeatureType.Barrel,
+    barrel_water: HexFeatureType.BarrelWater,
+    barrel_hay: HexFeatureType.BarrelHay,
+    fence: HexFeatureType.Fence,
+    bench: HexFeatureType.Bench,
+    cart: HexFeatureType.Cart,
+    wanted_poster: HexFeatureType.WantedPoster,
+    signpost: HexFeatureType.Signpost,
     // Special
-    'ruins': HexFeatureType.Ruins,
-    'campfire_pit': HexFeatureType.Camp,
-    'camp': HexFeatureType.Camp,
+    ruins: HexFeatureType.Ruins,
+    campfire_pit: HexFeatureType.Camp,
+    camp: HexFeatureType.Camp,
   };
   return mapping[feature] ?? HexFeatureType.None;
 }
@@ -136,14 +136,14 @@ function mapFeature(feature: string): HexFeatureType {
  */
 function mapEdge(edge: string): HexEdgeType {
   const mapping: Record<string, HexEdgeType> = {
-    'none': HexEdgeType.None,
-    'river': HexEdgeType.River,
-    'road': HexEdgeType.Road,
-    'railroad': HexEdgeType.Railroad,
-    'cliff': HexEdgeType.Cliff,
-    'bridge': HexEdgeType.Bridge,
-    'ford': HexEdgeType.Ford,
-    'fence': HexEdgeType.Fence,
+    none: HexEdgeType.None,
+    river: HexEdgeType.River,
+    road: HexEdgeType.Road,
+    railroad: HexEdgeType.Railroad,
+    cliff: HexEdgeType.Cliff,
+    bridge: HexEdgeType.Bridge,
+    ford: HexEdgeType.Ford,
+    fence: HexEdgeType.Fence,
   };
   return mapping[edge] ?? HexEdgeType.None;
 }
@@ -155,7 +155,12 @@ function mapEdge(edge: string): HexEdgeType {
 /**
  * Convert a spatial TileDef to a renderable HexTileData
  */
-function convertTile(tile: TileDef, offsetQ: number = 0, offsetR: number = 0, slotRotation: number = 0): HexTileData {
+function convertTile(
+  tile: TileDef,
+  offsetQ: number = 0,
+  offsetR: number = 0,
+  slotRotation: number = 0
+): HexTileData {
   const terrain = mapTerrain(tile.terrain);
   const coord = {
     q: tile.coord.q + offsetQ,
@@ -163,30 +168,29 @@ function convertTile(tile: TileDef, offsetQ: number = 0, offsetR: number = 0, sl
   };
 
   // Map edges if provided
-  const edges: [HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType] = tile.edges
-    ? [
-        mapEdge(tile.edges[0]),
-        mapEdge(tile.edges[1]),
-        mapEdge(tile.edges[2]),
-        mapEdge(tile.edges[3]),
-        mapEdge(tile.edges[4]),
-        mapEdge(tile.edges[5]),
-      ]
-    : [
-        HexEdgeType.None,
-        HexEdgeType.None,
-        HexEdgeType.None,
-        HexEdgeType.None,
-        HexEdgeType.None,
-        HexEdgeType.None,
-      ];
+  const edges: [HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType, HexEdgeType] =
+    tile.edges
+      ? [
+          mapEdge(tile.edges[0]),
+          mapEdge(tile.edges[1]),
+          mapEdge(tile.edges[2]),
+          mapEdge(tile.edges[3]),
+          mapEdge(tile.edges[4]),
+          mapEdge(tile.edges[5]),
+        ]
+      : [
+          HexEdgeType.None,
+          HexEdgeType.None,
+          HexEdgeType.None,
+          HexEdgeType.None,
+          HexEdgeType.None,
+          HexEdgeType.None,
+        ];
 
   // Combine tile's structure rotation with slot rotation
   const building = mapStructure(tile.structure ?? 'none');
   const baseRotation = tile.structureRotation ?? 0;
-  const finalRotation = building !== HexBuildingType.None
-    ? (baseRotation + slotRotation) % 6
-    : 0;
+  const finalRotation = building !== HexBuildingType.None ? (baseRotation + slotRotation) % 6 : 0;
 
   return {
     coord,
@@ -196,15 +200,18 @@ function convertTile(tile: TileDef, offsetQ: number = 0, offsetR: number = 0, sl
     feature: mapFeature(tile.feature ?? 'none'),
     building,
     buildingRotation: finalRotation,
-    isPassable: terrain !== HexTerrainType.Water &&
-                terrain !== HexTerrainType.WaterDeep &&
-                terrain !== HexTerrainType.StoneMountain,
-    isWater: terrain === HexTerrainType.Water ||
-             terrain === HexTerrainType.WaterShallow ||
-             terrain === HexTerrainType.WaterDeep,
-    isBuildable: terrain !== HexTerrainType.Water &&
-                 terrain !== HexTerrainType.WaterDeep &&
-                 terrain !== HexTerrainType.StoneMountain,
+    isPassable:
+      terrain !== HexTerrainType.Water &&
+      terrain !== HexTerrainType.WaterDeep &&
+      terrain !== HexTerrainType.StoneMountain,
+    isWater:
+      terrain === HexTerrainType.Water ||
+      terrain === HexTerrainType.WaterShallow ||
+      terrain === HexTerrainType.WaterDeep,
+    isBuildable:
+      terrain !== HexTerrainType.Water &&
+      terrain !== HexTerrainType.WaterDeep &&
+      terrain !== HexTerrainType.StoneMountain,
     modelVariant: tile.variant ?? 0,
     rotationOffset: 0,
   };
@@ -298,7 +305,9 @@ export function loadLocation(location: Location): LoadedLocation {
     }
   }
 
-  console.log(`[LocationLoader] Created ${location.width}x${location.height} base grid with ${baseTerrain}`);
+  console.log(
+    `[LocationLoader] Created ${location.width}x${location.height} base grid with ${baseTerrain}`
+  );
 
   // Apply base tiles (roads, terrain shaping)
   for (const tileDef of location.baseTiles) {
@@ -359,7 +368,9 @@ export function loadLocation(location: Location): LoadedLocation {
       r: location.playerSpawn.coord.r,
     };
     playerSpawnFacing = location.playerSpawn.facing;
-    console.log(`[LocationLoader] Using explicit player spawn: (${playerSpawn.q}, ${playerSpawn.r})`);
+    console.log(
+      `[LocationLoader] Using explicit player spawn: (${playerSpawn.q}, ${playerSpawn.r})`
+    );
   } else {
     // Fall back to first entry point
     const firstEntry = location.entryPoints[0];
@@ -367,7 +378,9 @@ export function loadLocation(location: Location): LoadedLocation {
       q: firstEntry.coord.q,
       r: firstEntry.coord.r,
     };
-    console.log(`[LocationLoader] Using first entry point as spawn: (${playerSpawn.q}, ${playerSpawn.r})`);
+    console.log(
+      `[LocationLoader] Using first entry point as spawn: (${playerSpawn.q}, ${playerSpawn.r})`
+    );
   }
 
   return {

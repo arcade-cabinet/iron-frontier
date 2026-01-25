@@ -5,8 +5,8 @@
  */
 
 import { z } from 'zod';
-import type { BaseItem } from '../schemas/item';
 import { getItem } from '../items/index';
+import type { BaseItem } from '../schemas/item';
 
 // ============================================================================
 // SHOP SCHEMAS
@@ -198,7 +198,7 @@ export const ALL_SHOPS: ShopDefinition[] = [
 ];
 
 export const SHOPS_BY_ID: Record<string, ShopDefinition> = Object.fromEntries(
-  ALL_SHOPS.map(shop => [shop.id, shop])
+  ALL_SHOPS.map((shop) => [shop.id, shop])
 );
 
 // ============================================================================
@@ -210,11 +210,11 @@ export function getShopById(id: string): ShopDefinition | undefined {
 }
 
 export function getShopByOwner(ownerId: string): ShopDefinition | undefined {
-  return ALL_SHOPS.find(shop => shop.ownerId === ownerId);
+  return ALL_SHOPS.find((shop) => shop.ownerId === ownerId);
 }
 
 export function getShopsByTag(tag: string): ShopDefinition[] {
-  return ALL_SHOPS.filter(shop => shop.tags?.includes(tag) ?? false);
+  return ALL_SHOPS.filter((shop) => shop.tags?.includes(tag) ?? false);
 }
 
 /**
@@ -237,11 +237,8 @@ export function calculateSellPrice(shop: ShopDefinition, itemDef: BaseItem): num
 /**
  * Get available items for a shop (filtered by reputation)
  */
-export function getAvailableShopItems(
-  shop: ShopDefinition,
-  playerReputation: number
-): ShopItem[] {
-  return shop.inventory.filter(item => {
+export function getAvailableShopItems(shop: ShopDefinition, playerReputation: number): ShopItem[] {
+  return shop.inventory.filter((item) => {
     // Check reputation requirement (default -100)
     if ((item.minReputation ?? -100) > playerReputation) return false;
     // Check if hidden (default false)

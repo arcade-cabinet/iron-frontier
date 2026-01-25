@@ -1,14 +1,13 @@
-import { useCallback, useState } from "react";
-import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import {
-  FilamentScene,
-  FilamentView,
   Camera,
   DefaultLight,
-  Model,
-  useModel,
+  FilamentScene,
+  FilamentView,
   type Float3,
-} from "react-native-filament";
+  Model,
+} from 'react-native-filament';
 
 /**
  * Buffer source type for Filament models
@@ -77,28 +76,19 @@ function FilamentSceneContent({
   modelPosition,
   modelScale,
   onReady,
-}: Omit<FilamentRendererProps, "showLoadingIndicator" | "onError">) {
-  const handleModelLoaded = useCallback(() => {
+}: Omit<FilamentRendererProps, 'showLoadingIndicator' | 'onError'>) {
+  const _handleModelLoaded = useCallback(() => {
     onReady?.();
   }, [onReady]);
 
   return (
     <FilamentView style={styles.filamentView}>
-      <Camera
-        cameraPosition={cameraPosition}
-        cameraTarget={cameraTarget}
-        near={0.1}
-        far={1000}
-      />
+      <Camera cameraPosition={cameraPosition} cameraTarget={cameraTarget} near={0.1} far={1000} />
 
       <DefaultLight />
 
       {modelSource != null && (
-        <Model
-          source={modelSource}
-          translate={modelPosition}
-          scale={modelScale}
-        />
+        <Model source={modelSource} translate={modelPosition} scale={modelScale} />
       )}
     </FilamentView>
   );
@@ -134,7 +124,7 @@ export function FilamentRenderer({
   showLoadingIndicator = true,
 }: FilamentRendererProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, _setError] = useState<Error | null>(null);
 
   const handleReady = useCallback(() => {
     setIsLoading(false);
@@ -201,15 +191,10 @@ export interface FilamentSceneContainerProps {
 /**
  * A minimal Filament scene wrapper for custom implementations
  */
-export function FilamentSceneContainer({
-  children,
-  style,
-}: FilamentSceneContainerProps) {
+export function FilamentSceneContainer({ children, style }: FilamentSceneContainerProps) {
   return (
     <View style={[styles.container, style]}>
-      <FilamentScene fallback={<LoadingFallback />}>
-        {children}
-      </FilamentScene>
+      <FilamentScene fallback={<LoadingFallback />}>{children}</FilamentScene>
     </View>
   );
 }
@@ -217,51 +202,50 @@ export function FilamentSceneContainer({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f0f1a",
+    backgroundColor: '#0f0f1a',
   },
   filamentView: {
     flex: 1,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(15, 15, 26, 0.9)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(15, 15, 26, 0.9)',
     zIndex: 1,
   },
   loadingText: {
-    color: "#d4a574",
+    color: '#d4a574',
     marginTop: 12,
     fontSize: 14,
   },
   errorContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   errorTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#e74c3c",
+    fontWeight: 'bold',
+    color: '#e74c3c',
     marginBottom: 12,
   },
   errorMessage: {
     fontSize: 14,
-    color: "#8b7355",
-    textAlign: "center",
+    color: '#8b7355',
+    textAlign: 'center',
   },
 });
 
+// Re-export useful types
+export type { Float3 } from 'react-native-filament';
 // Re-export Filament components for convenience
 export {
-  FilamentScene,
-  FilamentView,
   Camera,
   DefaultLight,
+  FilamentScene,
+  FilamentView,
   Model,
   useModel,
-} from "react-native-filament";
-
-// Re-export useful types
-export type { Float3 } from "react-native-filament";
+} from 'react-native-filament';

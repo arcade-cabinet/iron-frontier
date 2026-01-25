@@ -13,7 +13,7 @@
  * Self-contained script to be injected into cross-origin iframes
  * Handles DOM manipulation via postMessage communication
  */
-(function() {
+(() => {
     'use strict';
   
     // Constants
@@ -594,9 +594,9 @@
       const _caf = window.cancelAnimationFrame;
     
       let frozen = false;
-      let timers = new Set();
-      let intervals = new Set();
-      let rafIds = new Set();
+      const timers = new Set();
+      const intervals = new Set();
+      const rafIds = new Set();
       let videosPaused = [];
       let audiosPaused = [];
     
@@ -617,7 +617,7 @@
     
       // Wrap timing funcs so we can nuke them on freeze
       function wrapTimers() {
-        window.setTimeout = function(cb, ms, ...args) {
+        window.setTimeout = (cb, ms, ...args) => {
           if (frozen) return 0;
           const id = _setTimeout(() => {
             timers.delete(id);
@@ -626,17 +626,17 @@
           timers.add(id);
           return id;
         };
-        window.clearTimeout = function(id){ timers.delete(id); _clearTimeout(id); };
+        window.clearTimeout = (id)=> { timers.delete(id); _clearTimeout(id); };
     
-        window.setInterval = function(cb, ms, ...args) {
+        window.setInterval = (cb, ms, ...args) => {
           if (frozen) return 0;
           const id = _setInterval(cb, ms, ...args);
           intervals.add(id);
           return id;
         };
-        window.clearInterval = function(id){ intervals.delete(id); _clearInterval(id); };
+        window.clearInterval = (id)=> { intervals.delete(id); _clearInterval(id); };
     
-        window.requestAnimationFrame = function(cb) {
+        window.requestAnimationFrame = (cb) => {
           if (frozen) return 0;
           const id = _raf((t) => {
             rafIds.delete(id);
@@ -645,7 +645,7 @@
           rafIds.add(id);
           return id;
         };
-        window.cancelAnimationFrame = function(id){ rafIds.delete(id); _caf(id); };
+        window.cancelAnimationFrame = (id)=> { rafIds.delete(id); _caf(id); };
       }
     
       function restoreTimers() {

@@ -22,21 +22,21 @@ import { HexCoordSchema } from './spatial';
  * Condition types that can gate dialogue options
  */
 export const ConditionTypeSchema = z.enum([
-  'quest_active',      // Player has quest in progress
-  'quest_complete',    // Player has completed quest
+  'quest_active', // Player has quest in progress
+  'quest_complete', // Player has completed quest
   'quest_not_started', // Player hasn't started quest
-  'has_item',          // Player has specific item
-  'lacks_item',        // Player doesn't have item
-  'reputation_gte',    // Reputation >= threshold
-  'reputation_lte',    // Reputation <= threshold
-  'gold_gte',          // Gold >= amount
-  'talked_to',         // Has talked to specific NPC
-  'not_talked_to',     // Hasn't talked to specific NPC
-  'time_of_day',       // Morning, afternoon, evening, night
-  'flag_set',          // Custom flag is set
-  'flag_not_set',      // Custom flag is not set
-  'first_meeting',     // First time talking to this NPC
-  'return_visit',      // Not first time talking
+  'has_item', // Player has specific item
+  'lacks_item', // Player doesn't have item
+  'reputation_gte', // Reputation >= threshold
+  'reputation_lte', // Reputation <= threshold
+  'gold_gte', // Gold >= amount
+  'talked_to', // Has talked to specific NPC
+  'not_talked_to', // Hasn't talked to specific NPC
+  'time_of_day', // Morning, afternoon, evening, night
+  'flag_set', // Custom flag is set
+  'flag_not_set', // Custom flag is not set
+  'first_meeting', // First time talking to this NPC
+  'return_visit', // Not first time talking
 ]);
 export type ConditionType = z.infer<typeof ConditionTypeSchema>;
 
@@ -59,20 +59,20 @@ export type DialogueCondition = z.infer<typeof DialogueConditionSchema>;
  * Effect types that modify game state after dialogue
  */
 export const DialogueEffectTypeSchema = z.enum([
-  'start_quest',       // Begin a quest
-  'complete_quest',    // Mark quest complete
-  'advance_quest',     // Update quest progress
-  'give_item',         // Give item to player
-  'take_item',         // Remove item from player
-  'give_gold',         // Award gold
-  'take_gold',         // Charge gold
+  'start_quest', // Begin a quest
+  'complete_quest', // Mark quest complete
+  'advance_quest', // Update quest progress
+  'give_item', // Give item to player
+  'take_item', // Remove item from player
+  'give_gold', // Award gold
+  'take_gold', // Charge gold
   'change_reputation', // Modify player reputation
-  'set_flag',          // Set a custom flag
-  'clear_flag',        // Clear a custom flag
-  'unlock_location',   // Discover a location
-  'change_npc_state',  // Modify NPC disposition/state
-  'trigger_event',     // Trigger a world event
-  'open_shop',         // Open NPC's shop for trading
+  'set_flag', // Set a custom flag
+  'clear_flag', // Clear a custom flag
+  'unlock_location', // Discover a location
+  'change_npc_state', // Modify NPC disposition/state
+  'trigger_event', // Trigger a world event
+  'open_shop', // Open NPC's shop for trading
 ]);
 export type DialogueEffectType = z.infer<typeof DialogueEffectTypeSchema>;
 
@@ -176,11 +176,15 @@ export const DialogueTreeSchema = z.object({
   nodes: z.array(DialogueNodeSchema).min(1),
 
   /** Entry point nodes - conditions determine which one starts */
-  entryPoints: z.array(z.object({
-    nodeId: z.string(),
-    conditions: z.array(DialogueConditionSchema).optional(),
-    priority: z.number().int().optional(),
-  })).min(1),
+  entryPoints: z
+    .array(
+      z.object({
+        nodeId: z.string(),
+        conditions: z.array(DialogueConditionSchema).optional(),
+        priority: z.number().int().optional(),
+      })
+    )
+    .min(1),
 
   /** Tags for categorization */
   tags: z.array(z.string()).optional(),
@@ -238,12 +242,12 @@ export const NPCRoleSchema = z.enum([
 export type NPCRole = z.infer<typeof NPCRoleSchema>;
 
 export const NPCFactionSchema = z.enum([
-  'neutral',        // No strong allegiance
-  'ivrc',           // Iron Valley Railroad Company
-  'copperhead',     // Copperhead Gang
-  'freeminer',      // Freeminer Coalition
-  'remnant',        // The Remnant (automatons)
-  'townsfolk',      // Local community
+  'neutral', // No strong allegiance
+  'ivrc', // Iron Valley Railroad Company
+  'copperhead', // Copperhead Gang
+  'freeminer', // Freeminer Coalition
+  'remnant', // The Remnant (automatons)
+  'townsfolk', // Local community
 ]);
 export type NPCFaction = z.infer<typeof NPCFactionSchema>;
 
@@ -314,11 +318,15 @@ export const NPCDefinitionSchema = z.object({
   backstory: z.string().optional(),
 
   /** Relationship hints for dialogue */
-  relationships: z.array(z.object({
-    npcId: z.string(),
-    type: z.enum(['ally', 'enemy', 'neutral', 'family', 'romantic', 'rival']),
-    notes: z.string().optional(),
-  })).default([]),
+  relationships: z
+    .array(
+      z.object({
+        npcId: z.string(),
+        type: z.enum(['ally', 'enemy', 'neutral', 'family', 'romantic', 'rival']),
+        notes: z.string().optional(),
+      })
+    )
+    .default([]),
 
   /** Tags for filtering */
   tags: z.array(z.string()).default([]),
@@ -374,7 +382,7 @@ export function validateNPCDefinition(data: unknown): NPCDefinition {
  */
 export function validateDialogueTreeIntegrity(tree: DialogueTree): string[] {
   const errors: string[] = [];
-  const nodeIds = new Set(tree.nodes.map(n => n.id));
+  const nodeIds = new Set(tree.nodes.map((n) => n.id));
 
   // Check entry points reference valid nodes
   for (const entry of tree.entryPoints) {
@@ -389,7 +397,7 @@ export function validateDialogueTreeIntegrity(tree: DialogueTree): string[] {
       errors.push(`Node ${node.id} references unknown next node: ${node.nextNodeId}`);
     }
 
-    for (const choice of (node.choices ?? [])) {
+    for (const choice of node.choices ?? []) {
       if (choice.nextNodeId && !nodeIds.has(choice.nextNodeId)) {
         errors.push(`Choice in node ${node.id} references unknown node: ${choice.nextNodeId}`);
       }
@@ -417,13 +425,13 @@ export function getDialogueEntryNode(
     // Check if all conditions are met
     const allConditionsMet = (entry.conditions ?? []).every(checkCondition);
     if (allConditionsMet) {
-      return tree.nodes.find(n => n.id === entry.nodeId) || null;
+      return tree.nodes.find((n) => n.id === entry.nodeId) || null;
     }
   }
 
   // Fall back to first entry point if no conditions match
   const fallback = sortedEntries[sortedEntries.length - 1];
-  return tree.nodes.find(n => n.id === fallback?.nodeId) || null;
+  return tree.nodes.find((n) => n.id === fallback?.nodeId) || null;
 }
 
 /**
@@ -438,7 +446,7 @@ export function getAvailableChoices(
     return [];
   }
 
-  return node.choices.filter(choice => {
+  return node.choices.filter((choice) => {
     // If no conditions, the choice is always available
     if (!choice.conditions || !Array.isArray(choice.conditions) || choice.conditions.length === 0) {
       return true;

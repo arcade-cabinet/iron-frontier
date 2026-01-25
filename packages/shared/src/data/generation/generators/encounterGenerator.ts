@@ -4,17 +4,17 @@
  * Creates contextual combat encounters based on location, time, and difficulty.
  */
 
-import { SeededRandom } from '../seededRandom';
 import {
   type EncounterTemplate,
   type GenerationContext,
   substituteTemplate,
 } from '../../schemas/generation';
+import { SeededRandom } from '../seededRandom';
 import {
-  type EnemyTemplate,
-  getEnemyTemplate,
   calculateScaledStats,
   DEFAULT_ENEMY_TEMPLATE,
+  type EnemyTemplate,
+  getEnemyTemplate,
 } from '../templates/enemyTemplates';
 
 // Template registries
@@ -99,10 +99,7 @@ export function getEncountersForBiome(biome: string): EncounterTemplate[] {
 /**
  * Get encounters within a difficulty range
  */
-export function getEncountersForDifficulty(
-  minDiff: number,
-  maxDiff: number
-): EncounterTemplate[] {
+export function getEncountersForDifficulty(minDiff: number, maxDiff: number): EncounterTemplate[] {
   return ENCOUNTER_TEMPLATES.filter(
     (t) => t.difficultyRange[0] <= maxDiff && t.difficultyRange[1] >= minDiff
   );
@@ -113,9 +110,7 @@ export function getEncountersForDifficulty(
  */
 export function getEncountersForLocation(locationType: string): EncounterTemplate[] {
   return ENCOUNTER_TEMPLATES.filter(
-    (t) =>
-      t.validLocationTypes.length === 0 ||
-      t.validLocationTypes.includes(locationType)
+    (t) => t.validLocationTypes.length === 0 || t.validLocationTypes.includes(locationType)
   );
 }
 
@@ -124,18 +119,14 @@ export function getEncountersForLocation(locationType: string): EncounterTemplat
  */
 export function getEncountersForTime(timeOfDay: string): EncounterTemplate[] {
   return ENCOUNTER_TEMPLATES.filter(
-    (t) =>
-      t.validTimeOfDay.length === 0 || t.validTimeOfDay.includes(timeOfDay)
+    (t) => t.validTimeOfDay.length === 0 || t.validTimeOfDay.includes(timeOfDay)
   );
 }
 
 /**
  * Generate an enemy name from template name pools
  */
-function generateEnemyName(
-  rng: SeededRandom,
-  template: EnemyTemplate
-): string {
+function generateEnemyName(rng: SeededRandom, template: EnemyTemplate): string {
   const { prefixes, titles, suffixes } = template.namePool;
 
   // Build name from available pools
@@ -190,10 +181,7 @@ function generateEnemy(
   // Calculate actual enemy level based on player level and scale factor
   const baseLevel = Math.max(1, Math.round(playerLevel * levelScale));
   // Clamp to template's valid level range
-  const level = Math.max(
-    template.minLevel,
-    Math.min(template.maxLevel, baseLevel)
-  );
+  const level = Math.max(template.minLevel, Math.min(template.maxLevel, baseLevel));
 
   // Calculate scaled stats
   const scaledStats = calculateScaledStats(template, level);
@@ -209,9 +197,7 @@ function generateEnemy(
   const name = generateEnemyName(rng, template);
 
   // Calculate XP value
-  const baseXP = Math.round(
-    (health * 0.5 + damage * 2 + armor * 1.5) * template.xpModifier
-  );
+  const baseXP = Math.round((health * 0.5 + damage * 2 + armor * 1.5) * template.xpModifier);
   const levelXP = Math.round(baseXP * (1 + (level - 1) * 0.15));
 
   return {
@@ -249,10 +235,7 @@ export function generateEncounter(
   let enemyIndex = 0;
 
   for (const enemyDef of template.enemies) {
-    const count = encounterRng.int(
-      enemyDef.countRange[0],
-      enemyDef.countRange[1]
-    );
+    const count = encounterRng.int(enemyDef.countRange[0], enemyDef.countRange[1]);
 
     for (let i = 0; i < count; i++) {
       const enemy = generateEnemy(
@@ -271,10 +254,7 @@ export function generateEncounter(
     (sum, e) => sum + e.health + e.damage * 3 + e.armor * 2,
     0
   );
-  const difficulty = Math.min(
-    10,
-    Math.round(totalEnemyPower / (context.playerLevel * 50))
-  );
+  const difficulty = Math.min(10, Math.round(totalEnemyPower / (context.playerLevel * 50)));
 
   // Scale rewards by difficulty and player level
   const rewardMultiplier = 1 + (context.playerLevel - 1) * 0.2;
@@ -284,8 +264,7 @@ export function generateEncounter(
       (1 + difficulty * 0.1)
   );
   const goldReward = Math.round(
-    encounterRng.int(template.goldRange[0], template.goldRange[1]) *
-      rewardMultiplier
+    encounterRng.int(template.goldRange[0], template.goldRange[1]) * rewardMultiplier
   );
 
   // Build description variables
@@ -339,16 +318,13 @@ export function generateRandomEncounter(
   if (options.locationType) {
     validTemplates = validTemplates.filter(
       (t) =>
-        t.validLocationTypes.length === 0 ||
-        t.validLocationTypes.includes(options.locationType!)
+        t.validLocationTypes.length === 0 || t.validLocationTypes.includes(options.locationType!)
     );
   }
 
   if (options.timeOfDay) {
     validTemplates = validTemplates.filter(
-      (t) =>
-        t.validTimeOfDay.length === 0 ||
-        t.validTimeOfDay.includes(options.timeOfDay!)
+      (t) => t.validTimeOfDay.length === 0 || t.validTimeOfDay.includes(options.timeOfDay!)
     );
   }
 

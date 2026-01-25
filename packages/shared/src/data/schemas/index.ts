@@ -40,43 +40,87 @@ export const HexRotationSchema = z.number().int().min(0).max(5);
 // ============================================================================
 
 export const TerrainTypeSchema = z.enum([
-  'grass', 'grass_hill', 'grass_forest',
-  'sand', 'sand_hill', 'sand_dunes',
-  'dirt', 'dirt_hill',
-  'stone', 'stone_hill', 'stone_mountain', 'stone_rocks',
-  'water', 'water_shallow', 'water_deep',
-  'mesa', 'canyon', 'badlands',
+  'grass',
+  'grass_hill',
+  'grass_forest',
+  'sand',
+  'sand_hill',
+  'sand_dunes',
+  'dirt',
+  'dirt_hill',
+  'stone',
+  'stone_hill',
+  'stone_mountain',
+  'stone_rocks',
+  'water',
+  'water_shallow',
+  'water_deep',
+  'mesa',
+  'canyon',
+  'badlands',
 ]);
 export type TerrainType = z.infer<typeof TerrainTypeSchema>;
 
 export const FeatureTypeSchema = z.enum([
   'none',
-  'tree', 'tree_dead', 'bush', 'cactus', 'cactus_tall',
-  'rock_small', 'rock_large', 'boulder',
-  'ore_deposit', 'oil_seep', 'spring',
-  'ruins', 'camp',
+  'tree',
+  'tree_dead',
+  'bush',
+  'cactus',
+  'cactus_tall',
+  'rock_small',
+  'rock_large',
+  'boulder',
+  'ore_deposit',
+  'oil_seep',
+  'spring',
+  'ruins',
+  'camp',
 ]);
 export type FeatureType = z.infer<typeof FeatureTypeSchema>;
 
 export const BuildingTypeSchema = z.enum([
   'none',
   // Residential
-  'cabin', 'house', 'mansion',
+  'cabin',
+  'house',
+  'mansion',
   // Commercial
-  'saloon', 'general_store', 'bank', 'hotel',
+  'saloon',
+  'general_store',
+  'bank',
+  'hotel',
   // Industrial
-  'mine', 'smelter', 'workshop', 'windmill', 'water_tower',
+  'mine',
+  'smelter',
+  'workshop',
+  'windmill',
+  'water_tower',
   // Civic
-  'sheriff_office', 'church', 'train_station', 'telegraph',
+  'sheriff_office',
+  'church',
+  'train_station',
+  'telegraph',
   // Infrastructure
-  'well', 'stable', 'warehouse', 'dock',
+  'well',
+  'stable',
+  'warehouse',
+  'dock',
   // Defensive
-  'watch_tower', 'fort',
+  'watch_tower',
+  'fort',
 ]);
 export type BuildingType = z.infer<typeof BuildingTypeSchema>;
 
 export const EdgeTypeSchema = z.enum([
-  'none', 'river', 'road', 'railroad', 'cliff', 'bridge', 'ford', 'fence',
+  'none',
+  'river',
+  'road',
+  'railroad',
+  'cliff',
+  'bridge',
+  'ford',
+  'fence',
 ]);
 export type EdgeType = z.infer<typeof EdgeTypeSchema>;
 
@@ -118,20 +162,35 @@ export type TileDef = z.infer<typeof TileDefSchema>;
 
 export const AssemblageTypeSchema = z.enum([
   // Single buildings with surroundings
-  'single_cabin', 'single_house', 'single_mansion',
-  'single_saloon', 'single_store', 'single_bank',
-  'single_church', 'single_sheriff',
+  'single_cabin',
+  'single_house',
+  'single_mansion',
+  'single_saloon',
+  'single_store',
+  'single_bank',
+  'single_church',
+  'single_sheriff',
 
   // Functional groups
-  'ranch', 'farm', 'mine_entrance', 'lumber_camp',
-  'train_depot', 'water_station',
+  'ranch',
+  'farm',
+  'mine_entrance',
+  'lumber_camp',
+  'train_depot',
+  'water_station',
 
   // Town features
-  'town_square', 'main_street_segment', 'residential_block',
-  'commercial_block', 'industrial_yard',
+  'town_square',
+  'main_street_segment',
+  'residential_block',
+  'commercial_block',
+  'industrial_yard',
 
   // Decorative/filler
-  'empty_lot', 'garden', 'graveyard', 'corral',
+  'empty_lot',
+  'garden',
+  'graveyard',
+  'corral',
 
   // Special
   'custom',
@@ -186,12 +245,25 @@ export type Assemblage = z.infer<typeof AssemblageSchema>;
 // ============================================================================
 
 export const NPCRoleSchema = z.enum([
-  'shopkeeper', 'bartender', 'sheriff', 'deputy',
-  'blacksmith', 'doctor', 'preacher', 'banker',
-  'rancher', 'miner', 'farmer', 'drifter',
-  'outlaw', 'bounty_hunter', 'prospector',
-  'train_conductor', 'telegraph_operator',
-  'townsperson', 'child',
+  'shopkeeper',
+  'bartender',
+  'sheriff',
+  'deputy',
+  'blacksmith',
+  'doctor',
+  'preacher',
+  'banker',
+  'rancher',
+  'miner',
+  'farmer',
+  'drifter',
+  'outlaw',
+  'bounty_hunter',
+  'prospector',
+  'train_conductor',
+  'telegraph_operator',
+  'townsperson',
+  'child',
 ]);
 export type NPCRole = z.infer<typeof NPCRoleSchema>;
 
@@ -209,11 +281,15 @@ export const NPCSchema = z.object({
   spawnCoord: HexCoordSchema,
 
   /** Schedule: where they go at different times */
-  schedule: z.array(z.object({
-    time: z.enum(['morning', 'afternoon', 'evening', 'night']),
-    coord: HexCoordSchema,
-    activity: z.string().optional(),
-  })).optional(),
+  schedule: z
+    .array(
+      z.object({
+        time: z.enum(['morning', 'afternoon', 'evening', 'night']),
+        coord: HexCoordSchema,
+        activity: z.string().optional(),
+      })
+    )
+    .optional(),
 
   /** Dialogue tree reference */
   dialogueId: z.string().optional(),
@@ -237,8 +313,15 @@ export type NPC = z.infer<typeof NPCSchema>;
 // ============================================================================
 
 export const ContainerTypeSchema = z.enum([
-  'chest', 'crate', 'barrel', 'locker', 'safe',
-  'desk', 'cabinet', 'grave', 'trash',
+  'chest',
+  'crate',
+  'barrel',
+  'locker',
+  'safe',
+  'desk',
+  'cabinet',
+  'grave',
+  'trash',
 ]);
 export type ContainerType = z.infer<typeof ContainerTypeSchema>;
 
@@ -265,10 +348,14 @@ export const ContainerSchema = z.object({
   lootTable: z.string().optional(),
 
   /** Fixed items (override loot table) */
-  fixedItems: z.array(z.object({
-    itemId: z.string(),
-    quantity: z.number().int().min(1).default(1),
-  })).optional(),
+  fixedItems: z
+    .array(
+      z.object({
+        itemId: z.string(),
+        quantity: z.number().int().min(1).default(1),
+      })
+    )
+    .optional(),
 
   /** Respawns? */
   respawns: z.boolean().default(false),
@@ -280,18 +367,26 @@ export type Container = z.infer<typeof ContainerSchema>;
 // ============================================================================
 
 export const LocationTypeSchema = z.enum([
-  'town', 'city', 'village', 'outpost',
-  'mine', 'camp', 'ranch', 'fort',
-  'ruins', 'cave', 'special',
+  'town',
+  'city',
+  'village',
+  'outpost',
+  'mine',
+  'camp',
+  'ranch',
+  'fort',
+  'ruins',
+  'cave',
+  'special',
 ]);
 export type LocationType = z.infer<typeof LocationTypeSchema>;
 
 export const TownSizeSchema = z.enum([
-  'tiny',      // 1-3 buildings (camp, outpost)
-  'small',     // 4-8 buildings (village)
-  'medium',    // 9-20 buildings (town)
-  'large',     // 21-50 buildings (large town)
-  'huge',      // 50+ buildings (city)
+  'tiny', // 1-3 buildings (camp, outpost)
+  'small', // 4-8 buildings (village)
+  'medium', // 9-20 buildings (town)
+  'large', // 21-50 buildings (large town)
+  'huge', // 50+ buildings (city)
 ]);
 export type TownSize = z.infer<typeof TownSizeSchema>;
 
@@ -359,18 +454,26 @@ export const TownSchema = z.object({
   containers: z.array(ContainerSchema).default([]),
 
   /** Entry points from world map */
-  entryPoints: z.array(z.object({
-    id: z.string(),
-    coord: HexCoordSchema,
-    direction: z.enum(['north', 'south', 'east', 'west']),
-    label: z.string().optional(),
-  })).min(1),
+  entryPoints: z
+    .array(
+      z.object({
+        id: z.string(),
+        coord: HexCoordSchema,
+        direction: z.enum(['north', 'south', 'east', 'west']),
+        label: z.string().optional(),
+      })
+    )
+    .min(1),
 
   /** Connections to other locations (for fast travel, etc) */
-  connections: z.array(z.object({
-    targetLocationId: z.string(),
-    type: z.enum(['road', 'railroad', 'trail', 'river']),
-  })).default([]),
+  connections: z
+    .array(
+      z.object({
+        targetLocationId: z.string(),
+        type: z.enum(['road', 'railroad', 'trail', 'river']),
+      })
+    )
+    .default([]),
 
   /** Faction control */
   controllingFaction: z.string().optional(),
@@ -391,8 +494,13 @@ export type Town = z.infer<typeof TownSchema>;
 // ============================================================================
 
 export const RegionBiomeSchema = z.enum([
-  'desert', 'grassland', 'badlands', 'mountains',
-  'forest', 'swamp', 'tundra',
+  'desert',
+  'grassland',
+  'badlands',
+  'mountains',
+  'forest',
+  'swamp',
+  'tundra',
 ]);
 export type RegionBiome = z.infer<typeof RegionBiomeSchema>;
 
@@ -409,8 +517,16 @@ export const WorldLocationSchema = z.object({
 
   /** Icon to show on map */
   icon: z.enum([
-    'town', 'city', 'village', 'camp', 'mine',
-    'fort', 'ruins', 'cave', 'special', 'unknown',
+    'town',
+    'city',
+    'village',
+    'camp',
+    'mine',
+    'fort',
+    'ruins',
+    'cave',
+    'special',
+    'unknown',
   ]),
 });
 export type WorldLocation = z.infer<typeof WorldLocationSchema>;
@@ -433,12 +549,14 @@ export const EncounterDefSchema = z.object({
   /** Probability weight */
   weight: z.number().min(0).default(1),
   /** Required conditions */
-  conditions: z.object({
-    minDanger: z.number().int().min(0).max(10).optional(),
-    maxDanger: z.number().int().min(0).max(10).optional(),
-    biomes: z.array(RegionBiomeSchema).optional(),
-    timeOfDay: z.array(z.enum(['day', 'night'])).optional(),
-  }).optional(),
+  conditions: z
+    .object({
+      minDanger: z.number().int().min(0).max(10).optional(),
+      maxDanger: z.number().int().min(0).max(10).optional(),
+      biomes: z.array(RegionBiomeSchema).optional(),
+      timeOfDay: z.array(z.enum(['day', 'night'])).optional(),
+    })
+    .optional(),
   /** Encounter map template */
   mapTemplate: z.string().optional(),
   /** Enemy spawn table */
@@ -514,13 +632,17 @@ export const WorldSchema = z.object({
   regions: z.array(RegionSchema),
 
   /** Global faction definitions */
-  factions: z.array(z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string().optional(),
-    /** Relations with other factions (-100 to 100) */
-    relations: z.record(z.string(), z.number().int().min(-100).max(100)).default({}),
-  })).default([]),
+  factions: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        /** Relations with other factions (-100 to 100) */
+        relations: z.record(z.string(), z.number().int().min(-100).max(100)).default({}),
+      })
+    )
+    .default([]),
 
   /** Starting location for new games */
   startingLocation: z.object({
@@ -530,12 +652,16 @@ export const WorldSchema = z.object({
   }),
 
   /** Global timeline events */
-  timeline: z.array(z.object({
-    id: z.string(),
-    day: z.number().int().min(0),
-    event: z.string(),
-    effects: z.array(z.string()).default([]),
-  })).default([]),
+  timeline: z
+    .array(
+      z.object({
+        id: z.string(),
+        day: z.number().int().min(0),
+        event: z.string(),
+        effects: z.array(z.string()).default([]),
+      })
+    )
+    .default([]),
 });
 export type World = z.infer<typeof WorldSchema>;
 

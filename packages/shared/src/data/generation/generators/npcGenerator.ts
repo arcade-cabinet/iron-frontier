@@ -4,17 +4,17 @@
  * Combines NPC templates with name pools and context to create unique NPCs.
  */
 
-import { SeededRandom } from '../seededRandom';
 import {
-  type NPCTemplate,
   type GenerationContext,
   type NameOrigin,
+  type NPCTemplate,
   substituteTemplate,
 } from '../../schemas/generation';
+import { SeededRandom } from '../seededRandom';
 import {
+  type GeneratedName,
   generateName,
   generateNameWeighted,
-  type GeneratedName,
   type NameGender,
 } from './nameGenerator';
 
@@ -88,9 +88,7 @@ export function getNPCTemplatesByRole(role: string): NPCTemplate[] {
  */
 export function getNPCTemplatesForLocation(locationType: string): NPCTemplate[] {
   return NPC_TEMPLATES.filter(
-    (t) =>
-      t.validLocationTypes.length === 0 ||
-      t.validLocationTypes.includes(locationType)
+    (t) => t.validLocationTypes.length === 0 || t.validLocationTypes.includes(locationType)
   );
 }
 
@@ -144,8 +142,7 @@ export function generateNPC(
   );
 
   // Select faction
-  const faction =
-    options.forceFaction ?? npcRng.pick(template.allowedFactions);
+  const faction = options.forceFaction ?? npcRng.pick(template.allowedFactions);
 
   // Generate personality values within template ranges
   const defaultRanges: Record<string, [number, number]> = {
@@ -259,9 +256,7 @@ export function generateNPCsForLocation(
   const notableTemplates = validTemplates.filter((t) => t.minImportance >= 0.5);
   for (let i = 0; i < counts.notable; i++) {
     const template =
-      notableTemplates.length > 0
-        ? rng.pick(notableTemplates)
-        : rng.pick(validTemplates);
+      notableTemplates.length > 0 ? rng.pick(notableTemplates) : rng.pick(validTemplates);
 
     let npc = generateNPC(rng, template, context);
 
@@ -280,9 +275,7 @@ export function generateNPCsForLocation(
   const backgroundTemplates = validTemplates.filter((t) => t.minImportance < 0.5);
   for (let i = 0; i < counts.background; i++) {
     const template =
-      backgroundTemplates.length > 0
-        ? rng.pick(backgroundTemplates)
-        : rng.pick(validTemplates);
+      backgroundTemplates.length > 0 ? rng.pick(backgroundTemplates) : rng.pick(validTemplates);
 
     let npc = generateNPC(rng, template, context);
 

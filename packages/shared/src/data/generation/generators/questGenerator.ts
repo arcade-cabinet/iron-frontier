@@ -4,14 +4,14 @@
  * Combines quest templates with context to create unique quests.
  */
 
-import { SeededRandom } from '../seededRandom';
 import {
-  type QuestTemplate,
-  type QuestArchetype,
   type GenerationContext,
   type ObjectiveTemplate,
+  type QuestArchetype,
+  type QuestTemplate,
   substituteTemplate,
 } from '../../schemas/generation';
+import { SeededRandom } from '../seededRandom';
 
 // Template registry
 let QUEST_TEMPLATES: QuestTemplate[] = [];
@@ -95,9 +95,7 @@ export function getQuestTemplate(id: string): QuestTemplate | undefined {
 /**
  * Get quest templates by archetype
  */
-export function getQuestTemplatesByArchetype(
-  archetype: QuestArchetype
-): QuestTemplate[] {
+export function getQuestTemplatesByArchetype(archetype: QuestArchetype): QuestTemplate[] {
   return QUEST_TEMPLATES.filter((t) => t.archetype === archetype);
 }
 
@@ -105,23 +103,16 @@ export function getQuestTemplatesByArchetype(
  * Get quest templates valid for a level
  */
 export function getQuestTemplatesForLevel(level: number): QuestTemplate[] {
-  return QUEST_TEMPLATES.filter(
-    (t) => level >= t.levelRange[0] && level <= t.levelRange[1]
-  );
+  return QUEST_TEMPLATES.filter((t) => level >= t.levelRange[0] && level <= t.levelRange[1]);
 }
 
 /**
  * Get quest templates a specific giver role can offer
  */
-export function getQuestTemplatesForGiver(
-  role: string,
-  faction: string
-): QuestTemplate[] {
+export function getQuestTemplatesForGiver(role: string, faction: string): QuestTemplate[] {
   return QUEST_TEMPLATES.filter((t) => {
-    const roleMatch =
-      t.giverRoles.length === 0 || t.giverRoles.includes(role);
-    const factionMatch =
-      t.giverFactions.length === 0 || t.giverFactions.includes(faction);
+    const roleMatch = t.giverRoles.length === 0 || t.giverRoles.includes(role);
+    const factionMatch = t.giverFactions.length === 0 || t.giverFactions.includes(faction);
     return roleMatch && factionMatch;
   });
 }
@@ -172,9 +163,7 @@ function selectTarget(
 
   // Filter by tags if specified
   if (targetTags.length > 0) {
-    candidates = candidates.filter((c) =>
-      targetTags.some((tag) => c.tags.includes(tag))
-    );
+    candidates = candidates.filter((c) => targetTags.some((tag) => c.tags.includes(tag)));
   }
 
   // Exclude already used
@@ -273,13 +262,7 @@ export function generateQuest(
   };
 
   // Select a primary target for title/description
-  const primaryTarget = selectTarget(
-    questRng,
-    'any',
-    [],
-    context,
-    usedTargets
-  );
+  const primaryTarget = selectTarget(questRng, 'any', [], context, usedTargets);
   if (primaryTarget) {
     variables.target = primaryTarget.name;
     variables.targetId = primaryTarget.id;
@@ -289,13 +272,7 @@ export function generateQuest(
   }
 
   // Select a secondary location if available
-  const secondaryLocation = selectTarget(
-    questRng,
-    'location',
-    [],
-    context,
-    usedTargets
-  );
+  const secondaryLocation = selectTarget(questRng, 'location', [], context, usedTargets);
   if (secondaryLocation) {
     variables.destination = secondaryLocation.name;
     variables.destinationId = secondaryLocation.id;
@@ -355,12 +332,10 @@ export function generateQuest(
   const levelMultiplier = 1 + (level - 1) * 0.2;
 
   const xp = Math.floor(
-    questRng.int(template.rewards.xpRange[0], template.rewards.xpRange[1]) *
-      levelMultiplier
+    questRng.int(template.rewards.xpRange[0], template.rewards.xpRange[1]) * levelMultiplier
   );
   const gold = Math.floor(
-    questRng.int(template.rewards.goldRange[0], template.rewards.goldRange[1]) *
-      levelMultiplier
+    questRng.int(template.rewards.goldRange[0], template.rewards.goldRange[1]) * levelMultiplier
   );
 
   // Generate item rewards
@@ -423,9 +398,7 @@ export function generateRandomQuest(
   // Filter by giver if provided
   if (giver) {
     const giverTemplates = getQuestTemplatesForGiver(giver.role, giver.faction);
-    validTemplates = validTemplates.filter((t) =>
-      giverTemplates.some((gt) => gt.id === t.id)
-    );
+    validTemplates = validTemplates.filter((t) => giverTemplates.some((gt) => gt.id === t.id));
   }
 
   if (validTemplates.length === 0) {

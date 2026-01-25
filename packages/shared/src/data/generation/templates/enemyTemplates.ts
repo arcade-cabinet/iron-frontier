@@ -66,35 +66,35 @@ export type EnemyNamePool = z.infer<typeof EnemyNamePoolSchema>;
  */
 export const BehaviorTagSchema = z.enum([
   // Combat style
-  'aggressive',     // Attacks on sight, pursues
-  'defensive',      // Waits for player to engage
-  'ranged',         // Prefers ranged attacks
-  'melee',          // Prefers close combat
-  'ambusher',       // Sets up ambushes, surprise attacks
-  'flanker',        // Tries to get behind targets
+  'aggressive', // Attacks on sight, pursues
+  'defensive', // Waits for player to engage
+  'ranged', // Prefers ranged attacks
+  'melee', // Prefers close combat
+  'ambusher', // Sets up ambushes, surprise attacks
+  'flanker', // Tries to get behind targets
 
   // Movement
-  'mobile',         // Frequently repositions
-  'stationary',     // Holds position
-  'charges',        // Rushes toward target
-  'retreats',       // Falls back when hurt
+  'mobile', // Frequently repositions
+  'stationary', // Holds position
+  'charges', // Rushes toward target
+  'retreats', // Falls back when hurt
 
   // Special behaviors
-  'pack_tactics',   // Coordinates with allies
-  'berserker',      // More dangerous when wounded
-  'coward',         // Flees when outmatched
-  'leader',         // Buffs nearby allies
-  'healer',         // Can heal allies
+  'pack_tactics', // Coordinates with allies
+  'berserker', // More dangerous when wounded
+  'coward', // Flees when outmatched
+  'leader', // Buffs nearby allies
+  'healer', // Can heal allies
 
   // Condition effects
-  'poisonous',      // Applies poison
-  'bleeding',       // Causes bleed
-  'stunning',       // Can stun targets
+  'poisonous', // Applies poison
+  'bleeding', // Causes bleed
+  'stunning', // Can stun targets
 
   // AI traits
-  'smart',          // Uses cover, tactical positioning
-  'dumb',           // Predictable behavior
-  'erratic',        // Random actions
+  'smart', // Uses cover, tactical positioning
+  'dumb', // Predictable behavior
+  'erratic', // Random actions
 ]);
 export type BehaviorTag = z.infer<typeof BehaviorTagSchema>;
 
@@ -158,7 +158,7 @@ const BanditThugTemplate: EnemyTemplate = {
   },
   scaling: {
     healthPerLevel: 1.15,
-    damagePerLevel: 1.10,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.05,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
@@ -221,7 +221,7 @@ const BanditSharpshooterTemplate: EnemyTemplate = {
     evasion: 15,
   },
   scaling: {
-    healthPerLevel: 1.10,
+    healthPerLevel: 1.1,
     damagePerLevel: 1.15,
     armorPerLevel: 1.05,
     accuracyPerLevel: 1,
@@ -255,7 +255,7 @@ const BanditLeaderTemplate: EnemyTemplate = {
   scaling: {
     healthPerLevel: 1.18,
     damagePerLevel: 1.12,
-    armorPerLevel: 1.10,
+    armorPerLevel: 1.1,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
   },
@@ -290,7 +290,7 @@ const DesertWolfTemplate: EnemyTemplate = {
   },
   scaling: {
     healthPerLevel: 1.12,
-    damagePerLevel: 1.10,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.0,
     accuracyPerLevel: 1,
     evasionPerLevel: 2,
@@ -417,8 +417,8 @@ const ScorpionTemplate: EnemyTemplate = {
     evasion: 15,
   },
   scaling: {
-    healthPerLevel: 1.10,
-    damagePerLevel: 1.10,
+    healthPerLevel: 1.1,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.08,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
@@ -487,7 +487,7 @@ const IVRCGuardTemplate: EnemyTemplate = {
   scaling: {
     healthPerLevel: 1.15,
     damagePerLevel: 1.12,
-    armorPerLevel: 1.10,
+    armorPerLevel: 1.1,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
   },
@@ -619,7 +619,7 @@ const CopperheadEnforcerTemplate: EnemyTemplate = {
   scaling: {
     healthPerLevel: 1.18,
     damagePerLevel: 1.12,
-    armorPerLevel: 1.10,
+    armorPerLevel: 1.1,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
   },
@@ -649,7 +649,7 @@ const CopperheadDynamiterTemplate: EnemyTemplate = {
     evasion: 12,
   },
   scaling: {
-    healthPerLevel: 1.10,
+    healthPerLevel: 1.1,
     damagePerLevel: 1.18,
     armorPerLevel: 1.05,
     accuracyPerLevel: 2,
@@ -686,7 +686,7 @@ const RemnantScoutTemplate: EnemyTemplate = {
   },
   scaling: {
     healthPerLevel: 1.12,
-    damagePerLevel: 1.10,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.08,
     accuracyPerLevel: 1,
     evasionPerLevel: 2,
@@ -749,7 +749,7 @@ const RemnantJuggernautTemplate: EnemyTemplate = {
     evasion: 0,
   },
   scaling: {
-    healthPerLevel: 1.20,
+    healthPerLevel: 1.2,
     damagePerLevel: 1.15,
     armorPerLevel: 1.15,
     accuracyPerLevel: 2,
@@ -786,7 +786,7 @@ const RustlerTemplate: EnemyTemplate = {
   },
   scaling: {
     healthPerLevel: 1.12,
-    damagePerLevel: 1.10,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.05,
     accuracyPerLevel: 2,
     evasionPerLevel: 2,
@@ -819,7 +819,7 @@ const MercenaryTemplate: EnemyTemplate = {
   scaling: {
     healthPerLevel: 1.15,
     damagePerLevel: 1.12,
-    armorPerLevel: 1.10,
+    armorPerLevel: 1.1,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
   },
@@ -881,8 +881,8 @@ const HostileProspectorTemplate: EnemyTemplate = {
     evasion: 8,
   },
   scaling: {
-    healthPerLevel: 1.10,
-    damagePerLevel: 1.10,
+    healthPerLevel: 1.1,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.05,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
@@ -945,8 +945,8 @@ const GhostTownDwellerTemplate: EnemyTemplate = {
     evasion: 12,
   },
   scaling: {
-    healthPerLevel: 1.10,
-    damagePerLevel: 1.10,
+    healthPerLevel: 1.1,
+    damagePerLevel: 1.1,
     armorPerLevel: 1.05,
     accuracyPerLevel: 2,
     evasionPerLevel: 1,
@@ -1046,9 +1046,7 @@ export const ENEMY_TEMPLATES: EnemyTemplate[] = [
 // ============================================================================
 
 /** Map of template ID to template for quick lookup */
-const TEMPLATES_BY_ID = new Map<string, EnemyTemplate>(
-  ENEMY_TEMPLATES.map((t) => [t.id, t])
-);
+const TEMPLATES_BY_ID = new Map<string, EnemyTemplate>(ENEMY_TEMPLATES.map((t) => [t.id, t]));
 
 /** Map of faction to templates */
 const TEMPLATES_BY_FACTION = new Map<string, EnemyTemplate[]>();
@@ -1106,9 +1104,7 @@ export function getEnemyTemplatesByBehavior(behavior: BehaviorTag): EnemyTemplat
  * Get enemy templates valid for a given level
  */
 export function getEnemyTemplatesForLevel(level: number): EnemyTemplate[] {
-  return ENEMY_TEMPLATES.filter(
-    (t) => t.minLevel <= level && t.maxLevel >= level
-  );
+  return ENEMY_TEMPLATES.filter((t) => t.minLevel <= level && t.maxLevel >= level);
 }
 
 /**
@@ -1148,23 +1144,14 @@ export function getEnemyTemplatesMatching(criteria: {
 /**
  * Calculate scaled stats for an enemy at a given level
  */
-export function calculateScaledStats(
-  template: EnemyTemplate,
-  level: number
-): EnemyStats {
+export function calculateScaledStats(template: EnemyTemplate, level: number): EnemyStats {
   const levelDelta = Math.max(0, level - 1);
   const scaling = template.scaling;
 
   return {
-    health: Math.round(
-      template.baseStats.health * Math.pow(scaling.healthPerLevel, levelDelta)
-    ),
-    damage: Math.round(
-      template.baseStats.damage * Math.pow(scaling.damagePerLevel, levelDelta)
-    ),
-    armor: Math.round(
-      template.baseStats.armor * Math.pow(scaling.armorPerLevel, levelDelta)
-    ),
+    health: Math.round(template.baseStats.health * scaling.healthPerLevel ** levelDelta),
+    damage: Math.round(template.baseStats.damage * scaling.damagePerLevel ** levelDelta),
+    armor: Math.round(template.baseStats.armor * scaling.armorPerLevel ** levelDelta),
     accuracy: Math.min(
       100,
       Math.round(template.baseStats.accuracy + scaling.accuracyPerLevel * levelDelta)
@@ -1221,7 +1208,6 @@ export {
   BanditGunmanTemplate,
   BanditSharpshooterTemplate,
   BanditLeaderTemplate,
-
   // Wildlife
   DesertWolfTemplate,
   RattlesnakeTemplate,
@@ -1229,22 +1215,18 @@ export {
   GrizzlyBearTemplate,
   ScorpionTemplate,
   VultureTemplate,
-
   // IVRC
   IVRCGuardTemplate,
   IVRCMarksmanTemplate,
   IVRCCaptainTemplate,
-
   // Copperhead
   CopperheadGunslingerTemplate,
   CopperheadEnforcerTemplate,
   CopperheadDynamiterTemplate,
-
   // Remnant
   RemnantScoutTemplate,
   RemnantSentryTemplate,
   RemnantJuggernautTemplate,
-
   // Misc
   RustlerTemplate,
   MercenaryTemplate,

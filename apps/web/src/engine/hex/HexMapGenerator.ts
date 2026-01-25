@@ -5,8 +5,8 @@
  * with procedural path/river placement and building site designation.
  */
 
-import { createNoise2D, type NoiseFunction2D } from 'simplex-noise';
 import Alea from 'alea';
+import { createNoise2D, type NoiseFunction2D } from 'simplex-noise';
 
 // ============================================================================
 // TILE TYPES (Kenney Hexagon Kit)
@@ -119,22 +119,18 @@ export function cubeToAxial(cube: CubeCoord): HexCoord {
 export function hexDistance(a: HexCoord, b: HexCoord): number {
   const ac = axialToCube(a);
   const bc = axialToCube(b);
-  return Math.max(
-    Math.abs(ac.x - bc.x),
-    Math.abs(ac.y - bc.y),
-    Math.abs(ac.z - bc.z)
-  );
+  return Math.max(Math.abs(ac.x - bc.x), Math.abs(ac.y - bc.y), Math.abs(ac.z - bc.z));
 }
 
 /** Get all 6 neighboring hex coordinates */
 export function hexNeighbors(hex: HexCoord): HexCoord[] {
   const directions: HexCoord[] = [
-    { q: 1, r: 0 },   // East
-    { q: 1, r: -1 },  // Northeast
-    { q: 0, r: -1 },  // Northwest
-    { q: -1, r: 0 },  // West
-    { q: -1, r: 1 },  // Southwest
-    { q: 0, r: 1 },   // Southeast
+    { q: 1, r: 0 }, // East
+    { q: 1, r: -1 }, // Northeast
+    { q: 0, r: -1 }, // Northwest
+    { q: -1, r: 0 }, // West
+    { q: -1, r: 1 }, // Southwest
+    { q: 0, r: 1 }, // Southeast
   ];
   return directions.map((d) => ({ q: hex.q + d.q, r: hex.r + d.r }));
 }
@@ -142,12 +138,12 @@ export function hexNeighbors(hex: HexCoord): HexCoord[] {
 /** Get neighbor in a specific direction (0-5, starting East, going counter-clockwise) */
 export function hexNeighborInDirection(hex: HexCoord, direction: number): HexCoord {
   const directions: HexCoord[] = [
-    { q: 1, r: 0 },   // 0: East
-    { q: 1, r: -1 },  // 1: Northeast
-    { q: 0, r: -1 },  // 2: Northwest
-    { q: -1, r: 0 },  // 3: West
-    { q: -1, r: 1 },  // 4: Southwest
-    { q: 0, r: 1 },   // 5: Southeast
+    { q: 1, r: 0 }, // 0: East
+    { q: 1, r: -1 }, // 1: Northeast
+    { q: 0, r: -1 }, // 2: Northwest
+    { q: -1, r: 0 }, // 3: West
+    { q: -1, r: 1 }, // 4: Southwest
+    { q: 0, r: 1 }, // 5: Southeast
   ];
   const d = directions[direction % 6];
   return { q: hex.q + d.q, r: hex.r + d.r };
@@ -216,7 +212,7 @@ export interface HexTileData {
 
 export interface HexMapConfig {
   seed: number;
-  width: number;  // Map width in hex cells
+  width: number; // Map width in hex cells
   height: number; // Map height in hex cells
   hexSize: number; // Size of each hex in world units
 
@@ -317,9 +313,24 @@ export class HexMapGenerator {
         const worldPos = hexToWorld(coord, this.config.hexSize);
 
         // Sample noise values
-        const biomeValue = this.sampleNoise(this.biomeNoise, worldPos.x, worldPos.z, this.config.biomeScale);
-        const moisture = this.sampleNoise(this.moistureNoise, worldPos.x, worldPos.z, this.config.moistureScale);
-        const elevation = this.sampleNoise(this.elevationNoise, worldPos.x, worldPos.z, this.config.elevationScale);
+        const biomeValue = this.sampleNoise(
+          this.biomeNoise,
+          worldPos.x,
+          worldPos.z,
+          this.config.biomeScale
+        );
+        const moisture = this.sampleNoise(
+          this.moistureNoise,
+          worldPos.x,
+          worldPos.z,
+          this.config.moistureScale
+        );
+        const elevation = this.sampleNoise(
+          this.elevationNoise,
+          worldPos.x,
+          worldPos.z,
+          this.config.elevationScale
+        );
 
         // Determine biome
         const biome = this.determineBiome(biomeValue, moisture, elevation);
@@ -343,7 +354,8 @@ export class HexMapGenerator {
    * Determine biome based on noise values
    */
   private determineBiome(biomeValue: number, moisture: number, elevation: number): HexBiome {
-    const { desertThreshold, grasslandThreshold, badlandsElevation, riversideMoisture } = this.config;
+    const { desertThreshold, grasslandThreshold, badlandsElevation, riversideMoisture } =
+      this.config;
 
     // High moisture areas near water sources
     if (moisture > riversideMoisture) {
@@ -423,7 +435,10 @@ export class HexMapGenerator {
   /**
    * Generate a single river path using a flow simulation
    */
-  private generateRiverPath(tiles: Map<string, HexTileData>, existingRivers: HexCoord[][]): HexCoord[] {
+  private generateRiverPath(
+    tiles: Map<string, HexTileData>,
+    existingRivers: HexCoord[][]
+  ): HexCoord[] {
     const { width, height } = this.config;
     const path: HexCoord[] = [];
 
@@ -490,7 +505,9 @@ export class HexMapGenerator {
    * Get a starting point on a map edge
    */
   private getEdgeStartPoint(edge: number, width: number, height: number): HexCoord {
-    const pos = Math.floor(this.prng() * Math.max(width, height) * 0.6) + Math.floor(Math.max(width, height) * 0.2);
+    const pos =
+      Math.floor(this.prng() * Math.max(width, height) * 0.6) +
+      Math.floor(Math.max(width, height) * 0.2);
 
     switch (edge) {
       case 0: // Top edge
@@ -587,12 +604,12 @@ export class HexMapGenerator {
     const dr = to.r - from.r;
 
     const directions = [
-      { q: 1, r: 0 },   // 0: East
-      { q: 1, r: -1 },  // 1: Northeast
-      { q: 0, r: -1 },  // 2: Northwest
-      { q: -1, r: 0 },  // 3: West
-      { q: -1, r: 1 },  // 4: Southwest
-      { q: 0, r: 1 },   // 5: Southeast
+      { q: 1, r: 0 }, // 0: East
+      { q: 1, r: -1 }, // 1: Northeast
+      { q: 0, r: -1 }, // 2: Northwest
+      { q: -1, r: 0 }, // 3: West
+      { q: -1, r: 1 }, // 4: Southwest
+      { q: 0, r: 1 }, // 5: Southeast
     ];
 
     for (let i = 0; i < directions.length; i++) {
@@ -618,11 +635,7 @@ export class HexMapGenerator {
 
     tiles.forEach((tile, key) => {
       // Towns: near rivers, flat terrain, not too rocky
-      if (
-        tile.biome === 'riverside' &&
-        tile.elevation < 0.5 &&
-        !tile.riverTile
-      ) {
+      if (tile.biome === 'riverside' && tile.elevation < 0.5 && !tile.riverTile) {
         potentialTowns.push(tile.coord);
       }
 
@@ -635,11 +648,7 @@ export class HexMapGenerator {
       }
 
       // Farms: grassland with moderate moisture
-      if (
-        tile.biome === 'grassland' &&
-        tile.moisture > 0.3 &&
-        tile.moisture < 0.7
-      ) {
+      if (tile.biome === 'grassland' && tile.moisture > 0.3 && tile.moisture < 0.7) {
         potentialFarms.push(tile.coord);
       }
     });
@@ -649,13 +658,34 @@ export class HexMapGenerator {
     const minSpacing = 5;
 
     // Place towns first (most important)
-    this.placeSitesOfType(tiles, potentialTowns, 'town', Math.ceil(siteCount * 0.3), placedSites, minSpacing);
+    this.placeSitesOfType(
+      tiles,
+      potentialTowns,
+      'town',
+      Math.ceil(siteCount * 0.3),
+      placedSites,
+      minSpacing
+    );
 
     // Place mines
-    this.placeSitesOfType(tiles, potentialMines, 'mine', Math.ceil(siteCount * 0.3), placedSites, minSpacing);
+    this.placeSitesOfType(
+      tiles,
+      potentialMines,
+      'mine',
+      Math.ceil(siteCount * 0.3),
+      placedSites,
+      minSpacing
+    );
 
     // Place farms
-    this.placeSitesOfType(tiles, potentialFarms, 'farm', Math.ceil(siteCount * 0.4), placedSites, minSpacing);
+    this.placeSitesOfType(
+      tiles,
+      potentialFarms,
+      'farm',
+      Math.ceil(siteCount * 0.4),
+      placedSites,
+      minSpacing
+    );
 
     // Place a few outposts at crossings or strategic points
     this.placeCrossingOutposts(tiles, placedSites);
@@ -937,13 +967,19 @@ export class HexMapGenerator {
     const nextDir = next ? this.getDirection(current, next) : -1;
 
     // Multiple connections = intersection
-    if (existingConnections > 1 || (existingConnections > 0 && (prevDir !== -1 || nextDir !== -1))) {
+    if (
+      existingConnections > 1 ||
+      (existingConnections > 0 && (prevDir !== -1 || nextDir !== -1))
+    ) {
       return { pathTile: 'path-crossing', rotation: 0 };
     }
 
     // End of path
     if (prevDir === -1 || nextDir === -1) {
-      return { pathTile: 'path-straight', rotation: nextDir !== -1 ? nextDir : prevDir !== -1 ? prevDir : 0 };
+      return {
+        pathTile: 'path-straight',
+        rotation: nextDir !== -1 ? nextDir : prevDir !== -1 ? prevDir : 0,
+      };
     }
 
     // Check if straight

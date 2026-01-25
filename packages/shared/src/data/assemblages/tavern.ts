@@ -12,7 +12,7 @@
  * The SPATIAL DATA doesn't change - only the BEHAVIOR does.
  */
 
-import { Assemblage, validateAssemblage } from '../schemas/spatial';
+import { type Assemblage, validateAssemblage } from '../schemas/spatial';
 
 export const DesertSaloon: Assemblage = validateAssemblage({
   id: 'desert_saloon_01',
@@ -222,7 +222,10 @@ export const FrontierShack: Assemblage = validateAssemblage({
     {
       type: 'public_area',
       name: 'interior',
-      tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }],
+      tiles: [
+        { q: 0, r: 0 },
+        { q: 0, r: 1 },
+      ],
       tags: ['patron_area'],
     },
   ],

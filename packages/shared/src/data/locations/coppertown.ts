@@ -11,7 +11,7 @@
  * Population: ~300 workers + families
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const Coppertown: Location = validateLocation({
   id: 'coppertown',
@@ -309,9 +309,24 @@ export const Coppertown: Location = validateLocation({
         { coord: { q: -2, r: 1 }, terrain: 'stone_mountain', elevation: 2, feature: 'none' },
       ],
       markers: [
-        { type: 'vantage_point', name: 'pit_overlook', offset: { q: -1, r: 1 }, tags: ['danger', 'view'] },
-        { type: 'spawn_point', name: 'miner_spawn', offset: { q: 0, r: 0 }, tags: ['npc', 'worker'] },
-        { type: 'evidence_spot', name: 'unsafe_equipment', offset: { q: 1, r: 0 }, tags: ['clue', 'safety'] },
+        {
+          type: 'vantage_point',
+          name: 'pit_overlook',
+          offset: { q: -1, r: 1 },
+          tags: ['danger', 'view'],
+        },
+        {
+          type: 'spawn_point',
+          name: 'miner_spawn',
+          offset: { q: 0, r: 0 },
+          tags: ['npc', 'worker'],
+        },
+        {
+          type: 'evidence_spot',
+          name: 'unsafe_equipment',
+          offset: { q: 1, r: 0 },
+          tags: ['clue', 'safety'],
+        },
       ],
       zones: [
         {
@@ -382,7 +397,12 @@ export const Coppertown: Location = validateLocation({
         },
       ],
       markers: [
-        { type: 'spawn_point', name: 'ore_cart', offset: { q: -1, r: 0 }, tags: ['vehicle', 'industrial'] },
+        {
+          type: 'spawn_point',
+          name: 'ore_cart',
+          offset: { q: -1, r: 0 },
+          tags: ['vehicle', 'industrial'],
+        },
       ],
       zones: [],
       tags: ['infrastructure', 'industrial', 'transport'],

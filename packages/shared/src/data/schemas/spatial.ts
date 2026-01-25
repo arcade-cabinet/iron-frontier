@@ -38,48 +38,100 @@ export const HexRotationSchema = z.number().int().min(0).max(5);
 
 export const TerrainTypeSchema = z.enum([
   // Natural
-  'grass', 'grass_hill', 'grass_forest',
-  'sand', 'sand_hill', 'sand_dunes',
-  'dirt', 'dirt_hill',
-  'stone', 'stone_hill', 'stone_mountain', 'stone_rocks',
-  'water', 'water_shallow', 'water_deep',
-  'mesa', 'canyon', 'badlands',
+  'grass',
+  'grass_hill',
+  'grass_forest',
+  'sand',
+  'sand_hill',
+  'sand_dunes',
+  'dirt',
+  'dirt_hill',
+  'stone',
+  'stone_hill',
+  'stone_mountain',
+  'stone_rocks',
+  'water',
+  'water_shallow',
+  'water_deep',
+  'mesa',
+  'canyon',
+  'badlands',
 ]);
 
 export const FeatureTypeSchema = z.enum([
   'none',
   // Vegetation
-  'tree', 'tree_dead', 'bush', 'cactus', 'cactus_tall', 'stump', 'log',
+  'tree',
+  'tree_dead',
+  'bush',
+  'cactus',
+  'cactus_tall',
+  'stump',
+  'log',
   // Rocks
-  'rock_small', 'rock_large', 'boulder',
+  'rock_small',
+  'rock_large',
+  'boulder',
   // Visual-only resources (actual resource spawning is runtime)
-  'ore_vein', 'oil_seep', 'spring',
+  'ore_vein',
+  'oil_seep',
+  'spring',
   // Western Town Props
-  'barrel', 'barrel_water', 'barrel_hay',
-  'fence', 'bench', 'cart', 'wanted_poster', 'signpost',
+  'barrel',
+  'barrel_water',
+  'barrel_hay',
+  'fence',
+  'bench',
+  'cart',
+  'wanted_poster',
+  'signpost',
   // Ambient
-  'ruins', 'campfire_pit',
+  'ruins',
+  'campfire_pit',
 ]);
 
 export const StructureTypeSchema = z.enum([
   'none',
   // These are VISUAL MODELS only - functionality comes from slots
   // Residential shells
-  'cabin', 'house', 'mansion',
+  'cabin',
+  'house',
+  'mansion',
   // Commercial shells
-  'saloon_building', 'store_building', 'bank_building', 'hotel_building',
+  'saloon_building',
+  'store_building',
+  'bank_building',
+  'hotel_building',
   // Industrial shells
-  'mine_building', 'smelter_building', 'workshop_building', 'windmill', 'water_tower',
+  'mine_building',
+  'smelter_building',
+  'workshop_building',
+  'windmill',
+  'water_tower',
   // Civic shells
-  'office_building', 'church_building', 'station_building', 'telegraph_building',
+  'office_building',
+  'church_building',
+  'station_building',
+  'telegraph_building',
   // Infrastructure
-  'well', 'stable', 'warehouse', 'dock',
+  'well',
+  'stable',
+  'warehouse',
+  'dock',
   // Defensive
-  'watch_tower', 'fort',
+  'watch_tower',
+  'fort',
 ]);
 
 export const EdgeTypeSchema = z.enum([
-  'none', 'river', 'road', 'railroad', 'cliff', 'bridge', 'ford', 'fence',
+  'none',
+  'river',
+  'road',
+  'railroad',
+  'cliff',
+  'bridge',
+  'ford',
+  'fence',
 ]);
 
 // ============================================================================
@@ -95,47 +147,47 @@ export const EdgeTypeSchema = z.enum([
  */
 export const SlotTypeSchema = z.enum([
   // Commerce
-  'tavern',           // Social hub, rumors, recruiting
-  'general_store',    // Buy/sell general goods
-  'gunsmith',         // Weapons and ammo
-  'doctor',           // Healing, medicine
-  'bank',             // Money storage, loans
-  'hotel',            // Rest, long-term storage
-  'stable',           // Mount purchase/storage
+  'tavern', // Social hub, rumors, recruiting
+  'general_store', // Buy/sell general goods
+  'gunsmith', // Weapons and ammo
+  'doctor', // Healing, medicine
+  'bank', // Money storage, loans
+  'hotel', // Rest, long-term storage
+  'stable', // Mount purchase/storage
 
   // Civic
-  'law_office',       // Sheriff, bounties, justice
-  'church',           // Healing, moral quests, sanctuary
-  'telegraph',        // News, long-distance communication
-  'train_station',    // Fast travel, cargo
+  'law_office', // Sheriff, bounties, justice
+  'church', // Healing, moral quests, sanctuary
+  'telegraph', // News, long-distance communication
+  'train_station', // Fast travel, cargo
 
   // Industrial
-  'mine',             // Resource extraction
-  'smelter',          // Processing
-  'workshop',         // Crafting
-  'farm',             // Agricultural production
-  'ranch',            // Animal husbandry
+  'mine', // Resource extraction
+  'smelter', // Processing
+  'workshop', // Crafting
+  'farm', // Agricultural production
+  'ranch', // Animal husbandry
 
   // Residential
-  'residence',        // Generic home (NPC or player)
+  'residence', // Generic home (NPC or player)
   'residence_wealthy', // Rich NPC home (better loot potential)
-  'residence_poor',   // Poor NPC home
+  'residence_poor', // Poor NPC home
 
   // Wilderness & Camps
-  'camp',             // Temporary encampment
-  'hideout',          // Bandit/outlaw hideout
-  'waystation',       // Rest stop on trails
-  'water_source',     // Oasis, spring, well in wilderness
-  'landmark',         // Natural landmark (rocks, canyon, etc)
+  'camp', // Temporary encampment
+  'hideout', // Bandit/outlaw hideout
+  'waystation', // Rest stop on trails
+  'water_source', // Oasis, spring, well in wilderness
+  'landmark', // Natural landmark (rocks, canyon, etc)
 
   // Ruins & Abandoned
-  'ruins',            // Abandoned structures
+  'ruins', // Abandoned structures
 
   // Special
-  'quest_location',   // Dynamically assigned for quests
-  'hidden_cache',     // Secret areas
-  'ambush_point',     // Danger zones
-  'meeting_point',    // NPC gatherings
+  'quest_location', // Dynamically assigned for quests
+  'hidden_cache', // Secret areas
+  'ambush_point', // Danger zones
+  'meeting_point', // NPC gatherings
 ]);
 export type SlotType = z.infer<typeof SlotTypeSchema>;
 
@@ -149,37 +201,37 @@ export type SlotType = z.infer<typeof SlotTypeSchema>;
  */
 export const MarkerTypeSchema = z.enum([
   // Universal
-  'entrance',         // Main entry point
-  'exit',             // Alternative exit
-  'spawn_point',      // Where NPCs appear
+  'entrance', // Main entry point
+  'exit', // Alternative exit
+  'spawn_point', // Where NPCs appear
 
   // Interaction
-  'counter',          // Service counter (shops, bars)
-  'desk',             // Work desk (offices)
-  'bed',              // Sleeping spot
-  'chair',            // Sitting spot
-  'table',            // Gathering spot
+  'counter', // Service counter (shops, bars)
+  'desk', // Work desk (offices)
+  'bed', // Sleeping spot
+  'chair', // Sitting spot
+  'table', // Gathering spot
 
   // Functional
-  'storage',          // Where containers can go
-  'display',          // Where items are shown (shop windows)
-  'workbench',        // Crafting spot
+  'storage', // Where containers can go
+  'display', // Where items are shown (shop windows)
+  'workbench', // Crafting spot
 
   // Quest/Event
-  'evidence_spot',    // Where clues can be placed
-  'hiding_spot',      // Where things/people hide
-  'ambush_trigger',   // Where combat can start
+  'evidence_spot', // Where clues can be placed
+  'hiding_spot', // Where things/people hide
+  'ambush_trigger', // Where combat can start
   'conversation_spot', // Where important talks happen
 
   // Special
-  'cell',             // Jail cell
-  'vault',            // Secure storage
-  'altar',            // Religious spot
-  'stage',            // Performance area
+  'cell', // Jail cell
+  'vault', // Secure storage
+  'altar', // Religious spot
+  'stage', // Performance area
 
   // Wilderness/Camp
-  'rest_spot',        // Where player can rest outdoors
-  'vantage_point',    // Elevated lookout position
+  'rest_spot', // Where player can rest outdoors
+  'vantage_point', // Elevated lookout position
 ]);
 export type MarkerType = z.infer<typeof MarkerTypeSchema>;
 
@@ -206,14 +258,14 @@ export type Marker = z.infer<typeof MarkerSchema>;
  * Think of them as "fill regions" for procedural content.
  */
 export const ZoneTypeSchema = z.enum([
-  'loot_area',        // Containers can spawn here
-  'npc_area',         // NPCs can wander here
-  'combat_area',      // Fighting can happen here
-  'combat_zone',      // Tactical combat zone (ambush, flanking)
-  'event_stage',      // Events can be staged here
-  'decoration_area',  // Random props can fill here
-  'restricted_area',  // Player shouldn't normally access
-  'public_area',      // Always accessible
+  'loot_area', // Containers can spawn here
+  'npc_area', // NPCs can wander here
+  'combat_area', // Fighting can happen here
+  'combat_zone', // Tactical combat zone (ambush, flanking)
+  'event_stage', // Events can be staged here
+  'decoration_area', // Random props can fill here
+  'restricted_area', // Player shouldn't normally access
+  'public_area', // Always accessible
 ]);
 export type ZoneType = z.infer<typeof ZoneTypeSchema>;
 
@@ -387,17 +439,26 @@ export type EntryPoint = z.infer<typeof EntryPointSchema>;
 // ============================================================================
 
 export const LocationTypeSchema = z.enum([
-  'town', 'city', 'village', 'outpost',
-  'mine', 'camp', 'ranch', 'fort',
-  'ruins', 'cave', 'encounter', 'special',
+  'town',
+  'city',
+  'village',
+  'outpost',
+  'mine',
+  'camp',
+  'ranch',
+  'fort',
+  'ruins',
+  'cave',
+  'encounter',
+  'special',
 ]);
 
 export const LocationSizeSchema = z.enum([
-  'tiny',      // 1-3 slots
-  'small',     // 4-8 slots
-  'medium',    // 9-20 slots
-  'large',     // 21-50 slots
-  'huge',      // 50+ slots
+  'tiny', // 1-3 slots
+  'small', // 4-8 slots
+  'medium', // 9-20 slots
+  'large', // 21-50 slots
+  'huge', // 50+ slots
 ]);
 
 /**
@@ -463,10 +524,12 @@ export const LocationSchema = z.object({
    * Town planners designate this explicitly.
    * If not specified, defaults to first entry point.
    */
-  playerSpawn: z.object({
-    coord: HexCoordSchema,
-    facing: HexRotationSchema.optional(), // Direction player faces (0-5)
-  }).optional(),
+  playerSpawn: z
+    .object({
+      coord: HexCoordSchema,
+      facing: HexRotationSchema.optional(), // Direction player faces (0-5)
+    })
+    .optional(),
 
   /** Tags for filtering/matching */
   tags: z.array(z.string()).default([]),
@@ -475,21 +538,23 @@ export const LocationSchema = z.object({
    * Atmosphere hints (for runtime systems, not hardcoded behavior)
    * These are SUGGESTIONS that game logic can use
    */
-  atmosphere: z.object({
-    /** General danger level (affects random spawns) */
-    dangerLevel: z.number().int().min(0).max(10).default(0),
-    /** Economic prosperity (affects loot, prices) */
-    wealthLevel: z.number().int().min(1).max(10).default(5),
-    /** Population density hint */
-    populationDensity: z.enum(['abandoned', 'sparse', 'normal', 'crowded']).default('normal'),
-    /** Lawfulness (affects NPC behavior) */
-    lawLevel: z.enum(['lawless', 'frontier', 'orderly', 'strict']).default('frontier'),
-  }).default(() => ({
-    dangerLevel: 0,
-    wealthLevel: 5,
-    populationDensity: 'normal' as const,
-    lawLevel: 'frontier' as const,
-  })),
+  atmosphere: z
+    .object({
+      /** General danger level (affects random spawns) */
+      dangerLevel: z.number().int().min(0).max(10).default(0),
+      /** Economic prosperity (affects loot, prices) */
+      wealthLevel: z.number().int().min(1).max(10).default(5),
+      /** Population density hint */
+      populationDensity: z.enum(['abandoned', 'sparse', 'normal', 'crowded']).default('normal'),
+      /** Lawfulness (affects NPC behavior) */
+      lawLevel: z.enum(['lawless', 'frontier', 'orderly', 'strict']).default('frontier'),
+    })
+    .default(() => ({
+      dangerLevel: 0,
+      wealthLevel: 5,
+      populationDensity: 'normal' as const,
+      lawLevel: 'frontier' as const,
+    })),
 });
 export type Location = z.infer<typeof LocationSchema>;
 
@@ -506,8 +571,16 @@ export const WorldLocationSchema = z.object({
   startDiscovered: z.boolean().default(false),
   /** Icon type */
   icon: z.enum([
-    'town', 'city', 'village', 'camp', 'mine',
-    'fort', 'ruins', 'cave', 'special', 'unknown',
+    'town',
+    'city',
+    'village',
+    'camp',
+    'mine',
+    'fort',
+    'ruins',
+    'cave',
+    'special',
+    'unknown',
   ]),
   /** Tags */
   tags: z.array(z.string()).default([]),
@@ -519,8 +592,13 @@ export type WorldLocation = z.infer<typeof WorldLocationSchema>;
 // ============================================================================
 
 export const RegionBiomeSchema = z.enum([
-  'desert', 'grassland', 'badlands', 'mountains',
-  'forest', 'swamp', 'tundra',
+  'desert',
+  'grassland',
+  'badlands',
+  'mountains',
+  'forest',
+  'swamp',
+  'tundra',
 ]);
 
 export const WorldPathSchema = z.object({
@@ -554,13 +632,15 @@ export const RegionSchema = z.object({
   paths: z.array(WorldPathSchema).default([]),
 
   /** Atmosphere (hints for runtime) */
-  atmosphere: z.object({
-    baseDangerLevel: z.number().int().min(0).max(10).default(1),
-    encounterDensity: z.enum(['none', 'rare', 'occasional', 'frequent']).default('occasional'),
-  }).default(() => ({
-    baseDangerLevel: 1,
-    encounterDensity: 'occasional' as const,
-  })),
+  atmosphere: z
+    .object({
+      baseDangerLevel: z.number().int().min(0).max(10).default(1),
+      encounterDensity: z.enum(['none', 'rare', 'occasional', 'frequent']).default('occasional'),
+    })
+    .default(() => ({
+      baseDangerLevel: 1,
+      encounterDensity: 'occasional' as const,
+    })),
 
   tags: z.array(z.string()).default([]),
 });

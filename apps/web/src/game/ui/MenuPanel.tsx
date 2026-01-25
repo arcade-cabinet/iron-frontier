@@ -20,7 +20,7 @@ function SettingToggle({
   label,
   description,
   enabled,
-  onChange
+  onChange,
 }: {
   label: string;
   description?: string;
@@ -31,9 +31,7 @@ function SettingToggle({
     <div className="flex items-center justify-between py-2">
       <div className="flex-1">
         <Label className="text-amber-100 text-sm">{label}</Label>
-        {description && (
-          <p className="text-xs text-amber-500/70 mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-amber-500/70 mt-0.5">{description}</p>}
       </div>
       <Switch
         checked={enabled}
@@ -63,9 +61,7 @@ function SettingSlider({
     <div className="py-2">
       <div className="flex items-center justify-between mb-2">
         <Label className="text-amber-100 text-sm">{label}</Label>
-        <span className="text-amber-400 text-xs font-mono">
-          {Math.round(value * 100)}%
-        </span>
+        <span className="text-amber-400 text-xs font-mono">{Math.round(value * 100)}%</span>
       </div>
       <Slider
         value={[value]}
@@ -86,7 +82,12 @@ function SettingSlider({
 function VolumeIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+      />
     </svg>
   );
 }
@@ -94,7 +95,12 @@ function VolumeIcon() {
 function ControlsIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
+      />
     </svg>
   );
 }
@@ -102,7 +108,12 @@ function ControlsIcon() {
 function DisplayIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+      />
     </svg>
   );
 }
@@ -110,7 +121,12 @@ function DisplayIcon() {
 function SaveIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+      />
     </svg>
   );
 }
@@ -118,7 +134,12 @@ function SaveIcon() {
 function HomeIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+      />
     </svg>
   );
 }
@@ -126,7 +147,12 @@ function HomeIcon() {
 function RefreshIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+      />
     </svg>
   );
 }
@@ -145,7 +171,7 @@ export function MenuPanel() {
     saveGame,
     settings,
     updateSettings,
-    setPhase
+    setPhase,
   } = useGameStore();
 
   const menuOpen = activePanel === 'menu';
@@ -208,13 +234,27 @@ export function MenuPanel() {
                   <CardContent className="p-3">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-full bg-amber-700/80 flex items-center justify-center border-2 border-amber-600/50">
-                        <svg className="w-5 h-5 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <svg
+                          className="w-5 h-5 text-amber-200"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
                         </svg>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-amber-100 font-bold text-sm truncate">{playerName}</div>
-                        <div className="text-amber-400 text-xs">Level {playerStats.level} Outlaw</div>
+                        <div className="text-amber-100 font-bold text-sm truncate">
+                          {playerName}
+                        </div>
+                        <div className="text-amber-400 text-xs">
+                          Level {playerStats.level} Outlaw
+                        </div>
                       </div>
                     </div>
 
@@ -223,14 +263,18 @@ export function MenuPanel() {
                       <div>
                         <div className="flex justify-between text-[10px] text-amber-400/80 mb-0.5">
                           <span>HP</span>
-                          <span>{playerStats.health}/{playerStats.maxHealth}</span>
+                          <span>
+                            {playerStats.health}/{playerStats.maxHealth}
+                          </span>
                         </div>
                         <Progress value={healthPercent} className="h-1.5 bg-amber-900/50" />
                       </div>
                       <div>
                         <div className="flex justify-between text-[10px] text-amber-400/80 mb-0.5">
                           <span>XP</span>
-                          <span>{playerStats.xp}/{playerStats.xpToNext}</span>
+                          <span>
+                            {playerStats.xp}/{playerStats.xpToNext}
+                          </span>
                         </div>
                         <Progress value={xpPercent} className="h-1.5 bg-amber-900/50" />
                       </div>
@@ -238,16 +282,25 @@ export function MenuPanel() {
 
                     <div className="flex items-center justify-between mt-3 pt-2 border-t border-amber-700/30">
                       <div className="flex items-center gap-1.5">
-                        <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-4 h-4 text-yellow-500"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <circle cx="12" cy="12" r="10" />
                         </svg>
-                        <span className="text-yellow-400 font-bold text-sm">{playerStats.gold}</span>
+                        <span className="text-yellow-400 font-bold text-sm">
+                          {playerStats.gold}
+                        </span>
                       </div>
-                      <div className={cn(
-                        'text-xs font-medium',
-                        playerStats.reputation >= 0 ? 'text-green-400' : 'text-red-400'
-                      )}>
-                        Rep: {playerStats.reputation >= 0 ? '+' : ''}{playerStats.reputation}
+                      <div
+                        className={cn(
+                          'text-xs font-medium',
+                          playerStats.reputation >= 0 ? 'text-green-400' : 'text-red-400'
+                        )}
+                      >
+                        Rep: {playerStats.reputation >= 0 ? '+' : ''}
+                        {playerStats.reputation}
                       </div>
                     </div>
                   </CardContent>
@@ -391,9 +444,7 @@ export function MenuPanel() {
 
         {/* Version Footer */}
         <div className="absolute bottom-2 sm:bottom-2 left-0 right-0 text-center pb-safe">
-          <p className="text-amber-600/40 text-[9px] sm:text-[10px]">
-            Iron Frontier v0.1
-          </p>
+          <p className="text-amber-600/40 text-[9px] sm:text-[10px]">Iron Frontier v0.1</p>
         </div>
       </SheetContent>
     </Sheet>

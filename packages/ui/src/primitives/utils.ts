@@ -2,7 +2,7 @@
  * Platform-agnostic utility functions
  */
 
-import { clsx, type ClassValue } from 'clsx';
+import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 /**
@@ -24,9 +24,7 @@ export function generateId(prefix = 'ui'): string {
 /**
  * Create platform-specific style object from tokens
  */
-export function createStyleFromTokens<T extends Record<string, unknown>>(
-  tokens: T
-): T {
+export function createStyleFromTokens<T extends Record<string, unknown>>(tokens: T): T {
   return tokens;
 }
 
@@ -34,10 +32,7 @@ export function createStyleFromTokens<T extends Record<string, unknown>>(
  * Check if running in React Native environment
  */
 export function isReactNative(): boolean {
-  return (
-    typeof navigator !== 'undefined' &&
-    navigator.product === 'ReactNative'
-  );
+  return typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
 }
 
 /**
@@ -50,11 +45,7 @@ export function isWeb(): boolean {
 /**
  * Safely access platform-specific values
  */
-export function platformSelect<T>(options: {
-  web?: T;
-  native?: T;
-  default: T;
-}): T {
+export function platformSelect<T>(options: { web?: T; native?: T; default: T }): T {
   if (isWeb() && options.web !== undefined) {
     return options.web;
   }

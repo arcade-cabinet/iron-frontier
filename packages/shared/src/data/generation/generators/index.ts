@@ -2,129 +2,123 @@
  * Generators Index - Export all generator functionality
  */
 
-// Name generation
+// Dialogue generation
 export {
-  initNamePools,
-  generateName,
-  generateNameWeighted,
-  generatePlaceName,
-  generateUniqueName,
-  generateOutlawAlias,
-  generateAutomatonDesignation,
-  type GeneratedName,
-  type GeneratedPlaceName,
-  type NameGender,
-} from './nameGenerator';
-
-// NPC generation
-export {
-  initNPCTemplates,
-  getNPCTemplate,
-  getNPCTemplatesByRole,
-  getNPCTemplatesForLocation,
-  generateNPC,
-  generateNPCsForLocation,
-  generateNPCsForBuilding,
-  type GeneratedNPC,
-} from './npcGenerator';
-
-// Quest generation
-export {
-  initQuestTemplates,
-  getQuestTemplate,
-  getQuestTemplatesByArchetype,
-  getQuestTemplatesForLevel,
-  getQuestTemplatesForGiver,
-  generateQuest,
-  generateRandomQuest,
-  type GeneratedQuest,
-  type GeneratedQuestStage,
-  type GeneratedObjective,
-  type QuestGenerationContext,
-} from './questGenerator';
-
+  buildDialogueTree,
+  type GeneratedDialogueChoice,
+  type GeneratedDialogueNode,
+  type GeneratedDialogueTree,
+  generateSimpleDialogueTree,
+  getDialogueTreesForRole,
+  getDialogueTreeTemplate,
+  getSnippetsByCategory,
+  getSnippetsForNPC,
+  initDialogueData,
+} from './dialogueGenerator';
 // Encounter generation
 export {
-  initEncounterTemplates,
-  getEncounterTemplate,
+  type GeneratedEncounter,
+  type GeneratedEnemy,
+  generateEncounter,
+  generateRandomEncounter,
   getEncountersForBiome,
   getEncountersForDifficulty,
   getEncountersForLocation,
   getEncountersForTime,
-  generateEncounter,
-  generateRandomEncounter,
+  getEncounterTemplate,
+  initEncounterTemplates,
   shouldTriggerEncounter,
-  type GeneratedEnemy,
-  type GeneratedEncounter,
 } from './encounterGenerator';
-
-// Dialogue generation
-export {
-  initDialogueData,
-  getSnippetsByCategory,
-  getSnippetsForNPC,
-  getDialogueTreesForRole,
-  getDialogueTreeTemplate,
-  buildDialogueTree,
-  generateSimpleDialogueTree,
-  type GeneratedDialogueChoice,
-  type GeneratedDialogueNode,
-  type GeneratedDialogueTree,
-} from './dialogueGenerator';
-
-// World generation
-export {
-  WorldGenerator,
-  generateWorld,
-  type GeneratedLocation,
-  type GeneratedRegion,
-  type GeneratedWorld,
-  type WorldGenerationOptions,
-} from './worldGenerator';
-
 // Item generation
 export {
-  // Initialization
-  initItemGeneration,
-  // Core generators
-  generateWeapon,
+  ARMOR_PREFIXES,
+  ARMOR_SUFFIXES,
+  CONSUMABLE_PREFIXES,
+  CONSUMABLE_SUFFIXES,
+  calculateItemValue,
+  // Default pools
+  DEFAULT_MATERIALS,
+  DEFAULT_QUALITIES,
+  DEFAULT_STYLES,
+  // Types
+  type GeneratedItem,
   generateArmor,
   generateConsumable,
   generateLoot,
   generateShopInventory,
-  // Helper functions
-  scaleStatByLevel,
-  calculateItemValue,
+  // Core generators
+  generateWeapon,
   // Template/pool accessors
   getItemTemplate,
   getItemTemplatesByType,
   getLootTable,
   getLootTablesByTag,
+  type ItemTemplate,
   // Schemas
   ItemTemplateSchema,
-  RarityWeightsSchema,
-  StatRangeSchema,
+  // Initialization
+  initItemGeneration,
+  type LootTableEntry,
   LootTableEntrySchema,
+  type MaterialPool,
+  type ProceduralLootTable,
   ProceduralLootTableSchema,
-  // Default pools
-  DEFAULT_MATERIALS,
-  DEFAULT_QUALITIES,
-  DEFAULT_STYLES,
+  type QualityPool,
+  type RarityWeights,
+  RarityWeightsSchema,
+  type ShopInventoryItem,
+  type StatRange,
+  StatRangeSchema,
+  type StylePool,
+  // Helper functions
+  scaleStatByLevel,
   WEAPON_PREFIXES,
   WEAPON_SUFFIXES,
-  ARMOR_PREFIXES,
-  ARMOR_SUFFIXES,
-  CONSUMABLE_PREFIXES,
-  CONSUMABLE_SUFFIXES,
-  // Types
-  type GeneratedItem,
-  type ShopInventoryItem,
-  type ItemTemplate,
-  type RarityWeights,
-  type StatRange,
-  type LootTableEntry,
-  type ProceduralLootTable,
-  type MaterialPool,
-  type QualityPool,
-  type StylePool,
 } from './itemGenerator';
+// Name generation
+export {
+  type GeneratedName,
+  type GeneratedPlaceName,
+  generateAutomatonDesignation,
+  generateName,
+  generateNameWeighted,
+  generateOutlawAlias,
+  generatePlaceName,
+  generateUniqueName,
+  initNamePools,
+  type NameGender,
+} from './nameGenerator';
+// NPC generation
+export {
+  type GeneratedNPC,
+  generateNPC,
+  generateNPCsForBuilding,
+  generateNPCsForLocation,
+  getNPCTemplate,
+  getNPCTemplatesByRole,
+  getNPCTemplatesForLocation,
+  initNPCTemplates,
+} from './npcGenerator';
+// Quest generation
+export {
+  type GeneratedObjective,
+  type GeneratedQuest,
+  type GeneratedQuestStage,
+  generateQuest,
+  generateRandomQuest,
+  getQuestTemplate,
+  getQuestTemplatesByArchetype,
+  getQuestTemplatesForGiver,
+  getQuestTemplatesForLevel,
+  initQuestTemplates,
+  type QuestGenerationContext,
+} from './questGenerator';
+// World generation
+export {
+  type GeneratedLocation,
+  type GeneratedRegion,
+  type GeneratedWorld,
+  generateWorld,
+  type WorldGenerationOptions,
+  WorldGenerator,
+} from './worldGenerator';

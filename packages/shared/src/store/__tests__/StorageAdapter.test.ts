@@ -2,11 +2,8 @@
  * Tests for StorageAdapter implementations
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  MemoryStorageAdapter,
-  NoopStorageAdapter,
-} from '../StorageAdapter';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { MemoryStorageAdapter, NoopStorageAdapter } from '../StorageAdapter';
 
 describe('MemoryStorageAdapter', () => {
   let adapter: MemoryStorageAdapter;

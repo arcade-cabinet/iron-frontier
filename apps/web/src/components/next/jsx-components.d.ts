@@ -52,4 +52,4 @@ declare module './script.jsx' {
   import React from 'react';
   const Script: React.FC<any>;
   export default Script;
-} 
+}

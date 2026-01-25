@@ -12,41 +12,36 @@
  * - Compatible with existing data structures (NPCDefinition, WorldItemSpawn, etc.)
  */
 
-import { SeededRandom, hashString, combineSeeds } from './seededRandom';
-import {
-  generateNPCsForLocation,
-  initNPCTemplates,
-  type GeneratedNPC,
-} from './generators/npcGenerator';
-import {
-  generateRandomQuest,
-  initQuestTemplates,
-  type GeneratedQuest,
-} from './generators/questGenerator';
-import {
-  initNamePools,
-} from './generators/nameGenerator';
-import {
-  generateShopInventory,
-  type ShopInventoryItem,
-} from './generators/itemGenerator';
-import {
-  initDialogueData,
-  generateSimpleDialogueTree,
-  type GeneratedDialogueTree,
-} from './generators/dialogueGenerator';
-import type { NPCDefinition, DialogueTree, DialogueNode, DialogueChoice } from '../schemas/npc';
 import type { WorldItemSpawn } from '../items/worldItems';
+import type { GenerationContext } from '../schemas/generation';
+import type { DialogueChoice, DialogueNode, DialogueTree, NPCDefinition } from '../schemas/npc';
 import type { HexCoord } from '../schemas/spatial';
 import type { LocationRef } from '../schemas/world';
 import type { ResolvedLocation } from '../worlds/WorldLoader';
-import type { GenerationContext } from '../schemas/generation';
+import {
+  type GeneratedDialogueTree,
+  generateSimpleDialogueTree,
+  initDialogueData,
+} from './generators/dialogueGenerator';
+import { generateShopInventory, type ShopInventoryItem } from './generators/itemGenerator';
+import { initNamePools } from './generators/nameGenerator';
+import {
+  type GeneratedNPC,
+  generateNPCsForLocation,
+  initNPCTemplates,
+} from './generators/npcGenerator';
+import {
+  type GeneratedQuest,
+  generateRandomQuest,
+  initQuestTemplates,
+} from './generators/questGenerator';
+import { DIALOGUE_SNIPPETS } from './pools/dialogueSnippets';
 
 // Import templates and pools
 import { NAME_POOLS, PLACE_NAME_POOLS } from './pools/index';
-import { NPC_TEMPLATES, QUEST_TEMPLATES } from './templates/index';
-import { DIALOGUE_SNIPPETS } from './pools/dialogueSnippets';
+import { combineSeeds, hashString, SeededRandom } from './seededRandom';
 import { DIALOGUE_TREE_TEMPLATES } from './templates/dialogueTreeTemplates';
+import { NPC_TEMPLATES, QUEST_TEMPLATES } from './templates/index';
 
 // ============================================================================
 // TYPES
@@ -262,7 +257,9 @@ class ProceduralLocationManagerClass {
     this.npcCache.set(locationId, npcs);
     this.itemCache.set(locationId, worldItems);
 
-    console.log(`[ProceduralLocationManager] Generated: ${npcs.length} NPCs, ${worldItems.length} items, ${quests.length} quests`);
+    console.log(
+      `[ProceduralLocationManager] Generated: ${npcs.length} NPCs, ${worldItems.length} items, ${quests.length} quests`
+    );
 
     return content;
   }
@@ -461,70 +458,71 @@ class ProceduralLocationManagerClass {
 
     // Item pools based on location type
     // Location types match NPC template validLocationTypes: 'town', 'city', 'outpost', 'camp', 'ranch', 'mine'
-    const itemPools: Record<string, { id: string; weight: number; quantity: [number, number] }[]> = {
-      town: [
-        { id: 'bandage', weight: 20, quantity: [1, 2] },
-        { id: 'whiskey', weight: 15, quantity: [1, 1] },
-        { id: 'revolver_ammo', weight: 25, quantity: [6, 12] },
-        { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
-        { id: 'lockpick', weight: 10, quantity: [1, 3] },
-        { id: 'tobacco', weight: 10, quantity: [1, 2] },
-        { id: 'gold_nugget', weight: 5, quantity: [1, 1] },
-      ],
-      city: [
-        { id: 'bandage', weight: 15, quantity: [1, 3] },
-        { id: 'whiskey', weight: 10, quantity: [1, 2] },
-        { id: 'revolver_ammo', weight: 20, quantity: [6, 12] },
-        { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
-        { id: 'lockpick', weight: 15, quantity: [1, 3] },
-        { id: 'tobacco', weight: 10, quantity: [1, 2] },
-        { id: 'gold_nugget', weight: 10, quantity: [1, 2] },
-        { id: 'pocket_watch', weight: 5, quantity: [1, 1] },
-      ],
-      mine: [
-        { id: 'pickaxe', weight: 15, quantity: [1, 1] },
-        { id: 'gold_nugget', weight: 25, quantity: [1, 3] },
-        { id: 'dynamite', weight: 10, quantity: [1, 2] },
-        { id: 'bandage', weight: 20, quantity: [1, 2] },
-        { id: 'lantern_oil', weight: 15, quantity: [1, 2] },
-        { id: 'rope', weight: 10, quantity: [1, 1] },
-        { id: 'canteen', weight: 5, quantity: [1, 1] },
-      ],
-      ruin: [
-        { id: 'gold_nugget', weight: 20, quantity: [1, 2] },
-        { id: 'old_letter', weight: 15, quantity: [1, 1] },
-        { id: 'revolver_ammo', weight: 20, quantity: [3, 8] },
-        { id: 'bandage', weight: 15, quantity: [1, 3] },
-        { id: 'whiskey', weight: 15, quantity: [1, 2] },
-        { id: 'lockpick', weight: 10, quantity: [1, 2] },
-        { id: 'mysterious_key', weight: 5, quantity: [1, 1] },
-      ],
-      ranch: [
-        { id: 'rope', weight: 20, quantity: [1, 2] },
-        { id: 'bandage', weight: 15, quantity: [1, 2] },
-        { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
-        { id: 'canteen', weight: 15, quantity: [1, 1] },
-        { id: 'dried_meat', weight: 20, quantity: [1, 3] },
-        { id: 'tobacco', weight: 10, quantity: [1, 2] },
-        { id: 'horseshoe', weight: 5, quantity: [1, 1] },
-      ],
-      outpost: [
-        { id: 'revolver_ammo', weight: 25, quantity: [6, 12] },
-        { id: 'bandage', weight: 20, quantity: [1, 2] },
-        { id: 'canteen', weight: 15, quantity: [1, 1] },
-        { id: 'rope', weight: 15, quantity: [1, 1] },
-        { id: 'lantern_oil', weight: 15, quantity: [1, 2] },
-        { id: 'whiskey', weight: 10, quantity: [1, 1] },
-      ],
-      camp: [
-        { id: 'bandage', weight: 25, quantity: [1, 2] },
-        { id: 'dried_meat', weight: 20, quantity: [1, 2] },
-        { id: 'canteen', weight: 20, quantity: [1, 1] },
-        { id: 'revolver_ammo', weight: 15, quantity: [3, 6] },
-        { id: 'tobacco', weight: 15, quantity: [1, 1] },
-        { id: 'bedroll', weight: 5, quantity: [1, 1] },
-      ],
-    };
+    const itemPools: Record<string, { id: string; weight: number; quantity: [number, number] }[]> =
+      {
+        town: [
+          { id: 'bandage', weight: 20, quantity: [1, 2] },
+          { id: 'whiskey', weight: 15, quantity: [1, 1] },
+          { id: 'revolver_ammo', weight: 25, quantity: [6, 12] },
+          { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
+          { id: 'lockpick', weight: 10, quantity: [1, 3] },
+          { id: 'tobacco', weight: 10, quantity: [1, 2] },
+          { id: 'gold_nugget', weight: 5, quantity: [1, 1] },
+        ],
+        city: [
+          { id: 'bandage', weight: 15, quantity: [1, 3] },
+          { id: 'whiskey', weight: 10, quantity: [1, 2] },
+          { id: 'revolver_ammo', weight: 20, quantity: [6, 12] },
+          { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
+          { id: 'lockpick', weight: 15, quantity: [1, 3] },
+          { id: 'tobacco', weight: 10, quantity: [1, 2] },
+          { id: 'gold_nugget', weight: 10, quantity: [1, 2] },
+          { id: 'pocket_watch', weight: 5, quantity: [1, 1] },
+        ],
+        mine: [
+          { id: 'pickaxe', weight: 15, quantity: [1, 1] },
+          { id: 'gold_nugget', weight: 25, quantity: [1, 3] },
+          { id: 'dynamite', weight: 10, quantity: [1, 2] },
+          { id: 'bandage', weight: 20, quantity: [1, 2] },
+          { id: 'lantern_oil', weight: 15, quantity: [1, 2] },
+          { id: 'rope', weight: 10, quantity: [1, 1] },
+          { id: 'canteen', weight: 5, quantity: [1, 1] },
+        ],
+        ruin: [
+          { id: 'gold_nugget', weight: 20, quantity: [1, 2] },
+          { id: 'old_letter', weight: 15, quantity: [1, 1] },
+          { id: 'revolver_ammo', weight: 20, quantity: [3, 8] },
+          { id: 'bandage', weight: 15, quantity: [1, 3] },
+          { id: 'whiskey', weight: 15, quantity: [1, 2] },
+          { id: 'lockpick', weight: 10, quantity: [1, 2] },
+          { id: 'mysterious_key', weight: 5, quantity: [1, 1] },
+        ],
+        ranch: [
+          { id: 'rope', weight: 20, quantity: [1, 2] },
+          { id: 'bandage', weight: 15, quantity: [1, 2] },
+          { id: 'rifle_ammo', weight: 15, quantity: [5, 10] },
+          { id: 'canteen', weight: 15, quantity: [1, 1] },
+          { id: 'dried_meat', weight: 20, quantity: [1, 3] },
+          { id: 'tobacco', weight: 10, quantity: [1, 2] },
+          { id: 'horseshoe', weight: 5, quantity: [1, 1] },
+        ],
+        outpost: [
+          { id: 'revolver_ammo', weight: 25, quantity: [6, 12] },
+          { id: 'bandage', weight: 20, quantity: [1, 2] },
+          { id: 'canteen', weight: 15, quantity: [1, 1] },
+          { id: 'rope', weight: 15, quantity: [1, 1] },
+          { id: 'lantern_oil', weight: 15, quantity: [1, 2] },
+          { id: 'whiskey', weight: 10, quantity: [1, 1] },
+        ],
+        camp: [
+          { id: 'bandage', weight: 25, quantity: [1, 2] },
+          { id: 'dried_meat', weight: 20, quantity: [1, 2] },
+          { id: 'canteen', weight: 20, quantity: [1, 1] },
+          { id: 'revolver_ammo', weight: 15, quantity: [3, 6] },
+          { id: 'tobacco', weight: 15, quantity: [1, 1] },
+          { id: 'bedroll', weight: 5, quantity: [1, 1] },
+        ],
+      };
 
     const pool = itemPools[locationType] || itemPools.town;
     const totalWeight = pool.reduce((sum, item) => sum + item.weight, 0);
@@ -594,11 +592,13 @@ class ProceduralLocationManagerClass {
     // Convert nodes from Map to array
     const nodes: DialogueNode[] = [];
     for (const [, genNode] of generated.nodes) {
-      const choices: DialogueChoice[] = genNode.choices.map(choice => ({
+      const choices: DialogueChoice[] = genNode.choices.map((choice) => ({
         text: choice.text,
         nextNodeId: choice.nextNodeId,
         conditions: [],
-        effects: choice.tags.includes('open_shop') ? [{ type: 'open_shop' as const, target: npc.shopId }] : [],
+        effects: choice.tags.includes('open_shop')
+          ? [{ type: 'open_shop' as const, target: npc.shopId }]
+          : [],
         tags: choice.tags,
       }));
 
@@ -655,7 +655,7 @@ class ProceduralLocationManagerClass {
     return {
       npcId: npc.id,
       shopType,
-      items: generatedItems.map(item => ({
+      items: generatedItems.map((item) => ({
         itemId: item.item.id,
         stock: item.quantity,
         basePrice: item.buyPrice,
@@ -675,27 +675,31 @@ class ProceduralLocationManagerClass {
     context: GenerationContext
   ): GeneratedQuest[] {
     const quests: GeneratedQuest[] = [];
-    const questGivers = npcs.filter(npc => npc.questGiver);
+    const questGivers = npcs.filter((npc) => npc.questGiver);
 
     for (const giver of questGivers) {
       try {
-        const quest = generateRandomQuest(rng, {
-          ...context,
-          availableNPCs: npcs.map(n => ({
-            id: n.id,
-            name: n.name,
-            role: n.role,
-            tags: n.tags,
-          })),
-          availableItems: [],
-          availableLocations: [],
-          availableEnemies: [],
-        }, {
-          id: giver.id,
-          name: giver.name,
-          role: giver.role,
-          faction: giver.faction,
-        });
+        const quest = generateRandomQuest(
+          rng,
+          {
+            ...context,
+            availableNPCs: npcs.map((n) => ({
+              id: n.id,
+              name: n.name,
+              role: n.role,
+              tags: n.tags,
+            })),
+            availableItems: [],
+            availableLocations: [],
+            availableEnemies: [],
+          },
+          {
+            id: giver.id,
+            name: giver.name,
+            role: giver.role,
+            faction: giver.faction,
+          }
+        );
 
         if (quest) {
           quests.push(quest);

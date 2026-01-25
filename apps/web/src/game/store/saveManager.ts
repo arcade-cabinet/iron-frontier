@@ -106,7 +106,6 @@ export async function loadGame(saveId: string): Promise<any | null> {
     return null;
   }
 }
-}
 
 /**
  * Trigger a browser download of the SQLite .save file

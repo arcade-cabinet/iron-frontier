@@ -6,9 +6,9 @@
  */
 
 import {
-  AbstractMesh,
-  AnimationGroup,
-  ArcRotateCamera,
+  type AbstractMesh,
+  type AnimationGroup,
+  type ArcRotateCamera,
   Color3,
   Color4,
   DirectionalLight,
@@ -19,7 +19,7 @@ import {
   Scene,
   SceneLoader,
   ShadowGenerator,
-  Skeleton,
+  type Skeleton,
   StandardMaterial,
   TransformNode,
   Vector3,
@@ -27,44 +27,44 @@ import {
 import '@babylonjs/loaders/glTF';
 
 import { WesternAssets } from '@iron-frontier/assets';
+import type { Location } from '@iron-frontier/shared/data/schemas/spatial';
 import {
-  HexCoord,
-  HexTileData,
-  HexTerrainType,
-  HexElevation,
-  HexEdgeType,
-  HexFeatureType,
-  HexBuildingType,
-  DEFAULT_HEX_LAYOUT,
-  hexKey,
-  createEmptyTile,
-  isTerrainPassable,
-  isTerrainWater,
-  isTerrainBuildable,
-} from './HexTypes';
-import {
-  hex,
   hexToWorld as coordHexToWorld,
   worldToHex as coordWorldToHex,
+  hex,
   hexDistance,
   hexNeighbors,
 } from './HexCoord';
 import {
-  HexGridRenderer,
-  hexToWorld,
-  worldToHex,
   createEmptyGrid,
   HEX_SIZE,
   type HexGrid,
+  HexGridRenderer,
+  hexToWorld,
+  worldToHex,
 } from './HexGridRenderer';
-import { HexTileLoader, getHexTileLoader } from './HexTileLoader';
 import {
-  HexMapGenerator,
-  generateHexMap,
   type HexTileData as GeneratorTileData,
+  generateHexMap,
+  HexMapGenerator,
 } from './HexMapGenerator';
-import { loadLocation, getDefaultSpawnPoint, type LoadedLocation } from './LocationLoader';
-import type { Location } from '@iron-frontier/shared/data/schemas/spatial';
+import { getHexTileLoader, type HexTileLoader } from './HexTileLoader';
+import {
+  createEmptyTile,
+  DEFAULT_HEX_LAYOUT,
+  HexBuildingType,
+  type HexCoord,
+  HexEdgeType,
+  type HexElevation,
+  HexFeatureType,
+  HexTerrainType,
+  type HexTileData,
+  hexKey,
+  isTerrainBuildable,
+  isTerrainPassable,
+  isTerrainWater,
+} from './HexTypes';
+import { getDefaultSpawnPoint, type LoadedLocation, loadLocation } from './LocationLoader';
 
 // ============================================================================
 // TYPES
@@ -131,31 +131,82 @@ export class HexSceneManager {
 
   // Feature type to model path mapping
   // Scales increased significantly for visibility - calibrated against player/building scale
-  private static readonly FEATURE_MODELS: Record<string, { path: string; file: string; scale: number }> = {
+  private static readonly FEATURE_MODELS: Record<
+    string,
+    { path: string; file: string; scale: number }
+  > = {
     // Vegetation - prominent scales for visual impact
-    [HexFeatureType.Tree]: { path: 'assets/models/nature/', file: 'tree_detailed_fall.glb', scale: 2.5 },
+    [HexFeatureType.Tree]: {
+      path: 'assets/models/nature/',
+      file: 'tree_detailed_fall.glb',
+      scale: 2.5,
+    },
     [HexFeatureType.TreeDead]: { path: 'assets/models/nature/', file: 'deadtree.glb', scale: 2.0 },
     [HexFeatureType.Bush]: { path: 'assets/models/nature/', file: 'bushes.glb', scale: 1.5 },
-    [HexFeatureType.Cactus]: { path: 'assets/models/nature/', file: 'cactus_short.glb', scale: 2.0 },
-    [HexFeatureType.CactusTall]: { path: 'assets/models/nature/', file: 'cactus_tall.glb', scale: 2.5 },
+    [HexFeatureType.Cactus]: {
+      path: 'assets/models/nature/',
+      file: 'cactus_short.glb',
+      scale: 2.0,
+    },
+    [HexFeatureType.CactusTall]: {
+      path: 'assets/models/nature/',
+      file: 'cactus_tall.glb',
+      scale: 2.5,
+    },
     [HexFeatureType.Stump]: { path: 'assets/models/nature/', file: 'stump.glb', scale: 1.5 },
     [HexFeatureType.Log]: { path: 'assets/models/nature/', file: 'log.glb', scale: 1.5 },
     // Rocks - visible landmark sizes
-    [HexFeatureType.RockSmall]: { path: 'assets/models/nature/', file: 'rock_largeA.glb', scale: 0.8 },
-    [HexFeatureType.RockLarge]: { path: 'assets/models/nature/', file: 'rock_largeA.glb', scale: 1.5 },
-    [HexFeatureType.Boulder]: { path: 'assets/models/nature/', file: 'rock_largeA.glb', scale: 2.5 },
+    [HexFeatureType.RockSmall]: {
+      path: 'assets/models/nature/',
+      file: 'rock_largeA.glb',
+      scale: 0.8,
+    },
+    [HexFeatureType.RockLarge]: {
+      path: 'assets/models/nature/',
+      file: 'rock_largeA.glb',
+      scale: 1.5,
+    },
+    [HexFeatureType.Boulder]: {
+      path: 'assets/models/nature/',
+      file: 'rock_largeA.glb',
+      scale: 2.5,
+    },
     // Resources
-    [HexFeatureType.OreDeposit]: { path: 'assets/models/nature/', file: 'rock_largeA.glb', scale: 1.2 },
+    [HexFeatureType.OreDeposit]: {
+      path: 'assets/models/nature/',
+      file: 'rock_largeA.glb',
+      scale: 1.2,
+    },
     [HexFeatureType.Spring]: { path: 'assets/models/nature/', file: 'stump.glb', scale: 1.0 },
     // Western Town Props - prominent for town atmosphere
-    [HexFeatureType.Barrel]: { path: 'assets/models/containers/', file: 'westernbarrel.glb', scale: 1.5 },
-    [HexFeatureType.BarrelWater]: { path: 'assets/models/containers/', file: 'westernbarrel-water.glb', scale: 1.5 },
-    [HexFeatureType.BarrelHay]: { path: 'assets/models/containers/', file: 'westernbarrel-hay.glb', scale: 1.5 },
+    [HexFeatureType.Barrel]: {
+      path: 'assets/models/containers/',
+      file: 'westernbarrel.glb',
+      scale: 1.5,
+    },
+    [HexFeatureType.BarrelWater]: {
+      path: 'assets/models/containers/',
+      file: 'westernbarrel-water.glb',
+      scale: 1.5,
+    },
+    [HexFeatureType.BarrelHay]: {
+      path: 'assets/models/containers/',
+      file: 'westernbarrel-hay.glb',
+      scale: 1.5,
+    },
     [HexFeatureType.Fence]: { path: 'assets/models/structures/', file: 'fence.glb', scale: 1.2 },
     [HexFeatureType.Bench]: { path: 'assets/models/furniture/', file: 'oldbench.glb', scale: 1.5 },
     [HexFeatureType.Cart]: { path: 'assets/models/vehicles/', file: 'westerncart.glb', scale: 1.2 },
-    [HexFeatureType.WantedPoster]: { path: 'assets/models/decor/', file: 'wantedposter.glb', scale: 1.0 },
-    [HexFeatureType.Signpost]: { path: 'assets/models/structures/', file: 'postsign.glb', scale: 1.5 },
+    [HexFeatureType.WantedPoster]: {
+      path: 'assets/models/decor/',
+      file: 'wantedposter.glb',
+      scale: 1.0,
+    },
+    [HexFeatureType.Signpost]: {
+      path: 'assets/models/structures/',
+      file: 'postsign.glb',
+      scale: 1.5,
+    },
     // Camp/misc
     [HexFeatureType.Camp]: { path: 'assets/models/nature/', file: 'log.glb', scale: 1.2 },
   };
@@ -200,7 +251,9 @@ export class HexSceneManager {
       hexSize: this.config.hexSize,
     });
 
-    console.log(`[HexSceneManager] Created with seed ${this.config.seed}, ${this.config.mapWidth}x${this.config.mapHeight} hex grid`);
+    console.log(
+      `[HexSceneManager] Created with seed ${this.config.seed}, ${this.config.mapWidth}x${this.config.mapHeight} hex grid`
+    );
   }
 
   /**
@@ -239,7 +292,9 @@ export class HexSceneManager {
     if (this.loadedLocation) {
       // Use location's entry point
       spawnHex = getDefaultSpawnPoint(this.loadedLocation);
-      console.log(`[HexSceneManager] Spawning at location entry point: (${spawnHex.q}, ${spawnHex.r})`);
+      console.log(
+        `[HexSceneManager] Spawning at location entry point: (${spawnHex.q}, ${spawnHex.r})`
+      );
     } else {
       // Find passable spawn near center
       spawnHex = this.findPassableSpawnPoint({ q: Math.floor(centerQ), r: Math.floor(centerR) });
@@ -281,7 +336,9 @@ export class HexSceneManager {
       this.gridRenderer.setGrid(this.hexGrid);
     }
 
-    console.log(`[HexSceneManager] Loaded ${this.hexGrid.tiles.size} tiles from location "${location.name}"`);
+    console.log(
+      `[HexSceneManager] Loaded ${this.hexGrid.tiles.size} tiles from location "${location.name}"`
+    );
 
     // Spawn feature props (trees, bushes, rocks, etc.)
     await this.spawnFeatureProps();
@@ -411,26 +468,28 @@ export class HexSceneManager {
   private mapTerrainType(baseTile: string, biome: string): HexTerrainType {
     // Direct mapping from Kenney tile names to terrain types
     const mapping: Record<string, HexTerrainType> = {
-      'grass': HexTerrainType.Grass,
+      grass: HexTerrainType.Grass,
       'grass-forest': HexTerrainType.GrassForest,
       'grass-hill': HexTerrainType.GrassHill,
-      'sand': HexTerrainType.Sand,
+      sand: HexTerrainType.Sand,
       'sand-desert': HexTerrainType.SandHill,
       'sand-rocks': HexTerrainType.SandDunes,
-      'dirt': HexTerrainType.Dirt,
+      dirt: HexTerrainType.Dirt,
       'dirt-lumber': HexTerrainType.DirtHill,
-      'stone': HexTerrainType.Stone,
+      stone: HexTerrainType.Stone,
       'stone-hill': HexTerrainType.StoneHill,
       'stone-mountain': HexTerrainType.StoneMountain,
       'stone-rocks': HexTerrainType.StoneRocks,
-      'water': HexTerrainType.Water,
+      water: HexTerrainType.Water,
       'water-island': HexTerrainType.WaterShallow,
       'water-rocks': HexTerrainType.WaterDeep,
     };
 
     const terrain = mapping[baseTile];
     if (!terrain) {
-      throw new Error(`[HexSceneManager] FATAL: Unknown terrain type "${baseTile}" - no fallback allowed`);
+      throw new Error(
+        `[HexSceneManager] FATAL: Unknown terrain type "${baseTile}" - no fallback allowed`
+      );
     }
     return terrain;
   }
@@ -458,11 +517,15 @@ export class HexSceneManager {
   private setupSkyDome(): void {
     const mapSize = Math.max(this.config.mapWidth, this.config.mapHeight) * this.config.hexSize * 2;
 
-    this.skyDome = MeshBuilder.CreateSphere('skyDome', {
-      diameter: mapSize * 4,
-      segments: 32,
-      sideOrientation: Mesh.BACKSIDE,
-    }, this.scene);
+    this.skyDome = MeshBuilder.CreateSphere(
+      'skyDome',
+      {
+        diameter: mapSize * 4,
+        segments: 32,
+        sideOrientation: Mesh.BACKSIDE,
+      },
+      this.scene
+    );
 
     // Position at map center, below ground
     const centerWorld = this.getMapCenterWorld();
@@ -565,7 +628,9 @@ export class HexSceneManager {
       const modelMinY = boundingInfo.min.y; // Bottom of model in model space
       const modelMaxY = boundingInfo.max.y; // Top of model in model space
 
-      console.log(`[HexSceneManager] Model bounds: min=(${boundingInfo.min.x.toFixed(2)}, ${boundingInfo.min.y.toFixed(2)}, ${boundingInfo.min.z.toFixed(2)}), max=(${boundingInfo.max.x.toFixed(2)}, ${boundingInfo.max.y.toFixed(2)}, ${boundingInfo.max.z.toFixed(2)})`);
+      console.log(
+        `[HexSceneManager] Model bounds: min=(${boundingInfo.min.x.toFixed(2)}, ${boundingInfo.min.y.toFixed(2)}, ${boundingInfo.min.z.toFixed(2)}), max=(${boundingInfo.max.x.toFixed(2)}, ${boundingInfo.max.y.toFixed(2)}, ${boundingInfo.max.z.toFixed(2)})`
+      );
       console.log(`[HexSceneManager] Model height: ${modelHeight.toFixed(2)}`);
 
       // Normalize to desired height (around 1.5 units for a person on hex tiles)
@@ -586,7 +651,9 @@ export class HexSceneManager {
       // We need to subtract this to put feet at ground level
       this.playerModelYOffset = modelMinY * normalizedScale;
 
-      console.log(`[HexSceneManager] Normalized scale: ${normalizedScale.toFixed(4)}, yOffset: ${this.playerModelYOffset.toFixed(4)}`);
+      console.log(
+        `[HexSceneManager] Normalized scale: ${normalizedScale.toFixed(4)}, yOffset: ${this.playerModelYOffset.toFixed(4)}`
+      );
 
       player.checkCollisions = true;
 
@@ -599,7 +666,7 @@ export class HexSceneManager {
       this.playerAnimations = result.animationGroups;
 
       // Play idle animation if available
-      const idleAnim = this.playerAnimations.find(a => a.name.toLowerCase().includes('idle'));
+      const idleAnim = this.playerAnimations.find((a) => a.name.toLowerCase().includes('idle'));
       if (idleAnim) {
         idleAnim.play(true);
       }
@@ -607,7 +674,7 @@ export class HexSceneManager {
       // Add shadow casting
       if (this.shadowGenerator) {
         this.shadowGenerator.addShadowCaster(player);
-        player.getChildMeshes().forEach(m => this.shadowGenerator?.addShadowCaster(m));
+        player.getChildMeshes().forEach((m) => this.shadowGenerator?.addShadowCaster(m));
       }
 
       console.log('[HexSceneManager] Player character ready');
@@ -647,7 +714,11 @@ export class HexSceneManager {
     const newWorldPos = hexToWorld(coord, elevation + 0.1, DEFAULT_HEX_LAYOUT);
 
     // Calculate rotation if moving to a new hex
-    if (rotateToward && this.playerMesh && (previousHex.q !== coord.q || previousHex.r !== coord.r)) {
+    if (
+      rotateToward &&
+      this.playerMesh &&
+      (previousHex.q !== coord.q || previousHex.r !== coord.r)
+    ) {
       // Calculate angle from current position to target
       const dx = newWorldPos.x - this.playerWorldPos.x;
       const dz = newWorldPos.z - this.playerWorldPos.z;
@@ -710,7 +781,10 @@ export class HexSceneManager {
    * Set player position by world coordinates
    */
   setPlayerPosition(position: WorldPosition): void {
-    const hexCoord = worldToHex(new Vector3(position.x, position.y, position.z), DEFAULT_HEX_LAYOUT);
+    const hexCoord = worldToHex(
+      new Vector3(position.x, position.y, position.z),
+      DEFAULT_HEX_LAYOUT
+    );
     this.setPlayerHex(hexCoord, true); // Rotate toward movement direction
   }
 
@@ -868,11 +942,15 @@ export class HexSceneManager {
     npcGroup.position = new Vector3(worldPos.x, worldPos.y, worldPos.z);
 
     // Create a marker cylinder for the NPC
-    const marker = MeshBuilder.CreateCylinder(`npc_marker_${npcId}`, {
-      diameter: 0.6,
-      height: 2.0,
-      tessellation: 12,
-    }, this.scene);
+    const marker = MeshBuilder.CreateCylinder(
+      `npc_marker_${npcId}`,
+      {
+        diameter: 0.6,
+        height: 2.0,
+        tessellation: 12,
+      },
+      this.scene
+    );
 
     // Position marker relative to group
     marker.position = new Vector3(0, 1.0, 0);
@@ -892,18 +970,26 @@ export class HexSceneManager {
     // Add quest indicator (!) if NPC has quest
     if (hasQuest) {
       // Create floating exclamation mark using a box as the shaft and sphere as dot
-      const exclamationShaft = MeshBuilder.CreateBox(`quest_indicator_shaft_${npcId}`, {
-        width: 0.15,
-        height: 0.5,
-        depth: 0.15,
-      }, this.scene);
+      const exclamationShaft = MeshBuilder.CreateBox(
+        `quest_indicator_shaft_${npcId}`,
+        {
+          width: 0.15,
+          height: 0.5,
+          depth: 0.15,
+        },
+        this.scene
+      );
       exclamationShaft.position = new Vector3(0, 2.8, 0);
       exclamationShaft.parent = npcGroup;
 
-      const exclamationDot = MeshBuilder.CreateSphere(`quest_indicator_dot_${npcId}`, {
-        diameter: 0.18,
-        segments: 8,
-      }, this.scene);
+      const exclamationDot = MeshBuilder.CreateSphere(
+        `quest_indicator_dot_${npcId}`,
+        {
+          diameter: 0.18,
+          segments: 8,
+        },
+        this.scene
+      );
       exclamationDot.position = new Vector3(0, 2.2, 0);
       exclamationDot.parent = npcGroup;
 
@@ -937,7 +1023,9 @@ export class HexSceneManager {
     // Store marker reference (the parent group)
     this.npcMarkers.set(npcId, npcGroup as unknown as AbstractMesh);
 
-    console.log(`[HexSceneManager] Spawned NPC marker for ${npcName} at hex (${coord.q}, ${coord.r})${hasQuest ? ' [QUEST]' : ''}`);
+    console.log(
+      `[HexSceneManager] Spawned NPC marker for ${npcName} at hex (${coord.q}, ${coord.r})${hasQuest ? ' [QUEST]' : ''}`
+    );
   }
 
   /**
@@ -1016,7 +1104,7 @@ export class HexSceneManager {
 
       // Make marker pickable
       marker.isPickable = true;
-      result.meshes.forEach(m => {
+      result.meshes.forEach((m) => {
         m.isPickable = true;
         m.metadata = { itemId, itemName, isWorldItem: true };
       });
@@ -1027,7 +1115,9 @@ export class HexSceneManager {
       // Store marker reference
       this.itemMarkers.set(itemId, marker);
 
-      console.log(`[HexSceneManager] Spawned crate for ${itemName} at hex (${coord.q}, ${coord.r})`);
+      console.log(
+        `[HexSceneManager] Spawned crate for ${itemName} at hex (${coord.q}, ${coord.r})`
+      );
     } catch (err) {
       const errorMsg = `[HexSceneManager] FATAL: Failed to load item marker model for ${itemName}`;
       console.error(errorMsg, err);
@@ -1100,11 +1190,16 @@ export class HexSceneManager {
 
       // Load and spawn the feature
       loadPromises.push(
-        this.spawnSingleFeature(key, tile, modelInfo).then(() => {
-          featureCount++;
-        }).catch(err => {
-          console.warn(`[HexSceneManager] Failed to load feature ${tile.feature} at ${key}:`, err);
-        })
+        this.spawnSingleFeature(key, tile, modelInfo)
+          .then(() => {
+            featureCount++;
+          })
+          .catch((err) => {
+            console.warn(
+              `[HexSceneManager] Failed to load feature ${tile.feature} at ${key}:`,
+              err
+            );
+          })
       );
     }
 
@@ -1156,14 +1251,14 @@ export class HexSceneManager {
 
       // Mark as non-pickable (features are decoration)
       mesh.isPickable = false;
-      result.meshes.forEach(m => {
+      result.meshes.forEach((m) => {
         m.isPickable = false;
       });
 
       // Add shadow casting
       if (this.shadowGenerator) {
         this.shadowGenerator.addShadowCaster(mesh);
-        mesh.getChildMeshes().forEach(m => {
+        mesh.getChildMeshes().forEach((m) => {
           this.shadowGenerator?.addShadowCaster(m);
           m.receiveShadows = true;
         });
@@ -1173,8 +1268,9 @@ export class HexSceneManager {
       this.featureProps.set(key, mesh);
 
       // Debug: Log feature placement
-      console.log(`[HexSceneManager] Feature ${tile.feature} at hex (${tile.coord.q}, ${tile.coord.r}) -> world (${worldPos.x.toFixed(1)}, ${worldPos.y.toFixed(1)}, ${worldPos.z.toFixed(1)}) scale=${modelInfo.scale}`);
-
+      console.log(
+        `[HexSceneManager] Feature ${tile.feature} at hex (${tile.coord.q}, ${tile.coord.r}) -> world (${worldPos.x.toFixed(1)}, ${worldPos.y.toFixed(1)}, ${worldPos.z.toFixed(1)}) scale=${modelInfo.scale}`
+      );
     } catch (err) {
       // Don't crash on feature load failures - just warn
       console.warn(`[HexSceneManager] Failed to load feature model ${modelInfo.file}:`, err);

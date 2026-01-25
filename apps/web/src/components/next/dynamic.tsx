@@ -1,4 +1,4 @@
-import React, { Suspense, ComponentType } from "react";
+import React, { type ComponentType, Suspense } from 'react';
 
 interface DynamicOptions {
   ssr?: boolean;
@@ -9,9 +9,7 @@ function dynamic<P extends object>(
   importFunc: () => Promise<{ default: ComponentType<P> }>,
   options: DynamicOptions = {}
 ): ComponentType<P> {
-  const {
-    loading: LoadingComponent = () => <div>Loading...</div>,
-  } = options;
+  const { loading: LoadingComponent = () => <div>Loading...</div> } = options;
 
   const LazyComponent = React.lazy(importFunc);
 

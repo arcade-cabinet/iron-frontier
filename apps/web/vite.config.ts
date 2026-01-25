@@ -14,7 +14,20 @@ function copySharedAssetsPlugin() {
     buildStart() {
       // For build, assets are copied to public/assets symlink
     },
-    configureServer(server: { middlewares: { use: (handler: (req: { url?: string }, res: { writeHead: (status: number, headers?: Record<string, string>) => void; end: (data?: string | Buffer) => void }, next: () => void) => void) => void } }) {
+    configureServer(server: {
+      middlewares: {
+        use: (
+          handler: (
+            req: { url?: string },
+            res: {
+              writeHead: (status: number, headers?: Record<string, string>) => void;
+              end: (data?: string | Buffer) => void;
+            },
+            next: () => void
+          ) => void
+        ) => void;
+      };
+    }) {
       // Serve assets from packages/assets in dev mode
       server.middlewares.use((req, res, next) => {
         if (req.url?.startsWith('/assets/models/') || req.url?.startsWith('/assets/textures/')) {
@@ -45,20 +58,13 @@ function copySharedAssetsPlugin() {
 // https://vitejs.dev/config/
 export default defineConfig({
   cacheDir: '.vite',
-  plugins: [
-    react(),
-    tailwindcss(),
-    viteSingleFile(),
-    copySharedAssetsPlugin(),
-  ],
+  plugins: [react(), tailwindcss(), viteSingleFile(), copySharedAssetsPlugin()],
   server: {
     host: true,
     port: 8080,
     // Allow serving files from the workspace root
     fs: {
-      allow: [
-        path.resolve(__dirname, '../..'),
-      ],
+      allow: [path.resolve(__dirname, '../..')],
     },
   },
   resolve: {

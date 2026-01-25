@@ -8,7 +8,7 @@
  * Side Quests: Optional adventures that enrich the world
  */
 
-import { Quest } from '../schemas/quest';
+import type { Quest } from '../schemas/quest';
 
 // ============================================================================
 // MAIN QUEST: THE INHERITANCE
@@ -46,7 +46,7 @@ export const TheInheritance: Quest = {
       id: 'stage_1_arrival',
       title: 'Arrive in Dusty Springs',
       description:
-        'You\'ve arrived on the last train into Dusty Springs. Find the address mentioned in the mysterious letter.',
+        "You've arrived on the last train into Dusty Springs. Find the address mentioned in the mysterious letter.",
       onStartText:
         'The train hisses to a stop. Dusty Springs. The letter said to find "14 Copper Street." Time to get your bearings.',
       onCompleteText:
@@ -92,7 +92,7 @@ export const TheInheritance: Quest = {
       id: 'stage_2_investigation',
       title: 'Investigate the Burned Building',
       description:
-        'The address from the letter is now a burned ruin. Someone didn\'t want you finding what was here. Look for clues.',
+        "The address from the letter is now a burned ruin. Someone didn't want you finding what was here. Look for clues.",
       onStartText:
         'The building burned down within the last week. Charred timbers and ash. But fires leave traces...',
       onCompleteText:
@@ -134,15 +134,15 @@ export const TheInheritance: Quest = {
       id: 'stage_3_sheriff',
       title: 'Talk to Sheriff Cole',
       description:
-        'Sheriff Marcus Cole might know something about the fire. He\'s an honest man in a town full of IVRC influence.',
+        "Sheriff Marcus Cole might know something about the fire. He's an honest man in a town full of IVRC influence.",
       onStartText:
-        'The Sheriff\'s office is on Main Street. Cole has a reputation for being one of the few straight shooters left.',
+        "The Sheriff's office is on Main Street. Cole has a reputation for being one of the few straight shooters left.",
       onCompleteText:
         'Cole confirmed your suspicions. IVRC "inspectors" came through asking questions about a Freeminer named Samuel Ironpick. He suggests you head to Freeminer\'s Hollow if you want answers.',
       objectives: [
         {
           id: 'obj_find_sheriff',
-          description: 'Find Sheriff Cole at the Sheriff\'s Office',
+          description: "Find Sheriff Cole at the Sheriff's Office",
           type: 'visit',
           target: 'dusty_springs_sheriff_office',
           count: 1,
@@ -151,7 +151,7 @@ export const TheInheritance: Quest = {
           hidden: false,
           mapMarker: {
             locationId: 'dusty_springs',
-            markerLabel: 'Sheriff\'s Office',
+            markerLabel: "Sheriff's Office",
           },
         },
         {
@@ -177,17 +177,17 @@ export const TheInheritance: Quest = {
     // Stage 4: Follow the Leads
     {
       id: 'stage_4_freeminers',
-      title: 'Travel to Freeminer\'s Hollow',
+      title: "Travel to Freeminer's Hollow",
       description:
-        'Sheriff Cole pointed you toward Freeminer\'s Hollow in the Iron Mountains. Someone there knows why IVRC wanted that safehouse destroyed.',
+        "Sheriff Cole pointed you toward Freeminer's Hollow in the Iron Mountains. Someone there knows why IVRC wanted that safehouse destroyed.",
       onStartText:
-        'The road to Freeminer\'s Hollow is long and passes through rough country. Watch yourself.',
+        "The road to Freeminer's Hollow is long and passes through rough country. Watch yourself.",
       onCompleteText:
         'You\'ve reached Freeminer\'s Hollow. Old Samuel Ironpick eyes you warily but recognizes the gear symbol. "Your parent sent that letter," he says. "Before IVRC killed them."',
       objectives: [
         {
           id: 'obj_travel_hollow',
-          description: 'Travel to Freeminer\'s Hollow',
+          description: "Travel to Freeminer's Hollow",
           type: 'visit',
           target: 'freeminer_hollow',
           count: 1,
@@ -196,7 +196,7 @@ export const TheInheritance: Quest = {
           hidden: false,
           mapMarker: {
             locationId: 'freeminer_hollow',
-            markerLabel: 'Freeminer\'s Hollow',
+            markerLabel: "Freeminer's Hollow",
           },
         },
         {
@@ -266,9 +266,9 @@ export const MissingCattle: Quest = {
       description:
         'Silas has lost a dozen head this month alone. Check the pastures for signs of how the cattle are being taken.',
       onStartText:
-        'Blackwood\'s foreman Rosa will show you where the cattle were last seen. Keep your eyes open for tracks.',
+        "Blackwood's foreman Rosa will show you where the cattle were last seen. Keep your eyes open for tracks.",
       onCompleteText:
-        'The tracks lead west toward the badlands. Someone\'s driving the cattle through a hidden canyon pass.',
+        "The tracks lead west toward the badlands. Someone's driving the cattle through a hidden canyon pass.",
       objectives: [
         {
           id: 'obj_talk_rosa',
@@ -317,9 +317,9 @@ export const MissingCattle: Quest = {
       description:
         'The trail leads to a Copperhead operation. Deal with the rustlers and recover evidence for Blackwood.',
       onStartText:
-        'You\'ve found a hidden corral. Copperhead bandits are rebranding the cattle. This won\'t be pretty.',
+        "You've found a hidden corral. Copperhead bandits are rebranding the cattle. This won't be pretty.",
       onCompleteText:
-        'The rustlers are dealt with. You found a ledger showing this operation has been running for months - and Rosa\'s name is in it.',
+        "The rustlers are dealt with. You found a ledger showing this operation has been running for months - and Rosa's name is in it.",
       objectives: [
         {
           id: 'obj_defeat_rustlers',
@@ -357,7 +357,7 @@ export const MissingCattle: Quest = {
       description:
         'Return to Silas Blackwood with the evidence. The ledger implicates his own foreman.',
       onStartText:
-        'Rosa\'s name is in this ledger. Blackwood needs to know, but this will hurt him.',
+        "Rosa's name is in this ledger. Blackwood needs to know, but this will hurt him.",
       onCompleteText:
         'Blackwood is devastated but grateful for the truth. He pays you well and promises to "handle" Rosa.',
       objectives: [
@@ -406,7 +406,7 @@ export const MissingCattle: Quest = {
  */
 export const DocsDilemma: Quest = {
   id: 'side_docs_dilemma',
-  title: 'Doc\'s Dilemma',
+  title: "Doc's Dilemma",
   description:
     'Doc Chen Wei is running low on critical medical supplies. The nearest source is either Junction City (expensive) or Coppertown (dangerous).',
   type: 'side',
@@ -429,11 +429,11 @@ export const DocsDilemma: Quest = {
       id: 'stage_doc_list',
       title: 'Get the Supply List',
       description:
-        'Doc Chen Wei will give you a list of what\'s needed. You\'ll have to decide where to get it.',
+        "Doc Chen Wei will give you a list of what's needed. You'll have to decide where to get it.",
       onStartText:
         'The Doc\'s clinic is small but clean. "I\'m treating copper lung, snake bites, and worse," he says. "Without these supplies, people will die."',
       onCompleteText:
-        'You have the list. Junction City has a proper pharmacy but IVRC prices. Coppertown\'s company store is cheaper but... it\'s Coppertown.',
+        "You have the list. Junction City has a proper pharmacy but IVRC prices. Coppertown's company store is cheaper but... it's Coppertown.",
       objectives: [
         {
           id: 'obj_talk_doc',
@@ -446,7 +446,7 @@ export const DocsDilemma: Quest = {
           hidden: false,
           mapMarker: {
             locationId: 'dusty_springs',
-            markerLabel: 'Doc\'s Clinic',
+            markerLabel: "Doc's Clinic",
           },
         },
         {
@@ -475,9 +475,9 @@ export const DocsDilemma: Quest = {
       description:
         'Get the medical supplies from either Junction City or Coppertown. Each has its challenges.',
       onStartText:
-        'Junction City is safer but the IVRC pharmacy charges through the nose. Coppertown\'s company store is cheaper, but that town belongs to IVRC body and soul.',
+        "Junction City is safer but the IVRC pharmacy charges through the nose. Coppertown's company store is cheaper, but that town belongs to IVRC body and soul.",
       onCompleteText:
-        'You\'ve secured the supplies. Now get them back to Doc before someone gets hurt.',
+        "You've secured the supplies. Now get them back to Doc before someone gets hurt.",
       objectives: [
         {
           id: 'obj_junction_supplies',
@@ -539,7 +539,7 @@ export const DocsDilemma: Quest = {
           hidden: false,
           mapMarker: {
             locationId: 'dusty_springs',
-            markerLabel: 'Doc\'s Clinic',
+            markerLabel: "Doc's Clinic",
           },
         },
       ],
@@ -613,25 +613,21 @@ export function getQuestsByType(type: string): Quest[] {
  * Get all quests available at a specific location.
  */
 export function getQuestsAtLocation(locationId: string): Quest[] {
-  return Object.values(QUESTS_BY_ID).filter(
-    quest => quest.startLocationId === locationId
-  );
+  return Object.values(QUESTS_BY_ID).filter((quest) => quest.startLocationId === locationId);
 }
 
 /**
  * Get all quests given by a specific NPC.
  */
 export function getQuestsByNPC(npcId: string): Quest[] {
-  return Object.values(QUESTS_BY_ID).filter(
-    quest => quest.giverNpcId === npcId
-  );
+  return Object.values(QUESTS_BY_ID).filter((quest) => quest.giverNpcId === npcId);
 }
 
 /**
  * Get all quests with a specific tag.
  */
 export function getQuestsByTag(tag: string): Quest[] {
-  return Object.values(QUESTS_BY_ID).filter(quest => quest.tags.includes(tag));
+  return Object.values(QUESTS_BY_ID).filter((quest) => quest.tags.includes(tag));
 }
 
 /**
@@ -646,7 +642,7 @@ export function arePrerequisitesMet(
   const prereqs = quest.prerequisites;
 
   // Check completed quests
-  if (!prereqs.completedQuests.every(qid => completedQuestIds.includes(qid))) {
+  if (!prereqs.completedQuests.every((qid) => completedQuestIds.includes(qid))) {
     return false;
   }
 

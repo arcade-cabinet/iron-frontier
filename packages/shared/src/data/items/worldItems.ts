@@ -125,7 +125,10 @@ export function getWorldItemsForLocation(locationId: string): WorldItemSpawn[] {
   const handCrafted = WORLD_ITEMS_BY_LOCATION[locationId] ?? [];
 
   // Get procedural items if manager is initialized and has content for this location
-  if (ProceduralLocationManager.isInitialized() && ProceduralLocationManager.hasGeneratedContent(locationId)) {
+  if (
+    ProceduralLocationManager.isInitialized() &&
+    ProceduralLocationManager.hasGeneratedContent(locationId)
+  ) {
     const procedural = ProceduralLocationManager.getOrGenerateItems(locationId);
     return [...handCrafted, ...procedural];
   }

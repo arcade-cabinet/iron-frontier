@@ -2,20 +2,20 @@
  * ShopPanel - Western-themed buy/sell interface
  */
 
-import { useState } from 'react';
-import { useGameStore } from '../store/webGameStore';
+import { getItem } from '@iron-frontier/shared/data/items';
+import { getRarityColor } from '@iron-frontier/shared/data/schemas/item';
 import {
-  getShopById,
-  getAvailableShopItems,
   calculateBuyPrice,
   calculateSellPrice,
   canSellItemToShop,
+  getAvailableShopItems,
+  getShopById,
   type ShopDefinition,
   type ShopItem,
 } from '@iron-frontier/shared/data/shops';
-import { getItem } from '@iron-frontier/shared/data/items';
-import { getRarityColor } from '@iron-frontier/shared/data/schemas/item';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useGameStore } from '../store/webGameStore';
 
 // ============================================================================
 // ICONS
@@ -32,7 +32,12 @@ function CoinIcon({ className }: { className?: string }) {
 function ShoppingBagIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+      />
     </svg>
   );
 }
@@ -40,7 +45,12 @@ function ShoppingBagIcon({ className }: { className?: string }) {
 function TagIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+      />
     </svg>
   );
 }
@@ -56,7 +66,12 @@ function CloseIcon({ className }: { className?: string }) {
 function InfinityIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.781 0-4.781 8 0 8 5.606 0 7.644-8 12.74-8z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.781 0-4.781 8 0 8 5.606 0 7.644-8 12.74-8z"
+      />
     </svg>
   );
 }
@@ -74,10 +89,12 @@ function RarityBadge({ rarity }: { rarity: string }) {
   };
 
   return (
-    <span className={cn(
-      'text-[9px] px-1.5 py-0.5 rounded border font-medium uppercase',
-      styles[rarity as keyof typeof styles] || styles.common
-    )}>
+    <span
+      className={cn(
+        'text-[9px] px-1.5 py-0.5 rounded border font-medium uppercase',
+        styles[rarity as keyof typeof styles] || styles.common
+      )}
+    >
       {rarity}
     </span>
   );
@@ -107,12 +124,14 @@ function ShopItemRow({
   const isOutOfStock = stock === 0;
 
   return (
-    <div className={cn(
-      'flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-lg border transition-all',
-      'bg-amber-900/20 border-amber-800/30',
-      isOutOfStock && 'opacity-50',
-      canAfford && !isOutOfStock && 'hover:bg-amber-900/40 hover:border-amber-700/50'
-    )}>
+    <div
+      className={cn(
+        'flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-lg border transition-all',
+        'bg-amber-900/20 border-amber-800/30',
+        isOutOfStock && 'opacity-50',
+        canAfford && !isOutOfStock && 'hover:bg-amber-900/40 hover:border-amber-700/50'
+      )}
+    >
       {/* Item Icon Placeholder */}
       <div className="w-8 h-8 sm:w-10 sm:h-10 rounded bg-amber-800/40 border border-amber-700/30 flex items-center justify-center flex-shrink-0">
         <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
@@ -147,10 +166,12 @@ function ShopItemRow({
 
       {/* Price & Buy Button */}
       <div className="flex items-center gap-1.5 sm:gap-2">
-        <div className={cn(
-          'flex items-center gap-0.5 sm:gap-1 font-mono text-xs sm:text-sm font-medium',
-          canAfford ? 'text-amber-400' : 'text-red-400'
-        )}>
+        <div
+          className={cn(
+            'flex items-center gap-0.5 sm:gap-1 font-mono text-xs sm:text-sm font-medium',
+            canAfford ? 'text-amber-400' : 'text-red-400'
+          )}
+        >
           <CoinIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           <span>{price}</span>
         </div>
@@ -191,12 +212,14 @@ function InventoryItemRow({
   const price = canSell ? calculateSellPrice(shop, itemDef) : 0;
 
   return (
-    <div className={cn(
-      'flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-lg border transition-all',
-      'bg-amber-900/20 border-amber-800/30',
-      !canSell && 'opacity-50',
-      canSell && 'hover:bg-amber-900/40 hover:border-amber-700/50'
-    )}>
+    <div
+      className={cn(
+        'flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-lg border transition-all',
+        'bg-amber-900/20 border-amber-800/30',
+        !canSell && 'opacity-50',
+        canSell && 'hover:bg-amber-900/40 hover:border-amber-700/50'
+      )}
+    >
       {/* Item Icon Placeholder */}
       <div className="w-8 h-8 sm:w-10 sm:h-10 rounded bg-amber-800/40 border border-amber-700/30 flex items-center justify-center flex-shrink-0">
         <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
@@ -213,9 +236,7 @@ function InventoryItemRow({
           </span>
           <RarityBadge rarity={itemDef.rarity} />
         </div>
-        <div className="text-[9px] sm:text-[10px] text-amber-500/60 mt-0.5">
-          x{item.quantity}
-        </div>
+        <div className="text-[9px] sm:text-[10px] text-amber-500/60 mt-0.5">x{item.quantity}</div>
       </div>
 
       {/* Price & Sell Button */}
@@ -246,14 +267,7 @@ function InventoryItemRow({
 // ============================================================================
 
 export function ShopPanel() {
-  const {
-    shopState,
-    closeShop,
-    buyItem,
-    sellItem,
-    playerStats,
-    inventory,
-  } = useGameStore();
+  const { shopState, closeShop, buyItem, sellItem, playerStats, inventory } = useGameStore();
 
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
 
@@ -274,16 +288,22 @@ export function ShopPanel() {
               <ShoppingBagIcon className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-base sm:text-lg font-bold text-amber-200 truncate">{shop.name}</h2>
+              <h2 className="text-base sm:text-lg font-bold text-amber-200 truncate">
+                {shop.name}
+              </h2>
               {shop.description && (
-                <p className="text-[10px] sm:text-xs text-amber-500/70 truncate">{shop.description}</p>
+                <p className="text-[10px] sm:text-xs text-amber-500/70 truncate">
+                  {shop.description}
+                </p>
               )}
             </div>
           </div>
           <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
             {/* Player Gold */}
             <div className="text-left sm:text-right">
-              <div className="text-[9px] sm:text-[10px] text-amber-500/60 uppercase tracking-wide">Your Gold</div>
+              <div className="text-[9px] sm:text-[10px] text-amber-500/60 uppercase tracking-wide">
+                Your Gold
+              </div>
               <div className="flex items-center gap-1 text-base sm:text-lg font-bold text-yellow-400">
                 <CoinIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>${playerStats.gold}</span>
@@ -367,7 +387,9 @@ export function ShopPanel() {
                 <div className="text-center text-amber-600/50 py-8 sm:py-12">
                   <TagIcon className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-amber-700/30" />
                   <p className="text-xs sm:text-sm">Nothing to sell</p>
-                  <p className="text-[10px] sm:text-xs text-amber-700/40 mt-1">Find some loot first</p>
+                  <p className="text-[10px] sm:text-xs text-amber-700/40 mt-1">
+                    Find some loot first
+                  </p>
                 </div>
               ) : !shop.canSell ? (
                 <div className="text-center text-amber-600/50 py-8 sm:py-12">

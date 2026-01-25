@@ -3,11 +3,11 @@
  * Western-themed "Outlaw" character sheet
  */
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { useGameStore, type EquipmentSlot } from '../store/webGameStore';
 import { getItem } from '@iron-frontier/shared/data/items';
 import { getRarityColor } from '@iron-frontier/shared/data/schemas/item';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { type EquipmentSlot, useGameStore } from '../store/webGameStore';
 
 // ============================================================================
 // ICONS
@@ -16,7 +16,12 @@ import { getRarityColor } from '@iron-frontier/shared/data/schemas/item';
 function UserIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
     </svg>
   );
 }
@@ -48,7 +53,12 @@ function StarIcon({ className }: { className?: string }) {
 function SwordIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2"
+      />
     </svg>
   );
 }
@@ -56,7 +66,12 @@ function SwordIcon({ className }: { className?: string }) {
 function ShieldIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+      />
     </svg>
   );
 }
@@ -74,7 +89,12 @@ function TargetIcon({ className }: { className?: string }) {
 function GunIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8h18v4H9l-3 3v-3H3V8z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 8h18v4H9l-3 3v-3H3V8z"
+      />
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12v4" />
     </svg>
   );
@@ -92,7 +112,12 @@ function HatIcon({ className }: { className?: string }) {
 function VestIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 2h12l-2 8v12H8V10L6 2z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M6 2h12l-2 8v12H8V10L6 2z"
+      />
       <path strokeWidth={2} d="M10 2v4M14 2v4" />
     </svg>
   );
@@ -177,9 +202,7 @@ function EquipmentSlotDisplay({
   return (
     <div className="bg-amber-900/30 border border-amber-800/40 rounded-lg p-2.5">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-6 h-6 flex items-center justify-center text-amber-500">
-          {icon}
-        </div>
+        <div className="w-6 h-6 flex items-center justify-center text-amber-500">{icon}</div>
         <span className="text-[10px] text-amber-500/70 uppercase tracking-wider">{label}</span>
       </div>
 
@@ -236,9 +259,7 @@ function CombatStatCard({
 }) {
   return (
     <div className="bg-amber-900/30 border border-amber-800/40 rounded-lg p-2.5 text-center">
-      <div className="flex items-center justify-center gap-1.5 mb-1">
-        {icon}
-      </div>
+      <div className="flex items-center justify-center gap-1.5 mb-1">{icon}</div>
       <div className={cn('text-xl font-bold', textColor)}>{value}</div>
       <div className="text-[10px] text-amber-500/60 uppercase">{label}</div>
     </div>
@@ -250,13 +271,7 @@ function CombatStatCard({
 // ============================================================================
 
 export function CharacterPanel() {
-  const {
-    activePanel,
-    togglePanel,
-    playerName,
-    playerStats,
-    getEquipmentBonuses,
-  } = useGameStore();
+  const { activePanel, togglePanel, playerName, playerStats, getEquipmentBonuses } = useGameStore();
 
   const isOpen = activePanel === 'character';
   const bonuses = getEquipmentBonuses();
@@ -266,7 +281,8 @@ export function CharacterPanel() {
     if (rep >= 50) return { label: 'Respected', color: 'text-green-400', bg: 'bg-green-900/30' };
     if (rep >= 20) return { label: 'Known', color: 'text-lime-400', bg: 'bg-lime-900/30' };
     if (rep >= 0) return { label: 'Neutral', color: 'text-amber-400', bg: 'bg-amber-900/30' };
-    if (rep >= -20) return { label: 'Suspicious', color: 'text-orange-400', bg: 'bg-orange-900/30' };
+    if (rep >= -20)
+      return { label: 'Suspicious', color: 'text-orange-400', bg: 'bg-orange-900/30' };
     return { label: 'Notorious', color: 'text-red-400', bg: 'bg-red-900/30' };
   };
 
@@ -364,11 +380,7 @@ export function CharacterPanel() {
               label="Sidearm"
               icon={<SwordIcon className="w-5 h-5" />}
             />
-            <EquipmentSlotDisplay
-              slot="head"
-              label="Hat"
-              icon={<HatIcon className="w-5 h-5" />}
-            />
+            <EquipmentSlotDisplay slot="head" label="Hat" icon={<HatIcon className="w-5 h-5" />} />
             <EquipmentSlotDisplay
               slot="body"
               label="Vest"
@@ -383,20 +395,14 @@ export function CharacterPanel() {
         </div>
 
         {/* Reputation */}
-        <div className={cn(
-          'p-3 rounded-lg border',
-          repStatus.bg,
-          'border-amber-800/40'
-        )}>
+        <div className={cn('p-3 rounded-lg border', repStatus.bg, 'border-amber-800/40')}>
           <div className="flex items-center justify-between">
             <span className="text-sm text-amber-300">Reputation</span>
             <span className={cn('font-bold font-mono', repStatus.color)}>
               {playerStats.reputation}
             </span>
           </div>
-          <div className={cn('text-xs mt-1', repStatus.color)}>
-            {repStatus.label}
-          </div>
+          <div className={cn('text-xs mt-1', repStatus.color)}>{repStatus.label}</div>
         </div>
       </SheetContent>
     </Sheet>

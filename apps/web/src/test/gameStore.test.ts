@@ -2,8 +2,9 @@
  * Game Store Tests
  * Tests for state management, actions, and data flow
  */
-import { useGameStore } from '@/game/store/webGameStore';
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useGameStore } from '@/game/store/webGameStore';
 import { createMockItem, createMockNPC, resetGameStore } from './test-utils';
 
 describe('Game Store', () => {
@@ -102,7 +103,7 @@ describe('Game Store', () => {
   describe('NPC Interaction', () => {
     it('should open dialogue when talking to NPC', () => {
       const mockNPC = createMockNPC({ id: 'n1', name: 'Sheriff' });
-      useGameStore.setState({ npcs: { 'n1': mockNPC } });
+      useGameStore.setState({ npcs: { n1: mockNPC } });
       const { talkToNPC } = useGameStore.getState();
 
       talkToNPC('n1');

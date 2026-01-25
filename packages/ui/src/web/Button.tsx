@@ -5,10 +5,10 @@
  * Supports multiple variants and sizes.
  */
 
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../primitives/utils';
+import * as React from 'react';
 import type { ButtonProps } from '../primitives/types';
+import { cn } from '../primitives/utils';
 import { Spinner } from './Spinner';
 
 /**
@@ -120,11 +120,7 @@ export const Button = React.forwardRef<HTMLButtonElement, WebButtonProps>(
         aria-busy={loading}
         {...props}
       >
-        {loading ? (
-          <Spinner size={size === 'lg' ? 'md' : 'sm'} />
-        ) : (
-          leftIcon
-        )}
+        {loading ? <Spinner size={size === 'lg' ? 'md' : 'sm'} /> : leftIcon}
         {children}
         {!loading && rightIcon}
       </button>

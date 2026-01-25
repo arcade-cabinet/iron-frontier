@@ -29,13 +29,13 @@ export type WorldCoord = z.infer<typeof WorldCoordSchema>;
  * Biome types for world regions - affects terrain generation and atmosphere
  */
 export const RegionBiomeSchema = z.enum([
-  'desert',           // Hot, sandy, cacti
-  'badlands',         // Rocky, canyons, mesas
-  'grassland',        // Plains, scattered trees
-  'scrubland',        // Dry grass, bushes
-  'mountain',         // Rocky peaks, mines
-  'riverside',        // Near water, fertile
-  'salt_flat',        // Barren, mineral deposits
+  'desert', // Hot, sandy, cacti
+  'badlands', // Rocky, canyons, mesas
+  'grassland', // Plains, scattered trees
+  'scrubland', // Dry grass, bushes
+  'mountain', // Rocky peaks, mines
+  'riverside', // Near water, fertile
+  'salt_flat', // Barren, mineral deposits
 ]);
 export type RegionBiome = z.infer<typeof RegionBiomeSchema>;
 
@@ -43,11 +43,11 @@ export type RegionBiome = z.infer<typeof RegionBiomeSchema>;
  * Region danger levels - affects encounter frequency and difficulty
  */
 export const DangerLevelSchema = z.enum([
-  'safe',             // Towns, patrolled roads
-  'low',              // Near civilization
-  'moderate',         // Frontier territory
-  'high',             // Bandit territory, wildlife
-  'extreme',          // Lawless, dangerous creatures
+  'safe', // Towns, patrolled roads
+  'low', // Near civilization
+  'moderate', // Frontier territory
+  'high', // Bandit territory, wildlife
+  'extreme', // Lawless, dangerous creatures
 ]);
 export type DangerLevel = z.infer<typeof DangerLevelSchema>;
 
@@ -60,35 +60,35 @@ export type DangerLevel = z.infer<typeof DangerLevelSchema>;
  */
 export const LocationTypeSchema = z.enum([
   // Settlements
-  'city',             // Large settlement, multiple districts
-  'town',             // Medium settlement, shops and services
-  'village',          // Small settlement, basic services
-  'hamlet',           // Tiny settlement, few buildings
-  'outpost',          // Frontier post, minimal services
+  'city', // Large settlement, multiple districts
+  'town', // Medium settlement, shops and services
+  'village', // Small settlement, basic services
+  'hamlet', // Tiny settlement, few buildings
+  'outpost', // Frontier post, minimal services
 
   // Industrial
-  'mine',             // Mining operation
-  'quarry',           // Stone extraction
-  'oil_field',        // Oil drilling
-  'lumber_camp',      // Logging operation
-  'ranch',            // Cattle/horse ranch
-  'farm',             // Agricultural
+  'mine', // Mining operation
+  'quarry', // Stone extraction
+  'oil_field', // Oil drilling
+  'lumber_camp', // Logging operation
+  'ranch', // Cattle/horse ranch
+  'farm', // Agricultural
 
   // Infrastructure
-  'train_station',    // Railroad stop
+  'train_station', // Railroad stop
   'telegraph_office', // Communication hub
-  'trading_post',     // Remote commerce
-  'waystation',       // Rest stop on trails
+  'trading_post', // Remote commerce
+  'waystation', // Rest stop on trails
 
   // Points of Interest
-  'ruins',            // Abandoned structures
-  'cave',             // Natural cavern
-  'camp',             // Temporary encampment
-  'hideout',          // Bandit/outlaw base
-  'landmark',         // Notable natural feature
+  'ruins', // Abandoned structures
+  'cave', // Natural cavern
+  'camp', // Temporary encampment
+  'hideout', // Bandit/outlaw base
+  'landmark', // Notable natural feature
 
   // Special
-  'wilderness',       // No specific location (procedural encounters)
+  'wilderness', // No specific location (procedural encounters)
 ]);
 export type LocationType = z.infer<typeof LocationTypeSchema>;
 
@@ -136,11 +136,11 @@ export type LocationRef = z.infer<typeof LocationRefSchema>;
  * Travel method between locations
  */
 export const TravelMethodSchema = z.enum([
-  'road',             // Maintained road (fast, safe)
-  'trail',            // Rough trail (slower, less safe)
-  'wilderness',       // Cross-country (slow, risky)
-  'railroad',         // Train travel (fast, very safe, requires station)
-  'river',            // Boat travel (moderate, follows waterways)
+  'road', // Maintained road (fast, safe)
+  'trail', // Rough trail (slower, less safe)
+  'wilderness', // Cross-country (slow, risky)
+  'railroad', // Train travel (fast, very safe, requires station)
+  'river', // Boat travel (moderate, follows waterways)
 ]);
 export type TravelMethod = z.infer<typeof TravelMethodSchema>;
 
@@ -296,14 +296,15 @@ export function validateConnection(data: unknown): Connection {
  * Get all locations in a region
  */
 export function getLocationsInRegion(world: World, regionId: string): LocationRef[] {
-  const region = world.regions.find(r => r.id === regionId);
+  const region = world.regions.find((r) => r.id === regionId);
   if (!region) return [];
 
-  return world.locations.filter(loc =>
-    loc.coord.wx >= region.bounds.minX &&
-    loc.coord.wx <= region.bounds.maxX &&
-    loc.coord.wy >= region.bounds.minY &&
-    loc.coord.wy <= region.bounds.maxY
+  return world.locations.filter(
+    (loc) =>
+      loc.coord.wx >= region.bounds.minX &&
+      loc.coord.wx <= region.bounds.maxX &&
+      loc.coord.wy >= region.bounds.minY &&
+      loc.coord.wy <= region.bounds.maxY
   );
 }
 
@@ -311,8 +312,8 @@ export function getLocationsInRegion(world: World, regionId: string): LocationRe
  * Get all connections from a location
  */
 export function getConnectionsFrom(world: World, locationId: string): Connection[] {
-  return world.connections.filter(c =>
-    c.from === locationId || (c.bidirectional && c.to === locationId)
+  return world.connections.filter(
+    (c) => c.from === locationId || (c.bidirectional && c.to === locationId)
   );
 }
 
@@ -320,11 +321,12 @@ export function getConnectionsFrom(world: World, locationId: string): Connection
  * Get region at world coordinate
  */
 export function getRegionAt(world: World, coord: WorldCoord): Region | undefined {
-  return world.regions.find(r =>
-    coord.wx >= r.bounds.minX &&
-    coord.wx <= r.bounds.maxX &&
-    coord.wy >= r.bounds.minY &&
-    coord.wy <= r.bounds.maxY
+  return world.regions.find(
+    (r) =>
+      coord.wx >= r.bounds.minX &&
+      coord.wx <= r.bounds.maxX &&
+      coord.wy >= r.bounds.minY &&
+      coord.wy <= r.bounds.maxY
   );
 }
 
@@ -332,9 +334,7 @@ export function getRegionAt(world: World, coord: WorldCoord): Region | undefined
  * Get location at world coordinate
  */
 export function getLocationAt(world: World, coord: WorldCoord): LocationRef | undefined {
-  return world.locations.find(loc =>
-    loc.coord.wx === coord.wx && loc.coord.wy === coord.wy
-  );
+  return world.locations.find((loc) => loc.coord.wx === coord.wx && loc.coord.wy === coord.wy);
 }
 
 /**

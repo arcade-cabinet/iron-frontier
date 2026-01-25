@@ -6,7 +6,7 @@
  * Lore fragments build the world's history and mythology.
  */
 
-import type { RumorTemplate, LoreFragment, GenerationContext } from '../../schemas/generation';
+import type { GenerationContext, LoreFragment, RumorTemplate } from '../../schemas/generation';
 import type { SeededRandom } from '../seededRandom';
 
 // ============================================================================
@@ -43,7 +43,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_quest_escort',
     category: 'quest_hook',
     textTemplates: [
-      "{{npc}} is headed to {{location}} and needs protection on the road. Bandits been thick lately.",
+      '{{npc}} is headed to {{location}} and needs protection on the road. Bandits been thick lately.',
       "There's a wagon train formin' up. {{npc}} is payin' guards. Dangerous route through {{region}}.",
       "{{npc}} won't travel alone no more. Not after what happened at {{location}}. Needs an escort.",
     ],
@@ -56,7 +56,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} lost somethin' precious out near {{location}}. Offerin' good coin to whoever brings it back.",
       "Heard there's a family heirloom went missin'. {{npc}} wants it found real bad.",
-      "{{npc}} was robbed on the road to {{location}}. Wants their property back, no questions asked.",
+      '{{npc}} was robbed on the road to {{location}}. Wants their property back, no questions asked.',
     ],
     prevalence: 0.6,
     tags: ['retrieve', 'exploration'],
@@ -78,7 +78,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} needs someone to collect a debt from a fella out at {{location}}. Might need persuadin'.",
       "There's back rent owed to {{npc}}. Previous collectors ain't come back.",
-      "{{npc}} loaned money to the wrong sort. Now they need someone to get it back.",
+      '{{npc}} loaned money to the wrong sort. Now they need someone to get it back.',
     ],
     prevalence: 0.4,
     tags: ['collection', 'social'],
@@ -122,7 +122,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} is enterin' the shootin' competition. Needs a partner who can handle a gun.",
       "There's a horse race comin' up. {{npc}} is lookin' for a rider.",
-      "Poker tournament at {{location}}. {{npc}} needs someone to watch their back.",
+      'Poker tournament at {{location}}. {{npc}} needs someone to watch their back.',
     ],
     prevalence: 0.4,
     tags: ['competition', 'social'],
@@ -148,7 +148,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "They say there's a hidden cache of {{treasure}} somewhere in {{location}}. Old prospector talked about it 'fore he died.",
       "If you're headin' to {{location}}, keep your eyes peeled. Somethin' valuable's buried there.",
-      "My grandfather spoke of {{treasure}} hidden near {{location}}. Never found it himself.",
+      'My grandfather spoke of {{treasure}} hidden near {{location}}. Never found it himself.',
     ],
     prevalence: 0.5,
     tags: ['treasure', 'exploration'],
@@ -158,8 +158,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'location_hint',
     textTemplates: [
       "There's a pass through {{location}} most folks don't know about. Cuts travel time in half.",
-      "Old trail near {{location}} leads straight to {{destination}}. Rough going, but faster.",
-      "The natives used a hidden path through {{region}}. Entrance is near {{landmark}}.",
+      'Old trail near {{location}} leads straight to {{destination}}. Rough going, but faster.',
+      'The natives used a hidden path through {{region}}. Entrance is near {{landmark}}.',
     ],
     prevalence: 0.4,
     tags: ['travel', 'shortcut'],
@@ -170,7 +170,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "Ghost town out at {{location}}. Folks left in a hurry - didn't take everything with 'em.",
       "There's an abandoned mine at {{location}}. Previous owners hit somethin' and sealed it up.",
-      "Old homestead near {{location}} been empty for years. Might still have supplies.",
+      'Old homestead near {{location}} been empty for years. Might still have supplies.',
     ],
     prevalence: 0.6,
     tags: ['abandoned', 'exploration'],
@@ -181,7 +181,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "If you're crossin' the desert, there's a spring hidden at {{location}}. Could save your life.",
       "Water's scarce, but there's an oasis near {{landmark}}. Not on any map.",
-      "Underground stream surfaces at {{location}}. Only ones who know are the old-timers.",
+      'Underground stream surfaces at {{location}}. Only ones who know are the old-timers.',
     ],
     prevalence: 0.5,
     tags: ['survival', 'water'],
@@ -190,9 +190,9 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_location_camp',
     category: 'location_hint',
     textTemplates: [
-      "Travelers camp at {{location}}. Safe spot, good water, and you might hear useful talk.",
+      'Travelers camp at {{location}}. Safe spot, good water, and you might hear useful talk.',
       "There's a waystation near {{location}}. {{npc}} runs it - honest folk.",
-      "If you need rest on the road to {{destination}}, stop at {{location}}. Worth the detour.",
+      'If you need rest on the road to {{destination}}, stop at {{location}}. Worth the detour.',
     ],
     prevalence: 0.5,
     tags: ['rest', 'travel'],
@@ -213,7 +213,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'location_hint',
     textTemplates: [
       "The {{faction}} been meetin' in secret at {{location}}. After dark, usually.",
-      "If you want to find the black market, head to {{location}} around midnight.",
+      'If you want to find the black market, head to {{location}} around midnight.',
       "Smugglers use {{location}} for exchanges. Law don't go there.",
     ],
     prevalence: 0.4,
@@ -223,9 +223,9 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_location_sacred',
     category: 'location_hint',
     textTemplates: [
-      "{{location}} is sacred to the tribes. Treat it with respect if you go there.",
+      '{{location}} is sacred to the tribes. Treat it with respect if you go there.',
       "There's old magic at {{location}}. Or so the stories say. Healin' properties.",
-      "The spirits watch over {{location}}. Some say prayers are answered there.",
+      'The spirits watch over {{location}}. Some say prayers are answered there.',
     ],
     prevalence: 0.3,
     tags: ['sacred', 'mystery'],
@@ -240,7 +240,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} ain't what they seem. Heard they {{secret}} back East before comin' here.",
       "Don't let {{npc}}'s demeanor fool ya. Word is they {{secret}}.",
-      "{{npc}} changed their name when they came West. Used to be known for {{secret}}.",
+      '{{npc}} changed their name when they came West. Used to be known for {{secret}}.',
     ],
     prevalence: 0.5,
     tags: ['secret', 'backstory'],
@@ -272,7 +272,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'npc_gossip',
     textTemplates: [
       "{{npc}} is connected to the {{faction}}. Don't let on that you know.",
-      "Heard {{npc}} reports to someone in {{location}}. Might be a spy.",
+      'Heard {{npc}} reports to someone in {{location}}. Might be a spy.',
       "{{npc}} ain't just a {{occupation}}. Got friends in high places.",
     ],
     prevalence: 0.4,
@@ -283,8 +283,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'npc_gossip',
     textTemplates: [
       "{{npc}} is the best {{skill}} in three counties. Don't look like much, but trust me.",
-      "If you need {{skill}}, talk to {{npc}}. Expensive, but worth every penny.",
-      "{{npc}} learned {{skill}} from the best. Could teach you a thing or two.",
+      'If you need {{skill}}, talk to {{npc}}. Expensive, but worth every penny.',
+      '{{npc}} learned {{skill}} from the best. Could teach you a thing or two.',
     ],
     prevalence: 0.5,
     tags: ['skill', 'helpful'],
@@ -327,7 +327,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'npc_gossip',
     textTemplates: [
       "{{npc}}'s got kin out in {{location}}. Don't talk about 'em though.",
-      "Did you know {{npc}} and {{npc2}} are related? Cousins, I think.",
+      'Did you know {{npc}} and {{npc2}} are related? Cousins, I think.',
       "{{npc}} lost their whole family in the {{disaster}}. That's why they're the way they are.",
     ],
     prevalence: 0.4,
@@ -376,7 +376,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} is takin' over the {{faction}}. Old boss met an unfortunate end.",
       "The {{faction}}'s got new leadership. {{npc}} runs things now.",
-      "Power struggle in the {{faction}}. {{npc}} came out on top.",
+      'Power struggle in the {{faction}}. {{npc}} came out on top.',
     ],
     prevalence: 0.4,
     tags: ['leadership', 'change'],
@@ -398,7 +398,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "The {{faction}} is recruitin'. If you got the stomach for it, they pay well.",
       "{{faction}} lost a lot of men at {{location}}. Lookin' for replacements.",
-      "Want to join the {{faction}}? Talk to {{npc}}. But think hard before you do.",
+      'Want to join the {{faction}}? Talk to {{npc}}. But think hard before you do.',
     ],
     prevalence: 0.5,
     tags: ['recruitment', 'opportunity'],
@@ -407,7 +407,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_faction_crime',
     category: 'faction_news',
     textTemplates: [
-      "The {{faction}} robbed the bank at {{location}}. Got away clean.",
+      'The {{faction}} robbed the bank at {{location}}. Got away clean.',
       "{{faction}} been runnin' contraband through {{region}}. Sheriff's in their pocket.",
       "That train robbery? {{faction}}'s handiwork. Bold as brass.",
     ],
@@ -478,7 +478,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'world_event',
     textTemplates: [
       "Sickness spreadin' through {{location}}. Folks are quarantinin'.",
-      "Cholera broke out at the mining camp. Stay away from {{location}}.",
+      'Cholera broke out at the mining camp. Stay away from {{location}}.',
       "The fever's takin' folks in {{region}}. Doc's overwhelmed.",
     ],
     prevalence: 0.3,
@@ -499,7 +499,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_event_migration',
     category: 'world_event',
     textTemplates: [
-      "Big wagon train headed through next week. Hundreds of families.",
+      'Big wagon train headed through next week. Hundreds of families.',
       "Settlers are abandonin' {{location}}. Headin' further West.",
       "New immigrants arrivin' by the trainload. Town's gonna double in size.",
     ],
@@ -525,7 +525,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_treasure_outlaw',
     category: 'treasure_hint',
     textTemplates: [
-      "Old {{outlaw}} buried their take somewhere near {{landmark}}. Never recovered.",
+      'Old {{outlaw}} buried their take somewhere near {{landmark}}. Never recovered.',
       "The {{gang}} hid their loot before the hangin'. Map's lost, but the gold's still there.",
       "{{outlaw}}'s gang split up. One of 'em buried the strongbox near {{location}}.",
     ],
@@ -538,8 +538,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'treasure_hint',
     textTemplates: [
       "There's a played-out mine at {{location}}. But they missed a vein. I'd bet my life on it.",
-      "The Spaniards had a mine somewhere in {{region}}. Never mapped, never found.",
-      "Old prospector died with a nugget big as your fist. Never said where he found it.",
+      'The Spaniards had a mine somewhere in {{region}}. Never mapped, never found.',
+      'Old prospector died with a nugget big as your fist. Never said where he found it.',
     ],
     prevalence: 0.4,
     tags: ['treasure', 'mining'],
@@ -549,8 +549,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'treasure_hint',
     textTemplates: [
       "Army payroll went missin' during the war. Wagon was found empty near {{location}}.",
-      "Stagecoach got robbed ten years back. Money was never spent. Still hidden somewhere.",
-      "Bank shipment vanished between {{location}} and {{destination}}. Driver never talked.",
+      'Stagecoach got robbed ten years back. Money was never spent. Still hidden somewhere.',
+      'Bank shipment vanished between {{location}} and {{destination}}. Driver never talked.',
     ],
     prevalence: 0.3,
     tags: ['treasure', 'historical'],
@@ -559,9 +559,9 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_treasure_artifact',
     category: 'treasure_hint',
     textTemplates: [
-      "Native tribes had sacred gold at {{location}}. Hidden it from the conquistadors.",
+      'Native tribes had sacred gold at {{location}}. Hidden it from the conquistadors.',
       "There's a relic in the old mission. Priests hid it when the raiders came.",
-      "Ancient burial site in {{region}}. Grave goods still there, but cursed, they say.",
+      'Ancient burial site in {{region}}. Grave goods still there, but cursed, they say.',
     ],
     prevalence: 0.2,
     tags: ['treasure', 'artifact', 'sacred'],
@@ -585,7 +585,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_danger_wildlife',
     category: 'danger_warning',
     textTemplates: [
-      "Mountain lions been spotted near {{location}}. Lost two cattle last week.",
+      'Mountain lions been spotted near {{location}}. Lost two cattle last week.',
       "Rattlesnake den at {{location}}. Biggest nest anyone's ever seen.",
       "There's a grizzly in {{region}} that's killed three men. Hunters can't bring it down.",
     ],
@@ -596,9 +596,9 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_danger_terrain',
     category: 'danger_warning',
     textTemplates: [
-      "Quicksand at {{location}}. Swallowed a whole mule. Stay on the marked path.",
+      'Quicksand at {{location}}. Swallowed a whole mule. Stay on the marked path.',
       "The canyon at {{location}} floods without warning. Don't camp there.",
-      "Old mine shafts all through {{region}}. Ground can give way under your feet.",
+      'Old mine shafts all through {{region}}. Ground can give way under your feet.',
     ],
     prevalence: 0.4,
     tags: ['terrain', 'hazard'],
@@ -618,7 +618,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_danger_hostile',
     category: 'danger_warning',
     textTemplates: [
-      "{{faction}} controls {{location}}. They shoot strangers on sight.",
+      '{{faction}} controls {{location}}. They shoot strangers on sight.',
       "The folks at {{location}} don't take kindly to outsiders. Lost a friend there.",
       "Stay away from {{npc}}'s territory unless you want trouble.",
     ],
@@ -644,9 +644,9 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     id: 'rumor_history_battle',
     category: 'history',
     textTemplates: [
-      "Big battle happened at {{location}} during the war. Still find bones out there.",
-      "The cavalry made their last stand near {{landmark}}. Graves are unmarked.",
-      "{{location}} was the site of the massacre. Nobody settles there now.",
+      'Big battle happened at {{location}} during the war. Still find bones out there.',
+      'The cavalry made their last stand near {{landmark}}. Graves are unmarked.',
+      '{{location}} was the site of the massacre. Nobody settles there now.',
     ],
     prevalence: 0.4,
     tags: ['war', 'historical'],
@@ -656,7 +656,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'history',
     textTemplates: [
       "This town was founded by {{npc}}'s grandfather. Built it from nothing.",
-      "{{location}} used to be a mission. Padre still haunts the old chapel, they say.",
+      '{{location}} used to be a mission. Padre still haunts the old chapel, they say.',
       "Before the settlers came, {{region}} belonged to the tribes. We're guests here.",
     ],
     prevalence: 0.5,
@@ -667,8 +667,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'history',
     textTemplates: [
       "The great fire of '72 burned half the town. Some folks never rebuilt.",
-      "Flood took out {{location}} twenty years back. River changed course after.",
-      "Mine collapse at {{location}} killed forty men. Owners never paid the families.",
+      'Flood took out {{location}} twenty years back. River changed course after.',
+      'Mine collapse at {{location}} killed forty men. Owners never paid the families.',
     ],
     prevalence: 0.4,
     tags: ['disaster', 'tragedy'],
@@ -694,7 +694,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} lost their whole family to the fever. That's why they drink.",
       "Don't mention the war around {{npc}}. Lost three brothers at {{location}}.",
-      "{{npc}} was married once. Spouse died in childbirth. Never been the same.",
+      '{{npc}} was married once. Spouse died in childbirth. Never been the same.',
     ],
     prevalence: 0.3,
     tags: ['tragedy', 'backstory'],
@@ -704,7 +704,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'personal',
     textTemplates: [
       "{{npc}} is savin' up to buy a ranch. Been dreamin' of it for years.",
-      "All {{npc}} wants is to find their missing kin and go home.",
+      'All {{npc}} wants is to find their missing kin and go home.',
       "{{npc}}'s got plans to strike it rich and head back East. Show 'em all.",
     ],
     prevalence: 0.4,
@@ -716,7 +716,7 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     textTemplates: [
       "{{npc}} can read and write in three languages. Don't look it, but it's true.",
       "Before comin' West, {{npc}} was a doctor. Still got the skills.",
-      "{{npc}} is a crack shot. Won medals in the army.",
+      '{{npc}} is a crack shot. Won medals in the army.',
     ],
     prevalence: 0.4,
     tags: ['skill', 'hidden'],
@@ -726,8 +726,8 @@ export const RUMOR_TEMPLATES: RumorTemplate[] = [
     category: 'personal',
     textTemplates: [
       "{{npc}} may seem rough, but they took in three orphans. Raisin' 'em as their own.",
-      "When the mine collapsed, {{npc}} spent their savings on the widows. Never talks about it.",
-      "{{npc}} always leaves food for the hungry. Does it quiet, so nobody knows.",
+      'When the mine collapsed, {{npc}} spent their savings on the widows. Never talks about it.',
+      '{{npc}} always leaves food for the hungry. Does it quiet, so nobody knows.',
     ],
     prevalence: 0.4,
     tags: ['kindness', 'virtue'],
@@ -922,7 +922,7 @@ The Rangers have a reputation for incorruptibility in a land where every other a
   {
     id: 'lore_faction_outlaws',
     category: 'faction_lore',
-    title: "The Crimson Riders",
+    title: 'The Crimson Riders',
     text: `The Crimson Riders began as labor organizers driven underground after the Crimson Winter. When legal means of change were crushed, they turned to robbery, targeting railroad payrolls and company shipments.
 
 Over the years, the Riders have evolved into something between political movement and criminal enterprise. They redistribute some of their take to struggling workers and their families, earning loyalty in mining towns across the territory.
@@ -1195,10 +1195,8 @@ Rumors persist of secret sections of the Network, tubes that lead to hidden faci
 /**
  * Get all rumors of a specific category
  */
-export function getRumorsByCategory(
-  category: RumorTemplate['category']
-): RumorTemplate[] {
-  return RUMOR_TEMPLATES.filter(rumor => rumor.category === category);
+export function getRumorsByCategory(category: RumorTemplate['category']): RumorTemplate[] {
+  return RUMOR_TEMPLATES.filter((rumor) => rumor.category === category);
 }
 
 /**
@@ -1206,9 +1204,7 @@ export function getRumorsByCategory(
  */
 export function getRumorsByTags(tags: string[]): RumorTemplate[] {
   if (tags.length === 0) return RUMOR_TEMPLATES;
-  return RUMOR_TEMPLATES.filter(rumor =>
-    rumor.tags?.some(tag => tags.includes(tag))
-  );
+  return RUMOR_TEMPLATES.filter((rumor) => rumor.tags?.some((tag) => tags.includes(tag)));
 }
 
 /**
@@ -1227,25 +1223,23 @@ export function getRandomRumor(
 
   // Filter by category
   if (options?.category) {
-    candidates = candidates.filter(r => r.category === options.category);
+    candidates = candidates.filter((r) => r.category === options.category);
   }
 
   // Filter by tags
   if (options?.tags && options.tags.length > 0) {
-    candidates = candidates.filter(r =>
-      r.tags?.some(tag => options.tags!.includes(tag))
-    );
+    candidates = candidates.filter((r) => r.tags?.some((tag) => options.tags!.includes(tag)));
   }
 
   // Exclude specific IDs
   if (options?.excludeIds && options.excludeIds.length > 0) {
-    candidates = candidates.filter(r => !options.excludeIds!.includes(r.id));
+    candidates = candidates.filter((r) => !options.excludeIds!.includes(r.id));
   }
 
   // Filter by context tags if provided
   if (context.contextTags.length > 0) {
-    const contextFiltered = candidates.filter(r =>
-      r.tags?.some(tag => context.contextTags.includes(tag))
+    const contextFiltered = candidates.filter((r) =>
+      r.tags?.some((tag) => context.contextTags.includes(tag))
     );
     // Only use context filtering if it leaves some candidates
     if (contextFiltered.length > 0) {
@@ -1258,24 +1252,22 @@ export function getRandomRumor(
   }
 
   // Weight by prevalence
-  const weights = candidates.map(r => r.prevalence ?? 0.5);
+  const weights = candidates.map((r) => r.prevalence ?? 0.5);
   return rng.weightedPick(candidates, weights);
 }
 
 /**
  * Get all lore fragments of a specific category
  */
-export function getLoreByCategory(
-  category: LoreFragment['category']
-): LoreFragment[] {
-  return LORE_FRAGMENTS.filter(lore => lore.category === category);
+export function getLoreByCategory(category: LoreFragment['category']): LoreFragment[] {
+  return LORE_FRAGMENTS.filter((lore) => lore.category === category);
 }
 
 /**
  * Get lore fragments related to a specific entity ID
  */
 export function getLoreByRelatedId(id: string): LoreFragment[] {
-  return LORE_FRAGMENTS.filter(lore => lore.relatedIds?.includes(id));
+  return LORE_FRAGMENTS.filter((lore) => lore.relatedIds?.includes(id));
 }
 
 /**
@@ -1283,18 +1275,14 @@ export function getLoreByRelatedId(id: string): LoreFragment[] {
  */
 export function getLoreByTags(tags: string[]): LoreFragment[] {
   if (tags.length === 0) return LORE_FRAGMENTS;
-  return LORE_FRAGMENTS.filter(lore =>
-    lore.tags?.some(tag => tags.includes(tag))
-  );
+  return LORE_FRAGMENTS.filter((lore) => lore.tags?.some((tag) => tags.includes(tag)));
 }
 
 /**
  * Get lore filtered by discovery method
  */
-export function getLoreByDiscoveryMethod(
-  method: LoreFragment['discoveryMethod']
-): LoreFragment[] {
-  return LORE_FRAGMENTS.filter(lore => lore.discoveryMethod === method);
+export function getLoreByDiscoveryMethod(method: LoreFragment['discoveryMethod']): LoreFragment[] {
+  return LORE_FRAGMENTS.filter((lore) => lore.discoveryMethod === method);
 }
 
 /**
@@ -1314,31 +1302,27 @@ export function getRandomLore(
 
   // Filter by category
   if (options?.category) {
-    candidates = candidates.filter(l => l.category === options.category);
+    candidates = candidates.filter((l) => l.category === options.category);
   }
 
   // Filter by discovery method
   if (options?.discoveryMethod) {
-    candidates = candidates.filter(l => l.discoveryMethod === options.discoveryMethod);
+    candidates = candidates.filter((l) => l.discoveryMethod === options.discoveryMethod);
   }
 
   // Filter by tags
   if (options?.tags && options.tags.length > 0) {
-    candidates = candidates.filter(l =>
-      l.tags?.some(tag => options.tags!.includes(tag))
-    );
+    candidates = candidates.filter((l) => l.tags?.some((tag) => options.tags!.includes(tag)));
   }
 
   // Filter by related ID
   if (options?.relatedId) {
-    candidates = candidates.filter(l =>
-      l.relatedIds?.includes(options.relatedId!)
-    );
+    candidates = candidates.filter((l) => l.relatedIds?.includes(options.relatedId!));
   }
 
   // Exclude specific IDs
   if (options?.excludeIds && options.excludeIds.length > 0) {
-    candidates = candidates.filter(l => !options.excludeIds!.includes(l.id));
+    candidates = candidates.filter((l) => !options.excludeIds!.includes(l.id));
   }
 
   if (candidates.length === 0) {
@@ -1352,35 +1336,35 @@ export function getRandomLore(
  * Get automatic lore (known from the start)
  */
 export function getAutomaticLore(): LoreFragment[] {
-  return LORE_FRAGMENTS.filter(lore => lore.discoveryMethod === 'automatic');
+  return LORE_FRAGMENTS.filter((lore) => lore.discoveryMethod === 'automatic');
 }
 
 /**
  * Get all rumor template IDs
  */
 export function getAllRumorIds(): string[] {
-  return RUMOR_TEMPLATES.map(r => r.id);
+  return RUMOR_TEMPLATES.map((r) => r.id);
 }
 
 /**
  * Get all lore fragment IDs
  */
 export function getAllLoreIds(): string[] {
-  return LORE_FRAGMENTS.map(l => l.id);
+  return LORE_FRAGMENTS.map((l) => l.id);
 }
 
 /**
  * Get a specific rumor by ID
  */
 export function getRumorById(id: string): RumorTemplate | undefined {
-  return RUMOR_TEMPLATES.find(r => r.id === id);
+  return RUMOR_TEMPLATES.find((r) => r.id === id);
 }
 
 /**
  * Get a specific lore fragment by ID
  */
 export function getLoreById(id: string): LoreFragment | undefined {
-  return LORE_FRAGMENTS.find(l => l.id === id);
+  return LORE_FRAGMENTS.find((l) => l.id === id);
 }
 
 // ============================================================================

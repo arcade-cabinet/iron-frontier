@@ -6,64 +6,58 @@
  */
 
 // ============================================================================
-// TOWNS
-// ============================================================================
-export { TestTown } from './test_town';
-export { DustySprings } from './dusty_springs';
-export { JunctionCity } from './junction_city';
-export { Coppertown } from './coppertown';
-export { Prospect } from './prospect';
-
-// ============================================================================
 // INDUSTRIAL
 // ============================================================================
 export { CopperMine } from './copper_mine';
-
+export { Coppertown } from './coppertown';
 // ============================================================================
 // WAYSTATIONS
 // ============================================================================
 export { DesertWaystation } from './desert_waystation';
-export { ThornwoodStation } from './thornwood_station';
-
+export { DustySprings } from './dusty_springs';
 // ============================================================================
-// RANCHES & FARMS
+// CAMPS & SETTLEMENTS
 // ============================================================================
-export { SunsetRanch } from './sunset_ranch';
-
+export { FreeminerHollow } from './freeminer_hollow';
+export { JunctionCity } from './junction_city';
+// ============================================================================
+// DUNGEONS
+// ============================================================================
+export { OldWorks } from './old_works';
+export { Prospect } from './prospect';
 // ============================================================================
 // DANGEROUS LOCATIONS
 // ============================================================================
 export { RattlesnakeCanyon } from './rattlesnake_canyon';
 export { SignalRock } from './signal_rock';
-
 // ============================================================================
-// CAMPS & SETTLEMENTS
+// RANCHES & FARMS
 // ============================================================================
-export { FreeminerHollow } from './freeminer_hollow';
-
+export { SunsetRanch } from './sunset_ranch';
 // ============================================================================
-// DUNGEONS
+// TOWNS
 // ============================================================================
-export { OldWorks } from './old_works';
+export { TestTown } from './test_town';
+export { ThornwoodStation } from './thornwood_station';
 
 // ============================================================================
 // LOCATION REGISTRY
 // ============================================================================
 
-import { TestTown } from './test_town';
-import { DustySprings } from './dusty_springs';
-import { JunctionCity } from './junction_city';
-import { Coppertown } from './coppertown';
-import { Prospect } from './prospect';
+import type { Location } from '../schemas/spatial';
 import { CopperMine } from './copper_mine';
+import { Coppertown } from './coppertown';
 import { DesertWaystation } from './desert_waystation';
-import { ThornwoodStation } from './thornwood_station';
-import { SunsetRanch } from './sunset_ranch';
+import { DustySprings } from './dusty_springs';
+import { FreeminerHollow } from './freeminer_hollow';
+import { JunctionCity } from './junction_city';
+import { OldWorks } from './old_works';
+import { Prospect } from './prospect';
 import { RattlesnakeCanyon } from './rattlesnake_canyon';
 import { SignalRock } from './signal_rock';
-import { FreeminerHollow } from './freeminer_hollow';
-import { OldWorks } from './old_works';
-import type { Location } from '../schemas/spatial';
+import { SunsetRanch } from './sunset_ranch';
+import { TestTown } from './test_town';
+import { ThornwoodStation } from './thornwood_station';
 
 /** All hand-crafted locations indexed by ID */
 export const LOCATIONS_BY_ID = new Map<string, Location>([
@@ -107,10 +101,10 @@ export function getAllLocationIds(): string[] {
 
 /** Get locations by type */
 export function getLocationsByType(type: string): Location[] {
-  return Array.from(LOCATIONS_BY_ID.values()).filter(loc => loc.type === type);
+  return Array.from(LOCATIONS_BY_ID.values()).filter((loc) => loc.type === type);
 }
 
 /** Get locations by tag */
 export function getLocationsByTag(tag: string): Location[] {
-  return Array.from(LOCATIONS_BY_ID.values()).filter(loc => loc.tags.includes(tag));
+  return Array.from(LOCATIONS_BY_ID.values()).filter((loc) => loc.tags.includes(tag));
 }

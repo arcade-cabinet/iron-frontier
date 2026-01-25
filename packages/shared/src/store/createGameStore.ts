@@ -6,40 +6,38 @@
  */
 
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
 import type { StateStorage } from 'zustand/middleware';
-
-import type {
-  GameState,
-  GameStateData,
-  PersistedGameState,
-  InventoryItem,
-  EquipmentSlot,
-  GamePhase,
-  PanelType,
-  DialogueState,
-  WorldPosition,
-  PlayerStats,
-  NPC,
-  CombatActionType,
-  Notification,
-} from './types';
-
+import { createJSONStorage, persist } from 'zustand/middleware';
 import {
-  DEFAULT_PLAYER_STATS,
+  DEFAULT_CAMERA_STATE,
   DEFAULT_EQUIPMENT,
+  DEFAULT_PLAYER_STATS,
   DEFAULT_SETTINGS,
   DEFAULT_TIME,
   DEFAULT_WEATHER,
-  DEFAULT_CAMERA_STATE,
   DEFAULT_WORLD_POSITION,
   SAVE_VERSION,
   STORAGE_KEY,
 } from './defaults';
+import { createStateStorage } from './persistStorage';
 
 import type { StorageAdapter } from './StorageAdapter';
 import { NoopStorageAdapter } from './StorageAdapter';
-import { createStateStorage } from './persistStorage';
+import type {
+  CombatActionType,
+  DialogueState,
+  EquipmentSlot,
+  GamePhase,
+  GameState,
+  GameStateData,
+  InventoryItem,
+  Notification,
+  NPC,
+  PanelType,
+  PersistedGameState,
+  PlayerStats,
+  WorldPosition,
+} from './types';
 
 // ============================================================================
 // STORE CONFIGURATION
@@ -116,7 +114,12 @@ export interface DataAccess {
   getEnemyById: (enemyId: string) => any | undefined;
   getEncounterById: (encounterId: string) => any | undefined;
   calculateHitChance: (accuracy: number, evasion: number, range: number, aimed?: boolean) => number;
-  calculateDamage: (baseDamage: number, level: number, armor: number, isCritical?: boolean) => number;
+  calculateDamage: (
+    baseDamage: number,
+    level: number,
+    armor: number,
+    isCritical?: boolean
+  ) => number;
   rollHit: (chance: number) => boolean;
   rollCritical: () => boolean;
   AP_COSTS: Record<string, number>;
@@ -141,7 +144,9 @@ export interface DataAccess {
   };
 
   // Seeded random
-  SeededRandom: new (seed: number) => any;
+  SeededRandom: new (
+    seed: number
+  ) => any;
   hashString: (str: string) => number;
   combineSeeds: (a: number, b: number) => number;
 }
@@ -280,7 +285,7 @@ export function createGameStore(config: GameStoreConfig) {
           });
 
           // Auto-equip starting weapon
-          const startingWeapon = starterItems.find(item => item.type === 'weapon');
+          const startingWeapon = starterItems.find((item) => item.type === 'weapon');
           if (startingWeapon) {
             get().equipItem(startingWeapon.id, 'weapon');
           }
@@ -456,7 +461,10 @@ export function createGameStore(config: GameStoreConfig) {
             }
             if (stats.staminaAmount > 0) {
               updatePlayerStats({
-                stamina: Math.min(playerStats.maxStamina, playerStats.stamina + stats.staminaAmount),
+                stamina: Math.min(
+                  playerStats.maxStamina,
+                  playerStats.stamina + stats.staminaAmount
+                ),
               });
             }
           } else if (itemDef?.effects) {
@@ -1278,8 +1286,15 @@ export function createGameStore(config: GameStoreConfig) {
 
         travelTo: (locationId: string) => {
           const state = get() as any;
-          const { loadedWorld, currentLocationId, worldSeed, playerStats, addNotification, discoverLocation, time } =
-            state;
+          const {
+            loadedWorld,
+            currentLocationId,
+            worldSeed,
+            playerStats,
+            addNotification,
+            discoverLocation,
+            time,
+          } = state;
 
           if (!loadedWorld) {
             addNotification('warning', 'No world loaded');
@@ -1627,8 +1642,14 @@ export function createGameStore(config: GameStoreConfig) {
         },
 
         sellItem: (inventoryId: string) => {
-          const { shopState, inventory, playerStats, removeItem, addNotification, updatePlayerStats } =
-            get();
+          const {
+            shopState,
+            inventory,
+            playerStats,
+            removeItem,
+            addNotification,
+            updatePlayerStats,
+          } = get();
           if (!shopState) return;
 
           const shop = dataAccess.getShopById(shopState.shopId);

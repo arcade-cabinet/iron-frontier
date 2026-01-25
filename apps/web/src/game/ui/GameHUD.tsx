@@ -1,9 +1,10 @@
 // Game HUD - Compact always-visible stats display (western-themed)
+
+import { getQuestById } from '@iron-frontier/shared/data/quests';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
-import { getQuestById } from '@iron-frontier/shared/data/quests';
 
 // ============================================================================
 // ICONS
@@ -35,7 +36,12 @@ function StarIcon({ className }: { className?: string }) {
 
 function CompassIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-3.5 h-3.5', className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className={cn('w-3.5 h-3.5', className)}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <circle cx="12" cy="12" r="10" strokeWidth={2} />
       <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
     </svg>
@@ -79,8 +85,18 @@ export function GameHUD() {
             <div className="flex items-center gap-1.5 sm:gap-2 pr-2 sm:pr-3 border-r border-amber-700/40">
               {/* Avatar placeholder */}
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-800/60 border border-amber-600/50 flex items-center justify-center flex-shrink-0">
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <svg
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
                 </svg>
               </div>
               <div className="min-w-0">
@@ -106,7 +122,12 @@ export function GameHUD() {
                     aria-label="Health"
                   />
                 </div>
-                <span className={cn('text-[9px] sm:text-[10px] font-mono w-6 sm:w-8 text-right', getHealthColor())}>
+                <span
+                  className={cn(
+                    'text-[9px] sm:text-[10px] font-mono w-6 sm:w-8 text-right',
+                    getHealthColor()
+                  )}
+                >
                   {playerStats.health}
                 </span>
               </div>
@@ -149,31 +170,32 @@ export function GameHUD() {
         </div>
 
         {/* Active Quest Tracker - hidden on xs */}
-        {activeQuests.length > 0 && (() => {
-          const activeQuest = activeQuests[0];
-          const questDef = getQuestById(activeQuest.questId);
-          if (!questDef) return null;
+        {activeQuests.length > 0 &&
+          (() => {
+            const activeQuest = activeQuests[0];
+            const questDef = getQuestById(activeQuest.questId);
+            if (!questDef) return null;
 
-          const currentStage = questDef.stages[activeQuest.currentStageIndex];
-          const currentObjective = currentStage?.objectives.find(obj => {
-            const progress = activeQuest.objectiveProgress[obj.id] ?? 0;
-            return progress < obj.count;
-          });
+            const currentStage = questDef.stages[activeQuest.currentStageIndex];
+            const currentObjective = currentStage?.objectives.find((obj) => {
+              const progress = activeQuest.objectiveProgress[obj.id] ?? 0;
+              return progress < obj.count;
+            });
 
-          return (
-            <div className="hidden sm:block max-w-[150px] md:max-w-[200px] px-2 py-1 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" />
-                <span className="text-amber-300 text-[10px] font-medium truncate">
-                  {questDef.title}
-                </span>
+            return (
+              <div className="hidden sm:block max-w-[150px] md:max-w-[200px] px-2 py-1 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" />
+                  <span className="text-amber-300 text-[10px] font-medium truncate">
+                    {questDef.title}
+                  </span>
+                </div>
+                <div className="text-amber-400/70 text-[9px] truncate mt-0.5">
+                  {currentObjective?.description || currentStage?.title || 'Complete quest'}
+                </div>
               </div>
-              <div className="text-amber-400/70 text-[9px] truncate mt-0.5">
-                {currentObjective?.description || currentStage?.title || 'Complete quest'}
-              </div>
-            </div>
-          );
-        })()}
+            );
+          })()}
       </div>
     </div>
   );

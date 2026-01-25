@@ -5,55 +5,49 @@
  * procedurally generated content with the game store.
  */
 
-import { SeededRandom, hashString, combineSeeds } from '../seededRandom';
+// Import shared types instead of web/engine types
+import type {
+  CharacterAppearance,
+  NPC,
+  NPCPersonality,
+  NPCRole,
+  WorldItem,
+  WorldPosition,
+} from '../../../types/engine';
+import type { GenerationContext } from '../../schemas/generation';
+import type {
+  DialogueChoice,
+  DialogueCondition,
+  DialogueEffect,
+  DialogueNode,
+  DialogueTree,
+  NPCDefinition,
+  NPCFaction,
+} from '../../schemas/npc';
+import type { Objective, Quest, QuestStage, QuestType } from '../../schemas/quest';
 import {
-  WorldGenerator,
+  type GeneratedDialogueChoice,
+  type GeneratedDialogueNode,
+  type GeneratedDialogueTree,
+  type GeneratedEncounter,
+  type GeneratedNPC,
+  type GeneratedObjective,
+  type GeneratedQuest,
+  type GeneratedQuestStage,
+  generateNPCsForLocation,
+  generateRandomEncounter,
+  generateRandomQuest,
+  generateSimpleDialogueTree,
+  type QuestGenerationContext,
+  shouldTriggerEncounter,
+} from '../generators';
+import {
   type GeneratedLocation,
   type GeneratedWorld,
   type WorldGenerationOptions,
+  WorldGenerator,
 } from '../generators/worldGenerator';
-import {
-  generateNPC,
-  generateNPCsForLocation,
-  generateRandomQuest,
-  generateRandomEncounter,
-  shouldTriggerEncounter,
-  generateSimpleDialogueTree,
-  type GeneratedNPC,
-  type GeneratedQuest,
-  type GeneratedQuestStage,
-  type GeneratedObjective,
-  type GeneratedDialogueTree,
-  type GeneratedDialogueNode,
-  type GeneratedDialogueChoice,
-  type GeneratedEncounter,
-  type QuestGenerationContext,
-} from '../generators';
-import type { GenerationContext } from '../../schemas/generation';
-
-// Import game store types
-import { useGameStore, type InventoryItem } from '../../../game/store/gameStore';
-import type {
-  NPC,
-  NPCPersonality,
-  CharacterAppearance,
-  WorldPosition,
-  WorldItem,
-} from '../../../engine/types';
-import type { NPCDefinition, NPCFaction, NPCRole } from '../../schemas/npc';
-import type {
-  DialogueTree,
-  DialogueNode,
-  DialogueChoice,
-  DialogueEffect,
-  DialogueCondition,
-} from '../../schemas/npc';
-import type {
-  Quest,
-  QuestStage,
-  Objective,
-  QuestType,
-} from '../../schemas/quest';
+import { combineSeeds, hashString, SeededRandom } from '../seededRandom';
 
 // ============================================================================
 // TYPE CONVERTERS - Generated Content to Game Format
@@ -62,9 +56,7 @@ import type {
 /**
  * Convert generated NPC personality to engine format
  */
-function convertPersonality(
-  generated: GeneratedNPC['personality']
-): NPCPersonality {
+function convertPersonality(generated: GeneratedNPC['personality']): NPCPersonality {
   return {
     aggression: generated.aggression,
     friendliness: generated.friendliness,
@@ -77,10 +69,7 @@ function convertPersonality(
 /**
  * Generate a default appearance for an NPC based on their role and personality
  */
-function generateDefaultAppearance(
-  rng: SeededRandom,
-  npc: GeneratedNPC
-): CharacterAppearance {
+function generateDefaultAppearance(rng: SeededRandom, npc: GeneratedNPC): CharacterAppearance {
   const isMale = npc.gender === 'male';
   const isFemale = npc.gender === 'female';
 
@@ -138,10 +127,7 @@ export function convertGeneratedNPCToEngine(
 /**
  * Convert generated NPC to NPCDefinition format (data NPC)
  */
-export function convertGeneratedNPC(
-  generated: GeneratedNPC,
-  locationId: string
-): NPCDefinition {
+export function convertGeneratedNPC(generated: GeneratedNPC, locationId: string): NPCDefinition {
   return {
     id: generated.id,
     name: generated.name,
@@ -282,9 +268,7 @@ export function convertGeneratedQuest(generated: GeneratedQuest): Quest {
 /**
  * Convert generated dialogue choice to DialogueChoice format
  */
-function convertGeneratedDialogueChoice(
-  generated: GeneratedDialogueChoice
-): DialogueChoice {
+function convertGeneratedDialogueChoice(generated: GeneratedDialogueChoice): DialogueChoice {
   const effects: DialogueEffect[] = [];
 
   // Convert reputation effects
@@ -320,9 +304,7 @@ function convertGeneratedDialogueChoice(
 /**
  * Convert generated dialogue node to DialogueNode format
  */
-function convertGeneratedDialogueNode(
-  generated: GeneratedDialogueNode
-): DialogueNode {
+function convertGeneratedDialogueNode(generated: GeneratedDialogueNode): DialogueNode {
   return {
     id: generated.id,
     text: generated.speakerText,
@@ -338,9 +320,7 @@ function convertGeneratedDialogueNode(
 /**
  * Convert generated dialogue tree to DialogueTree format
  */
-export function convertGeneratedDialogue(
-  generated: GeneratedDialogueTree
-): DialogueTree {
+export function convertGeneratedDialogue(generated: GeneratedDialogueTree): DialogueTree {
   const nodes: DialogueNode[] = [];
 
   // Use Array.from to iterate over Map values for compatibility
@@ -369,17 +349,17 @@ export function convertGeneratedDialogue(
 // ============================================================================
 
 /**
- * Populate a location with generated NPCs
+ * Generate NPCs for a location
+ * Returns a map of ID -> NPC to be merged into the game store
  */
-export function populateLocationWithNPCs(
+export function generateLocationNPCs(
   locationId: string,
   npcs: GeneratedNPC[],
-  centerPosition: WorldPosition = { x: 128, y: 0, z: 128 }
-): void {
-  const store = useGameStore.getState();
+  centerPosition: WorldPosition = { x: 128, y: 0, z: 128 },
+  existingNPCs: Record<string, NPC> = {}
+): Record<string, NPC> {
   const rng = new SeededRandom(hashString(locationId));
-
-  const updatedNPCs: Record<string, NPC> = { ...store.npcs };
+  const newNPCs: Record<string, NPC> = {};
 
   for (let i = 0; i < npcs.length; i++) {
     const generated = npcs[i];
@@ -394,42 +374,28 @@ export function populateLocationWithNPCs(
     };
 
     const engineNPC = convertGeneratedNPCToEngine(generated, position, rng);
-    updatedNPCs[engineNPC.id] = engineNPC;
+    newNPCs[engineNPC.id] = engineNPC;
   }
 
-  useGameStore.setState({ npcs: updatedNPCs });
+  return newNPCs;
 }
 
 /**
- * Populate a location with generated quests
- * Note: Quests are registered but not started automatically
+ * Generate items for a location
+ * Returns a map of ID -> WorldItem to be merged into the game store
  */
-export function populateLocationWithQuests(
-  locationId: string,
-  quests: GeneratedQuest[]
-): Quest[] {
-  // Convert quests to game format
-  // Note: The game store uses getQuestById from a static registry,
-  // so we return the converted quests for the caller to manage
-  return quests.map(convertGeneratedQuest);
-}
-
-/**
- * Populate a location with world items
- */
-export function populateLocationWithItems(
+export function generateLocationItems(
   locationId: string,
   items: Array<{
     itemId: string;
     quantity: number;
     position?: WorldPosition;
   }>,
-  centerPosition: WorldPosition = { x: 128, y: 0, z: 128 }
-): void {
-  const store = useGameStore.getState();
+  centerPosition: WorldPosition = { x: 128, y: 0, z: 128 },
+  existingItems: Record<string, WorldItem> = {}
+): Record<string, WorldItem> {
   const rng = new SeededRandom(hashString(locationId + '_items'));
-
-  const updatedItems: Record<string, WorldItem> = { ...store.worldItems };
+  const newItems: Record<string, WorldItem> = {};
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
@@ -448,10 +414,10 @@ export function populateLocationWithItems(
       quantity: item.quantity,
     };
 
-    updatedItems[worldItem.id] = worldItem;
+    newItems[worldItem.id] = worldItem;
   }
 
-  useGameStore.setState({ worldItems: updatedItems });
+  return newItems;
 }
 
 // ============================================================================
@@ -459,19 +425,24 @@ export function populateLocationWithItems(
 // ============================================================================
 
 /**
- * Build generation context from current game state
+ * Build generation context from game state parameters
  */
 export function buildGenerationContext(
+  params: {
+    worldSeed: number;
+    regionId?: string;
+    locationId?: string;
+    playerLevel: number;
+    gameHour: number;
+  },
   overrides: Partial<GenerationContext> = {}
 ): GenerationContext {
-  const store = useGameStore.getState();
-
   return {
-    worldSeed: store.worldSeed,
-    regionId: store.currentWorldId ?? undefined,
-    locationId: store.currentLocationId ?? undefined,
-    playerLevel: store.playerStats.level,
-    gameHour: store.time.hour,
+    worldSeed: params.worldSeed,
+    regionId: params.regionId,
+    locationId: params.locationId,
+    playerLevel: params.playerLevel,
+    gameHour: params.gameHour,
     factionTensions: {},
     activeEvents: [],
     contextTags: [],
@@ -501,9 +472,9 @@ export function buildQuestGenerationContext(
 }
 
 /**
- * Generate and populate a complete location
+ * Generate a complete location result (NPCs and Quests)
  */
-export async function generateAndPopulateLocation(
+export async function generateLocationContent(
   rng: SeededRandom,
   locationId: string,
   context: GenerationContext,
@@ -516,6 +487,7 @@ export async function generateAndPopulateLocation(
 ): Promise<{
   npcs: GeneratedNPC[];
   quests: Quest[];
+  engineNPCs: Record<string, NPC>;
 }> {
   const locationType = options.locationType ?? 'frontier_town';
   const npcCounts = options.npcCounts ?? { background: 3, notable: 2 };
@@ -524,8 +496,8 @@ export async function generateAndPopulateLocation(
   // Generate NPCs
   const npcs = generateNPCsForLocation(rng, locationType, context, npcCounts);
 
-  // Populate game store with NPCs
-  populateLocationWithNPCs(locationId, npcs, centerPosition);
+  // Convert to engine format
+  const engineNPCs = generateLocationNPCs(locationId, npcs, centerPosition);
 
   // Generate quests from quest-giving NPCs
   const quests: Quest[] = [];
@@ -547,7 +519,7 @@ export async function generateAndPopulateLocation(
     }
   }
 
-  return { npcs, quests };
+  return { npcs, quests, engineNPCs };
 }
 
 /**
@@ -617,7 +589,7 @@ export interface ProceduralWorldState {
   initialized: boolean;
 }
 
-// Global procedural world state (separate from game store)
+// Global procedural world state
 let proceduralWorldState: ProceduralWorldState | null = null;
 
 /**
@@ -676,9 +648,6 @@ export async function initializeProceduralWorld(
     initialized: generator.isInitialized(),
   };
 
-  // Update game store with world seed
-  useGameStore.setState({ worldSeed });
-
   return proceduralWorldState;
 }
 
@@ -687,41 +656,30 @@ export async function initializeProceduralWorld(
  */
 export async function regenerateLocation(
   locationId: string,
+  worldSeed: number,
   options: {
     locationType?: string;
     npcCounts?: { background: number; notable: number };
-    clearExisting?: boolean;
   } = {}
 ): Promise<{
   npcs: GeneratedNPC[];
   quests: Quest[];
+  engineNPCs: Record<string, NPC>;
 }> {
-  const store = useGameStore.getState();
-
   // Create RNG from location and world seed
-  const locationSeed = combineSeeds(store.worldSeed, hashString(locationId));
+  const locationSeed = combineSeeds(worldSeed, hashString(locationId));
   const rng = new SeededRandom(locationSeed);
 
-  // Clear existing NPCs at this location if requested
-  if (options.clearExisting) {
-    const updatedNPCs = { ...store.npcs };
-    // Remove NPCs that were generated for this location
-    for (const [id, npc] of Object.entries(updatedNPCs)) {
-      if (id.includes(locationId)) {
-        delete updatedNPCs[id];
-      }
-    }
-    useGameStore.setState({ npcs: updatedNPCs });
-  }
-
-  // Build generation context
+  // Build generation context (basic)
   const context = buildGenerationContext({
     locationId,
-    worldSeed: store.worldSeed,
+    worldSeed: worldSeed,
+    playerLevel: 1, // Default, caller should override if needed
+    gameHour: 12,
   });
 
   // Generate and populate
-  return generateAndPopulateLocation(rng, locationId, context, options);
+  return generateLocationContent(rng, locationId, context, options);
 }
 
 /**

@@ -1,25 +1,25 @@
 // Babylon.js Engine wrapper for Cogsworth Station
 
 import {
-  Engine,
-  Scene,
+  ActionManager,
+  Animation,
   ArcRotateCamera,
-  Vector3,
-  HemisphericLight,
-  DirectionalLight,
   Color3,
   Color4,
-  MeshBuilder,
-  StandardMaterial,
-  Mesh,
-  Animation,
-  ShadowGenerator,
-  PointerEventTypes,
-  ActionManager,
+  DirectionalLight,
+  Engine,
   ExecuteCodeAction,
+  HemisphericLight,
   HighlightLayer,
+  type Mesh,
+  MeshBuilder,
+  PointerEventTypes,
+  Scene,
+  ShadowGenerator,
+  StandardMaterial,
+  Vector3,
 } from '@babylonjs/core';
-import type { Sector, GridPos, NPC } from '../lib/types';
+import type { GridPos, NPC, Sector } from '../lib/types';
 
 // Tile size in world units
 const TILE_SIZE = 1;
@@ -61,15 +61,15 @@ export class BabylonEngine {
   private currentSector: Sector | null = null;
   private shadowGenerator: ShadowGenerator | null = null;
   private isLowPower: boolean = false;
-  
+
   // Animation state
   private playerTargetPosition: Vector3 | null = null;
   private isPlayerMoving: boolean = false;
-  
+
   constructor(canvas: HTMLCanvasElement, callbacks: EngineCallbacks) {
     this.canvas = canvas;
     this.callbacks = callbacks;
-    
+
     // Create engine with mobile optimizations
     this.engine = new Engine(canvas, true, {
       preserveDrawingBuffer: true,
@@ -77,23 +77,23 @@ export class BabylonEngine {
       antialias: true,
       powerPreference: 'high-performance',
     });
-    
+
     // Enable hardware scaling for mobile
     this.engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
-    
+
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.08, 0.07, 0.1, 1);
-    
+
     // Isometric camera setup
     this.camera = new ArcRotateCamera(
       'camera',
       -Math.PI / 4, // Alpha (rotation around Y)
-      Math.PI / 3,  // Beta (angle from top)
-      20,           // Radius
+      Math.PI / 3, // Beta (angle from top)
+      20, // Radius
       Vector3.Zero(),
       this.scene
     );
-    
+
     // Camera controls for mobile
     this.camera.attachControl(canvas, true);
     this.camera.lowerRadiusLimit = 10;
@@ -103,26 +103,26 @@ export class BabylonEngine {
     this.camera.panningSensibility = 100;
     this.camera.pinchPrecision = 50;
     this.camera.wheelPrecision = 20;
-    
+
     // Highlight layer for interactables
     this.highlightLayer = new HighlightLayer('highlights', this.scene);
-    
+
     this.setupLighting();
     this.setupInput();
   }
-  
+
   private setupLighting(): void {
     // Ambient light (steampunk warm tone)
     const ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), this.scene);
     ambient.intensity = 0.4;
     ambient.groundColor = new Color3(0.2, 0.15, 0.1);
     ambient.diffuse = new Color3(0.9, 0.8, 0.6);
-    
+
     // Main directional light (creates depth)
     const dirLight = new DirectionalLight('dirLight', new Vector3(-1, -2, -1), this.scene);
     dirLight.intensity = 0.8;
     dirLight.diffuse = new Color3(1, 0.9, 0.7);
-    
+
     // Shadow generator (simplified for mobile)
     if (!this.isLowPower) {
       this.shadowGenerator = new ShadowGenerator(512, dirLight);
@@ -130,31 +130,28 @@ export class BabylonEngine {
       this.shadowGenerator.blurKernel = 8;
     }
   }
-  
+
   private setupInput(): void {
     // Tap-to-move input handling
     this.scene.onPointerObservable.add((pointerInfo) => {
       if (pointerInfo.type === PointerEventTypes.POINTERTAP) {
-        const pickResult = this.scene.pick(
-          this.scene.pointerX,
-          this.scene.pointerY
-        );
-        
+        const pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+
         if (pickResult?.hit && pickResult.pickedMesh) {
           const mesh = pickResult.pickedMesh;
-          
+
           // Check if it's an NPC
           if (mesh.metadata?.type === 'npc') {
             this.callbacks.onNPCClick(mesh.metadata.id);
             return;
           }
-          
+
           // Check if it's an item
           if (mesh.metadata?.type === 'item') {
             this.callbacks.onItemClick(mesh.metadata.position);
             return;
           }
-          
+
           // Check if it's a floor tile
           if (mesh.metadata?.type === 'floor' || mesh.metadata?.type === 'door') {
             this.callbacks.onTileClick(mesh.metadata.position);
@@ -163,18 +160,18 @@ export class BabylonEngine {
       }
     });
   }
-  
+
   public loadSector(sector: Sector): void {
     // Clear existing meshes
     this.clearSector();
     this.currentSector = sector;
-    
+
     // Create floor and walls
     for (let y = 0; y < sector.height; y++) {
       for (let x = 0; x < sector.width; x++) {
         const tile = sector.grid[y][x];
         const worldPos = this.gridToWorld({ x, y });
-        
+
         if (tile.type === 'floor' || tile.type === 'door') {
           const floorMesh = MeshBuilder.CreateBox(
             `floor_${x}_${y}`,
@@ -182,17 +179,16 @@ export class BabylonEngine {
             this.scene
           );
           floorMesh.position = new Vector3(worldPos.x, -0.05, worldPos.z);
-          
+
           const floorMat = new StandardMaterial(`floorMat_${x}_${y}`, this.scene);
           floorMat.diffuseColor = tile.type === 'door' ? COLORS.door : COLORS.floor;
           floorMat.specularColor = new Color3(0.1, 0.1, 0.1);
           floorMesh.material = floorMat;
-          
+
           floorMesh.metadata = { type: tile.type, position: { x, y } };
           floorMesh.receiveShadows = true;
-          
+
           this.tileMeshes.push(floorMesh);
-          
         } else if (tile.type === 'wall') {
           const wallMesh = MeshBuilder.CreateBox(
             `wall_${x}_${y}`,
@@ -200,45 +196,44 @@ export class BabylonEngine {
             this.scene
           );
           wallMesh.position = new Vector3(worldPos.x, 0.65, worldPos.z);
-          
+
           const wallMat = new StandardMaterial(`wallMat_${x}_${y}`, this.scene);
           wallMat.diffuseColor = COLORS.wall;
           wallMat.specularColor = new Color3(0.05, 0.05, 0.05);
           wallMesh.material = wallMat;
-          
+
           wallMesh.metadata = { type: 'wall', position: { x, y } };
           if (this.shadowGenerator) {
             this.shadowGenerator.addShadowCaster(wallMesh);
           }
-          
+
           this.tileMeshes.push(wallMesh);
-          
         } else if (tile.type === 'prop' && tile.propId) {
           this.createProp(tile.propId, { x, y });
         }
       }
     }
-    
+
     // Create NPCs
     for (const npc of sector.npcs) {
       this.createNPC(npc);
     }
-    
+
     // Create items
     for (const item of sector.items) {
       this.createItemMesh(item.item.id, item.position);
     }
-    
+
     // Center camera on sector
     const centerX = (sector.width * TILE_SIZE) / 2;
     const centerZ = (sector.height * TILE_SIZE) / 2;
     this.camera.target = new Vector3(centerX, 0, centerZ);
   }
-  
+
   private createProp(propId: string, position: GridPos): void {
     const worldPos = this.gridToWorld(position);
     let mesh: Mesh;
-    
+
     // Create different prop shapes based on type
     switch (propId) {
       case 'crate':
@@ -264,25 +259,25 @@ export class BabylonEngine {
           this.scene
         );
     }
-    
+
     mesh.position = new Vector3(worldPos.x, 0.35, worldPos.z);
-    
+
     const mat = new StandardMaterial(`propMat_${position.x}_${position.y}`, this.scene);
     mat.diffuseColor = COLORS.wood;
     mat.specularColor = new Color3(0.1, 0.08, 0.05);
     mesh.material = mat;
-    
+
     mesh.metadata = { type: 'prop', propId, position };
     if (this.shadowGenerator) {
       this.shadowGenerator.addShadowCaster(mesh);
     }
-    
+
     this.tileMeshes.push(mesh);
   }
-  
+
   private createNPC(npc: NPC): void {
     const worldPos = this.gridToWorld(npc.position);
-    
+
     // NPC body
     const body = MeshBuilder.CreateCylinder(
       `npc_${npc.id}_body`,
@@ -290,7 +285,7 @@ export class BabylonEngine {
       this.scene
     );
     body.position = new Vector3(worldPos.x, 0.3, worldPos.z);
-    
+
     // NPC head
     const head = MeshBuilder.CreateSphere(
       `npc_${npc.id}_head`,
@@ -299,7 +294,7 @@ export class BabylonEngine {
     );
     head.position = new Vector3(0, 0.5, 0);
     head.parent = body;
-    
+
     // Hat (steampunk top hat)
     const hat = MeshBuilder.CreateCylinder(
       `npc_${npc.id}_hat`,
@@ -308,19 +303,19 @@ export class BabylonEngine {
     );
     hat.position = new Vector3(0, 0.75, 0);
     hat.parent = body;
-    
+
     const mat = new StandardMaterial(`npcMat_${npc.id}`, this.scene);
     mat.diffuseColor = COLORS.npc;
     mat.specularColor = new Color3(0.2, 0.2, 0.2);
     body.material = mat;
     head.material = mat;
-    
+
     const hatMat = new StandardMaterial(`npcHatMat_${npc.id}`, this.scene);
     hatMat.diffuseColor = COLORS.iron;
     hat.material = hatMat;
-    
+
     body.metadata = { type: 'npc', id: npc.id };
-    
+
     // Make NPC clickable
     body.actionManager = new ActionManager(this.scene);
     body.actionManager.registerAction(
@@ -333,18 +328,18 @@ export class BabylonEngine {
         this.highlightLayer.removeMesh(body);
       })
     );
-    
+
     if (this.shadowGenerator) {
       this.shadowGenerator.addShadowCaster(body);
     }
-    
+
     this.npcMeshes.set(npc.id, body);
   }
-  
+
   private createItemMesh(itemId: string, position: GridPos): void {
     const worldPos = this.gridToWorld(position);
     const key = `${position.x}_${position.y}`;
-    
+
     // Glowing item pickup
     const mesh = MeshBuilder.CreateBox(
       `item_${key}`,
@@ -352,15 +347,15 @@ export class BabylonEngine {
       this.scene
     );
     mesh.position = new Vector3(worldPos.x, 0.25, worldPos.z);
-    
+
     const mat = new StandardMaterial(`itemMat_${key}`, this.scene);
     mat.diffuseColor = COLORS.item;
     mat.emissiveColor = new Color3(0.1, 0.3, 0.1);
     mat.specularColor = new Color3(0.5, 0.5, 0.5);
     mesh.material = mat;
-    
+
     mesh.metadata = { type: 'item', id: itemId, position };
-    
+
     // Floating animation
     const floatAnim = new Animation(
       'itemFloat',
@@ -376,7 +371,7 @@ export class BabylonEngine {
     ]);
     mesh.animations.push(floatAnim);
     this.scene.beginAnimation(mesh, 0, 60, true);
-    
+
     // Rotation animation
     const rotateAnim = new Animation(
       'itemRotate',
@@ -391,17 +386,17 @@ export class BabylonEngine {
     ]);
     mesh.animations.push(rotateAnim);
     this.scene.beginAnimation(mesh, 0, 120, true);
-    
+
     this.itemMeshes.set(key, mesh);
   }
-  
+
   public createPlayer(position: GridPos): void {
     if (this.playerMesh) {
       this.playerMesh.dispose();
     }
-    
+
     const worldPos = this.gridToWorld(position);
-    
+
     // Player body
     this.playerMesh = MeshBuilder.CreateCylinder(
       'player_body',
@@ -409,7 +404,7 @@ export class BabylonEngine {
       this.scene
     );
     this.playerMesh.position = new Vector3(worldPos.x, 0.275, worldPos.z);
-    
+
     // Player head
     const head = MeshBuilder.CreateSphere(
       'player_head',
@@ -418,7 +413,7 @@ export class BabylonEngine {
     );
     head.position = new Vector3(0, 0.45, 0);
     head.parent = this.playerMesh;
-    
+
     // Goggles (steampunk!)
     const goggleL = MeshBuilder.CreateTorus(
       'goggle_l',
@@ -428,7 +423,7 @@ export class BabylonEngine {
     goggleL.rotation.x = Math.PI / 2;
     goggleL.position = new Vector3(-0.08, 0.47, 0.12);
     goggleL.parent = this.playerMesh;
-    
+
     const goggleR = MeshBuilder.CreateTorus(
       'goggle_r',
       { diameter: 0.12, thickness: 0.02, tessellation: 12 },
@@ -437,31 +432,31 @@ export class BabylonEngine {
     goggleR.rotation.x = Math.PI / 2;
     goggleR.position = new Vector3(0.08, 0.47, 0.12);
     goggleR.parent = this.playerMesh;
-    
+
     const playerMat = new StandardMaterial('playerMat', this.scene);
     playerMat.diffuseColor = COLORS.player;
     playerMat.specularColor = new Color3(0.3, 0.3, 0.3);
     this.playerMesh.material = playerMat;
     head.material = playerMat;
-    
+
     const goggleMat = new StandardMaterial('goggleMat', this.scene);
     goggleMat.diffuseColor = COLORS.brass;
     goggleMat.specularColor = new Color3(0.6, 0.5, 0.3);
     goggleL.material = goggleMat;
     goggleR.material = goggleMat;
-    
+
     if (this.shadowGenerator) {
       this.shadowGenerator.addShadowCaster(this.playerMesh);
     }
   }
-  
+
   public movePlayerTo(position: GridPos): void {
     if (!this.playerMesh) return;
-    
+
     const worldPos = this.gridToWorld(position);
     this.playerTargetPosition = new Vector3(worldPos.x, 0.275, worldPos.z);
     this.isPlayerMoving = true;
-    
+
     // Face direction of movement
     const dx = worldPos.x - this.playerMesh.position.x;
     const dz = worldPos.z - this.playerMesh.position.z;
@@ -469,7 +464,7 @@ export class BabylonEngine {
       this.playerMesh.rotation.y = Math.atan2(dx, dz);
     }
   }
-  
+
   public removeItem(position: GridPos): void {
     const key = `${position.x}_${position.y}`;
     const mesh = this.itemMeshes.get(key);
@@ -478,37 +473,37 @@ export class BabylonEngine {
       this.itemMeshes.delete(key);
     }
   }
-  
+
   private clearSector(): void {
     // Dispose tile meshes
     for (const mesh of this.tileMeshes) {
       mesh.dispose();
     }
     this.tileMeshes = [];
-    
+
     // Dispose NPC meshes
     for (const mesh of this.npcMeshes.values()) {
       mesh.dispose();
     }
     this.npcMeshes.clear();
-    
+
     // Dispose item meshes
     for (const mesh of this.itemMeshes.values()) {
       mesh.dispose();
     }
     this.itemMeshes.clear();
   }
-  
+
   private gridToWorld(gridPos: GridPos): { x: number; z: number } {
     return {
       x: gridPos.x * TILE_SIZE + TILE_SIZE / 2,
       z: gridPos.y * TILE_SIZE + TILE_SIZE / 2,
     };
   }
-  
+
   public setLowPowerMode(enabled: boolean): void {
     this.isLowPower = enabled;
-    
+
     if (enabled) {
       // Reduce quality for battery saving
       this.engine.setHardwareScalingLevel(2);
@@ -520,10 +515,10 @@ export class BabylonEngine {
       this.engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
     }
   }
-  
+
   public focusCameraOn(position: GridPos): void {
     const worldPos = this.gridToWorld(position);
-    
+
     // Smooth camera follow
     Animation.CreateAndStartAnimation(
       'cameraFollow',
@@ -536,7 +531,7 @@ export class BabylonEngine {
       Animation.ANIMATIONLOOPMODE_CONSTANT
     );
   }
-  
+
   public start(): void {
     // Main render loop
     this.engine.runRenderLoop(() => {
@@ -546,7 +541,7 @@ export class BabylonEngine {
         const dx = this.playerTargetPosition.x - this.playerMesh.position.x;
         const dz = this.playerTargetPosition.z - this.playerMesh.position.z;
         const dist = Math.sqrt(dx * dx + dz * dz);
-        
+
         if (dist < 0.1) {
           this.playerMesh.position = this.playerTargetPosition;
           this.isPlayerMoving = false;
@@ -556,16 +551,16 @@ export class BabylonEngine {
           this.playerMesh.position.z += (dz / dist) * speed;
         }
       }
-      
+
       this.scene.render();
     });
-    
+
     // Handle resize
     window.addEventListener('resize', () => {
       this.engine.resize();
     });
   }
-  
+
   public dispose(): void {
     this.clearSector();
     if (this.playerMesh) {
@@ -574,11 +569,11 @@ export class BabylonEngine {
     this.scene.dispose();
     this.engine.dispose();
   }
-  
+
   public getScene(): Scene {
     return this.scene;
   }
-  
+
   public getEngine(): Engine {
     return this.engine;
   }

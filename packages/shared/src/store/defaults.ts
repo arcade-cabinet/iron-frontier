@@ -5,12 +5,12 @@
  */
 
 import type {
-  PlayerStats,
+  CameraState,
   EquipmentState,
   GameSettings,
+  PlayerStats,
   TimeState,
   WeatherState,
-  CameraState,
 } from './types';
 
 export const DEFAULT_PLAYER_STATS: PlayerStats = {

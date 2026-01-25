@@ -177,9 +177,7 @@ export const BUILDING_TEMPLATES: BuildingTemplate[] = [
   {
     id: 'bld_telegraph',
     type: 'telegraph',
-    npcSlots: [
-      { role: 'telegraph_operator', required: true, count: 1 },
-    ],
+    npcSlots: [{ role: 'telegraph_operator', required: true, count: 1 }],
     minTownSize: 'town',
     maxInstances: 1,
     tags: ['communication', 'technology', 'ivrc'],
@@ -236,9 +234,7 @@ export const BUILDING_TEMPLATES: BuildingTemplate[] = [
   {
     id: 'bld_windmill',
     type: 'windmill',
-    npcSlots: [
-      { role: 'miller', required: false, count: 1 },
-    ],
+    npcSlots: [{ role: 'miller', required: false, count: 1 }],
     minTownSize: 'hamlet',
     maxInstances: 1,
     tags: ['agriculture', 'utility', 'landmark'],
@@ -250,9 +246,7 @@ export const BUILDING_TEMPLATES: BuildingTemplate[] = [
   {
     id: 'bld_house_small',
     type: 'house_small',
-    npcSlots: [
-      { role: 'resident', required: false, count: 2 },
-    ],
+    npcSlots: [{ role: 'resident', required: false, count: 2 }],
     minTownSize: 'hamlet',
     maxInstances: 20,
     tags: ['residential', 'modest'],
@@ -271,9 +265,7 @@ export const BUILDING_TEMPLATES: BuildingTemplate[] = [
   {
     id: 'bld_shack',
     type: 'shack',
-    npcSlots: [
-      { role: 'poor_resident', required: false, count: 2 },
-    ],
+    npcSlots: [{ role: 'poor_resident', required: false, count: 2 }],
     minTownSize: 'hamlet',
     maxInstances: 10,
     tags: ['residential', 'poor', 'edge'],
@@ -281,9 +273,7 @@ export const BUILDING_TEMPLATES: BuildingTemplate[] = [
   {
     id: 'bld_barn',
     type: 'barn',
-    npcSlots: [
-      { role: 'farmhand', required: false, count: 2 },
-    ],
+    npcSlots: [{ role: 'farmhand', required: false, count: 2 }],
     minTownSize: 'hamlet',
     maxInstances: 5,
     tags: ['agriculture', 'storage', 'animals'],
@@ -590,7 +580,7 @@ export const LOCATION_TEMPLATES: LocationTemplate[] = [
     validBiomes: ['plains', 'desert', 'grassland', 'prairie', 'valley'],
     descriptionTemplates: [
       'A simple waystation offering fresh horses and a roof for the night.',
-      '{{name}} marks a day\'s ride along the trail, a welcome sight for weary travelers.',
+      "{{name}} marks a day's ride along the trail, a welcome sight for weary travelers.",
       'Little more than a stable and a shack, but civilization nonetheless.',
       'A lonely waystation where the stagecoach stops to change horses.',
     ],
@@ -766,23 +756,25 @@ export const LOCATION_TEMPLATES: LocationTemplate[] = [
  * Get a building template by ID
  */
 export function getBuildingTemplateById(id: string): BuildingTemplate | undefined {
-  return BUILDING_TEMPLATES.find(b => b.id === id);
+  return BUILDING_TEMPLATES.find((b) => b.id === id);
 }
 
 /**
  * Get a building template by type
  */
 export function getBuildingTemplateByType(type: string): BuildingTemplate | undefined {
-  return BUILDING_TEMPLATES.find(b => b.type === type);
+  return BUILDING_TEMPLATES.find((b) => b.type === type);
 }
 
 /**
  * Get all building templates that fit a town size
  */
-export function getBuildingTemplatesForTownSize(size: 'hamlet' | 'village' | 'town' | 'city'): BuildingTemplate[] {
+export function getBuildingTemplatesForTownSize(
+  size: 'hamlet' | 'village' | 'town' | 'city'
+): BuildingTemplate[] {
   const sizeOrder = ['hamlet', 'village', 'town', 'city'];
   const sizeIndex = sizeOrder.indexOf(size);
-  return BUILDING_TEMPLATES.filter(b => {
+  return BUILDING_TEMPLATES.filter((b) => {
     const minIndex = sizeOrder.indexOf(b.minTownSize);
     return minIndex <= sizeIndex;
   });
@@ -792,21 +784,21 @@ export function getBuildingTemplatesForTownSize(size: 'hamlet' | 'village' | 'to
  * Get a location template by ID
  */
 export function getLocationTemplateById(id: string): LocationTemplate | undefined {
-  return LOCATION_TEMPLATES.find(l => l.id === id);
+  return LOCATION_TEMPLATES.find((l) => l.id === id);
 }
 
 /**
  * Get location templates by type
  */
 export function getLocationTemplatesByType(type: string): LocationTemplate[] {
-  return LOCATION_TEMPLATES.filter(l => l.locationType === type);
+  return LOCATION_TEMPLATES.filter((l) => l.locationType === type);
 }
 
 /**
  * Get location templates valid for a specific biome
  */
 export function getLocationTemplatesForBiome(biome: string): LocationTemplate[] {
-  return LOCATION_TEMPLATES.filter(l => {
+  return LOCATION_TEMPLATES.filter((l) => {
     const validBiomes = l.validBiomes ?? [];
     return validBiomes.length === 0 || validBiomes.includes(biome);
   });
@@ -815,22 +807,24 @@ export function getLocationTemplatesForBiome(biome: string): LocationTemplate[] 
 /**
  * Get location templates by size
  */
-export function getLocationTemplatesBySize(size: 'tiny' | 'small' | 'medium' | 'large' | 'huge'): LocationTemplate[] {
-  return LOCATION_TEMPLATES.filter(l => l.size === size);
+export function getLocationTemplatesBySize(
+  size: 'tiny' | 'small' | 'medium' | 'large' | 'huge'
+): LocationTemplate[] {
+  return LOCATION_TEMPLATES.filter((l) => l.size === size);
 }
 
 /**
  * Get location templates with a specific tag
  */
 export function getLocationTemplatesWithTag(tag: string): LocationTemplate[] {
-  return LOCATION_TEMPLATES.filter(l => (l.tags ?? []).includes(tag));
+  return LOCATION_TEMPLATES.filter((l) => (l.tags ?? []).includes(tag));
 }
 
 /**
  * Get building templates with a specific tag
  */
 export function getBuildingTemplatesWithTag(tag: string): BuildingTemplate[] {
-  return BUILDING_TEMPLATES.filter(b => b.tags.includes(tag));
+  return BUILDING_TEMPLATES.filter((b) => b.tags.includes(tag));
 }
 
 /**
@@ -841,7 +835,7 @@ export function getRequiredNpcRolesForLocation(templateId: string): string[] {
   if (!location) return [];
 
   const roles: string[] = [];
-  for (const buildingRef of (location.buildings ?? [])) {
+  for (const buildingRef of location.buildings ?? []) {
     const building = getBuildingTemplateById(buildingRef.templateId);
     if (building) {
       for (const slot of building.npcSlots) {
@@ -862,7 +856,7 @@ export function getAllNpcRolesForLocation(templateId: string): string[] {
   if (!location) return [];
 
   const roles: string[] = [];
-  for (const buildingRef of (location.buildings ?? [])) {
+  for (const buildingRef of location.buildings ?? []) {
     const building = getBuildingTemplateById(buildingRef.templateId);
     if (building) {
       for (const slot of building.npcSlots) {
@@ -887,7 +881,7 @@ export function getNpcCapacityForLocation(templateId: string): { min: number; ma
   let maxTotal = backgroundNpcRange[1];
 
   // Add building NPC slots
-  for (const buildingRef of (location.buildings ?? [])) {
+  for (const buildingRef of location.buildings ?? []) {
     const building = getBuildingTemplateById(buildingRef.templateId);
     if (building) {
       const countRange = buildingRef.countRange ?? [1, 1];
@@ -942,10 +936,10 @@ export function getTemplateStats(): {
   }
 
   for (const location of LOCATION_TEMPLATES) {
-    for (const biome of (location.validBiomes ?? [])) {
+    for (const biome of location.validBiomes ?? []) {
       biomes.add(biome);
     }
-    for (const tag of (location.tags ?? [])) {
+    for (const tag of location.tags ?? []) {
       tags.add(tag);
     }
   }

@@ -5,27 +5,27 @@
  * across web and mobile applications.
  */
 
+export * from './animation';
 export * from './colors';
-export * from './spacing';
-export * from './typography';
 export * from './radius';
 export * from './shadows';
-export * from './animation';
+export * from './spacing';
+export * from './typography';
 
+import { durations, easings, transitions } from './animation';
 // Re-export everything as a theme object for convenience
 import { colors, semanticColors } from './colors';
-import { spacing, namedSpacing } from './spacing';
+import { componentRadius, radius } from './radius';
+import { componentShadows, shadows } from './shadows';
+import { namedSpacing, spacing } from './spacing';
 import {
   fontFamilies,
   fontSizes,
   fontWeights,
-  lineHeights,
   letterSpacing,
+  lineHeights,
   textStyles,
 } from './typography';
-import { radius, componentRadius } from './radius';
-import { shadows, componentShadows } from './shadows';
-import { durations, easings, transitions } from './animation';
 
 /**
  * Complete theme object with all design tokens

@@ -7,8 +7,8 @@
  */
 
 import type { PlaceNamePool } from '../../schemas/generation';
-import { SeededRandom } from '../seededRandom';
 import { substituteTemplate } from '../../schemas/generation';
+import type { SeededRandom } from '../seededRandom';
 
 // ============================================================================
 // SHARED WORD POOLS
@@ -19,18 +19,63 @@ import { substituteTemplate } from '../../schemas/generation';
  */
 const COMMON_ADJECTIVES = [
   // Colors
-  'Red', 'Black', 'White', 'Golden', 'Silver', 'Copper', 'Iron', 'Gray', 'Brown',
+  'Red',
+  'Black',
+  'White',
+  'Golden',
+  'Silver',
+  'Copper',
+  'Iron',
+  'Gray',
+  'Brown',
   // Conditions
-  'Dusty', 'Dry', 'Broken', 'Dead', 'Lost', 'Forgotten', 'Hidden', 'Silent',
-  'Lonely', 'Crooked', 'Twisted', 'Hollow', 'Burnt', 'Rusted', 'Weathered',
+  'Dusty',
+  'Dry',
+  'Broken',
+  'Dead',
+  'Lost',
+  'Forgotten',
+  'Hidden',
+  'Silent',
+  'Lonely',
+  'Crooked',
+  'Twisted',
+  'Hollow',
+  'Burnt',
+  'Rusted',
+  'Weathered',
   // Descriptors
-  'High', 'Low', 'Far', 'Wide', 'Long', 'Deep', 'Steep', 'Flat', 'Rocky',
+  'High',
+  'Low',
+  'Far',
+  'Wide',
+  'Long',
+  'Deep',
+  'Steep',
+  'Flat',
+  'Rocky',
   // Temperature/Weather
-  'Cold', 'Windy', 'Scorched', 'Parched', 'Frozen',
+  'Cold',
+  'Windy',
+  'Scorched',
+  'Parched',
+  'Frozen',
   // Wildlife/Nature
-  'Coyote', 'Rattler', 'Vulture', 'Crow', 'Wolf', 'Bear', 'Eagle', 'Hawk',
+  'Coyote',
+  'Rattler',
+  'Vulture',
+  'Crow',
+  'Wolf',
+  'Bear',
+  'Eagle',
+  'Hawk',
   // Frontier Spirit
-  'Wild', 'Savage', 'Lawless', 'Outlaw', 'Desperate', 'Lonesome',
+  'Wild',
+  'Savage',
+  'Lawless',
+  'Outlaw',
+  'Desperate',
+  'Lonesome',
 ] as const;
 
 /**
@@ -38,18 +83,52 @@ const COMMON_ADJECTIVES = [
  */
 const COMMON_NOUNS = [
   // Water features
-  'Creek', 'River', 'Springs', 'Wells', 'Gulch', 'Wash', 'Falls',
+  'Creek',
+  'River',
+  'Springs',
+  'Wells',
+  'Gulch',
+  'Wash',
+  'Falls',
   // Elevated terrain
-  'Mesa', 'Butte', 'Ridge', 'Peak', 'Bluff', 'Hill', 'Knoll',
-  'Mountain', 'Summit', 'Overlook',
+  'Mesa',
+  'Butte',
+  'Ridge',
+  'Peak',
+  'Bluff',
+  'Hill',
+  'Knoll',
+  'Mountain',
+  'Summit',
+  'Overlook',
   // Low terrain
-  'Canyon', 'Valley', 'Hollow', 'Basin', 'Flats', 'Bottom',
+  'Canyon',
+  'Valley',
+  'Hollow',
+  'Basin',
+  'Flats',
+  'Bottom',
   // Rocky features
-  'Rock', 'Boulder', 'Stone', 'Cliff', 'Ledge', 'Crag',
+  'Rock',
+  'Boulder',
+  'Stone',
+  'Cliff',
+  'Ledge',
+  'Crag',
   // Passages
-  'Pass', 'Gap', 'Notch', 'Crossing', 'Ford', 'Trail',
+  'Pass',
+  'Gap',
+  'Notch',
+  'Crossing',
+  'Ford',
+  'Trail',
   // Other features
-  'Bend', 'Point', 'Fork', 'Branch', 'Draw', 'Gulley',
+  'Bend',
+  'Point',
+  'Fork',
+  'Branch',
+  'Draw',
+  'Gulley',
 ] as const;
 
 // ============================================================================
@@ -59,56 +138,169 @@ const COMMON_NOUNS = [
 const TOWN_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Colors and metals
-    'Red', 'Black', 'White', 'Golden', 'Silver', 'Copper', 'Iron', 'Gray',
+    'Red',
+    'Black',
+    'White',
+    'Golden',
+    'Silver',
+    'Copper',
+    'Iron',
+    'Gray',
     // Conditions
-    'Dusty', 'Dry', 'Broken', 'Dead', 'Lost', 'Forgotten', 'Silent', 'Lonely',
-    'Crooked', 'Burnt', 'Weathered', 'Old', 'New',
+    'Dusty',
+    'Dry',
+    'Broken',
+    'Dead',
+    'Lost',
+    'Forgotten',
+    'Silent',
+    'Lonely',
+    'Crooked',
+    'Burnt',
+    'Weathered',
+    'Old',
+    'New',
     // Descriptors
-    'High', 'Low', 'Far', 'Long', 'Deep', 'Flat', 'Rocky', 'Sandy',
+    'High',
+    'Low',
+    'Far',
+    'Long',
+    'Deep',
+    'Flat',
+    'Rocky',
+    'Sandy',
     // Temperature
-    'Cold', 'Windy', 'Scorched', 'Parched',
+    'Cold',
+    'Windy',
+    'Scorched',
+    'Parched',
     // Animals
-    'Coyote', 'Rattler', 'Crow', 'Wolf', 'Eagle', 'Hawk', 'Mustang', 'Buffalo',
+    'Coyote',
+    'Rattler',
+    'Crow',
+    'Wolf',
+    'Eagle',
+    'Hawk',
+    'Mustang',
+    'Buffalo',
     // Frontier
-    'Wild', 'Lonesome', 'Frontier', 'Border', 'Last', 'First',
+    'Wild',
+    'Lonesome',
+    'Frontier',
+    'Border',
+    'Last',
+    'First',
   ],
   nouns: [
     // Geographic
-    'Creek', 'River', 'Springs', 'Wells', 'Gulch', 'Mesa', 'Butte', 'Ridge',
-    'Peak', 'Bluff', 'Hill', 'Canyon', 'Valley', 'Hollow', 'Flats', 'Rock',
-    'Boulder', 'Cliff', 'Pass', 'Gap', 'Crossing', 'Fork', 'Bend', 'Point',
-    'Draw', 'Basin', 'Wash', 'Falls',
+    'Creek',
+    'River',
+    'Springs',
+    'Wells',
+    'Gulch',
+    'Mesa',
+    'Butte',
+    'Ridge',
+    'Peak',
+    'Bluff',
+    'Hill',
+    'Canyon',
+    'Valley',
+    'Hollow',
+    'Flats',
+    'Rock',
+    'Boulder',
+    'Cliff',
+    'Pass',
+    'Gap',
+    'Crossing',
+    'Fork',
+    'Bend',
+    'Point',
+    'Draw',
+    'Basin',
+    'Wash',
+    'Falls',
     // Town-specific
-    'Town', 'City', 'Settlement', 'Camp', 'Post',
+    'Town',
+    'City',
+    'Settlement',
+    'Camp',
+    'Post',
   ],
   suffixes: [
     // Standard town suffixes
-    'ville', 'ton', 'burg', 'berg', 'field', 'dale', 'wood', 'land',
+    'ville',
+    'ton',
+    'burg',
+    'berg',
+    'field',
+    'dale',
+    'wood',
+    'land',
     // Western-specific
-    'Gulch', 'Junction', 'Crossing', 'Springs', 'Falls', 'Wells', 'Creek',
-    'Flats', 'City', 'Town', 'Camp', 'Post', 'Station', 'Point', 'Landing',
-    'Corner', 'Corners', 'End', 'Center', 'Heights', 'View',
+    'Gulch',
+    'Junction',
+    'Crossing',
+    'Springs',
+    'Falls',
+    'Wells',
+    'Creek',
+    'Flats',
+    'City',
+    'Town',
+    'Camp',
+    'Post',
+    'Station',
+    'Point',
+    'Landing',
+    'Corner',
+    'Corners',
+    'End',
+    'Center',
+    'Heights',
+    'View',
   ],
   possessives: [
     // Common frontier surnames
-    "Smith's", "Jones's", "Brown's", "Wilson's", "Taylor's", "Jackson's",
-    "Morgan's", "Murphy's", "Carter's", "Miller's", "Walker's", "Thompson's",
-    "Martinez's", "Garcia's", "Rodriguez's",
+    "Smith's",
+    "Jones's",
+    "Brown's",
+    "Wilson's",
+    "Taylor's",
+    "Jackson's",
+    "Morgan's",
+    "Murphy's",
+    "Carter's",
+    "Miller's",
+    "Walker's",
+    "Thompson's",
+    "Martinez's",
+    "Garcia's",
+    "Rodriguez's",
     // Nicknames
-    "Old Tom's", "Big Jake's", "Little Pete's", "Mad Dog's", "Lucky's",
-    "One-Eye's", "Doc's", "Judge's", "Preacher's", "Colonel's",
+    "Old Tom's",
+    "Big Jake's",
+    "Little Pete's",
+    "Mad Dog's",
+    "Lucky's",
+    "One-Eye's",
+    "Doc's",
+    "Judge's",
+    "Preacher's",
+    "Colonel's",
   ],
   patterns: [
-    '{{adj}} {{noun}}',              // Dusty Gulch
-    '{{noun}} {{suffix}}',           // Creek Junction
-    '{{adj}} {{noun}} {{suffix}}',   // Red Mesa Springs
-    '{{possessive}} {{noun}}',       // Smith's Crossing
-    '{{possessive}} {{suffix}}',     // Murphy's Landing
-    'Fort {{adj}}',                  // Fort Dusty
-    'Fort {{noun}}',                 // Fort Mesa
-    '{{adj}}{{suffix}}',             // Dustyville
-    '{{noun}} City',                 // Mesa City
-    '{{adj}} {{suffix}}',            // Red Junction
+    '{{adj}} {{noun}}', // Dusty Gulch
+    '{{noun}} {{suffix}}', // Creek Junction
+    '{{adj}} {{noun}} {{suffix}}', // Red Mesa Springs
+    '{{possessive}} {{noun}}', // Smith's Crossing
+    '{{possessive}} {{suffix}}', // Murphy's Landing
+    'Fort {{adj}}', // Fort Dusty
+    'Fort {{noun}}', // Fort Mesa
+    '{{adj}}{{suffix}}', // Dustyville
+    '{{noun}} City', // Mesa City
+    '{{adj}} {{suffix}}', // Red Junction
   ],
   tags: ['town', 'settlement', 'civilization'],
 };
@@ -120,51 +312,159 @@ const TOWN_NAME_POOL: PlaceNamePool = {
 const RANCH_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Ranch-appropriate descriptors
-    'Double', 'Triple', 'Lucky', 'Lazy', 'Running', 'Flying', 'Rocking',
-    'Rolling', 'Rising', 'Setting', 'Blazing', 'Shining', 'Golden', 'Silver',
-    'Copper', 'Iron', 'Diamond', 'Star', 'Circle', 'Square', 'Broken',
-    'Crooked', 'Straight', 'Long', 'Wide', 'Big', 'Little', 'Old', 'New',
-    'High', 'Low', 'Hidden', 'Lonesome', 'Peaceful', 'Wild', 'Winding',
+    'Double',
+    'Triple',
+    'Lucky',
+    'Lazy',
+    'Running',
+    'Flying',
+    'Rocking',
+    'Rolling',
+    'Rising',
+    'Setting',
+    'Blazing',
+    'Shining',
+    'Golden',
+    'Silver',
+    'Copper',
+    'Iron',
+    'Diamond',
+    'Star',
+    'Circle',
+    'Square',
+    'Broken',
+    'Crooked',
+    'Straight',
+    'Long',
+    'Wide',
+    'Big',
+    'Little',
+    'Old',
+    'New',
+    'High',
+    'Low',
+    'Hidden',
+    'Lonesome',
+    'Peaceful',
+    'Wild',
+    'Winding',
   ],
   nouns: [
     // Symbols/Objects
-    'Diamond', 'Star', 'Arrow', 'Horseshoe', 'Spur', 'Saddle', 'Boot',
-    'Hat', 'Brand', 'Iron', 'Anchor', 'Cross', 'Crown', 'Heart',
+    'Diamond',
+    'Star',
+    'Arrow',
+    'Horseshoe',
+    'Spur',
+    'Saddle',
+    'Boot',
+    'Hat',
+    'Brand',
+    'Iron',
+    'Anchor',
+    'Cross',
+    'Crown',
+    'Heart',
     // Animals
-    'Horse', 'Mustang', 'Bull', 'Steer', 'Cattle', 'Longhorn', 'Buffalo',
-    'Coyote', 'Wolf', 'Eagle', 'Hawk', 'Dove', 'Raven',
+    'Horse',
+    'Mustang',
+    'Bull',
+    'Steer',
+    'Cattle',
+    'Longhorn',
+    'Buffalo',
+    'Coyote',
+    'Wolf',
+    'Eagle',
+    'Hawk',
+    'Dove',
+    'Raven',
     // Nature
-    'Oak', 'Pine', 'Cottonwood', 'Willow', 'Mesquite', 'Cactus', 'Sage',
-    'Creek', 'River', 'Springs', 'Mesa', 'Canyon', 'Ridge', 'Valley',
-    'Sunset', 'Sunrise', 'Thunder', 'Lightning', 'Wind', 'Dust',
+    'Oak',
+    'Pine',
+    'Cottonwood',
+    'Willow',
+    'Mesquite',
+    'Cactus',
+    'Sage',
+    'Creek',
+    'River',
+    'Springs',
+    'Mesa',
+    'Canyon',
+    'Ridge',
+    'Valley',
+    'Sunset',
+    'Sunrise',
+    'Thunder',
+    'Lightning',
+    'Wind',
+    'Dust',
   ],
   suffixes: [
-    'Ranch', 'Farm', 'Homestead', 'Spread', 'Estate', 'Acres', 'Range',
-    'Land', 'Holdings', 'Place', 'Station', 'Camp', 'Corral',
-    'Hacienda', 'Rancho', 'Ranchero',
+    'Ranch',
+    'Farm',
+    'Homestead',
+    'Spread',
+    'Estate',
+    'Acres',
+    'Range',
+    'Land',
+    'Holdings',
+    'Place',
+    'Station',
+    'Camp',
+    'Corral',
+    'Hacienda',
+    'Rancho',
+    'Ranchero',
     // Letter/Number combos
-    'Bar', 'Circle', 'Square', 'Cross', 'Slash',
+    'Bar',
+    'Circle',
+    'Square',
+    'Cross',
+    'Slash',
   ],
   possessives: [
     // Rancher surnames
-    "Johnson's", "Williams's", "Davis's", "Anderson's", "Thomas's",
-    "White's", "Harris's", "Martin's", "Thompson's", "Young's",
-    "King's", "Scott's", "Green's", "Baker's", "Hill's",
+    "Johnson's",
+    "Williams's",
+    "Davis's",
+    "Anderson's",
+    "Thomas's",
+    "White's",
+    "Harris's",
+    "Martin's",
+    "Thompson's",
+    "Young's",
+    "King's",
+    "Scott's",
+    "Green's",
+    "Baker's",
+    "Hill's",
     // Nicknames
-    "Big Jim's", "Old Man's", "Widow's", "Grandpa's", "Papa's",
-    "Slim's", "Curly's", "Red's", "Dusty's", "Tex's",
+    "Big Jim's",
+    "Old Man's",
+    "Widow's",
+    "Grandpa's",
+    "Papa's",
+    "Slim's",
+    "Curly's",
+    "Red's",
+    "Dusty's",
+    "Tex's",
   ],
   patterns: [
-    '{{adj}} {{noun}} {{suffix}}',   // Double Diamond Ranch
-    'The {{adj}} {{noun}}',          // The Lazy Horseshoe
-    '{{possessive}} {{suffix}}',     // Johnson's Spread
-    '{{adj}} {{suffix}}',            // Running Bar Ranch
-    '{{noun}} {{suffix}}',           // Horseshoe Ranch
-    '{{adj}} {{adj}} {{suffix}}',    // Double Lucky Ranch
-    '{{letter}}-{{letter}} {{suffix}}',  // Special pattern handled separately
-    'The {{noun}}',                  // The Longhorn
-    '{{possessive}} {{noun}}',       // Wilson's Creek
-    '{{adj}} {{noun}}',              // Flying Eagle
+    '{{adj}} {{noun}} {{suffix}}', // Double Diamond Ranch
+    'The {{adj}} {{noun}}', // The Lazy Horseshoe
+    '{{possessive}} {{suffix}}', // Johnson's Spread
+    '{{adj}} {{suffix}}', // Running Bar Ranch
+    '{{noun}} {{suffix}}', // Horseshoe Ranch
+    '{{adj}} {{adj}} {{suffix}}', // Double Lucky Ranch
+    '{{letter}}-{{letter}} {{suffix}}', // Special pattern handled separately
+    'The {{noun}}', // The Longhorn
+    '{{possessive}} {{noun}}', // Wilson's Creek
+    '{{adj}} {{noun}}', // Flying Eagle
   ],
   tags: ['ranch', 'farm', 'agriculture', 'rural'],
 };
@@ -176,52 +476,145 @@ const RANCH_NAME_POOL: PlaceNamePool = {
 const MINE_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Fortune-related
-    'Lucky', 'Fortune', 'Golden', 'Silver', 'Rich', 'Bonanza', 'Glory',
-    'Grand', 'Great', 'Big', 'Little', 'Lost', 'Hidden', 'Secret',
+    'Lucky',
+    'Fortune',
+    'Golden',
+    'Silver',
+    'Rich',
+    'Bonanza',
+    'Glory',
+    'Grand',
+    'Great',
+    'Big',
+    'Little',
+    'Lost',
+    'Hidden',
+    'Secret',
     // Conditions
-    'Deep', 'Dark', 'Black', 'Old', 'New', 'Abandoned', 'Working', 'Dry',
-    'Wet', 'Flooded', 'Collapsed', 'Haunted', 'Cursed', 'Blessed',
+    'Deep',
+    'Dark',
+    'Black',
+    'Old',
+    'New',
+    'Abandoned',
+    'Working',
+    'Dry',
+    'Wet',
+    'Flooded',
+    'Collapsed',
+    'Haunted',
+    'Cursed',
+    'Blessed',
     // Metals/Gems
-    'Copper', 'Iron', 'Lead', 'Tin', 'Coal', 'Crystal', 'Diamond', 'Ruby',
-    'Emerald', 'Sapphire',
+    'Copper',
+    'Iron',
+    'Lead',
+    'Tin',
+    'Coal',
+    'Crystal',
+    'Diamond',
+    'Ruby',
+    'Emerald',
+    'Sapphire',
   ],
   nouns: [
     // Mine types
-    'Strike', 'Claim', 'Lode', 'Vein', 'Seam', 'Deposit', 'Mother Lode',
-    'Diggins', 'Pit', 'Shaft', 'Tunnel', 'Hole', 'Cut',
+    'Strike',
+    'Claim',
+    'Lode',
+    'Vein',
+    'Seam',
+    'Deposit',
+    'Mother Lode',
+    'Diggins',
+    'Pit',
+    'Shaft',
+    'Tunnel',
+    'Hole',
+    'Cut',
     // Ore/Materials
-    'Gold', 'Silver', 'Copper', 'Iron', 'Lead', 'Coal', 'Ore',
+    'Gold',
+    'Silver',
+    'Copper',
+    'Iron',
+    'Lead',
+    'Coal',
+    'Ore',
     // Animals (superstition names)
-    'Mule', 'Burro', 'Jackass', 'Rattler', 'Spider',
+    'Mule',
+    'Burro',
+    'Jackass',
+    'Rattler',
+    'Spider',
     // Geographic
-    'Mountain', 'Hill', 'Ridge', 'Canyon', 'Gulch', 'Creek',
+    'Mountain',
+    'Hill',
+    'Ridge',
+    'Canyon',
+    'Gulch',
+    'Creek',
     // Luck/Fortune
-    'Fortune', 'Chance', 'Hope', 'Dream', 'Glory', 'Destiny',
+    'Fortune',
+    'Chance',
+    'Hope',
+    'Dream',
+    'Glory',
+    'Destiny',
   ],
   suffixes: [
-    'Mine', 'Mines', 'Pit', 'Works', 'Diggins', 'Claim', 'Strike',
-    'Prospect', 'Operation', 'Excavation', 'Shaft', 'Tunnel',
-    'Lode', 'Vein', 'Seam', 'Hole', 'Cut', 'Quarry', 'Site',
+    'Mine',
+    'Mines',
+    'Pit',
+    'Works',
+    'Diggins',
+    'Claim',
+    'Strike',
+    'Prospect',
+    'Operation',
+    'Excavation',
+    'Shaft',
+    'Tunnel',
+    'Lode',
+    'Vein',
+    'Seam',
+    'Hole',
+    'Cut',
+    'Quarry',
+    'Site',
   ],
   possessives: [
     // Miner surnames
-    "Sullivan's", "O'Brien's", "McCarthy's", "Kelly's", "Murphy's",
-    "Schmidt's", "Weber's", "Mueller's", "Chang's", "Wong's",
+    "Sullivan's",
+    "O'Brien's",
+    "McCarthy's",
+    "Kelly's",
+    "Murphy's",
+    "Schmidt's",
+    "Weber's",
+    "Mueller's",
+    "Chang's",
+    "Wong's",
     // Nicknames
-    "Old Prospector's", "Lucky Pete's", "Mad Miner's", "Crazy Jack's",
-    "One-Armed Charlie's", "Fool's", "Dead Man's", "Widow's",
+    "Old Prospector's",
+    "Lucky Pete's",
+    "Mad Miner's",
+    "Crazy Jack's",
+    "One-Armed Charlie's",
+    "Fool's",
+    "Dead Man's",
+    "Widow's",
   ],
   patterns: [
-    '{{adj}} {{noun}} {{suffix}}',   // Lucky Strike Mine
-    'The {{adj}} {{noun}}',          // The Golden Lode
-    '{{possessive}} {{suffix}}',     // Sullivan's Claim
-    '{{adj}} {{suffix}}',            // Lost Mine
-    '{{noun}} {{suffix}}',           // Glory Hole
-    '{{possessive}} {{noun}}',       // Murphy's Lode
-    'The {{noun}} {{suffix}}',       // The Mother Lode Mine
-    '{{adj}} {{adj}} {{suffix}}',    // Big Lucky Strike
-    'Shaft {{number}}',              // Shaft 7 (handled separately)
-    '{{noun}} No. {{number}}',       // Tunnel No. 3 (handled separately)
+    '{{adj}} {{noun}} {{suffix}}', // Lucky Strike Mine
+    'The {{adj}} {{noun}}', // The Golden Lode
+    '{{possessive}} {{suffix}}', // Sullivan's Claim
+    '{{adj}} {{suffix}}', // Lost Mine
+    '{{noun}} {{suffix}}', // Glory Hole
+    '{{possessive}} {{noun}}', // Murphy's Lode
+    'The {{noun}} {{suffix}}', // The Mother Lode Mine
+    '{{adj}} {{adj}} {{suffix}}', // Big Lucky Strike
+    'Shaft {{number}}', // Shaft 7 (handled separately)
+    '{{noun}} No. {{number}}', // Tunnel No. 3 (handled separately)
   ],
   tags: ['mine', 'mining', 'industry', 'underground'],
 };
@@ -233,61 +626,174 @@ const MINE_NAME_POOL: PlaceNamePool = {
 const LANDMARK_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Ominous/Evocative
-    "Devil's", "Dead Man's", "Hangman's", "Ghost", "Phantom", "Shadow",
-    "Death", "Skull", "Bone", "Blood", "Hell's", "Satan's", "Demon's",
+    "Devil's",
+    "Dead Man's",
+    "Hangman's",
+    'Ghost',
+    'Phantom',
+    'Shadow',
+    'Death',
+    'Skull',
+    'Bone',
+    'Blood',
+    "Hell's",
+    "Satan's",
+    "Demon's",
     // Mysterious
-    "Lost", "Hidden", "Secret", "Forgotten", "Ancient", "Cursed", "Haunted",
-    "Mysterious", "Strange", "Weird", "Eerie", "Silent",
+    'Lost',
+    'Hidden',
+    'Secret',
+    'Forgotten',
+    'Ancient',
+    'Cursed',
+    'Haunted',
+    'Mysterious',
+    'Strange',
+    'Weird',
+    'Eerie',
+    'Silent',
     // Natural
-    "Thunder", "Lightning", "Storm", "Wind", "Sun", "Moon", "Star",
+    'Thunder',
+    'Lightning',
+    'Storm',
+    'Wind',
+    'Sun',
+    'Moon',
+    'Star',
     // Size/Shape
-    "Giant", "Towering", "Massive", "Twin", "Triple", "Split", "Broken",
+    'Giant',
+    'Towering',
+    'Massive',
+    'Twin',
+    'Triple',
+    'Split',
+    'Broken',
     // Colors
-    "Red", "Black", "White", "Gray", "Painted", "Striped",
+    'Red',
+    'Black',
+    'White',
+    'Gray',
+    'Painted',
+    'Striped',
     // Wildlife
-    "Eagle", "Hawk", "Vulture", "Coyote", "Wolf", "Bear", "Rattlesnake",
+    'Eagle',
+    'Hawk',
+    'Vulture',
+    'Coyote',
+    'Wolf',
+    'Bear',
+    'Rattlesnake',
   ],
   nouns: [
     // Elevated
-    'Peak', 'Pinnacle', 'Spire', 'Tower', 'Needle', 'Monument', 'Pillar',
-    'Mesa', 'Butte', 'Bluff', 'Mountain', 'Ridge', 'Crest', 'Summit',
+    'Peak',
+    'Pinnacle',
+    'Spire',
+    'Tower',
+    'Needle',
+    'Monument',
+    'Pillar',
+    'Mesa',
+    'Butte',
+    'Bluff',
+    'Mountain',
+    'Ridge',
+    'Crest',
+    'Summit',
     // Low/Recessed
-    'Canyon', 'Gorge', 'Chasm', 'Abyss', 'Pit', 'Hollow', 'Valley',
-    'Basin', 'Sink', 'Crater',
+    'Canyon',
+    'Gorge',
+    'Chasm',
+    'Abyss',
+    'Pit',
+    'Hollow',
+    'Valley',
+    'Basin',
+    'Sink',
+    'Crater',
     // Rocky
-    'Rock', 'Boulder', 'Stone', 'Cliff', 'Face', 'Wall', 'Arch',
-    'Bridge', 'Cave', 'Cavern', 'Grotto',
+    'Rock',
+    'Boulder',
+    'Stone',
+    'Cliff',
+    'Face',
+    'Wall',
+    'Arch',
+    'Bridge',
+    'Cave',
+    'Cavern',
+    'Grotto',
     // Water
-    'Falls', 'Springs', 'Pool', 'Lake', 'River', 'Creek', 'Wash',
+    'Falls',
+    'Springs',
+    'Pool',
+    'Lake',
+    'River',
+    'Creek',
+    'Wash',
     // Paths
-    'Pass', 'Gap', 'Notch', 'Trail', 'Road', 'Crossing', 'Ford',
+    'Pass',
+    'Gap',
+    'Notch',
+    'Trail',
+    'Road',
+    'Crossing',
+    'Ford',
   ],
   suffixes: [
-    'Point', 'Head', 'Top', 'End', 'Edge', 'Face',
-    'Overlook', 'Vista', 'View', 'Lookout',
-    'Formation', 'Monument', 'Landmark',
-    'Trail', 'Path', 'Way', 'Route',
+    'Point',
+    'Head',
+    'Top',
+    'End',
+    'Edge',
+    'Face',
+    'Overlook',
+    'Vista',
+    'View',
+    'Lookout',
+    'Formation',
+    'Monument',
+    'Landmark',
+    'Trail',
+    'Path',
+    'Way',
+    'Route',
   ],
   possessives: [
     // Legendary figures
-    "Devil's", "Satan's", "Death's", "Hell's",
-    "Old Scratch's", "Coyote's", "Raven's", "Eagle's",
+    "Devil's",
+    "Satan's",
+    "Death's",
+    "Hell's",
+    "Old Scratch's",
+    "Coyote's",
+    "Raven's",
+    "Eagle's",
     // Historical figures
-    "Coronado's", "Carson's", "Bridger's", "Fremont's",
-    "Apache's", "Comanche's", "Navajo's",
+    "Coronado's",
+    "Carson's",
+    "Bridger's",
+    "Fremont's",
+    "Apache's",
+    "Comanche's",
+    "Navajo's",
     // Frontier characters
-    "Outlaw's", "Bandit's", "Prospector's", "Pioneer's",
-    "Soldier's", "Cavalry's",
+    "Outlaw's",
+    "Bandit's",
+    "Prospector's",
+    "Pioneer's",
+    "Soldier's",
+    "Cavalry's",
   ],
   patterns: [
-    '{{adj}} {{noun}}',              // Devil's Canyon
-    '{{possessive}} {{noun}}',       // Death's Door
-    'The {{adj}} {{noun}}',          // The Painted Desert
-    '{{noun}} {{suffix}}',           // Canyon Overlook
-    '{{adj}} {{noun}} {{suffix}}',   // Red Rock Point
-    'The {{noun}}',                  // The Abyss
-    '{{adj}} {{adj}} {{noun}}',      // Twin Sister Peaks
-    '{{possessive}} {{suffix}}',     // Outlaw's Lookout
+    '{{adj}} {{noun}}', // Devil's Canyon
+    '{{possessive}} {{noun}}', // Death's Door
+    'The {{adj}} {{noun}}', // The Painted Desert
+    '{{noun}} {{suffix}}', // Canyon Overlook
+    '{{adj}} {{noun}} {{suffix}}', // Red Rock Point
+    'The {{noun}}', // The Abyss
+    '{{adj}} {{adj}} {{noun}}', // Twin Sister Peaks
+    '{{possessive}} {{suffix}}', // Outlaw's Lookout
   ],
   tags: ['landmark', 'geographic', 'natural', 'exploration'],
 };
@@ -299,52 +805,137 @@ const LANDMARK_NAME_POOL: PlaceNamePool = {
 const OUTPOST_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Remoteness
-    'Lonely', 'Lonesome', 'Remote', 'Distant', 'Far', 'Last', 'End',
-    'Border', 'Frontier', 'Edge', 'Outpost', 'Way',
+    'Lonely',
+    'Lonesome',
+    'Remote',
+    'Distant',
+    'Far',
+    'Last',
+    'End',
+    'Border',
+    'Frontier',
+    'Edge',
+    'Outpost',
+    'Way',
     // Conditions
-    'Dusty', 'Dry', 'Windy', 'Scorched', 'Sun-bleached', 'Weather-beaten',
-    'Ramshackle', 'Rickety', 'Tumbledown', 'Abandoned', 'Forgotten',
+    'Dusty',
+    'Dry',
+    'Windy',
+    'Scorched',
+    'Sun-bleached',
+    'Weather-beaten',
+    'Ramshackle',
+    'Rickety',
+    'Tumbledown',
+    'Abandoned',
+    'Forgotten',
     // Descriptors
-    'Old', 'New', 'Little', 'Small', 'Tiny', 'Hidden', 'Secret',
+    'Old',
+    'New',
+    'Little',
+    'Small',
+    'Tiny',
+    'Hidden',
+    'Secret',
     // Territorial
-    'Comanche', 'Apache', 'Navajo', 'Sioux', 'Cheyenne',
+    'Comanche',
+    'Apache',
+    'Navajo',
+    'Sioux',
+    'Cheyenne',
     // Military
-    'Army', 'Cavalry', 'Scout', 'Ranger', 'Patrol',
+    'Army',
+    'Cavalry',
+    'Scout',
+    'Ranger',
+    'Patrol',
   ],
   nouns: [
     // Settlement types
-    'Post', 'Station', 'Camp', 'Stop', 'Rest', 'Waystation',
-    'Shelter', 'Refuge', 'Haven', 'Hideout', 'Den',
+    'Post',
+    'Station',
+    'Camp',
+    'Stop',
+    'Rest',
+    'Waystation',
+    'Shelter',
+    'Refuge',
+    'Haven',
+    'Hideout',
+    'Den',
     // Geographic
-    'Creek', 'Springs', 'Wells', 'Gulch', 'Canyon', 'Mesa', 'Butte',
-    'Pass', 'Gap', 'Crossing', 'Ford', 'Trail', 'Road',
+    'Creek',
+    'Springs',
+    'Wells',
+    'Gulch',
+    'Canyon',
+    'Mesa',
+    'Butte',
+    'Pass',
+    'Gap',
+    'Crossing',
+    'Ford',
+    'Trail',
+    'Road',
     // Structures
-    'Cabin', 'Shack', 'Hut', 'Dugout', 'Stockade', 'Palisade',
-    'Adobe', 'Hovel', 'Shanty',
+    'Cabin',
+    'Shack',
+    'Hut',
+    'Dugout',
+    'Stockade',
+    'Palisade',
+    'Adobe',
+    'Hovel',
+    'Shanty',
   ],
   suffixes: [
-    'Post', 'Station', 'Stop', 'Rest', 'Camp', 'Outpost',
-    'Trading Post', 'Way Station', 'Relay', 'Depot',
-    'Point', 'Corner', 'Crossing', 'Junction',
+    'Post',
+    'Station',
+    'Stop',
+    'Rest',
+    'Camp',
+    'Outpost',
+    'Trading Post',
+    'Way Station',
+    'Relay',
+    'Depot',
+    'Point',
+    'Corner',
+    'Crossing',
+    'Junction',
   ],
   possessives: [
     // Traders/Trappers
-    "Trapper's", "Trader's", "Scout's", "Hunter's", "Guide's",
-    "Pathfinder's", "Woodsman's", "Ranger's",
+    "Trapper's",
+    "Trader's",
+    "Scout's",
+    "Hunter's",
+    "Guide's",
+    "Pathfinder's",
+    "Woodsman's",
+    "Ranger's",
     // Personal names
-    "Jake's", "Pete's", "Bill's", "Sam's", "Joe's",
-    "Hank's", "Buck's", "Slim's", "Rusty's", "Dusty's",
+    "Jake's",
+    "Pete's",
+    "Bill's",
+    "Sam's",
+    "Joe's",
+    "Hank's",
+    "Buck's",
+    "Slim's",
+    "Rusty's",
+    "Dusty's",
   ],
   patterns: [
-    '{{adj}} {{noun}} {{suffix}}',   // Lonely Creek Post
-    '{{possessive}} {{suffix}}',     // Trader's Station
-    '{{adj}} {{suffix}}',            // Last Stop
-    '{{noun}} {{suffix}}',           // Canyon Outpost
-    '{{possessive}} {{noun}}',       // Jake's Cabin
-    'The {{adj}} {{noun}}',          // The Lonesome Post
-    '{{adj}} {{noun}}',              // Border Camp
-    'Fort {{adj}}',                  // Fort Remote
-    'Camp {{noun}}',                 // Camp Mesa
+    '{{adj}} {{noun}} {{suffix}}', // Lonely Creek Post
+    '{{possessive}} {{suffix}}', // Trader's Station
+    '{{adj}} {{suffix}}', // Last Stop
+    '{{noun}} {{suffix}}', // Canyon Outpost
+    '{{possessive}} {{noun}}', // Jake's Cabin
+    'The {{adj}} {{noun}}', // The Lonesome Post
+    '{{adj}} {{noun}}', // Border Camp
+    'Fort {{adj}}', // Fort Remote
+    'Camp {{noun}}', // Camp Mesa
   ],
   tags: ['outpost', 'remote', 'frontier', 'wilderness'],
 };
@@ -356,56 +947,139 @@ const OUTPOST_NAME_POOL: PlaceNamePool = {
 const STATION_NAME_POOL: PlaceNamePool = {
   adjectives: [
     // Railroad-related
-    'Iron', 'Steel', 'Steam', 'Rail', 'Track', 'Line',
+    'Iron',
+    'Steel',
+    'Steam',
+    'Rail',
+    'Track',
+    'Line',
     // Telegraph-related
-    'Wire', 'Telegraph', 'Signal', 'Relay',
+    'Wire',
+    'Telegraph',
+    'Signal',
+    'Relay',
     // Geographic
-    'High', 'Low', 'Flat', 'Rocky', 'Sandy', 'Dusty',
-    'North', 'South', 'East', 'West', 'Central', 'Union',
+    'High',
+    'Low',
+    'Flat',
+    'Rocky',
+    'Sandy',
+    'Dusty',
+    'North',
+    'South',
+    'East',
+    'West',
+    'Central',
+    'Union',
     // Conditions
-    'New', 'Old', 'Grand', 'Great', 'Little',
+    'New',
+    'Old',
+    'Grand',
+    'Great',
+    'Little',
     // Colors
-    'Red', 'Black', 'White', 'Golden', 'Silver',
+    'Red',
+    'Black',
+    'White',
+    'Golden',
+    'Silver',
     // Speed/Progress
-    'Express', 'Swift', 'Quick', 'Rapid', 'Fast',
+    'Express',
+    'Swift',
+    'Quick',
+    'Rapid',
+    'Fast',
   ],
   nouns: [
     // Station-specific
-    'Depot', 'Station', 'Terminal', 'Yard', 'Siding', 'Switch',
-    'Platform', 'Stop', 'Halt', 'Junction', 'Crossing',
+    'Depot',
+    'Station',
+    'Terminal',
+    'Yard',
+    'Siding',
+    'Switch',
+    'Platform',
+    'Stop',
+    'Halt',
+    'Junction',
+    'Crossing',
     // Geographic features
-    'Creek', 'River', 'Springs', 'Wells', 'Mesa', 'Butte', 'Ridge',
-    'Peak', 'Valley', 'Canyon', 'Pass', 'Gap', 'Flats', 'Point',
+    'Creek',
+    'River',
+    'Springs',
+    'Wells',
+    'Mesa',
+    'Butte',
+    'Ridge',
+    'Peak',
+    'Valley',
+    'Canyon',
+    'Pass',
+    'Gap',
+    'Flats',
+    'Point',
     // Water towers etc
-    'Tank', 'Tower', 'Water', 'Coaling',
+    'Tank',
+    'Tower',
+    'Water',
+    'Coaling',
   ],
   suffixes: [
-    'Station', 'Depot', 'Junction', 'Crossing', 'Terminal',
-    'Siding', 'Switch', 'Yard', 'Stop', 'Halt',
-    'Platform', 'Point', 'End', 'Line',
-    'Central', 'Union', 'Pacific', 'Western', 'Eastern',
+    'Station',
+    'Depot',
+    'Junction',
+    'Crossing',
+    'Terminal',
+    'Siding',
+    'Switch',
+    'Yard',
+    'Stop',
+    'Halt',
+    'Platform',
+    'Point',
+    'End',
+    'Line',
+    'Central',
+    'Union',
+    'Pacific',
+    'Western',
+    'Eastern',
   ],
   possessives: [
     // Railroad barons
-    "Vanderbilt's", "Stanford's", "Huntington's", "Gould's", "Hill's",
-    "Harriman's", "Drew's", "Fisk's",
+    "Vanderbilt's",
+    "Stanford's",
+    "Huntington's",
+    "Gould's",
+    "Hill's",
+    "Harriman's",
+    "Drew's",
+    "Fisk's",
     // Engineers/Workers
-    "Engineer's", "Conductor's", "Brakeman's", "Fireman's",
-    "Dispatcher's", "Telegrapher's",
+    "Engineer's",
+    "Conductor's",
+    "Brakeman's",
+    "Fireman's",
+    "Dispatcher's",
+    "Telegrapher's",
     // Local names
-    "Wilson's", "Murphy's", "Johnson's", "Thompson's", "Davis's",
+    "Wilson's",
+    "Murphy's",
+    "Johnson's",
+    "Thompson's",
+    "Davis's",
   ],
   patterns: [
-    '{{adj}} {{noun}} {{suffix}}',   // Iron Horse Junction
-    '{{noun}} {{suffix}}',           // Creek Station
-    '{{adj}} {{suffix}}',            // Union Station
-    '{{noun}} City {{suffix}}',      // Mesa City Depot
-    '{{possessive}} {{suffix}}',     // Wilson's Junction
-    '{{adj}} {{noun}}',              // Iron Creek
-    'Mile {{number}}',               // Mile 42 (handled separately)
-    '{{noun}} No. {{number}}',       // Siding No. 7 (handled separately)
-    'The {{adj}} {{noun}}',          // The Grand Depot
-    '{{adj}} Line {{suffix}}',       // Pacific Line Terminal
+    '{{adj}} {{noun}} {{suffix}}', // Iron Horse Junction
+    '{{noun}} {{suffix}}', // Creek Station
+    '{{adj}} {{suffix}}', // Union Station
+    '{{noun}} City {{suffix}}', // Mesa City Depot
+    '{{possessive}} {{suffix}}', // Wilson's Junction
+    '{{adj}} {{noun}}', // Iron Creek
+    'Mile {{number}}', // Mile 42 (handled separately)
+    '{{noun}} No. {{number}}', // Siding No. 7 (handled separately)
+    'The {{adj}} {{noun}}', // The Grand Depot
+    '{{adj}} Line {{suffix}}', // Pacific Line Terminal
   ],
   tags: ['station', 'railroad', 'telegraph', 'transport', 'infrastructure'],
 };
@@ -469,9 +1143,7 @@ export function generatePlaceName(poolId: string, rng: SeededRandom): string {
     const letter2 = LETTERS[rng.int(0, LETTERS.length - 1)];
     variables['letter'] = letter1;
     // Replace second {{letter}} separately if present
-    const result = pattern
-      .replace('{{letter}}', letter1)
-      .replace('{{letter}}', letter2);
+    const result = pattern.replace('{{letter}}', letter1).replace('{{letter}}', letter2);
     return applyRemainingSubstitutions(result, pool, rng, variables);
   }
 
@@ -537,11 +1209,7 @@ function applyRemainingSubstitutions(
  * @param rng Seeded random number generator
  * @returns Array of unique generated names
  */
-export function generatePlaceNames(
-  poolId: string,
-  count: number,
-  rng: SeededRandom
-): string[] {
+export function generatePlaceNames(poolId: string, count: number, rng: SeededRandom): string[] {
   const names = new Set<string>();
   let attempts = 0;
   const maxAttempts = count * 10; // Prevent infinite loops

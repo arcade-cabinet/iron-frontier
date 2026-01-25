@@ -5,17 +5,15 @@
 export {
   // Travel functions
   canTravel,
-  getTravelCost,
-  getReachableLocations,
   executeTravel,
-
+  formatTravelTime,
   // Display helpers
   getDangerDescription,
   getMethodDescription,
-  formatTravelTime,
-
+  getReachableLocations,
+  getTravelCost,
   // Types
   type TravelCost,
-  type TravelResult,
   type TravelGameState,
+  type TravelResult,
 } from './TravelService';

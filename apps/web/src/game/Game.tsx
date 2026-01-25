@@ -1,15 +1,17 @@
 // Iron Frontier - Hex-Tile Based Western RPG
 // Fallout 2-style isometric view with Kenney Hexagon Kit tiles
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import {
+  getWorldItemName,
+  getWorldItemsForLocation,
+} from '@iron-frontier/shared/data/items/worldItems';
+import { getNPCsByLocation } from '@iron-frontier/shared/data/npcs';
+// World/location data
+import { getLocationData } from '@iron-frontier/shared/data/worlds';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { HexSceneManager, type HexWorldPosition } from '../engine/hex';
 import { TitleScreen } from './screens/TitleScreen';
 import { useGameStore } from './store/gameStore';
-
-// World/location data
-import { getLocationData } from '@iron-frontier/shared/data/worlds';
-import { getNPCsByLocation } from '@iron-frontier/shared/data/npcs';
-import { getWorldItemsForLocation, getWorldItemName } from '@iron-frontier/shared/data/items/worldItems';
 
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
@@ -24,8 +26,8 @@ import { NotificationFeed } from './ui/NotificationFeed';
 import { QuestLog } from './ui/QuestLog';
 // SettingsPanel merged into MenuPanel
 import { ShopPanel } from './ui/ShopPanel';
-import { WorldMap } from './ui/WorldMap';
 import { TravelPanel } from './ui/TravelPanel';
+import { WorldMap } from './ui/WorldMap';
 
 // ============================================================================
 // GAME CANVAS - Babylon.js 3D Scene with Hex Tiles
@@ -60,7 +62,8 @@ function GameCanvas() {
 
   // Initialize scene - handle React 18 StrictMode properly
   useEffect(() => {
-    if (!canvasRef.current || (phase !== 'playing' && phase !== 'dialogue' && phase !== 'paused')) return;
+    if (!canvasRef.current || (phase !== 'playing' && phase !== 'dialogue' && phase !== 'paused'))
+      return;
 
     // Wait for world to be loaded
     if (!loadedWorld || !currentLocationId) {
@@ -123,7 +126,8 @@ function GameCanvas() {
           if (currentLocationId) {
             const npcsInLocation = getNPCsByLocation(currentLocationId);
             const npcAtHex = npcsInLocation.find(
-              npc => npc.spawnCoord && npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
+              (npc) =>
+                npc.spawnCoord && npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
             );
 
             if (npcAtHex) {
@@ -135,8 +139,10 @@ function GameCanvas() {
             // Check if there's a world item at this hex
             const worldItems = getWorldItemsForLocation(currentLocationId);
             const itemAtHex = worldItems.find(
-              item => item.coord.q === hexCoord.q && item.coord.r === hexCoord.r &&
-                      !collectedItemIds.includes(item.id)
+              (item) =>
+                item.coord.q === hexCoord.q &&
+                item.coord.r === hexCoord.r &&
+                !collectedItemIds.includes(item.id)
             );
 
             if (itemAtHex) {
@@ -161,9 +167,18 @@ function GameCanvas() {
         if (currentLocationId) {
           const npcsInLocation = getNPCsByLocation(currentLocationId);
           for (const npc of npcsInLocation) {
-            if (npc.spawnCoord && npc.spawnCoord.q !== undefined && npc.spawnCoord.r !== undefined) {
+            if (
+              npc.spawnCoord &&
+              npc.spawnCoord.q !== undefined &&
+              npc.spawnCoord.r !== undefined
+            ) {
               // Pass questGiver flag to show "!" indicator above quest-giving NPCs
-              manager.spawnNPCMarker(npc.id, { q: npc.spawnCoord.q, r: npc.spawnCoord.r }, npc.name, npc.questGiver ?? false);
+              manager.spawnNPCMarker(
+                npc.id,
+                { q: npc.spawnCoord.q, r: npc.spawnCoord.r },
+                npc.name,
+                npc.questGiver ?? false
+              );
             }
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers`);
@@ -188,7 +203,9 @@ function GameCanvas() {
         // This ensures the store reflects where the player actually spawned
         const initialPos = manager.getPlayerPosition();
         setPlayerPosition(initialPos);
-        console.log(`[GameCanvas] Synced initial player position: (${initialPos.x.toFixed(2)}, ${initialPos.y.toFixed(2)}, ${initialPos.z.toFixed(2)})`);
+        console.log(
+          `[GameCanvas] Synced initial player position: (${initialPos.x.toFixed(2)}, ${initialPos.y.toFixed(2)}, ${initialPos.z.toFixed(2)})`
+        );
 
         setIsLoading(false);
 
@@ -240,7 +257,9 @@ function GameCanvas() {
     // Skip if location hasn't changed
     if (prevLocationRef.current === currentLocationId) return;
 
-    console.log(`[GameCanvas] Location changed: ${prevLocationRef.current} -> ${currentLocationId}`);
+    console.log(
+      `[GameCanvas] Location changed: ${prevLocationRef.current} -> ${currentLocationId}`
+    );
     prevLocationRef.current = currentLocationId;
 
     // Reload scene with new location
@@ -278,7 +297,8 @@ function GameCanvas() {
           if (currentLocationId) {
             const npcsInLocation = getNPCsByLocation(currentLocationId);
             const npcAtHex = npcsInLocation.find(
-              npc => npc.spawnCoord && npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
+              (npc) =>
+                npc.spawnCoord && npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r
             );
 
             if (npcAtHex) {
@@ -290,8 +310,10 @@ function GameCanvas() {
             // Check if there's a world item at this hex
             const worldItems = getWorldItemsForLocation(currentLocationId);
             const itemAtHex = worldItems.find(
-              item => item.coord.q === hexCoord.q && item.coord.r === hexCoord.r &&
-                      !collectedItemIds.includes(item.id)
+              (item) =>
+                item.coord.q === hexCoord.q &&
+                item.coord.r === hexCoord.r &&
+                !collectedItemIds.includes(item.id)
             );
 
             if (itemAtHex) {
@@ -312,9 +334,18 @@ function GameCanvas() {
         if (currentLocationId) {
           const npcsInLocation = getNPCsByLocation(currentLocationId);
           for (const npc of npcsInLocation) {
-            if (npc.spawnCoord && npc.spawnCoord.q !== undefined && npc.spawnCoord.r !== undefined) {
+            if (
+              npc.spawnCoord &&
+              npc.spawnCoord.q !== undefined &&
+              npc.spawnCoord.r !== undefined
+            ) {
               // Pass questGiver flag to show "!" indicator above quest-giving NPCs
-              manager.spawnNPCMarker(npc.id, { q: npc.spawnCoord.q, r: npc.spawnCoord.r }, npc.name, npc.questGiver ?? false);
+              manager.spawnNPCMarker(
+                npc.id,
+                { q: npc.spawnCoord.q, r: npc.spawnCoord.r },
+                npc.name,
+                npc.questGiver ?? false
+              );
             }
           }
           console.log(`[GameCanvas] Spawned ${npcsInLocation.length} NPC markers for new location`);
@@ -337,7 +368,9 @@ function GameCanvas() {
         // Sync initial player position from scene manager to store
         const initialPos = manager.getPlayerPosition();
         setPlayerPosition(initialPos);
-        console.log(`[GameCanvas] Synced player position for new location: (${initialPos.x.toFixed(2)}, ${initialPos.y.toFixed(2)}, ${initialPos.z.toFixed(2)})`);
+        console.log(
+          `[GameCanvas] Synced player position for new location: (${initialPos.x.toFixed(2)}, ${initialPos.y.toFixed(2)}, ${initialPos.z.toFixed(2)})`
+        );
 
         setIsLoading(false);
       } catch (err) {
@@ -414,7 +447,7 @@ export function Game() {
       // 'M' key opens world map
       if (e.key === 'm' || e.key === 'M') {
         if (phase === 'playing') {
-          setIsWorldMapOpen(prev => !prev);
+          setIsWorldMapOpen((prev) => !prev);
         }
       }
 
@@ -429,10 +462,13 @@ export function Game() {
   }, [phase, isWorldMapOpen]);
 
   // Handle travel from world map
-  const handleTravelTo = useCallback((locationId: string) => {
-    travelTo(locationId);
-    setIsWorldMapOpen(false);
-  }, [travelTo]);
+  const handleTravelTo = useCallback(
+    (locationId: string) => {
+      travelTo(locationId);
+      setIsWorldMapOpen(false);
+    },
+    [travelTo]
+  );
 
   // Show title screen
   if (phase === 'title') {

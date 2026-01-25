@@ -8,7 +8,7 @@
 import type { BaseItem } from '../schemas/item';
 
 // Re-export types for external use
-export type { BaseItem, WeaponItem, ArmorItem, ConsumableItem } from '../schemas/item';
+export type { ArmorItem, BaseItem, ConsumableItem, WeaponItem } from '../schemas/item';
 
 // ============================================================================
 // WEAPONS
@@ -450,7 +450,7 @@ const WEAPONS: BaseItem[] = [
   {
     id: 'dynamite',
     name: 'Dynamite',
-    description: 'Nobel\'s invention. Handle with care.',
+    description: "Nobel's invention. Handle with care.",
     type: 'weapon',
     rarity: 'uncommon',
     value: 15,
@@ -520,7 +520,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'bottle',
     tags: ['consumable', 'alcohol', 'drink'],
-    effects: [{ type: 'heal', value: 5 }, { type: 'stamina', value: 10 }],
+    effects: [
+      { type: 'heal', value: 5 },
+      { type: 'stamina', value: 10 },
+    ],
     consumableStats: {
       healAmount: 5,
       staminaAmount: 10,
@@ -664,7 +667,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'medicine',
     tags: ['consumable', 'medical', 'cure'],
-    effects: [{ type: 'heal', value: 25 }, { type: 'cure', value: 1 }],
+    effects: [
+      { type: 'heal', value: 25 },
+      { type: 'cure', value: 1 },
+    ],
     consumableStats: {
       healAmount: 25,
       staminaAmount: 0,
@@ -712,7 +718,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'food',
     tags: ['consumable', 'food'],
-    effects: [{ type: 'heal', value: 5 }, { type: 'stamina', value: 15 }],
+    effects: [
+      { type: 'heal', value: 5 },
+      { type: 'stamina', value: 15 },
+    ],
     consumableStats: {
       healAmount: 5,
       staminaAmount: 15,
@@ -736,7 +745,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'food',
     tags: ['consumable', 'food'],
-    effects: [{ type: 'heal', value: 10 }, { type: 'stamina', value: 20 }],
+    effects: [
+      { type: 'heal', value: 10 },
+      { type: 'stamina', value: 20 },
+    ],
     consumableStats: {
       healAmount: 10,
       staminaAmount: 20,
@@ -760,7 +772,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'food',
     tags: ['consumable', 'food'],
-    effects: [{ type: 'heal', value: 20 }, { type: 'stamina', value: 40 }],
+    effects: [
+      { type: 'heal', value: 20 },
+      { type: 'stamina', value: 40 },
+    ],
     consumableStats: {
       healAmount: 20,
       staminaAmount: 40,
@@ -795,7 +810,7 @@ const CONSUMABLES: BaseItem[] = [
   },
   {
     id: 'medicine',
-    name: 'Dr. Thornton\'s Tonic',
+    name: "Dr. Thornton's Tonic",
     description: 'Patent medicine. Cures what ails you, or so the label claims.',
     type: 'consumable',
     rarity: 'uncommon',
@@ -856,7 +871,10 @@ const CONSUMABLES: BaseItem[] = [
     sellable: true,
     icon: 'food',
     tags: ['consumable', 'food', 'stamina'],
-    effects: [{ type: 'heal', value: 5 }, { type: 'stamina', value: 20 }],
+    effects: [
+      { type: 'heal', value: 5 },
+      { type: 'stamina', value: 20 },
+    ],
     consumableStats: {
       healAmount: 5,
       staminaAmount: 20,
@@ -899,7 +917,8 @@ const KEY_ITEMS: BaseItem[] = [
   {
     id: 'mysterious_letter',
     name: 'Mysterious Letter',
-    description: 'A weathered letter summoning you to claim what\'s rightfully yours. Signed only with a gear symbol.',
+    description:
+      "A weathered letter summoning you to claim what's rightfully yours. Signed only with a gear symbol.",
     type: 'key_item',
     rarity: 'rare',
     value: 0,
@@ -967,7 +986,8 @@ const KEY_ITEMS: BaseItem[] = [
   {
     id: 'ivrc_pass',
     name: 'IVRC Employee Pass',
-    description: 'Official identification for Iron Valley Railroad Company employees. Opens many doors.',
+    description:
+      'Official identification for Iron Valley Railroad Company employees. Opens many doors.',
     type: 'key_item',
     rarity: 'rare',
     value: 0,
@@ -1008,7 +1028,8 @@ const CURRENCY: BaseItem[] = [
   {
     id: 'ivrc_script',
     name: 'IVRC Script',
-    description: 'Company scrip issued by the Iron Valley Railroad Company. Only good at company stores.',
+    description:
+      'Company scrip issued by the Iron Valley Railroad Company. Only good at company stores.',
     type: 'currency',
     rarity: 'common',
     value: 0,
@@ -1168,7 +1189,7 @@ const SUPPLIES: BaseItem[] = [
   {
     id: 'lucky_charm',
     name: 'Lucky Charm',
-    description: 'A rabbit\'s foot on a chain. Some say it brings good fortune.',
+    description: "A rabbit's foot on a chain. Some say it brings good fortune.",
     type: 'armor',
     rarity: 'rare',
     value: 30,
@@ -1412,9 +1433,11 @@ const AMMO: BaseItem[] = [
 export const ITEM_LIBRARY: Record<string, BaseItem> = {};
 
 // Populate the library
-[...WEAPONS, ...CONSUMABLES, ...KEY_ITEMS, ...CURRENCY, ...SUPPLIES, ...JUNK, ...AMMO].forEach((item) => {
-  ITEM_LIBRARY[item.id] = item;
-});
+[...WEAPONS, ...CONSUMABLES, ...KEY_ITEMS, ...CURRENCY, ...SUPPLIES, ...JUNK, ...AMMO].forEach(
+  (item) => {
+    ITEM_LIBRARY[item.id] = item;
+  }
+);
 
 /**
  * Get an item definition by ID

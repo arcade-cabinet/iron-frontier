@@ -1,16 +1,16 @@
 // Filament-based 3D renderer
 export {
-  FilamentRenderer,
-  FilamentSceneContainer,
-  type FilamentRendererProps,
-  type FilamentSceneContainerProps,
-  type ModelSource,
-  // Re-exported Filament components for custom scenes
-  FilamentScene,
-  FilamentView,
   Camera,
   DefaultLight,
-  Model,
-  useModel,
+  FilamentRenderer,
+  type FilamentRendererProps,
+  // Re-exported Filament components for custom scenes
+  FilamentScene,
+  FilamentSceneContainer,
+  type FilamentSceneContainerProps,
+  FilamentView,
   type Float3,
-} from "./FilamentRenderer";
+  Model,
+  type ModelSource,
+  useModel,
+} from './FilamentRenderer';

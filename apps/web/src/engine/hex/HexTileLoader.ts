@@ -6,12 +6,12 @@
  */
 import {
   AbstractMesh,
-  AssetContainer,
-  InstancedMesh,
+  type AssetContainer,
+  type InstancedMesh,
   Mesh,
-  Scene,
+  type Scene,
   SceneLoader,
-  TransformNode,
+  type TransformNode,
   Vector3,
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';

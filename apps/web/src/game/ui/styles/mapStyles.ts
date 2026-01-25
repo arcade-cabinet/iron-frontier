@@ -5,7 +5,11 @@
  * Designed to evoke an aged paper map from the Old West era.
  */
 
-import type { RegionBiome, LocationType, TravelMethod } from '@iron-frontier/shared/data/schemas/world';
+import type {
+  LocationType,
+  RegionBiome,
+  TravelMethod,
+} from '@iron-frontier/shared/data/schemas/world';
 
 // ============================================================================
 // COLOR TOKENS
@@ -200,14 +204,7 @@ export const mapBorder = {
     'z-30',
   ].join(' '),
 
-  corner: [
-    'absolute',
-    'w-6',
-    'h-6',
-    'border-2',
-    'border-[#5a4838]',
-    'z-30',
-  ].join(' '),
+  corner: ['absolute', 'w-6', 'h-6', 'border-2', 'border-[#5a4838]', 'z-30'].join(' '),
 };
 
 // ============================================================================
@@ -318,7 +315,11 @@ export function getLocationMarkerStyles(
     ranch: { bg: 'bg-[#228b22]', border: 'border-[#32cd32]', glow: 'shadow-[#32cd32]/50' },
     farm: { bg: 'bg-[#8fbc8f]', border: 'border-[#98fb98]', glow: 'shadow-[#98fb98]/50' },
     train_station: { bg: 'bg-[#2f4f4f]', border: 'border-[#5f9ea0]', glow: 'shadow-[#5f9ea0]/50' },
-    telegraph_office: { bg: 'bg-[#4a5568]', border: 'border-[#718096]', glow: 'shadow-[#718096]/50' },
+    telegraph_office: {
+      bg: 'bg-[#4a5568]',
+      border: 'border-[#718096]',
+      glow: 'shadow-[#718096]/50',
+    },
     trading_post: { bg: 'bg-[#b8860b]', border: 'border-[#daa520]', glow: 'shadow-[#daa520]/50' },
     waystation: { bg: 'bg-[#b8860b]', border: 'border-[#daa520]', glow: 'shadow-[#daa520]/50' },
     ruins: { bg: 'bg-[#696969]', border: 'border-[#a9a9a9]', glow: 'shadow-[#a9a9a9]/50' },
@@ -329,15 +330,13 @@ export function getLocationMarkerStyles(
     wilderness: { bg: 'bg-[#556b2f]', border: 'border-[#6b8e23]', glow: 'shadow-[#6b8e23]/40' },
   };
 
-  const colors = typeColors[type] || { bg: 'bg-[#8b7355]', border: 'border-[#a0926c]', glow: 'shadow-[#a0926c]/50' };
+  const colors = typeColors[type] || {
+    bg: 'bg-[#8b7355]',
+    border: 'border-[#a0926c]',
+    glow: 'shadow-[#a0926c]/50',
+  };
 
-  const classes = [
-    colors.bg,
-    'border-2',
-    colors.border,
-    'shadow-md',
-    colors.glow,
-  ];
+  const classes = [colors.bg, 'border-2', colors.border, 'shadow-md', colors.glow];
 
   // Discovery state
   if (!discovered) {
@@ -357,11 +356,7 @@ export function getLocationMarkerStyles(
 
   // Selected state
   if (selected && !current) {
-    classes.push(
-      'ring-4',
-      'ring-amber-500/50',
-      'scale-110'
-    );
+    classes.push('ring-4', 'ring-amber-500/50', 'scale-110');
   }
 
   return classes.join(' ');
@@ -491,18 +486,10 @@ export function getConnectionStyles(
  * Tailwind classes for path container
  */
 export const pathStyles = {
-  container: [
-    'absolute',
-    'inset-0',
-    'pointer-events-none',
-    'z-30',
-  ].join(' '),
+  container: ['absolute', 'inset-0', 'pointer-events-none', 'z-30'].join(' '),
 
   // For SVG element
-  svg: [
-    'w-full',
-    'h-full',
-  ].join(' '),
+  svg: ['w-full', 'h-full'].join(' '),
 };
 
 // ============================================================================
@@ -513,12 +500,7 @@ export const pathStyles = {
  * Fog of war overlay for undiscovered regions
  */
 export const fogOfWar = {
-  base: [
-    'absolute',
-    'inset-0',
-    'pointer-events-none',
-    'z-50',
-  ].join(' '),
+  base: ['absolute', 'inset-0', 'pointer-events-none', 'z-50'].join(' '),
 
   // Gradient from edges
   overlay: 'bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(60,40,30,0.8)_80%)]',
@@ -568,19 +550,9 @@ export const mapTooltip = {
     'mb-2',
   ].join(' '),
 
-  type: [
-    'text-[10px]',
-    'uppercase',
-    'tracking-wider',
-    'text-[#5a4838]',
-    'font-medium',
-  ].join(' '),
+  type: ['text-[10px]', 'uppercase', 'tracking-wider', 'text-[#5a4838]', 'font-medium'].join(' '),
 
-  description: [
-    'text-xs',
-    'text-[#5a4838]',
-    'leading-relaxed',
-  ].join(' '),
+  description: ['text-xs', 'text-[#5a4838]', 'leading-relaxed'].join(' '),
 
   stats: [
     'mt-2',
@@ -623,14 +595,7 @@ export const mapTooltip = {
  * Decorative compass rose for map corner
  */
 export const compassRose = {
-  container: [
-    'absolute',
-    'w-16',
-    'h-16',
-    'pointer-events-none',
-    'z-40',
-    'opacity-60',
-  ].join(' '),
+  container: ['absolute', 'w-16', 'h-16', 'pointer-events-none', 'z-40', 'opacity-60'].join(' '),
 
   // Positioning
   topLeft: 'top-4 left-4',
@@ -639,11 +604,7 @@ export const compassRose = {
   bottomRight: 'bottom-4 right-4',
 
   // Inner styling
-  inner: [
-    'w-full',
-    'h-full',
-    'text-[#5a4838]',
-  ].join(' '),
+  inner: ['w-full', 'h-full', 'text-[#5a4838]'].join(' '),
 };
 
 // ============================================================================
@@ -680,28 +641,11 @@ export const mapLegend = {
     'border-[#8b7355]/30',
   ].join(' '),
 
-  item: [
-    'flex',
-    'items-center',
-    'gap-2',
-    'text-[10px]',
-    'text-[#5a4838]',
-    'py-0.5',
-  ].join(' '),
+  item: ['flex', 'items-center', 'gap-2', 'text-[10px]', 'text-[#5a4838]', 'py-0.5'].join(' '),
 
-  icon: [
-    'w-3',
-    'h-3',
-    'rounded-full',
-    'border',
-    'flex-shrink-0',
-  ].join(' '),
+  icon: ['w-3', 'h-3', 'rounded-full', 'border', 'flex-shrink-0'].join(' '),
 
-  line: [
-    'w-6',
-    'h-0.5',
-    'flex-shrink-0',
-  ].join(' '),
+  line: ['w-6', 'h-0.5', 'flex-shrink-0'].join(' '),
 };
 
 // ============================================================================
@@ -723,27 +667,13 @@ export const scaleBar = {
     'z-50',
   ].join(' '),
 
-  bar: [
-    'h-1',
-    'bg-[#2a1810]',
-    'border',
-    'border-[#5a4838]',
-  ].join(' '),
+  bar: ['h-1', 'bg-[#2a1810]', 'border', 'border-[#5a4838]'].join(' '),
 
-  labels: [
-    'flex',
-    'justify-between',
-    'w-full',
-    'text-[8px]',
-    'text-[#5a4838]',
-    'font-mono',
-  ].join(' '),
+  labels: ['flex', 'justify-between', 'w-full', 'text-[8px]', 'text-[#5a4838]', 'font-mono'].join(
+    ' '
+  ),
 
-  unit: [
-    'text-[8px]',
-    'text-[#5a4838]/70',
-    'italic',
-  ].join(' '),
+  unit: ['text-[8px]', 'text-[#5a4838]/70', 'italic'].join(' '),
 };
 
 // ============================================================================

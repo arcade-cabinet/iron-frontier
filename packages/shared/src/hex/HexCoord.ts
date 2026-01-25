@@ -12,19 +12,19 @@
  */
 
 import {
-  HexCoord,
-  HexCubeCoord,
-  FractionalHexCoord,
-  WorldPosition,
-  HexLayout,
-  HexOrientation,
-  HexDirection,
-  HEX_DIRECTIONS,
-  DEFAULT_HEX_LAYOUT,
-  HexChunkCoord,
-  HexChunkConfig,
   DEFAULT_HEX_CHUNK_CONFIG,
+  DEFAULT_HEX_LAYOUT,
+  type FractionalHexCoord,
+  HEX_DIRECTIONS,
+  type HexChunkConfig,
+  type HexChunkCoord,
+  type HexCoord,
+  type HexCubeCoord,
+  HexDirection,
+  type HexLayout,
+  HexOrientation,
   hexKey,
+  type WorldPosition,
 } from './HexTypes';
 
 // ============================================================================
@@ -86,7 +86,7 @@ export function hexRound(frac: FractionalHexCoord): HexCoord {
 
   let q = Math.round(frac.q);
   let r = Math.round(frac.r);
-  let roundedS = Math.round(s);
+  const roundedS = Math.round(s);
 
   const qDiff = Math.abs(q - frac.q);
   const rDiff = Math.abs(r - frac.r);
@@ -184,7 +184,10 @@ export function worldToHex(pos: WorldPosition, layout: HexLayout = DEFAULT_HEX_L
  * Get the 6 corner positions of a hex in world coordinates.
  * Corners are ordered starting from the east corner, going clockwise.
  */
-export function hexCorners(coord: HexCoord, layout: HexLayout = DEFAULT_HEX_LAYOUT): WorldPosition[] {
+export function hexCorners(
+  coord: HexCoord,
+  layout: HexLayout = DEFAULT_HEX_LAYOUT
+): WorldPosition[] {
   const center = hexToWorld(coord, layout);
   const m = getOrientationMatrix(layout.orientation);
   const corners: WorldPosition[] = [];
@@ -210,12 +213,12 @@ export function hexCorners(coord: HexCoord, layout: HexLayout = DEFAULT_HEX_LAYO
  * Indexed by HexDirection enum.
  */
 const DIRECTION_VECTORS: readonly HexCoord[] = [
-  { q: 1, r: 0 },   // E
-  { q: 0, r: 1 },   // SE
-  { q: -1, r: 1 },  // SW
-  { q: -1, r: 0 },  // W
-  { q: 0, r: -1 },  // NW
-  { q: 1, r: -1 },  // NE
+  { q: 1, r: 0 }, // E
+  { q: 0, r: 1 }, // SE
+  { q: -1, r: 1 }, // SW
+  { q: -1, r: 0 }, // W
+  { q: 0, r: -1 }, // NW
+  { q: 1, r: -1 }, // NE
 ] as const;
 
 /**
@@ -254,7 +257,7 @@ export function oppositeDirection(direction: HexDirection): HexDirection {
  * Rotate a direction clockwise by the given number of steps.
  */
 export function rotateDirection(direction: HexDirection, steps: number): HexDirection {
-  return (((direction + steps) % 6) + 6) % 6 as HexDirection;
+  return ((((direction + steps) % 6) + 6) % 6) as HexDirection;
 }
 
 /**
@@ -548,10 +551,7 @@ export function areAdjacent(a: HexCoord, b: HexCoord): boolean {
  * Get the shared edge index between two adjacent hexes.
  * Returns [edgeIndexOnA, edgeIndexOnB] or undefined if not adjacent.
  */
-export function getSharedEdge(
-  a: HexCoord,
-  b: HexCoord
-): [HexDirection, HexDirection] | undefined {
+export function getSharedEdge(a: HexCoord, b: HexCoord): [HexDirection, HexDirection] | undefined {
   const dir = getDirection(a, b);
   if (dir === undefined) {
     return undefined;

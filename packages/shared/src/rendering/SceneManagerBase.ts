@@ -5,16 +5,8 @@
  * Platform-specific adapters (Babylon, Filament) extend this class.
  */
 
-import type {
-  IScene,
-  ISceneManager,
-  IMeshHandle,
-} from './interfaces';
-import type {
-  Transform,
-  SceneConfig,
-  MeshConfig,
-} from './types';
+import type { IMeshHandle, IScene, ISceneManager } from './interfaces';
+import type { MeshConfig, SceneConfig, Transform } from './types';
 
 /**
  * Abstract base class for scene managers.
@@ -51,10 +43,7 @@ export abstract class SceneManagerBase implements ISceneManager {
    * @param surface Platform surface (canvas for web, view for mobile)
    * @param config Scene configuration
    */
-  protected abstract createScene(
-    surface: unknown,
-    config?: SceneConfig
-  ): Promise<IScene>;
+  protected abstract createScene(surface: unknown, config?: SceneConfig): Promise<IScene>;
 
   /**
    * Platform-specific model loading.

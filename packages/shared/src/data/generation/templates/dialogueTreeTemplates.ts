@@ -12,8 +12,12 @@
  * - Generator combines template + snippets + NPC context = full dialogue tree
  */
 
-import type { DialogueTreeTemplate, DialogueSnippet, GenerationContext } from '../../schemas/generation';
-import type { NPCDefinition, DialogueTree, DialogueNode, DialogueChoice } from '../../schemas/npc';
+import type {
+  DialogueSnippet,
+  DialogueTreeTemplate,
+  GenerationContext,
+} from '../../schemas/generation';
+import type { DialogueChoice, DialogueNode, DialogueTree, NPCDefinition } from '../../schemas/npc';
 import type { SeededRandom } from '../seededRandom';
 
 // ============================================================================
@@ -34,7 +38,8 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
   generic_townsfolk: {
     id: 'generic_townsfolk',
     name: 'Generic Townsfolk',
-    description: 'Basic conversation for unnamed or background NPCs. Simple greeting, optional rumor, farewell.',
+    description:
+      'Basic conversation for unnamed or background NPCs. Simple greeting, optional rumor, farewell.',
     entryConditions: [],
     nodePatterns: [
       {
@@ -58,9 +63,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['townsfolk', 'farmer', 'miner', 'rancher'],
@@ -75,9 +78,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
     id: 'hostile_greeting',
     name: 'Hostile Greeting',
     description: 'Conversation opener for NPCs who dislike the player. Terse, unwelcoming.',
-    entryConditions: [
-      { type: 'reputation_lte', target: 'speaker_faction', value: -25 },
-    ],
+    entryConditions: [{ type: 'reputation_lte', target: 'speaker_faction', value: -25 }],
     nodePatterns: [
       {
         role: 'greeting',
@@ -92,16 +93,18 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'main',
         snippetCategories: ['refusal', 'insult'],
         choicePatterns: [
-          { textTemplate: 'Is there any way we can work this out?', nextRole: 'branch', tags: ['diplomatic'] },
+          {
+            textTemplate: 'Is there any way we can work this out?',
+            nextRole: 'branch',
+            tags: ['diplomatic'],
+          },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
       },
       {
         role: 'branch',
         snippetCategories: ['threat', 'refusal'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -115,10 +118,9 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
   friendly_greeting: {
     id: 'friendly_greeting',
     name: 'Friendly Greeting',
-    description: 'Warm conversation opener for NPCs who like the player. Offers help and information.',
-    entryConditions: [
-      { type: 'reputation_gte', target: 'speaker_faction', value: 50 },
-    ],
+    description:
+      'Warm conversation opener for NPCs who like the player. Offers help and information.',
+    entryConditions: [{ type: 'reputation_gte', target: 'speaker_faction', value: 50 }],
     nodePatterns: [
       {
         role: 'greeting',
@@ -157,9 +159,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -185,7 +185,11 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['greeting'],
         choicePatterns: [
           { textTemplate: 'Any bounties posted?', nextRole: 'quest', tags: ['bounty'] },
-          { textTemplate: 'I have information about a crime.', nextRole: 'branch', tags: ['report'] },
+          {
+            textTemplate: 'I have information about a crime.',
+            nextRole: 'branch',
+            tags: ['report'],
+          },
           { textTemplate: 'Just passing through.', nextRole: 'main', tags: ['casual'] },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
@@ -211,7 +215,11 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'branch',
         snippetCategories: ['question'],
         choicePatterns: [
-          { textTemplate: 'I saw suspicious activity near {{location}}.', nextRole: 'farewell', tags: ['report'] },
+          {
+            textTemplate: 'I saw suspicious activity near {{location}}.',
+            nextRole: 'farewell',
+            tags: ['report'],
+          },
           { textTemplate: "Never mind, it's nothing.", nextRole: 'main', tags: ['cancel'] },
         ],
       },
@@ -226,9 +234,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['sheriff', 'deputy'],
@@ -250,8 +256,16 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['greeting', 'shop_welcome'],
         choicePatterns: [
           { textTemplate: "I'll have a drink.", nextRole: 'shop', tags: ['purchase'] },
-          { textTemplate: 'What can you tell me about this town?', nextRole: 'rumor', tags: ['curious'] },
-          { textTemplate: "Anyone interesting pass through lately?", nextRole: 'rumor', tags: ['curious'] },
+          {
+            textTemplate: 'What can you tell me about this town?',
+            nextRole: 'rumor',
+            tags: ['curious'],
+          },
+          {
+            textTemplate: 'Anyone interesting pass through lately?',
+            nextRole: 'rumor',
+            tags: ['curious'],
+          },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
       },
@@ -284,9 +298,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'shop_farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['bartender'],
@@ -309,7 +321,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         choicePatterns: [
           { textTemplate: 'Show me what you have.', nextRole: 'shop', tags: ['browse'] },
           { textTemplate: 'I have some items to sell.', nextRole: 'shop', tags: ['sell'] },
-          { textTemplate: "Just looking around.", nextRole: 'main', tags: ['casual'] },
+          { textTemplate: 'Just looking around.', nextRole: 'main', tags: ['casual'] },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
       },
@@ -318,7 +330,11 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['shop_browse', 'small_talk'],
         choicePatterns: [
           { textTemplate: 'Actually, let me see your wares.', nextRole: 'shop', tags: ['browse'] },
-          { textTemplate: 'Heard anything interesting lately?', nextRole: 'rumor', tags: ['curious'] },
+          {
+            textTemplate: 'Heard anything interesting lately?',
+            nextRole: 'rumor',
+            tags: ['curious'],
+          },
           { textTemplate: 'I should be going.', nextRole: 'farewell', tags: ['exit'] },
         ],
       },
@@ -335,8 +351,8 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'branch',
         snippetCategories: ['agreement', 'refusal'],
         choicePatterns: [
-          { textTemplate: "Deal.", nextRole: 'shop', tags: ['accept'] },
-          { textTemplate: "Fine, the regular price then.", nextRole: 'shop', tags: ['accept'] },
+          { textTemplate: 'Deal.', nextRole: 'shop', tags: ['accept'] },
+          { textTemplate: 'Fine, the regular price then.', nextRole: 'shop', tags: ['accept'] },
           { textTemplate: 'I changed my mind.', nextRole: 'farewell', tags: ['decline'] },
         ],
       },
@@ -344,16 +360,18 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'rumor',
         snippetCategories: ['rumor', 'small_talk'],
         choicePatterns: [
-          { textTemplate: 'Interesting. Now about those goods...', nextRole: 'shop', tags: ['transition'] },
+          {
+            textTemplate: 'Interesting. Now about those goods...',
+            nextRole: 'shop',
+            tags: ['transition'],
+          },
           { textTemplate: 'Thanks.', nextRole: 'farewell', tags: ['polite'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'shop_farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['merchant', 'blacksmith'],
@@ -416,9 +434,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['doctor'],
@@ -440,8 +456,16 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['greeting'],
         choicePatterns: [
           { textTemplate: 'I seek guidance, Father.', nextRole: 'main', tags: ['spiritual'] },
-          { textTemplate: 'I have something to confess.', nextRole: 'branch', tags: ['confession'] },
-          { textTemplate: "What's the state of the town's soul?", nextRole: 'rumor', tags: ['curious'] },
+          {
+            textTemplate: 'I have something to confess.',
+            nextRole: 'branch',
+            tags: ['confession'],
+          },
+          {
+            textTemplate: "What's the state of the town's soul?",
+            nextRole: 'rumor',
+            tags: ['curious'],
+          },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
       },
@@ -458,7 +482,11 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['agreement', 'small_talk'],
         choicePatterns: [
           { textTemplate: "I'll reflect on that.", nextRole: 'farewell', tags: ['accept'] },
-          { textTemplate: 'Is there anything I can do to help?', nextRole: 'quest', tags: ['offer'] },
+          {
+            textTemplate: 'Is there anything I can do to help?',
+            nextRole: 'quest',
+            tags: ['offer'],
+          },
         ],
       },
       {
@@ -466,7 +494,11 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['rumor'],
         choicePatterns: [
           { textTemplate: 'Perhaps I can help.', nextRole: 'quest', tags: ['offer'] },
-          { textTemplate: 'The Lord works in mysterious ways.', nextRole: 'farewell', tags: ['spiritual'] },
+          {
+            textTemplate: 'The Lord works in mysterious ways.',
+            nextRole: 'farewell',
+            tags: ['spiritual'],
+          },
         ],
       },
       {
@@ -480,9 +512,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['preacher'],
@@ -541,15 +571,13 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         choicePatterns: [
           { textTemplate: "You've got a deal.", nextRole: 'farewell', tags: ['accept'] },
           { textTemplate: "I'll think about it.", nextRole: 'farewell', tags: ['stall'] },
-          { textTemplate: "Not interested.", nextRole: 'farewell', tags: ['decline'] },
+          { textTemplate: 'Not interested.', nextRole: 'farewell', tags: ['decline'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'threat'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['outlaw', 'gang_leader'],
@@ -568,15 +596,17 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
     id: 'quest_giver_dialogue',
     name: 'Quest Giver Dialogue',
     description: 'Standard quest offer dialogue. Problem explanation, accept/decline.',
-    entryConditions: [
-      { type: 'flag_not_set', target: 'quest_offered_{{quest_id}}' },
-    ],
+    entryConditions: [{ type: 'flag_not_set', target: 'quest_offered_{{quest_id}}' }],
     nodePatterns: [
       {
         role: 'greeting',
         snippetCategories: ['greeting'],
         choicePatterns: [
-          { textTemplate: 'You look troubled. What is it?', nextRole: 'quest', tags: ['concerned'] },
+          {
+            textTemplate: 'You look troubled. What is it?',
+            nextRole: 'quest',
+            tags: ['concerned'],
+          },
           { textTemplate: 'Need something done?', nextRole: 'quest', tags: ['direct'] },
           { textTemplate: 'Just passing through.', nextRole: 'farewell', tags: ['decline'] },
         ],
@@ -604,16 +634,14 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['agreement', 'bribe'],
         choicePatterns: [
           { textTemplate: "Fair enough. I'm in.", nextRole: 'farewell', tags: ['accept'] },
-          { textTemplate: "Make it worth my while.", nextRole: 'branch', tags: ['haggle'] },
-          { textTemplate: "Not enough.", nextRole: 'farewell', tags: ['decline'] },
+          { textTemplate: 'Make it worth my while.', nextRole: 'branch', tags: ['haggle'] },
+          { textTemplate: 'Not enough.', nextRole: 'farewell', tags: ['decline'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'thanks'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -628,17 +656,15 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
     id: 'quest_update_dialogue',
     name: 'Quest Update Dialogue',
     description: 'Mid-quest check-in. Progress discussion, hints, encouragement.',
-    entryConditions: [
-      { type: 'quest_active', target: '{{quest_id}}' },
-    ],
+    entryConditions: [{ type: 'quest_active', target: '{{quest_id}}' }],
     nodePatterns: [
       {
         role: 'greeting',
         snippetCategories: ['greeting', 'question'],
         choicePatterns: [
           { textTemplate: "I'm working on it.", nextRole: 'main', tags: ['update'] },
-          { textTemplate: "I need some guidance.", nextRole: 'branch', tags: ['hint'] },
-          { textTemplate: "[Leave]", nextRole: null, tags: ['exit'] },
+          { textTemplate: 'I need some guidance.', nextRole: 'branch', tags: ['hint'] },
+          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
       },
       {
@@ -660,16 +686,12 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'rumor',
         snippetCategories: ['rumor', 'quest_update'],
-        choicePatterns: [
-          { textTemplate: 'Good to know.', nextRole: 'farewell', tags: ['polite'] },
-        ],
+        choicePatterns: [{ textTemplate: 'Good to know.', nextRole: 'farewell', tags: ['polite'] }],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -684,9 +706,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
     id: 'quest_complete_dialogue',
     name: 'Quest Complete Dialogue',
     description: 'Quest turn-in dialogue. Report success, receive rewards.',
-    entryConditions: [
-      { type: 'quest_complete', target: '{{quest_id}}' },
-    ],
+    entryConditions: [{ type: 'quest_complete', target: '{{quest_id}}' }],
     nodePatterns: [
       {
         role: 'greeting',
@@ -716,16 +736,18 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'branch',
         snippetCategories: ['quest_offer', 'refusal'],
         choicePatterns: [
-          { textTemplate: 'Let me know if anything comes up.', nextRole: 'farewell', tags: ['interested'] },
+          {
+            textTemplate: 'Let me know if anything comes up.',
+            nextRole: 'farewell',
+            tags: ['interested'],
+          },
           { textTemplate: "I'll be around.", nextRole: 'farewell', tags: ['casual'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'thanks'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -751,7 +773,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['greeting', 'shop_welcome'],
         choicePatterns: [
           { textTemplate: 'Show me your exotic wares.', nextRole: 'shop', tags: ['browse'] },
-          { textTemplate: "Where have you traveled from?", nextRole: 'rumor', tags: ['curious'] },
+          { textTemplate: 'Where have you traveled from?', nextRole: 'rumor', tags: ['curious'] },
           { textTemplate: 'Just browsing.', nextRole: 'main', tags: ['casual'] },
           { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
         ],
@@ -768,7 +790,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'shop',
         snippetCategories: ['shop_buy', 'shop_sell'],
         choicePatterns: [
-          { textTemplate: "That price is robbery!", nextRole: 'branch', tags: ['haggle'] },
+          { textTemplate: 'That price is robbery!', nextRole: 'branch', tags: ['haggle'] },
           { textTemplate: 'I have items to trade.', nextRole: 'shop', tags: ['sell'] },
           { textTemplate: "I'll take it.", nextRole: 'farewell', tags: ['purchase'] },
           { textTemplate: 'Never mind.', nextRole: 'farewell', tags: ['decline'] },
@@ -779,24 +801,26 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         snippetCategories: ['bribe', 'refusal', 'agreement'],
         choicePatterns: [
           { textTemplate: 'I can go lower. How about...', nextRole: 'branch', tags: ['haggle'] },
-          { textTemplate: "Fine. You drive a hard bargain.", nextRole: 'shop', tags: ['accept'] },
-          { textTemplate: "Forget it.", nextRole: 'farewell', tags: ['decline'] },
+          { textTemplate: 'Fine. You drive a hard bargain.', nextRole: 'shop', tags: ['accept'] },
+          { textTemplate: 'Forget it.', nextRole: 'farewell', tags: ['decline'] },
         ],
       },
       {
         role: 'rumor',
         snippetCategories: ['rumor'],
         choicePatterns: [
-          { textTemplate: 'Fascinating. Now about those goods...', nextRole: 'shop', tags: ['transition'] },
+          {
+            textTemplate: 'Fascinating. Now about those goods...',
+            nextRole: 'shop',
+            tags: ['transition'],
+          },
           { textTemplate: 'Good luck on the road.', nextRole: 'farewell', tags: ['polite'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell', 'shop_farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['merchant', 'drifter'],
@@ -858,9 +882,7 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Disengage]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Disengage]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: [],
@@ -917,16 +939,14 @@ export const DIALOGUE_TREE_TEMPLATES: Record<string, DialogueTreeTemplate> = {
         role: 'branch',
         snippetCategories: ['agreement', 'refusal', 'small_talk'],
         choicePatterns: [
-          { textTemplate: "Sure it is.", nextRole: 'farewell', tags: ['sarcastic'] },
+          { textTemplate: 'Sure it is.', nextRole: 'farewell', tags: ['sarcastic'] },
           { textTemplate: 'Alright, thanks anyway.', nextRole: 'farewell', tags: ['polite'] },
         ],
       },
       {
         role: 'farewell',
         snippetCategories: ['farewell'],
-        choicePatterns: [
-          { textTemplate: '[Leave]', nextRole: null, tags: ['exit'] },
-        ],
+        choicePatterns: [{ textTemplate: '[Leave]', nextRole: null, tags: ['exit'] }],
       },
     ],
     validRoles: ['townsfolk', 'gambler', 'drifter'],
@@ -950,7 +970,7 @@ export function getDialogueTreeTemplate(id: string): DialogueTreeTemplate | unde
  * Get all dialogue tree templates valid for a specific NPC role
  */
 export function getDialogueTreesForRole(role: string): DialogueTreeTemplate[] {
-  return Object.values(DIALOGUE_TREE_TEMPLATES).filter(template => {
+  return Object.values(DIALOGUE_TREE_TEMPLATES).filter((template) => {
     // Empty validRoles means valid for all roles
     if (template.validRoles.length === 0) return true;
     return template.validRoles.includes(role);
@@ -961,7 +981,7 @@ export function getDialogueTreesForRole(role: string): DialogueTreeTemplate[] {
  * Get all dialogue tree templates valid for a specific faction
  */
 export function getDialogueTreesForFaction(faction: string): DialogueTreeTemplate[] {
-  return Object.values(DIALOGUE_TREE_TEMPLATES).filter(template => {
+  return Object.values(DIALOGUE_TREE_TEMPLATES).filter((template) => {
     // Empty validFactions means valid for all factions
     if (template.validFactions.length === 0) return true;
     return template.validFactions.includes(faction);
@@ -972,9 +992,10 @@ export function getDialogueTreesForFaction(faction: string): DialogueTreeTemplat
  * Get templates matching both role and faction
  */
 export function getDialogueTreesForNPC(role: string, faction: string): DialogueTreeTemplate[] {
-  return Object.values(DIALOGUE_TREE_TEMPLATES).filter(template => {
+  return Object.values(DIALOGUE_TREE_TEMPLATES).filter((template) => {
     const roleMatch = template.validRoles.length === 0 || template.validRoles.includes(role);
-    const factionMatch = template.validFactions.length === 0 || template.validFactions.includes(faction);
+    const factionMatch =
+      template.validFactions.length === 0 || template.validFactions.includes(faction);
     return roleMatch && factionMatch;
   });
 }
@@ -983,9 +1004,7 @@ export function getDialogueTreesForNPC(role: string, faction: string): DialogueT
  * Get templates by tag
  */
 export function getDialogueTreesByTag(tag: string): DialogueTreeTemplate[] {
-  return Object.values(DIALOGUE_TREE_TEMPLATES).filter(template =>
-    template.tags.includes(tag)
-  );
+  return Object.values(DIALOGUE_TREE_TEMPLATES).filter((template) => template.tags.includes(tag));
 }
 
 // ============================================================================
@@ -1062,14 +1081,12 @@ export function buildDialogueTree(
     const nodeId = nodeIdMap.get(pattern.role)!;
 
     // Find matching snippet for this node's categories
-    const matchingSnippets = compatibleSnippets.filter(s =>
+    const matchingSnippets = compatibleSnippets.filter((s) =>
       pattern.snippetCategories.includes(s.category)
     );
 
     // Select a snippet (or use fallback)
-    const selectedSnippet = matchingSnippets.length > 0
-      ? rng.pick(matchingSnippets)
-      : null;
+    const selectedSnippet = matchingSnippets.length > 0 ? rng.pick(matchingSnippets) : null;
 
     // Get text from snippet or use fallback
     const nodeText = selectedSnippet
@@ -1077,7 +1094,7 @@ export function buildDialogueTree(
       : getFallbackText(pattern.role, npc);
 
     // Build choices
-    const choices: DialogueChoice[] = pattern.choicePatterns.map(choicePattern => {
+    const choices: DialogueChoice[] = pattern.choicePatterns.map((choicePattern) => {
       const nextNodeId = choicePattern.nextRole
         ? nodeIdMap.get(choicePattern.nextRole) || null
         : null;
@@ -1113,7 +1130,7 @@ export function buildDialogueTree(
     entryPoints: [
       {
         nodeId: nodes[0]?.id || '',
-        conditions: template.entryConditions.map(ec => ({
+        conditions: template.entryConditions.map((ec) => ({
           type: ec.type as any,
           target: substituteVariables(ec.target || '', variables),
           value: ec.value,
@@ -1151,7 +1168,7 @@ function filterSnippetsByNPC(
 ): DialogueSnippet[] {
   const timeOfDay = getTimeOfDay(context.gameHour);
 
-  return snippets.filter(snippet => {
+  return snippets.filter((snippet) => {
     // Check role restrictions
     const validRoles = snippet.validRoles ?? [];
     if (validRoles.length > 0 && !validRoles.includes(npc.role)) {

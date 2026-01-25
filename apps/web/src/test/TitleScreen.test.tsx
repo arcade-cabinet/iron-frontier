@@ -2,10 +2,11 @@
  * Title Screen Tests
  * Tests for visual elements and interactions on the title/splash screens
  */
-import { TitleScreen } from '@/game/screens/TitleScreen';
+
 import { act, fireEvent, screen } from '@testing-library/react';
-import React from 'react';
+import type React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TitleScreen } from '@/game/screens/TitleScreen';
 import { customRender, getStoreState, resetGameStore } from './test-utils';
 
 // Mock framer-motion to avoid animation issues
@@ -110,7 +111,7 @@ describe('TitleScreen', () => {
         initialState: {
           initialized: true,
           playerName: 'SavedPlayer',
-          playerStats: { level: 5, gold: 100 }
+          playerStats: { level: 5, gold: 100 },
         } as any,
       });
       skipSplash();

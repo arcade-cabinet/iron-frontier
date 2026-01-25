@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,9 +16,7 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/jbogaty/iron-frontier' },
       ],
-      customCss: [
-        './src/styles/custom.css',
-      ],
+      customCss: ['./src/styles/custom.css'],
       sidebar: [
         {
           label: 'Introduction',
@@ -47,9 +45,7 @@ export default defineConfig({
         },
         {
           label: 'Contributing',
-          items: [
-            { label: 'Contributing Guide', slug: 'guides/contributing' },
-          ],
+          items: [{ label: 'Contributing Guide', slug: 'guides/contributing' }],
         },
       ],
       head: [

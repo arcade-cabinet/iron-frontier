@@ -49,7 +49,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'not_ivrc',
         },
         {
-          text: "I was looking for you specifically.",
+          text: 'I was looking for you specifically.',
           nextNodeId: 'looking_for_you',
         },
         {
@@ -70,7 +70,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           conditions: [{ type: 'has_item', target: 'mysterious_letter' }],
         },
         {
-          text: "IVRC killed people I cared about.",
+          text: 'IVRC killed people I cared about.',
           nextNodeId: 'personal_grudge',
         },
         {
@@ -82,11 +82,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
 
     {
       id: 'gear_reveal',
-      text: "*Her knife pauses mid-stroke. For a moment, something cracks through her hard exterior.* The gear. Where did you get that letter? *She holds out her hand* Show me.",
+      text: '*Her knife pauses mid-stroke. For a moment, something cracks through her hard exterior.* The gear. Where did you get that letter? *She holds out her hand* Show me.',
       expression: 'shocked',
       choices: [
         {
-          text: "*Hand over the letter*",
+          text: '*Hand over the letter*',
           nextNodeId: 'letter_examination',
         },
         {
@@ -105,11 +105,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "What does it mean?",
+          text: 'What does it mean?',
           nextNodeId: 'letter_meaning',
         },
         {
-          text: "Who would send such a letter?",
+          text: 'Who would send such a letter?',
           nextNodeId: 'who_sent_letter',
         },
       ],
@@ -120,11 +120,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "It means you're connected to somethin' bigger than you know. The gear was the symbol of the first resistance - the workers who tried to organize against IVRC before Thorne crushed them. If someone's using it again... *she pauses* ...they must have good reason.",
       choices: [
         {
-          text: "I want to find out who sent it.",
+          text: 'I want to find out who sent it.',
           nextNodeId: 'find_sender',
         },
         {
-          text: "What happened to the first resistance?",
+          text: 'What happened to the first resistance?',
           nextNodeId: 'first_resistance',
         },
       ],
@@ -139,7 +139,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "Thank you. Can I ask you more questions?",
+          text: 'Thank you. Can I ask you more questions?',
           nextNodeId: 'more_questions',
         },
         {
@@ -159,7 +159,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'why_fight',
         },
         {
-          text: "And you formed the Copperheads from the survivors?",
+          text: 'And you formed the Copperheads from the survivors?',
           nextNodeId: 'copperhead_origin',
         },
       ],
@@ -170,7 +170,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "I fight because words failed. Petitions failed. The law failed. When peaceful means are crushed, what's left? *She spreads her hands* IVRC understands one thing: money. I take their money. It's the only language they speak.",
       choices: [
         {
-          text: "Violence breeds violence.",
+          text: 'Violence breeds violence.',
           nextNodeId: 'violence_debate',
         },
         {
@@ -185,11 +185,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "You think I don't know that? *Her voice hardens* Every raid, every bullet - it weighs on me. But so do the faces of the miners who die in cave-ins while Thorne counts his gold. There's violence either way. At least mine has a purpose.",
       choices: [
         {
-          text: "Is there no other way?",
+          text: 'Is there no other way?',
           nextNodeId: 'other_way',
         },
         {
-          text: "I understand your position.",
+          text: 'I understand your position.',
           nextNodeId: null,
         },
       ],
@@ -200,11 +200,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She stares into the fire* If there is, I ain't found it. The Freeminers hide in the mountains. Father Miguel prays for change. Doc Chen patches up the wounded. But nothing changes. IVRC grows stronger each year. Someone has to strike back.",
       choices: [
         {
-          text: "Maybe the right evidence could change things.",
+          text: 'Maybe the right evidence could change things.',
           nextNodeId: 'evidence_idea',
         },
         {
-          text: "I hope you find that other way someday.",
+          text: 'I hope you find that other way someday.',
           nextNodeId: null,
         },
       ],
@@ -215,7 +215,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*Her eyes narrow with interest* Evidence? You mean proof of their crimes? *She laughs bitterly* We all know their crimes. The problem is makin' anyone care. Thorne owns the judges, the newspapers, the politicians...",
       choices: [
         {
-          text: "But there might be documents. Hidden records.",
+          text: 'But there might be documents. Hidden records.',
           nextNodeId: 'documents_hint',
         },
       ],
@@ -246,7 +246,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "Thank you.",
+          text: 'Thank you.',
           nextNodeId: null,
         },
       ],
@@ -257,11 +257,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Formed it from scratch. People who had nothin' left to lose. Former miners, ranchers who lost their land, workers blacklisted for speakin' up. We ain't saints, but we ain't devils neither. We hit IVRC where it hurts and share what we take with those who need it.",
       choices: [
         {
-          text: "Robin Hood of the frontier.",
+          text: 'Robin Hood of the frontier.',
           nextNodeId: 'robin_hood',
         },
         {
-          text: "How many are you?",
+          text: 'How many are you?',
           nextNodeId: 'gang_numbers',
         },
       ],
@@ -272,7 +272,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She smirks* Somethin' like that. Though I ain't much for fancy tales. The reality is dirtier. We kill when we have to. We steal because we need to. But every coin we take from IVRC is one less they can use to crush people.",
       choices: [
         {
-          text: "The ends justify the means?",
+          text: 'The ends justify the means?',
           nextNodeId: 'ends_means',
         },
       ],
@@ -283,7 +283,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Don't lecture me about morality. IVRC works men to death in the mines and calls it 'employment.' They poison the water and call it 'progress.' At least I'm honest about what I am. Can Thorne say the same?",
       choices: [
         {
-          text: "You have a point.",
+          text: 'You have a point.',
           nextNodeId: null,
           effects: [{ type: 'change_reputation', value: 10 }],
         },
@@ -295,11 +295,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Enough to cause trouble. Not enough to win a war. *She shrugs* We raid, we disappear, we survive. That's the best we can do for now. IVRC's got Pinkertons, private armies, endless money. We've got determination and knowledge of the land.",
       choices: [
         {
-          text: "Could the Freeminers help?",
+          text: 'Could the Freeminers help?',
           nextNodeId: 'freeminer_alliance',
         },
         {
-          text: "I see.",
+          text: 'I see.',
           nextNodeId: null,
         },
       ],
@@ -311,7 +311,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'set_flag', target: 'diamondback_open_to_alliance' }],
       choices: [
         {
-          text: "Like the documents?",
+          text: 'Like the documents?',
           nextNodeId: 'documents_alliance',
         },
       ],
@@ -322,7 +322,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Maybe. Proof that could actually bring IVRC down legally... that'd be worth putting aside differences for. But those documents are just a rumor at this point. Someone would need to find them, verify they're real, get them to people who matter.",
       choices: [
         {
-          text: "I might be that someone.",
+          text: 'I might be that someone.',
           nextNodeId: 'volunteer',
         },
       ],
@@ -348,7 +348,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Could be any of the old guard who survived. Problem is, most of 'em are dead, disappeared, or hidin' so deep they might as well be ghosts. But if I had to guess... *she thinks* ...Samuel Ironpick would know. He kept records of everyone in the movement.",
       choices: [
         {
-          text: "Where can I find him?",
+          text: 'Where can I find him?',
           nextNodeId: 'samuel_location',
         },
       ],
@@ -360,7 +360,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'unlock_location', target: 'freeminer_hollow' }],
       choices: [
         {
-          text: "Thank you, Diamondback.",
+          text: 'Thank you, Diamondback.',
           nextNodeId: null,
           effects: [{ type: 'change_reputation', value: 10 }],
         },
@@ -372,7 +372,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She laughs - a harsh, humorless sound* You're in no position to make demands. But I respect the nerve. *She leans back* Fine. One question. Then you show me that letter.",
       choices: [
         {
-          text: "Why did you turn against IVRC?",
+          text: 'Why did you turn against IVRC?',
           nextNodeId: 'origin_story',
         },
         {
@@ -388,7 +388,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'set_flag', target: 'heard_diamondback_story' }],
       choices: [
         {
-          text: "*Show her the letter*",
+          text: '*Show her the letter*',
           nextNodeId: 'letter_examination',
         },
       ],
@@ -399,7 +399,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Crushed. Thorne's men came in the night, burned meeting halls, arrested leaders on fake charges. Some were hanged as 'agitators.' Others vanished into IVRC's private prisons. The lucky ones scattered to the mountains or changed their names.",
       choices: [
         {
-          text: "*Show her the letter*",
+          text: '*Show her the letter*',
           nextNodeId: 'letter_examination',
         },
       ],
@@ -407,14 +407,14 @@ export const DiamondbackMainDialogue: DialogueTree = {
 
     {
       id: 'personal_grudge',
-      text: "*Her expression softens, just slightly* That makes two of us. IVRC takes and takes, and never answers for it. *She sheathes her knife* Tell me what happened.",
+      text: '*Her expression softens, just slightly* That makes two of us. IVRC takes and takes, and never answers for it. *She sheathes her knife* Tell me what happened.',
       choices: [
         {
-          text: "My family lost everything to their land grabs.",
+          text: 'My family lost everything to their land grabs.',
           nextNodeId: 'land_grab_story',
         },
         {
-          text: "Someone close to me died in their mines.",
+          text: 'Someone close to me died in their mines.',
           nextNodeId: 'mine_death_story',
         },
         {
@@ -433,7 +433,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "Thank you.",
+          text: 'Thank you.',
           nextNodeId: 'more_questions',
         },
       ],
@@ -448,7 +448,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "I want to make them pay.",
+          text: 'I want to make them pay.',
           nextNodeId: 'make_them_pay',
         },
       ],
@@ -504,7 +504,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "We take from IVRC. Money, supplies, weapons. Whatever hurts their operations. We share with the folks they've ground down - miners' families, displaced ranchers, anyone blacklisted for standin' up. It ain't legal, but neither is what they do.",
       choices: [
         {
-          text: "How can I help?",
+          text: 'How can I help?',
           nextNodeId: 'help_copperheads',
         },
         {
@@ -530,7 +530,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She pauses, then laughs* Got some stones, don't you? *She sheathes the knife* Fine. You're right - bodies attract attention, and attention's the last thing we need right now. But you're not leavin' til you prove you're not a threat.",
       choices: [
         {
-          text: "What do you need?",
+          text: 'What do you need?',
           nextNodeId: 'prove_yourself',
         },
       ],
@@ -545,7 +545,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'no_info',
         },
         {
-          text: "And if I could get it?",
+          text: 'And if I could get it?',
           nextNodeId: 'get_info',
         },
       ],
@@ -556,7 +556,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Then we got a problem. *She shrugs* Sit tight. My scouts'll check you out. If you're clean, we talk. If not... *she doesn't finish the sentence*",
       choices: [
         {
-          text: "I have nothing to hide.",
+          text: 'I have nothing to hide.',
           nextNodeId: 'waiting',
         },
       ],
@@ -577,7 +577,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       ],
       choices: [
         {
-          text: "Consider it done.",
+          text: 'Consider it done.',
           nextNodeId: null,
         },
       ],
@@ -589,15 +589,15 @@ export const DiamondbackMainDialogue: DialogueTree = {
       expression: 'threatening',
       choices: [
         {
-          text: "I want to help fight IVRC.",
+          text: 'I want to help fight IVRC.',
           nextNodeId: 'want_to_fight',
         },
         {
-          text: "I have information you might want.",
+          text: 'I have information you might want.',
           nextNodeId: 'have_info',
         },
         {
-          text: "Someone told me to find you.",
+          text: 'Someone told me to find you.',
           nextNodeId: 'someone_sent',
         },
       ],
@@ -612,7 +612,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'nothing_to_lose',
         },
         {
-          text: "I have skills you can use.",
+          text: 'I have skills you can use.',
           nextNodeId: 'skills',
         },
       ],
@@ -623,7 +623,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*Something flickers in her eyes - recognition, perhaps* That's a dangerous place to be. But also... *she nods slowly* ...useful. People with nothin' to lose fight harder than those protectin' somethin'.",
       choices: [
         {
-          text: "Then let me fight with you.",
+          text: 'Then let me fight with you.',
           nextNodeId: 'join_copperheads',
         },
       ],
@@ -638,7 +638,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'infiltrator',
         },
         {
-          text: "I know how to talk my way out of trouble.",
+          text: 'I know how to talk my way out of trouble.',
           nextNodeId: 'smooth_talker',
         },
       ],
@@ -650,7 +650,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'start_quest', target: 'prove_infiltration' }],
       choices: [
         {
-          text: "Name the target.",
+          text: 'Name the target.',
           nextNodeId: null,
         },
       ],
@@ -662,7 +662,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'start_quest', target: 'prove_smooth_talk' }],
       choices: [
         {
-          text: "I can handle it.",
+          text: 'I can handle it.',
           nextNodeId: null,
         },
       ],
@@ -678,7 +678,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           conditions: [{ type: 'flag_set', target: 'warned_about_ashworth' }],
         },
         {
-          text: "There are documents that could destroy IVRC. I know where to look.",
+          text: 'There are documents that could destroy IVRC. I know where to look.',
           nextNodeId: 'documents_hint',
           conditions: [{ type: 'flag_set', target: 'seeking_ironpick_docs' }],
         },
@@ -722,7 +722,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'change_reputation', value: -15 }],
       choices: [
         {
-          text: "I can get you what you need. Just give me time.",
+          text: 'I can get you what you need. Just give me time.',
           nextNodeId: 'ask_for_time',
         },
       ],
@@ -734,7 +734,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'clear_flag', target: 'captured_by_copperheads' }],
       choices: [
         {
-          text: "*Leave*",
+          text: '*Leave*',
           nextNodeId: null,
         },
       ],
@@ -742,20 +742,20 @@ export const DiamondbackMainDialogue: DialogueTree = {
 
     {
       id: 'someone_sent',
-      text: "Who? And why would anyone send a stranger to me?",
+      text: 'Who? And why would anyone send a stranger to me?',
       choices: [
         {
-          text: "Doc Chen mentioned your name.",
+          text: 'Doc Chen mentioned your name.',
           nextNodeId: 'doc_mention',
           conditions: [{ type: 'talked_to', target: 'doc_chen' }],
         },
         {
-          text: "Sheriff Cole... in a roundabout way.",
+          text: 'Sheriff Cole... in a roundabout way.',
           nextNodeId: 'sheriff_mention',
           conditions: [{ type: 'talked_to', target: 'sheriff_cole' }],
         },
         {
-          text: "Someone who trusted I could help your cause.",
+          text: 'Someone who trusted I could help your cause.',
           nextNodeId: 'vague_sender',
         },
       ],
@@ -767,7 +767,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'change_reputation', value: 10 }],
       choices: [
         {
-          text: "That you fight IVRC because words failed.",
+          text: 'That you fight IVRC because words failed.',
           nextNodeId: 'doc_understanding',
         },
       ],
@@ -778,7 +778,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "He understands. Better than most. *She sits back down* Alright. You've got my attention. What do you want from the Copperheads?",
       choices: [
         {
-          text: "An alliance. Or at least cooperation.",
+          text: 'An alliance. Or at least cooperation.',
           nextNodeId: 'alliance_talk',
         },
         {
@@ -794,7 +794,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'start_quest', target: 'prove_to_copperheads' }],
       choices: [
         {
-          text: "What do you need?",
+          text: 'What do you need?',
           nextNodeId: null,
         },
       ],
@@ -805,7 +805,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Their biggest weakness is their greed. They spread themselves thin, trying to control everything. The second is their arrogance - they think no one can touch them. Hit them where they're weak, and they panic. But hit wrong, and they bring the full force of their private army.",
       choices: [
         {
-          text: "Where would you recommend hitting?",
+          text: 'Where would you recommend hitting?',
           nextNodeId: 'target_recommendation',
         },
       ],
@@ -831,7 +831,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'problem_response',
         },
         {
-          text: "That some call you an outlaw, others a hero.",
+          text: 'That some call you an outlaw, others a hero.',
           nextNodeId: 'hero_outlaw',
         },
       ],
@@ -843,7 +843,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'change_reputation', value: 5 }],
       choices: [
         {
-          text: "Maybe he wishes he could join you.",
+          text: 'Maybe he wishes he could join you.',
           nextNodeId: 'cole_join',
         },
       ],
@@ -877,7 +877,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She studies you skeptically* Mighty vague. But you're here, and you ain't dead yet. That's either luck or skill. Which is it?",
       choices: [
         {
-          text: "A bit of both.",
+          text: 'A bit of both.',
           nextNodeId: 'bit_of_both',
         },
       ],
@@ -889,11 +889,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'clear_flag', target: 'captured_by_copperheads' }],
       choices: [
         {
-          text: "I want to help fight IVRC.",
+          text: 'I want to help fight IVRC.',
           nextNodeId: 'want_to_fight',
         },
         {
-          text: "I need to find Samuel Ironpick.",
+          text: 'I need to find Samuel Ironpick.',
           nextNodeId: 'find_samuel',
         },
       ],
@@ -927,7 +927,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She laughs coldly* Bold. But out here, bold gets you buried. *She nods to her men* Keep 'em comfortable but contained. We'll see who comes lookin' for this one.",
       choices: [
         {
-          text: "*Wait for developments*",
+          text: '*Wait for developments*',
           nextNodeId: 'waiting',
         },
       ],
@@ -942,11 +942,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'origin_story',
         },
         {
-          text: "What do you know about the Freeminers?",
+          text: 'What do you know about the Freeminers?',
           nextNodeId: 'freeminer_info',
         },
         {
-          text: "I should go.",
+          text: 'I should go.',
           nextNodeId: null,
         },
       ],
@@ -957,11 +957,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Good people, mostly. Old Samuel leads them. They work their own claims, refuse to sell to IVRC. Independent, stubborn. We share goals but disagree on methods. He won't raid trains with me, and I won't sit in the mountains waitin' to be overrun.",
       choices: [
         {
-          text: "Could you work together?",
+          text: 'Could you work together?',
           nextNodeId: 'freeminer_alliance',
         },
         {
-          text: "I understand.",
+          text: 'I understand.',
           nextNodeId: null,
         },
       ],
@@ -993,7 +993,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She tilts her head* Business. I like business. *She steps closer* But out here, business means profit, and profit means someone loses. Who's losing if you win?",
       choices: [
         {
-          text: "IVRC. Cornelius Thorne.",
+          text: 'IVRC. Cornelius Thorne.',
           nextNodeId: 'thorne_business',
         },
         {
@@ -1009,7 +1009,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'change_reputation', value: 15 }],
       choices: [
         {
-          text: "Lead the way.",
+          text: 'Lead the way.',
           nextNodeId: 'more_questions',
         },
       ],
@@ -1020,11 +1020,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Cagey. I respect that. *She folds her arms* But I don't deal with people I don't understand. Give me something real, or this conversation ends with you walkin' back the way you came - if you're lucky.",
       choices: [
         {
-          text: "I have information that could hurt IVRC.",
+          text: 'I have information that could hurt IVRC.',
           nextNodeId: 'have_info',
         },
         {
-          text: "I want to join your fight.",
+          text: 'I want to join your fight.',
           nextNodeId: 'want_to_fight',
         },
       ],
@@ -1035,11 +1035,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Everyone's an enemy until proven otherwise. *She studies you* But you walked in here alone, no backup, no weapon drawn. Either you trust us, or you're too stupid to live. Which is it?",
       choices: [
         {
-          text: "I trust you. Partly.",
+          text: 'I trust you. Partly.',
           nextNodeId: 'partial_trust',
         },
         {
-          text: "I calculated the risk was worth it.",
+          text: 'I calculated the risk was worth it.',
           nextNodeId: 'calculated',
         },
       ],
@@ -1051,7 +1051,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'change_reputation', value: 10 }],
       choices: [
         {
-          text: "I want to fight IVRC.",
+          text: 'I want to fight IVRC.',
           nextNodeId: 'want_to_fight',
         },
         {
@@ -1066,7 +1066,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Cold. I like cold. *She gestures toward the camp* Come on. Anyone stupid enough to walk into a outlaw camp alone deserves to at least hear what we're about before dyin'.",
       choices: [
         {
-          text: "I appreciate the hospitality.",
+          text: 'I appreciate the hospitality.',
           nextNodeId: 'copperhead_mission',
         },
       ],
@@ -1074,16 +1074,16 @@ export const DiamondbackMainDialogue: DialogueTree = {
 
     {
       id: 'gear_question',
-      text: "*She goes very still* Where did you hear about that symbol?",
+      text: '*She goes very still* Where did you hear about that symbol?',
       expression: 'serious',
       choices: [
         {
-          text: "I have a letter marked with it.",
+          text: 'I have a letter marked with it.',
           nextNodeId: 'gear_reveal',
           conditions: [{ type: 'has_item', target: 'mysterious_letter' }],
         },
         {
-          text: "Doc Chen mentioned it.",
+          text: 'Doc Chen mentioned it.',
           nextNodeId: 'doc_gear_mention',
         },
       ],
@@ -1094,7 +1094,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Doc's got a long memory. *She relaxes slightly* The gear was the workers' symbol, back when there was still hope of peaceful change. IVRC destroyed that hope. Now the symbol's just a ghost... unless someone's tryin' to resurrect it.",
       choices: [
         {
-          text: "Maybe someone is.",
+          text: 'Maybe someone is.',
           nextNodeId: 'resurrection',
         },
       ],
@@ -1105,11 +1105,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "*She studies you intently* If that's true... it changes things. The old guard, the Freeminers, even my people - we could unite under that symbol. But it would take something real. Proof that IVRC can be beaten.",
       choices: [
         {
-          text: "Like the Ironpick documents?",
+          text: 'Like the Ironpick documents?',
           nextNodeId: 'documents_alliance',
         },
         {
-          text: "Like a decisive strike against their operations?",
+          text: 'Like a decisive strike against their operations?',
           nextNodeId: 'decisive_strike',
         },
       ],
@@ -1120,7 +1120,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Blood gets attention, but it don't change laws. *She shakes her head* If you want to really hurt IVRC, you need to expose 'em. Make even their bought politicians distance themselves. Violence just makes martyrs - theirs and ours.",
       choices: [
         {
-          text: "The documents, then.",
+          text: 'The documents, then.',
           nextNodeId: 'documents_alliance',
         },
       ],
@@ -1133,15 +1133,15 @@ export const DiamondbackMainDialogue: DialogueTree = {
       expression: 'friendly',
       choices: [
         {
-          text: "Just doing what needs done.",
+          text: 'Just doing what needs done.',
           nextNodeId: 'humble_response',
         },
         {
-          text: "Any news from your end?",
+          text: 'Any news from your end?',
           nextNodeId: 'copperhead_news',
         },
         {
-          text: "I may have a lead on those documents.",
+          text: 'I may have a lead on those documents.',
           nextNodeId: 'documents_lead',
           conditions: [{ type: 'flag_set', target: 'found_document_clue' }],
         },
@@ -1175,7 +1175,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "Same old dance. We hit a supply wagon last week - nothin' major, but it'll keep us fed. IVRC's bringin' in more guards from the east. And there's talk of Victoria Ashworth herself comin' to 'clean up' the territory. Means they're scared.",
       choices: [
         {
-          text: "Scared is good.",
+          text: 'Scared is good.',
           nextNodeId: null,
         },
       ],
@@ -1187,7 +1187,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       expression: 'eager',
       choices: [
         {
-          text: "Samuel Ironpick has them hidden. I know where.",
+          text: 'Samuel Ironpick has them hidden. I know where.',
           nextNodeId: 'documents_location',
         },
         {
@@ -1203,11 +1203,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       onEnterEffects: [{ type: 'start_quest', target: 'retrieve_documents' }],
       choices: [
         {
-          text: "This needs to be quiet. Too many people will spook Samuel.",
+          text: 'This needs to be quiet. Too many people will spook Samuel.',
           nextNodeId: 'quiet_approach',
         },
         {
-          text: "Backup would be good. Just in case.",
+          text: 'Backup would be good. Just in case.',
           nextNodeId: 'backup_approach',
         },
       ],
@@ -1257,11 +1257,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
           nextNodeId: 'situation_update',
         },
         {
-          text: "I might have a lead.",
+          text: 'I might have a lead.',
           nextNodeId: 'lead_check',
         },
         {
-          text: "Just passing through.",
+          text: 'Just passing through.',
           nextNodeId: null,
         },
       ],
@@ -1272,11 +1272,11 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "IVRC's got the railroad locked down tighter than a drum. Harder to hit their shipments now. But they can't guard everything. We're still findin' soft spots. Just takes more planning.",
       choices: [
         {
-          text: "Anything I can help with?",
+          text: 'Anything I can help with?',
           nextNodeId: 'help_request',
         },
         {
-          text: "Stay safe out there.",
+          text: 'Stay safe out there.',
           nextNodeId: null,
         },
       ],
@@ -1287,7 +1287,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "There's always somethin'. But right now, the best thing you can do is keep workin' on whatever brought you here. The documents, Samuel, the gear symbol - that's the long game. We'll handle the short game.",
       choices: [
         {
-          text: "Understood.",
+          text: 'Understood.',
           nextNodeId: null,
         },
       ],
@@ -1298,7 +1298,7 @@ export const DiamondbackMainDialogue: DialogueTree = {
       text: "A lead on what? The documents? Victoria Ashworth? I'm all ears.",
       choices: [
         {
-          text: "Still working on it. Nothing solid yet.",
+          text: 'Still working on it. Nothing solid yet.',
           nextNodeId: 'keep_working',
         },
       ],

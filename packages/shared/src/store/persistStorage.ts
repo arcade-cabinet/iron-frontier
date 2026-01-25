@@ -41,7 +41,8 @@ export function createStateStorage(adapter: StorageAdapter): StateStorage {
       cache.set(name, value);
       adapter.setItem(name, value).catch((error) => {
         // eslint-disable-next-line no-console
-        if (typeof console !== 'undefined') console.error('[persistStorage] Failed to persist:', name, error);
+        if (typeof console !== 'undefined')
+          console.error('[persistStorage] Failed to persist:', name, error);
       });
     },
 
@@ -49,7 +50,8 @@ export function createStateStorage(adapter: StorageAdapter): StateStorage {
       cache.delete(name);
       adapter.removeItem(name).catch((error) => {
         // eslint-disable-next-line no-console
-        if (typeof console !== 'undefined') console.error('[persistStorage] Failed to remove:', name, error);
+        if (typeof console !== 'undefined')
+          console.error('[persistStorage] Failed to remove:', name, error);
       });
     },
   };
@@ -135,7 +137,8 @@ export class AsyncStateStorage implements StateStorage {
     this.cache.set(name, value);
     this.adapter.setItem(name, value).catch((error) => {
       // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined') console.error('[AsyncStateStorage] Failed to persist:', name, error);
+      if (typeof console !== 'undefined')
+        console.error('[AsyncStateStorage] Failed to persist:', name, error);
     });
   }
 
@@ -143,7 +146,8 @@ export class AsyncStateStorage implements StateStorage {
     this.cache.delete(name);
     this.adapter.removeItem(name).catch((error) => {
       // eslint-disable-next-line no-console
-      if (typeof console !== 'undefined') console.error('[AsyncStateStorage] Failed to remove:', name, error);
+      if (typeof console !== 'undefined')
+        console.error('[AsyncStateStorage] Failed to remove:', name, error);
     });
   }
 

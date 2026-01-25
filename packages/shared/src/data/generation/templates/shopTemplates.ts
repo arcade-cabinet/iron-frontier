@@ -12,9 +12,9 @@
  */
 
 import type {
-  ShopInventoryTemplate,
-  PriceModifier,
   GenerationContext,
+  PriceModifier,
+  ShopInventoryTemplate,
 } from '../../schemas/generation';
 
 // ============================================================================
@@ -655,9 +655,7 @@ export const PRICE_MODIFIERS: PriceModifier[] = [
 /**
  * Get a shop template by shop type or ID
  */
-export function getShopTemplate(
-  shopTypeOrId: string
-): ShopInventoryTemplate | undefined {
+export function getShopTemplate(shopTypeOrId: string): ShopInventoryTemplate | undefined {
   return SHOP_TEMPLATES.find(
     (template) => template.id === shopTypeOrId || template.shopType === shopTypeOrId
   );
@@ -666,12 +664,8 @@ export function getShopTemplate(
 /**
  * Get all shop templates matching given tags
  */
-export function getShopTemplatesByTags(
-  tags: string[]
-): ShopInventoryTemplate[] {
-  return SHOP_TEMPLATES.filter((template) =>
-    tags.some((tag) => template.tags.includes(tag))
-  );
+export function getShopTemplatesByTags(tags: string[]): ShopInventoryTemplate[] {
+  return SHOP_TEMPLATES.filter((template) => tags.some((tag) => template.tags.includes(tag)));
 }
 
 /**
@@ -722,10 +716,7 @@ function checkCondition(
           (tension) => tension > (condition.value ?? 0)
         );
       }
-      return (
-        (context.factionTensions?.[condition.target ?? ''] ?? 0) >
-        (condition.value ?? 0)
-      );
+      return (context.factionTensions?.[condition.target ?? ''] ?? 0) > (condition.value ?? 0);
 
     case 'has_feature':
       return context.features?.includes(condition.target ?? '') ?? false;
@@ -745,14 +736,12 @@ function modifierApplies(
 ): boolean {
   // Check if item tags match (empty array = applies to all)
   const itemTagsMatch =
-    modifier.itemTags.length === 0 ||
-    modifier.itemTags.some((tag) => itemTags.includes(tag));
+    modifier.itemTags.length === 0 || modifier.itemTags.some((tag) => itemTags.includes(tag));
 
   // Check if location type matches (empty array = applies to all)
   const locationTypeMatch =
     modifier.locationTypes.length === 0 ||
-    (context.locationType !== undefined &&
-      modifier.locationTypes.includes(context.locationType));
+    (context.locationType !== undefined && modifier.locationTypes.includes(context.locationType));
 
   // Check if region matches (empty array = applies to all)
   const regionMatch =
@@ -786,8 +775,7 @@ export function calculatePrice(
     if (modifierApplies(modifier, itemTags, context)) {
       // Use the midpoint of the multiplier range for deterministic pricing
       // For true variance, pass a SeededRandom and use random within range
-      const midpoint =
-        (modifier.multiplierRange[0] + modifier.multiplierRange[1]) / 2;
+      const midpoint = (modifier.multiplierRange[0] + modifier.multiplierRange[1]) / 2;
       finalMultiplier *= midpoint;
     }
   }
@@ -832,9 +820,7 @@ export function getApplicableModifiers(
   itemTags: string[],
   context: PriceCalculationContext
 ): PriceModifier[] {
-  return PRICE_MODIFIERS.filter((modifier) =>
-    modifierApplies(modifier, itemTags, context)
-  );
+  return PRICE_MODIFIERS.filter((modifier) => modifierApplies(modifier, itemTags, context));
 }
 
 /**

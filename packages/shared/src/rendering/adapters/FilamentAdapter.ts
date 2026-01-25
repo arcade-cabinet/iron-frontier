@@ -56,9 +56,7 @@ export const DEFAULT_FILAMENT_OPTIONS: FilamentAdapterOptions = {
 /**
  * Type guard for Filament adapter options
  */
-export function isFilamentAdapterOptions(
-  options: unknown
-): options is FilamentAdapterOptions {
+export function isFilamentAdapterOptions(options: unknown): options is FilamentAdapterOptions {
   if (!options || typeof options !== 'object') return false;
   const opt = options as FilamentAdapterOptions;
   return (
@@ -103,11 +101,7 @@ export interface IFilamentSceneManager extends ISceneManager {
    * @param minScale Minimum scale factor (0.5 = half resolution)
    * @param maxScale Maximum scale factor (1.0 = full resolution)
    */
-  setDynamicResolution(
-    enabled: boolean,
-    minScale?: number,
-    maxScale?: number
-  ): void;
+  setDynamicResolution(enabled: boolean, minScale?: number, maxScale?: number): void;
 
   /**
    * Set ambient occlusion settings.
@@ -115,11 +109,7 @@ export interface IFilamentSceneManager extends ISceneManager {
    * @param radius AO radius
    * @param intensity AO intensity
    */
-  setAmbientOcclusion(
-    enabled: boolean,
-    radius?: number,
-    intensity?: number
-  ): void;
+  setAmbientOcclusion(enabled: boolean, radius?: number, intensity?: number): void;
 
   /**
    * Apply indirect lighting from an IBL (Image-Based Lighting) file.

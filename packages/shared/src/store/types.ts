@@ -5,13 +5,7 @@
  * the web and mobile apps.
  */
 
-import type {
-  DialogueCondition,
-  DialogueEffect,
-  NPCDefinition,
-  Quest,
-  ActiveQuest,
-} from '../data';
+import type { ActiveQuest, DialogueCondition, DialogueEffect, NPCDefinition, Quest } from '../data';
 
 // ============================================================================
 // COMMON TYPES
@@ -340,13 +334,7 @@ export interface DialogueState {
 // COMBAT TYPES
 // ============================================================================
 
-export type CombatActionType =
-  | 'attack'
-  | 'aimed_shot'
-  | 'defend'
-  | 'reload'
-  | 'use_item'
-  | 'flee';
+export type CombatActionType = 'attack' | 'aimed_shot' | 'defend' | 'reload' | 'use_item' | 'flee';
 
 export interface Combatant {
   definitionId: string;
@@ -384,12 +372,7 @@ export interface CombatResult {
   targetHealthRemaining?: number;
 }
 
-export type CombatPhase =
-  | 'player_turn'
-  | 'enemy_turn'
-  | 'victory'
-  | 'defeat'
-  | 'fled';
+export type CombatPhase = 'player_turn' | 'enemy_turn' | 'victory' | 'defeat' | 'fled';
 
 export interface CombatState {
   encounterId: string;

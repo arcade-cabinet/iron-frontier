@@ -6,18 +6,18 @@
 
 import * as React from 'react';
 import {
-  View,
-  TextInput,
-  Text,
   StyleSheet,
+  Text,
+  TextInput,
   type TextInputProps,
-  type ViewStyle,
   type TextStyle,
+  View,
+  type ViewStyle,
 } from 'react-native';
 import type { InputProps, InputType } from '../primitives/types';
 import { colors } from '../tokens/colors';
-import { spacing } from '../tokens/spacing';
 import { radius } from '../tokens/radius';
+import { spacing } from '../tokens/spacing';
 import { fontSizes } from '../tokens/typography';
 
 /**
@@ -88,24 +88,19 @@ export const Input: React.FC<NativeInputProps> = ({
     borderColor: hasError
       ? colors.crimson[500]
       : focused
-      ? colors.bronze[500]
-      : colors.leather[300],
+        ? colors.bronze[500]
+        : colors.leather[300],
     backgroundColor: disabled
       ? colors.parchment[200]
       : readOnly
-      ? colors.parchment[100]
-      : colors.parchment[50],
+        ? colors.parchment[100]
+        : colors.parchment[50],
   };
 
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <Text
-          style={[
-            styles.label,
-            disabled && styles.labelDisabled,
-          ]}
-        >
+        <Text style={[styles.label, disabled && styles.labelDisabled]}>
           {label}
           {required && <Text style={styles.required}> *</Text>}
         </Text>

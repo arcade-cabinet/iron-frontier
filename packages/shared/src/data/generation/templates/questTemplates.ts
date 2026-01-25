@@ -16,7 +16,11 @@
  * - {{amount}} - Numeric amount
  */
 
-import { type QuestTemplate, type QuestArchetype, QuestTemplateSchema } from '../../schemas/generation';
+import {
+  type QuestArchetype,
+  type QuestTemplate,
+  QuestTemplateSchema,
+} from '../../schemas/generation';
 
 /**
  * All quest templates for procedural generation.
@@ -38,7 +42,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     ],
     descriptionTemplates: [
       '{{target}} is wanted for crimes in {{region}}. Bring them in, dead or alive.',
-      'The law wants {{target}}. There\'s a price on their head.',
+      "The law wants {{target}}. There's a price on their head.",
       '{{giver}} needs {{target}} dealt with. Permanently.',
     ],
     stages: [
@@ -100,7 +104,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     titleTemplates: [
       'Wanted: {{target}} - Gang Leader',
       'High Bounty: {{target}}',
-      'Take Down {{target}}\'s Gang',
+      "Take Down {{target}}'s Gang",
     ],
     descriptionTemplates: [
       '{{target}} leads a gang terrorizing {{region}}. The bounty is substantial.',
@@ -110,7 +114,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     stages: [
       {
         titleTemplate: 'Find the Gang',
-        descriptionTemplate: 'Locate {{target}}\'s hideout.',
+        descriptionTemplate: "Locate {{target}}'s hideout.",
         objectives: [
           {
             type: 'visit',
@@ -183,7 +187,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     stages: [
       {
         titleTemplate: 'Track {{target}}',
-        descriptionTemplate: 'Follow {{target}}\'s trail to {{destination}}.',
+        descriptionTemplate: "Follow {{target}}'s trail to {{destination}}.",
         objectives: [
           {
             type: 'visit',
@@ -288,15 +292,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Wildlife Control',
     archetype: 'clear_area',
     questType: 'side',
-    titleTemplates: [
-      'Predator Problem',
-      'Dangerous Wildlife',
-      'Animal Attacks Near {{location}}',
-    ],
+    titleTemplates: ['Predator Problem', 'Dangerous Wildlife', 'Animal Attacks Near {{location}}'],
     descriptionTemplates: [
       'Wild animals have been attacking livestock and people. Hunt them down.',
       '{{giver}} lost cattle to predators. Help deal with the problem.',
-      'The wildlife\'s gotten bold and dangerous. Thin the herd.',
+      "The wildlife's gotten bold and dangerous. Thin the herd.",
     ],
     stages: [
       {
@@ -337,14 +337,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Clear the Mine',
     archetype: 'clear_area',
     questType: 'side',
-    titleTemplates: [
-      'Reclaim the Mine',
-      'Clear {{destination}}',
-      'Dangerous Infestation',
-    ],
+    titleTemplates: ['Reclaim the Mine', 'Clear {{destination}}', 'Dangerous Infestation'],
     descriptionTemplates: [
       'Creatures have overrun the {{destination}} mine. Clear them out so work can resume.',
-      '{{giver}} can\'t get workers back in until the mine is safe.',
+      "{{giver}} can't get workers back in until the mine is safe.",
       'Something dangerous moved into {{destination}}. Deal with it.',
     ],
     stages: [
@@ -462,14 +458,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Guard the Wagon',
     archetype: 'escort',
     questType: 'side',
-    titleTemplates: [
-      'Wagon Guard to {{destination}}',
-      'Protect the Shipment',
-      'Supply Convoy',
-    ],
+    titleTemplates: ['Wagon Guard to {{destination}}', 'Protect the Shipment', 'Supply Convoy'],
     descriptionTemplates: [
       '{{giver}} needs guards for a supply wagon heading to {{destination}}.',
-      'Valuable cargo must reach {{destination}} safely. Bandits know it\'s coming.',
+      "Valuable cargo must reach {{destination}} safely. Bandits know it's coming.",
       'This shipment is worth a lot. Make sure nothing happens to it.',
     ],
     stages: [
@@ -521,11 +513,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Ambush the Raiders',
     archetype: 'ambush',
     questType: 'side',
-    titleTemplates: [
-      'Turn the Tables',
-      'Trap at {{destination}}',
-      'Counter-Ambush',
-    ],
+    titleTemplates: ['Turn the Tables', 'Trap at {{destination}}', 'Counter-Ambush'],
     descriptionTemplates: [
       'Raiders have been hitting travelers near {{destination}}. Set a trap for them.',
       '{{giver}} knows when the bandits will strike next. Be ready for them.',
@@ -593,11 +581,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Hit the Supply Line',
     archetype: 'ambush',
     questType: 'side',
-    titleTemplates: [
-      'Disrupt IVRC Supplies',
-      'Supply Line Sabotage',
-      'Strike at {{destination}}',
-    ],
+    titleTemplates: ['Disrupt IVRC Supplies', 'Supply Line Sabotage', 'Strike at {{destination}}'],
     descriptionTemplates: [
       '{{giver}} wants you to ambush an IVRC supply convoy near {{destination}}.',
       'IVRC shipments pass through {{destination}} regularly. Intercept one.',
@@ -639,7 +623,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
             optional: false,
           },
         ],
-        onCompleteTextTemplate: 'The supplies are yours. IVRC won\'t be happy.',
+        onCompleteTextTemplate: "The supplies are yours. IVRC won't be happy.",
       },
     ],
     rewards: {
@@ -672,11 +656,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     titleTemplates: [
       'Urgent: Medicine Needed',
       'Medical Supplies for {{location}}',
-      'Fetch Dr. {{giver}}\'s Order',
+      "Fetch Dr. {{giver}}'s Order",
     ],
     descriptionTemplates: [
       '{{giver}} desperately needs medical supplies from {{destination}}.',
-      'Someone\'s sick and needs medicine. Pick it up from {{destination}}.',
+      "Someone's sick and needs medicine. Pick it up from {{destination}}.",
       'The doctor is out of supplies. Get more from the trading post.',
     ],
     stages: [
@@ -733,11 +717,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Machine Parts',
     archetype: 'fetch_item',
     questType: 'side',
-    titleTemplates: [
-      'Parts Needed',
-      'Steam Engine Repair',
-      'Mechanical Components Wanted',
-    ],
+    titleTemplates: ['Parts Needed', 'Steam Engine Repair', 'Mechanical Components Wanted'],
     descriptionTemplates: [
       '{{giver}} needs specific parts to fix a machine. Can you find them?',
       'The steam engine is down. We need replacement parts from {{destination}}.',
@@ -796,15 +776,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Lost Heirloom',
     archetype: 'fetch_item',
     questType: 'side',
-    titleTemplates: [
-      'Find the {{item}}',
-      'Family Heirloom',
-      'Recover the {{item}}',
-    ],
+    titleTemplates: ['Find the {{item}}', 'Family Heirloom', 'Recover the {{item}}'],
     descriptionTemplates: [
       '{{giver}} lost a precious family {{item}} at {{destination}}. Retrieve it.',
       'A valuable {{item}} was left behind at {{destination}}. It has sentimental value.',
-      '{{giver}}\'s {{item}} is somewhere in {{destination}}. Find it and return it.',
+      "{{giver}}'s {{item}} is somewhere in {{destination}}. Find it and return it.",
     ],
     stages: [
       {
@@ -871,15 +847,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Acquire Documents',
     archetype: 'steal_item',
     questType: 'side',
-    titleTemplates: [
-      'Covert Acquisition',
-      'Get the {{item}}',
-      'Corporate Secrets',
-    ],
+    titleTemplates: ['Covert Acquisition', 'Get the {{item}}', 'Corporate Secrets'],
     descriptionTemplates: [
       '{{giver}} needs you to "acquire" {{item}} from {{destination}}. Discretion is key.',
       'Important documents are held at {{destination}}. Get them without being seen.',
-      '{{giver}} wants {{item}} retrieved quietly. Don\'t ask why.',
+      "{{giver}} wants {{item}} retrieved quietly. Don't ask why.",
     ],
     stages: [
       {
@@ -943,14 +915,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Payroll Heist',
     archetype: 'steal_item',
     questType: 'side',
-    titleTemplates: [
-      'The Payroll Job',
-      'IVRC Payroll',
-      'Redistribution',
-    ],
+    titleTemplates: ['The Payroll Job', 'IVRC Payroll', 'Redistribution'],
     descriptionTemplates: [
       '{{giver}} wants IVRC\'s payroll "redirected" from {{destination}}.',
-      'The workers deserve that payroll more than IVRC. It\'s at {{destination}}.',
+      "The workers deserve that payroll more than IVRC. It's at {{destination}}.",
       'Hit the payroll at {{destination}}. For the people.',
     ],
     stages: [
@@ -1020,14 +988,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Lost Shipment',
     archetype: 'recover_lost',
     questType: 'side',
-    titleTemplates: [
-      'Find the Lost Shipment',
-      'Missing Cargo',
-      'Where\'s the Wagon?',
-    ],
+    titleTemplates: ['Find the Lost Shipment', 'Missing Cargo', "Where's the Wagon?"],
     descriptionTemplates: [
       'A shipment went missing between here and {{destination}}. Find out what happened.',
-      '{{giver}}\'s cargo never arrived from {{destination}}. Track it down.',
+      "{{giver}}'s cargo never arrived from {{destination}}. Track it down.",
       'The supply wagon vanished near {{destination}}. Recover what you can.',
     ],
     stages: [
@@ -1098,15 +1062,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Relic Recovery',
     archetype: 'recover_lost',
     questType: 'side',
-    titleTemplates: [
-      'The Lost {{item}}',
-      'Relic of the Past',
-      'Ancient {{item}}',
-    ],
+    titleTemplates: ['The Lost {{item}}', 'Relic of the Past', 'Ancient {{item}}'],
     descriptionTemplates: [
       'An ancient {{item}} was lost in {{destination}} years ago. Find it.',
       'Legends speak of a {{item}} hidden in {{destination}}.',
-      '{{giver}} believes their ancestor\'s {{item}} is still at {{destination}}.',
+      "{{giver}} believes their ancestor's {{item}} is still at {{destination}}.",
     ],
     stages: [
       {
@@ -1179,11 +1139,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Ore Collection',
     archetype: 'gather_materials',
     questType: 'side',
-    titleTemplates: [
-      'Ore Needed',
-      'Mining Request',
-      'Gather {{item}}',
-    ],
+    titleTemplates: ['Ore Needed', 'Mining Request', 'Gather {{item}}'],
     descriptionTemplates: [
       '{{giver}} needs {{item}} for operations. Gather some from {{destination}}.',
       'The blacksmith requires {{item}}. Find it near {{destination}}.',
@@ -1212,7 +1168,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
             hintTemplate: 'Look for exposed veins.',
           },
         ],
-        onCompleteTextTemplate: 'You\'ve gathered enough.',
+        onCompleteTextTemplate: "You've gathered enough.",
       },
     ],
     rewards: {
@@ -1235,11 +1191,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Scrap Collection',
     archetype: 'gather_materials',
     questType: 'side',
-    titleTemplates: [
-      'Scrap Hunt',
-      'Parts Needed',
-      'Salvage Run',
-    ],
+    titleTemplates: ['Scrap Hunt', 'Parts Needed', 'Salvage Run'],
     descriptionTemplates: [
       '{{giver}} needs mechanical parts. Salvage some from {{destination}}.',
       'Old machinery at {{destination}} has parts we need.',
@@ -1342,15 +1294,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Secret Correspondence',
     archetype: 'deliver_message',
     questType: 'delivery',
-    titleTemplates: [
-      'Secret Message',
-      'Confidential Delivery',
-      'Coded Dispatch',
-    ],
+    titleTemplates: ['Secret Message', 'Confidential Delivery', 'Coded Dispatch'],
     descriptionTemplates: [
       '{{giver}} has a sensitive message for their contact at {{destination}}. Be discreet.',
       'This coded message must reach {{target}} without IVRC knowing.',
-      'Deliver this letter to {{destination}}, but don\'t let anyone see you.',
+      "Deliver this letter to {{destination}}, but don't let anyone see you.",
     ],
     stages: [
       {
@@ -1404,14 +1352,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Package Delivery',
     archetype: 'deliver_package',
     questType: 'delivery',
-    titleTemplates: [
-      'Deliver to {{target}}',
-      'Package for {{destination}}',
-      'Special Delivery',
-    ],
+    titleTemplates: ['Deliver to {{target}}', 'Package for {{destination}}', 'Special Delivery'],
     descriptionTemplates: [
       '{{giver}} has a package that needs to reach {{target}} safely.',
-      'This crate is valuable. Don\'t let anything happen to it.',
+      "This crate is valuable. Don't let anything happen to it.",
       'Deliver this to {{target}} in {{destination}}. Handle with care.',
     ],
     stages: [
@@ -1453,11 +1397,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Supply Delivery',
     archetype: 'deliver_package',
     questType: 'delivery',
-    titleTemplates: [
-      'Supplies to {{destination}}',
-      'Supply Run',
-      'Goods for {{target}}',
-    ],
+    titleTemplates: ['Supplies to {{destination}}', 'Supply Run', 'Goods for {{target}}'],
     descriptionTemplates: [
       '{{giver}} needs these supplies delivered to {{destination}}.',
       '{{target}} at {{destination}} is waiting for this shipment.',
@@ -1512,13 +1452,9 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Contraband Run',
     archetype: 'smuggle',
     questType: 'delivery',
-    titleTemplates: [
-      'Under the Radar',
-      'Contraband to {{destination}}',
-      'Off the Books',
-    ],
+    titleTemplates: ['Under the Radar', 'Contraband to {{destination}}', 'Off the Books'],
     descriptionTemplates: [
-      '{{giver}} needs banned goods smuggled into {{destination}}. Don\'t get caught.',
+      "{{giver}} needs banned goods smuggled into {{destination}}. Don't get caught.",
       'These items are prohibited by IVRC. Get them to {{target}} quietly.',
       'Slip this contraband past the checkpoints to {{destination}}.',
     ],
@@ -1571,13 +1507,9 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Weapons Smuggling',
     archetype: 'smuggle',
     questType: 'delivery',
-    titleTemplates: [
-      'Arms Delivery',
-      'Weapons to {{destination}}',
-      'Hot Iron',
-    ],
+    titleTemplates: ['Arms Delivery', 'Weapons to {{destination}}', 'Hot Iron'],
     descriptionTemplates: [
-      '{{giver}} needs weapons delivered to {{destination}}. IVRC can\'t know.',
+      "{{giver}} needs weapons delivered to {{destination}}. IVRC can't know.",
       'The resistance needs arms. Get them to {{target}} at {{destination}}.',
       'Smuggle these weapons past IVRC checkpoints to {{destination}}.',
     ],
@@ -1634,11 +1566,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Missing Person',
     archetype: 'find_person',
     questType: 'side',
-    titleTemplates: [
-      'Find {{target}}',
-      'Missing: {{target}}',
-      'Search for the Lost',
-    ],
+    titleTemplates: ['Find {{target}}', 'Missing: {{target}}', 'Search for the Lost'],
     descriptionTemplates: [
       '{{target}} went missing days ago. {{giver}} is worried sick.',
       'No one has seen {{target}} since they headed to {{destination}}.',
@@ -1647,7 +1575,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     stages: [
       {
         titleTemplate: 'Search for {{target}}',
-        descriptionTemplate: 'Investigate {{target}}\'s disappearance.',
+        descriptionTemplate: "Investigate {{target}}'s disappearance.",
         objectives: [
           {
             type: 'visit',
@@ -1698,11 +1626,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Track the Debtor',
     archetype: 'find_person',
     questType: 'side',
-    titleTemplates: [
-      'Find the Debtor',
-      'Hunt Down {{target}}',
-      '{{target}} Owes Money',
-    ],
+    titleTemplates: ['Find the Debtor', 'Hunt Down {{target}}', '{{target}} Owes Money'],
     descriptionTemplates: [
       '{{target}} owes money and skipped town. Track them to {{destination}}.',
       'A debtor named {{target}} fled toward {{destination}}.',
@@ -1711,7 +1635,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     stages: [
       {
         titleTemplate: 'Track {{target}}',
-        descriptionTemplate: 'Follow {{target}}\'s trail.',
+        descriptionTemplate: "Follow {{target}}'s trail.",
         objectives: [
           {
             type: 'visit',
@@ -1771,14 +1695,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Crime Investigation',
     archetype: 'investigate',
     questType: 'side',
-    titleTemplates: [
-      'Who Done It?',
-      'Solve the Crime',
-      'Investigation: {{location}}',
-    ],
+    titleTemplates: ['Who Done It?', 'Solve the Crime', 'Investigation: {{location}}'],
     descriptionTemplates: [
-      'Something bad happened and {{giver}} wants to know who\'s responsible.',
-      'There\'s been a crime. Help investigate.',
+      "Something bad happened and {{giver}} wants to know who's responsible.",
+      "There's been a crime. Help investigate.",
       '{{giver}} needs someone to get to the bottom of this.',
     ],
     stages: [
@@ -1842,15 +1762,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Follow the Money',
     archetype: 'investigate',
     questType: 'side',
-    titleTemplates: [
-      'Corporate Corruption',
-      'Follow the Money',
-      'Dirty Dealings',
-    ],
+    titleTemplates: ['Corporate Corruption', 'Follow the Money', 'Dirty Dealings'],
     descriptionTemplates: [
       '{{giver}} suspects corruption. Find evidence at {{destination}}.',
-      'Someone\'s skimming profits. Investigate the books.',
-      'There\'s dirty money flowing through {{destination}}. Expose it.',
+      "Someone's skimming profits. Investigate the books.",
+      "There's dirty money flowing through {{destination}}. Expose it.",
     ],
     stages: [
       {
@@ -1917,11 +1833,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Intelligence Gathering',
     archetype: 'spy',
     questType: 'side',
-    titleTemplates: [
-      'Spy on IVRC',
-      'Eyes and Ears',
-      'Watch and Report',
-    ],
+    titleTemplates: ['Spy on IVRC', 'Eyes and Ears', 'Watch and Report'],
     descriptionTemplates: [
       '{{giver}} needs intel on IVRC activities at {{destination}}. Observe and report.',
       'We need to know what IVRC is planning at {{destination}}.',
@@ -1990,15 +1902,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Track Gang Movements',
     archetype: 'spy',
     questType: 'side',
-    titleTemplates: [
-      'Scout the Gang',
-      'Track Copperhead',
-      'Eyes on the Outlaws',
-    ],
+    titleTemplates: ['Scout the Gang', 'Track Copperhead', 'Eyes on the Outlaws'],
     descriptionTemplates: [
       '{{giver}} needs information on Copperhead gang movements near {{destination}}.',
       'We need to know where the gang is operating. Scout {{destination}}.',
-      'Track the outlaws but don\'t engage. Intel only.',
+      "Track the outlaws but don't engage. Intel only.",
     ],
     stages: [
       {
@@ -2022,7 +1930,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
             optional: false,
           },
         ],
-        onCompleteTextTemplate: 'You\'ve gathered valuable intelligence.',
+        onCompleteTextTemplate: "You've gathered valuable intelligence.",
       },
     ],
     rewards: {
@@ -2051,14 +1959,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Persuade the Settler',
     archetype: 'convince_npc',
     questType: 'side',
-    titleTemplates: [
-      'Talk Some Sense',
-      'Convince {{target}}',
-      'Diplomatic Mission',
-    ],
+    titleTemplates: ['Talk Some Sense', 'Convince {{target}}', 'Diplomatic Mission'],
     descriptionTemplates: [
       '{{giver}} needs you to convince {{target}} to see reason.',
-      '{{target}} won\'t listen to {{giver}}. Maybe they\'ll listen to you.',
+      "{{target}} won't listen to {{giver}}. Maybe they'll listen to you.",
       'A little diplomacy could prevent a lot of trouble.',
     ],
     stages: [
@@ -2115,11 +2019,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Recruitment',
     archetype: 'convince_npc',
     questType: 'side',
-    titleTemplates: [
-      'Win Over {{target}}',
-      'Recruitment Drive',
-      'Bring {{target}} Aboard',
-    ],
+    titleTemplates: ['Win Over {{target}}', 'Recruitment Drive', 'Bring {{target}} Aboard'],
     descriptionTemplates: [
       '{{giver}} wants {{target}} to join the cause. Convince them.',
       '{{target}} has skills we need. Persuade them to work with us.',
@@ -2156,11 +2056,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
       },
       {
         titleTemplate: 'Seal the Deal',
-        descriptionTemplate: 'Finalize {{target}}\'s commitment.',
+        descriptionTemplate: "Finalize {{target}}'s commitment.",
         objectives: [
           {
             type: 'talk',
-            descriptionTemplate: 'Get {{target}}\'s agreement',
+            descriptionTemplate: "Get {{target}}'s agreement",
             targetType: 'npc',
             targetTags: ['recruit'],
             countRange: [1, 1],
@@ -2194,11 +2094,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Silence a Witness',
     archetype: 'intimidate',
     questType: 'side',
-    titleTemplates: [
-      'Shut Them Up',
-      'Silence {{target}}',
-      'The Quiet Treatment',
-    ],
+    titleTemplates: ['Shut Them Up', 'Silence {{target}}', 'The Quiet Treatment'],
     descriptionTemplates: [
       '{{target}} knows too much. Convince them to keep quiet.',
       'A witness named {{target}} needs to forget what they saw.',
@@ -2267,14 +2163,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Protection Money',
     archetype: 'intimidate',
     questType: 'side',
-    titleTemplates: [
-      'Collect Protection',
-      'Time to Pay Up',
-      'Insurance Collection',
-    ],
+    titleTemplates: ['Collect Protection', 'Time to Pay Up', 'Insurance Collection'],
     descriptionTemplates: [
-      '{{target}} hasn\'t paid protection money. Remind them.',
-      'Some merchants need a visit. Collect what\'s owed.',
+      "{{target}} hasn't paid protection money. Remind them.",
+      "Some merchants need a visit. Collect what's owed.",
       '{{giver}} wants their cut. Make sure they pay.',
     ],
     stages: [
@@ -2330,11 +2222,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Settle the Dispute',
     archetype: 'mediate',
     questType: 'side',
-    titleTemplates: [
-      'Peace Talks',
-      'Mediate the Conflict',
-      'Settle This',
-    ],
+    titleTemplates: ['Peace Talks', 'Mediate the Conflict', 'Settle This'],
     descriptionTemplates: [
       'Two parties are at odds. {{giver}} needs someone to mediate.',
       'This dispute could turn violent. Help find a peaceful resolution.',
@@ -2401,11 +2289,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Labor Dispute',
     archetype: 'mediate',
     questType: 'side',
-    titleTemplates: [
-      'Worker Talks',
-      'Labor Negotiation',
-      'Strike Mediation',
-    ],
+    titleTemplates: ['Worker Talks', 'Labor Negotiation', 'Strike Mediation'],
     descriptionTemplates: [
       'Workers and management are at an impasse. Help negotiate.',
       'A strike is brewing. Find a compromise before it gets ugly.',
@@ -2414,7 +2298,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     stages: [
       {
         titleTemplate: 'Meet Both Sides',
-        descriptionTemplate: 'Understand each party\'s concerns.',
+        descriptionTemplate: "Understand each party's concerns.",
         objectives: [
           {
             type: 'talk',
@@ -2477,14 +2361,10 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Explore the Ruins',
     archetype: 'explore_location',
     questType: 'exploration',
-    titleTemplates: [
-      'The Old Ruins',
-      'Explore {{destination}}',
-      'Survey Mission',
-    ],
+    titleTemplates: ['The Old Ruins', 'Explore {{destination}}', 'Survey Mission'],
     descriptionTemplates: [
-      '{{giver}} wants to know what\'s at {{destination}}.',
-      'Nobody\'s been to {{destination}} in years. Scout it out.',
+      "{{giver}} wants to know what's at {{destination}}.",
+      "Nobody's been to {{destination}} in years. Scout it out.",
       'There might be something valuable at {{destination}}.',
     ],
     stages: [
@@ -2523,7 +2403,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
             optional: true,
           },
         ],
-        onCompleteTextTemplate: 'You\'ve thoroughly explored the area.',
+        onCompleteTextTemplate: "You've thoroughly explored the area.",
       },
     ],
     rewards: {
@@ -2546,13 +2426,9 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Cave Exploration',
     archetype: 'explore_location',
     questType: 'exploration',
-    titleTemplates: [
-      'Into the Depths',
-      'Explore the Cave',
-      'Underground Survey',
-    ],
+    titleTemplates: ['Into the Depths', 'Explore the Cave', 'Underground Survey'],
     descriptionTemplates: [
-      'A cave was discovered near {{location}}. See what\'s inside.',
+      "A cave was discovered near {{location}}. See what's inside.",
       '{{giver}} wants the caves at {{destination}} mapped.',
       'Rumors of treasure in the {{destination}} caves. Investigate.',
     ],
@@ -2621,11 +2497,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Survey Mission',
     archetype: 'map_area',
     questType: 'exploration',
-    titleTemplates: [
-      'Map the Territory',
-      'Survey {{destination}}',
-      'Chart the Region',
-    ],
+    titleTemplates: ['Map the Territory', 'Survey {{destination}}', 'Chart the Region'],
     descriptionTemplates: [
       '{{giver}} needs accurate maps of {{destination}}. Survey the area.',
       'The territory around {{destination}} is unmapped. Chart it.',
@@ -2692,11 +2564,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Claim Survey',
     archetype: 'map_area',
     questType: 'exploration',
-    titleTemplates: [
-      'Survey Mining Claims',
-      'Map the Claims',
-      'Prospector\'s Survey',
-    ],
+    titleTemplates: ['Survey Mining Claims', 'Map the Claims', "Prospector's Survey"],
     descriptionTemplates: [
       '{{giver}} needs mining claims surveyed at {{destination}}.',
       'Document the boundaries of claims near {{destination}}.',
@@ -2753,11 +2621,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Find a Shortcut',
     archetype: 'find_route',
     questType: 'exploration',
-    titleTemplates: [
-      'Find a Shortcut',
-      'New Route to {{destination}}',
-      'Blaze a Trail',
-    ],
+    titleTemplates: ['Find a Shortcut', 'New Route to {{destination}}', 'Blaze a Trail'],
     descriptionTemplates: [
       '{{giver}} needs a faster route to {{destination}}.',
       'The main road to {{destination}} is too dangerous. Find an alternative.',
@@ -2824,15 +2688,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Safe Passage',
     archetype: 'find_route',
     questType: 'exploration',
-    titleTemplates: [
-      'Find Safe Passage',
-      'Avoid the Danger',
-      'Alternative Route',
-    ],
+    titleTemplates: ['Find Safe Passage', 'Avoid the Danger', 'Alternative Route'],
     descriptionTemplates: [
       'The usual road to {{destination}} is compromised. Find a safe alternative.',
       '{{giver}} needs a route that avoids bandit territory.',
-      'Scout a path to {{destination}} that\'s safe for travelers.',
+      "Scout a path to {{destination}} that's safe for travelers.",
     ],
     stages: [
       {
@@ -2899,11 +2759,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Debt Collection',
     archetype: 'debt_collection',
     questType: 'side',
-    titleTemplates: [
-      'Collect from {{target}}',
-      'Outstanding Debt',
-      'Payment Due',
-    ],
+    titleTemplates: ['Collect from {{target}}', 'Outstanding Debt', 'Payment Due'],
     descriptionTemplates: [
       '{{target}} owes {{giver}} money. Collect it.',
       'That debt has been outstanding for too long.',
@@ -2961,11 +2817,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'IVRC Debt Collection',
     archetype: 'debt_collection',
     questType: 'side',
-    titleTemplates: [
-      'Company Debts',
-      'IVRC Collection',
-      'Corporate Recovery',
-    ],
+    titleTemplates: ['Company Debts', 'IVRC Collection', 'Corporate Recovery'],
     descriptionTemplates: [
       'IVRC has outstanding debts from miners at {{destination}}. Collect.',
       '{{giver}} needs company money recovered from workers who skipped payments.',
@@ -3023,15 +2875,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Prospecting Investment',
     archetype: 'investment',
     questType: 'side',
-    titleTemplates: [
-      'Investment Opportunity',
-      'Fund the Prospect',
-      'Mining Venture',
-    ],
+    titleTemplates: ['Investment Opportunity', 'Fund the Prospect', 'Mining Venture'],
     descriptionTemplates: [
       '{{giver}} has found a promising site but needs funding.',
       'A mining claim at {{destination}} needs capital. High risk, high reward.',
-      'Fund {{giver}}\'s operation for a cut of the profits.',
+      "Fund {{giver}}'s operation for a cut of the profits.",
     ],
     stages: [
       {
@@ -3108,15 +2956,11 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Business Investment',
     archetype: 'investment',
     questType: 'side',
-    titleTemplates: [
-      'Business Opportunity',
-      'Back the Venture',
-      'Startup Funding',
-    ],
+    titleTemplates: ['Business Opportunity', 'Back the Venture', 'Startup Funding'],
     descriptionTemplates: [
       '{{giver}} wants to start a business but needs capital.',
       'An entrepreneur needs investment for a new venture.',
-      'Fund {{giver}}\'s idea for a share of the profits.',
+      "Fund {{giver}}'s idea for a share of the profits.",
     ],
     stages: [
       {
@@ -3168,7 +3012,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
             optional: false,
           },
         ],
-        onCompleteTextTemplate: 'You\'re now a business partner.',
+        onCompleteTextTemplate: "You're now a business partner.",
       },
     ],
     rewards: {
@@ -3197,11 +3041,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Establish Trade Route',
     archetype: 'trade_route',
     questType: 'side',
-    titleTemplates: [
-      'New Trade Route',
-      'Commerce to {{destination}}',
-      'Open the Markets',
-    ],
+    titleTemplates: ['New Trade Route', 'Commerce to {{destination}}', 'Open the Markets'],
     descriptionTemplates: [
       '{{giver}} wants to establish trade with {{destination}}.',
       'Open a trade route between here and {{destination}}.',
@@ -3290,11 +3130,7 @@ export const QUEST_TEMPLATES: QuestTemplate[] = [
     name: 'Secure Trade Route',
     archetype: 'trade_route',
     questType: 'side',
-    titleTemplates: [
-      'Protect the Trade Route',
-      'Secure Commerce',
-      'Clear the Trading Path',
-    ],
+    titleTemplates: ['Protect the Trade Route', 'Secure Commerce', 'Clear the Trading Path'],
     descriptionTemplates: [
       'The trade route to {{destination}} is threatened. Secure it.',
       'Bandits are disrupting trade. Make the route safe.',
@@ -3421,9 +3257,7 @@ export function getQuestTemplate(id: string): QuestTemplate | undefined {
 /**
  * Get quest templates by archetype
  */
-export function getQuestTemplatesByArchetype(
-  archetype: QuestArchetype
-): QuestTemplate[] {
+export function getQuestTemplatesByArchetype(archetype: QuestArchetype): QuestTemplate[] {
   return TEMPLATES_BY_ARCHETYPE[archetype] ?? [];
 }
 
@@ -3431,23 +3265,16 @@ export function getQuestTemplatesByArchetype(
  * Get quest templates valid for a level
  */
 export function getQuestTemplatesForLevel(level: number): QuestTemplate[] {
-  return QUEST_TEMPLATES.filter(
-    (t) => level >= t.levelRange[0] && level <= t.levelRange[1]
-  );
+  return QUEST_TEMPLATES.filter((t) => level >= t.levelRange[0] && level <= t.levelRange[1]);
 }
 
 /**
  * Get quest templates for a specific giver
  */
-export function getQuestTemplatesForGiver(
-  role: string,
-  faction: string
-): QuestTemplate[] {
+export function getQuestTemplatesForGiver(role: string, faction: string): QuestTemplate[] {
   return QUEST_TEMPLATES.filter((t) => {
-    const roleMatch =
-      t.giverRoles.length === 0 || t.giverRoles.includes(role);
-    const factionMatch =
-      t.giverFactions.length === 0 || t.giverFactions.includes(faction);
+    const roleMatch = t.giverRoles.length === 0 || t.giverRoles.includes(role);
+    const factionMatch = t.giverFactions.length === 0 || t.giverFactions.includes(faction);
     return roleMatch && factionMatch;
   });
 }
@@ -3485,21 +3312,15 @@ export function getRandomQuestTemplate(
   }
 
   if (criteria.tags && criteria.tags.length > 0) {
-    candidates = candidates.filter((t) =>
-      criteria.tags!.some((tag) => t.tags.includes(tag))
-    );
+    candidates = candidates.filter((t) => criteria.tags!.some((tag) => t.tags.includes(tag)));
   }
 
   if (criteria.giverRole) {
-    candidates = candidates.filter((t) =>
-      t.giverRoles.includes(criteria.giverRole!)
-    );
+    candidates = candidates.filter((t) => t.giverRoles.includes(criteria.giverRole!));
   }
 
   if (criteria.giverFaction) {
-    candidates = candidates.filter((t) =>
-      t.giverFactions.includes(criteria.giverFaction!)
-    );
+    candidates = candidates.filter((t) => t.giverFactions.includes(criteria.giverFaction!));
   }
 
   if (candidates.length === 0) {

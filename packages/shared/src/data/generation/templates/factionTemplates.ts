@@ -65,10 +65,7 @@ const lawEnforcementTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Person of Interest',
-      greetingSnippets: [
-        'greeting_law_cold',
-        'greeting_law_curt',
-      ],
+      greetingSnippets: ['greeting_law_cold', 'greeting_law_curt'],
       priceModifier: 1.15,
       questAvailability: 0.3,
       hostile: false,
@@ -77,10 +74,7 @@ const lawEnforcementTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Stranger',
-      greetingSnippets: [
-        'greeting_law_neutral',
-        'greeting_law_professional',
-      ],
+      greetingSnippets: ['greeting_law_neutral', 'greeting_law_professional'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -89,10 +83,7 @@ const lawEnforcementTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Upstanding Citizen',
-      greetingSnippets: [
-        'greeting_law_friendly',
-        'greeting_law_respectful',
-      ],
+      greetingSnippets: ['greeting_law_friendly', 'greeting_law_respectful'],
       priceModifier: 0.95,
       questAvailability: 0.7,
       hostile: false,
@@ -101,11 +92,7 @@ const lawEnforcementTemplate: FactionReactionTemplate = {
       minRep: 30,
       maxRep: 59,
       tierName: 'Trusted Ally',
-      greetingSnippets: [
-        'greeting_law_warm',
-        'greeting_law_grateful',
-        'greeting_law_confidential',
-      ],
+      greetingSnippets: ['greeting_law_warm', 'greeting_law_grateful', 'greeting_law_confidential'],
       priceModifier: 0.85,
       questAvailability: 0.9,
       hostile: false,
@@ -114,11 +101,7 @@ const lawEnforcementTemplate: FactionReactionTemplate = {
       minRep: 60,
       maxRep: 100,
       tierName: 'Honorary Deputy',
-      greetingSnippets: [
-        'greeting_law_honored',
-        'greeting_law_hero',
-        'greeting_law_deputy',
-      ],
+      greetingSnippets: ['greeting_law_honored', 'greeting_law_hero', 'greeting_law_deputy'],
       priceModifier: 0.75,
       questAvailability: 1.0,
       hostile: false,
@@ -149,10 +132,7 @@ const townCouncilTemplate: FactionReactionTemplate = {
       minRep: -100,
       maxRep: -60,
       tierName: 'Persona Non Grata',
-      greetingSnippets: [
-        'greeting_council_banned',
-        'greeting_council_exile',
-      ],
+      greetingSnippets: ['greeting_council_banned', 'greeting_council_exile'],
       priceModifier: 1.5,
       questAvailability: 0,
       hostile: true,
@@ -161,10 +141,7 @@ const townCouncilTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Undesirable Element',
-      greetingSnippets: [
-        'greeting_council_dismissive',
-        'greeting_council_condescending',
-      ],
+      greetingSnippets: ['greeting_council_dismissive', 'greeting_council_condescending'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -173,10 +150,7 @@ const townCouncilTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Troublesome Vagrant',
-      greetingSnippets: [
-        'greeting_council_cold',
-        'greeting_council_suspicious',
-      ],
+      greetingSnippets: ['greeting_council_cold', 'greeting_council_suspicious'],
       priceModifier: 1.15,
       questAvailability: 0.25,
       hostile: false,
@@ -185,10 +159,7 @@ const townCouncilTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Common Folk',
-      greetingSnippets: [
-        'greeting_council_neutral',
-        'greeting_council_bureaucratic',
-      ],
+      greetingSnippets: ['greeting_council_neutral', 'greeting_council_bureaucratic'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -197,10 +168,7 @@ const townCouncilTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Concerned Citizen',
-      greetingSnippets: [
-        'greeting_council_polite',
-        'greeting_council_receptive',
-      ],
+      greetingSnippets: ['greeting_council_polite', 'greeting_council_receptive'],
       priceModifier: 0.95,
       questAvailability: 0.65,
       hostile: false,
@@ -274,10 +242,7 @@ const railroadCompanyTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Saboteur Suspect',
-      greetingSnippets: [
-        'greeting_railroad_suspicious',
-        'greeting_railroad_hostile',
-      ],
+      greetingSnippets: ['greeting_railroad_suspicious', 'greeting_railroad_hostile'],
       priceModifier: 1.35,
       questAvailability: 0.1,
       hostile: false,
@@ -286,10 +251,7 @@ const railroadCompanyTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Unreliable Element',
-      greetingSnippets: [
-        'greeting_railroad_dismissive',
-        'greeting_railroad_cold',
-      ],
+      greetingSnippets: ['greeting_railroad_dismissive', 'greeting_railroad_cold'],
       priceModifier: 1.2,
       questAvailability: 0.3,
       hostile: false,
@@ -298,10 +260,7 @@ const railroadCompanyTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Potential Customer',
-      greetingSnippets: [
-        'greeting_railroad_neutral',
-        'greeting_railroad_business',
-      ],
+      greetingSnippets: ['greeting_railroad_neutral', 'greeting_railroad_business'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -310,10 +269,7 @@ const railroadCompanyTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Valued Customer',
-      greetingSnippets: [
-        'greeting_railroad_friendly',
-        'greeting_railroad_welcoming',
-      ],
+      greetingSnippets: ['greeting_railroad_friendly', 'greeting_railroad_welcoming'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -383,10 +339,7 @@ const miningConsortiumTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Union Sympathizer',
-      greetingSnippets: [
-        'greeting_mining_suspicious',
-        'greeting_mining_warning',
-      ],
+      greetingSnippets: ['greeting_mining_suspicious', 'greeting_mining_warning'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -395,10 +348,7 @@ const miningConsortiumTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Unwelcome Visitor',
-      greetingSnippets: [
-        'greeting_mining_cold',
-        'greeting_mining_dismissive',
-      ],
+      greetingSnippets: ['greeting_mining_cold', 'greeting_mining_dismissive'],
       priceModifier: 1.15,
       questAvailability: 0.3,
       hostile: false,
@@ -407,10 +357,7 @@ const miningConsortiumTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Drifter',
-      greetingSnippets: [
-        'greeting_mining_neutral',
-        'greeting_mining_business',
-      ],
+      greetingSnippets: ['greeting_mining_neutral', 'greeting_mining_business'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -419,10 +366,7 @@ const miningConsortiumTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Reliable Worker',
-      greetingSnippets: [
-        'greeting_mining_friendly',
-        'greeting_mining_respectful',
-      ],
+      greetingSnippets: ['greeting_mining_friendly', 'greeting_mining_respectful'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -492,10 +436,7 @@ const cattleBaronsTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Range Pest',
-      greetingSnippets: [
-        'greeting_cattle_hostile',
-        'greeting_cattle_suspicious',
-      ],
+      greetingSnippets: ['greeting_cattle_hostile', 'greeting_cattle_suspicious'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -504,10 +445,7 @@ const cattleBaronsTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Trespasser',
-      greetingSnippets: [
-        'greeting_cattle_cold',
-        'greeting_cattle_dismissive',
-      ],
+      greetingSnippets: ['greeting_cattle_cold', 'greeting_cattle_dismissive'],
       priceModifier: 1.15,
       questAvailability: 0.3,
       hostile: false,
@@ -516,10 +454,7 @@ const cattleBaronsTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Passing Stranger',
-      greetingSnippets: [
-        'greeting_cattle_neutral',
-        'greeting_cattle_business',
-      ],
+      greetingSnippets: ['greeting_cattle_neutral', 'greeting_cattle_business'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -528,10 +463,7 @@ const cattleBaronsTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Trail Hand',
-      greetingSnippets: [
-        'greeting_cattle_friendly',
-        'greeting_cattle_respectful',
-      ],
+      greetingSnippets: ['greeting_cattle_friendly', 'greeting_cattle_respectful'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -552,7 +484,7 @@ const cattleBaronsTemplate: FactionReactionTemplate = {
     {
       minRep: 60,
       maxRep: 100,
-      tierName: 'Cattle Baron\'s Kin',
+      tierName: "Cattle Baron's Kin",
       greetingSnippets: [
         'greeting_cattle_honored',
         'greeting_cattle_family',
@@ -601,10 +533,7 @@ const merchantsGuildTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Bad Risk',
-      greetingSnippets: [
-        'greeting_merchant_suspicious',
-        'greeting_merchant_wary',
-      ],
+      greetingSnippets: ['greeting_merchant_suspicious', 'greeting_merchant_wary'],
       priceModifier: 1.4,
       questAvailability: 0.1,
       hostile: false,
@@ -613,10 +542,7 @@ const merchantsGuildTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Poor Customer',
-      greetingSnippets: [
-        'greeting_merchant_cold',
-        'greeting_merchant_reluctant',
-      ],
+      greetingSnippets: ['greeting_merchant_cold', 'greeting_merchant_reluctant'],
       priceModifier: 1.2,
       questAvailability: 0.3,
       hostile: false,
@@ -625,10 +551,7 @@ const merchantsGuildTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Customer',
-      greetingSnippets: [
-        'greeting_merchant_neutral',
-        'greeting_merchant_business',
-      ],
+      greetingSnippets: ['greeting_merchant_neutral', 'greeting_merchant_business'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -637,10 +560,7 @@ const merchantsGuildTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Regular Customer',
-      greetingSnippets: [
-        'greeting_merchant_friendly',
-        'greeting_merchant_welcoming',
-      ],
+      greetingSnippets: ['greeting_merchant_friendly', 'greeting_merchant_welcoming'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -714,10 +634,7 @@ const desperadosTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Snitch',
-      greetingSnippets: [
-        'greeting_outlaw_suspicious',
-        'greeting_outlaw_unwelcome',
-      ],
+      greetingSnippets: ['greeting_outlaw_suspicious', 'greeting_outlaw_unwelcome'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -726,10 +643,7 @@ const desperadosTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Law-Lover',
-      greetingSnippets: [
-        'greeting_outlaw_cold',
-        'greeting_outlaw_dismissive',
-      ],
+      greetingSnippets: ['greeting_outlaw_cold', 'greeting_outlaw_dismissive'],
       priceModifier: 1.15,
       questAvailability: 0.25,
       hostile: false,
@@ -738,10 +652,7 @@ const desperadosTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Unknown Quantity',
-      greetingSnippets: [
-        'greeting_outlaw_neutral',
-        'greeting_outlaw_testing',
-      ],
+      greetingSnippets: ['greeting_outlaw_neutral', 'greeting_outlaw_testing'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -750,10 +661,7 @@ const desperadosTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Fellow Renegade',
-      greetingSnippets: [
-        'greeting_outlaw_friendly',
-        'greeting_outlaw_respect',
-      ],
+      greetingSnippets: ['greeting_outlaw_friendly', 'greeting_outlaw_respect'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -823,10 +731,7 @@ const gangRedCanyonTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Bounty Target',
-      greetingSnippets: [
-        'greeting_redcanyon_hostile',
-        'greeting_redcanyon_threat',
-      ],
+      greetingSnippets: ['greeting_redcanyon_hostile', 'greeting_redcanyon_threat'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -835,10 +740,7 @@ const gangRedCanyonTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Outsider',
-      greetingSnippets: [
-        'greeting_redcanyon_cold',
-        'greeting_redcanyon_warning',
-      ],
+      greetingSnippets: ['greeting_redcanyon_cold', 'greeting_redcanyon_warning'],
       priceModifier: 1.15,
       questAvailability: 0.2,
       hostile: false,
@@ -847,10 +749,7 @@ const gangRedCanyonTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Stranger',
-      greetingSnippets: [
-        'greeting_redcanyon_neutral',
-        'greeting_redcanyon_wary',
-      ],
+      greetingSnippets: ['greeting_redcanyon_neutral', 'greeting_redcanyon_wary'],
       priceModifier: 1.0,
       questAvailability: 0.4,
       hostile: false,
@@ -859,10 +758,7 @@ const gangRedCanyonTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Prospect',
-      greetingSnippets: [
-        'greeting_redcanyon_friendly',
-        'greeting_redcanyon_interested',
-      ],
+      greetingSnippets: ['greeting_redcanyon_friendly', 'greeting_redcanyon_interested'],
       priceModifier: 0.9,
       questAvailability: 0.65,
       hostile: false,
@@ -932,10 +828,7 @@ const gangIronRidersTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Marked',
-      greetingSnippets: [
-        'greeting_ironriders_hostile',
-        'greeting_ironriders_marked',
-      ],
+      greetingSnippets: ['greeting_ironriders_hostile', 'greeting_ironriders_marked'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -944,10 +837,7 @@ const gangIronRidersTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Weak Link',
-      greetingSnippets: [
-        'greeting_ironriders_cold',
-        'greeting_ironriders_dismissive',
-      ],
+      greetingSnippets: ['greeting_ironriders_cold', 'greeting_ironriders_dismissive'],
       priceModifier: 1.15,
       questAvailability: 0.2,
       hostile: false,
@@ -956,10 +846,7 @@ const gangIronRidersTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Soft Skin',
-      greetingSnippets: [
-        'greeting_ironriders_neutral',
-        'greeting_ironriders_assessing',
-      ],
+      greetingSnippets: ['greeting_ironriders_neutral', 'greeting_ironriders_assessing'],
       priceModifier: 1.0,
       questAvailability: 0.4,
       hostile: false,
@@ -968,10 +855,7 @@ const gangIronRidersTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Iron Prospect',
-      greetingSnippets: [
-        'greeting_ironriders_friendly',
-        'greeting_ironriders_potential',
-      ],
+      greetingSnippets: ['greeting_ironriders_friendly', 'greeting_ironriders_potential'],
       priceModifier: 0.9,
       questAvailability: 0.65,
       hostile: false,
@@ -1045,10 +929,7 @@ const prospectorsUnionTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Company Stooge',
-      greetingSnippets: [
-        'greeting_prospector_suspicious',
-        'greeting_prospector_stooge',
-      ],
+      greetingSnippets: ['greeting_prospector_suspicious', 'greeting_prospector_stooge'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -1057,10 +938,7 @@ const prospectorsUnionTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Greenhorn',
-      greetingSnippets: [
-        'greeting_prospector_cold',
-        'greeting_prospector_greenhorn',
-      ],
+      greetingSnippets: ['greeting_prospector_cold', 'greeting_prospector_greenhorn'],
       priceModifier: 1.1,
       questAvailability: 0.3,
       hostile: false,
@@ -1069,10 +947,7 @@ const prospectorsUnionTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Wanderer',
-      greetingSnippets: [
-        'greeting_prospector_neutral',
-        'greeting_prospector_curious',
-      ],
+      greetingSnippets: ['greeting_prospector_neutral', 'greeting_prospector_curious'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -1081,10 +956,7 @@ const prospectorsUnionTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Fellow Digger',
-      greetingSnippets: [
-        'greeting_prospector_friendly',
-        'greeting_prospector_digger',
-      ],
+      greetingSnippets: ['greeting_prospector_friendly', 'greeting_prospector_digger'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -1154,10 +1026,7 @@ const nativeTribesTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Trespasser',
-      greetingSnippets: [
-        'greeting_native_suspicious',
-        'greeting_native_unwelcome',
-      ],
+      greetingSnippets: ['greeting_native_suspicious', 'greeting_native_unwelcome'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -1166,10 +1035,7 @@ const nativeTribesTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'White Eyes',
-      greetingSnippets: [
-        'greeting_native_cold',
-        'greeting_native_wary',
-      ],
+      greetingSnippets: ['greeting_native_cold', 'greeting_native_wary'],
       priceModifier: 1.15,
       questAvailability: 0.25,
       hostile: false,
@@ -1178,10 +1044,7 @@ const nativeTribesTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Outsider',
-      greetingSnippets: [
-        'greeting_native_neutral',
-        'greeting_native_cautious',
-      ],
+      greetingSnippets: ['greeting_native_neutral', 'greeting_native_cautious'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -1190,10 +1053,7 @@ const nativeTribesTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Friend to the People',
-      greetingSnippets: [
-        'greeting_native_friendly',
-        'greeting_native_respectful',
-      ],
+      greetingSnippets: ['greeting_native_friendly', 'greeting_native_respectful'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -1263,10 +1123,7 @@ const driftersTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Bad News',
-      greetingSnippets: [
-        'greeting_drifter_suspicious',
-        'greeting_drifter_badnews',
-      ],
+      greetingSnippets: ['greeting_drifter_suspicious', 'greeting_drifter_badnews'],
       priceModifier: 1.2,
       questAvailability: 0.15,
       hostile: false,
@@ -1275,10 +1132,7 @@ const driftersTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Hard Case',
-      greetingSnippets: [
-        'greeting_drifter_cold',
-        'greeting_drifter_wary',
-      ],
+      greetingSnippets: ['greeting_drifter_cold', 'greeting_drifter_wary'],
       priceModifier: 1.1,
       questAvailability: 0.35,
       hostile: false,
@@ -1287,10 +1141,7 @@ const driftersTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Fellow Wanderer',
-      greetingSnippets: [
-        'greeting_drifter_neutral',
-        'greeting_drifter_nod',
-      ],
+      greetingSnippets: ['greeting_drifter_neutral', 'greeting_drifter_nod'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -1299,10 +1150,7 @@ const driftersTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Road Companion',
-      greetingSnippets: [
-        'greeting_drifter_friendly',
-        'greeting_drifter_companion',
-      ],
+      greetingSnippets: ['greeting_drifter_friendly', 'greeting_drifter_companion'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -1372,10 +1220,7 @@ const automatonCollectiveTemplate: FactionReactionTemplate = {
       minRep: -59,
       maxRep: -30,
       tierName: 'Hostile Organic',
-      greetingSnippets: [
-        'greeting_automaton_suspicious',
-        'greeting_automaton_warning',
-      ],
+      greetingSnippets: ['greeting_automaton_suspicious', 'greeting_automaton_warning'],
       priceModifier: 1.3,
       questAvailability: 0.1,
       hostile: false,
@@ -1384,10 +1229,7 @@ const automatonCollectiveTemplate: FactionReactionTemplate = {
       minRep: -29,
       maxRep: -10,
       tierName: 'Unpredictable Variable',
-      greetingSnippets: [
-        'greeting_automaton_cold',
-        'greeting_automaton_calculating',
-      ],
+      greetingSnippets: ['greeting_automaton_cold', 'greeting_automaton_calculating'],
       priceModifier: 1.15,
       questAvailability: 0.3,
       hostile: false,
@@ -1396,10 +1238,7 @@ const automatonCollectiveTemplate: FactionReactionTemplate = {
       minRep: -9,
       maxRep: 9,
       tierName: 'Organic Unit',
-      greetingSnippets: [
-        'greeting_automaton_neutral',
-        'greeting_automaton_query',
-      ],
+      greetingSnippets: ['greeting_automaton_neutral', 'greeting_automaton_query'],
       priceModifier: 1.0,
       questAvailability: 0.5,
       hostile: false,
@@ -1408,10 +1247,7 @@ const automatonCollectiveTemplate: FactionReactionTemplate = {
       minRep: 10,
       maxRep: 29,
       tierName: 'Cooperative Entity',
-      greetingSnippets: [
-        'greeting_automaton_friendly',
-        'greeting_automaton_acknowledge',
-      ],
+      greetingSnippets: ['greeting_automaton_friendly', 'greeting_automaton_acknowledge'],
       priceModifier: 0.9,
       questAvailability: 0.7,
       hostile: false,
@@ -1485,7 +1321,7 @@ export const FACTION_TEMPLATES: FactionReactionTemplate[] = [
 ];
 
 const FACTION_TEMPLATES_BY_ID: Record<string, FactionReactionTemplate> = Object.fromEntries(
-  FACTION_TEMPLATES.map(template => [template.factionId, template])
+  FACTION_TEMPLATES.map((template) => [template.factionId, template])
 );
 
 // ============================================================================
@@ -1505,13 +1341,15 @@ export function getFactionTemplate(factionId: string): FactionReactionTemplate |
 export function getReputationTier(
   factionId: string,
   reputation: number
-): {
-  tierName: string;
-  greetingSnippets: string[];
-  priceModifier: number;
-  questAvailability: number;
-  hostile: boolean;
-} | undefined {
+):
+  | {
+      tierName: string;
+      greetingSnippets: string[];
+      priceModifier: number;
+      questAvailability: number;
+      hostile: boolean;
+    }
+  | undefined {
   const template = FACTION_TEMPLATES_BY_ID[factionId];
   if (!template) return undefined;
 
@@ -1612,16 +1450,13 @@ export function getAlliedFactions(factionId: string): string[] {
  * Get all faction IDs in the system
  */
 export function getAllFactionIds(): string[] {
-  return FACTION_TEMPLATES.map(t => t.factionId);
+  return FACTION_TEMPLATES.map((t) => t.factionId);
 }
 
 /**
  * Check if a player with given reputation would be hostile to a faction
  */
-export function isPlayerHostileToFaction(
-  factionId: string,
-  reputation: number
-): boolean {
+export function isPlayerHostileToFaction(factionId: string, reputation: number): boolean {
   const tier = getReputationTier(factionId, reputation);
   return tier?.hostile ?? false;
 }

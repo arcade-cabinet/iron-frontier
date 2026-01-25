@@ -7,20 +7,20 @@
  */
 
 import type {
-  Transform,
-  PartialTransform,
-  MeshConfig,
+  AnimationConfig,
   CameraConfig,
-  LightConfig,
-  SceneConfig,
   EnvironmentConfig,
-  RenderQuality,
+  LightConfig,
+  MeshConfig,
+  PartialTransform,
   PickResult,
   Ray,
+  RenderQuality,
+  SceneConfig,
   SceneEvent,
   SceneEventHandler,
   SceneEventType,
-  AnimationConfig,
+  Transform,
   Vector3Tuple,
 } from './types';
 
@@ -145,10 +145,7 @@ export interface ICameraHandle {
   setFOV(fov: number): void;
 
   /** Smoothly animate camera to new position/target */
-  animateTo(
-    config: Partial<CameraConfig>,
-    duration: number
-  ): Promise<void>;
+  animateTo(config: Partial<CameraConfig>, duration: number): Promise<void>;
 
   /** Attach camera controls (orbit, pan, zoom) */
   attachControls(canvas: unknown): void;
@@ -357,10 +354,7 @@ export interface ISceneManager {
    * @param onProgress Progress callback (0-1)
    * @returns Promise that resolves when all models are loaded
    */
-  preloadModels(
-    modelPaths: string[],
-    onProgress?: (progress: number) => void
-  ): Promise<void>;
+  preloadModels(modelPaths: string[], onProgress?: (progress: number) => void): Promise<void>;
 
   /**
    * Check if a model is already loaded/cached.

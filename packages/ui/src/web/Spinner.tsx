@@ -4,10 +4,10 @@
  * Loading indicator with western styling.
  */
 
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../primitives/utils';
+import * as React from 'react';
 import type { SpinnerProps } from '../primitives/types';
+import { cn } from '../primitives/utils';
 
 /**
  * Spinner variants
@@ -50,10 +50,7 @@ export const Spinner = React.forwardRef<HTMLDivElement, WebSpinnerProps>(
         data-testid={testID}
         {...props}
       >
-        <span
-          className={cn(spinnerVariants({ size }))}
-          style={color ? { color } : undefined}
-        />
+        <span className={cn(spinnerVariants({ size }))} style={color ? { color } : undefined} />
         <span className="sr-only">{label}</span>
       </div>
     );

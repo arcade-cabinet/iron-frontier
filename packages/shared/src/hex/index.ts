@@ -5,6 +5,6 @@
  * Rendering-specific code remains in the platform apps.
  */
 
-export * from './HexTypes';
 export * from './HexCoord';
 export * from './HexECS';
+export * from './HexTypes';

@@ -1,8 +1,8 @@
 // Scene Manager - Main Babylon.js scene orchestration
 // Uses a DIORAMA approach: bounded platform + 2D sky backdrop + fixed isometric camera
 import {
-  AbstractMesh,
-  AnimationGroup,
+  type AbstractMesh,
+  type AnimationGroup,
   ArcRotateCamera,
   Color3,
   Color4,
@@ -14,23 +14,23 @@ import {
   Scene,
   SceneLoader,
   ShadowGenerator,
-  Skeleton,
+  type Skeleton,
   StandardMaterial,
   Texture,
-  Vector3
+  Vector3,
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import { WesternAssets } from '@iron-frontier/assets';
-import { HeightmapGenerator, getHeightmapGenerator } from '../terrain/HeightmapGenerator';
+import { getHeightmapGenerator, type HeightmapGenerator } from '../terrain/HeightmapGenerator';
 import { TerrainChunk } from '../terrain/TerrainChunk';
 import {
-  CameraState,
-  ChunkCoord,
+  type CameraState,
+  type ChunkCoord,
+  chunkKey,
   DEFAULT_CAMERA_STATE,
   VIEW_DISTANCE,
-  WorldPosition,
-  chunkKey,
-  worldToChunk
+  type WorldPosition,
+  worldToChunk,
 } from '../types';
 
 // Diorama world bounds - the visible play area
@@ -89,14 +89,16 @@ export class SceneManager {
     const spawnHeight = this.terrainGenerator.getHeightAt(spawnX, spawnZ);
     this.playerPosition = { x: spawnX, y: spawnHeight, z: spawnZ };
 
-    console.log(`[SceneManager] Diorama world: ${WORLD_SIZE}x${WORLD_SIZE}m, spawn at center (${spawnX}, ${spawnHeight.toFixed(2)}, ${spawnZ})`);
+    console.log(
+      `[SceneManager] Diorama world: ${WORLD_SIZE}x${WORLD_SIZE}m, spawn at center (${spawnX}, ${spawnHeight.toFixed(2)}, ${spawnZ})`
+    );
 
     // Setup diorama components in correct order
-    this.setupSkyBackdrop();    // 1. Sky backdrop behind everything
-    this.setupDioramaCamera();  // 2. Fixed isometric camera
-    this.setupLighting();       // 3. Lighting
-    this.setupPlatformBase();   // 4. Platform edge/cliff
-    this.setupInput();          // 5. Input handling
+    this.setupSkyBackdrop(); // 1. Sky backdrop behind everything
+    this.setupDioramaCamera(); // 2. Fixed isometric camera
+    this.setupLighting(); // 3. Lighting
+    this.setupPlatformBase(); // 4. Platform edge/cliff
+    this.setupInput(); // 5. Input handling
 
     // Create player mesh
     this.createPlayerMesh();
@@ -111,12 +113,16 @@ export class SceneManager {
    */
   private setupSkyBackdrop(): void {
     // Create a hemisphere for the sky - visible from inside
-    this.skyBackdrop = MeshBuilder.CreateSphere('skyDome', {
-      diameter: WORLD_SIZE * 6,
-      segments: 32,
-      slice: 0.5, // Half sphere (hemisphere)
-      sideOrientation: Mesh.BACKSIDE, // Render inside
-    }, this.scene);
+    this.skyBackdrop = MeshBuilder.CreateSphere(
+      'skyDome',
+      {
+        diameter: WORLD_SIZE * 6,
+        segments: 32,
+        slice: 0.5, // Half sphere (hemisphere)
+        sideOrientation: Mesh.BACKSIDE, // Render inside
+      },
+      this.scene
+    );
 
     // Position centered on world, slightly below to show horizon
     this.skyBackdrop.position = new Vector3(WORLD_CENTER, -WORLD_SIZE * 0.5, WORLD_CENTER);
@@ -141,10 +147,14 @@ export class SceneManager {
   private setupPlatformBase(): void {
     // Create a ground plane that extends beyond terrain
     const platformSize = WORLD_SIZE + 40;
-    this.platformBase = MeshBuilder.CreateGround('platformBase', {
-      width: platformSize,
-      height: platformSize,
-    }, this.scene);
+    this.platformBase = MeshBuilder.CreateGround(
+      'platformBase',
+      {
+        width: platformSize,
+        height: platformSize,
+      },
+      this.scene
+    );
 
     // Position at terrain base level, centered on world
     this.platformBase.position = new Vector3(WORLD_CENTER, -2, WORLD_CENTER);
@@ -165,43 +175,41 @@ export class SceneManager {
    */
   private setupDioramaCamera(): void {
     // Camera target starts at player spawn position (chest height)
-    const targetHeight = this.terrainGenerator.getHeightAt(this.playerPosition.x, this.playerPosition.z);
+    const targetHeight = this.terrainGenerator.getHeightAt(
+      this.playerPosition.x,
+      this.playerPosition.z
+    );
     const target = new Vector3(this.playerPosition.x, targetHeight + 1.2, this.playerPosition.z);
 
     // MODERN THIRD-PERSON CAMERA:
     // Alpha = horizontal rotation (start behind player)
     // Beta = vertical angle (slightly above horizontal for over-shoulder view)
     // Radius = distance from player (close enough to see details)
-    const alpha = Math.PI;           // Start behind the player
-    const beta = Math.PI * 0.4;      // ~72° from vertical (slightly looking down at player)
-    const radius = 8;                // Close third-person distance
+    const alpha = Math.PI; // Start behind the player
+    const beta = Math.PI * 0.4; // ~72° from vertical (slightly looking down at player)
+    const radius = 8; // Close third-person distance
 
-    this.camera = new ArcRotateCamera(
-      'thirdPersonCamera',
-      alpha,
-      beta,
-      radius,
-      target,
-      this.scene
-    );
+    this.camera = new ArcRotateCamera('thirdPersonCamera', alpha, beta, radius, target, this.scene);
 
     this.camera.attachControl(this.canvas, true);
 
     // Allow full rotation but constrain zoom and vertical angle
-    this.camera.lowerRadiusLimit = 3;    // Minimum zoom - close over-shoulder
-    this.camera.upperRadiusLimit = 30;   // Maximum zoom - tactical overview
-    this.camera.lowerBetaLimit = Math.PI * 0.15;  // Don't go too top-down
-    this.camera.upperBetaLimit = Math.PI * 0.48;  // Don't go below horizon
+    this.camera.lowerRadiusLimit = 3; // Minimum zoom - close over-shoulder
+    this.camera.upperRadiusLimit = 30; // Maximum zoom - tactical overview
+    this.camera.lowerBetaLimit = Math.PI * 0.15; // Don't go too top-down
+    this.camera.upperBetaLimit = Math.PI * 0.48; // Don't go below horizon
 
     // Smooth, responsive controls
-    this.camera.panningSensibility = 0;  // Disable panning - camera follows player
+    this.camera.panningSensibility = 0; // Disable panning - camera follows player
     this.camera.wheelPrecision = 50;
     this.camera.wheelDeltaPercentage = 0.02;
     this.camera.inertia = 0.9;
     this.camera.angularSensibilityX = 500;
     this.camera.angularSensibilityY = 500;
 
-    console.log(`[SceneManager] Third-person camera: radius=${radius}, alpha=${(alpha * 180/Math.PI).toFixed(0)}°, beta=${(beta * 180/Math.PI).toFixed(0)}°`);
+    console.log(
+      `[SceneManager] Third-person camera: radius=${radius}, alpha=${((alpha * 180) / Math.PI).toFixed(0)}°, beta=${((beta * 180) / Math.PI).toFixed(0)}°`
+    );
   }
 
   private setupLighting(): void {
@@ -248,12 +256,7 @@ export class SceneManager {
       const rootUrl = lastSlash >= 0 ? characterPath.substring(0, lastSlash + 1) : '';
       const fileName = lastSlash >= 0 ? characterPath.substring(lastSlash + 1) : characterPath;
 
-      const result = await SceneLoader.ImportMeshAsync(
-        '',
-        rootUrl,
-        fileName,
-        this.scene
-      );
+      const result = await SceneLoader.ImportMeshAsync('', rootUrl, fileName, this.scene);
 
       console.log(`[SceneManager] Engineer loaded: ${result.meshes.length} meshes`);
       const player = result.meshes[0];
@@ -273,7 +276,7 @@ export class SceneManager {
       this.playerAnimations = result.animationGroups;
 
       // Start Idle animation if available
-      const idleAnim = this.playerAnimations.find(a => a.name.toLowerCase().includes('idle'));
+      const idleAnim = this.playerAnimations.find((a) => a.name.toLowerCase().includes('idle'));
       if (idleAnim) {
         console.log(`[SceneManager] Playing idle animation: ${idleAnim.name}`);
         idleAnim.play(true);
@@ -282,7 +285,7 @@ export class SceneManager {
       // Shadow caster
       if (this.shadowGenerator) {
         this.shadowGenerator.addShadowCaster(player);
-        player.getChildMeshes().forEach(m => this.shadowGenerator?.addShadowCaster(m));
+        player.getChildMeshes().forEach((m) => this.shadowGenerator?.addShadowCaster(m));
       }
 
       // Initial position update
@@ -294,7 +297,6 @@ export class SceneManager {
       children.forEach((child, i) => {
         console.log(`[SceneManager] Child ${i}: ${child.name}, visible: ${child.isVisible}`);
       });
-
     } catch (err) {
       console.error('[SceneManager] Failed to load player assets:', err);
       // Fallback to primitive if load fails
@@ -306,12 +308,16 @@ export class SceneManager {
   private createPrimitivePlayer(): void {
     console.log('[SceneManager] Creating primitive player fallback...');
     // Create a simple gunslinger placeholder
-    const body = MeshBuilder.CreateCylinder('player_body', {
-      height: 1.6,
-      diameterTop: 0.4,
-      diameterBottom: 0.5,
-      tessellation: 12,
-    }, this.scene);
+    const body = MeshBuilder.CreateCylinder(
+      'player_body',
+      {
+        height: 1.6,
+        diameterTop: 0.4,
+        diameterBottom: 0.5,
+        tessellation: 12,
+      },
+      this.scene
+    );
 
     // ... (rest of old logic for fallback)
     const bodyMat = new StandardMaterial('playerBodyMat', this.scene);
@@ -381,7 +387,9 @@ export class SceneManager {
     const targetY = height + 1.0;
     this.camera.target.set(position.x, targetY, position.z);
 
-    console.log(`[SceneManager] Player at (${position.x.toFixed(1)}, ${height.toFixed(1)}, ${position.z.toFixed(1)})`);
+    console.log(
+      `[SceneManager] Player at (${position.x.toFixed(1)}, ${height.toFixed(1)}, ${position.z.toFixed(1)})`
+    );
 
     // Update loaded chunks
     this.updateLoadedChunks(position);

@@ -4,30 +4,26 @@
  * Coordinates all generators to create a coherent procedural world.
  */
 
-import { SeededRandom, hashString, combineSeeds } from '../seededRandom';
 import {
+  GENERATION_SCHEMA_VERSION,
   type GenerationContext,
   type GenerationManifest,
-  GENERATION_SCHEMA_VERSION,
 } from '../../schemas/generation';
+import { combineSeeds, hashString, SeededRandom } from '../seededRandom';
+import { type GeneratedPlaceName, generatePlaceName, initNamePools } from './nameGenerator';
 import {
+  type GeneratedNPC,
   generateNPC,
   generateNPCsForLocation,
   initNPCTemplates,
-  type GeneratedNPC,
 } from './npcGenerator';
 import {
+  type GeneratedQuest,
   generateQuest,
   generateRandomQuest,
   initQuestTemplates,
-  type GeneratedQuest,
   type QuestGenerationContext,
 } from './questGenerator';
-import {
-  initNamePools,
-  generatePlaceName,
-  type GeneratedPlaceName,
-} from './nameGenerator';
 
 /**
  * Generated location data
@@ -350,7 +346,9 @@ export class WorldGenerator {
     for (let i = 0; i < this.options.regionCount; i++) {
       const region = this.generateRegion(i);
       regions.push(region);
-      console.log(`[WorldGenerator] Generated region: ${region.name} with ${region.locations.length} locations`);
+      console.log(
+        `[WorldGenerator] Generated region: ${region.name} with ${region.locations.length} locations`
+      );
     }
 
     // Create manifest

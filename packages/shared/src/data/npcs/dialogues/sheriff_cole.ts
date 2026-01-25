@@ -45,21 +45,21 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Just arrived. Looking for work.",
+          text: 'Just arrived. Looking for work.',
           nextNodeId: 'work_response',
           conditions: [],
           effects: [],
           tags: ['neutral'],
         },
         {
-          text: "I received a letter. Summoned here.",
+          text: 'I received a letter. Summoned here.',
           nextNodeId: 'letter_response',
           conditions: [],
           effects: [],
           tags: ['main_quest'],
         },
         {
-          text: "None of your concern, Sheriff.",
+          text: 'None of your concern, Sheriff.',
           nextNodeId: 'hostile_response',
           conditions: [],
           effects: [],
@@ -85,14 +85,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
           tags: [],
         },
         {
-          text: "Any trouble I should know about?",
+          text: 'Any trouble I should know about?',
           nextNodeId: 'town_trouble',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Thanks for the tip.",
+          text: 'Thanks for the tip.',
           nextNodeId: null,
           conditions: [],
           effects: [{ type: 'change_reputation', value: 5 }],
@@ -126,7 +126,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
           tags: [],
         },
         {
-          text: "Show him the letter.",
+          text: 'Show him the letter.',
           nextNodeId: 'show_letter',
           conditions: [{ type: 'has_item', target: 'mysterious_letter' }],
           effects: [],
@@ -149,14 +149,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "What happened to the Ironpick place?",
+          text: 'What happened to the Ironpick place?',
           nextNodeId: 'ironpick_history',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Who should I watch out for?",
+          text: 'Who should I watch out for?',
           nextNodeId: 'watch_out_for',
           conditions: [],
           effects: [],
@@ -183,7 +183,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Crystal clear, Sheriff.",
+          text: 'Crystal clear, Sheriff.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -210,7 +210,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "[Walk away]",
+          text: '[Walk away]',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -236,14 +236,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
           tags: [],
         },
         {
-          text: "What can you do about it?",
+          text: 'What can you do about it?',
           nextNodeId: 'sheriff_limitations',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Good to know.",
+          text: 'Good to know.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -263,14 +263,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Maybe you need allies.",
+          text: 'Maybe you need allies.',
           nextNodeId: 'ally_hint',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Times are changing.",
+          text: 'Times are changing.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -308,14 +308,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "That must be frustrating.",
+          text: 'That must be frustrating.',
           nextNodeId: 'sheriff_frustration',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Thanks for being honest.",
+          text: 'Thanks for being honest.',
           nextNodeId: null,
           conditions: [],
           effects: [{ type: 'change_reputation', value: 5 }],
@@ -335,7 +335,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "The frontier needs men like you.",
+          text: 'The frontier needs men like you.',
           nextNodeId: null,
           conditions: [],
           effects: [{ type: 'change_reputation', value: 10 }],
@@ -354,14 +354,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Tell me about the Copperheads.",
+          text: 'Tell me about the Copperheads.',
           nextNodeId: 'copperhead_info',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "People are disappearing?",
+          text: 'People are disappearing?',
           nextNodeId: 'disappearances',
           conditions: [],
           effects: [],
@@ -387,14 +387,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Where can I find her?",
+          text: 'Where can I find her?',
           nextNodeId: 'copperhead_location',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Why do some call her a hero?",
+          text: 'Why do some call her a hero?',
           nextNodeId: 'copperhead_sympathy',
           conditions: [],
           effects: [],
@@ -420,7 +420,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Thanks for the warning.",
+          text: 'Thanks for the warning.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -439,14 +439,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Do you see justice in it?",
+          text: 'Do you see justice in it?',
           nextNodeId: 'sheriff_moral',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Interesting perspective.",
+          text: 'Interesting perspective.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -485,14 +485,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Maybe I could talk to them.",
+          text: 'Maybe I could talk to them.',
           nextNodeId: 'investigate_offer',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Sounds dangerous.",
+          text: 'Sounds dangerous.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -511,7 +511,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Where do I find this Samuel?",
+          text: 'Where do I find this Samuel?',
           nextNodeId: 'samuel_location',
           conditions: [],
           effects: [],
@@ -556,14 +556,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "IVRC burned it down?",
+          text: 'IVRC burned it down?',
           nextNodeId: 'ivrc_suspicion',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Can I see the site?",
+          text: 'Can I see the site?',
           nextNodeId: 'burned_site',
           conditions: [],
           effects: [],
@@ -582,7 +582,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "The evidence was destroyed.",
+          text: 'The evidence was destroyed.',
           nextNodeId: 'evidence_destroyed',
           conditions: [],
           effects: [],
@@ -601,7 +601,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Maybe I can earn his trust.",
+          text: 'Maybe I can earn his trust.',
           nextNodeId: null,
           conditions: [],
           effects: [{ type: 'set_flag', target: 'motivated_to_find_samuel' }],
@@ -659,21 +659,21 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Any news I should know about?",
+          text: 'Any news I should know about?',
           nextNodeId: 'latest_news',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Just passing through.",
+          text: 'Just passing through.',
           nextNodeId: null,
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "Need any help with anything?",
+          text: 'Need any help with anything?',
           nextNodeId: 'help_offer',
           conditions: [{ type: 'reputation_gte', value: 20 }],
           effects: [],
@@ -692,7 +692,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Thanks for keeping me informed.",
+          text: 'Thanks for keeping me informed.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -711,7 +711,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "You can count on me.",
+          text: 'You can count on me.',
           nextNodeId: null,
           conditions: [],
           effects: [{ type: 'change_reputation', value: 10 }],
@@ -731,14 +731,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Still working on it.",
+          text: 'Still working on it.',
           nextNodeId: 'quest_encouragement',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "I need more information.",
+          text: 'I need more information.',
           nextNodeId: 'quest_info',
           conditions: [],
           effects: [],
@@ -757,7 +757,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Understood.",
+          text: 'Understood.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -776,14 +776,14 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Tell me about Samuel Ironpick.",
+          text: 'Tell me about Samuel Ironpick.',
           nextNodeId: 'samuel_info',
           conditions: [],
           effects: [],
           tags: [],
         },
         {
-          text: "What should I avoid saying?",
+          text: 'What should I avoid saying?',
           nextNodeId: 'what_to_avoid',
           conditions: [],
           effects: [],
@@ -809,7 +809,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "How do I prove myself?",
+          text: 'How do I prove myself?',
           nextNodeId: 'prove_yourself',
           conditions: [],
           effects: [],
@@ -828,7 +828,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "Good advice. Thanks.",
+          text: 'Good advice. Thanks.',
           nextNodeId: null,
           conditions: [],
           effects: [],
@@ -870,7 +870,7 @@ export const SheriffColeMainDialogue: DialogueTree = {
       tags: [],
       choices: [
         {
-          text: "What do you think it means?",
+          text: 'What do you think it means?',
           nextNodeId: 'letter_meaning',
           conditions: [],
           effects: [],

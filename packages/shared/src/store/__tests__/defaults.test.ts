@@ -2,14 +2,14 @@
  * Tests for store defaults
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  DEFAULT_PLAYER_STATS,
+  DEFAULT_CAMERA_STATE,
   DEFAULT_EQUIPMENT,
+  DEFAULT_PLAYER_STATS,
   DEFAULT_SETTINGS,
   DEFAULT_TIME,
   DEFAULT_WEATHER,
-  DEFAULT_CAMERA_STATE,
   DEFAULT_WORLD_POSITION,
   SAVE_VERSION,
   STORAGE_KEY,
@@ -86,12 +86,16 @@ describe('Store Defaults', () => {
 
   describe('DEFAULT_CAMERA_STATE', () => {
     it('should have valid distance bounds', () => {
-      expect(DEFAULT_CAMERA_STATE.distance).toBeGreaterThanOrEqual(DEFAULT_CAMERA_STATE.minDistance);
+      expect(DEFAULT_CAMERA_STATE.distance).toBeGreaterThanOrEqual(
+        DEFAULT_CAMERA_STATE.minDistance
+      );
       expect(DEFAULT_CAMERA_STATE.distance).toBeLessThanOrEqual(DEFAULT_CAMERA_STATE.maxDistance);
     });
 
     it('should have valid elevation bounds', () => {
-      expect(DEFAULT_CAMERA_STATE.elevation).toBeGreaterThanOrEqual(DEFAULT_CAMERA_STATE.minElevation);
+      expect(DEFAULT_CAMERA_STATE.elevation).toBeGreaterThanOrEqual(
+        DEFAULT_CAMERA_STATE.minElevation
+      );
       expect(DEFAULT_CAMERA_STATE.elevation).toBeLessThanOrEqual(DEFAULT_CAMERA_STATE.maxElevation);
     });
 

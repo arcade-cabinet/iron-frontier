@@ -6,4 +6,4 @@
  */
 
 export { useMediaQuery } from './useMediaQuery';
-export { useIsMobile, MOBILE_BREAKPOINT_PX } from './useMobile';
+export { MOBILE_BREAKPOINT_PX, useIsMobile } from './useMobile';

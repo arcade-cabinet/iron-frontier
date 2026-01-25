@@ -9,19 +9,19 @@
  */
 
 import { World } from 'miniplex';
+import { hexDistance, hexNeighbor } from './HexCoord';
 import {
-  HexCoord,
-  HexTerrainType,
-  HexElevation,
-  HexEdgeType,
-  HexFeatureType,
-  HexBuildingType,
-  HexDirection,
   HEX_DIRECTIONS,
+  HexBuildingType,
+  type HexCoord,
+  type HexDirection,
+  HexEdgeType,
+  HexElevation,
+  HexFeatureType,
+  HexTerrainType,
   hexKey,
   parseHexKey,
 } from './HexTypes';
-import { hexNeighbor, hexDistance } from './HexCoord';
 
 // ============================================================================
 // COMPONENT TYPES
@@ -83,7 +83,12 @@ export const TERRAIN_MOVEMENT_COSTS: Record<HexTerrainType, Partial<MovementComp
   // Water - requires swimming
   [HexTerrainType.Water]: { passable: true, cost: 3.0, swimRequired: true },
   [HexTerrainType.WaterShallow]: { passable: true, cost: 2.0 }, // Can wade through
-  [HexTerrainType.WaterDeep]: { passable: false, cost: Infinity, swimRequired: true, flyOnly: true },
+  [HexTerrainType.WaterDeep]: {
+    passable: false,
+    cost: Infinity,
+    swimRequired: true,
+    flyOnly: true,
+  },
 
   // Special terrain
   [HexTerrainType.Lava]: { passable: false, cost: Infinity, flyOnly: true },
@@ -211,10 +216,7 @@ export function createHexTileEntity(
 /**
  * Add adjacency data to an entity
  */
-export function addAdjacencyComponent(
-  entity: HexTileEntity,
-  world: World<HexTileEntity>
-): void {
+export function addAdjacencyComponent(entity: HexTileEntity, world: World<HexTileEntity>): void {
   const neighbors = new Map<HexDirection, string | null>();
   const edges = new Map<HexDirection, HexEdgeType>();
 
@@ -343,10 +345,7 @@ export interface MovementCapabilities {
   canFly: boolean;
 }
 
-export function canTraverse(
-  tile: HexTileEntity,
-  capabilities: MovementCapabilities
-): boolean {
+export function canTraverse(tile: HexTileEntity, capabilities: MovementCapabilities): boolean {
   const { movement } = tile;
 
   if (!movement.passable) {
@@ -538,11 +537,7 @@ export function populateWorldFromGrid(
 ): void {
   // First pass: create all entities
   for (const [_key, tileData] of tiles) {
-    const entity = createHexTileEntity(
-      tileData.coord,
-      tileData.terrain,
-      tileData.elevation
-    );
+    const entity = createHexTileEntity(tileData.coord, tileData.terrain, tileData.elevation);
     world.add(entity);
   }
 
@@ -567,19 +562,17 @@ export function createHexQueries(world: World<HexTileEntity>) {
     allTiles: world.with('position', 'terrain', 'movement'),
 
     // Passable tiles only
-    passableTiles: world.with('position', 'terrain', 'movement').where(
-      (e) => e.movement.passable
-    ),
+    passableTiles: world.with('position', 'terrain', 'movement').where((e) => e.movement.passable),
 
     // Tiles with buildings
-    buildingTiles: world.with('position', 'feature').where(
-      (e) => e.feature?.building !== HexBuildingType.None
-    ),
+    buildingTiles: world
+      .with('position', 'feature')
+      .where((e) => e.feature?.building !== HexBuildingType.None),
 
     // Tiles with resources
-    resourceTiles: world.with('position', 'resource').where(
-      (e) => e.resource !== undefined && e.resource.amount > 0
-    ),
+    resourceTiles: world
+      .with('position', 'resource')
+      .where((e) => e.resource !== undefined && e.resource.amount > 0),
 
     // Spawn points
     spawnPoints: world.with('position', 'isSpawnPoint'),
@@ -588,14 +581,12 @@ export function createHexQueries(world: World<HexTileEntity>) {
     pathNodes: world.with('position', 'isPathNode'),
 
     // Explored tiles
-    exploredTiles: world.with('position', 'visibility').where(
-      (e) => e.visibility?.explored === true
-    ),
+    exploredTiles: world
+      .with('position', 'visibility')
+      .where((e) => e.visibility?.explored === true),
 
     // Currently visible tiles
-    visibleTiles: world.with('position', 'visibility').where(
-      (e) => e.visibility?.visible === true
-    ),
+    visibleTiles: world.with('position', 'visibility').where((e) => e.visibility?.visible === true),
   };
 }
 

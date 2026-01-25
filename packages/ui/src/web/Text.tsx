@@ -5,10 +5,10 @@
  * matching the Iron Frontier design system.
  */
 
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../primitives/utils';
+import * as React from 'react';
 import type { TextProps } from '../primitives/types';
+import { cn } from '../primitives/utils';
 
 /**
  * Text style variants using CVA

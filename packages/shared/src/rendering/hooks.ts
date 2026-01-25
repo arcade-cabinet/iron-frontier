@@ -5,9 +5,9 @@
  * These hooks are platform-agnostic and work with any ISceneManager implementation.
  */
 
-import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
-import type { ISceneManager, IScene, IMeshHandle } from './interfaces';
-import type { Transform, MeshConfig, SceneConfig } from './types';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import type { IMeshHandle, IScene, ISceneManager } from './interfaces';
+import type { MeshConfig, SceneConfig, Transform } from './types';
 
 // ============================================================================
 // CONTEXT
@@ -47,13 +47,13 @@ export function useSceneManager(): ISceneManager {
   if (!ctx.manager) {
     throw new Error(
       'useSceneManager must be used within a SceneManagerProvider. ' +
-      'Make sure you have wrapped your app with the appropriate provider.'
+        'Make sure you have wrapped your app with the appropriate provider.'
     );
   }
   if (!ctx.ready) {
     throw new Error(
       'Scene manager is not ready yet. ' +
-      'Wait for initialization to complete before using the scene manager.'
+        'Wait for initialization to complete before using the scene manager.'
     );
   }
   return ctx.manager;
@@ -111,10 +111,7 @@ export function useSceneManagerError(): Error | null {
  * @param config Mesh configuration
  * @returns Mesh handle or null if not yet loaded
  */
-export function useMesh(
-  id: string,
-  config: MeshConfig | null
-): IMeshHandle | null {
+export function useMesh(id: string, config: MeshConfig | null): IMeshHandle | null {
   const scene = useSceneSafe();
   const [mesh, setMesh] = useState<IMeshHandle | null>(null);
   const mountedRef = useRef(true);
@@ -135,16 +132,19 @@ export function useMesh(
     let disposed = false;
 
     // Create the mesh
-    scene.addMesh(id, config).then((handle) => {
-      if (!disposed && mountedRef.current) {
-        setMesh(handle);
-      } else {
-        // Component unmounted before mesh loaded
-        handle.dispose();
-      }
-    }).catch((err) => {
-      console.error(`[useMesh] Failed to create mesh ${id}:`, err);
-    });
+    scene
+      .addMesh(id, config)
+      .then((handle) => {
+        if (!disposed && mountedRef.current) {
+          setMesh(handle);
+        } else {
+          // Component unmounted before mesh loaded
+          handle.dispose();
+        }
+      })
+      .catch((err) => {
+        console.error(`[useMesh] Failed to create mesh ${id}:`, err);
+      });
 
     return () => {
       disposed = true;
@@ -173,10 +173,7 @@ export function useMesh(
  * @param meshId Mesh identifier
  * @param transform Transform to sync
  */
-export function useMeshTransformSync(
-  meshId: string,
-  transform: Transform | null
-): void {
+export function useMeshTransformSync(meshId: string, transform: Transform | null): void {
   const scene = useSceneSafe();
 
   useEffect(() => {
@@ -196,10 +193,7 @@ export function useMeshTransformSync(
  * @param entityId ECS entity identifier
  * @param meshId Scene mesh identifier
  */
-export function useEntityMeshMapping(
-  entityId: string | null,
-  meshId: string | null
-): void {
+export function useEntityMeshMapping(entityId: string | null, meshId: string | null): void {
   const manager = useSceneManagerSafe();
 
   useEffect(() => {
@@ -219,9 +213,11 @@ export function useEntityMeshMapping(
  * @param modelPaths Array of model paths to preload
  * @returns Loading state: { loading, progress, error }
  */
-export function usePreloadModels(
-  modelPaths: string[]
-): { loading: boolean; progress: number; error: Error | null } {
+export function usePreloadModels(modelPaths: string[]): {
+  loading: boolean;
+  progress: number;
+  error: Error | null;
+} {
   const manager = useSceneManagerSafe();
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -238,7 +234,8 @@ export function usePreloadModels(
     setProgress(0);
     setError(null);
 
-    manager.preloadModels(modelPaths, setProgress)
+    manager
+      .preloadModels(modelPaths, setProgress)
       .then(() => {
         setLoading(false);
         setProgress(1);

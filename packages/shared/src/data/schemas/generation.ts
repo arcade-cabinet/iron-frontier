@@ -49,13 +49,13 @@ export type GenerationContext = z.infer<typeof GenerationContextSchema>;
  * Cultural/ethnic origin for name generation
  */
 export const NameOriginSchema = z.enum([
-  'frontier_anglo',     // American frontier names
-  'frontier_hispanic',  // Spanish/Mexican influence
-  'frontier_native',    // Native American influence
-  'frontier_chinese',   // Chinese immigrant names
-  'frontier_european',  // European immigrant mix
-  'outlaw',            // Nicknames and aliases
-  'mechanical',        // Automaton/robot designations
+  'frontier_anglo', // American frontier names
+  'frontier_hispanic', // Spanish/Mexican influence
+  'frontier_native', // Native American influence
+  'frontier_chinese', // Chinese immigrant names
+  'frontier_european', // European immigrant mix
+  'outlaw', // Nicknames and aliases
+  'mechanical', // Automaton/robot designations
 ]);
 export type NameOrigin = z.infer<typeof NameOriginSchema>;
 
@@ -141,10 +141,14 @@ export const NPCTemplateSchema = z.object({
     lawfulness: [0.3, 0.7] as [number, number],
   })),
   /** Name origin preferences (weighted) */
-  nameOrigins: z.array(z.object({
-    origin: NameOriginSchema,
-    weight: z.number().min(0).default(1),
-  })).default([{ origin: 'frontier_anglo', weight: 1 }]),
+  nameOrigins: z
+    .array(
+      z.object({
+        origin: NameOriginSchema,
+        weight: z.number().min(0).default(1),
+      })
+    )
+    .default([{ origin: 'frontier_anglo', weight: 1 }]),
   /** Gender distribution: [male%, female%, neutral%] */
   genderDistribution: z.tuple([z.number(), z.number(), z.number()]).default([0.5, 0.5, 0]),
   /** Backstory templates with {{variable}} slots */
@@ -175,41 +179,41 @@ export type NPCTemplate = z.infer<typeof NPCTemplateSchema>;
  */
 export const QuestArchetypeSchema = z.enum([
   // Combat
-  'bounty_hunt',        // Kill specific target
-  'clear_area',         // Clear enemies from location
-  'escort',             // Protect NPC during travel
-  'ambush',             // Set trap for enemies
+  'bounty_hunt', // Kill specific target
+  'clear_area', // Clear enemies from location
+  'escort', // Protect NPC during travel
+  'ambush', // Set trap for enemies
 
   // Retrieval
-  'fetch_item',         // Get item and return
-  'steal_item',         // Steal from target
-  'recover_lost',       // Find lost item
-  'gather_materials',   // Collect multiple items
+  'fetch_item', // Get item and return
+  'steal_item', // Steal from target
+  'recover_lost', // Find lost item
+  'gather_materials', // Collect multiple items
 
   // Delivery
-  'deliver_message',    // Bring message to NPC
-  'deliver_package',    // Bring item to NPC
-  'smuggle',            // Deliver without detection
+  'deliver_message', // Bring message to NPC
+  'deliver_package', // Bring item to NPC
+  'smuggle', // Deliver without detection
 
   // Investigation
-  'find_person',        // Locate missing NPC
-  'investigate',        // Discover information
-  'spy',                // Observe and report
+  'find_person', // Locate missing NPC
+  'investigate', // Discover information
+  'spy', // Observe and report
 
   // Social
-  'convince_npc',       // Persuade someone
-  'intimidate',         // Threaten someone
-  'mediate',            // Resolve conflict
+  'convince_npc', // Persuade someone
+  'intimidate', // Threaten someone
+  'mediate', // Resolve conflict
 
   // Exploration
-  'explore_location',   // Visit new place
-  'map_area',           // Survey region
-  'find_route',         // Discover path
+  'explore_location', // Visit new place
+  'map_area', // Survey region
+  'find_route', // Discover path
 
   // Economic
-  'debt_collection',    // Collect payment
-  'investment',         // Fund operation
-  'trade_route',        // Establish commerce
+  'debt_collection', // Collect payment
+  'investment', // Fund operation
+  'trade_route', // Establish commerce
 ]);
 export type QuestArchetype = z.infer<typeof QuestArchetypeSchema>;
 
@@ -251,13 +255,17 @@ export const QuestTemplateSchema = z.object({
   /** Description templates */
   descriptionTemplates: z.array(z.string()).min(1),
   /** Stage templates - each stage has objective templates */
-  stages: z.array(z.object({
-    titleTemplate: z.string(),
-    descriptionTemplate: z.string(),
-    objectives: z.array(ObjectiveTemplateSchema).min(1),
-    onStartTextTemplate: z.string().optional(),
-    onCompleteTextTemplate: z.string().optional(),
-  })).min(1),
+  stages: z
+    .array(
+      z.object({
+        titleTemplate: z.string(),
+        descriptionTemplate: z.string(),
+        objectives: z.array(ObjectiveTemplateSchema).min(1),
+        onStartTextTemplate: z.string().optional(),
+        onCompleteTextTemplate: z.string().optional(),
+      })
+    )
+    .min(1),
   /** Reward ranges */
   rewards: z.object({
     xpRange: z.tuple([z.number(), z.number()]).default([10, 50]),
@@ -344,24 +352,36 @@ export const DialogueTreeTemplateSchema = z.object({
   /** Description */
   description: z.string(),
   /** Entry conditions */
-  entryConditions: z.array(z.object({
-    type: z.string(),
-    target: z.string().optional(),
-    value: z.number().optional(),
-  })).default([]),
+  entryConditions: z
+    .array(
+      z.object({
+        type: z.string(),
+        target: z.string().optional(),
+        value: z.number().optional(),
+      })
+    )
+    .default([]),
   /** Node templates - simplified tree structure */
-  nodePatterns: z.array(z.object({
-    /** Node role in conversation */
-    role: z.enum(['greeting', 'main', 'branch', 'farewell', 'quest', 'shop', 'rumor']),
-    /** Snippet categories to pull from */
-    snippetCategories: z.array(z.string()),
-    /** Choice patterns */
-    choicePatterns: z.array(z.object({
-      textTemplate: z.string(),
-      nextRole: z.string().nullable(),
-      tags: z.array(z.string()).default([]),
-    })).default([]),
-  })).min(1),
+  nodePatterns: z
+    .array(
+      z.object({
+        /** Node role in conversation */
+        role: z.enum(['greeting', 'main', 'branch', 'farewell', 'quest', 'shop', 'rumor']),
+        /** Snippet categories to pull from */
+        snippetCategories: z.array(z.string()),
+        /** Choice patterns */
+        choicePatterns: z
+          .array(
+            z.object({
+              textTemplate: z.string(),
+              nextRole: z.string().nullable(),
+              tags: z.array(z.string()).default([]),
+            })
+          )
+          .default([]),
+      })
+    )
+    .min(1),
   /** Valid for roles */
   validRoles: z.array(z.string()).default([]),
   /** Valid for factions */
@@ -407,11 +427,15 @@ export const BuildingTemplateSchema = z.object({
     'windmill',
   ]),
   /** NPC slots this building provides */
-  npcSlots: z.array(z.object({
-    role: z.string(),
-    required: z.boolean().default(false),
-    count: z.number().int().min(1).default(1),
-  })).default([]),
+  npcSlots: z
+    .array(
+      z.object({
+        role: z.string(),
+        required: z.boolean().default(false),
+        count: z.number().int().min(1).default(1),
+      })
+    )
+    .default([]),
   /** Shop type if applicable */
   shopType: z.string().optional(),
   /** Required for town of this size+ */
@@ -438,11 +462,15 @@ export const LocationTemplateSchema = z.object({
   /** Name pool to use */
   namePoolId: z.string(),
   /** Building composition */
-  buildings: z.array(z.object({
-    templateId: z.string(),
-    countRange: z.tuple([z.number(), z.number()]).optional(),
-    required: z.boolean().optional(),
-  })).optional(),
+  buildings: z
+    .array(
+      z.object({
+        templateId: z.string(),
+        countRange: z.tuple([z.number(), z.number()]).optional(),
+        required: z.boolean().optional(),
+      })
+    )
+    .optional(),
   /** Background NPC count range */
   backgroundNpcRange: z.tuple([z.number(), z.number()]).optional(),
   /** Notable NPC count range */
@@ -473,14 +501,18 @@ export const EncounterTemplateSchema = z.object({
   /** Description template */
   descriptionTemplate: z.string(),
   /** Enemy composition */
-  enemies: z.array(z.object({
-    /** Enemy definition ID or tag */
-    enemyIdOrTag: z.string(),
-    /** Count range */
-    countRange: z.tuple([z.number(), z.number()]).default([1, 1]),
-    /** Level scaling factor */
-    levelScale: z.number().min(0.5).max(2).default(1),
-  })).min(1),
+  enemies: z
+    .array(
+      z.object({
+        /** Enemy definition ID or tag */
+        enemyIdOrTag: z.string(),
+        /** Count range */
+        countRange: z.tuple([z.number(), z.number()]).default([1, 1]),
+        /** Level scaling factor */
+        levelScale: z.number().min(0.5).max(2).default(1),
+      })
+    )
+    .min(1),
   /** Difficulty range (1-10) */
   difficultyRange: z.tuple([z.number(), z.number()]).default([1, 5]),
   /** Valid biomes */
@@ -514,15 +546,15 @@ export const RumorTemplateSchema = z.object({
   id: z.string(),
   /** Rumor category */
   category: z.enum([
-    'quest_hook',       // Leads to quest
-    'location_hint',    // Reveals location
-    'npc_gossip',       // About another NPC
-    'faction_news',     // Faction activity
-    'world_event',      // Major happenings
-    'treasure_hint',    // Hidden loot
-    'danger_warning',   // Area warnings
-    'history',          // World lore
-    'personal',         // NPC personal story
+    'quest_hook', // Leads to quest
+    'location_hint', // Reveals location
+    'npc_gossip', // About another NPC
+    'faction_news', // Faction activity
+    'world_event', // Major happenings
+    'treasure_hint', // Hidden loot
+    'danger_warning', // Area warnings
+    'history', // World lore
+    'personal', // NPC personal story
   ]),
   /** Text templates with {{variables}} */
   textTemplates: z.array(z.string()).min(1),
@@ -531,11 +563,15 @@ export const RumorTemplateSchema = z.object({
   /** Can reveal location */
   linkedLocationId: z.string().optional(),
   /** Validity conditions */
-  conditions: z.array(z.object({
-    type: z.string(),
-    target: z.string().optional(),
-    value: z.number().optional(),
-  })).optional(),
+  conditions: z
+    .array(
+      z.object({
+        type: z.string(),
+        target: z.string().optional(),
+        value: z.number().optional(),
+      })
+    )
+    .optional(),
   /** How likely this rumor is to be told (0-1) */
   prevalence: z.number().min(0).max(1).optional(),
   /** Tags */
@@ -551,14 +587,14 @@ export const LoreFragmentSchema = z.object({
   id: z.string(),
   /** Category */
   category: z.enum([
-    'history',          // Past events
-    'legend',           // Myths and tales
-    'faction_lore',     // Organization backstory
-    'location_lore',    // Place history
-    'item_lore',        // Artifact stories
-    'person_lore',      // Famous figures
-    'creature_lore',    // Bestiary entries
-    'technology_lore',  // Steam-tech explanations
+    'history', // Past events
+    'legend', // Myths and tales
+    'faction_lore', // Organization backstory
+    'location_lore', // Place history
+    'item_lore', // Artifact stories
+    'person_lore', // Famous figures
+    'creature_lore', // Bestiary entries
+    'technology_lore', // Steam-tech explanations
   ]),
   /** Title */
   title: z.string(),
@@ -567,13 +603,15 @@ export const LoreFragmentSchema = z.object({
   /** Related entity IDs */
   relatedIds: z.array(z.string()).default([]),
   /** Discovery method */
-  discoveryMethod: z.enum([
-    'dialogue',         // NPC tells you
-    'book',             // Found in readable
-    'exploration',      // Visit location
-    'quest',            // Quest reward
-    'automatic',        // Known from start
-  ]).default('dialogue'),
+  discoveryMethod: z
+    .enum([
+      'dialogue', // NPC tells you
+      'book', // Found in readable
+      'exploration', // Visit location
+      'quest', // Quest reward
+      'automatic', // Known from start
+    ])
+    .default('dialogue'),
   /** Tags */
   tags: z.array(z.string()).default([]),
 });
@@ -598,11 +636,15 @@ export const PriceModifierSchema = z.object({
   /** Price multiplier range */
   multiplierRange: z.tuple([z.number(), z.number()]).default([0.8, 1.2]),
   /** Conditions for this modifier */
-  conditions: z.array(z.object({
-    type: z.string(),
-    target: z.string().optional(),
-    value: z.number().optional(),
-  })).default([]),
+  conditions: z
+    .array(
+      z.object({
+        type: z.string(),
+        target: z.string().optional(),
+        value: z.number().optional(),
+      })
+    )
+    .default([]),
   /** Tags */
   tags: z.array(z.string()).default([]),
 });
@@ -625,21 +667,27 @@ export const ShopInventoryTemplateSchema = z.object({
     'specialty',
   ]),
   /** Base item pool by tags */
-  itemPools: z.array(z.object({
-    tags: z.array(z.string()),
-    countRange: z.tuple([z.number(), z.number()]).default([1, 5]),
-    rarityWeights: z.object({
-      common: z.number().default(70),
-      uncommon: z.number().default(25),
-      rare: z.number().default(4),
-      legendary: z.number().default(1),
-    }).default(() => ({
-      common: 70,
-      uncommon: 25,
-      rare: 4,
-      legendary: 1,
-    })),
-  })).min(1),
+  itemPools: z
+    .array(
+      z.object({
+        tags: z.array(z.string()),
+        countRange: z.tuple([z.number(), z.number()]).default([1, 5]),
+        rarityWeights: z
+          .object({
+            common: z.number().default(70),
+            uncommon: z.number().default(25),
+            rare: z.number().default(4),
+            legendary: z.number().default(1),
+          })
+          .default(() => ({
+            common: 70,
+            uncommon: 25,
+            rare: 4,
+            legendary: 1,
+          })),
+      })
+    )
+    .min(1),
   /** Restock interval in game hours */
   restockHours: z.number().int().min(1).default(24),
   /** Buy price multiplier */
@@ -664,28 +712,32 @@ export const ScheduleTemplateSchema = z.object({
   /** Valid roles */
   validRoles: z.array(z.string()).default([]),
   /** Daily schedule entries */
-  entries: z.array(z.object({
-    /** Start hour (0-24) */
-    startHour: z.number().min(0).max(24),
-    /** End hour (0-24) */
-    endHour: z.number().min(0).max(24),
-    /** Activity type */
-    activity: z.enum([
-      'sleep',
-      'work',
-      'eat',
-      'patrol',
-      'socialize',
-      'pray',
-      'shop',
-      'travel',
-      'idle',
-    ]),
-    /** Location marker ID ({{building_type}} for dynamic) */
-    locationMarker: z.string(),
-    /** Override dialogue tree during this activity */
-    dialogueOverride: z.string().optional(),
-  })).min(1),
+  entries: z
+    .array(
+      z.object({
+        /** Start hour (0-24) */
+        startHour: z.number().min(0).max(24),
+        /** End hour (0-24) */
+        endHour: z.number().min(0).max(24),
+        /** Activity type */
+        activity: z.enum([
+          'sleep',
+          'work',
+          'eat',
+          'patrol',
+          'socialize',
+          'pray',
+          'shop',
+          'travel',
+          'idle',
+        ]),
+        /** Location marker ID ({{building_type}} for dynamic) */
+        locationMarker: z.string(),
+        /** Override dialogue tree during this activity */
+        dialogueOverride: z.string().optional(),
+      })
+    )
+    .min(1),
   /** Tags */
   tags: z.array(z.string()).default([]),
 });
@@ -704,22 +756,26 @@ export const FactionReactionTemplateSchema = z.object({
   /** Faction this template is for */
   factionId: z.string(),
   /** Reputation thresholds and their effects */
-  reputationTiers: z.array(z.object({
-    /** Minimum reputation for this tier */
-    minRep: z.number().int(),
-    /** Maximum reputation for this tier */
-    maxRep: z.number().int(),
-    /** Tier name */
-    tierName: z.string(),
-    /** Greeting snippets to use */
-    greetingSnippets: z.array(z.string()).default([]),
-    /** Price modifier */
-    priceModifier: z.number().default(1),
-    /** Quest availability modifier */
-    questAvailability: z.number().min(0).max(1).default(1),
-    /** Hostile if true */
-    hostile: z.boolean().default(false),
-  })).min(1),
+  reputationTiers: z
+    .array(
+      z.object({
+        /** Minimum reputation for this tier */
+        minRep: z.number().int(),
+        /** Maximum reputation for this tier */
+        maxRep: z.number().int(),
+        /** Tier name */
+        tierName: z.string(),
+        /** Greeting snippets to use */
+        greetingSnippets: z.array(z.string()).default([]),
+        /** Price modifier */
+        priceModifier: z.number().default(1),
+        /** Quest availability modifier */
+        questAvailability: z.number().min(0).max(1).default(1),
+        /** Hostile if true */
+        hostile: z.boolean().default(false),
+      })
+    )
+    .min(1),
   /** Relations with other factions (-1 to 1) */
   factionRelations: z.record(z.string(), z.number()).default({}),
   /** Tags */
@@ -797,10 +853,7 @@ export function validateNamePool(data: unknown): NamePool {
 /**
  * Substitute {{variables}} in a template string
  */
-export function substituteTemplate(
-  template: string,
-  variables: Record<string, string>
-): string {
+export function substituteTemplate(template: string, variables: Record<string, string>): string {
   return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
     return variables[key] ?? match;
   });
@@ -811,7 +864,7 @@ export function substituteTemplate(
  */
 export function extractTemplateVariables(template: string): string[] {
   const matches = template.matchAll(/\{\{(\w+)\}\}/g);
-  return [...new Set([...matches].map(m => m[1]))];
+  return [...new Set([...matches].map((m) => m[1]))];
 }
 
 export const GENERATION_SCHEMA_VERSION = '1.0.0';

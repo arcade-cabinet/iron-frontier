@@ -79,14 +79,23 @@ export class SimplexNoise {
     return (
       this.lerp(
         this.lerp(this.grad(this.perm[A], x, y), this.grad(this.perm[B], x - 1, y), u),
-        this.lerp(this.grad(this.perm[A + 1], x, y - 1), this.grad(this.perm[B + 1], x - 1, y - 1), u),
+        this.lerp(
+          this.grad(this.perm[A + 1], x, y - 1),
+          this.grad(this.perm[B + 1], x - 1, y - 1),
+          u
+        ),
         v
-      ) * 0.5 + 0.5
+      ) *
+        0.5 +
+      0.5
     );
   }
 
   fbm(x: number, y: number, octaves = 4): number {
-    let value = 0, amp = 1, freq = 1, max = 0;
+    let value = 0,
+      amp = 1,
+      freq = 1,
+      max = 0;
     for (let i = 0; i < octaves; i++) {
       value += amp * this.noise2D(x * freq, y * freq);
       max += amp;
@@ -100,7 +109,7 @@ export class SimplexNoise {
 export function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash = (hash << 5) - hash + str.charCodeAt(i);
     hash = hash & hash;
   }
   return Math.abs(hash) || 1;

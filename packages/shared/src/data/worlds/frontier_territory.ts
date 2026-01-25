@@ -12,7 +12,7 @@
  *   EAST/CENTER = Civilized (Central Plains)
  */
 
-import { World, validateWorld } from '../schemas/world';
+import { validateWorld, type World } from '../schemas/world';
 
 export const FrontierTerritory: World = validateWorld({
   id: 'frontier_territory',
@@ -191,7 +191,14 @@ export const FrontierTerritory: World = validateWorld({
       size: 'large',
       discovered: false,
       accessible: true,
-      tags: ['automaton_factory', 'civil_war', 'final_dungeon', 'the_remnant', 'level_4', 'level_5'],
+      tags: [
+        'automaton_factory',
+        'civil_war',
+        'final_dungeon',
+        'the_remnant',
+        'level_4',
+        'level_5',
+      ],
     },
 
     // ========== TIER 2 - SECONDARY LOCATIONS (5) ==========

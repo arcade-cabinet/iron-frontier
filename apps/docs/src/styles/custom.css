@@ -28,7 +28,7 @@
 }
 
 /* Light mode overrides */
-:root[data-theme='light'] {
+:root[data-theme="light"] {
   --sl-color-accent-low: #f5e6d3;
   --sl-color-accent: #8b6914;
   --sl-color-accent-high: #3d2c1a;
@@ -53,7 +53,7 @@
 }
 
 /* Sidebar enhancements */
-.sidebar-content a[aria-current='page'] {
+.sidebar-content a[aria-current="page"] {
   background: linear-gradient(90deg, var(--sl-color-accent-low), transparent);
   border-left: 3px solid var(--sl-color-accent);
 }
@@ -90,7 +90,8 @@ th {
   font-weight: 600;
 }
 
-td, th {
+td,
+th {
   border: 1px solid var(--sl-color-gray-5);
   padding: 0.5rem 0.75rem;
 }
@@ -125,6 +126,7 @@ a:hover:not(.sl-nav-logo) {
 
 /* Search styling */
 .pagefind-ui__search-input {
+  /* biome-ignore lint/complexity/noImportantStyles: Search input needs override */
   border: 1px solid var(--sl-color-accent) !important;
 }
 

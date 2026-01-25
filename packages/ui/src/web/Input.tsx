@@ -4,10 +4,10 @@
  * Form input component with label, helper text, and error states.
  */
 
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn, generateId } from '../primitives/utils';
+import * as React from 'react';
 import type { InputProps } from '../primitives/types';
+import { cn, generateId } from '../primitives/utils';
 
 /**
  * Input container variants
@@ -117,10 +117,7 @@ export const Input = React.forwardRef<HTMLInputElement, WebInputProps>(
         {label && (
           <label
             htmlFor={id}
-            className={cn(
-              'text-sm font-medium text-obsidian-700',
-              disabled && 'text-obsidian-500'
-            )}
+            className={cn('text-sm font-medium text-obsidian-700', disabled && 'text-obsidian-500')}
           >
             {label}
             {required && (

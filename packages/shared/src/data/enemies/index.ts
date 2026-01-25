@@ -4,7 +4,7 @@
  * Defines all enemy types and combat encounters in the game.
  */
 
-import type { EnemyDefinition, CombatEncounter } from '../schemas/combat';
+import type { CombatEncounter, EnemyDefinition } from '../schemas/combat';
 
 // ============================================================================
 // ENEMY DEFINITIONS
@@ -330,7 +330,7 @@ export const ALL_ENEMIES: EnemyDefinition[] = [
 ];
 
 export const ENEMIES_BY_ID: Record<string, EnemyDefinition> = Object.fromEntries(
-  ALL_ENEMIES.map(e => [e.id, e])
+  ALL_ENEMIES.map((e) => [e.id, e])
 );
 
 // ============================================================================
@@ -363,18 +363,14 @@ export const WolfPack: CombatEncounter = {
   id: 'wolf_pack',
   name: 'Wolf Pack',
   description: 'A pack of hungry desert wolves.',
-  enemies: [
-    { enemyId: 'desert_wolf', count: 3 },
-  ],
+  enemies: [{ enemyId: 'desert_wolf', count: 3 }],
   minLevel: 1,
   isBoss: false,
   canFlee: true,
   rewards: {
     xp: 35,
     gold: 0,
-    items: [
-      { itemId: 'wolf_pelt', quantity: 1, chance: 0.3 },
-    ],
+    items: [{ itemId: 'wolf_pelt', quantity: 1, chance: 0.3 }],
   },
   tags: ['random', 'wildlife'],
 };
@@ -405,18 +401,14 @@ export const IVRCCheckpoint: CombatEncounter = {
   id: 'ivrc_checkpoint',
   name: 'IVRC Checkpoint',
   description: 'Company guards blocking the way.',
-  enemies: [
-    { enemyId: 'ivrc_guard', count: 3 },
-  ],
+  enemies: [{ enemyId: 'ivrc_guard', count: 3 }],
   minLevel: 2,
   isBoss: false,
   canFlee: true,
   rewards: {
     xp: 80,
     gold: 30,
-    items: [
-      { itemId: 'ivrc_scrip', quantity: 15, chance: 0.6 },
-    ],
+    items: [{ itemId: 'ivrc_scrip', quantity: 15, chance: 0.6 }],
   },
   tags: ['ivrc', 'checkpoint'],
 };
@@ -479,7 +471,7 @@ export const ALL_ENCOUNTERS: CombatEncounter[] = [
 ];
 
 export const ENCOUNTERS_BY_ID: Record<string, CombatEncounter> = Object.fromEntries(
-  ALL_ENCOUNTERS.map(e => [e.id, e])
+  ALL_ENCOUNTERS.map((e) => [e.id, e])
 );
 
 // ============================================================================
@@ -495,22 +487,25 @@ export function getEncounterById(id: string): CombatEncounter | undefined {
 }
 
 export function getEnemiesByFaction(faction: string): EnemyDefinition[] {
-  return ALL_ENEMIES.filter(e => e.faction === faction);
+  return ALL_ENEMIES.filter((e) => e.faction === faction);
 }
 
 export function getEnemiesByTag(tag: string): EnemyDefinition[] {
-  return ALL_ENEMIES.filter(e => e.tags.includes(tag));
+  return ALL_ENEMIES.filter((e) => e.tags.includes(tag));
 }
 
 export function getEncountersByTag(tag: string): CombatEncounter[] {
-  return ALL_ENCOUNTERS.filter(e => e.tags.includes(tag));
+  return ALL_ENCOUNTERS.filter((e) => e.tags.includes(tag));
 }
 
-export function getRandomEncounter(playerLevel: number, tags?: string[]): CombatEncounter | undefined {
-  let candidates = ALL_ENCOUNTERS.filter(e => e.minLevel <= playerLevel && !e.isBoss);
+export function getRandomEncounter(
+  playerLevel: number,
+  tags?: string[]
+): CombatEncounter | undefined {
+  let candidates = ALL_ENCOUNTERS.filter((e) => e.minLevel <= playerLevel && !e.isBoss);
 
   if (tags && tags.length > 0) {
-    candidates = candidates.filter(e => tags.some(tag => e.tags.includes(tag)));
+    candidates = candidates.filter((e) => tags.some((tag) => e.tags.includes(tag)));
   }
 
   if (candidates.length === 0) return undefined;

@@ -9,23 +9,18 @@
  * - '@iron-frontier/shared/store' for state management
  * - '@iron-frontier/shared/hex' for hex grid utilities
  * - '@iron-frontier/shared/rendering' for rendering abstractions
+ * - '@iron-frontier/shared/types' for shared types
  */
 
 // Data exports - primary game content
 export * from './data';
 
-// Types exports - includes spatial types that may overlap with data
-// Import './types' directly for type declarations
-export * from './types';
-
 // Generation exports
 export * from './generation';
 
-// Note: hex, store, and rendering have conflicting exports with data
+// Note: hex, store, rendering, and types have conflicting exports with data
 // Use direct imports for these modules:
 // - '@iron-frontier/shared/hex'
 // - '@iron-frontier/shared/store'
 // - '@iron-frontier/shared/rendering'
-
-// Rendering module is NOT re-exported here to avoid React dependency issues
-// Import directly: import { ... } from '@iron-frontier/shared/rendering'
+// - '@iron-frontier/shared/types'

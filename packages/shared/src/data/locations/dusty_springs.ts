@@ -14,7 +14,7 @@
  * - Father Miguel - Priest, runs underground railroad for escaped workers
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const DustySprings: Location = validateLocation({
   id: 'dusty_springs',
@@ -222,23 +222,62 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
       anchor: { q: 26, r: 18 },
       rotation: 0,
       tiles: [
-        { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'office_building', structureRotation: 0 },
+        {
+          coord: { q: 0, r: 0 },
+          terrain: 'dirt',
+          structure: 'office_building',
+          structureRotation: 0,
+        },
         { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },
       ],
       markers: [
         { type: 'entrance', name: 'front_door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
-        { type: 'counter', name: 'examination_table', offset: { q: 0, r: 0 }, tags: ['medical', 'service'] },
-        { type: 'storage', name: 'medicine_cabinet', offset: { q: -1, r: 0 }, tags: ['medical', 'supplies'] },
+        {
+          type: 'counter',
+          name: 'examination_table',
+          offset: { q: 0, r: 0 },
+          tags: ['medical', 'service'],
+        },
+        {
+          type: 'storage',
+          name: 'medicine_cabinet',
+          offset: { q: -1, r: 0 },
+          tags: ['medical', 'supplies'],
+        },
         { type: 'bed', name: 'patient_cot', offset: { q: 0, r: 1 }, tags: ['rest', 'recovery'] },
-        { type: 'spawn_point', name: 'doc_chen', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'doctor', 'important'] },
-        { type: 'conversation_spot', name: 'private_consultation', offset: { q: -1, r: 0 }, tags: ['quest', 'secrets'] },
+        {
+          type: 'spawn_point',
+          name: 'doc_chen',
+          offset: { q: 0, r: 0 },
+          facing: 0,
+          tags: ['npc', 'doctor', 'important'],
+        },
+        {
+          type: 'conversation_spot',
+          name: 'private_consultation',
+          offset: { q: -1, r: 0 },
+          tags: ['quest', 'secrets'],
+        },
       ],
       zones: [
         { type: 'public_area', name: 'waiting_area', tiles: [{ q: 1, r: 0 }], tags: [] },
-        { type: 'restricted_area', name: 'treatment_room', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }], tags: ['medical'] },
-        { type: 'loot_area', name: 'supplies', tiles: [{ q: -1, r: 0 }], tags: ['medical', 'valuable'] },
+        {
+          type: 'restricted_area',
+          name: 'treatment_room',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 0, r: 1 },
+          ],
+          tags: ['medical'],
+        },
+        {
+          type: 'loot_area',
+          name: 'supplies',
+          tiles: [{ q: -1, r: 0 }],
+          tags: ['medical', 'valuable'],
+        },
       ],
       tags: ['main_street', 'medical', 'doc_chen'],
       importance: 4,
@@ -255,24 +294,73 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
       anchor: { q: 18, r: 18 },
       rotation: 0,
       tiles: [
-        { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'hotel_building', structureRotation: 0 },
+        {
+          coord: { q: 0, r: 0 },
+          terrain: 'dirt',
+          structure: 'hotel_building',
+          structureRotation: 0,
+        },
         { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none' },
       ],
       markers: [
-        { type: 'entrance', name: 'main_entrance', offset: { q: 1, r: 0 }, facing: 0, tags: ['main', 'public'] },
-        { type: 'counter', name: 'front_desk', offset: { q: 0, r: 0 }, tags: ['service', 'registration'] },
+        {
+          type: 'entrance',
+          name: 'main_entrance',
+          offset: { q: 1, r: 0 },
+          facing: 0,
+          tags: ['main', 'public'],
+        },
+        {
+          type: 'counter',
+          name: 'front_desk',
+          offset: { q: 0, r: 0 },
+          tags: ['service', 'registration'],
+        },
         { type: 'bed', name: 'room_1', offset: { q: 0, r: -1 }, tags: ['rest', 'paid'] },
         { type: 'bed', name: 'room_2', offset: { q: -1, r: 0 }, tags: ['rest', 'paid'] },
-        { type: 'spawn_point', name: 'innkeeper', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'staff'] },
-        { type: 'spawn_point', name: 'traveler_spawn', offset: { q: 0, r: 1 }, tags: ['npc', 'transient'] },
-        { type: 'storage', name: 'guest_storage', offset: { q: -1, r: 0 }, tags: ['personal', 'player'] },
+        {
+          type: 'spawn_point',
+          name: 'innkeeper',
+          offset: { q: 0, r: 0 },
+          facing: 0,
+          tags: ['npc', 'staff'],
+        },
+        {
+          type: 'spawn_point',
+          name: 'traveler_spawn',
+          offset: { q: 0, r: 1 },
+          tags: ['npc', 'transient'],
+        },
+        {
+          type: 'storage',
+          name: 'guest_storage',
+          offset: { q: -1, r: 0 },
+          tags: ['personal', 'player'],
+        },
       ],
       zones: [
-        { type: 'public_area', name: 'lobby', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 0, r: 1 }], tags: [] },
-        { type: 'restricted_area', name: 'guest_rooms', tiles: [{ q: 0, r: -1 }, { q: -1, r: 0 }], tags: ['private'] },
+        {
+          type: 'public_area',
+          name: 'lobby',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 1, r: 0 },
+            { q: 0, r: 1 },
+          ],
+          tags: [],
+        },
+        {
+          type: 'restricted_area',
+          name: 'guest_rooms',
+          tiles: [
+            { q: 0, r: -1 },
+            { q: -1, r: 0 },
+          ],
+          tags: ['private'],
+        },
       ],
       tags: ['main_street', 'rest', 'travelers', 'dusty_rose'],
       importance: 4,
@@ -288,7 +376,12 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
       anchor: { q: 10, r: 18 },
       rotation: 0,
       tiles: [
-        { coord: { q: 0, r: 0 }, terrain: 'dirt', structure: 'workshop_building', structureRotation: 0 },
+        {
+          coord: { q: 0, r: 0 },
+          terrain: 'dirt',
+          structure: 'workshop_building',
+          structureRotation: 0,
+        },
         { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
         { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none' },
@@ -297,12 +390,32 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
         { type: 'entrance', name: 'door', offset: { q: 1, r: 0 }, facing: 0, tags: ['main'] },
         { type: 'workbench', name: 'forge', offset: { q: 0, r: 0 }, tags: ['crafting', 'repair'] },
         { type: 'workbench', name: 'anvil', offset: { q: 0, r: 1 }, tags: ['crafting'] },
-        { type: 'storage', name: 'materials', offset: { q: -1, r: 0 }, tags: ['supplies', 'metal'] },
-        { type: 'spawn_point', name: 'blacksmith', offset: { q: 0, r: 0 }, facing: 0, tags: ['npc', 'craftsman'] },
+        {
+          type: 'storage',
+          name: 'materials',
+          offset: { q: -1, r: 0 },
+          tags: ['supplies', 'metal'],
+        },
+        {
+          type: 'spawn_point',
+          name: 'blacksmith',
+          offset: { q: 0, r: 0 },
+          facing: 0,
+          tags: ['npc', 'craftsman'],
+        },
       ],
       zones: [
         { type: 'public_area', name: 'shop_front', tiles: [{ q: 1, r: 0 }], tags: [] },
-        { type: 'restricted_area', name: 'forge_area', tiles: [{ q: 0, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 0 }], tags: ['work'] },
+        {
+          type: 'restricted_area',
+          name: 'forge_area',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 0, r: 1 },
+            { q: -1, r: 0 },
+          ],
+          tags: ['work'],
+        },
       ],
       tags: ['main_street', 'crafting', 'repair'],
       importance: 3,
@@ -325,11 +438,26 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
         { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'none' },
       ],
       markers: [
-        { type: 'vantage_point', name: 'tower_top', offset: { q: 0, r: 0 }, tags: ['elevated', 'lookout'] },
+        {
+          type: 'vantage_point',
+          name: 'tower_top',
+          offset: { q: 0, r: 0 },
+          tags: ['elevated', 'lookout'],
+        },
         { type: 'hiding_spot', name: 'tower_shadow', offset: { q: -1, r: 0 }, tags: ['cover'] },
       ],
       zones: [
-        { type: 'public_area', name: 'tower_base', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: -1, r: 0 }, { q: 0, r: 1 }], tags: ['landmark'] },
+        {
+          type: 'public_area',
+          name: 'tower_base',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 1, r: 0 },
+            { q: -1, r: 0 },
+            { q: 0, r: 1 },
+          ],
+          tags: ['landmark'],
+        },
       ],
       tags: ['landmark', 'water', 'visible'],
       importance: 2,
@@ -356,15 +484,55 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
         { coord: { q: 1, r: 2 }, terrain: 'grass', feature: 'none' },
       ],
       markers: [
-        { type: 'entrance', name: 'cemetery_gate', offset: { q: 0, r: 0 }, facing: 5, tags: ['main'] },
-        { type: 'evidence_spot', name: 'fresh_grave', offset: { q: 2, r: 1 }, tags: ['clue', 'dark', 'quest'] },
-        { type: 'evidence_spot', name: 'old_headstone', offset: { q: 1, r: 0 }, tags: ['lore', 'history'] },
+        {
+          type: 'entrance',
+          name: 'cemetery_gate',
+          offset: { q: 0, r: 0 },
+          facing: 5,
+          tags: ['main'],
+        },
+        {
+          type: 'evidence_spot',
+          name: 'fresh_grave',
+          offset: { q: 2, r: 1 },
+          tags: ['clue', 'dark', 'quest'],
+        },
+        {
+          type: 'evidence_spot',
+          name: 'old_headstone',
+          offset: { q: 1, r: 0 },
+          tags: ['lore', 'history'],
+        },
         { type: 'hiding_spot', name: 'behind_monument', offset: { q: 0, r: 1 }, tags: ['cover'] },
-        { type: 'conversation_spot', name: 'mourning_spot', offset: { q: 1, r: 1 }, tags: ['private', 'emotional'] },
+        {
+          type: 'conversation_spot',
+          name: 'mourning_spot',
+          offset: { q: 1, r: 1 },
+          tags: ['private', 'emotional'],
+        },
       ],
       zones: [
-        { type: 'public_area', name: 'cemetery', tiles: [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }, { q: 2, r: 1 }, { q: 0, r: 2 }, { q: 1, r: 2 }], tags: ['somber'] },
-        { type: 'loot_area', name: 'hidden_cache', tiles: [{ q: 2, r: 1 }], tags: ['hidden', 'dark'] },
+        {
+          type: 'public_area',
+          name: 'cemetery',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: 1, r: 0 },
+            { q: 2, r: 0 },
+            { q: 0, r: 1 },
+            { q: 1, r: 1 },
+            { q: 2, r: 1 },
+            { q: 0, r: 2 },
+            { q: 1, r: 2 },
+          ],
+          tags: ['somber'],
+        },
+        {
+          type: 'loot_area',
+          name: 'hidden_cache',
+          tiles: [{ q: 2, r: 1 }],
+          tags: ['hidden', 'dark'],
+        },
       ],
       tags: ['cemetery', 'somber', 'secrets'],
       importance: 2,
@@ -381,102 +549,378 @@ Now it serves as IVRC's gateway to the western territories - for better or worse
     // -------------------------------------------------------------------------
 
     // Main Street - from west entrance through town center to east
-    { coord: { q: 4, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 5, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 6, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 7, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 8, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 9, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 10, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 11, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 12, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 13, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 14, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 15, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 16, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 17, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 18, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 19, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 20, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 21, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 22, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 23, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 24, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 25, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 26, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 27, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 28, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 29, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 30, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 31, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 32, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 33, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 34, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 35, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 36, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 4, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 5, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 6, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 7, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 8, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 9, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 10, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 11, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 12, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 13, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 14, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 15, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 16, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 17, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 18, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 20, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 21, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 22, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 23, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 24, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 25, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 26, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 27, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 28, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 29, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 30, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 31, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 32, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 33, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 34, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 35, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 36, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // West road entrance approach
-    { coord: { q: 2, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 3, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 2, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 3, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // East road exit
-    { coord: { q: 37, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 38, r: 19 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 37, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 38, r: 19 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
 
     // -------------------------------------------------------------------------
     // NORTH-SOUTH ROAD - To the well and water tower
     // -------------------------------------------------------------------------
-    { coord: { q: 20, r: 15 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 20, r: 16 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 20, r: 17 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 20, r: 18 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 20, r: 15 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 20, r: 16 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 20, r: 17 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 20, r: 18 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // Road continues north to water tower
-    { coord: { q: 20, r: 11 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 20, r: 12 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 20, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 20, r: 11 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 20, r: 12 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 20, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // -------------------------------------------------------------------------
     // CHURCH ROAD - Side road to St. Michael's
     // -------------------------------------------------------------------------
-    { coord: { q: 10, r: 20 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 21 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 22 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 23 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 24 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 10, r: 25 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 10, r: 20 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 21 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 22 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 23 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 24 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 10, r: 25 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // -------------------------------------------------------------------------
     // DEPOT ROAD - To train station
     // -------------------------------------------------------------------------
-    { coord: { q: 30, r: 17 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 30, r: 18 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 31, r: 16 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 31, r: 15 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 31, r: 14 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 31, r: 13 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 30, r: 17 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 30, r: 18 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 31, r: 16 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 31, r: 15 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 31, r: 14 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 31, r: 13 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // -------------------------------------------------------------------------
     // MANSION ROAD - To Holt Mansion
     // -------------------------------------------------------------------------
-    { coord: { q: 28, r: 20 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 28, r: 21 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 28, r: 22 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 28, r: 23 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 28, r: 20 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 28, r: 21 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 28, r: 22 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 28, r: 23 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // -------------------------------------------------------------------------
     // RAILROAD - Running east-west north of town
     // The iron spine of IVRC's domain
     // -------------------------------------------------------------------------
-    { coord: { q: 28, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 29, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 30, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 35, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 36, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 37, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 38, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 26, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 27, r: 12 }, terrain: 'dirt', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
+    {
+      coord: { q: 28, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 29, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 30, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 35, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 36, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 37, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 38, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 26, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 27, r: 12 },
+      terrain: 'dirt',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
 
     // -------------------------------------------------------------------------
     // DESERT DECORATIONS - Atmosphere

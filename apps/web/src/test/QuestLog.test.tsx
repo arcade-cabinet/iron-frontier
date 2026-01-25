@@ -6,11 +6,12 @@
  * - activeQuests are ActiveQuest objects with questId references
  * - Quest definitions are looked up from the registry
  */
-import { QuestLog } from '@/game/ui/QuestLog';
+
+import type { Quest } from '@iron-frontier/shared/data/schemas/quest';
 import { screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { QuestLog } from '@/game/ui/QuestLog';
 import { customRender } from './test-utils';
-import type { Quest } from '@iron-frontier/shared/data/schemas/quest';
 
 // Mock the quest registry to return controlled test data
 vi.mock('@iron-frontier/shared/data/quests', () => ({
@@ -121,7 +122,16 @@ vi.mock('@iron-frontier/shared/data/quests', () => ({
             title: 'Do the Thing',
             description: 'Simple objective.',
             objectives: [
-              { id: 'obj_1', description: 'Complete', type: 'visit', target: 'loc', count: 1, current: 0, optional: false, hidden: false },
+              {
+                id: 'obj_1',
+                description: 'Complete',
+                type: 'visit',
+                target: 'loc',
+                count: 1,
+                current: 0,
+                optional: false,
+                hidden: false,
+              },
             ],
             stageRewards: { xp: 10, gold: 0, items: [], reputation: {} },
           },
@@ -220,7 +230,9 @@ describe('QuestLog', () => {
     it('should display quest info correctly', () => {
       customRender(<QuestLog />, { initialState: questInitialState as any });
       expect(screen.getByText('Find the Golden Gear')).toBeInTheDocument();
-      expect(screen.getByText('Search the old workshop for a rare golden gear.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Search the old workshop for a rare golden gear.')
+      ).toBeInTheDocument();
       expect(screen.getByText('Side')).toBeInTheDocument();
       expect(screen.getByText(/Go to the workshop/)).toBeInTheDocument();
       expect(screen.getByText(/Search the shelves/)).toBeInTheDocument();

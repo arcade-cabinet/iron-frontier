@@ -5,10 +5,10 @@
  * Uses native dialog element with portal for accessibility.
  */
 
-import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../primitives/utils';
+import * as React from 'react';
 import type { ModalProps, SheetProps, SheetSide } from '../primitives/types';
+import { cn } from '../primitives/utils';
 
 /**
  * Overlay backdrop variants
@@ -122,12 +122,8 @@ export const ModalHeader: React.FC<{
 
   return (
     <div className={cn('mb-4', className)}>
-      {title && (
-        <h2 className="text-xl font-semibold text-obsidian-900">{title}</h2>
-      )}
-      {description && (
-        <p className="mt-1 text-sm text-obsidian-600">{description}</p>
-      )}
+      {title && <h2 className="text-xl font-semibold text-obsidian-900">{title}</h2>}
+      {description && <p className="mt-1 text-sm text-obsidian-600">{description}</p>}
     </div>
   );
 };

@@ -17,14 +17,14 @@ export * from './textures';
 
 // Export types
 export type {
-  AssetPath,
-  TextureSet,
-  ModelCategory,
-  TextureCategory,
-  AudioCategory,
   AssetFormat,
-  ModelAsset,
-  TextureAsset,
-  AudioAsset,
   AssetManifest,
+  AssetPath,
+  AudioAsset,
+  AudioCategory,
+  ModelAsset,
+  ModelCategory,
+  TextureAsset,
+  TextureCategory,
+  TextureSet,
 } from './types';

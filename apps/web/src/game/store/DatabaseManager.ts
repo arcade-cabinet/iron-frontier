@@ -85,150 +85,164 @@ CREATE TABLE IF NOT EXISTS game_metadata (
 // ============================================================================
 
 export class DatabaseManager {
-    private db: any = null;
+  private db: any = null;
 
-    /**
-     * Initialize SQL.js and create/open the database
-     */
-    async init(binaryData?: Uint8Array): Promise<void> {
-        if (!SQL) {
-            SQL = await initSqlJs({
-                locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
-            });
-        }
-
-        if (binaryData) {
-            this.db = new SQL.Database(binaryData);
-        } else {
-            this.db = new SQL.Database();
-            this.db.run(SCHEMA_SQL);
-        }
+  /**
+   * Initialize SQL.js and create/open the database
+   */
+  async init(binaryData?: Uint8Array): Promise<void> {
+    if (!SQL) {
+      SQL = await initSqlJs({
+        locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
+      });
     }
 
-    /**
-     * Close the database connection
-     */
-    dispose(): void {
-        if (this.db) {
-            this.db.close();
-            this.db = null;
-        }
+    if (binaryData) {
+      this.db = new SQL.Database(binaryData);
+    } else {
+      this.db = new SQL.Database();
+      this.db.run(SCHEMA_SQL);
     }
+  }
 
-    /**
-     * Export the database to a binary Uint8Array
-     */
-    export(): Uint8Array | null {
-        if (!this.db) return null;
-        return this.db.export();
+  /**
+   * Close the database connection
+   */
+  dispose(): void {
+    if (this.db) {
+      this.db.close();
+      this.db = null;
     }
+  }
 
-    /**
-     * Execute a raw SQL statement
-     * Silently returns if database not yet initialized (save will happen later)
-     */
-    run(sql: string, params?: any[]): void {
-        if (!this.db) return; // Silently skip if not initialized
-        this.db.run(sql, params);
-    }
+  /**
+   * Export the database to a binary Uint8Array
+   */
+  export(): Uint8Array | null {
+    if (!this.db) return null;
+    return this.db.export();
+  }
 
-    /**
-     * Execute a query and return results
-     */
-    exec(sql: string, params?: any[]): any[] {
-        if (!this.db) throw new Error('Database not initialized');
-        const results = this.db.exec(sql, params);
-        if (results.length === 0) return [];
+  /**
+   * Execute a raw SQL statement
+   * Silently returns if database not yet initialized (save will happen later)
+   */
+  run(sql: string, params?: any[]): void {
+    if (!this.db) return; // Silently skip if not initialized
+    this.db.run(sql, params);
+  }
 
-        const { columns, values } = results[0];
-        return values.map((row: unknown[]) => {
-            const obj: Record<string, unknown> = {};
-            columns.forEach((col: string, i: number) => {
-                obj[col] = row[i];
-            });
-            return obj;
-        });
-    }
+  /**
+   * Execute a query and return results
+   */
+  exec(sql: string, params?: any[]): any[] {
+    if (!this.db) throw new Error('Database not initialized');
+    const results = this.db.exec(sql, params);
+    if (results.length === 0) return [];
 
-    /**
-     * Helper to transactionally update the player state
-     * Accepts the full game state and extracts player data from it
-     */
-    savePlayer(state: any): void {
-        const stats = state.playerStats || {};
-        const pos = state.playerPosition || { x: 0, y: 0, z: 0 };
+    const { columns, values } = results[0];
+    return values.map((row: unknown[]) => {
+      const obj: Record<string, unknown> = {};
+      columns.forEach((col: string, i: number) => {
+        obj[col] = row[i];
+      });
+      return obj;
+    });
+  }
 
-        this.run(`
+  /**
+   * Helper to transactionally update the player state
+   * Accepts the full game state and extracts player data from it
+   */
+  savePlayer(state: any): void {
+    const stats = state.playerStats || {};
+    const pos = state.playerPosition || { x: 0, y: 0, z: 0 };
+
+    this.run(
+      `
       INSERT OR REPLACE INTO player (
         id, name, level, xp, xp_to_next, health, max_health,
         stamina, max_stamina, gold, reputation,
         pos_x, pos_y, pos_z, rotation, last_updated
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-            1, // Single player, always id=1
-            state.playerName || 'Unknown',
-            stats.level || 1,
-            stats.xp || 0,
-            stats.xpToNext || 100,
-            stats.health || 100,
-            stats.maxHealth || 100,
-            stats.stamina || 100,
-            stats.maxStamina || 100,
-            stats.gold || 0,
-            stats.reputation || 0,
-            pos.x,
-            pos.y,
-            pos.z,
-            state.playerRotation || 0,
-            Date.now()
-        ]);
-    }
+    `,
+      [
+        1, // Single player, always id=1
+        state.playerName || 'Unknown',
+        stats.level || 1,
+        stats.xp || 0,
+        stats.xpToNext || 100,
+        stats.health || 100,
+        stats.maxHealth || 100,
+        stats.stamina || 100,
+        stats.maxStamina || 100,
+        stats.gold || 0,
+        stats.reputation || 0,
+        pos.x,
+        pos.y,
+        pos.z,
+        state.playerRotation || 0,
+        Date.now(),
+      ]
+    );
+  }
 
-    /**
-     * Helper to transactionally update inventory
-     */
-    saveInventory(items: any[]): void {
-        this.run('DELETE FROM inventory');
-        items.forEach(item => {
-            this.run(`
+  /**
+   * Helper to transactionally update inventory
+   */
+  saveInventory(items: any[]): void {
+    this.run('DELETE FROM inventory');
+    items.forEach((item) => {
+      this.run(
+        `
         INSERT INTO inventory (id, item_id, name, rarity, quantity, usable, description)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [item.id, item.itemId, item.name, item.rarity, item.quantity, item.usable ? 1 : 0, item.description || '']);
-        });
-    }
+      `,
+        [
+          item.id,
+          item.itemId,
+          item.name,
+          item.rarity,
+          item.quantity,
+          item.usable ? 1 : 0,
+          item.description || '',
+        ]
+      );
+    });
+  }
 
-    /**
-     * Load the full game state from the database
-     */
-    loadGameState(): any {
-        const players = this.exec('SELECT * FROM player LIMIT 1');
-        if (players.length === 0) return null;
+  /**
+   * Load the full game state from the database
+   */
+  loadGameState(): any {
+    const players = this.exec('SELECT * FROM player LIMIT 1');
+    if (players.length === 0) return null;
 
-        const p = players[0];
-        const inventory = this.exec('SELECT * FROM inventory');
+    const p = players[0];
+    const inventory = this.exec('SELECT * FROM inventory');
 
-        return {
-            playerName: p.name,
-            playerId: p.id,
-            playerStats: {
-                level: p.level,
-                xp: p.xp,
-                xpToNext: p.xp_to_next,
-                health: p.health,
-                maxHealth: p.max_health,
-                stamina: p.stamina,
-                maxStamina: p.max_stamina,
-                gold: p.gold,
-                reputation: p.reputation,
-            },
-            playerPosition: { x: p.pos_x, y: p.pos_y, z: p.pos_z },
-            playerRotation: p.rotation,
-            inventory: inventory.map(i => ({
-                ...i,
-                usable: !!i.usable
-            })),
-        };
-    }
+    return {
+      playerName: p.name,
+      playerId: p.id,
+      playerStats: {
+        level: p.level,
+        xp: p.xp,
+        xpToNext: p.xp_to_next,
+        health: p.health,
+        maxHealth: p.max_health,
+        stamina: p.stamina,
+        maxStamina: p.max_stamina,
+        gold: p.gold,
+        reputation: p.reputation,
+      },
+      playerPosition: { x: p.pos_x, y: p.pos_y, z: p.pos_z },
+      playerRotation: p.rotation,
+      inventory: inventory.map((i) => ({
+        ...i,
+        usable: !!i.usable,
+      })),
+    };
+  }
 }
 
 export const dbManager = new DatabaseManager();

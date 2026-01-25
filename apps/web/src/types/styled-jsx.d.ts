@@ -6,4 +6,4 @@ declare module 'react' {
     global?: boolean;
     [key: string]: any;
   }
-} 
+}

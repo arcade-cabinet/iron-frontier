@@ -4,14 +4,8 @@
  * Loading indicator with western styling.
  */
 
-import * as React from 'react';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  StyleSheet,
-  type ViewStyle,
-} from 'react-native';
+import type * as React from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 import type { SpinnerProps, SpinnerSize } from '../primitives/types';
 import { colors } from '../tokens/colors';
 import { spacing } from '../tokens/spacing';
@@ -47,10 +41,7 @@ export const Spinner: React.FC<NativeSpinnerProps> = ({
       accessibilityRole="progressbar"
       accessibilityLabel={label || 'Loading'}
     >
-      <ActivityIndicator
-        size={sizeMap[size]}
-        color={color}
-      />
+      <ActivityIndicator size={sizeMap[size]} color={color} />
     </View>
   );
 };

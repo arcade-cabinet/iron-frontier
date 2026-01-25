@@ -7,25 +7,23 @@ export { FrontierTerritory } from './frontier_territory';
 
 // World loader utilities
 export {
-  loadWorld,
   getLocationData,
-  validateWorldReferences,
   getTravelInfo,
   type LoadedWorld,
+  loadWorld,
   type ResolvedLocation,
+  validateWorldReferences,
 } from './WorldLoader';
 
 // ============================================================================
 // WORLD REGISTRY
 // ============================================================================
 
-import { FrontierTerritory } from './frontier_territory';
 import type { World } from '../schemas/world';
+import { FrontierTerritory } from './frontier_territory';
 
 /** All worlds indexed by ID */
-export const WORLDS_BY_ID = new Map<string, World>([
-  ['frontier_territory', FrontierTerritory],
-]);
+export const WORLDS_BY_ID = new Map<string, World>([['frontier_territory', FrontierTerritory]]);
 
 /** Get a world by ID */
 export function getWorldById(id: string): World | undefined {

@@ -2,20 +2,20 @@
  * Unit tests for HexMapGenerator
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  HexMapGenerator,
   generateHexMap,
-  hexKey,
-  parseHexKey,
-  hexDistance,
-  hexNeighbors,
-  hexToWorld,
-  worldToHex,
-  hexRound,
   type HexCoord,
-  type HexTileData,
   type HexMapConfig,
+  HexMapGenerator,
+  type HexTileData,
+  hexDistance,
+  hexKey,
+  hexNeighbors,
+  hexRound,
+  hexToWorld,
+  parseHexKey,
+  worldToHex,
 } from '../engine/hex/HexMapGenerator';
 
 describe('HexMapGenerator', () => {

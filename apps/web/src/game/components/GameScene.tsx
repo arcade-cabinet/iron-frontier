@@ -1,12 +1,19 @@
 // Main Babylon.js Game Scene using Reactylon
 // @ts-nocheck - Reactylon JSX types are registered at runtime
-import React, { useEffect, useCallback, useMemo } from 'react';
-import { Engine } from 'reactylon/web';
-import { Scene, useScene } from 'reactylon';
-import { Vector3, Color3, Color4 } from '@babylonjs/core/Maths/math';
-import { useGameStore } from '../store/webGameStore';
-import { generateSector, CELL_SIZE, SECTOR_SIZE, type SectorData, type GridCell } from '../lib/procgen';
+
 import type { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
+import { Color3, Color4, Vector3 } from '@babylonjs/core/Maths/math';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Scene, useScene } from 'reactylon';
+import { Engine } from 'reactylon/web';
+import {
+  CELL_SIZE,
+  type GridCell,
+  generateSector,
+  SECTOR_SIZE,
+  type SectorData,
+} from '../lib/procgen';
+import { useGameStore } from '../store/webGameStore';
 
 // Import to register JSX elements
 import 'reactylon';
@@ -15,10 +22,17 @@ import 'reactylon';
 function Ground({ sector }: { sector: SectorData }) {
   const groundColor = useMemo(() => Color3.FromHexString(sector.groundColor), [sector.groundColor]);
   const size = SECTOR_SIZE * CELL_SIZE + 10;
-  
+
   return (
-    <mesh name="ground" position={new Vector3(SECTOR_SIZE * CELL_SIZE / 2, -0.1, SECTOR_SIZE * CELL_SIZE / 2)}>
-      <standardMaterial name="groundMat" diffuseColor={groundColor} specularColor={new Color3(0.1, 0.1, 0.1)} />
+    <mesh
+      name="ground"
+      position={new Vector3((SECTOR_SIZE * CELL_SIZE) / 2, -0.1, (SECTOR_SIZE * CELL_SIZE) / 2)}
+    >
+      <standardMaterial
+        name="groundMat"
+        diffuseColor={groundColor}
+        specularColor={new Color3(0.1, 0.1, 0.1)}
+      />
       <ground name="groundMesh" options={{ width: size, height: size }} />
     </mesh>
   );
@@ -28,17 +42,18 @@ function Ground({ sector }: { sector: SectorData }) {
 function GridCells({ grid }: { grid: GridCell[][] }) {
   const cells = useMemo(() => {
     const result: { x: number; y: number; z: number; height: number; color: Color3 }[] = [];
-    
+
     for (let gy = 0; gy < grid.length; gy++) {
       for (let gx = 0; gx < grid[gy].length; gx++) {
         const cell = grid[gy][gx];
         if (cell.type === 'wall' || cell.height > 0) {
-          const color = cell.type === 'wall' 
-            ? new Color3(0.4, 0.3, 0.2)
-            : cell.type === 'stone' 
-              ? new Color3(0.5, 0.5, 0.5)
-              : new Color3(0.6, 0.4, 0.2);
-          
+          const color =
+            cell.type === 'wall'
+              ? new Color3(0.4, 0.3, 0.2)
+              : cell.type === 'stone'
+                ? new Color3(0.5, 0.5, 0.5)
+                : new Color3(0.6, 0.4, 0.2);
+
           result.push({
             x: gx * CELL_SIZE,
             y: cell.height / 2,
@@ -74,7 +89,7 @@ function Props({ sector }: { sector: SectorData }) {
     return sector.props.map((prop) => {
       let size = { w: 0.5, h: 0.5, d: 0.5 };
       let color = new Color3(0.6, 0.4, 0.2);
-      
+
       switch (prop.type) {
         case 'crate':
           size = { w: 0.8, h: 0.8, d: 0.8 };
@@ -109,7 +124,7 @@ function Props({ sector }: { sector: SectorData }) {
           color = new Color3(0.6, 0.5, 0.4);
           break;
       }
-      
+
       return { ...prop, size, color };
     });
   }, [sector.props]);
@@ -125,7 +140,7 @@ function Props({ sector }: { sector: SectorData }) {
             height: prop.size.h * prop.scale,
             depth: prop.size.d * prop.scale,
           }}
-          position={new Vector3(prop.x, prop.size.h * prop.scale / 2, prop.y)}
+          position={new Vector3(prop.x, (prop.size.h * prop.scale) / 2, prop.y)}
           rotation={new Vector3(0, prop.rotation, 0)}
         >
           <standardMaterial name={`${prop.id}-mat`} diffuseColor={prop.color} />
@@ -138,18 +153,22 @@ function Props({ sector }: { sector: SectorData }) {
 // Items on ground
 function Items({ sector }: { sector: SectorData }) {
   const { collectedItems } = useGameStore();
-  
-  const visibleItems = useMemo(() => 
-    sector.items.filter((item) => !collectedItems.includes(item.id)),
+
+  const visibleItems = useMemo(
+    () => sector.items.filter((item) => !collectedItems.includes(item.id)),
     [sector.items, collectedItems]
   );
 
   const getItemColor = (rarity: string) => {
     switch (rarity) {
-      case 'legendary': return new Color3(1, 0.8, 0);
-      case 'rare': return new Color3(0.6, 0.2, 0.8);
-      case 'uncommon': return new Color3(0.2, 0.6, 0.2);
-      default: return new Color3(0.8, 0.7, 0.5);
+      case 'legendary':
+        return new Color3(1, 0.8, 0);
+      case 'rare':
+        return new Color3(0.6, 0.2, 0.8);
+      case 'uncommon':
+        return new Color3(0.2, 0.6, 0.2);
+      default:
+        return new Color3(0.8, 0.7, 0.5);
     }
   };
 
@@ -162,8 +181,8 @@ function Items({ sector }: { sector: SectorData }) {
           options={{ width: 0.4, height: 0.4, depth: 0.4 }}
           position={new Vector3(item.x, 0.3, item.y)}
         >
-          <standardMaterial 
-            name={`${item.id}-mat`} 
+          <standardMaterial
+            name={`${item.id}-mat`}
             diffuseColor={getItemColor(item.rarity)}
             emissiveColor={getItemColor(item.rarity).scale(0.3)}
           />
@@ -185,10 +204,7 @@ function NPCs({ sector }: { sector: SectorData }) {
             options={{ width: 0.6, height: 1.2, depth: 0.4 }}
             position={new Vector3(0, 0.8, 0)}
           >
-            <standardMaterial 
-              name={`${npc.id}-bodyMat`} 
-              diffuseColor={new Color3(0.5, 0.3, 0.2)} 
-            />
+            <standardMaterial name={`${npc.id}-bodyMat`} diffuseColor={new Color3(0.5, 0.3, 0.2)} />
           </box>
           {/* Head */}
           <sphere
@@ -196,10 +212,7 @@ function NPCs({ sector }: { sector: SectorData }) {
             options={{ diameter: 0.5 }}
             position={new Vector3(0, 1.65, 0)}
           >
-            <standardMaterial 
-              name={`${npc.id}-headMat`} 
-              diffuseColor={new Color3(0.9, 0.7, 0.6)} 
-            />
+            <standardMaterial name={`${npc.id}-headMat`} diffuseColor={new Color3(0.9, 0.7, 0.6)} />
           </sphere>
           {/* Hat */}
           <cylinder
@@ -207,10 +220,7 @@ function NPCs({ sector }: { sector: SectorData }) {
             options={{ diameter: 0.7, height: 0.3 }}
             position={new Vector3(0, 2, 0)}
           >
-            <standardMaterial 
-              name={`${npc.id}-hatMat`} 
-              diffuseColor={new Color3(0.3, 0.2, 0.1)} 
-            />
+            <standardMaterial name={`${npc.id}-hatMat`} diffuseColor={new Color3(0.3, 0.2, 0.1)} />
           </cylinder>
           {/* Indicator for quest giver */}
           {npc.questGiver && (
@@ -247,11 +257,7 @@ function Player() {
         <standardMaterial name="player-bodyMat" diffuseColor={new Color3(0.3, 0.25, 0.2)} />
       </box>
       {/* Head */}
-      <sphere
-        name="player-head"
-        options={{ diameter: 0.4 }}
-        position={new Vector3(0, 1.45, 0)}
-      >
+      <sphere name="player-head" options={{ diameter: 0.4 }} position={new Vector3(0, 1.45, 0)}>
         <standardMaterial name="player-headMat" diffuseColor={new Color3(0.85, 0.65, 0.5)} />
       </sphere>
       {/* Hat */}
@@ -269,8 +275,8 @@ function Player() {
         position={new Vector3(0, 0.05, 0)}
         rotation={new Vector3(Math.PI / 2, 0, 0)}
       >
-        <standardMaterial 
-          name="player-ringMat" 
+        <standardMaterial
+          name="player-ringMat"
           diffuseColor={new Color3(0.9, 0.7, 0.2)}
           emissiveColor={new Color3(0.4, 0.3, 0.1)}
         />
@@ -283,7 +289,7 @@ function Player() {
 function CameraController() {
   const { player } = useGameStore();
   const scene = useScene();
-  
+
   useEffect(() => {
     if (!scene) return;
     const camera = scene.activeCamera as ArcRotateCamera;
@@ -299,58 +305,61 @@ function CameraController() {
 function InputHandler({ sector }: { sector: SectorData }) {
   const { movePlayer, collectItem, talkToNPC, collectedItems, settings } = useGameStore();
   const scene = useScene();
-  
-  const handlePointerDown = useCallback((evt: PointerEvent) => {
-    if (!scene) return;
-    
-    const pickResult = scene.pick(evt.clientX, evt.clientY);
-    if (pickResult?.hit && pickResult.pickedPoint) {
-      const targetX = pickResult.pickedPoint.x;
-      const targetZ = pickResult.pickedPoint.z;
-      
-      // Check grid bounds
-      const gridX = Math.floor(targetX / CELL_SIZE);
-      const gridY = Math.floor(targetZ / CELL_SIZE);
-      
-      if (gridX >= 0 && gridX < SECTOR_SIZE && gridY >= 0 && gridY < SECTOR_SIZE) {
-        const cell = sector.grid[gridY]?.[gridX];
-        if (cell?.walkable) {
-          // Check for nearby items
-          const nearbyItem = sector.items.find((item) => {
-            if (collectedItems.includes(item.id)) return false;
-            const dx = item.x - targetX;
-            const dy = item.y - targetZ;
-            return Math.sqrt(dx * dx + dy * dy) < 1.5;
-          });
-          
-          if (nearbyItem) {
-            collectItem(nearbyItem);
-            // Haptic feedback
-            if (settings.haptics && navigator.vibrate) {
-              navigator.vibrate(50);
+
+  const handlePointerDown = useCallback(
+    (evt: PointerEvent) => {
+      if (!scene) return;
+
+      const pickResult = scene.pick(evt.clientX, evt.clientY);
+      if (pickResult?.hit && pickResult.pickedPoint) {
+        const targetX = pickResult.pickedPoint.x;
+        const targetZ = pickResult.pickedPoint.z;
+
+        // Check grid bounds
+        const gridX = Math.floor(targetX / CELL_SIZE);
+        const gridY = Math.floor(targetZ / CELL_SIZE);
+
+        if (gridX >= 0 && gridX < SECTOR_SIZE && gridY >= 0 && gridY < SECTOR_SIZE) {
+          const cell = sector.grid[gridY]?.[gridX];
+          if (cell?.walkable) {
+            // Check for nearby items
+            const nearbyItem = sector.items.find((item) => {
+              if (collectedItems.includes(item.id)) return false;
+              const dx = item.x - targetX;
+              const dy = item.y - targetZ;
+              return Math.sqrt(dx * dx + dy * dy) < 1.5;
+            });
+
+            if (nearbyItem) {
+              collectItem(nearbyItem);
+              // Haptic feedback
+              if (settings.haptics && navigator.vibrate) {
+                navigator.vibrate(50);
+              }
             }
-          }
-          
-          // Check for nearby NPCs
-          const nearbyNPC = sector.npcs.find((npc) => {
-            const dx = npc.x - targetX;
-            const dy = npc.y - targetZ;
-            return Math.sqrt(dx * dx + dy * dy) < 2;
-          });
-          
-          if (nearbyNPC) {
-            talkToNPC(nearbyNPC);
-            if (settings.haptics && navigator.vibrate) {
-              navigator.vibrate([30, 20, 30]);
+
+            // Check for nearby NPCs
+            const nearbyNPC = sector.npcs.find((npc) => {
+              const dx = npc.x - targetX;
+              const dy = npc.y - targetZ;
+              return Math.sqrt(dx * dx + dy * dy) < 2;
+            });
+
+            if (nearbyNPC) {
+              talkToNPC(nearbyNPC);
+              if (settings.haptics && navigator.vibrate) {
+                navigator.vibrate([30, 20, 30]);
+              }
+            } else {
+              movePlayer(targetX, targetZ);
             }
-          } else {
-            movePlayer(targetX, targetZ);
           }
         }
       }
-    }
-  }, [scene, sector, movePlayer, collectItem, talkToNPC, collectedItems, settings.haptics]);
-  
+    },
+    [scene, sector, movePlayer, collectItem, talkToNPC, collectedItems, settings.haptics]
+  );
+
   useEffect(() => {
     const canvas = scene?.getEngine().getRenderingCanvas();
     if (canvas) {
@@ -365,24 +374,27 @@ function InputHandler({ sector }: { sector: SectorData }) {
 // Scene ready handler
 function SceneSetup() {
   const scene = useScene();
-  
+
   useEffect(() => {
     if (scene) {
       scene.clearColor = new Color4(0.4, 0.35, 0.3, 1);
     }
   }, [scene]);
-  
+
   return null;
 }
 
 // Main scene content
 function SceneContent({ sector }: { sector: SectorData }) {
-  const ambientColor = useMemo(() => Color3.FromHexString(sector.ambientColor), [sector.ambientColor]);
+  const ambientColor = useMemo(
+    () => Color3.FromHexString(sector.ambientColor),
+    [sector.ambientColor]
+  );
 
   return (
     <>
       <SceneSetup />
-      
+
       {/* Lighting */}
       <hemisphericLight
         name="ambient"
@@ -404,7 +416,7 @@ function SceneContent({ sector }: { sector: SectorData }) {
         alpha={-Math.PI / 4}
         beta={Math.PI / 3}
         radius={25}
-        target={new Vector3(SECTOR_SIZE * CELL_SIZE / 2, 0, SECTOR_SIZE * CELL_SIZE / 2)}
+        target={new Vector3((SECTOR_SIZE * CELL_SIZE) / 2, 0, (SECTOR_SIZE * CELL_SIZE) / 2)}
         lowerRadiusLimit={15}
         upperRadiusLimit={40}
         lowerBetaLimit={0.3}
@@ -420,7 +432,7 @@ function SceneContent({ sector }: { sector: SectorData }) {
       <Items sector={sector} />
       <NPCs sector={sector} />
       <Player />
-      
+
       {/* Controllers */}
       <CameraController />
       <InputHandler sector={sector} />
@@ -431,7 +443,7 @@ function SceneContent({ sector }: { sector: SectorData }) {
 // Main exported component
 export function GameScene() {
   const { currentSector, gamePhase } = useGameStore();
-  
+
   useEffect(() => {
     if (gamePhase === 'playing' && !currentSector) {
       // Regenerate sector if needed

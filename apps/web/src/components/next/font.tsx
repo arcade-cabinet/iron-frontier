@@ -1,3 +1,3 @@
 export const Roboto = {
-  className: "font-roboto",
+  className: 'font-roboto',
 };

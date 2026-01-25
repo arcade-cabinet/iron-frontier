@@ -5,7 +5,7 @@
  * All coordinates are relative to anchor at (0,0).
  */
 
-import { Assemblage, validateAssemblage } from '../schemas';
+import { type Assemblage, validateAssemblage } from '../schemas';
 
 // ============================================================================
 // SINGLE BUILDINGS
@@ -42,7 +42,12 @@ export const SingleSaloon: Assemblage = validateAssemblage({
     // Center - the saloon
     { coord: { q: 0, r: 0 }, terrain: 'dirt', building: 'saloon', buildingRotation: 0 },
     // Front porch area (road side)
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'none', 'none', 'none'] },
+    {
+      coord: { q: 1, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'none', 'none', 'none'],
+    },
     { coord: { q: 1, r: -1 }, terrain: 'dirt', feature: 'none' },
     // Side yard
     { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none' },
@@ -137,19 +142,51 @@ export const Ranch: Assemblage = validateAssemblage({
     { coord: { q: 3, r: -1 }, terrain: 'grass', feature: 'none' },
 
     // Corral (fenced area)
-    { coord: { q: 2, r: 1 }, terrain: 'grass', feature: 'none', edges: ['fence', 'fence', 'none', 'none', 'none', 'fence'] },
-    { coord: { q: 3, r: 0 }, terrain: 'grass', feature: 'none', edges: ['fence', 'none', 'none', 'fence', 'fence', 'fence'] },
-    { coord: { q: 3, r: 1 }, terrain: 'grass', feature: 'none', edges: ['fence', 'fence', 'fence', 'none', 'none', 'fence'] },
+    {
+      coord: { q: 2, r: 1 },
+      terrain: 'grass',
+      feature: 'none',
+      edges: ['fence', 'fence', 'none', 'none', 'none', 'fence'],
+    },
+    {
+      coord: { q: 3, r: 0 },
+      terrain: 'grass',
+      feature: 'none',
+      edges: ['fence', 'none', 'none', 'fence', 'fence', 'fence'],
+    },
+    {
+      coord: { q: 3, r: 1 },
+      terrain: 'grass',
+      feature: 'none',
+      edges: ['fence', 'fence', 'fence', 'none', 'none', 'fence'],
+    },
 
     // Well
     { coord: { q: -1, r: 0 }, terrain: 'dirt', building: 'well', buildingRotation: 0 },
 
     // Approach road
-    { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none', edges: ['none', 'none', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 1, r: -1 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 0, r: -1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['none', 'none', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 1, r: -1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
   ],
   validRotations: [0, 2, 4], // Only even rotations to align with hex grid better
-  forbiddenTerrain: ['water', 'water_shallow', 'water_deep', 'stone_mountain', 'badlands', 'canyon'],
+  forbiddenTerrain: [
+    'water',
+    'water_shallow',
+    'water_deep',
+    'stone_mountain',
+    'badlands',
+    'canyon',
+  ],
   minWaterDistance: 0,
 });
 
@@ -166,8 +203,18 @@ export const MineEntrance: Assemblage = validateAssemblage({
     { coord: { q: 1, r: 0 }, terrain: 'stone', feature: 'crate' },
     { coord: { q: 1, r: -1 }, terrain: 'stone', feature: 'ore_deposit' },
     // Cart track approach
-    { coord: { q: 0, r: -1 }, terrain: 'stone', feature: 'none', edges: ['none', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: -1, r: 0 }, terrain: 'stone', feature: 'none', edges: ['railroad', 'none', 'none', 'none', 'none', 'none'] },
+    {
+      coord: { q: 0, r: -1 },
+      terrain: 'stone',
+      feature: 'none',
+      edges: ['none', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: -1, r: 0 },
+      terrain: 'stone',
+      feature: 'none',
+      edges: ['railroad', 'none', 'none', 'none', 'none', 'none'],
+    },
     // Rocky surroundings
     { coord: { q: -1, r: 1 }, terrain: 'stone_rocks', feature: 'boulder' },
     { coord: { q: 0, r: 1 }, terrain: 'stone_rocks', feature: 'rock_large' },
@@ -187,16 +234,36 @@ export const TrainDepot: Assemblage = validateAssemblage({
     // Station building (anchor)
     { coord: { q: 0, r: 0 }, terrain: 'dirt', building: 'train_station', buildingRotation: 0 },
     // Platform
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['railroad', 'none', 'none', 'none', 'none', 'railroad'] },
-    { coord: { q: 2, r: -1 }, terrain: 'dirt', feature: 'none', edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'] },
-    { coord: { q: 1, r: -1 }, terrain: 'dirt', feature: 'none', edges: ['none', 'none', 'none', 'none', 'railroad', 'railroad'] },
+    {
+      coord: { q: 1, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['railroad', 'none', 'none', 'none', 'none', 'railroad'],
+    },
+    {
+      coord: { q: 2, r: -1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['railroad', 'none', 'none', 'railroad', 'none', 'none'],
+    },
+    {
+      coord: { q: 1, r: -1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['none', 'none', 'none', 'none', 'railroad', 'railroad'],
+    },
     // Water tower for steam engines
     { coord: { q: -1, r: 0 }, terrain: 'dirt', building: 'water_tower', buildingRotation: 0 },
     // Cargo area
     { coord: { q: 0, r: 1 }, terrain: 'dirt', feature: 'crate' },
     { coord: { q: -1, r: 1 }, terrain: 'dirt', feature: 'barrel' },
     // Approach
-    { coord: { q: 0, r: -1 }, terrain: 'dirt', feature: 'none', edges: ['none', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 0, r: -1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['none', 'none', 'none', 'road', 'none', 'none'],
+    },
   ],
   requiresRoadAccess: true,
   forbiddenTerrain: ['water', 'water_shallow', 'water_deep', 'stone_mountain'],
@@ -224,10 +291,20 @@ export const TownSquare: Assemblage = validateAssemblage({
     { coord: { q: 1, r: -1 }, terrain: 'dirt', feature: 'none' },
     // Outer ring with some trees
     { coord: { q: 2, r: -1 }, terrain: 'grass', feature: 'tree' },
-    { coord: { q: 2, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'none', 'none', 'none'] },
+    {
+      coord: { q: 2, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'none', 'none', 'none'],
+    },
     { coord: { q: 1, r: 1 }, terrain: 'grass', feature: 'bush' },
     { coord: { q: -1, r: 2 }, terrain: 'grass', feature: 'tree' },
-    { coord: { q: -2, r: 1 }, terrain: 'dirt', feature: 'none', edges: ['none', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: -2, r: 1 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['none', 'none', 'none', 'road', 'none', 'none'],
+    },
     { coord: { q: -1, r: -1 }, terrain: 'grass', feature: 'bush' },
   ],
   validRotations: [0, 1, 2, 3, 4, 5],
@@ -242,10 +319,30 @@ export const MainStreetSegment: Assemblage = validateAssemblage({
   tags: ['infrastructure', 'road', 'connector'],
   tiles: [
     // Road tiles in a line
-    { coord: { q: 0, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 1, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 2, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: -1, r: 0 }, terrain: 'dirt', feature: 'none', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
+    {
+      coord: { q: 0, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 1, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 2, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: -1, r: 0 },
+      terrain: 'dirt',
+      feature: 'none',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
   ],
   validRotations: [0, 1, 2, 3, 4, 5],
   forbiddenTerrain: ['water', 'water_shallow', 'water_deep', 'stone_mountain'],
@@ -304,16 +401,14 @@ export const ALL_ASSEMBLAGES: Assemblage[] = [
 ];
 
 /** Lookup by ID */
-export const ASSEMBLAGES_BY_ID = new Map<string, Assemblage>(
-  ALL_ASSEMBLAGES.map(a => [a.id, a])
-);
+export const ASSEMBLAGES_BY_ID = new Map<string, Assemblage>(ALL_ASSEMBLAGES.map((a) => [a.id, a]));
 
 /** Lookup by type */
 export function getAssemblagesByType(type: string): Assemblage[] {
-  return ALL_ASSEMBLAGES.filter(a => a.type === type);
+  return ALL_ASSEMBLAGES.filter((a) => a.type === type);
 }
 
 /** Lookup by tag */
 export function getAssemblagesByTag(tag: string): Assemblage[] {
-  return ALL_ASSEMBLAGES.filter(a => a.tags.includes(tag));
+  return ALL_ASSEMBLAGES.filter((a) => a.tags.includes(tag));
 }

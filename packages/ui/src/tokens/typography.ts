@@ -12,29 +12,11 @@
  * - Mono: Mechanical/typewriter feel
  */
 export const fontFamilies = {
-  display: [
-    'Rye',
-    'Playfair Display',
-    'Georgia',
-    'Times New Roman',
-    'serif',
-  ].join(', '),
-  body: [
-    'Inter',
-    '-apple-system',
-    'BlinkMacSystemFont',
-    'Segoe UI',
-    'Roboto',
-    'sans-serif',
-  ].join(', '),
-  mono: [
-    'JetBrains Mono',
-    'Fira Code',
-    'Menlo',
-    'Monaco',
-    'Consolas',
-    'monospace',
-  ].join(', '),
+  display: ['Rye', 'Playfair Display', 'Georgia', 'Times New Roman', 'serif'].join(', '),
+  body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'].join(
+    ', '
+  ),
+  mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace'].join(', '),
 } as const;
 
 /**

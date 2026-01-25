@@ -5,18 +5,12 @@
  */
 
 import * as React from 'react';
-import {
-  View,
-  Pressable,
-  StyleSheet,
-  type ViewStyle,
-  type PressableProps,
-} from 'react-native';
+import { Pressable, type PressableProps, StyleSheet, View, type ViewStyle } from 'react-native';
 import type { CardProps } from '../primitives/types';
 import { colors } from '../tokens/colors';
-import { spacing } from '../tokens/spacing';
 import { radius } from '../tokens/radius';
 import { shadows } from '../tokens/shadows';
+import { spacing } from '../tokens/spacing';
 
 /**
  * Card variant configurations
@@ -108,9 +102,7 @@ export const Card: React.FC<NativeCardProps> = ({
 export const CardHeader: React.FC<{
   children: React.ReactNode;
   style?: ViewStyle;
-}> = ({ children, style }) => (
-  <View style={[styles.header, style]}>{children}</View>
-);
+}> = ({ children, style }) => <View style={[styles.header, style]}>{children}</View>;
 
 /**
  * Card Title component
@@ -136,9 +128,7 @@ export const CardTitle: React.FC<{
 export const CardContent: React.FC<{
   children: React.ReactNode;
   style?: ViewStyle;
-}> = ({ children, style }) => (
-  <View style={style}>{children}</View>
-);
+}> = ({ children, style }) => <View style={style}>{children}</View>;
 
 /**
  * Card Footer component
@@ -146,9 +136,7 @@ export const CardContent: React.FC<{
 export const CardFooter: React.FC<{
   children: React.ReactNode;
   style?: ViewStyle;
-}> = ({ children, style }) => (
-  <View style={[styles.footer, style]}>{children}</View>
-);
+}> = ({ children, style }) => <View style={[styles.footer, style]}>{children}</View>;
 
 const styles = StyleSheet.create({
   container: {

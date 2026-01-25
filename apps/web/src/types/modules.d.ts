@@ -91,4 +91,4 @@ declare module '@/components/next/*.js' {
   const value: any;
   export = value;
   export default value;
-} 
+}

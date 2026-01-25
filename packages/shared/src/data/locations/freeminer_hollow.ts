@@ -9,7 +9,7 @@
  * Themes: Independence, solidarity, resistance, community
  */
 
-import { Location, validateLocation } from '../schemas/spatial';
+import { type Location, validateLocation } from '../schemas/spatial';
 
 export const FreeminerHollow: Location = validateLocation({
   id: 'freeminer_hollow',
@@ -197,11 +197,21 @@ any stolen ore.`,
         { coord: { q: 0, r: 1 }, terrain: 'stone', feature: 'rock_small' },
       ],
       markers: [
-        { type: 'storage', name: 'emergency_supplies', offset: { q: 0, r: 0 }, tags: ['hidden', 'emergency'] },
+        {
+          type: 'storage',
+          name: 'emergency_supplies',
+          offset: { q: 0, r: 0 },
+          tags: ['hidden', 'emergency'],
+        },
         { type: 'hiding_spot', name: 'cache_entrance', offset: { q: 1, r: 0 }, tags: ['secret'] },
       ],
       zones: [
-        { type: 'loot_area', name: 'hidden_goods', tiles: [{ q: 0, r: 0 }], tags: ['hidden', 'valuable'] },
+        {
+          type: 'loot_area',
+          name: 'hidden_goods',
+          tiles: [{ q: 0, r: 0 }],
+          tags: ['hidden', 'valuable'],
+        },
       ],
       tags: ['hidden', 'emergency', 'secret'],
       importance: 3,
@@ -217,11 +227,29 @@ any stolen ore.`,
         { coord: { q: -1, r: 0 }, terrain: 'stone_rocks', feature: 'rock_large' },
       ],
       markers: [
-        { type: 'storage', name: 'weapon_cache', offset: { q: 0, r: 0 }, tags: ['hidden', 'weapons'] },
-        { type: 'evidence_spot', name: 'ivrc_documents', offset: { q: -1, r: 0 }, tags: ['clue', 'quest'] },
+        {
+          type: 'storage',
+          name: 'weapon_cache',
+          offset: { q: 0, r: 0 },
+          tags: ['hidden', 'weapons'],
+        },
+        {
+          type: 'evidence_spot',
+          name: 'ivrc_documents',
+          offset: { q: -1, r: 0 },
+          tags: ['clue', 'quest'],
+        },
       ],
       zones: [
-        { type: 'loot_area', name: 'arms_cache', tiles: [{ q: 0, r: 0 }, { q: -1, r: 0 }], tags: ['weapons', 'hidden'] },
+        {
+          type: 'loot_area',
+          name: 'arms_cache',
+          tiles: [
+            { q: 0, r: 0 },
+            { q: -1, r: 0 },
+          ],
+          tags: ['weapons', 'hidden'],
+        },
       ],
       tags: ['hidden', 'weapons', 'resistance'],
       importance: 4,
@@ -310,14 +338,46 @@ any stolen ore.`,
     // CANYON FLOOR - Main paths
     // ========================================
     // Entry path from south
-    { coord: { q: 16, r: 26 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 25 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 24 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 23 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 22 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 21 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 20 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 16, r: 19 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 16, r: 26 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 25 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 24 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 23 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 22 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 21 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 20 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 16, r: 19 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // Central plaza area
     { coord: { q: 15, r: 15 }, terrain: 'dirt', feature: 'none' },
@@ -328,11 +388,31 @@ any stolen ore.`,
     { coord: { q: 15, r: 17 }, terrain: 'dirt', feature: 'none' },
 
     // Path to mine
-    { coord: { q: 18, r: 10 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 18, r: 9 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
-    { coord: { q: 18, r: 8 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'road', 'none'] },
-    { coord: { q: 19, r: 7 }, terrain: 'dirt', edges: ['road', 'none', 'none', 'road', 'none', 'none'] },
-    { coord: { q: 19, r: 6 }, terrain: 'dirt', edges: ['none', 'road', 'none', 'none', 'none', 'road'] },
+    {
+      coord: { q: 18, r: 10 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 18, r: 9 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
+    {
+      coord: { q: 18, r: 8 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'road', 'none'],
+    },
+    {
+      coord: { q: 19, r: 7 },
+      terrain: 'dirt',
+      edges: ['road', 'none', 'none', 'road', 'none', 'none'],
+    },
+    {
+      coord: { q: 19, r: 6 },
+      terrain: 'dirt',
+      edges: ['none', 'road', 'none', 'none', 'none', 'road'],
+    },
 
     // ========================================
     // ROCKY TERRAIN & VEGETATION

@@ -21,12 +21,7 @@ export const ItemTypeSchema = z.enum([
 ]);
 export type ItemType = z.infer<typeof ItemTypeSchema>;
 
-export const ItemRaritySchema = z.enum([
-  'common',
-  'uncommon',
-  'rare',
-  'legendary',
-]);
+export const ItemRaritySchema = z.enum(['common', 'uncommon', 'rare', 'legendary']);
 export type ItemRarity = z.infer<typeof ItemRaritySchema>;
 
 export const WeaponTypeSchema = z.enum([
@@ -39,12 +34,7 @@ export const WeaponTypeSchema = z.enum([
 ]);
 export type WeaponType = z.infer<typeof WeaponTypeSchema>;
 
-export const AmmoTypeSchema = z.enum([
-  'pistol',
-  'rifle',
-  'shotgun',
-  'none',
-]);
+export const AmmoTypeSchema = z.enum(['pistol', 'rifle', 'shotgun', 'none']);
 export type AmmoType = z.infer<typeof AmmoTypeSchema>;
 
 export const BuffTypeSchema = z.enum([
@@ -278,11 +268,13 @@ export const LootEntrySchema = z.object({
   weight: z.number().min(0).default(1), // probability weight
   minQuantity: z.number().int().min(1).default(1),
   maxQuantity: z.number().int().min(1).default(1),
-  condition: z.object({
-    minPlayerLevel: z.number().int().min(0).optional(),
-    maxPlayerLevel: z.number().int().min(0).optional(),
-    requiredQuest: z.string().optional(),
-  }).optional(),
+  condition: z
+    .object({
+      minPlayerLevel: z.number().int().min(0).optional(),
+      maxPlayerLevel: z.number().int().min(0).optional(),
+      requiredQuest: z.string().optional(),
+    })
+    .optional(),
 });
 export type LootEntry = z.infer<typeof LootEntrySchema>;
 
@@ -354,11 +346,16 @@ export function isCurrency(item: BaseItem): boolean {
  */
 export function getRarityColor(rarity: string): string {
   switch (rarity) {
-    case 'legendary': return '#FFD700'; // gold
-    case 'epic': return '#E67E22'; // orange
-    case 'rare': return '#9B59B6'; // purple
-    case 'uncommon': return '#27AE60'; // green
-    default: return '#95A5A6'; // gray
+    case 'legendary':
+      return '#FFD700'; // gold
+    case 'epic':
+      return '#E67E22'; // orange
+    case 'rare':
+      return '#9B59B6'; // purple
+    case 'uncommon':
+      return '#27AE60'; // green
+    default:
+      return '#95A5A6'; // gray
   }
 }
 
@@ -367,12 +364,18 @@ export function getRarityColor(rarity: string): string {
  */
 export function getItemTypeName(type: ItemType): string {
   switch (type) {
-    case 'weapon': return 'Weapon';
-    case 'armor': return 'Armor';
-    case 'consumable': return 'Consumable';
-    case 'key_item': return 'Key Item';
-    case 'junk': return 'Junk';
-    case 'currency': return 'Currency';
+    case 'weapon':
+      return 'Weapon';
+    case 'armor':
+      return 'Armor';
+    case 'consumable':
+      return 'Consumable';
+    case 'key_item':
+      return 'Key Item';
+    case 'junk':
+      return 'Junk';
+    case 'currency':
+      return 'Currency';
   }
 }
 

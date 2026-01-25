@@ -1,4 +1,5 @@
 // Next.js component type definitions - permissive types
+// biome-ignore lint/suspicious/noExplicitAny: Shim file for Next.js types
 import React from 'react';
 
 // Document components - accept any props
@@ -33,4 +34,4 @@ export function usePathname(): any;
 export const RouterProvider: React.ComponentType<any>;
 
 // Script component - accept any props
-export const Script: React.ComponentType<any>; 
+export const Script: React.ComponentType<any>;

@@ -16,7 +16,7 @@ export const ITEMS: Record<string, Item> = {
     icon: '🧪',
     effects: [{ type: 'heal', value: 25 }],
   },
-  
+
   cogwheel_cookie: {
     id: 'cogwheel_cookie',
     name: 'Cogwheel Cookie',
@@ -29,7 +29,7 @@ export const ITEMS: Record<string, Item> = {
     icon: '🍪',
     effects: [{ type: 'heal', value: 10 }],
   },
-  
+
   aether_elixir: {
     id: 'aether_elixir',
     name: 'Aether Elixir',
@@ -42,11 +42,12 @@ export const ITEMS: Record<string, Item> = {
     icon: '✨',
     effects: [{ type: 'buff', value: 20, duration: 60 }],
   },
-  
+
   ironclad_brew: {
     id: 'ironclad_brew',
     name: 'Ironclad Brew',
-    description: 'Thick metallic drink that hardens the skin temporarily. +30 defense for 45 seconds.',
+    description:
+      'Thick metallic drink that hardens the skin temporarily. +30 defense for 45 seconds.',
     category: 'consumable',
     rarity: 'rare',
     stackable: true,
@@ -68,10 +69,10 @@ export const ITEMS: Record<string, Item> = {
     value: 0,
     icon: '📜',
   },
-  
+
   master_key: {
     id: 'master_key',
-    name: 'Dockmaster\'s Key',
+    name: "Dockmaster's Key",
     description: 'An ornate brass key that opens most doors in the docking sector.',
     category: 'key',
     rarity: 'rare',
@@ -80,7 +81,7 @@ export const ITEMS: Record<string, Item> = {
     value: 0,
     icon: '🔑',
   },
-  
+
   broken_compass: {
     id: 'broken_compass',
     name: 'Broken Compass',
@@ -92,11 +93,12 @@ export const ITEMS: Record<string, Item> = {
     value: 0,
     icon: '🧭',
   },
-  
+
   captains_seal: {
     id: 'captains_seal',
-    name: 'Captain\'s Seal',
-    description: 'Wax seal bearing the emblem of the Ironwind. Grants passage on official business.',
+    name: "Captain's Seal",
+    description:
+      'Wax seal bearing the emblem of the Ironwind. Grants passage on official business.',
     category: 'key',
     rarity: 'legendary',
     stackable: false,
@@ -117,10 +119,10 @@ export const ITEMS: Record<string, Item> = {
     value: 30,
     icon: '🥽',
   },
-  
+
   engineers_wrench: {
     id: 'engineers_wrench',
-    name: 'Engineer\'s Wrench',
+    name: "Engineer's Wrench",
     description: 'A well-worn adjustable wrench. Essential for repair puzzles.',
     category: 'gear',
     rarity: 'common',
@@ -129,7 +131,7 @@ export const ITEMS: Record<string, Item> = {
     value: 25,
     icon: '🔧',
   },
-  
+
   clockwork_gauntlet: {
     id: 'clockwork_gauntlet',
     name: 'Clockwork Gauntlet',
@@ -141,7 +143,7 @@ export const ITEMS: Record<string, Item> = {
     value: 85,
     icon: '🦾',
   },
-  
+
   aetheric_lantern: {
     id: 'aetheric_lantern',
     name: 'Aetheric Lantern',
@@ -166,7 +168,7 @@ export const ITEMS: Record<string, Item> = {
     value: 3,
     icon: '⚙️',
   },
-  
+
   brass_fitting: {
     id: 'brass_fitting',
     name: 'Brass Fitting',
@@ -178,7 +180,7 @@ export const ITEMS: Record<string, Item> = {
     value: 5,
     icon: '🔩',
   },
-  
+
   aether_crystal: {
     id: 'aether_crystal',
     name: 'Aether Crystal',
@@ -190,7 +192,7 @@ export const ITEMS: Record<string, Item> = {
     value: 75,
     icon: '💎',
   },
-  
+
   clockwork_spring: {
     id: 'clockwork_spring',
     name: 'Clockwork Spring',
@@ -226,7 +228,7 @@ export const LOOT_TABLES = {
     { itemId: 'steam_tonic', weight: 15, minQty: 1, maxQty: 2 },
     { itemId: 'brass_coin', weight: 10, minQty: 5, maxQty: 20 },
   ],
-  
+
   uncommon_container: [
     { itemId: 'steam_tonic', weight: 25, minQty: 1, maxQty: 3 },
     { itemId: 'clockwork_spring', weight: 20, minQty: 1, maxQty: 3 },
@@ -234,7 +236,7 @@ export const LOOT_TABLES = {
     { itemId: 'brass_goggles', weight: 10, minQty: 1, maxQty: 1 },
     { itemId: 'brass_coin', weight: 30, minQty: 15, maxQty: 50 },
   ],
-  
+
   rare_container: [
     { itemId: 'aether_crystal', weight: 20, minQty: 1, maxQty: 2 },
     { itemId: 'ironclad_brew', weight: 15, minQty: 1, maxQty: 1 },
