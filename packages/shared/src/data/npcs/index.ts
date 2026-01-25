@@ -21,13 +21,18 @@ export type { DialogueTree, NPCDefinition } from '../schemas/npc';
 // Re-export ambient dialogue system
 export * from './ambientDialogue';
 
+// Import dialogue trees
+import { BlackBelleDialogues } from './dialogues/black_belle';
+import { DeputyHawkinsDialogues } from './dialogues/deputy_hawkins';
 import { DiamondbackDialogues } from './dialogues/diamondback';
 import { DocChenDialogues } from './dialogues/doc_chen';
 import { FatherMiguelDialogues } from './dialogues/father_miguel';
+import { MaggieIronpickDialogues } from './dialogues/maggie_ironpick';
 import { MayorHoltDialogues } from './dialogues/mayor_holt';
+import { ProfessorCogsworthDialogues } from './dialogues/professor_cogsworth';
 import { SamuelIronpickDialogues } from './dialogues/samuel_ironpick';
-// Import dialogue trees
 import { SheriffColeDialogues } from './dialogues/sheriff_cole';
+import { WhiskeyPeteDialogues } from './dialogues/whiskey_pete';
 
 // ============================================================================
 // NPC DEFINITIONS
@@ -576,6 +581,12 @@ export const ALL_DIALOGUE_TREES: DialogueTree[] = [
   ...FatherMiguelDialogues,
   ...MayorHoltDialogues,
   ...SamuelIronpickDialogues,
+  // Supporting NPC dialogues
+  ...WhiskeyPeteDialogues,
+  ...BlackBelleDialogues,
+  ...ProfessorCogsworthDialogues,
+  ...MaggieIronpickDialogues,
+  ...DeputyHawkinsDialogues,
 ];
 
 export const DIALOGUE_TREES_BY_ID: Record<string, DialogueTree> = Object.fromEntries(
