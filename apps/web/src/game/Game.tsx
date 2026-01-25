@@ -63,7 +63,28 @@ function GameCanvas() {
     startPuzzle,
     startCombat,
     addNotification,
+    time,
+    weather,
+    updateTime,
   } = useGameStore();
+
+  // Time Cycle
+  useEffect(() => {
+      if (phase !== 'playing') return;
+      
+      const timer = setInterval(() => {
+          updateTime(0.1); // Advance 0.1 hours every second -> 1 hour every 10 seconds
+      }, 1000);
+      
+      return () => clearInterval(timer);
+  }, [phase, updateTime]);
+
+  // Update Environment Visuals
+  useEffect(() => {
+      if (sceneManagerRef.current) {
+          sceneManagerRef.current.updateEnvironment(time, weather);
+      }
+  }, [time, weather]);
 
   // Initialize world on first play
   useEffect(() => {

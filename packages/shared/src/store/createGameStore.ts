@@ -844,15 +844,30 @@ export function createGameStore({
         },
 
         completeTravel: () => {
-          const { travelState } = get();
+          const { travelState, activeQuests } = get();
           if (!travelState) return;
 
+          const destinationId = travelState.toLocationId;
+
           set({
-            currentLocationId: travelState.toLocationId,
+            currentLocationId: destinationId,
             travelState: null,
             phase: 'playing',
           });
-          get().discoverLocation(travelState.toLocationId);
+          get().discoverLocation(destinationId);
+
+          // Update Quest Objectives (Visit)
+          activeQuests.forEach(quest => {
+              const def = dataAccess.getQuestById(quest.questId);
+              if (!def) return;
+              
+              const stage = def.stages[quest.currentStageIndex];
+              stage.objectives.forEach(obj => {
+                  if (obj.type === 'visit' && obj.target === destinationId) {
+                      get().updateObjective(quest.questId, obj.id, 1);
+                  }
+              });
+          });
         },
 
         cancelTravel: () => set({ travelState: null, phase: 'playing' }),
@@ -1150,18 +1165,65 @@ export function createGameStore({
 
         // Shop Actions
         openShop: (shopId: string) => {
-          set({ shopState: { shopId, ownerId: 'unknown' } }); // Needs owner lookup
-          get().openPanel('inventory'); // Reuse inventory panel for now? Or needs shop panel
+          // In a real implementation, we'd load the shop's specific inventory from a persistent source
+          // For now, we generate/load it via the ProceduralLocationManager if possible, or just open the UI
+          // The UI (ShopPanel) will likely handle fetching the actual items via a selector or hook
+          
+          // But we need to track *who* we are trading with for reputation/price modifiers
+          set({ shopState: { shopId, ownerId: 'unknown' } }); 
         },
 
         closeShop: () => set({ shopState: null }),
 
         buyItem: (itemId: string) => {
-          // Logic
+          const state = get();
+          const { shopState, playerStats } = state;
+          if (!shopState) return;
+
+          // Resolve price
+          const itemDef = dataAccess.getItem(itemId);
+          if (!itemDef) return;
+
+          // Calculate price (base * modifier)
+          // For now, simple logic using DataAccess
+          const price = dataAccess.calculateBuyPrice(itemDef.value, playerStats.reputation);
+
+          if (playerStats.gold < price) {
+              state.addNotification('warning', "Can't afford that.");
+              return;
+          }
+
+          // Transaction
+          set(s => ({
+              playerStats: { ...s.playerStats, gold: s.playerStats.gold - price }
+          }));
+          
+          state.addItemById(itemId, 1);
+          state.addNotification('item', `Bought ${itemDef.name} for ${price}g`);
+          
+          // Audio
+          // state.playSfx('ui_buy'); // If we had this in actions
         },
 
         sellItem: (inventoryId: string) => {
-          // Logic
+          const state = get();
+          const { shopState, playerStats, inventory } = state;
+          if (!shopState) return;
+
+          const item = inventory.find(i => i.id === inventoryId);
+          if (!item) return;
+
+          const itemDef = dataAccess.getItem(item.itemId);
+          const price = dataAccess.calculateSellPrice(itemDef.value, playerStats.reputation);
+
+          // Transaction
+          state.removeItem(item.itemId, 1); // Remove 1 quantity
+          
+          set(s => ({
+              playerStats: { ...s.playerStats, gold: s.playerStats.gold + price }
+          }));
+
+          state.addNotification('item', `Sold ${item.name} for ${price}g`);
         },
       }),
       {
