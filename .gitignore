@@ -142,3 +142,6 @@ vite.config.ts.timestamp-*
 # Playwright test artifacts
 playwright-report/
 test-results/
+
+.gemini/
+gha-creds-*.json
