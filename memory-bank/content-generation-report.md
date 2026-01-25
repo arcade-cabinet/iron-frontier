@@ -12,9 +12,9 @@ Massive parallel content generation session using 24+ specialized agents. This r
 | adbaf44 | Mayor Holt dialogue | ✅ Complete | ~1400 |
 | aaf273b | Father Miguel dialogue | ✅ Complete | ~1200 |
 | a0212a0 | Samuel Ironpick dialogue | ✅ Complete | ~2600 |
-| a201234 | Cornelius Thorne dialogue | In Progress | ~800 |
-| ae8b0e2 | Supporting NPC dialogues | In Progress | TBD |
-| | Black Belle, Whiskey Pete, Prof. Cogsworth | | |
+| a201234 | Cornelius Thorne dialogue | ✅ Complete | 5,283 |
+| ae8b0e2 | Supporting NPC dialogues | ✅ Complete | 7,222 |
+| | Black Belle, Whiskey Pete, Prof. Cogsworth, Maggie, Deputy | | |
 
 ### Phase 2: Game Systems (8 agents)
 | Agent | Task | Status | Output |
@@ -31,7 +31,7 @@ Massive parallel content generation session using 24+ specialized agents. This r
 ### Phase 3: World Content (6 agents)
 | Agent | Task | Status | Output |
 |-------|------|--------|--------|
-| a17ebde | Random event encounters | In Progress | 40+ events |
+| a17ebde | Random event encounters | ✅ Complete | 40+ events |
 | a635236 | Ambient NPC barks | ✅ Complete | 60+ barks per NPC |
 | ae952a9 | Tutorial/onboarding | ✅ Complete | Guided intro flow |
 | a443ffe | Town shop inventories | ✅ Complete | 6 towns with stock |
@@ -44,7 +44,7 @@ Massive parallel content generation session using 24+ specialized agents. This r
 | ad7ae7f | Achievement system | ✅ Complete | 30+ achievements |
 | a2cfecb | Faction reputation | ✅ Complete | Schema + faction data |
 | a460471 | Multiple endings | ✅ Complete | 6 endings + epilogues |
-| ae80304 | Secrets/easter eggs | In Progress | Hidden content |
+| ae80304 | Secrets/easter eggs | ✅ Complete | Hidden content |
 | ab42726 | Journal/codex UI content | ✅ Complete | All journal entries |
 
 ## Integration Status
@@ -126,9 +126,10 @@ Massive parallel content generation session using 24+ specialized agents. This r
 - New additions: Maggie Ironpick, Cornelius Thorne, Whiskey Pete, Black Belle, Professor Cogsworth, Sister Maria, Deputy Hawkins, Lucky Lou
 
 ### Dialogues
-- ~12,000+ lines of authored dialogue
-- ~300+ unique dialogue nodes
-- ~60+ branching choice paths
+- ~20,000+ lines of authored dialogue (includes latest batch)
+- ~400+ unique dialogue nodes
+- ~80+ branching choice paths
+- Latest additions: Cornelius Thorne (5,283), Maggie Ironpick (1,760), Deputy Hawkins (1,181)
 
 ### Items
 - **Before**: 77 items
@@ -155,7 +156,7 @@ Massive parallel content generation session using 24+ specialized agents. This r
 ## Recommendations
 
 ### Immediate Actions
-1. Complete remaining agent work (3 in progress)
+1. ✅ All agents complete (24+ agents)
 2. Bind journal content to UI components
 3. Verify shop inventories against economy balance
 
@@ -184,6 +185,9 @@ packages/shared/src/data/companions/index.ts        NEW
 packages/shared/src/data/journal/index.ts           NEW
 packages/shared/src/data/endings/index.ts           NEW
 packages/shared/src/data/npcs/dialogues/*.ts        MODIFIED (all NPCs)
+packages/shared/src/data/npcs/dialogues/cornelius_thorne.ts  NEW (5,283 lines)
+packages/shared/src/data/npcs/dialogues/maggie_ironpick.ts   NEW (1,760 lines)
+packages/shared/src/data/npcs/dialogues/deputy_hawkins.ts    NEW (1,181 lines)
 packages/shared/src/data/enemies/index.ts           MODIFIED
 packages/shared/src/data/items/index.ts             MODIFIED
 packages/shared/src/data/quests/*.ts                MODIFIED
