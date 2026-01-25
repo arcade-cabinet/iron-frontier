@@ -1,0 +1,70 @@
+---
+title: Iron Frontier
+description: A mobile-first isometric RPG set in a Steampunk American Frontier
+template: splash
+hero:
+  tagline: A Steampunk Western RPG with procedural generation, touch-first controls, and a diorama presentation style.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Get Started
+      link: /iron-frontier/guides/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/jbogaty/iron-frontier
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is Iron Frontier?
+
+Iron Frontier is a **mobile-first isometric RPG** that combines the atmospheric charm of classic PS1-era RPGs with modern procedural generation and intuitive touch controls. Set in a unique **Steampunk American Frontier** world, the game features brass gears, steam-powered machinery, and the dusty trails of the Old West.
+
+<CardGrid stagger>
+  <Card title="Steampunk Frontier" icon="star">
+    A unique blend of the Wild West and industrial steam technology. Brass, gears, and steam meet dusty saloons and frontier towns.
+  </Card>
+  <Card title="Diorama Presentation" icon="puzzle">
+    The world renders as a tangible, tilt-shift tabletop diorama, distinct from grid-based tile games.
+  </Card>
+  <Card title="Touch-First Design" icon="approve-check">
+    Controls designed for thumbs, not mouse cursors. "Tap to move" and "virtual joystick" options for mobile play.
+  </Card>
+  <Card title="Procedural Generation" icon="random">
+    Daggerfall-style procedural content generation creates unique NPCs, quests, items, and encounters.
+  </Card>
+</CardGrid>
+
+## Core Pillars
+
+| Pillar | Description |
+|--------|-------------|
+| **Aesthetic** | Steampunk Frontier - brass, gears, steam, and Old West atmosphere |
+| **Presentation** | Diorama-style isometric view with tilt-shift depth of field |
+| **Controls** | Mobile-first touch interface with 44px minimum tap targets |
+| **Gameplay** | "One More Minute" loop - 30s to 5m gameplay bursts with frequent rewards |
+
+## Technical Highlights
+
+- **Babylon.js** for high-performance 3D rendering
+- **React** with "Reactylon" pattern for declarative 3D scenes
+- **Zustand** for state management with SQLite persistence
+- **Procedural generation** system with seeded random for deterministic content
+- **Cross-platform** support for web and mobile (via React Native)
+
+## Project Status
+
+Iron Frontier is currently in active development. The core systems are implemented:
+
+- Procedural generation system (NPCs, quests, items, encounters)
+- Travel system with random encounters
+- Combat system with turn-based battles
+- Shop and inventory management
+- World map with connected locations
+- SQLite-based save system
+
+---
+
+Ready to dive in? Check out the [Getting Started](/iron-frontier/guides/getting-started/) guide to run the game locally.

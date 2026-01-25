@@ -1,0 +1,244 @@
+---
+title: Web Application
+description: Guide to the Iron Frontier web application built with Vite and React
+---
+
+import { Aside, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+The web application is the primary development target for Iron Frontier. It uses Vite for fast development and Babylon.js for 3D rendering.
+
+## Technology Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **Vite** | Build tool and development server |
+| **React 19** | UI framework |
+| **Babylon.js** | 3D rendering engine |
+| **Tailwind CSS v4** | Styling |
+| **shadcn/ui** | UI component library |
+| **Framer Motion** | Animations |
+| **Zustand** | State management |
+| **sql.js** | SQLite in the browser (WASM) |
+
+## Project Structure
+
+<FileTree>
+- apps/web/
+  - src/
+    - components/
+      - ui/          # shadcn/ui components
+      - game/        # Game-specific components
+    - game/
+      - store/       # Zustand store
+      - ui/          # Game UI panels
+      - lib/         # Game utilities
+    - engine/
+      - rendering/   # Babylon.js integration
+      - assets/      # Asset loading
+    - hooks/         # Custom React hooks
+    - lib/           # Shared utilities
+    - test/          # Test files
+  - public/
+    - assets/        # Static assets (models, textures)
+  - index.html
+  - vite.config.ts
+  - tailwind.config.js
+</FileTree>
+
+## Development
+
+### Starting the Dev Server
+
+```bash
+pnpm dev
+```
+
+This starts Vite on [http://localhost:8080](http://localhost:8080) with:
+
+- Hot Module Replacement (HMR)
+- Fast refresh for React components
+- TypeScript compilation
+- Tailwind CSS processing
+
+### Building for Production
+
+```bash
+pnpm build
+```
+
+Output is generated in `apps/web/dist/` with:
+
+- Minified JavaScript bundles
+- Optimized assets
+- Tree-shaken dependencies
+- Source maps (for debugging)
+
+## Game UI Architecture
+
+The game UI is organized into panels that overlay the 3D scene:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        GameHUD                               │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ Health | Location | Quest Tracker                     │   │
+│  └──────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│                    3D Scene (Babylon.js)                     │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              ActionBar                                │   │
+│  │ [Character] [Map] [Inventory] [Journal] [Menu]       │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Panel Types
+
+| Panel | Description |
+|-------|-------------|
+| `CharacterPanel` | Player stats, equipment, reputation |
+| `InventoryPanel` | Item management with filters |
+| `WorldMapPanel` | Travel between locations |
+| `QuestLogPanel` | Active and completed quests |
+| `MenuPanel` | Game/Settings tabs, save/load |
+| `CombatPanel` | Turn-based combat interface |
+| `ShopPanel` | Buy/sell items |
+| `DialogueBox` | NPC conversations |
+| `TravelPanel` | Travel progress and encounters |
+
+### Panel State
+
+Panels are controlled through Zustand:
+
+```typescript
+// In gameStore.ts
+interface UIState {
+  activePanel: PanelType | null;
+  openPanel: (panel: PanelType) => void;
+  closePanel: () => void;
+}
+
+// Usage
+const { activePanel, openPanel, closePanel } = useGameStore();
+
+// Open inventory
+openPanel('inventory');
+
+// Close current panel
+closePanel();
+```
+
+## 3D Scene Integration
+
+The 3D scene is managed by Babylon.js through the `SceneManager`:
+
+```typescript
+// Initialize the scene
+const sceneManager = new SceneManager();
+await sceneManager.initialize(canvasRef.current);
+
+// Load the current location
+await sceneManager.loadLocation(currentLocation);
+
+// Update loop
+sceneManager.onBeforeRender = (deltaTime) => {
+  // Update game state
+  updatePlayer(deltaTime);
+  updateNPCs(deltaTime);
+};
+```
+
+### Asset Loading
+
+Assets are loaded through the `WesternRegistry`:
+
+```typescript
+import { WesternAssets } from '@/engine/assets/WesternRegistry';
+
+// Load a model
+const model = await sceneManager.loadModel(WesternAssets.GUNSLINGER);
+
+// Position the model
+model.position.set(0, 0, 0);
+model.rotation.y = Math.PI;
+```
+
+## Testing
+
+### Unit Tests
+
+```bash
+# Run all tests
+pnpm test
+
+# Watch mode
+pnpm test -- --watch
+
+# Coverage
+pnpm test -- --coverage
+```
+
+<Aside type="tip">
+  Tests use Vitest with jsdom environment. GL context warnings are expected in Node.
+</Aside>
+
+### E2E Tests
+
+```bash
+# Install Playwright browsers
+pnpm exec playwright install
+
+# Run E2E tests
+pnpm test:e2e
+```
+
+E2E tests are in `tests/e2e/` and test full game flows.
+
+## Configuration Files
+
+### vite.config.ts
+
+```typescript
+export default defineConfig({
+  server: {
+    port: 8080,
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  optimizeDeps: {
+    exclude: ['sql.js'], // WASM module
+  },
+  assetsInclude: ['**/*.glb', '**/*.gltf'],
+});
+```
+
+### tsconfig.json
+
+Key compiler options:
+
+- `strict: true` - Full TypeScript strict mode
+- `jsx: react-jsx` - React 19 JSX transform
+- `paths: { "@/*": ["./src/*"] }` - Path aliases
+
+## Performance Considerations
+
+1. **Asset Loading**: Models are loaded lazily and cached
+2. **State Updates**: Zustand's selector pattern prevents unnecessary re-renders
+3. **3D Optimization**: LOD, frustum culling, and instancing are used
+4. **Bundle Size**: Code splitting and tree shaking reduce initial load
+
+<Aside type="caution">
+  The game targets 60fps on mid-range mobile devices. Profile regularly to catch performance regressions.
+</Aside>
+
+## Next Steps
+
+- [Architecture Overview](/iron-frontier/guides/architecture/) - System design details
+- [Shared Packages](/iron-frontier/guides/shared-packages/) - The shared code library
+- [Contributing](/iron-frontier/guides/contributing/) - How to contribute

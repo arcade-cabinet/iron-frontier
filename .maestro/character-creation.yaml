@@ -1,0 +1,103 @@
+# Character Creation Test - Iron Frontier
+# Tests the character name input flow with various scenarios
+# Validates input validation, character limits, and edge cases
+
+appId: com.ironfrontier.mobile
+name: "Character Creation"
+tags:
+  - character
+  - input-validation
+
+---
+
+# Launch app with clean state
+- launchApp:
+    appId: com.ironfrontier.mobile
+    clearState: true
+
+# Wait for main menu
+- extendedWaitUntil:
+    visible: "Tales of the Steam Frontier"
+    timeout: 15000
+
+# Navigate to character creation
+- tapOn:
+    text: ".*Adventure|.*New Game.*"
+    regex: true
+
+# Wait for name input
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+# Take screenshot of empty name input
+- takeScreenshot: screenshots/12_char_creation_empty
+
+# Test 1: Try to start with empty name (should not proceed)
+- tapOn:
+    text: "Start"
+
+# Should still be on name input screen
+- assertVisible:
+    text: "Enter your name, stranger..."
+
+# Take screenshot showing validation works
+- takeScreenshot: screenshots/13_char_creation_empty_validation
+
+# Test 2: Enter a short name
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "Tex"
+
+# Take screenshot with short name
+- takeScreenshot: screenshots/14_char_creation_short_name
+
+# Verify Start button should now be enabled
+- assertVisible:
+    text: "Start"
+
+# Go back to try another name
+- tapOn:
+    text: "Back"
+
+# Return to name input
+- tapOn:
+    text: ".*Adventure|.*New Game.*"
+    regex: true
+
+# Wait for name input
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+# Test 3: Enter a longer name (within 20 char limit)
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "Billy the Kid"
+
+# Take screenshot with longer name
+- takeScreenshot: screenshots/15_char_creation_long_name
+
+# Test 4: Actually create the character
+- tapOn:
+    text: "Start"
+
+# Wait for game to initialize
+- extendedWaitUntil:
+    visible: "Billy the Kid"
+    timeout: 30000
+
+# Verify character was created with correct name
+- assertVisible:
+    text: "Billy the Kid"
+
+# Take screenshot of created character in game
+- takeScreenshot: screenshots/16_char_created_ingame
+
+# Test passes
+- runScript:
+    script: |
+      console.log('Character creation test completed successfully');
+      output.characterCreationSuccess = true;

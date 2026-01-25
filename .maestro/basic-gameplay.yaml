@@ -1,0 +1,189 @@
+# Basic Gameplay Test - Iron Frontier
+# Tests basic game interactions after starting a new game
+# Includes UI panels, action bar, world map, and game systems
+
+appId: com.ironfrontier.mobile
+name: "Basic Gameplay Interactions"
+tags:
+  - gameplay
+  - interactions
+  - critical
+
+---
+
+# Launch app with clean state
+- launchApp:
+    appId: com.ironfrontier.mobile
+    clearState: true
+
+# Wait for main menu and start new game
+- extendedWaitUntil:
+    visible: "Tales of the Steam Frontier"
+    timeout: 15000
+
+- tapOn:
+    text: ".*Adventure|.*New Game.*"
+    regex: true
+
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "TestRanger"
+
+- tapOn:
+    text: "Start"
+
+# Wait for game to fully load
+- extendedWaitUntil:
+    visible: "TestRanger"
+    timeout: 30000
+
+# Take initial gameplay screenshot
+- takeScreenshot: screenshots/17_gameplay_start
+
+# === Test Action Bar Navigation ===
+
+# Test 1: Open Character Panel (Outlaw button)
+- tapOn:
+    text: "Outlaw"
+
+# Wait for character panel
+- extendedWaitUntil:
+    visible: ".*Level|.*Health|.*Stamina.*"
+    regex: true
+    timeout: 5000
+
+# Take screenshot of character panel
+- takeScreenshot: screenshots/18_character_panel
+
+# Close character panel (tap outside or close button)
+- tapOn:
+    text: ".*Close|.*X.*"
+    regex: true
+    optional: true
+
+# If no close button, tap outside the panel
+- back
+
+# Test 2: Open World Map (Territory button)
+- tapOn:
+    text: "Territory"
+
+# Wait for world map
+- extendedWaitUntil:
+    visible: ".*Map|.*Territory|.*Dusty Springs.*"
+    regex: true
+    timeout: 5000
+
+# Take screenshot of world map
+- takeScreenshot: screenshots/19_world_map
+
+# Close world map
+- tapOn:
+    text: ".*Close|.*X.*"
+    regex: true
+    optional: true
+
+- back
+
+# Test 3: Open Inventory (Saddlebag button)
+- tapOn:
+    text: "Saddlebag"
+
+# Wait for inventory panel
+- extendedWaitUntil:
+    visible: ".*Inventory|.*Items|.*All|.*Weapons.*"
+    regex: true
+    timeout: 5000
+
+# Take screenshot of inventory
+- takeScreenshot: screenshots/20_inventory_panel
+
+# Test inventory filter tabs if visible
+- tapOn:
+    text: "Weapons"
+    optional: true
+
+- takeScreenshot: screenshots/21_inventory_weapons_filter
+
+# Close inventory
+- tapOn:
+    text: ".*Close|.*X.*"
+    regex: true
+    optional: true
+
+- back
+
+# Test 4: Open Quest Log (Journal button)
+- tapOn:
+    text: "Journal"
+
+# Wait for quest log
+- extendedWaitUntil:
+    visible: ".*Quests|.*Journal|.*Active.*"
+    regex: true
+    timeout: 5000
+
+# Take screenshot of quest log
+- takeScreenshot: screenshots/22_quest_log
+
+# Close quest log
+- back
+
+# Test 5: Open Menu Panel
+- tapOn:
+    text: "Menu"
+
+# Wait for menu panel
+- extendedWaitUntil:
+    visible: ".*Settings|.*Save|.*Load|.*Game.*"
+    regex: true
+    timeout: 5000
+
+# Take screenshot of menu
+- takeScreenshot: screenshots/23_menu_panel
+
+# Test Settings tab if available
+- tapOn:
+    text: "Settings"
+    optional: true
+
+- takeScreenshot: screenshots/24_settings_tab
+
+# Close menu
+- back
+
+# === Test 3D Canvas Interaction ===
+
+# Tap on the game canvas (center of screen) to test movement/interaction
+- swipe:
+    start: 50%, 50%
+    end: 60%, 50%
+    duration: 500
+
+# Wait for any animation
+- extendedWaitUntil:
+    timeout: 2000
+    visible: "TestRanger"
+
+# Take screenshot after interaction
+- takeScreenshot: screenshots/25_after_canvas_interaction
+
+# === Final State ===
+
+# Verify game is still running properly
+- assertVisible:
+    text: "TestRanger"
+
+# Take final gameplay screenshot
+- takeScreenshot: screenshots/26_gameplay_final
+
+# Test passes
+- runScript:
+    script: |
+      console.log('Basic gameplay test completed successfully');
+      output.gameplaySuccess = true;

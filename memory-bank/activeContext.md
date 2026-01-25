@@ -234,7 +234,7 @@
 
 ## Session 2026-01-24 (Latest) - UI/UX Polish
 
-### Completed
+### Completed - Full UI Overhaul
 
 1. **ActionBar Streamlined**
    - Reduced from 7 to 5 buttons (Outlaw, Territory, Saddlebag, Journal, Menu)
@@ -261,14 +261,50 @@
    - Equipped items badge (blue checkmark)
    - Better empty state per filter type
 
+5. **CombatPanel Polished** (`e33a475`)
+   - Western amber theme with custom icons
+   - Redesigned enemy cards with AP bars
+   - Icon-based action buttons (attack, defend, item, flee)
+   - Improved outcome screens for victory/defeat/fled
+
+6. **ShopPanel Polished** (`97a4f50`)
+   - Unified amber/western color scheme
+   - Custom icons (CoinIcon, ShoppingBagIcon, TagIcon)
+   - RarityBadge component for item rarity display
+   - Improved item rows with icons and stock indicators
+   - Infinity symbol for unlimited stock items
+
+7. **TravelPanel Polished** (`cea1956`)
+   - Unified amber color scheme with danger level styling
+   - Custom progress bar with animated marker
+   - Added compass and method icons
+   - Polished encounter panel with fight/flee buttons
+
+8. **CharacterPanel Polished** (`cea1956`)
+   - Full amber western theme overhaul
+   - Custom icons for equipment slots (gun, hat, vest, ring)
+   - Gradient stat bars for health and stamina
+   - Combat stat cards with color-coded values
+   - Reputation status with dynamic styling
+
+9. **GameOverScreen Polished** (`cea1956`)
+   - Dramatic western death screen with animations
+   - Skull icon in circular frame
+   - Tombstone decoration with R.I.P. marker
+   - Dust particle background effects
+   - Vignette and gradient effects
+
+10. **Cleanup**
+    - Deleted deprecated SettingsPanel.tsx (merged into MenuPanel)
+
 ### Build & Test Status
-- **Build**: Passes (7.67 MB)
+- **Build**: Passes (7.70 MB)
 - **Tests**: 203/203 pass
 - **TypeScript**: No errors
 
 ## Next Steps
 
-1. **Combat Panel Polish**: Improve encounter combat flow
-2. **Save/Load System**: Persist procedural generation state
-3. **Audio System**: Add western ambient music and SFX
-4. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
+1. **Save/Load System**: Persist procedural generation state
+2. **Audio System**: Add western ambient music and SFX
+3. **Consolidate Procgen**: Merge with /src/game/lib/procgen.ts (low priority)
+4. **Polish Remaining**: DialogueBox, QuestLog, WorldMap already good but could be refined

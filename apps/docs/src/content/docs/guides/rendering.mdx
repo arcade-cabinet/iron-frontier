@@ -1,0 +1,413 @@
+---
+title: Rendering Abstraction
+description: Cross-platform 3D rendering with the rendering abstraction layer
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Iron Frontier uses a rendering abstraction layer to support different 3D engines on different platforms while sharing the same game logic.
+
+## Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Game Logic                               │
+│              (platform-agnostic)                             │
+├─────────────────────────────────────────────────────────────┤
+│                  Rendering Abstraction                       │
+│               (RenderingAdapter interface)                   │
+├───────────────────────┬─────────────────────────────────────┤
+│    BabylonAdapter     │          FilamentAdapter            │
+│       (Web)           │            (Mobile)                 │
+├───────────────────────┼─────────────────────────────────────┤
+│      Babylon.js       │           Filament                  │
+│     WebGL/WebGPU      │         OpenGL ES/Metal             │
+└───────────────────────┴─────────────────────────────────────┘
+```
+
+## RenderingAdapter Interface
+
+The core interface that all renderers must implement:
+
+```typescript
+// packages/shared/src/rendering/interfaces.ts
+
+export interface RenderingAdapter {
+  // Lifecycle
+  initialize(canvas: HTMLCanvasElement | GLView): Promise<void>;
+  dispose(): void;
+
+  // Scene management
+  loadModel(path: string, options?: ModelOptions): Promise<ModelHandle>;
+  removeModel(handle: ModelHandle): void;
+
+  // Camera
+  setCamera(config: CameraConfig): void;
+  getCameraPosition(): Vector3;
+  screenToWorld(screenPos: Vector2): Vector3;
+
+  // Rendering
+  render(): void;
+  setRenderCallback(callback: (deltaTime: number) => void): void;
+
+  // Lighting
+  setAmbientLight(color: Color, intensity: number): void;
+  addPointLight(config: PointLightConfig): LightHandle;
+  removeLight(handle: LightHandle): void;
+
+  // Terrain
+  loadTerrain(heightmap: Float32Array, config: TerrainConfig): Promise<void>;
+
+  // Effects
+  enablePostProcessing(effects: PostProcessEffect[]): void;
+}
+```
+
+## Using the Adapter
+
+### Initialization
+
+```typescript
+import { useRenderer } from '@iron-frontier/shared/rendering';
+
+function GameScene() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { adapter, isReady, error } = useRenderer();
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      adapter.initialize(canvasRef.current);
+    }
+
+    return () => adapter.dispose();
+  }, [adapter]);
+
+  if (error) return <ErrorDisplay error={error} />;
+  if (!isReady) return <LoadingSpinner />;
+
+  return <canvas ref={canvasRef} />;
+}
+```
+
+### Loading Models
+
+```typescript
+// Load a model
+const gunslingerHandle = await adapter.loadModel(
+  '/assets/characters/gunslinger.glb',
+  {
+    position: [0, 0, 0],
+    rotation: [0, Math.PI, 0],
+    scale: [1, 1, 1],
+  }
+);
+
+// Update position
+adapter.updateModel(gunslingerHandle, {
+  position: player.position,
+  rotation: [0, player.heading, 0],
+});
+
+// Remove when done
+adapter.removeModel(gunslingerHandle);
+```
+
+### Camera Control
+
+```typescript
+// Isometric camera for diorama view
+adapter.setCamera({
+  type: 'orthographic',
+  position: [10, 15, 10],
+  target: [0, 0, 0],
+  zoom: 1.5,
+  near: 0.1,
+  far: 1000,
+});
+
+// Follow player
+function updateCamera(playerPos: Vector3) {
+  adapter.setCamera({
+    target: playerPos,
+    position: [
+      playerPos[0] + 10,
+      playerPos[1] + 15,
+      playerPos[2] + 10,
+    ],
+  });
+}
+```
+
+## Platform Adapters
+
+### BabylonAdapter (Web)
+
+<Tabs>
+  <TabItem label="Implementation">
+    ```typescript
+    // packages/shared/src/rendering/adapters/BabylonAdapter.ts
+
+    export class BabylonAdapter implements RenderingAdapter {
+      private engine: Engine;
+      private scene: Scene;
+      private camera: Camera;
+
+      async initialize(canvas: HTMLCanvasElement) {
+        this.engine = new Engine(canvas, true, {
+          preserveDrawingBuffer: true,
+          stencil: true,
+        });
+
+        this.scene = new Scene(this.engine);
+        this.setupDefaultLighting();
+        this.setupCamera();
+
+        this.engine.runRenderLoop(() => {
+          this.scene.render();
+        });
+      }
+
+      async loadModel(path: string, options?: ModelOptions) {
+        const result = await SceneLoader.ImportMeshAsync(
+          '', path, '', this.scene
+        );
+
+        const root = result.meshes[0];
+        if (options?.position) {
+          root.position = new Vector3(...options.position);
+        }
+
+        return { id: root.uniqueId, mesh: root };
+      }
+
+      // ... rest of implementation
+    }
+    ```
+  </TabItem>
+  <TabItem label="Features">
+    - WebGL 2.0 / WebGPU support
+    - Built-in GLTF/GLB loader
+    - Advanced post-processing
+    - Physics via Havok or Cannon.js
+    - Particle systems
+    - PBR materials
+  </TabItem>
+</Tabs>
+
+### FilamentAdapter (Mobile)
+
+<Tabs>
+  <TabItem label="Implementation">
+    ```typescript
+    // packages/shared/src/rendering/adapters/FilamentAdapter.ts
+
+    export class FilamentAdapter implements RenderingAdapter {
+      private engine: FilamentEngine;
+      private scene: FilamentScene;
+      private view: FilamentView;
+
+      async initialize(glView: GLView) {
+        this.engine = await Filament.Engine.create();
+        this.scene = this.engine.createScene();
+        this.view = this.engine.createView();
+
+        // Setup Filament renderer
+        this.view.scene = this.scene;
+        this.setupCamera();
+        this.setupLighting();
+      }
+
+      async loadModel(path: string, options?: ModelOptions) {
+        const asset = await this.engine.loadAsset(path);
+        this.scene.addEntities(asset.getEntities());
+
+        if (options?.position) {
+          // Apply transforms via TransformManager
+        }
+
+        return { id: asset.getRoot(), asset };
+      }
+
+      // ... rest of implementation
+    }
+    ```
+  </TabItem>
+  <TabItem label="Features">
+    - Native OpenGL ES / Metal
+    - Efficient mobile rendering
+    - IBL (Image Based Lighting)
+    - Optimized for battery life
+    - Lower memory footprint
+  </TabItem>
+</Tabs>
+
+## SceneManagerBase
+
+A higher-level abstraction built on the adapter:
+
+```typescript
+// packages/shared/src/rendering/SceneManagerBase.ts
+
+export abstract class SceneManagerBase {
+  protected adapter: RenderingAdapter;
+  protected loadedModels: Map<string, ModelHandle> = new Map();
+
+  constructor(adapter: RenderingAdapter) {
+    this.adapter = adapter;
+  }
+
+  async loadLocation(location: Location) {
+    // Clear previous models
+    this.clearScene();
+
+    // Load terrain
+    await this.adapter.loadTerrain(
+      location.heightmap,
+      { size: location.size, maxHeight: 50 }
+    );
+
+    // Load structures
+    for (const structure of location.structures) {
+      const handle = await this.adapter.loadModel(
+        structure.modelPath,
+        { position: structure.position }
+      );
+      this.loadedModels.set(structure.id, handle);
+    }
+
+    // Load NPCs, props, etc.
+    // ...
+  }
+
+  updateEntity(entityId: string, transform: Transform) {
+    const handle = this.loadedModels.get(entityId);
+    if (handle) {
+      this.adapter.updateModel(handle, transform);
+    }
+  }
+
+  clearScene() {
+    for (const handle of this.loadedModels.values()) {
+      this.adapter.removeModel(handle);
+    }
+    this.loadedModels.clear();
+  }
+}
+```
+
+## Render Loop Integration
+
+The adapter integrates with the game loop:
+
+```typescript
+function GameLoop() {
+  const adapter = useAdapter();
+  const store = useGameStore();
+
+  useEffect(() => {
+    adapter.setRenderCallback((deltaTime) => {
+      // Update game state
+      const state = store.getState();
+
+      // Update player model
+      adapter.updateModel(playerHandle, {
+        position: state.player.position,
+        rotation: [0, state.player.heading, 0],
+      });
+
+      // Update NPCs
+      for (const npc of state.npcs.values()) {
+        adapter.updateModel(npcHandles.get(npc.id), {
+          position: npc.position,
+        });
+      }
+
+      // Render frame
+      adapter.render();
+    });
+  }, [adapter]);
+}
+```
+
+## Post-Processing Effects
+
+<Aside type="note">
+  Post-processing availability varies by platform. Check capabilities before enabling.
+</Aside>
+
+```typescript
+// Enable diorama-style effects
+adapter.enablePostProcessing([
+  {
+    type: 'tilt-shift',
+    focusDistance: 10,
+    blurAmount: 2,
+  },
+  {
+    type: 'color-grading',
+    saturation: 1.1,
+    contrast: 1.05,
+    temperature: 0.1, // Warm western tones
+  },
+  {
+    type: 'vignette',
+    intensity: 0.3,
+  },
+]);
+```
+
+## Performance Considerations
+
+| Consideration | Web (Babylon) | Mobile (Filament) |
+|--------------|---------------|-------------------|
+| Max draw calls | ~1000 | ~500 |
+| Max triangles | ~500K | ~200K |
+| Texture budget | 512MB | 128MB |
+| Target FPS | 60 | 60 |
+
+### Optimization Tips
+
+1. **Use instancing** for repeated objects (cacti, rocks)
+2. **LOD system** for distant objects
+3. **Frustum culling** enabled by default
+4. **Texture atlases** to reduce material count
+5. **Lazy loading** for assets not immediately visible
+
+## Testing Renderers
+
+Mock adapters for testing:
+
+```typescript
+// packages/shared/src/rendering/adapters/MockAdapter.ts
+
+export class MockAdapter implements RenderingAdapter {
+  public loadedModels: string[] = [];
+  public cameraConfig: CameraConfig | null = null;
+
+  async initialize() { /* no-op */ }
+  dispose() { /* no-op */ }
+
+  async loadModel(path: string) {
+    this.loadedModels.push(path);
+    return { id: path };
+  }
+
+  setCamera(config: CameraConfig) {
+    this.cameraConfig = config;
+  }
+
+  render() { /* no-op */ }
+}
+
+// In tests
+const mockAdapter = new MockAdapter();
+const sceneManager = new SceneManagerBase(mockAdapter);
+await sceneManager.loadLocation(testLocation);
+expect(mockAdapter.loadedModels).toContain('saloon.glb');
+```
+
+## Next Steps
+
+- [Architecture Overview](/iron-frontier/guides/architecture/) - Full system design
+- [Shared Packages](/iron-frontier/guides/shared-packages/) - More on shared code
+- [API Reference](/iron-frontier/reference/api/) - Complete API docs
