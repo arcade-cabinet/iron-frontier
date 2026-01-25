@@ -5,6 +5,7 @@
  */
 
 import type {
+  AudioState,
   CameraState,
   EquipmentState,
   GameSettings,
@@ -69,6 +70,11 @@ export const DEFAULT_CAMERA_STATE: CameraState = {
   maxElevation: 1.4,
   followLag: 0.1,
   isInCutscene: false,
+};
+
+export const DEFAULT_AUDIO_STATE: AudioState = {
+  currentTrack: null,
+  isPlaying: false,
 };
 
 export const DEFAULT_WORLD_POSITION = { x: 128, y: 0, z: 128 };

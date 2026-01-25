@@ -28,6 +28,7 @@ import { QuestLog } from './ui/QuestLog';
 import { ShopPanel } from './ui/ShopPanel';
 import { TravelPanel } from './ui/TravelPanel';
 import { WorldMap } from './ui/WorldMap';
+import { audioService } from './services/AudioService';
 
 // ============================================================================
 // GAME CANVAS - Babylon.js 3D Scene with Hex Tiles
@@ -435,6 +436,11 @@ function GameCanvas() {
 export function Game() {
   const { phase, travelTo, shopState, travelState } = useGameStore();
   const [isWorldMapOpen, setIsWorldMapOpen] = useState(false);
+
+  // Initialize audio system
+  useEffect(() => {
+    audioService.initialize();
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {

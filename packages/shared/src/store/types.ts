@@ -43,6 +43,14 @@ export interface CameraState {
 }
 
 /**
+ * Audio state
+ */
+export interface AudioState {
+  currentTrack: string | null;
+  isPlaying: boolean;
+}
+
+/**
  * Time state in the game world
  */
 export interface TimeState {
@@ -473,6 +481,9 @@ export interface GameStateData {
   // Camera
   camera: CameraState;
 
+  // Audio
+  audio: AudioState;
+
   // UI
   activePanel: PanelType | null;
   dialogueState: DialogueState | null;
@@ -558,6 +569,10 @@ export interface GameStateActions {
   // World
   collectWorldItem: (itemId: string) => void;
   updateTime: (hours: number) => void;
+
+  // Audio
+  playMusic: (trackId: string) => void;
+  stopMusic: () => void;
 
   // UI
   togglePanel: (panel: PanelType) => void;
