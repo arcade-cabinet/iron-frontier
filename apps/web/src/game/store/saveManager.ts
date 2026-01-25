@@ -90,8 +90,12 @@ export async function loadGame(saveId: string): Promise<any | null> {
     // Try binary first
     const binary = await get<Uint8Array>(`${BINARY_SAVE_PREFIX}${saveId}`);
     if (binary) {
-      await dbManager.init(binary);
-      return dbManager.loadGameState();
+      try {
+        await dbManager.init(binary);
+        return dbManager.loadGameState();
+      } catch (e) {
+        console.warn('Binary load failed, falling back to JSON', e);
+      }
     }
 
     // Fallback to JSON
@@ -101,6 +105,7 @@ export async function loadGame(saveId: string): Promise<any | null> {
     console.error('Failed to load game:', error);
     return null;
   }
+}
 }
 
 /**
