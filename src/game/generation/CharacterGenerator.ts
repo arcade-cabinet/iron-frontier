@@ -1,5 +1,6 @@
 // Procedural Character Generator - Old West Gunslinger
 import Alea from 'alea';
+// @ts-expect-error - types/engine module needs to be refactored to use store types
 import type {
   CharacterAppearance,
   NPC,

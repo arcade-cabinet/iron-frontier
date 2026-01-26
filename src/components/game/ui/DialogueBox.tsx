@@ -124,7 +124,7 @@ export function DialogueBox({
         {/* Continue indicator (no choices) */}
         {showChoices && choices.length === 0 && (
           <View className="border-t border-brass-700 p-3">
-            <Button onPress={onClose} variant="primary">
+            <Button onPress={onClose} variant="default">
               <Text className="text-steam-900 font-bold">Continue</Text>
             </Button>
           </View>

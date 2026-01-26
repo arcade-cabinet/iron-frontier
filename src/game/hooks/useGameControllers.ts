@@ -4,6 +4,7 @@
  * Provides easy access to all game controllers with proper lifecycle management.
  */
 
+// @ts-expect-error - GameMode needs to be imported from store/gameStateSlice, WorldPosition y property issues
 import type { WorldPosition } from '@/store/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {

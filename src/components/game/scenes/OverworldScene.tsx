@@ -19,7 +19,6 @@ import { useFrame } from '@react-three/fiber';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-import { useGameStore } from '@/store';
 
 // ============================================================================
 // CONSTANTS
@@ -326,14 +325,21 @@ function CameraController({ target, distance = 20 }: CameraControllerProps) {
 // MAIN SCENE COMPONENT
 // ============================================================================
 
-export function OverworldScene() {
-  const gameStore = useGameStore();
-  const playerPosition = gameStore((state) => state.playerPosition);
-  const setPlayerPosition = gameStore((state) => state.setPlayerPosition);
-  const currentLocationId = gameStore((state) => state.currentLocationId);
-  const time = gameStore((state) => state.time);
-  const phase = gameStore((state) => state.phase);
+interface OverworldSceneProps {
+  playerPosition?: WorldPosition;
+  setPlayerPosition?: (pos: WorldPosition) => void;
+  currentLocationId?: string;
+  time?: { hour: number };
+  phase?: GamePhase;
+}
 
+export function OverworldScene({
+  playerPosition = { x: 0, y: 0.5, z: 0 },
+  setPlayerPosition = () => {},
+  currentLocationId = 'unknown',
+  time = { hour: 12 },
+  phase = 'playing',
+}: OverworldSceneProps) {
   const [targetPosition, setTargetPosition] = useState<THREE.Vector3 | null>(null);
   const playerPos = useMemo(
     () => new THREE.Vector3(playerPosition.x, PLAYER_HEIGHT, playerPosition.z),

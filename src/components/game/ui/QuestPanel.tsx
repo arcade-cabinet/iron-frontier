@@ -142,7 +142,7 @@ export function QuestPanel({
             {tab === 'active' && (
               <Button
                 onPress={() => onTrackQuest(selectedQuest.id)}
-                variant="primary"
+                variant="default"
                 className="mt-3"
               >
                 <Text className="text-steam-900 font-bold">Track Quest</Text>

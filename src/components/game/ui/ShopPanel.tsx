@@ -134,7 +134,7 @@ export function ShopPanel({
             {tab === 'buy' ? (
               <Button
                 onPress={() => onBuyItem(selectedItem.id)}
-                variant="primary"
+                variant="default"
                 disabled={playerGold < selectedItem.price || selectedItem.inStock === 0}
               >
                 <Text className="text-steam-900 font-bold">
@@ -146,7 +146,7 @@ export function ShopPanel({
                 </Text>
               </Button>
             ) : (
-              <Button onPress={() => onSellItem(selectedItem.id)} variant="primary">
+              <Button onPress={() => onSellItem(selectedItem.id)} variant="default">
                 <Text className="text-steam-900 font-bold">Sell</Text>
               </Button>
             )}

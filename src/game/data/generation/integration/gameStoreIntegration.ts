@@ -6,46 +6,44 @@
  */
 
 // Import shared types instead of web/engine types
+// @ts-expect-error - types/engine module needs to be refactored to use store types
 import type {
-  CharacterAppearance,
-  NPC,
-  NPCPersonality,
-  NPCRole,
-  WorldItem,
-  WorldPosition,
+    CharacterAppearance,
+    NPC,
+    NPCPersonality,
+    NPCRole,
+    WorldItem,
+    WorldPosition,
 } from '../../../types/engine';
 import type { GenerationContext } from '../../schemas/generation';
 import type {
-  DialogueChoice,
-  DialogueCondition,
-  DialogueEffect,
-  DialogueNode,
-  DialogueTree,
-  NPCDefinition,
-  NPCFaction,
+    DialogueChoice,
+    DialogueEffect,
+    DialogueNode,
+    DialogueTree,
+    NPCDefinition,
+    NPCFaction
 } from '../../schemas/npc';
 import type { Objective, Quest, QuestStage, QuestType } from '../../schemas/quest';
 import {
-  type GeneratedDialogueChoice,
-  type GeneratedDialogueNode,
-  type GeneratedDialogueTree,
-  type GeneratedEncounter,
-  type GeneratedNPC,
-  type GeneratedObjective,
-  type GeneratedQuest,
-  type GeneratedQuestStage,
-  generateNPCsForLocation,
-  generateRandomEncounter,
-  generateRandomQuest,
-  generateSimpleDialogueTree,
-  type QuestGenerationContext,
-  shouldTriggerEncounter,
+    type GeneratedDialogueChoice,
+    type GeneratedDialogueNode,
+    type GeneratedDialogueTree,
+    type GeneratedEncounter,
+    type GeneratedNPC,
+    type GeneratedObjective,
+    type GeneratedQuest,
+    type GeneratedQuestStage,
+    generateNPCsForLocation,
+    generateRandomEncounter,
+    generateRandomQuest,
+    generateSimpleDialogueTree,
+    type QuestGenerationContext,
+    shouldTriggerEncounter,
 } from '../generators';
 import {
-  type GeneratedLocation,
-  type GeneratedWorld,
-  type WorldGenerationOptions,
-  WorldGenerator,
+    type GeneratedLocation,
+    WorldGenerator
 } from '../generators/worldGenerator';
 import { combineSeeds, hashString, SeededRandom } from '../seededRandom';
 

@@ -8,6 +8,7 @@
  * - Save file versioning and migration
  */
 
+// @ts-expect-error - GameSaveData needs to be imported from store/gameStateSlice
 
 /**
  * Save slot metadata

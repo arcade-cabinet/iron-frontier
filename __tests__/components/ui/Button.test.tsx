@@ -5,8 +5,8 @@ import React from 'react';
 import { Text } from 'react-native';
 
 describe('Button', () => {
-  it('renders correctly', () => {
-    const { getByText } = render(
+  it('renders correctly', async () => {
+    const { getByText } = await render(
       <Button>
         <Text>Click me</Text>
       </Button>
@@ -14,9 +14,9 @@ describe('Button', () => {
     expect(getByText('Click me')).toBeTruthy();
   });
 
-  it('calls onPress when pressed', () => {
+  it('calls onPress when pressed', async () => {
     const onPress = jest.fn();
-    const { getByText } = render(
+    const { getByText } = await render(
       <Button onPress={onPress}>
         <Text>Click me</Text>
       </Button>
@@ -26,10 +26,10 @@ describe('Button', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('applies variant styles', () => {
-    const { getByTestId } = render(
-      <Button variant="primary" testID="button">
-        <Text>Primary</Text>
+  it('applies variant styles', async () => {
+    const { getByTestId } = await render(
+      <Button variant="default" testID="button">
+        <Text>Default</Text>
       </Button>
     );
     
@@ -37,9 +37,9 @@ describe('Button', () => {
     expect(button).toBeTruthy();
   });
 
-  it('is disabled when disabled prop is true', () => {
+  it('is disabled when disabled prop is true', async () => {
     const onPress = jest.fn();
-    const { getByText } = render(
+    const { getByText } = await render(
       <Button onPress={onPress} disabled>
         <Text>Disabled</Text>
       </Button>

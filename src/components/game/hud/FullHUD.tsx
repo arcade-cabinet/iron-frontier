@@ -54,7 +54,7 @@ export function FullHUD({
           {/* Health */}
           <View className="mb-2">
             <Text className="text-brass-400 text-xs mb-1">Health</Text>
-            <Progress value={healthPercent} variant="health" size="md" />
+            <Progress value={healthPercent} variant="health" size="default" />
             <Text className="text-brass-400 text-xs mt-0.5">
               {health}/{maxHealth}
             </Text>
@@ -63,7 +63,7 @@ export function FullHUD({
           {/* XP */}
           <View className="mb-2">
             <Text className="text-brass-400 text-xs mb-1">Experience</Text>
-            <Progress value={xpPercent} variant="xp" size="md" />
+            <Progress value={xpPercent} variant="experience" size="default" />
             <Text className="text-brass-400 text-xs mt-0.5">
               {xp}/{xpToNextLevel}
             </Text>
@@ -72,7 +72,7 @@ export function FullHUD({
           {/* Stamina */}
           <View className="mb-2">
             <Text className="text-brass-400 text-xs mb-1">Stamina</Text>
-            <Progress value={staminaPercent} variant="stamina" size="md" />
+            <Progress value={staminaPercent} variant="mana" size="default" />
             <Text className="text-brass-400 text-xs mt-0.5">
               {stamina}/{maxStamina}
             </Text>

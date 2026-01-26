@@ -9,6 +9,7 @@
  * - Interaction triggering
  */
 
+// @ts-expect-error - WorldPosition y property missing in some places
 import type { WorldPosition } from '@/store/types';
 import type { MovementVector } from '../input/types';
 

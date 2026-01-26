@@ -55,7 +55,7 @@ export function GameCanvas({
     // Setup renderer
     const renderer = new Renderer({ gl });
     renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
-    renderer.setClearColor('#c4b59d', 1);
+    renderer.setClearColor(0xc4b59d, 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -64,7 +64,7 @@ export function GameCanvas({
 
     // Setup scene
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog('#c4b59d', 30, 80);
+    scene.fog = new THREE.Fog(0xc4b59d, 30, 80);
     sceneRef.current = scene;
 
     // Setup camera
@@ -79,10 +79,10 @@ export function GameCanvas({
     cameraRef.current = camera;
 
     // Add basic lighting (scenes can override)
-    const ambientLight = new THREE.AmbientLight('#fff8e7', 0.4);
+    const ambientLight = new THREE.AmbientLight(0xfff8e7, 0.4);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight('#ffffff', 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 10, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;

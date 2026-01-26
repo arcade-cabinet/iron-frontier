@@ -13,8 +13,7 @@ import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-import { useGameStore } from '@/store';
-import type { Combatant } from '@/store/types';
+import type { Combatant, CombatState } from '@/store/types';
 
 // ============================================================================
 // CONSTANTS
@@ -212,8 +211,11 @@ function CombatLighting() {
 // COMBAT CAMERA
 // ============================================================================
 
-function CombatCamera() {
-  const combatState = useGameStore((state) => state.combatState);
+interface CombatCameraProps {
+  combatState: CombatState | null;
+}
+
+function CombatCamera({ combatState }: CombatCameraProps) {
   const controlsRef = useRef<any>(null);
 
   const centerPosition = useMemo(() => {
@@ -265,9 +267,11 @@ function CombatCamera() {
 // MAIN COMBAT SCENE
 // ============================================================================
 
-export function CombatScene() {
-  const combatState = useGameStore((state) => state.combatState);
+interface CombatSceneProps {
+  combatState?: CombatState | null;
+}
 
+export function CombatScene({ combatState = null }: CombatSceneProps) {
   const selectedTargetId = combatState?.selectedTargetId;
   const currentTurnCombatant = combatState?.combatants[combatState.currentTurnIndex];
 
@@ -278,10 +282,10 @@ export function CombatScene() {
   return (
     <>
       <CombatLighting />
-      <CombatCamera />
+      <CombatCamera combatState={combatState} />
       <ArenaFloor />
 
-      {combatState.combatants.map((combatant) => (
+      {combatState.combatants.map((combatant: Combatant) => (
         <CombatantMesh
           key={combatant.definitionId + combatant.name}
           combatant={combatant}
@@ -291,7 +295,7 @@ export function CombatScene() {
       ))}
 
       <group position={[0, 0, -ARENA_SIZE]}>
-        {[-8, -4, 0, 4, 8].map((x, i) => (
+        {[-8, -4, 0, 4, 8].map((x: number, i: number) => (
           <mesh key={`bg-${i}`} position={[x, 2 + Math.random() * 2, 0]} castShadow={false}>
             <boxGeometry args={[2, 4 + Math.random() * 3, 1]} />
             <meshStandardMaterial color="#2d2418" roughness={1} />

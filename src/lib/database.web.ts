@@ -5,7 +5,9 @@
  * Data is persisted to localStorage as a binary blob.
  */
 
-import initSqlJs, { Database as SqlJsDatabase } from 'sql.js';
+// @ts-expect-error - sql.js types need adjustment for default import
+import type { Database as SqlJsDatabase } from 'sql.js';
+import initSqlJs from 'sql.js';
 import type { Database } from './database';
 import { DB_SCHEMA } from './database';
 

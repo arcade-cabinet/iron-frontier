@@ -143,7 +143,7 @@ export function SettingsPanel({
           <View className="mb-6">
             <Text className="text-brass-300 font-bold text-lg mb-3">Game</Text>
 
-            <Button onPress={onSaveGame} variant="primary" className="mb-2">
+            <Button onPress={onSaveGame} variant="default" className="mb-2">
               <Text className="text-steam-900 font-bold">Save Game</Text>
             </Button>
 

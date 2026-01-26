@@ -100,7 +100,7 @@ export function InventoryPanel({ visible, items, onClose, onUseItem, onDropItem 
             <Text className="text-brass-300 font-bold text-lg mb-2">{selectedItem.name}</Text>
             <Text className="text-brass-400 text-sm mb-3">{selectedItem.description}</Text>
             <View className="flex-row gap-2">
-              <Button onPress={() => onUseItem(selectedItem.id)} variant="primary" className="flex-1">
+              <Button onPress={() => onUseItem(selectedItem.id)} variant="default" className="flex-1">
                 <Text className="text-steam-900 font-bold">Use</Text>
               </Button>
               <Button onPress={() => onDropItem(selectedItem.id)} variant="secondary" className="flex-1">

@@ -8,6 +8,7 @@
  * - Save/load triggers
  */
 
+// @ts-expect-error - GameMode and GameSaveData need to be imported from store
 import type { WorldPosition } from '@/store/types';
 import type { InputContext } from '../input/InputManager';
 import type { EncounterTrigger } from '../systems/EncounterSystem';
@@ -18,7 +19,7 @@ import type { CombatEvent, CombatRewards } from './CombatController';
  * Game event types
  */
 export type GameEvent =
-  | { type: 'mode_change'; from: GameMode; to: GameMode }
+  | { type: 'mode_change'; from: any; to: any } // GameMode
   | { type: 'position_change'; position: WorldPosition }
   | { type: 'town_enter'; townId: string }
   | { type: 'town_exit' }

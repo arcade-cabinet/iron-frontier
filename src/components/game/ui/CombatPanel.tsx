@@ -68,14 +68,14 @@ export function CombatPanel({
           <Text className="text-brass-300 font-bold text-lg mb-2">{player.name}</Text>
           <View className="mb-2">
             <Text className="text-brass-400 text-xs mb-1">Health</Text>
-            <Progress value={(player.health / player.maxHealth) * 100} variant="health" size="md" />
+            <Progress value={(player.health / player.maxHealth) * 100} variant="health" size="default" />
             <Text className="text-brass-400 text-xs mt-1">
               {player.health}/{player.maxHealth}
             </Text>
           </View>
           <View>
             <Text className="text-brass-400 text-xs mb-1">Action Points</Text>
-            <Progress value={(player.ap / player.maxAP) * 100} variant="stamina" size="md" />
+            <Progress value={(player.ap / player.maxAP) * 100} variant="mana" size="default" />
             <Text className="text-brass-400 text-xs mt-1">
               {player.ap}/{player.maxAP} AP
             </Text>
@@ -163,7 +163,7 @@ export function CombatPanel({
 
       {/* Control buttons */}
       <View className="flex-row gap-2">
-        <Button onPress={onEndTurn} variant="primary" className="flex-1" disabled={!isPlayerTurn}>
+        <Button onPress={onEndTurn} variant="default" className="flex-1" disabled={!isPlayerTurn}>
           <Text className="text-steam-900 font-bold">End Turn</Text>
         </Button>
         <Button onPress={onFlee} variant="secondary" className="flex-1">

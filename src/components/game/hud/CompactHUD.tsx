@@ -48,7 +48,7 @@ export function CompactHUD({
 
           {/* XP bar */}
           <View>
-            <Progress value={xpPercent} variant="xp" size="sm" />
+            <Progress value={xpPercent} variant="experience" size="sm" />
             <Text className="text-brass-400 text-xs mt-0.5">
               {xp}/{xpToNextLevel} XP
             </Text>
