@@ -1,58 +1,22 @@
-# Iron Frontier E2E Test: App Launch
-# Smoke test - verifies the game starts correctly
-#
-# Platforms: Android (Pixel 8a, Pixel Tablet)
+# Iron Frontier - Smoke Test: App Launch
+# Verifies app launches and reaches main menu
 # Priority: P0 (Critical)
 
 appId: ${ANDROID_APP_ID}
-name: App Launch Test
-tags:
-  - smoke
-  - critical
-  - p0
+name: Smoke - App Launch
+tags: [smoke, critical, p0]
 
 ---
-# Launch the application
 - launchApp:
     appId: ${ANDROID_APP_ID}
     clearState: true
-    clearKeychain: true
 
-# Wait for Unity splash screen and game loading
-- extendedWaitUntil:
-    visible:
-      text: ".*"
-    timeout: ${LONG_TIMEOUT}
-
-# Wait for splash screen to fade
-- waitForAnimationToEnd:
-    timeout: ${ANIMATION_TIMEOUT}
-
-# Verify main menu appears with primary action
+# Wait for Unity to load and main menu to appear
 - assertVisible:
     text: "New Game"
     timeout: ${LONG_TIMEOUT}
 
-# Verify secondary menu items (optional as layout may vary)
-- assertVisible:
-    text: "Continue"
-    optional: true
-    timeout: ${DEFAULT_TIMEOUT}
-
-- assertVisible:
-    text: "Settings"
-    optional: true
-    timeout: ${DEFAULT_TIMEOUT}
-
-- assertVisible:
-    text: "Quit"
-    optional: true
-    timeout: ${DEFAULT_TIMEOUT}
-
-# Take screenshot for visual verification
-- takeScreenshot: screenshots/01-app-launch-success
-
-# Verify no error dialogs
+# No crash or error dialogs
 - assertNotVisible:
     text: "Error"
     optional: true
@@ -61,5 +25,4 @@ tags:
     text: "Crash"
     optional: true
 
-# Log success
-- evalScript: console.log("App launch test completed successfully")
+- takeScreenshot: screenshots/smoke-01-main-menu

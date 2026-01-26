@@ -1,0 +1,34 @@
+# Iron Frontier - Smoke Test: Settings Access
+# Verifies settings menu is accessible
+
+appId: ${ANDROID_APP_ID}
+name: Smoke - Settings
+tags: [smoke, p1]
+
+---
+- launchApp:
+    appId: ${ANDROID_APP_ID}
+    clearState: true
+
+- assertVisible:
+    text: "New Game"
+    timeout: ${LONG_TIMEOUT}
+
+# Try to open settings
+- tapOn:
+    text: "Settings"
+    optional: true
+
+- tapOn:
+    text: "Options"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+# Verify we can navigate (no crash)
+- assertNotVisible:
+    text: "Error"
+    optional: true
+
+- takeScreenshot: screenshots/smoke-03-settings

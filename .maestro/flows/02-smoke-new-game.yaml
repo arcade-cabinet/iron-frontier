@@ -1,0 +1,28 @@
+# Iron Frontier - Smoke Test: New Game Flow
+# Verifies basic touch interaction and game start
+
+appId: ${ANDROID_APP_ID}
+name: Smoke - New Game
+tags: [smoke, critical, p0]
+
+---
+- launchApp:
+    appId: ${ANDROID_APP_ID}
+    clearState: true
+
+- assertVisible:
+    text: "New Game"
+    timeout: ${LONG_TIMEOUT}
+
+# Tap New Game - verify touch works
+- tapOn: "New Game"
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+# Should transition to character creation or game
+- assertNotVisible:
+    text: "Error"
+    optional: true
+
+- takeScreenshot: screenshots/smoke-02-after-new-game

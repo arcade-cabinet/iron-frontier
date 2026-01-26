@@ -1,11 +1,16 @@
 # Iron Frontier - CI/CD Pipeline
 # Unity 6 game with WebGL deploy to GitHub Pages and Android APK releases
 #
+# Testing Strategy:
+# - Primary (90%): Playwright + WebGL - Full E2E testing, interactions, visual verification
+# - Smoke (10%): Maestro + Android - Verify builds launch, basic touch works
+# - Implicit: Unity handles cross-platform rendering consistency
+#
 # Workflow:
 # 1. Test: Run Unity EditMode tests
 # 2. Build: Create WebGL and Android builds
 # 3. Deploy: WebGL to GitHub Pages, Android APK via release-please
-# 4. E2E: Playwright (WebGL) and Maestro (Android) tests
+# 4. E2E: Playwright (primary) and Maestro (smoke tests)
 
 name: CI/CD Pipeline
 
@@ -359,10 +364,11 @@ jobs:
           retention-days: 14
 
   # ============================================================
-  # Maestro E2E Tests (Android)
+  # Maestro Smoke Tests (Android) - Operability verification only
+  # Full E2E testing handled by Playwright + WebGL
   # ============================================================
   e2e-android:
-    name: E2E Tests (Android - ${{ matrix.device }})
+    name: Smoke Tests (Android - ${{ matrix.device }})
     runs-on: ubuntu-latest
     needs: build-android
     if: |
