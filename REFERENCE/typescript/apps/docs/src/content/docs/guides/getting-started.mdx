@@ -1,0 +1,152 @@
+---
+title: Getting Started
+description: Learn how to set up and run Iron Frontier locally
+---
+
+import { Tabs, TabItem, Steps, Aside, Code } from '@astrojs/starlight/components';
+
+This guide will help you get Iron Frontier running on your local machine for development.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** v22 or higher
+- **pnpm** v10 or higher (package manager)
+- **Git** with LFS support (for 3D assets)
+
+<Aside type="tip">
+  We recommend using [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) to manage Node.js versions.
+</Aside>
+
+## Installation
+
+<Steps>
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/jbogaty/iron-frontier.git
+   cd iron-frontier
+   ```
+
+2. **Enable Git LFS**
+
+   The project uses Git LFS for 3D model assets. Make sure LFS is initialized:
+
+   ```bash
+   git lfs install
+   git lfs pull
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+4. **Run the development server**
+
+   <Tabs>
+     <TabItem label="Web App">
+       ```bash
+       pnpm dev
+       ```
+
+       Open [http://localhost:8080](http://localhost:8080) in your browser.
+     </TabItem>
+     <TabItem label="Mobile App">
+       ```bash
+       pnpm dev:mobile
+       ```
+
+       Follow the Expo instructions to run on iOS Simulator or Android Emulator.
+     </TabItem>
+   </Tabs>
+
+</Steps>
+
+## Project Structure
+
+Iron Frontier uses a monorepo structure with pnpm workspaces:
+
+```
+iron-frontier/
+├── apps/
+│   ├── web/          # Web application (Vite + React)
+│   ├── mobile/       # Mobile application (Expo + React Native)
+│   └── docs/         # Documentation site (Astro + Starlight)
+├── packages/
+│   ├── shared/       # Shared game logic, types, and data
+│   ├── ui/           # Cross-platform UI components
+│   └── assets/       # Shared assets and configurations
+├── memory-bank/      # Project context files for AI assistants
+└── package.json      # Root workspace configuration
+```
+
+## Available Scripts
+
+Run these commands from the repository root:
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start the web development server |
+| `pnpm build` | Build the web application |
+| `pnpm test` | Run unit tests |
+| `pnpm lint` | Run Biome linting |
+| `pnpm typecheck` | Run TypeScript type checking |
+| `pnpm dev:mobile` | Start the mobile development server |
+| `pnpm build:android` | Build Android APK |
+| `pnpm build:ios` | Build iOS app |
+
+## Development Workflow
+
+### Code Style
+
+The project uses **Biome** for linting and formatting:
+
+```bash
+# Check for issues
+pnpm lint
+
+# Auto-fix issues
+pnpm lint:fix
+
+# Format code
+pnpm format
+```
+
+### Testing
+
+Unit tests are written with **Vitest**:
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm --filter @iron-frontier/web test -- --watch
+```
+
+End-to-end tests use **Playwright**:
+
+```bash
+# Run E2E tests
+pnpm --filter @iron-frontier/web test:e2e
+```
+
+### Type Checking
+
+TypeScript strict mode is enabled across all packages:
+
+```bash
+pnpm typecheck
+```
+
+## Next Steps
+
+Now that you have the project running, explore these guides:
+
+- [Architecture Overview](/iron-frontier/guides/architecture/) - Understand the system design
+- [Shared Packages](/iron-frontier/guides/shared-packages/) - Learn about the shared code
+- [Contributing Guide](/iron-frontier/guides/contributing/) - How to contribute to the project

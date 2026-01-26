@@ -1,0 +1,258 @@
+---
+title: Mobile Application
+description: Guide to the Iron Frontier mobile application built with Expo and React Native
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+The mobile application brings Iron Frontier to iOS and Android devices using Expo and React Native.
+
+<Aside type="note">
+  The mobile app shares core game logic with the web version through `@iron-frontier/shared`.
+</Aside>
+
+## Technology Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **Expo** | React Native framework and build tools |
+| **React Native** | Cross-platform mobile framework |
+| **Filament** | 3D rendering engine (via expo-gl) |
+| **NativeWind** | Tailwind CSS for React Native |
+| **Expo SQLite** | Native SQLite database |
+| **Zustand** | State management (shared with web) |
+
+## Prerequisites
+
+Before developing for mobile, ensure you have:
+
+- **Xcode** (for iOS development, macOS only)
+- **Android Studio** (for Android development)
+- **Expo CLI** (installed globally)
+
+```bash
+npm install -g expo-cli
+```
+
+## Getting Started
+
+### Start Development Server
+
+```bash
+pnpm dev:mobile
+```
+
+This starts the Expo development server. You can then:
+
+- Press `i` to open in iOS Simulator
+- Press `a` to open in Android Emulator
+- Scan the QR code with Expo Go app on your device
+
+### Running on Simulators
+
+<Tabs>
+  <TabItem label="iOS">
+    ```bash
+    # Start iOS Simulator
+    pnpm dev:mobile
+    # Press 'i' in terminal
+
+    # Or directly
+    pnpm --filter @iron-frontier/mobile ios
+    ```
+  </TabItem>
+  <TabItem label="Android">
+    ```bash
+    # Start Android Emulator first
+    # Then:
+    pnpm dev:mobile
+    # Press 'a' in terminal
+
+    # Or directly
+    pnpm --filter @iron-frontier/mobile android
+    ```
+  </TabItem>
+</Tabs>
+
+## Project Structure
+
+```
+apps/mobile/
+├── src/
+│   ├── components/       # Mobile-specific components
+│   ├── screens/          # App screens
+│   ├── navigation/       # Navigation setup
+│   ├── hooks/            # Mobile-specific hooks
+│   └── utils/            # Utilities
+├── assets/               # Mobile assets
+├── app.json              # Expo configuration
+├── babel.config.js       # Babel configuration
+├── metro.config.js       # Metro bundler config
+└── package.json
+```
+
+## Shared Code
+
+The mobile app imports shared logic from `@iron-frontier/shared`:
+
+```typescript
+// Import game store
+import { useGameStore } from '@iron-frontier/shared/store';
+
+// Import game data
+import { getLocation, getNPCsByLocation } from '@iron-frontier/shared/data';
+
+// Import types
+import type { PlayerState, Quest } from '@iron-frontier/shared/types';
+```
+
+## Rendering Abstraction
+
+Mobile uses a different 3D engine than web:
+
+| Platform | Engine | Adapter |
+|----------|--------|---------|
+| Web | Babylon.js | `BabylonAdapter` |
+| Mobile | Filament | `FilamentAdapter` |
+
+Both implement the same `RenderingAdapter` interface:
+
+```typescript
+// Shared rendering interface
+import { useRenderer } from '@iron-frontier/shared/rendering';
+
+function GameScene() {
+  const { renderer, isReady } = useRenderer();
+
+  // Same API regardless of platform
+  if (isReady) {
+    renderer.loadModel('/assets/gunslinger.glb');
+  }
+}
+```
+
+## Touch Controls
+
+Mobile features touch-optimized controls:
+
+### Tap to Move
+
+```typescript
+function TouchControls() {
+  const handleTap = (event: GestureEvent) => {
+    const worldPosition = screenToWorld(event.position);
+    gameStore.setPlayerTarget(worldPosition);
+  };
+
+  return (
+    <GestureHandler onTap={handleTap}>
+      <GameView />
+    </GestureHandler>
+  );
+}
+```
+
+### Virtual Joystick
+
+```typescript
+function VirtualJoystick() {
+  const handleMove = (direction: Vector2) => {
+    gameStore.setPlayerVelocity(direction);
+  };
+
+  return (
+    <Joystick
+      onMove={handleMove}
+      size={100}
+      baseColor="rgba(255,255,255,0.3)"
+      stickColor="rgba(201,149,108,0.8)"
+    />
+  );
+}
+```
+
+## SQLite Storage
+
+Mobile uses Expo SQLite instead of sql.js:
+
+```typescript
+import * as SQLite from 'expo-sqlite';
+
+// The storage adapter handles the platform difference
+import { createStorageAdapter } from '@iron-frontier/shared/store';
+
+const storage = createStorageAdapter({
+  platform: 'mobile',
+  sqliteInstance: SQLite.openDatabase('iron-frontier.db'),
+});
+```
+
+## Building for Production
+
+### iOS Build
+
+```bash
+# Development build
+pnpm build:ios
+
+# Production build (requires Apple Developer account)
+eas build --platform ios --profile production
+```
+
+### Android Build
+
+```bash
+# Development APK
+pnpm build:android
+
+# Production AAB (for Play Store)
+eas build --platform android --profile production
+```
+
+## Performance Optimization
+
+Mobile requires extra attention to performance:
+
+1. **Asset Compression**: Use Draco-compressed GLB files
+2. **Texture Atlas**: Combine textures to reduce draw calls
+3. **LOD System**: Lower detail for distant objects
+4. **Memory Management**: Unload assets when leaving locations
+5. **Frame Budget**: Target 16ms per frame for 60fps
+
+<Aside type="caution">
+  Test on real devices regularly. Simulators don't accurately represent performance.
+</Aside>
+
+## Touch Target Sizes
+
+All interactive elements must meet minimum tap target sizes:
+
+```typescript
+const TOUCH_TARGET = {
+  minimum: 44, // pixels
+  recommended: 48,
+  spacing: 8, // between targets
+};
+
+// Apply to buttons
+<TouchableOpacity
+  style={{ minHeight: TOUCH_TARGET.minimum, minWidth: TOUCH_TARGET.minimum }}
+  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+>
+  <Text>Action</Text>
+</TouchableOpacity>
+```
+
+## Offline Support
+
+The mobile app works offline:
+
+- SQLite database stored locally
+- Assets bundled with the app
+- No network required for gameplay
+
+## Next Steps
+
+- [Architecture Overview](/iron-frontier/guides/architecture/) - System design
+- [Rendering Abstraction](/iron-frontier/guides/rendering/) - Cross-platform rendering
+- [Contributing](/iron-frontier/guides/contributing/) - How to contribute

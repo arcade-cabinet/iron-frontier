@@ -1,0 +1,26 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["../../packages/shared/src/index.ts"],
+  "entryPointStrategy": "expand",
+  "out": "src/content/docs/api/generated",
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "../../packages/shared/tsconfig.json",
+  "readme": "none",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "githubPages": false,
+  "outputFileStrategy": "modules",
+  "flattenOutputFiles": false,
+  "entryFileName": "README",
+  "indexFormat": "table",
+  "parametersFormat": "table",
+  "enumMembersFormat": "table",
+  "typeDeclarationFormat": "table",
+  "propertyMembersFormat": "table",
+  "textContentMappings": {
+    "title.indexPage": "API Reference",
+    "title.memberPage": "{name}"
+  }
+}

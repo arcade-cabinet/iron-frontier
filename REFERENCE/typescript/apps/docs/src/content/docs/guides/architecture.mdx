@@ -1,0 +1,255 @@
+---
+title: Architecture Overview
+description: Understanding the system design and architecture of Iron Frontier
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+
+Iron Frontier is built as a cross-platform RPG with shared game logic and platform-specific rendering. This guide explains the key architectural decisions.
+
+## System Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      User Interface                          │
+├───────────────────────┬─────────────────────────────────────┤
+│      Web (React)      │        Mobile (React Native)        │
+├───────────────────────┴─────────────────────────────────────┤
+│                   Rendering Abstraction                      │
+│              (BabylonAdapter / FilamentAdapter)              │
+├─────────────────────────────────────────────────────────────┤
+│                     @iron-frontier/shared                    │
+│  ┌─────────┐  ┌──────────┐  ┌───────────┐  ┌─────────────┐ │
+│  │  Store  │  │   Data   │  │ Generation│  │   Schemas   │ │
+│  │(Zustand)│  │ (JSON)   │  │(Procedural)│  │   (Zod)    │ │
+│  └─────────┘  └──────────┘  └───────────┘  └─────────────┘ │
+├─────────────────────────────────────────────────────────────┤
+│                       Persistence                            │
+│                  SQLite (sql.js / Expo SQLite)              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## The "Reactylon" Pattern
+
+We bridge React state and Babylon.js 3D rendering using a declarative pattern we call **Reactylon**:
+
+<CardGrid>
+  <Card title="React" icon="seti:react">
+    Handles game logic, UI state, and user interactions. Components coordinate the bridge between state and 3D.
+  </Card>
+  <Card title="Babylon.js" icon="seti:3d">
+    A pure view layer for 3D rendering. Scene elements are driven by React state, not imperative code.
+  </Card>
+</CardGrid>
+
+### Example: Declarative 3D Components
+
+```tsx
+// Components receive state as props, not internal state
+function GunslingerModel({ position, velocity, animation }: Props) {
+  // Animation logic based on props
+  const animState = velocity.length() > 0 ? 'walk' : 'idle';
+
+  return (
+    <mesh position={position}>
+      <AnimatedGLTF
+        src={WesternAssets.GUNSLINGER}
+        animation={animState}
+      />
+    </mesh>
+  );
+}
+```
+
+<Aside type="note">
+  The key principle: **Store owns the state**, components are purely declarative views.
+</Aside>
+
+## State Management
+
+### Zustand Store
+
+The game uses **Zustand** as the single source of truth for runtime state:
+
+```typescript
+interface GameState {
+  // Player state
+  player: PlayerState;
+  inventory: InventoryState;
+
+  // World state
+  currentLocation: LocationRef;
+  npcs: Map<string, NPC>;
+  quests: Quest[];
+
+  // UI state
+  activePanel: PanelType | null;
+  dialogueState: DialogueState | null;
+
+  // Actions
+  travelTo: (location: LocationRef) => void;
+  startDialogue: (npcId: string) => void;
+  addToInventory: (item: Item) => void;
+}
+```
+
+### SQLite Persistence
+
+State is persisted to SQLite for saves:
+
+```
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   Zustand   │ ───► │  Sync Layer │ ───► │   SQLite    │
+│  (Memory)   │ ◄─── │             │ ◄─── │ (IndexedDB) │
+└─────────────┘      └─────────────┘      └─────────────┘
+```
+
+- **sql.js** (web): WASM-based SQLite in the browser
+- **Expo SQLite** (mobile): Native SQLite bindings
+- **idb-keyval**: Stores the SQLite binary blob in IndexedDB
+
+## Diorama Layer System
+
+The 3D world is built in strictly defined layers for visual consistency:
+
+| Layer | Content | Purpose |
+|-------|---------|---------|
+| 7 | Sky/Horizon | Background atmosphere |
+| 5 | Characters/Props | Interactive entities |
+| 4 | Structures | Buildings and architecture |
+| 1 | Terrain | Base heightmap and ground |
+
+This layering ensures proper depth sorting and visual hierarchy.
+
+## Biome Blending
+
+Terrain uses noise maps to smoothly blend between biomes:
+
+```typescript
+function getBiomeWeights(x: number, z: number): BiomeWeights {
+  const noise = simplex.noise2D(x * 0.01, z * 0.01);
+
+  return {
+    desert: clamp(noise, 0, 1),
+    town: clamp(1 - noise, 0, 1),
+    badlands: clamp(noise * 0.5, 0, 1),
+  };
+}
+```
+
+Vegetation and texture choices are derived from biome weights at any coordinate.
+
+## Asset Registry
+
+Type-safe asset management through a centralized registry:
+
+```typescript
+// WesternRegistry.ts
+export const WesternAssets = {
+  // Characters
+  GUNSLINGER: '/assets/western/characters/gunslinger.glb',
+
+  // Nature
+  CACTUS_1: '/assets/western/nature/cactus1.glb',
+  DEAD_TREE: '/assets/western/nature/deadtree.glb',
+
+  // Structures
+  SALOON: '/assets/western/structures/saloon.glb',
+} as const;
+
+// Type-safe usage
+<Model src={WesternAssets.GUNSLINGER} />
+```
+
+## Procedural Generation
+
+The game features a comprehensive procedural generation system inspired by Daggerfall:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    World Generator                           │
+│  ┌──────────────┬──────────────┬──────────────────────────┐ │
+│  │     NPC      │    Quest     │      Encounter           │ │
+│  │  Generator   │  Generator   │      Generator           │ │
+│  └──────────────┴──────────────┴──────────────────────────┘ │
+│  ┌──────────────┬──────────────┬──────────────────────────┐ │
+│  │     Item     │   Dialogue   │        Name              │ │
+│  │  Generator   │  Generator   │      Generator           │ │
+│  └──────────────┴──────────────┴──────────────────────────┘ │
+│                                                              │
+│                    Seeded Random (Mulberry32)                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+All generation is **deterministic**: same seed + location ID = identical content.
+
+## Data Flow
+
+```
+User Action
+    │
+    ▼
+┌─────────────┐
+│   Zustand   │ ◄── State Management
+│    Store    │
+└─────────────┘
+    │
+    ▼
+┌─────────────┐
+│   React     │ ◄── UI Updates
+│ Components  │
+└─────────────┘
+    │
+    ▼
+┌─────────────┐
+│  Babylon.js │ ◄── 3D Rendering
+│   Scene     │
+└─────────────┘
+```
+
+## Platform Abstractions
+
+### Rendering Abstraction
+
+The rendering layer is abstracted to support different 3D engines:
+
+```typescript
+interface RenderingAdapter {
+  initialize(canvas: HTMLCanvasElement): Promise<void>;
+  loadModel(path: string): Promise<Model>;
+  setCamera(config: CameraConfig): void;
+  render(): void;
+  dispose(): void;
+}
+
+// Implementations
+class BabylonAdapter implements RenderingAdapter { /* web */ }
+class FilamentAdapter implements RenderingAdapter { /* mobile */ }
+```
+
+### Storage Abstraction
+
+Storage is abstracted for cross-platform persistence:
+
+```typescript
+interface StorageAdapter {
+  save(key: string, data: Uint8Array): Promise<void>;
+  load(key: string): Promise<Uint8Array | null>;
+  delete(key: string): Promise<void>;
+  list(): Promise<string[]>;
+}
+```
+
+## Key Design Decisions
+
+1. **Decoupled Data**: Spatial data is pure JSON schemas (Zod validated), no behavior
+2. **ECS Ready**: Data designed for loading into ECS components (Miniplex)
+3. **Two-Tier Generation**: Hand-crafted locations via `locationDataId`, procedural via seed
+4. **Component Decoupling**: UI logic separated from rendering logic
+5. **Type Safety**: Strict TypeScript with Zod runtime validation
+
+## Next Steps
+
+- [Shared Packages](/iron-frontier/guides/shared-packages/) - Deep dive into @iron-frontier/shared
+- [Rendering Abstraction](/iron-frontier/guides/rendering/) - Details on the rendering layer
+- [Procedural Generation](/iron-frontier/reference/procedural-generation/) - How content is generated

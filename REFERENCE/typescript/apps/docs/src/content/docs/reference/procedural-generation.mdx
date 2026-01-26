@@ -1,0 +1,472 @@
+---
+title: Procedural Generation
+description: Daggerfall-style procedural content generation in Iron Frontier
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+
+Iron Frontier features a comprehensive procedural generation system inspired by The Elder Scrolls II: Daggerfall. This system creates NPCs, quests, items, encounters, and dialogue dynamically.
+
+## Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    World Generator                           │
+│           (Orchestrates all generation)                      │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────┬──────────────┬──────────────────────────┐ │
+│  │     NPC      │    Quest     │      Encounter           │ │
+│  │  Generator   │  Generator   │      Generator           │ │
+│  └──────────────┴──────────────┴──────────────────────────┘ │
+│  ┌──────────────┬──────────────┬──────────────────────────┐ │
+│  │     Item     │   Dialogue   │        Name              │ │
+│  │  Generator   │  Generator   │      Generator           │ │
+│  └──────────────┴──────────────┴──────────────────────────┘ │
+├─────────────────────────────────────────────────────────────┤
+│                    Seeded Random                             │
+│              (Mulberry32 PRNG)                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Key Principles
+
+<CardGrid>
+  <Card title="Deterministic" icon="approve-check">
+    Same seed + location = identical content every time. This enables consistent worlds across sessions.
+  </Card>
+  <Card title="Template-Based" icon="document">
+    Content is assembled from pre-authored templates, ensuring quality while allowing variety.
+  </Card>
+  <Card title="Context-Aware" icon="setting">
+    Generation considers location type, danger level, and existing content for coherent results.
+  </Card>
+  <Card title="Lazy Loading" icon="rocket">
+    Content is generated on-demand when players visit locations, not upfront.
+  </Card>
+</CardGrid>
+
+## Seeded Random
+
+All generation uses a seeded PRNG for deterministic results:
+
+```typescript
+import { SeededRandom } from '@iron-frontier/shared/data';
+
+// Create RNG with seed
+const rng = new SeededRandom(worldSeed);
+
+// Derive location-specific RNG
+const locationRng = rng.derive(`location:${locationId}`);
+
+// Generate values
+const value = locationRng.next();        // 0-1 float
+const int = locationRng.nextInt(1, 10);  // 1-10 integer
+const item = locationRng.pick(items);    // Random array element
+const items = locationRng.shuffle(arr);   // Shuffled array
+```
+
+<Aside type="note">
+  The Mulberry32 algorithm provides fast, high-quality pseudorandom numbers suitable for game generation.
+</Aside>
+
+## NPC Generation
+
+### Template Structure
+
+```typescript
+const MERCHANT_TEMPLATE: NPCTemplate = {
+  id: 'merchant',
+  archetype: 'merchant',
+  nameOrigins: ['american', 'irish', 'german'],
+  validLocationTypes: ['town', 'city', 'outpost'],
+  dialogueTemplates: ['merchant_greeting', 'merchant_barter'],
+  shopChance: 1.0,
+  shopTypes: ['general', 'provisions'],
+  scheduleTemplate: 'shopkeeper',
+  personalityTraits: ['friendly', 'shrewd', 'patient'],
+};
+```
+
+### Generation Process
+
+```typescript
+function generateNPC(options: GenerateNPCOptions): GeneratedNPC {
+  const { seed, locationId, locationType, archetype } = options;
+  const rng = new SeededRandom(seed).derive(`npc:${locationId}`);
+
+  // 1. Select template
+  const template = archetype
+    ? NPC_TEMPLATES[archetype]
+    : rng.pick(getValidTemplates(locationType));
+
+  // 2. Generate name
+  const nameOrigin = rng.pick(template.nameOrigins);
+  const name = generateName(rng, nameOrigin);
+
+  // 3. Generate personality
+  const personality = rng.pick(template.personalityTraits, 2);
+
+  // 4. Generate schedule
+  const schedule = template.scheduleTemplate
+    ? generateSchedule(rng, template.scheduleTemplate)
+    : undefined;
+
+  // 5. Generate shop (if applicable)
+  const shop = rng.next() < template.shopChance
+    ? generateShop(rng, template.shopTypes)
+    : undefined;
+
+  return {
+    id: `proc_npc_${locationId}_${rng.nextInt(0, 9999)}`,
+    name,
+    role: template.archetype,
+    personality,
+    schedule,
+    shop,
+    dialogueTemplates: template.dialogueTemplates,
+  };
+}
+```
+
+### Available Archetypes
+
+| Archetype | Valid Locations | Shop Chance |
+|-----------|-----------------|-------------|
+| `merchant` | town, city, outpost | 100% |
+| `bartender` | town, city | 80% |
+| `blacksmith` | town, city, mine | 100% |
+| `sheriff` | town, city | 0% |
+| `outlaw` | camp, ruin | 20% |
+| `doctor` | town, city | 50% |
+| `civilian` | all | 5% |
+
+## Quest Generation
+
+### Template Structure
+
+```typescript
+const BOUNTY_TEMPLATE: QuestTemplate = {
+  id: 'bounty_hunt',
+  type: 'bounty',
+  titleTemplates: [
+    'Wanted: {target_name}',
+    'Bounty on {target_name}',
+    'Dead or Alive: {target_name}',
+  ],
+  descriptionTemplates: [
+    '{target_name} has been terrorizing {location}. Bring them to justice.',
+    'A bounty of {reward_gold} gold has been placed on {target_name}.',
+  ],
+  objectiveTemplates: [
+    { type: 'kill', target: '{target_id}', count: 1 },
+  ],
+  rewardScaling: {
+    baseGold: 50,
+    goldPerLevel: 25,
+    xpMultiplier: 1.5,
+  },
+  validGiverRoles: ['sheriff', 'merchant'],
+  minLevel: 1,
+  maxLevel: 20,
+};
+```
+
+### Generation Process
+
+```typescript
+function generateQuest(options: GenerateQuestOptions): GeneratedQuest {
+  const { seed, template, giver, location } = options;
+  const rng = new SeededRandom(seed).derive(`quest:${giver.id}`);
+
+  // 1. Generate target (for bounty/kill quests)
+  const target = template.type === 'bounty'
+    ? generateBountyTarget(rng, location)
+    : undefined;
+
+  // 2. Fill title template
+  const titleTemplate = rng.pick(template.titleTemplates);
+  const title = fillTemplate(titleTemplate, { target, location, giver });
+
+  // 3. Fill description
+  const descTemplate = rng.pick(template.descriptionTemplates);
+  const description = fillTemplate(descTemplate, { target, location, giver });
+
+  // 4. Generate objectives
+  const objectives = template.objectiveTemplates.map(objTemplate =>
+    generateObjective(rng, objTemplate, { target, location })
+  );
+
+  // 5. Calculate rewards
+  const rewards = calculateRewards(template.rewardScaling, giver.level || 1);
+
+  return {
+    id: `proc_quest_${rng.nextInt(0, 99999)}`,
+    title,
+    description,
+    objectives,
+    rewards,
+    giver: giver.id,
+    location: location?.id,
+  };
+}
+```
+
+## Item Generation
+
+### Loot Tables
+
+```typescript
+const BANDIT_LOOT_TABLE: LootTable = {
+  id: 'bandit_loot',
+  rolls: { min: 1, max: 3 },
+  entries: [
+    { weight: 50, itemPool: 'common_consumables' },
+    { weight: 30, itemPool: 'common_weapons' },
+    { weight: 15, itemPool: 'uncommon_weapons' },
+    { weight: 5, itemPool: 'rare_weapons' },
+  ],
+  guaranteedDrops: ['gold_pouch'],
+  goldRange: { min: 5, max: 25 },
+};
+```
+
+### Generation Process
+
+```typescript
+function generateLoot(
+  rng: SeededRandom,
+  lootTable: LootTable,
+  modifiers?: LootModifiers
+): GeneratedItem[] {
+  const items: GeneratedItem[] = [];
+
+  // Add guaranteed drops
+  for (const itemId of lootTable.guaranteedDrops) {
+    items.push(generateItem(rng, itemId, modifiers));
+  }
+
+  // Roll for random items
+  const rolls = rng.nextInt(lootTable.rolls.min, lootTable.rolls.max);
+  for (let i = 0; i < rolls; i++) {
+    const entry = rng.weightedPick(lootTable.entries);
+    const pool = ITEM_POOLS[entry.itemPool];
+    const itemTemplate = rng.pick(pool);
+    items.push(generateItem(rng, itemTemplate, modifiers));
+  }
+
+  // Add gold
+  const gold = rng.nextInt(lootTable.goldRange.min, lootTable.goldRange.max);
+  if (gold > 0) {
+    items.push({ id: 'gold', quantity: gold });
+  }
+
+  return items;
+}
+```
+
+## Encounter Generation
+
+### Template Structure
+
+```typescript
+const BANDIT_AMBUSH_TEMPLATE: EncounterTemplate = {
+  id: 'bandit_ambush',
+  name: 'Bandit Ambush',
+  validLocations: ['road', 'trail', 'canyon'],
+  dangerLevels: ['moderate', 'high'],
+  enemyComposition: [
+    { templateId: 'bandit', count: { min: 2, max: 4 } },
+    { templateId: 'bandit_leader', count: { min: 0, max: 1 }, chance: 0.3 },
+  ],
+  levelScaling: {
+    minLevel: 1,
+    maxLevel: 10,
+    levelVariance: 2,
+  },
+  ambushChance: 0.7,
+  escapeChance: 40,
+  lootTable: 'bandit_loot',
+};
+```
+
+### Danger Level Probabilities
+
+| Danger Level | Encounter Chance | Enemy Count Modifier |
+|--------------|------------------|---------------------|
+| safe | 5% | 0.5x |
+| low | 15% | 0.75x |
+| moderate | 30% | 1.0x |
+| high | 50% | 1.25x |
+| extreme | 70% | 1.5x |
+
+## Dialogue Generation
+
+### Template Structure
+
+```typescript
+const MERCHANT_GREETING_TEMPLATE: DialogueTemplate = {
+  id: 'merchant_greeting',
+  startNode: 'greeting',
+  nodes: {
+    greeting: {
+      textTemplates: [
+        "Welcome, stranger! Looking to buy or sell?",
+        "Howdy, partner! Got some fine wares today.",
+        "{time_greeting}! What can I get for ya?",
+      ],
+      options: [
+        { text: "Show me what you've got.", nextNode: 'shop' },
+        { text: "I'm looking for information.", nextNode: 'rumors' },
+        { text: "Nevermind.", nextNode: 'farewell' },
+      ],
+    },
+    rumors: {
+      textTemplates: [
+        "{rumor}",
+        "Well, I heard {rumor}",
+      ],
+      options: [
+        { text: "Interesting. Now about those wares...", nextNode: 'shop' },
+        { text: "Thanks for the info.", nextNode: 'farewell' },
+      ],
+    },
+    // ... more nodes
+  },
+};
+```
+
+### Variable Substitution
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `{npc_name}` | NPC's name | "Hank" |
+| `{player_name}` | Player's name | "Marshal" |
+| `{location}` | Current location | "Dusty Springs" |
+| `{time_greeting}` | Time-based greeting | "Good morning" |
+| `{rumor}` | Random rumor | "Outlaws spotted near the canyon" |
+| `{faction}` | NPC's faction | "Copper Consortium" |
+
+## Name Generation
+
+### Cultural Pools
+
+```typescript
+const NAME_POOLS = {
+  american: {
+    first: ['John', 'William', 'James', 'Mary', 'Sarah', 'Elizabeth'],
+    last: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones'],
+    nicknames: ['Big', 'Slim', 'Red', 'Lucky', 'Quick'],
+  },
+  mexican: {
+    first: ['Jose', 'Miguel', 'Carlos', 'Maria', 'Rosa', 'Elena'],
+    last: ['Garcia', 'Rodriguez', 'Martinez', 'Lopez', 'Gonzalez'],
+    nicknames: ['El', 'La', 'Viejo', 'Chico'],
+  },
+  native: {
+    first: ['Running', 'Sitting', 'Red', 'Black', 'White'],
+    last: ['Wolf', 'Bear', 'Eagle', 'Hawk', 'Cloud'],
+    nicknames: [],
+  },
+  // ... more origins
+};
+```
+
+### Generation
+
+```typescript
+function generateName(rng: SeededRandom, origin: string): string {
+  const pool = NAME_POOLS[origin];
+  const first = rng.pick(pool.first);
+  const last = rng.pick(pool.last);
+
+  // 20% chance of nickname
+  if (pool.nicknames.length > 0 && rng.next() < 0.2) {
+    const nickname = rng.pick(pool.nicknames);
+    return `${first} "${nickname}" ${last}`;
+  }
+
+  return `${first} ${last}`;
+}
+```
+
+## ProceduralLocationManager
+
+The `ProceduralLocationManager` orchestrates all generation:
+
+```typescript
+import { ProceduralLocationManager } from '@iron-frontier/shared/data';
+
+// Initialize with world seed
+const manager = ProceduralLocationManager.getInstance();
+manager.initialize(worldSeed);
+
+// Generate content for a location (lazy)
+const content = await manager.generateLocationContent(location);
+// Returns: { npcs, items, dialogue, shops, quests }
+
+// Get NPCs (uses cache if available)
+const npcs = manager.getOrGenerateNPCs(locationId);
+
+// Get dialogue for NPC
+const dialogue = manager.getOrGenerateDialogue(npcId, locationId);
+```
+
+<Aside type="tip">
+  Content is cached after first generation. Use `manager.clearCache(locationId)` to regenerate.
+</Aside>
+
+## Integration with Game Store
+
+```typescript
+// In gameStore.ts
+initWorld: (worldSeed: number) => {
+  // Initialize procedural manager
+  ProceduralLocationManager.getInstance().initialize(worldSeed);
+
+  // Generate content for starting location
+  const startLocation = getLocation('dusty_springs');
+  ProceduralLocationManager.getInstance()
+    .generateLocationContent(startLocation);
+},
+
+travelTo: (locationId: string) => {
+  const location = getLocation(locationId);
+
+  // Generate content on-demand for procedural locations
+  if (!location.locationDataId) {
+    ProceduralLocationManager.getInstance()
+      .generateLocationContent(location);
+  }
+
+  // ... rest of travel logic
+},
+```
+
+## Adding New Templates
+
+To add a new NPC archetype:
+
+1. Add the template to `packages/shared/src/data/generation/templates/npcTemplates.ts`
+2. Add any new dialogue templates to `dialogueTreeTemplates.ts`
+3. Add to the template index
+4. Test with different seeds
+
+```typescript
+// New template
+export const PROSPECTOR_TEMPLATE: NPCTemplate = {
+  id: 'prospector',
+  archetype: 'civilian',
+  nameOrigins: ['american', 'irish', 'chinese'],
+  validLocationTypes: ['mine', 'camp', 'town'],
+  dialogueTemplates: ['prospector_greeting', 'prospector_mining_tips'],
+  shopChance: 0.3,
+  shopTypes: ['mining_supplies'],
+  personalityTraits: ['grizzled', 'paranoid', 'optimistic', 'secretive'],
+};
+```
+
+## Next Steps
+
+- [Data Schemas](/iron-frontier/reference/schemas/) - Schema definitions
+- [API Reference](/iron-frontier/reference/api/) - Full API documentation
+- [Architecture](/iron-frontier/guides/architecture/) - System design
