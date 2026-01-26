@@ -9,7 +9,6 @@
  * - Interaction triggering
  */
 
-// @ts-expect-error - WorldPosition y property missing in some places
 import type { WorldPosition } from '@/store/types';
 import type { MovementVector } from '../input/types';
 
@@ -91,7 +90,7 @@ export class PlayerController {
   private wantsSprint = false;
 
   constructor(
-    initialPosition: WorldPosition = { x: 0, z: 0 },
+    initialPosition: WorldPosition = { x: 0, y: 0, z: 0 },
     config: Partial<PlayerMovementConfig> = {}
   ) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -195,6 +194,7 @@ export class PlayerController {
 
     const newPosition: WorldPosition = {
       x: this.state.position.x + this.state.velocity.x * deltaTime,
+      y: this.state.position.y,
       z: this.state.position.z + this.state.velocity.z * deltaTime,
     };
 
@@ -255,7 +255,7 @@ export class PlayerController {
     this.state.position = position;
     this.state.velocity = { x: 0, z: 0 };
     this.state.isMoving = false;
-    console.log(`[PlayerController] Teleported to (${position.x}, ${position.z})`);
+    console.log(`[PlayerController] Teleported to (${position.x}, ${position.y}, ${position.z})`);
   }
 
   /**
