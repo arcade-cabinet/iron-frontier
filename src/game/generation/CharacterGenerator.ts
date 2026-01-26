@@ -1,13 +1,12 @@
 // Procedural Character Generator - Old West Gunslinger
-import Alea from 'alea';
-// @ts-expect-error - types/engine module needs to be refactored to use store types
 import type {
   CharacterAppearance,
   NPC,
   NPCPersonality,
   NPCRole,
   WorldPosition,
-} from '../types/engine';
+} from '@/store/types';
+import Alea from 'alea';
 
 // Name pools for procedural generation
 const FIRST_NAMES_MALE = [

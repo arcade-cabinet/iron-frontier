@@ -5,8 +5,7 @@
  * procedurally generated content with the game store.
  */
 
-// Import shared types instead of web/engine types
-// @ts-expect-error - types/engine module needs to be refactored to use store types
+// Import shared types from store
 import type {
     CharacterAppearance,
     NPC,
@@ -14,7 +13,7 @@ import type {
     NPCRole,
     WorldItem,
     WorldPosition,
-} from '../../../types/engine';
+} from '@/store/types';
 import type { GenerationContext } from '../../schemas/generation';
 import type {
     DialogueChoice,
