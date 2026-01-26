@@ -9,8 +9,8 @@
  * - Interaction triggering
  */
 
+import type { WorldPosition } from '@/store/types';
 import type { MovementVector } from '../input/types';
-import type { WorldPosition } from '../store/gameStateSlice';
 
 /**
  * Player movement configuration

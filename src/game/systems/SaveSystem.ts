@@ -8,7 +8,6 @@
  * - Save file versioning and migration
  */
 
-import type { GameSaveData } from '../store/gameStateSlice';
 
 /**
  * Save slot metadata

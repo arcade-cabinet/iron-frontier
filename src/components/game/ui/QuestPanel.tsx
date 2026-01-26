@@ -1,7 +1,16 @@
 // QuestPanel.tsx - Quest log with active/completed tabs
 import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Card, Modal } from '../../ui';
+import {
+    Button,
+    Card,
+    Modal,
+    ModalContent,
+    ModalDescription,
+    ModalFooter,
+    ModalHeader,
+    ModalTitle,
+} from '../../ui';
 
 interface QuestObjective {
   id: string;

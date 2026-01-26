@@ -4,33 +4,33 @@
  * Provides easy access to all game controllers with proper lifecycle management.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { WorldPosition } from '@/store/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  GameController,
-  getGameController,
-  type GameEvent,
-  type GameControllerConfig,
-} from '../controllers/GameController';
-import {
-  CombatController,
-  getCombatController,
-  type CombatEvent,
-  type CombatControllerDataAccess,
+    CombatController,
+    getCombatController,
+    type CombatControllerDataAccess,
+    type CombatEvent,
 } from '../controllers/CombatController';
 import {
-  PlayerController,
-  createPlayerController,
-  type PlayerMovementConfig,
-} from '../controllers/PlayerController';
-import {
-  DialogueController,
-  getDialogueController,
-  type DialogueEvent,
-  type DialogueControllerDataAccess,
+    DialogueController,
+    getDialogueController,
+    type DialogueControllerDataAccess,
+    type DialogueEvent,
 } from '../controllers/DialogueController';
-import { getInputManager, type MovementVector } from '../input';
-import { getEncounterSystem, type EncounterTrigger } from '../systems/EncounterSystem';
-import type { WorldPosition, GameMode } from '../store/gameStateSlice';
+import {
+    GameController,
+    getGameController,
+    type GameControllerConfig,
+    type GameEvent,
+} from '../controllers/GameController';
+import {
+    PlayerController,
+    createPlayerController,
+    type PlayerMovementConfig,
+} from '../controllers/PlayerController';
+import { getInputManager } from '../input';
+import { getEncounterSystem } from '../systems/EncounterSystem';
 
 /**
  * Hook configuration

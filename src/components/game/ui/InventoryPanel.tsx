@@ -1,7 +1,15 @@
 // InventoryPanel.tsx - Grid-based inventory with NativeWind
 import React, { useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Modal } from '../../ui';
+import {
+    Button,
+    Modal,
+    ModalContent,
+    ModalDescription,
+    ModalFooter,
+    ModalHeader,
+    ModalTitle,
+} from '../../ui';
 
 interface InventoryItem {
   id: string;

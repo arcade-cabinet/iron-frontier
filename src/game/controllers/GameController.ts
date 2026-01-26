@@ -8,7 +8,7 @@
  * - Save/load triggers
  */
 
-import type { GameMode, GameSaveData, WorldPosition } from '../store/gameStateSlice';
+import type { WorldPosition } from '@/store/types';
 import type { InputContext } from '../input/InputManager';
 import type { EncounterTrigger } from '../systems/EncounterSystem';
 import type { TimePhase } from '../systems/time';

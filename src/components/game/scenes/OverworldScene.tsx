@@ -19,7 +19,7 @@ import { useFrame } from '@react-three/fiber';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-import { useGameStore } from '@/src/store';
+import { useGameStore } from '@/store';
 
 // ============================================================================
 // CONSTANTS
