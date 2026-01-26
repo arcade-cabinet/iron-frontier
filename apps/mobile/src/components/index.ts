@@ -1,16 +1,18 @@
-// Filament-based 3D renderer
+/**
+ * Components module - UI components for the mobile app
+ *
+ * Note: The 3D rendering has moved to the engine module.
+ * Use imports from '../engine' for ThreeCanvas and MobileGameView.
+ */
+
+// Re-export engine components for convenience
 export {
-  Camera,
-  DefaultLight,
-  FilamentRenderer,
-  type FilamentRendererProps,
-  // Re-exported Filament components for custom scenes
-  FilamentScene,
-  FilamentSceneContainer,
-  type FilamentSceneContainerProps,
-  FilamentView,
-  type Float3,
-  Model,
-  type ModelSource,
-  useModel,
-} from './FilamentRenderer';
+  ThreeCanvas,
+  type ThreeCanvasProps,
+  type ThreeCanvasRef,
+  MobileGameView,
+  type MobileGameViewProps,
+} from '../engine';
+
+// Vector3 tuple type for positions and directions
+export type Float3 = [number, number, number];

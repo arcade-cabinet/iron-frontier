@@ -7,8 +7,14 @@
   "scripts": {
     "dev": "pnpm --filter @iron-frontier/web dev",
     "build": "pnpm --filter @iron-frontier/web build",
-    "test": "pnpm --filter @iron-frontier/web test",
-    "test:all": "pnpm -r test",
+    "test": "pnpm -r test",
+    "test:web": "pnpm --filter @iron-frontier/web test",
+    "test:mobile": "pnpm --filter @iron-frontier/mobile test",
+    "test:shared": "pnpm --filter @iron-frontier/shared test",
+    "test:ui": "pnpm --filter @iron-frontier/ui test",
+    "test:coverage": "pnpm -r test:coverage",
+    "test:e2e": "pnpm --filter @iron-frontier/web test:e2e",
+    "test:e2e:mobile": "pnpm --filter @iron-frontier/mobile test:e2e",
     "e2e": "pnpm --filter @iron-frontier/web test:e2e",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
@@ -45,6 +51,9 @@
     "onlyBuiltDependencies": [
       "sharp",
       "esbuild"
-    ]
+    ],
+    "overrides": {
+      "@types/three": "0.176.0"
+    }
   }
 }

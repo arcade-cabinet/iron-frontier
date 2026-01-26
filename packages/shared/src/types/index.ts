@@ -1,11 +1,14 @@
 /**
  * Shared Type Definitions
  *
- * Note: Most types are declared in .d.ts files for ambient declarations.
- * This file re-exports any runtime type utilities.
+ * Re-exports types from @iron-frontier/types plus schema-derived types.
+ * Note: Declaration files (.d.ts) provide ambient declarations.
  */
 
-// Re-export any runtime types from data schemas
+// Re-export all types from the dedicated types package
+export * from '@iron-frontier/types';
+
+// Re-export schema-derived types (Zod-inferred)
 export type {
   Assemblage,
   AssemblageRef,
@@ -27,4 +30,13 @@ export type {
   Zone,
   ZoneType,
 } from '../data/schemas/spatial';
-export * from './engine';
+
+// Re-export engine runtime values (constants, functions)
+export {
+  CHUNK_SIZE,
+  VIEW_DISTANCE,
+  STRUCTURE_TEMPLATES,
+  worldToChunk,
+  chunkToWorld,
+  chunkKey,
+} from './engine';

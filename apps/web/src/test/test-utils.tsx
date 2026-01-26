@@ -3,8 +3,22 @@ import userEvent from '@testing-library/user-event';
 import type React from 'react';
 import { Children, cloneElement, isValidElement, type ReactElement, useState } from 'react';
 import { expect, vi } from 'vitest';
-import type { ChunkData, NPC } from '@/engine/types';
+import type { ChunkCoord, NPC } from '@iron-frontier/shared/types/engine';
 import { type GameState, type InventoryItem, useGameStore } from '@/game/store/webGameStore';
+
+// Local ChunkData type for test mocks (simplified version)
+interface ChunkData {
+  coord: ChunkCoord;
+  seed: number;
+  generatedAt: number;
+  heightmap: Float32Array;
+  biomeWeights: Map<string, Float32Array>;
+  structures: unknown[];
+  props: unknown[];
+  npcs: NPC[];
+  items: unknown[];
+  overlays: unknown[];
+}
 
 // Mock Sheet components for testing - needs to be before imports
 vi.mock('@/components/ui/sheet', () => ({

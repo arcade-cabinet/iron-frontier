@@ -9,62 +9,38 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Game } from '@/game/Game';
 import { customRender, getStoreState, resetGameStore } from './test-utils';
 
-// Mocks
-vi.mock('@/engine/rendering/SceneManager', () => ({
-  SceneManager: vi.fn().mockImplementation(() => ({
-    setPlayerPosition: vi.fn(),
-    setGroundClickHandler: vi.fn(),
-    movePlayerTo: vi.fn(),
-    start: vi.fn(),
-    dispose: vi.fn(),
-    getHeightAt: vi.fn().mockReturnValue(0),
+// Mock React Three Fiber Canvas
+vi.mock('@react-three/fiber', () => ({
+  Canvas: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="r3f-canvas">{children}</div>
+  ),
+  useFrame: vi.fn(),
+  useThree: vi.fn(() => ({
+    camera: {},
+    gl: {},
+    scene: {},
   })),
 }));
 
-vi.mock('reactylon/web', () => ({
-  Engine: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="babylon-engine">{children}</div>
-  ),
+// Mock drei components
+vi.mock('@react-three/drei', () => ({
+  Sky: () => null,
+  Cloud: () => null,
+  OrbitControls: () => null,
+  useTexture: vi.fn(() => null),
+  Html: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Instances: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Instance: () => null,
 }));
 
-vi.mock('reactylon/core', () => ({
-  Scene: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="babylon-scene">{children}</div>
-  ),
-  useScene: () => null,
+// Mock postprocessing
+vi.mock('@react-three/postprocessing', () => ({
+  EffectComposer: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Bloom: () => null,
+  Vignette: () => null,
 }));
 
-vi.mock('@babylonjs/core/Maths/math', () => ({
-  Vector3: class {
-    constructor(
-      public x = 0,
-      public y = 0,
-      public z = 0
-    ) {}
-  },
-  Color3: class {
-    constructor(
-      public r = 0,
-      public g = 0,
-      public b = 0
-    ) {}
-    static FromHexString() {
-      return new this();
-    }
-    scale() {
-      return new (this.constructor as any)();
-    }
-  },
-  Color4: class {
-    constructor(
-      public r = 0,
-      public g = 0,
-      public b = 0,
-      public a = 1
-    ) {}
-  },
-}));
-
+// Mock framer-motion
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   motion: {

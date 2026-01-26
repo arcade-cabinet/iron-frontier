@@ -315,7 +315,7 @@ function MainMenu() {
                 steam age.
               </p>
               <p className="text-stone-500 text-xs mb-4">
-                Built with React, Babylon.js, and Reactylon. Procedural generation ensures every
+                Built with React and React Three Fiber. Procedural generation ensures every
                 playthrough is unique.
               </p>
               <button

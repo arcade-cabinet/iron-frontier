@@ -31,7 +31,7 @@ test.describe('Iron Frontier - Core Game Flow', () => {
     await expect(startBtn).toBeVisible({ timeout: 30000 });
     await startBtn.click();
 
-    const nameInput = page.getByPlaceholder('Enter your name...');
+    const nameInput = page.getByPlaceholder('Enter your name, stranger...');
     await expect(nameInput).toBeVisible({ timeout: 30000 });
     await nameInput.fill('E2E Gunslinger');
     await page.keyboard.press('Enter');
@@ -39,7 +39,7 @@ test.describe('Iron Frontier - Core Game Flow', () => {
     // 3. Verify HUD and Initial State
     // Wait for game phase to switch (HUD appears)
     await expect(page.getByText('E2E Gunslinger')).toBeVisible({ timeout: 30000 });
-    await expect(page.getByText('Level 1')).toBeVisible();
+    await expect(page.getByText(/Lv\.\d+/)).toBeVisible();
 
     // Verify notifications
     await expect(page.getByText('Welcome to the frontier')).toBeVisible();
@@ -52,7 +52,7 @@ test.describe('Iron Frontier - Core Game Flow', () => {
 
     // Should skip title screen and go straight to game
     await expect(page.getByText('E2E Gunslinger')).toBeVisible({ timeout: 60000 });
-    await expect(page.getByText('Level 1')).toBeVisible();
+    await expect(page.getByText(/Lv\.\d+/)).toBeVisible();
     await page.screenshot({ path: 'tests/e2e/screenshots/3-persistence-verified.png' });
   });
 
@@ -64,7 +64,7 @@ test.describe('Iron Frontier - Core Game Flow', () => {
     await expect(startBtn).toBeVisible({ timeout: 45000 });
     await startBtn.click();
 
-    const nameInput = page.getByPlaceholder('Enter your name...');
+    const nameInput = page.getByPlaceholder('Enter your name, stranger...');
     await expect(nameInput).toBeVisible({ timeout: 30000 });
     await nameInput.fill('Trader Joe');
     await page.keyboard.press('Enter');

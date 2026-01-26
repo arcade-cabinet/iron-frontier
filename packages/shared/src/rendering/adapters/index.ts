@@ -2,18 +2,8 @@
  * Rendering Adapters Index
  *
  * Exports interfaces and utilities for platform-specific rendering adapters.
- * Actual implementations are provided by apps/web (Babylon) and apps/mobile (Filament).
+ * The web uses React Three Fiber (Three.js), mobile uses Three.js via expo-gl.
  */
-
-export {
-  BABYLON_ADAPTER_TOKEN,
-  type BabylonAdapterOptions,
-  DEFAULT_BABYLON_OPTIONS,
-  type IBabylonSceneManager,
-  type IBabylonSceneManagerFactory,
-  isBabylonAdapterOptions,
-  isBabylonAvailable,
-} from './BabylonAdapter';
 
 export {
   DEFAULT_FILAMENT_OPTIONS,

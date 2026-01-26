@@ -2,33 +2,141 @@
 
 ## Current Focus
 
-**Phase 6: Massive Content Generation** - 24+ parallel agents creating authored content. TypeScript clean, 610 tests passing.
+**Phase 8: R3F Migration & AI Integration - COMPLETE** - Migrated from Babylon.js to React Three Fiber. Added YukaJS for AI. Aligned with Expo 2026 best practices.
 
-## Content Generation Session (2026-01-25 continued)
+## R3F Migration & AI Session (2026-01-25)
 
-### Parallel Agent Work - ✅ ALL COMPLETE
+### ✅ ALL TASKS COMPLETE
+
+**1. React Three Fiber Migration**
+- Removed Babylon.js dependency entirely
+- R3F is now the default (and only) 3D renderer
+- Updated App.tsx to use R3F directly (removed feature flag)
+- Cleaned up Babylon adapter code from shared package
+- Updated comments/documentation to reflect Three.js
+
+**2. YukaJS AI Integration**
+- Added `yuka` npm package to shared
+- Created `packages/shared/src/ai/` module:
+  - `AIManager.ts` - YukaJS-based entity manager with state machines
+  - `types.ts` - AI type definitions (AIState, NPCBehaviorConfig, etc.)
+  - `useAI.ts` - React hooks for AI integration
+  - `index.ts` - Module exports
+- Created TypeScript declarations for Yuka (`types/yuka.d.ts`)
+- Supports: wander, patrol, seek, flee, alert states
+- Steering behaviors: WanderBehavior, SeekBehavior, FleeBehavior, FollowPathBehavior
+
+**3. Codebase Cleanup**
+- Deleted deprecated Babylon.js scene setup files:
+  - `setupOverworldScene.ts`, `setupCombatScene.ts`
+  - `setupAtmosphere.ts`, `setupTerrain.ts`
+  - `setupVegetation.ts`, `setupLighting.ts`, `westernScene.ts`
+- Deleted `BabylonAdapter.ts`
+- Updated rendering module exports
+
+**4. Package Decomposition Plan**
+- Created `docs/PACKAGE_DECOMPOSITION.md` with:
+  - 6 proposed packages: types, schemas, config, game-logic, content, generation
+  - 6-phase migration strategy
+  - Dependency graph and benefits analysis
+
+**5. Expo 2026 Best Practices**
+- Enabled New Architecture (`newArchEnabled: true`) - SDK 54 is final supporting Legacy
+- Enabled React Compiler (`experiments.reactCompiler: true`) - automatic memoization
+- Expo SDK 54, React 19.1, React Native 0.81.4
+- pnpm workspace with auto-configured Metro
+- expo-gl + expo-three for 3D rendering
+
+### Build Status
+- TypeScript: **0 errors**
+- Tests: **739 passing**, 1 skipped
+- Build: **Success**
+
+### Next Steps
+- [ ] Execute package decomposition plan (Phase 2: Extract Schemas)
+- [ ] Run mobile gameplay tests with Maestro
+- [ ] Complete remaining package decomposition phases
+
+---
+
+## Package Decomposition Progress (2026-01-25)
+
+### ✅ Phase 1: Types Package Complete
+- Created `packages/types/` with pure TypeScript types
+- `engine.ts` - Coordinates, biomes, structures, NPCs, items, weather
+- `game.ts` - Game phases, combat, quests, inventory, saves
+- `ai.ts` - YukaJS AI types (states, behaviors, perception)
+- Updated `@iron-frontier/shared` to depend on and re-export from types
+
+### AI-R3F Integration Complete
+- Created `apps/web/src/game/hooks/useNPCAI.ts` - Hook for AI-driven NPCs
+- Created `apps/web/src/game/components/AINPCMarker.tsx` - AI-driven NPC marker
+- Updated `OverworldSceneR3F.tsx` to use AI-driven NPCs with fallback
+- NPCs now wander, patrol, and react to player based on role:
+  - Sheriff/Deputy: Patrol waypoints
+  - Merchant/Banker: Idle (stay at shop)
+  - Rancher/Miner: Wander around area
+  - Outlaw/Drifter: Aggressive wander
+
+---
+
+## Previous Focus
+
+**Phase 7: Core Gameplay Complete** - All major systems implemented. TypeScript clean, 692 tests passing.
+
+## Core Gameplay Implementation (2026-01-25)
+
+### ✅ ALL SYSTEMS COMPLETE
+
+**1. Streaming Terrain System**
+- `apps/web/src/engine/terrain/` - Chunk-based infinite procedural terrain
+- `TerrainChunk.ts` - Individual chunks with LOD (65x65, 33x33, 17x17)
+- `ChunkPool.ts` - LRU eviction with MAX_ACTIVE_CHUNKS = 49
+- `ChunkManager.ts` - Spiral loading, priority queue, distance-based LOD
+- `BiomeBlender.ts` - Biome sampling (desert, grassland, badlands, riverside, town)
+- `StreamingTerrain.ts` - Main manager with height queries
+
+**2. Zone and Collision System**
+- `packages/shared/src/systems/SpatialHash.ts` - Grid-based spatial partitioning
+- `packages/shared/src/systems/ZoneSystem.ts` - Zone boundaries and transitions
+- `packages/shared/src/systems/CollisionSystem.ts` - Movement collision with triggers
+- 82 new tests for zone/collision systems
+
+**3. Overworld Scene**
+- `apps/web/src/game/scenes/OverworldScene.tsx` - Main Reactylon scene with WASD
+- `apps/web/src/game/systems/CameraController.ts` - Third-person follow camera
+- `apps/web/src/game/systems/PlayerMesh.ts` - Player character with animations
+
+**4. Scene Transitions & Combat Integration**
+- `apps/web/src/game/systems/TransitionManager.ts` - Fade/wipe transitions
+- `apps/web/src/game/systems/SceneController.ts` - Scene stack management
+- `apps/web/src/game/hooks/useEncounterTrigger.ts` - Combat trigger hook
+- `apps/web/src/game/hooks/useCombatEnd.ts` - Combat return hook
+
+**5. Town Rendering**
+- `apps/web/src/game/systems/TownRenderer.ts` - Procedural building meshes
+- `apps/web/src/game/systems/NPCManager.ts` - NPC spawning with name plates
+- `apps/web/src/game/hooks/useNPCInteraction.ts` - NPC dialogue hook
+- `apps/web/src/game/hooks/useTownTransition.ts` - Town loading/unloading
+
+### Build Status
+- TypeScript: **0 errors**
+- Tests: **692 passing**, 1 skipped
+- Build: **Success**
+
+---
+
+## Previous Focus (Content Generation)
+
+**Phase 6: Massive Content Generation** - 24+ parallel agents creating authored content.
+
+### Content Generation Session
 - 24+ agents launched for massive content generation
 - **100% complete** - All agents finished
-- TypeScript: **0 errors**
-- Tests: **610 passing**
-- Latest commit: `2e40713` - 8,224 lines of NPC dialogue
-
-### New Systems Created
-- Weather/environment with gameplay effects
-- Crafting system with 30 recipes
-- Companion system with 3 recruitable NPCs
-- Multiple endings (6 variants)
-- Random encounter system (40+ events)
-- Faction reputation system
-- Achievement system (30+ achievements)
-
-### Content Added
-- 8 new supporting NPCs with dialogues
-- 6 new side quests
-- 12 legendary/rare unique items
-- 5 boss enemies + 10 elite variants
-- Full lore codex
-- Journal system content
+- Weather/environment, crafting (30 recipes), companions (3 NPCs)
+- Multiple endings (6 variants), random encounters (40+ events)
+- Faction reputation, achievements (30+)
+- 8 new NPCs, 6 new side quests, 12 legendary items, 5 bosses
 
 ---
 

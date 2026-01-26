@@ -1,42 +1,42 @@
 /**
  * Rendering Abstraction Layer
  *
- * Platform-agnostic rendering abstractions for Iron Frontier.
- * Allows game logic to work with both Babylon.js (web) and Filament/WebGPU (mobile).
+ * Platform-agnostic rendering types and abstractions for Iron Frontier.
+ * The web uses React Three Fiber (Three.js), mobile uses Three.js via expo-gl.
  *
  * Architecture:
  * - Types: Core data types (Transform, MeshConfig, etc.)
  * - Interfaces: Contracts for renderers (IScene, ISceneManager)
  * - SceneManagerBase: Abstract base class for implementations
- * - Adapters: Interface stubs for Babylon and Filament
  * - Hooks: React integration hooks
  *
  * Usage:
  *
- * 1. In your app (web or mobile), create the appropriate scene manager:
- *    ```typescript
- *    // Web (apps/web)
- *    import { BabylonSceneManager } from './engine/rendering/BabylonSceneManager';
- *    const manager = new BabylonSceneManager();
+ * 1. Web (apps/web): Use React Three Fiber directly
+ *    ```tsx
+ *    import { Canvas } from '@react-three/fiber';
+ *    import { OrbitControls } from '@react-three/drei';
  *
- *    // Mobile (apps/mobile)
- *    import { FilamentSceneManager } from './engine/rendering/FilamentSceneManager';
- *    const manager = new FilamentSceneManager();
+ *    function Game() {
+ *      return (
+ *        <Canvas>
+ *          <OrbitControls />
+ *          <mesh>
+ *            <boxGeometry />
+ *            <meshStandardMaterial color="orange" />
+ *          </mesh>
+ *        </Canvas>
+ *      );
+ *    }
  *    ```
  *
- * 2. Wrap your app with the context provider:
- *    ```typescript
- *    <SceneManagerProvider manager={manager}>
- *      <Game />
- *    </SceneManagerProvider>
- *    ```
+ * 2. Mobile (apps/mobile): Use Three.js via expo-gl
+ *    ```tsx
+ *    import { ThreeCanvas } from './engine/ThreeCanvas';
  *
- * 3. Use hooks in your components:
- *    ```typescript
- *    const mesh = useMesh('player', {
- *      modelPath: 'assets/models/player.glb',
- *      transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] }
- *    });
+ *    function Game() {
+ *      return <ThreeCanvas onSetup={setupScene} />;
+ *    }
  *    ```
  */
 
@@ -112,20 +112,12 @@ export {
 // ============================================================================
 
 export {
-  BABYLON_ADAPTER_TOKEN,
-  // Babylon (web)
-  type BabylonAdapterOptions,
-  DEFAULT_BABYLON_OPTIONS,
   DEFAULT_FILAMENT_OPTIONS,
   FILAMENT_ADAPTER_TOKEN,
   // Filament (mobile)
   type FilamentAdapterOptions,
-  type IBabylonSceneManager,
-  type IBabylonSceneManagerFactory,
   type IFilamentSceneManager,
   type IFilamentSceneManagerFactory,
-  isBabylonAdapterOptions,
-  isBabylonAvailable,
   isFilamentAdapterOptions,
   isFilamentAvailable,
   isWebGPUAvailable,

@@ -33,7 +33,7 @@ test.describe('Character Creation', () => {
     await gamePage.startNewGame('Level Check');
 
     await gamePage.waitForGameLoaded('Level Check');
-    await expect(page.getByText('Level 1')).toBeVisible();
+    await expect(page.getByText(/Lv\.\d+/)).toBeVisible();
   });
 
   test('welcome notification appears on game start', async () => {

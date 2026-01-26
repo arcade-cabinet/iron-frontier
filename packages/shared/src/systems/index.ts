@@ -146,3 +146,52 @@ export {
   type SaveSlotMeta,
   type SaveStorageAdapter,
 } from './SaveSystem';
+
+// Spatial Hash (efficient spatial partitioning)
+export {
+  SpatialHash,
+  aabbIntersects,
+  aabbContainsPoint,
+  circleToAABB,
+  aabbCircleIntersects,
+  circleIntersects,
+  circleContainsPoint,
+  aabbCenter,
+  aabbExpand,
+  aabbFromCenter,
+  aabbFromRadius,
+  type AABB,
+  type Circle,
+} from './SpatialHash';
+
+// Zone System
+export {
+  ZoneSystem,
+  getZoneSystem,
+  resetZoneSystem,
+  TOWN_POSITIONS,
+  type Zone,
+  type ZoneType,
+  type ZoneTransition,
+  type ZoneChangeCallback,
+  type TransitionCallback,
+} from './ZoneSystem';
+
+// Collision System
+export {
+  CollisionSystem,
+  getCollisionSystem,
+  resetCollisionSystem,
+  createBuildingCollider,
+  createNPCCollider,
+  createTriggerCollider,
+  createTerrainCollider,
+  isCircle,
+  isAABB,
+  type CollisionLayer,
+  type Collider,
+  type ColliderShape,
+  type CollisionResult,
+  type MovementCollisionResult,
+  type TriggerCallback,
+} from './CollisionSystem';

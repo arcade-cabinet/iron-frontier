@@ -1,26 +1,21 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FilamentRenderer } from '../src/components/FilamentRenderer';
+import { MobileGameView } from '../src/engine';
 import { useMobileGameStore } from '../src/game/store/mobileGameStore';
-import { MobileGameHUD } from '../src/game/ui/MobileGameHUD';
-
-// Test model - a cactus from our western asset pack
-const TEST_MODEL = require('../assets/models/cactus1.glb');
 
 export default function HomeScreen() {
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showModel, setShowModel] = useState(true);
-  
-  const initGame = useMobileGameStore(state => state.initGame);
-  const initialized = useMobileGameStore(state => state.initialized);
+
+  const initGame = useMobileGameStore((state) => state.initGame);
+  const initialized = useMobileGameStore((state) => state.initialized);
 
   useEffect(() => {
-      if (!initialized) {
-          initGame('Mobile Player');
-      }
-  }, [initialized]);
+    if (!initialized) {
+      initGame('Mobile Player');
+    }
+  }, [initialized, initGame]);
 
   const handleReady = () => {
     setIsReady(true);
@@ -34,13 +29,12 @@ export default function HomeScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorTitle}>Filament Error</Text>
+          <Text style={styles.errorTitle}>Rendering Error</Text>
           <Text style={styles.errorMessage}>{error}</Text>
           <TouchableOpacity
             style={styles.retryButton}
             onPress={() => {
               setError(null);
-              setShowModel(true);
             }}
           >
             <Text style={styles.retryButtonText}>Retry</Text>
@@ -52,25 +46,17 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.sceneContainer}>
-        {showModel && (
-          <FilamentRenderer
-            modelSource={TEST_MODEL}
-            cameraPosition={[0, 1.5, 3]}
-            cameraTarget={[0, 0.5, 0]}
-            onReady={handleReady}
-            onError={handleError}
-          />
-        )}
-      </View>
+      <MobileGameView
+        onReady={handleReady}
+        onError={handleError}
+        showHUD={true}
+        enableTouch={true}
+      />
 
-      {/* Game HUD Overlay */}
-      {isReady && <MobileGameHUD />}
-      
       {!isReady && (
-          <View style={styles.loadingOverlay}>
-              <Text style={styles.loadingText}>Loading Frontier...</Text>
-          </View>
+        <View style={styles.loadingOverlay}>
+          <Text style={styles.loadingText}>Loading Frontier...</Text>
+        </View>
       )}
     </View>
   );
@@ -81,20 +67,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1a1a2e',
   },
-  sceneContainer: {
-    flex: 1,
-    backgroundColor: '#0f0f1a',
-  },
   loadingOverlay: {
-      ...StyleSheet.absoluteFillObject,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#1a1a2e',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1a1a2e',
   },
   loadingText: {
-      color: '#d4a574',
-      fontSize: 20,
-      fontWeight: 'bold',
+    color: '#d4a574',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   errorContainer: {
     flex: 1,

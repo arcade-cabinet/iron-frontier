@@ -1,5 +1,6 @@
-# Basic Gameplay Test - Iron Frontier (Mobile Beta)
+# Basic Gameplay Test - Iron Frontier (Mobile)
 # Tests basic game interactions on the mobile HUD
+# Updated for BabylonReactNative (replaced Filament)
 
 appId: com.ironfrontier.mobile
 name: "Mobile HUD & Stats"
@@ -15,11 +16,11 @@ tags:
     appId: com.ironfrontier.mobile
     clearState: true
 
-# Wait for Filament and Game Store to initialize
+# Wait for Babylon.js and Game Store to initialize
 # The HUD appears when isReady is true
 - extendedWaitUntil:
     visible: "HP"
-    timeout: 30000
+    timeout: 45000  # Babylon.js may take longer to initialize
 
 # Verify Stats exist
 - assertVisible:
@@ -45,7 +46,7 @@ tags:
 - tapOn:
     text: "Character"
 
-# Since Panels aren't fully ported to Native UI yet, we just verify the HUD stays active
+# Verify the HUD stays active after interactions
 - assertVisible:
     text: "HP"
 

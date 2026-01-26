@@ -6,7 +6,7 @@ import type {
   NPCPersonality,
   NPCRole,
   WorldPosition,
-} from '../engine/types';
+} from '@iron-frontier/shared/types/engine';
 
 // Name pools for procedural generation
 const FIRST_NAMES_MALE = [

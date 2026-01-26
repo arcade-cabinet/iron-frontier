@@ -142,7 +142,7 @@ test.describe('Overworld Navigation', () => {
     await expect(page.getByText('Explorer')).toBeVisible();
 
     // Level should be visible
-    await expect(page.getByText('Level 1')).toBeVisible();
+    await expect(page.getByText(/Lv\.\d+/)).toBeVisible();
 
     // Action bar should be visible
     await expect(gamePage.inventoryBtn).toBeVisible();

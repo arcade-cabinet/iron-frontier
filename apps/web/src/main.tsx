@@ -4,7 +4,7 @@ import App from './App.tsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // StrictMode temporarily disabled for Babylon.js scene management
+  // StrictMode temporarily disabled for React Three Fiber scene management
   // <React.StrictMode>
   <App />
   // </React.StrictMode>

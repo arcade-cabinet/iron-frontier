@@ -17,7 +17,7 @@ test.describe('Iron Frontier - Combat & Gameplay Features', () => {
     // Enter Game
     const startBtn = page.getByRole('button', { name: 'Begin Adventure' });
     await startBtn.click();
-    const nameInput = page.getByPlaceholder('Enter your name...');
+    const nameInput = page.getByPlaceholder('Enter your name, stranger...');
     await nameInput.fill('Combat Tester');
     await page.keyboard.press('Enter');
     await expect(page.getByText('Combat Tester')).toBeVisible({ timeout: 30000 });
