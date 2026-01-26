@@ -16,7 +16,7 @@ import * as THREE from 'three';
 // TYPES
 // ============================================================================
 
-interface GameCanvasProps {
+export interface GameCanvasProps {
   children: ReactNode;
   shadows?: boolean;
   dpr?: number | [number, number];
