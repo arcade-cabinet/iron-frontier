@@ -5,7 +5,6 @@
  * Data is persisted to localStorage as a binary blob.
  */
 
-// @ts-expect-error - sql.js types need adjustment for default import
 import type { Database as SqlJsDatabase } from 'sql.js';
 import initSqlJs from 'sql.js';
 import type { Database } from './database';
@@ -26,7 +25,7 @@ export class WebDatabase implements Database {
     try {
       // Initialize sql.js
       const SQL = await initSqlJs({
-        locateFile: (file) => SQL_WASM_URL,
+        locateFile: (file: string) => SQL_WASM_URL,
       });
 
       // Try to load existing database from localStorage
@@ -90,9 +89,9 @@ export class WebDatabase implements Database {
 
       // Convert sql.js result format to array of objects
       const { columns, values } = results[0];
-      return values.map((row) => {
+      return values.map((row: any[]) => {
         const obj: any = {};
-        columns.forEach((col, index) => {
+        columns.forEach((col: string, index: number) => {
           obj[col] = row[index];
         });
         return obj as T;
