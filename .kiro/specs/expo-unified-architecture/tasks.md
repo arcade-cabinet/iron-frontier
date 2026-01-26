@@ -252,94 +252,94 @@ This task list breaks down the migration from a pnpm workspace monorepo to a sin
 - [x] 5.1.5 Copy UI images to `assets/images/`
 
 ### 5.2 Update Asset References
-- [ ] 5.2.1 Update all `require()` statements to point to new asset paths
-- [ ] 5.2.2 Update asset loading code to use `expo-asset`
-- [ ] 5.2.3 Test asset loading on web
-- [ ] 5.2.4 Test asset loading on native
+- [x] 5.2.1 Update all `require()` statements to point to new asset paths
+- [x] 5.2.2 Update asset loading code to use `expo-asset`
+- [x] 5.2.3 Test asset loading on web
+- [x] 5.2.4 Test asset loading on native
 
 ### 5.3 Verify Git LFS
-- [ ] 5.3.1 Run `git lfs ls-files` to verify LFS tracking
-- [ ] 5.3.2 Verify `.glb`, `.gltf`, `.png`, `.jpg` files are tracked by LFS
-- [ ] 5.3.3 Verify assets are not in regular Git (only LFS pointers)
-- [ ] 5.3.4 Test Git LFS pull on fresh clone
+- [x] 5.3.1 Run `git lfs ls-files` to verify LFS tracking
+- [x] 5.3.2 Verify `.glb`, `.gltf`, `.png`, `.jpg` files are tracked by LFS
+- [x] 5.3.3 Verify assets are not in regular Git (only LFS pointers)
+- [x] 5.3.4 Test Git LFS pull on fresh clone
 
 ### 5.4 Optimize Assets
-- [ ] 5.4.1 Run `expo-optimize` for images
-- [ ] 5.4.2 Check 3D model file sizes (compress if needed)
-- [ ] 5.4.3 Verify total asset size is reasonable (<50MB)
+- [x] 5.4.1 Run `expo-optimize` for images
+- [x] 5.4.2 Check 3D model file sizes (compress if needed)
+- [x] 5.4.3 Verify total asset size is reasonable (<50MB)
 
 ### 5.5 Validation
-- [ ] 5.5.1 All assets load correctly on web
-- [ ] 5.5.2 All assets load correctly on iOS
-- [ ] 5.5.3 All assets load correctly on Android
-- [ ] 5.5.4 Git LFS tracking works correctly
-- [ ] 5.5.5 Asset file sizes are reasonable
-- [ ] 5.5.6 No assets in regular Git (only LFS pointers)
+- [x] 5.5.1 All assets load correctly on web
+- [x] 5.5.2 All assets load correctly on iOS
+- [x] 5.5.3 All assets load correctly on Android
+- [x] 5.5.4 Git LFS tracking works correctly
+- [x] 5.5.5 Asset file sizes are reasonable
+- [x] 5.5.6 No assets in regular Git (only LFS pointers)
 
 ---
 
 ## Phase 6: Migrate Tests (3-4 days)
 
 ### 6.1 Setup Jest Configuration
-- [ ] 6.1.1 Create `jest.config.js` with jest-expo preset
-- [ ] 6.1.2 Configure transform ignore patterns for React Native modules
-- [ ] 6.1.3 Create `__tests__/setup.ts` with test environment setup
-- [ ] 6.1.4 Mock Expo modules (expo-asset, expo-gl, expo-sqlite)
-- [ ] 6.1.5 Configure coverage collection
+- [x] 6.1.1 Create `jest.config.js` with jest-expo preset
+- [x] 6.1.2 Configure transform ignore patterns for React Native modules
+- [x] 6.1.3 Create `__tests__/setup.ts` with test environment setup
+- [x] 6.1.4 Mock Expo modules (expo-asset, expo-gl, expo-sqlite)
+- [x] 6.1.5 Configure coverage collection
 
 ### 6.2 Convert Unit Tests
-- [ ] 6.2.1 Convert store tests from Vitest to Jest
-- [ ] 6.2.2 Convert component tests from Vitest to Jest
-- [ ] 6.2.3 Convert game logic tests from Vitest to Jest
-- [ ] 6.2.4 Update test imports (replace Vitest with Jest)
-- [ ] 6.2.5 Fix any compatibility issues
-- [ ] 6.2.6 Run all unit tests - verify 203 tests pass
+- [x] 6.2.1 Convert store tests from Vitest to Jest
+- [x] 6.2.2 Convert component tests from Vitest to Jest
+- [x] 6.2.3 Convert game logic tests from Vitest to Jest
+- [x] 6.2.4 Update test imports (replace Vitest with Jest)
+- [x] 6.2.5 Fix any compatibility issues
+- [x] 6.2.6 Run all unit tests - verify 203 tests pass
 
 ### 6.3 Create Responsive Design Tests (Playwright)
-- [ ] 6.3.1 Create `__tests__/e2e/web/responsive.spec.ts`
-- [ ] 6.3.2 Test phone portrait viewport (390x844)
-- [ ] 6.3.3 Test phone landscape viewport (844x390)
-- [ ] 6.3.4 Test tablet viewport (1640x2360)
-- [ ] 6.3.5 Test rotation transitions
-- [ ] 6.3.6 Test adaptive HUD modes (minimal, compact, full)
+- [x] 6.3.1 Create `__tests__/e2e/web/responsive.spec.ts`
+- [x] 6.3.2 Test phone portrait viewport (390x844)
+- [x] 6.3.3 Test phone landscape viewport (844x390)
+- [x] 6.3.4 Test tablet viewport (1640x2360)
+- [x] 6.3.5 Test rotation transitions
+- [x] 6.3.6 Test adaptive HUD modes (minimal, compact, full)
 
 ### 6.4 Update Playwright Tests
-- [ ] 6.4.1 Update base URL to Expo web server (http://localhost:8081)
-- [ ] 6.4.2 Update selectors if needed
-- [ ] 6.4.3 Test gameplay flow on web
-- [ ] 6.4.4 Test navigation on web
-- [ ] 6.4.5 Run Playwright tests - verify all pass
+- [x] 6.4.1 Update base URL to Expo web server (http://localhost:8081)
+- [x] 6.4.2 Update selectors if needed
+- [x] 6.4.3 Test gameplay flow on web
+- [x] 6.4.4 Test navigation on web
+- [x] 6.4.5 Run Playwright tests - verify all pass
 
 ### 6.5 Create Device-Specific Maestro Tests
-- [ ] 6.5.1 Create `__tests__/e2e/mobile/pixel-8a.yaml` (portrait/landscape)
-- [ ] 6.5.2 Create `__tests__/e2e/mobile/pixel-fold-folded.yaml`
-- [ ] 6.5.3 Create `__tests__/e2e/mobile/pixel-fold-unfolded.yaml`
-- [ ] 6.5.4 Create `__tests__/e2e/mobile/pixel-tablet.yaml`
-- [ ] 6.5.5 Create `__tests__/e2e/mobile/iphone-17.yaml` (portrait/landscape)
-- [ ] 6.5.6 Create `__tests__/e2e/mobile/ipad.yaml`
-- [ ] 6.5.7 Create `__tests__/e2e/mobile/rotation-test.yaml`
-- [ ] 6.5.8 Create `__tests__/e2e/mobile/fold-test.yaml`
+- [x] 6.5.1 Create `__tests__/e2e/mobile/pixel-8a.yaml` (portrait/landscape)
+- [x] 6.5.2 Create `__tests__/e2e/mobile/pixel-fold-folded.yaml`
+- [x] 6.5.3 Create `__tests__/e2e/mobile/pixel-fold-unfolded.yaml`
+- [x] 6.5.4 Create `__tests__/e2e/mobile/pixel-tablet.yaml`
+- [x] 6.5.5 Create `__tests__/e2e/mobile/iphone-17.yaml` (portrait/landscape)
+- [x] 6.5.6 Create `__tests__/e2e/mobile/ipad.yaml`
+- [x] 6.5.7 Create `__tests__/e2e/mobile/rotation-test.yaml`
+- [x] 6.5.8 Create `__tests__/e2e/mobile/fold-test.yaml`
 
 ### 6.6 Update Maestro Tests
-- [ ] 6.6.1 Update app ID to `com.ironfrontier.app`
-- [ ] 6.6.2 Update screen selectors for new UI structure
-- [ ] 6.6.3 Test gameplay flow on all devices
-- [ ] 6.6.4 Test navigation on all devices
-- [ ] 6.6.5 Test orientation changes
-- [ ] 6.6.6 Test fold/unfold transitions on Pixel Fold
-- [ ] 6.6.7 Run Maestro tests on all devices - verify all pass
+- [x] 6.6.1 Update app ID to `com.ironfrontier.app`
+- [x] 6.6.2 Update screen selectors for new UI structure
+- [x] 6.6.3 Test gameplay flow on all devices
+- [x] 6.6.4 Test navigation on all devices
+- [x] 6.6.5 Test orientation changes
+- [x] 6.6.6 Test fold/unfold transitions on Pixel Fold
+- [x] 6.6.7 Run Maestro tests on all devices - verify all pass
 
 ### 6.7 Validation
-- [ ] 6.7.1 All 203 unit tests pass with Jest
-- [ ] 6.7.2 Coverage meets targets (>80%)
-- [ ] 6.7.3 Playwright tests pass on all viewports
-- [ ] 6.7.4 Maestro tests pass on Pixel 8A (portrait and landscape)
-- [ ] 6.7.5 Maestro tests pass on Pixel Fold (folded and unfolded)
-- [ ] 6.7.6 Maestro tests pass on Pixel Tablet
-- [ ] 6.7.7 Maestro tests pass on iPhone 17 (portrait and landscape)
-- [ ] 6.7.8 Maestro tests pass on iPad
-- [ ] 6.7.9 Rotation tests pass
-- [ ] 6.7.10 Fold/unfold tests pass
+- [x] 6.7.1 All 203 unit tests pass with Jest
+- [x] 6.7.2 Coverage meets targets (>80%)
+- [x] 6.7.3 Playwright tests pass on all viewports
+- [x] 6.7.4 Maestro tests pass on Pixel 8A (portrait and landscape)
+- [x] 6.7.5 Maestro tests pass on Pixel Fold (folded and unfolded)
+- [x] 6.7.6 Maestro tests pass on Pixel Tablet
+- [x] 6.7.7 Maestro tests pass on iPhone 17 (portrait and landscape)
+- [x] 6.7.8 Maestro tests pass on iPad
+- [x] 6.7.9 Rotation tests pass
+- [x] 6.7.10 Fold/unfold tests pass
 
 ---
 
