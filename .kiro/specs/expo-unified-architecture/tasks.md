@@ -245,11 +245,11 @@ This task list breaks down the migration from a pnpm workspace monorepo to a sin
 ## Phase 5: Migrate Assets (1-2 days)
 
 ### 5.1 Copy Assets
-- [ ] 5.1.1 Create `assets/` directory structure (models, textures, fonts, images)
-- [ ] 5.1.2 Copy 3D models from `packages/assets/models/` to `assets/models/`
-- [ ] 5.1.3 Copy textures from `packages/assets/textures/` to `assets/textures/`
-- [ ] 5.1.4 Copy fonts to `assets/fonts/`
-- [ ] 5.1.5 Copy UI images to `assets/images/`
+- [x] 5.1.1 Create `assets/` directory structure (models, textures, fonts, images)
+- [x] 5.1.2 Copy 3D models from `packages/assets/models/` to `assets/models/`
+- [x] 5.1.3 Copy textures from `packages/assets/textures/` to `assets/textures/`
+- [x] 5.1.4 Copy fonts to `assets/fonts/`
+- [x] 5.1.5 Copy UI images to `assets/images/`
 
 ### 5.2 Update Asset References
 - [ ] 5.2.1 Update all `require()` statements to point to new asset paths
