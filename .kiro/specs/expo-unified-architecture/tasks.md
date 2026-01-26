@@ -199,14 +199,14 @@ This task list breaks down the migration from a pnpm workspace monorepo to a sin
 - [x] 4.2.5 Test HUD adapts correctly on all devices and orientations
 
 ### 4.3 Migrate Game UI Panels
-- [ ] 4.3.1 Migrate ActionBar with NativeWind (bottom navigation)
-- [ ] 4.3.2 Migrate DialogueBox with typewriter effect
-- [ ] 4.3.3 Migrate InventoryPanel with grid layout
-- [ ] 4.3.4 Migrate CombatPanel with turn-based UI
-- [ ] 4.3.5 Migrate ShopPanel with item list
-- [ ] 4.3.6 Migrate QuestPanel with quest log
-- [ ] 4.3.7 Migrate SettingsPanel with game options
-- [ ] 4.3.8 Apply Steampunk styling to all panels
+- [x] 4.3.1 Migrate ActionBar with NativeWind (bottom navigation)
+- [x] 4.3.2 Migrate DialogueBox with typewriter effect
+- [x] 4.3.3 Migrate InventoryPanel with grid layout
+- [x] 4.3.4 Migrate CombatPanel with turn-based UI
+- [x] 4.3.5 Migrate ShopPanel with item list
+- [x] 4.3.6 Migrate QuestPanel with quest log
+- [x] 4.3.7 Migrate SettingsPanel with game options
+- [x] 4.3.8 Apply Steampunk styling to all panels
 
 ### 4.4 Setup Navigation
 - [ ] 4.4.1 Configure Expo Router tabs in `app/(tabs)/_layout.tsx`
