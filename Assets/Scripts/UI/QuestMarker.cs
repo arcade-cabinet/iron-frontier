@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using IronFrontier.Core;
 
 namespace IronFrontier.UI
 {

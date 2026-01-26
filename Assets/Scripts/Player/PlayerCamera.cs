@@ -8,11 +8,7 @@ using UnityEngine;
 using IronFrontier.Core;
 using IronFrontier.Input;
 
-#if UNITY_6000_OR_NEWER
 using Unity.Cinemachine;
-#else
-using Cinemachine;
-#endif
 
 namespace IronFrontier.Player
 {

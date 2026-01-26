@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using IronFrontier.Core;
 
 namespace IronFrontier.VFX
 {

@@ -4,6 +4,7 @@
 // =============================================================================
 
 using UnityEngine;
+using IronFrontier.Core;
 
 namespace IronFrontier.VFX
 {

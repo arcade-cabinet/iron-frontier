@@ -258,7 +258,7 @@ namespace IronFrontier.Shop
         private void Update()
         {
             // Handle escape key
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 if (confirmationPanel.activeSelf)
                 {

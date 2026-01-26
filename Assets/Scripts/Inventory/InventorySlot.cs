@@ -37,6 +37,11 @@ namespace IronFrontier.Inventory
         public ItemData ItemData => _itemData;
 
         /// <summary>
+        /// The item ID, or null if empty.
+        /// </summary>
+        public string ItemId => _itemData?.id;
+
+        /// <summary>
         /// The quantity of items in this slot.
         /// </summary>
         public int Quantity => _quantity;

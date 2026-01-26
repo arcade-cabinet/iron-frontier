@@ -429,7 +429,7 @@ namespace IronFrontier.Dialogue
             if (!_isVisible) return;
 
             // Space/Enter to continue
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Space) || UnityEngine.Input.GetKeyDown(KeyCode.Return))
             {
                 OnContinueClicked();
             }
@@ -437,7 +437,7 @@ namespace IronFrontier.Dialogue
             // Number keys to select choices
             for (int i = 0; i < 9; i++)
             {
-                if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+                if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1 + i))
                 {
                     if (i < _choiceButtons.Count)
                     {
@@ -447,7 +447,7 @@ namespace IronFrontier.Dialogue
             }
 
             // Escape to close (if in a state where closing is allowed)
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 DialogueManager.Instance?.ForceEndDialogue();
             }

@@ -741,9 +741,9 @@ namespace IronFrontier.Scenes
                 Attack = 15,
                 Defense = 10,
                 Speed = 10,
-                Accuracy = 85f,
-                Evasion = 10f,
-                CritChance = 5f,
+                Accuracy = (int)85f,
+                Evasion = (int)10f,
+                CritChance = (int)5f,
                 CritMultiplier = 1.5f
             };
         }

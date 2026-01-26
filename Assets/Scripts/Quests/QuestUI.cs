@@ -226,7 +226,7 @@ namespace IronFrontier.Quests
         private void Update()
         {
             // Handle input for journal toggle
-            if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.L))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.J) || UnityEngine.Input.GetKeyDown(KeyCode.L))
             {
                 ToggleJournal();
             }

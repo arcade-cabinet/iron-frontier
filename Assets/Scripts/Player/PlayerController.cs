@@ -22,7 +22,8 @@ namespace IronFrontier.Player
         Interacting,
         InDialogue,
         InCombat,
-        Dead
+        Dead,
+        Disabled
     }
 
     /// <summary>
@@ -32,6 +33,9 @@ namespace IronFrontier.Player
     {
         public PlayerState PreviousState { get; }
         public PlayerState NewState { get; }
+
+        /// <summary>Alias for NewState for API compatibility.</summary>
+        public PlayerState ToState => NewState;
 
         public PlayerStateChangedEventArgs(PlayerState previous, PlayerState newState)
         {
@@ -184,7 +188,13 @@ namespace IronFrontier.Player
         public bool CanMove => _currentState != PlayerState.InDialogue &&
                                _currentState != PlayerState.InCombat &&
                                _currentState != PlayerState.Dead &&
-                               _currentState != PlayerState.Interacting;
+                               _currentState != PlayerState.Interacting &&
+                               _currentState != PlayerState.Disabled;
+
+        /// <summary>Whether the player can currently interact with objects.</summary>
+        public bool CanInteract => _currentState == PlayerState.Idle ||
+                                   _currentState == PlayerState.Walking ||
+                                   _currentState == PlayerState.Running;
 
         /// <summary>Transform reference for external systems.</summary>
         public Transform Transform => transform;
@@ -393,6 +403,21 @@ namespace IronFrontier.Player
         {
             TeleportTo(position);
             transform.rotation = rotation;
+        }
+
+        /// <summary>
+        /// Makes the player face toward a specific world position.
+        /// </summary>
+        /// <param name="position">The world position to look at.</param>
+        public void LookAt(Vector3 position)
+        {
+            Vector3 direction = position - transform.position;
+            direction.y = 0f; // Keep rotation horizontal
+
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
         }
 
         #endregion

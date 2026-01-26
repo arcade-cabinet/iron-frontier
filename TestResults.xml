@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="165" result="Failed(Child)" total="165" passed="153" failed="12" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.1044888">
+  <test-suite type="TestSuite" id="1000" name="Iron Frontier" fullname="Iron Frontier" runstate="Runnable" testcasecount="165" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.104489" total="165" passed="153" failed="12" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1174" name="IronFrontier.Tests.EditMode.dll" fullname="/Users/jbogaty/src/arcade-cabinet/iron-frontier/Library/ScriptAssemblies/IronFrontier.Tests.EditMode.dll" runstate="Runnable" testcasecount="164" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.099428" total="164" passed="152" failed="12" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76663" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1175" name="IronFrontier" fullname="IronFrontier" runstate="Runnable" testcasecount="164" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.099134" total="164" passed="152" failed="12" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1176" name="Tests" fullname="IronFrontier.Tests" runstate="Runnable" testcasecount="164" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.098965" total="164" passed="152" failed="12" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1177" name="EditMode" fullname="IronFrontier.Tests.EditMode" runstate="Runnable" testcasecount="164" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.098697" total="164" passed="152" failed="12" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1001" name="CombatTests" fullname="IronFrontier.Tests.EditMode.CombatTests" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" testcasecount="31" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.025106" total="31" passed="31" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="Category" value="Combat" />
+              </properties>
+              <test-case id="1033" name="AnimationDurations_DeathShouldBeLongest" fullname="IronFrontier.Tests.EditMode.CombatTests.AnimationDurations_DeathShouldBeLongest" methodname="AnimationDurations_DeathShouldBeLongest" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="210352413" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.006970" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="AnimationDurations_IdleShouldBeContinuous" fullname="IronFrontier.Tests.EditMode.CombatTests.AnimationDurations_IdleShouldBeContinuous" methodname="AnimationDurations_IdleShouldBeContinuous" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="342289533" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001918" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1032" name="AnimationDurations_ShouldHaveAllAnimationTypes" fullname="IronFrontier.Tests.EditMode.CombatTests.AnimationDurations_ShouldHaveAllAnimationTypes" methodname="AnimationDurations_ShouldHaveAllAnimationTypes" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="48151741" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000754" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1019" name="ArenaType_ShouldDetectBossArenaFromEncounterId" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.002487" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1014" name="ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;boss_encounter&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;boss_encounter&quot;)" methodname="ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1706050304" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000926" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1015" name="ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;final_boss&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;final_boss&quot;)" methodname="ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="426607339" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000048" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1016" name="ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;thorne_fight&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;thorne_fight&quot;)" methodname="ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1509344335" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000036" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1017" name="ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;tyrant_battle&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;tyrant_battle&quot;)" methodname="ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1833107682" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000031" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1018" name="ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;bandit_camp&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectBossArenaFromEncounterId(&quot;bandit_camp&quot;)" methodname="ArenaType_ShouldDetectBossArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1246070308" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000027" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1024" name="ArenaType_ShouldDetectMineArenaFromEncounterId" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectMineArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000610" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1020" name="ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;mine_encounter&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;mine_encounter&quot;)" methodname="ArenaType_ShouldDetectMineArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1356335761" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000090" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1021" name="ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;remnant_base&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;remnant_base&quot;)" methodname="ArenaType_ShouldDetectMineArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="870183143" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000029" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1022" name="ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;automaton_factory&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;automaton_factory&quot;)" methodname="ArenaType_ShouldDetectMineArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="694630510" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000028" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1023" name="ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;desert_camp&quot;)" fullname="IronFrontier.Tests.EditMode.CombatTests.ArenaType_ShouldDetectMineArenaFromEncounterId(&quot;desert_camp&quot;)" methodname="ArenaType_ShouldDetectMineArenaFromEncounterId" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="409461208" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000028" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1007" name="Combatant_ShouldBeDeadWhenHealthIsZero" fullname="IronFrontier.Tests.EditMode.CombatTests.Combatant_ShouldBeDeadWhenHealthIsZero" methodname="Combatant_ShouldBeDeadWhenHealthIsZero" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1236492183" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000395" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="Combatant_ShouldHaveCorrectDefaultStats" fullname="IronFrontier.Tests.EditMode.CombatTests.Combatant_ShouldHaveCorrectDefaultStats" methodname="Combatant_ShouldHaveCorrectDefaultStats" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1402120899" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000150" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="CombatPhase_ShouldDetectDefeatPhase" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPhase_ShouldDetectDefeatPhase" methodname="CombatPhase_ShouldDetectDefeatPhase" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1494650320" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000418" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="CombatPhase_ShouldDetectEnemyTurn" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPhase_ShouldDetectEnemyTurn" methodname="CombatPhase_ShouldDetectEnemyTurn" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1447113036" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000084" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="CombatPhase_ShouldDetectPlayerTurn" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPhase_ShouldDetectPlayerTurn" methodname="CombatPhase_ShouldDetectPlayerTurn" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1889148020" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="CombatPhase_ShouldDetectVictoryPhase" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPhase_ShouldDetectVictoryPhase" methodname="CombatPhase_ShouldDetectVictoryPhase" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1722636383" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000064" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="CombatPositions_EnemiesShouldBeOnRightSide" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPositions_EnemiesShouldBeOnRightSide" methodname="CombatPositions_EnemiesShouldBeOnRightSide" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="908838168" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000457" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1031" name="CombatPositions_EnemiesShouldBeSpreadAlongZAxis" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPositions_EnemiesShouldBeSpreadAlongZAxis" methodname="CombatPositions_EnemiesShouldBeSpreadAlongZAxis" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="235884727" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000814" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="CombatPositions_PlayerShouldBeOnLeftSide" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPositions_PlayerShouldBeOnLeftSide" methodname="CombatPositions_PlayerShouldBeOnLeftSide" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1836707237" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000136" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="CombatPositions_ShouldHaveAtLeast4EnemyPositions" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatPositions_ShouldHaveAtLeast4EnemyPositions" methodname="CombatPositions_ShouldHaveAtLeast4EnemyPositions" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="2015956877" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000389" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1027" name="CombatResult_ShouldCalculateDamageCorrectly" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatResult_ShouldCalculateDamageCorrectly" methodname="CombatResult_ShouldCalculateDamageCorrectly" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="34359103" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000084" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="CombatResult_ShouldDetectCriticalHits" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatResult_ShouldDetectCriticalHits" methodname="CombatResult_ShouldDetectCriticalHits" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1806143077" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000090" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="CombatResult_ShouldDetectMisses" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatResult_ShouldDetectMisses" methodname="CombatResult_ShouldDetectMisses" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1759497161" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000056" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="CombatState_ShouldHandleMultipleEnemies" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldHandleMultipleEnemies" methodname="CombatState_ShouldHandleMultipleEnemies" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="2003424857" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000271" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="CombatState_ShouldHaveTurnOrderSetCorrectly" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldHaveTurnOrderSetCorrectly" methodname="CombatState_ShouldHaveTurnOrderSetCorrectly" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1932378058" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000081" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="CombatState_ShouldIdentifyDeadCombatants" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldIdentifyDeadCombatants" methodname="CombatState_ShouldIdentifyDeadCombatants" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1552713944" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000162" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="CombatState_ShouldIdentifyEnemyCombatants" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldIdentifyEnemyCombatants" methodname="CombatState_ShouldIdentifyEnemyCombatants" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1403276843" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000090" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="CombatState_ShouldIdentifyPlayerCombatant" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldIdentifyPlayerCombatant" methodname="CombatState_ShouldIdentifyPlayerCombatant" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="1864452874" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000986" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="CombatState_ShouldInitializeWithCorrectDefaults" fullname="IronFrontier.Tests.EditMode.CombatTests.CombatState_ShouldInitializeWithCorrectDefaults" methodname="CombatState_ShouldInitializeWithCorrectDefaults" classname="IronFrontier.Tests.EditMode.CombatTests" runstate="Runnable" seed="2108590083" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000102" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1035" name="DamageCalculatorTests" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" testcasecount="31" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.008399" total="31" passed="30" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="Category" value="Combat" />
+                <property name="Category" value="DamageCalculation" />
+              </properties>
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1037" name="BaseDamage_ShouldApplyWeaponModifier" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.BaseDamage_ShouldApplyWeaponModifier" methodname="BaseDamage_ShouldApplyWeaponModifier" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1953880152" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000208" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1036" name="BaseDamage_ShouldCalculateFromAttackStat" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.BaseDamage_ShouldCalculateFromAttackStat" methodname="BaseDamage_ShouldCalculateFromAttackStat" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="674355868" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000055" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="BaseDamage_ShouldNeverBeNegative" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.BaseDamage_ShouldNeverBeNegative" methodname="BaseDamage_ShouldNeverBeNegative" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="86808059" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000050" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1049" name="CriticalChance_ShouldBeInValidRange" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalChance_ShouldBeInValidRange" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.002809" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1046" name="CriticalChance_ShouldBeInValidRange(5)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalChance_ShouldBeInValidRange(5)" methodname="CriticalChance_ShouldBeInValidRange" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="101363991" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000106" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1047" name="CriticalChance_ShouldBeInValidRange(10)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalChance_ShouldBeInValidRange(10)" methodname="CriticalChance_ShouldBeInValidRange" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1520939228" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000028" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1048" name="CriticalChance_ShouldBeInValidRange(0)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalChance_ShouldBeInValidRange(0)" methodname="CriticalChance_ShouldBeInValidRange" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1552515978" result="Failed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.002185" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                    <stack-trace><![CDATA[at NUnit.Framework.Internal.Commands.TestMethodCommand.Execute (NUnit.Framework.Internal.ITestExecutionContext context) [0x00020] in <f577cd9686154d6ab10efd7e65e64366>:0
+at UnityEngine.TestTools.UnityTestMethodCommand.Execute (NUnit.Framework.Internal.ITestExecutionContext context) [0x00019] in ./Library/PackageCache/com.unity.test-framework@0b7a23ab2e1d/UnityEngine.TestRunner/NUnitExtensions/Commands/UnityTestMethodCommand.cs:19
+at UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand+<>c__DisplayClass2_0.<Execute>b__0 () [0x00000] in ./Library/PackageCache/com.unity.test-framework@0b7a23ab2e1d/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:24
+at UnityEngine.TestRunner.NUnitExtensions.Runner.UnityLogCheckDelegatingCommand.CaptureException (NUnit.Framework.Internal.TestResult result, System.Action action) [0x00000] in ./Library/PackageCache/com.unity.test-framework@0b7a23ab2e1d/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs:72
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+              <test-case id="1044" name="CriticalHit_HighMultiplier_ShouldCalculateCorrectly" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalHit_HighMultiplier_ShouldCalculateCorrectly" methodname="CriticalHit_HighMultiplier_ShouldCalculateCorrectly" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="438480040" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000126" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="CriticalHit_ShouldApplyMultiplier" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalHit_ShouldApplyMultiplier" methodname="CriticalHit_ShouldApplyMultiplier" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1292064698" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000047" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="CriticalHit_ShouldRoundDown" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.CriticalHit_ShouldRoundDown" methodname="CriticalHit_ShouldRoundDown" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="65662808" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000043" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="DefenseReduction_PercentageBased_ShouldApplyCorrectly" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.DefenseReduction_PercentageBased_ShouldApplyCorrectly" methodname="DefenseReduction_PercentageBased_ShouldApplyCorrectly" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="637550018" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000059" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1041" name="DefenseReduction_ShouldHandleZeroDefense" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.DefenseReduction_ShouldHandleZeroDefense" methodname="DefenseReduction_ShouldHandleZeroDefense" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="2136106471" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000056" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="DefenseReduction_ShouldNotReduceBelowMinimum" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.DefenseReduction_ShouldNotReduceBelowMinimum" methodname="DefenseReduction_ShouldNotReduceBelowMinimum" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="99583465" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000047" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="DefenseReduction_ShouldReduceDamage" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.DefenseReduction_ShouldReduceDamage" methodname="DefenseReduction_ShouldReduceDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="55591762" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000047" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1054" name="ElementalDamage_ElectricShouldDealBonusToWet" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.ElementalDamage_ElectricShouldDealBonusToWet" methodname="ElementalDamage_ElectricShouldDealBonusToWet" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="412103657" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000261" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1053" name="ElementalDamage_FireShouldDealBonusToOil" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.ElementalDamage_FireShouldDealBonusToOil" methodname="ElementalDamage_FireShouldDealBonusToOil" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1400516976" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000123" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1055" name="ElementalDamage_NoBonus_ShouldReturnBaseDamage" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.ElementalDamage_NoBonus_ShouldReturnBaseDamage" methodname="ElementalDamage_NoBonus_ShouldReturnBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="634531841" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000061" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1066" name="FullDamageCalculation_NonCritical_ShouldCalculateCorrectly" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.FullDamageCalculation_NonCritical_ShouldCalculateCorrectly" methodname="FullDamageCalculation_NonCritical_ShouldCalculateCorrectly" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1341678070" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000129" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1065" name="FullDamageCalculation_ShouldCombineAllFactors" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.FullDamageCalculation_ShouldCombineAllFactors" methodname="FullDamageCalculation_ShouldCombineAllFactors" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="643706150" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000143" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="HitChance_ShouldCalculateCorrectly" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.HitChance_ShouldCalculateCorrectly" methodname="HitChance_ShouldCalculateCorrectly" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1202777493" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000173" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1052" name="HitChance_ShouldNotBeBelowMinimum" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.HitChance_ShouldNotBeBelowMinimum" methodname="HitChance_ShouldNotBeBelowMinimum" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="2140907142" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000058" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1051" name="HitChance_ShouldNotExceed95Percent" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.HitChance_ShouldNotExceed95Percent" methodname="HitChance_ShouldNotExceed95Percent" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="967357970" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000129" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1068" name="RewardGold_ShouldBeRandomInRange" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.RewardGold_ShouldBeRandomInRange" methodname="RewardGold_ShouldBeRandomInRange" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="764350354" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000137" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1067" name="RewardXP_ShouldScaleWithEnemyLevel" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.RewardXP_ShouldScaleWithEnemyLevel" methodname="RewardXP_ShouldScaleWithEnemyLevel" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1956092580" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000045" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1064" name="StatusEffect_Burn_ShouldStackDamage" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.StatusEffect_Burn_ShouldStackDamage" methodname="StatusEffect_Burn_ShouldStackDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="82160903" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000039" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1063" name="StatusEffect_Poison_ShouldDealDamageOverTime" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.StatusEffect_Poison_ShouldDealDamageOverTime" methodname="StatusEffect_Poison_ShouldDealDamageOverTime" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="653834797" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000037" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1061" name="WeaponRange_ShouldAffectAccuracy" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponRange_ShouldAffectAccuracy" methodname="WeaponRange_ShouldAffectAccuracy" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="871883927" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000082" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1062" name="WeaponRange_WithinRange_ShouldNotReduceAccuracy" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponRange_WithinRange_ShouldNotReduceAccuracy" methodname="WeaponRange_WithinRange_ShouldNotReduceAccuracy" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1315571836" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000043" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1060" name="WeaponType_ShouldHaveCorrectBaseDamage" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponType_ShouldHaveCorrectBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001102" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1056" name="WeaponType_ShouldHaveCorrectBaseDamage(&quot;revolver&quot;,15)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponType_ShouldHaveCorrectBaseDamage(&quot;revolver&quot;,15)" methodname="WeaponType_ShouldHaveCorrectBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="133935158" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000172" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1057" name="WeaponType_ShouldHaveCorrectBaseDamage(&quot;rifle&quot;,25)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponType_ShouldHaveCorrectBaseDamage(&quot;rifle&quot;,25)" methodname="WeaponType_ShouldHaveCorrectBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="2086497958" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000029" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1058" name="WeaponType_ShouldHaveCorrectBaseDamage(&quot;shotgun&quot;,30)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponType_ShouldHaveCorrectBaseDamage(&quot;shotgun&quot;,30)" methodname="WeaponType_ShouldHaveCorrectBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="1533926462" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000028" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1059" name="WeaponType_ShouldHaveCorrectBaseDamage(&quot;melee&quot;,12)" fullname="IronFrontier.Tests.EditMode.DamageCalculatorTests.WeaponType_ShouldHaveCorrectBaseDamage(&quot;melee&quot;,12)" methodname="WeaponType_ShouldHaveCorrectBaseDamage" classname="IronFrontier.Tests.EditMode.DamageCalculatorTests" runstate="Runnable" seed="306977217" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000025" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestFixture" id="1069" name="InventoryTests" fullname="IronFrontier.Tests.EditMode.InventoryTests" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.012795" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="Category" value="Inventory" />
+              </properties>
+              <test-case id="1077" name="AddItem_NonStackable_ShouldCreateSeparateEntries" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_NonStackable_ShouldCreateSeparateEntries" methodname="AddItem_NonStackable_ShouldCreateSeparateEntries" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1423610885" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.003343" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1071" name="AddItem_ShouldAddToInventory" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldAddToInventory" methodname="AddItem_ShouldAddToInventory" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="155845808" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000176" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1101" name="AddItem_ShouldEmitInventoryFullEventWhenOverWeight" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldEmitInventoryFullEventWhenOverWeight" methodname="AddItem_ShouldEmitInventoryFullEventWhenOverWeight" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1991823541" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000201" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1102" name="AddItem_ShouldEmitItemAddedEvent" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldEmitItemAddedEvent" methodname="AddItem_ShouldEmitItemAddedEvent" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="967233669" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000140" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1074" name="AddItem_ShouldFailWhenOverWeight" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldFailWhenOverWeight" methodname="AddItem_ShouldFailWhenOverWeight" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="422150476" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000074" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1076" name="AddItem_ShouldNotExceedMaxStack" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldNotExceedMaxStack" methodname="AddItem_ShouldNotExceedMaxStack" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1584406190" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000108" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1072" name="AddItem_ShouldReturnFalseForUnknownItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldReturnFalseForUnknownItem" methodname="AddItem_ShouldReturnFalseForUnknownItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="619500203" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000066" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1070" name="AddItem_ShouldReturnTrueForValidItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldReturnTrueForValidItem" methodname="AddItem_ShouldReturnTrueForValidItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1401463874" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000064" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="AddItem_ShouldStackIdenticalItems" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldStackIdenticalItems" methodname="AddItem_ShouldStackIdenticalItems" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1211979277" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000072" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1073" name="AddItem_ShouldUpdateWeight" fullname="IronFrontier.Tests.EditMode.InventoryTests.AddItem_ShouldUpdateWeight" methodname="AddItem_ShouldUpdateWeight" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1494516447" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000115" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1105" name="EquipItem_ShouldEmitItemEquippedEvent" fullname="IronFrontier.Tests.EditMode.InventoryTests.EquipItem_ShouldEmitItemEquippedEvent" methodname="EquipItem_ShouldEmitItemEquippedEvent" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="383961570" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000400" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1089" name="EquipItem_ShouldReturnFalseForNonEquippableItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.EquipItem_ShouldReturnFalseForNonEquippableItem" methodname="EquipItem_ShouldReturnFalseForNonEquippableItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1054388257" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000070" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1087" name="EquipItem_ShouldReturnTrueForEquippableItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.EquipItem_ShouldReturnTrueForEquippableItem" methodname="EquipItem_ShouldReturnTrueForEquippableItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="542333262" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000064" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1088" name="EquipItem_ShouldSetCorrectSlot" fullname="IronFrontier.Tests.EditMode.InventoryTests.EquipItem_ShouldSetCorrectSlot" methodname="EquipItem_ShouldSetCorrectSlot" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="67097180" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000075" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1091" name="GetEquipmentStats_ShouldSumAllEquippedStats" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetEquipmentStats_ShouldSumAllEquippedStats" methodname="GetEquipmentStats_ShouldSumAllEquippedStats" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="2027672498" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000273" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="GetFilteredItems_ShouldRespectCategoryFilter" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetFilteredItems_ShouldRespectCategoryFilter" methodname="GetFilteredItems_ShouldRespectCategoryFilter" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1434907065" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000340" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1097" name="GetItemsByCategory_ShouldReturnFilteredItems" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetItemsByCategory_ShouldReturnFilteredItems" methodname="GetItemsByCategory_ShouldReturnFilteredItems" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="499838578" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000093" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1106" name="GetSaveData_ShouldIncludeAllItems" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetSaveData_ShouldIncludeAllItems" methodname="GetSaveData_ShouldIncludeAllItems" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="485289786" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000458" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1107" name="GetSaveData_ShouldIncludeEquipment" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetSaveData_ShouldIncludeEquipment" methodname="GetSaveData_ShouldIncludeEquipment" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1825178029" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000078" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1100" name="GetWeightInfo_ShouldReturnCorrectValues" fullname="IronFrontier.Tests.EditMode.InventoryTests.GetWeightInfo_ShouldReturnCorrectValues" methodname="GetWeightInfo_ShouldReturnCorrectValues" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1997396311" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000098" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1111" name="HasItem_ShouldReturnFalseForMissingItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.HasItem_ShouldReturnFalseForMissingItem" methodname="HasItem_ShouldReturnFalseForMissingItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="144214555" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000072" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1110" name="HasItem_ShouldReturnFalseWhenNotEnough" fullname="IronFrontier.Tests.EditMode.InventoryTests.HasItem_ShouldReturnFalseWhenNotEnough" methodname="HasItem_ShouldReturnFalseWhenNotEnough" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1288373790" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000069" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1109" name="HasItem_ShouldReturnTrueWhenHasEnough" fullname="IronFrontier.Tests.EditMode.InventoryTests.HasItem_ShouldReturnTrueWhenHasEnough" methodname="HasItem_ShouldReturnTrueWhenHasEnough" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1539378649" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000076" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1108" name="LoadFromSave_ShouldRestoreItems" fullname="IronFrontier.Tests.EditMode.InventoryTests.LoadFromSave_ShouldRestoreItems" methodname="LoadFromSave_ShouldRestoreItems" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1955627417" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000474" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1096" name="RemoveItem_ShouldClearFromQuickSlotWhenEmpty" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldClearFromQuickSlotWhenEmpty" methodname="RemoveItem_ShouldClearFromQuickSlotWhenEmpty" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="382795365" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000395" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1103" name="RemoveItem_ShouldEmitItemRemovedEvent" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldEmitItemRemovedEvent" methodname="RemoveItem_ShouldEmitItemRemovedEvent" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1643223069" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000117" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1079" name="RemoveItem_ShouldReduceQuantity" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldReduceQuantity" methodname="RemoveItem_ShouldReduceQuantity" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1886019890" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000073" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1081" name="RemoveItem_ShouldRemoveItemEntirelyWhenQuantityReachesZero" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldRemoveItemEntirelyWhenQuantityReachesZero" methodname="RemoveItem_ShouldRemoveItemEntirelyWhenQuantityReachesZero" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1909259185" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1080" name="RemoveItem_ShouldReturnFalseWhenNotEnough" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldReturnFalseWhenNotEnough" methodname="RemoveItem_ShouldReturnFalseWhenNotEnough" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="251367998" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000064" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1078" name="RemoveItem_ShouldReturnTrueWhenSuccessful" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldReturnTrueWhenSuccessful" methodname="RemoveItem_ShouldReturnTrueWhenSuccessful" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="854596365" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000066" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1082" name="RemoveItem_ShouldUpdateWeight" fullname="IronFrontier.Tests.EditMode.InventoryTests.RemoveItem_ShouldUpdateWeight" methodname="RemoveItem_ShouldUpdateWeight" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1678297473" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000084" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1098" name="SetCategory_ShouldUpdateSelectedCategory" fullname="IronFrontier.Tests.EditMode.InventoryTests.SetCategory_ShouldUpdateSelectedCategory" methodname="SetCategory_ShouldUpdateSelectedCategory" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1107344191" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000116" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1092" name="SetQuickSlot_ShouldAssignConsumableItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.SetQuickSlot_ShouldAssignConsumableItem" methodname="SetQuickSlot_ShouldAssignConsumableItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1760102442" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000067" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1093" name="SetQuickSlot_ShouldRejectNonConsumable" fullname="IronFrontier.Tests.EditMode.InventoryTests.SetQuickSlot_ShouldRejectNonConsumable" methodname="SetQuickSlot_ShouldRejectNonConsumable" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1719440635" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1090" name="UnequipSlot_ShouldClearSlot" fullname="IronFrontier.Tests.EditMode.InventoryTests.UnequipSlot_ShouldClearSlot" methodname="UnequipSlot_ShouldClearSlot" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="957780228" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000165" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1084" name="UseItem_ShouldApplyEffects" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseItem_ShouldApplyEffects" methodname="UseItem_ShouldApplyEffects" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="357996280" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000170" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1083" name="UseItem_ShouldConsumeConsumableItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseItem_ShouldConsumeConsumableItem" methodname="UseItem_ShouldConsumeConsumableItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1893874868" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000076" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1104" name="UseItem_ShouldEmitItemUsedEvent" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseItem_ShouldEmitItemUsedEvent" methodname="UseItem_ShouldEmitItemUsedEvent" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="992277605" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000437" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1085" name="UseItem_ShouldReturnFalseForNonConsumable" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseItem_ShouldReturnFalseForNonConsumable" methodname="UseItem_ShouldReturnFalseForNonConsumable" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1097125974" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000120" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1086" name="UseItem_ShouldReturnFalseWhenItemNotFound" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseItem_ShouldReturnFalseWhenItemNotFound" methodname="UseItem_ShouldReturnFalseWhenItemNotFound" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="1581064418" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000078" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1095" name="UseQuickSlot_ShouldReturnFalseForEmptySlot" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseQuickSlot_ShouldReturnFalseForEmptySlot" methodname="UseQuickSlot_ShouldReturnFalseForEmptySlot" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="393464920" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000131" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1094" name="UseQuickSlot_ShouldUseAssignedItem" fullname="IronFrontier.Tests.EditMode.InventoryTests.UseQuickSlot_ShouldUseAssignedItem" methodname="UseQuickSlot_ShouldUseAssignedItem" classname="IronFrontier.Tests.EditMode.InventoryTests" runstate="Runnable" seed="267387250" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000103" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1112" name="QuestSystemTests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" testcasecount="30" result="Failed" site="Child" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.010984" total="30" passed="19" failed="11" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="Category" value="Quest" />
+              </properties>
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1138" name="CompleteObjective_ShouldEmitObjectiveCompleteEvent" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteObjective_ShouldEmitObjectiveCompleteEvent" methodname="CompleteObjective_ShouldEmitObjectiveCompleteEvent" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1661916214" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.004077" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteObjective_ShouldEmitObjectiveCompleteEvent () [0x00039] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:416 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1139" name="CompleteQuest_ShouldEmitQuestCompleteEvent" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldEmitQuestCompleteEvent" methodname="CompleteQuest_ShouldEmitQuestCompleteEvent" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="520312029" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000276" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldEmitQuestCompleteEvent () [0x00039] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:431 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1128" name="CompleteQuest_ShouldGrantRewards" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldGrantRewards" methodname="CompleteQuest_ShouldGrantRewards" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1909384666" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000145" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldGrantRewards () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:262 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1127" name="CompleteQuest_ShouldMoveToCompletedList" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldMoveToCompletedList" methodname="CompleteQuest_ShouldMoveToCompletedList" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="724657713" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000151" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldMoveToCompletedList () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:248 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1126" name="CompleteQuest_ShouldSetCompletedStatus" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldSetCompletedStatus" methodname="CompleteQuest_ShouldSetCompletedStatus" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1761502622" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000149" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldSetCompletedStatus () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:234 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1129" name="CompleteQuest_ShouldSetCompletionTime" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldSetCompletionTime" methodname="CompleteQuest_ShouldSetCompletionTime" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="300556930" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000167" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.CompleteQuest_ShouldSetCompletionTime () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:275 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1131" name="FailQuest_ShouldRemoveFromActiveList" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.FailQuest_ShouldRemoveFromActiveList" methodname="FailQuest_ShouldRemoveFromActiveList" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="427524032" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000277" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="FailQuest_ShouldSetFailedStatus" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.FailQuest_ShouldSetFailedStatus" methodname="FailQuest_ShouldSetFailedStatus" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="2140074866" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000163" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="GetMainQuests_ShouldReturnOnlyMainQuests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.GetMainQuests_ShouldReturnOnlyMainQuests" methodname="GetMainQuests_ShouldReturnOnlyMainQuests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1111520716" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000204" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1140" name="GetSaveData_ShouldIncludeActiveQuests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.GetSaveData_ShouldIncludeActiveQuests" methodname="GetSaveData_ShouldIncludeActiveQuests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1952027699" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000098" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1141" name="GetSaveData_ShouldIncludeCompletedQuests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.GetSaveData_ShouldIncludeCompletedQuests" methodname="GetSaveData_ShouldIncludeCompletedQuests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="23085672" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000154" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.GetSaveData_ShouldIncludeCompletedQuests () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:459 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1135" name="GetSideQuests_ShouldReturnOnlySideQuests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.GetSideQuests_ShouldReturnOnlySideQuests" methodname="GetSideQuests_ShouldReturnOnlySideQuests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1976059167" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000144" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="LoadFromSave_ShouldRestoreActiveQuests" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.LoadFromSave_ShouldRestoreActiveQuests" methodname="LoadFromSave_ShouldRestoreActiveQuests" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="677931392" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000274" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="MainQuest_ShouldAutoTrackOnStart" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.MainQuest_ShouldAutoTrackOnStart" methodname="MainQuest_ShouldAutoTrackOnStart" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1520998666" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000138" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="SetTrackedQuest_ShouldUpdateTrackedQuest" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.SetTrackedQuest_ShouldUpdateTrackedQuest" methodname="SetTrackedQuest_ShouldUpdateTrackedQuest" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1526711520" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000157" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1125" name="StageProgression_OptionalObjectives_ShouldNotBlockProgress" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StageProgression_OptionalObjectives_ShouldNotBlockProgress" methodname="StageProgression_OptionalObjectives_ShouldNotBlockProgress" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1551767403" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000166" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.StageProgression_OptionalObjectives_ShouldNotBlockProgress () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:216 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1123" name="StageProgression_ShouldAdvanceOnAllRequiredComplete" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StageProgression_ShouldAdvanceOnAllRequiredComplete" methodname="StageProgression_ShouldAdvanceOnAllRequiredComplete" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1782689672" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000410" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1124" name="StageProgression_ShouldLoadNewObjectives" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StageProgression_ShouldLoadNewObjectives" methodname="StageProgression_ShouldLoadNewObjectives" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="376641299" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000167" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1114" name="StartQuest_ShouldAddQuestToActiveList" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldAddQuestToActiveList" methodname="StartQuest_ShouldAddQuestToActiveList" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="2049861456" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000073" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="StartQuest_ShouldEmitQuestStartedEvent" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldEmitQuestStartedEvent" methodname="StartQuest_ShouldEmitQuestStartedEvent" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="437538478" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000124" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1118" name="StartQuest_ShouldInitializeObjectivesCorrectly" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldInitializeObjectivesCorrectly" methodname="StartQuest_ShouldInitializeObjectivesCorrectly" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1344297106" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000129" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1115" name="StartQuest_ShouldNotStartDuplicateQuest" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldNotStartDuplicateQuest" methodname="StartQuest_ShouldNotStartDuplicateQuest" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="61035567" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000068" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1116" name="StartQuest_ShouldNotStartNonExistentQuest" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldNotStartNonExistentQuest" methodname="StartQuest_ShouldNotStartNonExistentQuest" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1539786542" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1117" name="StartQuest_ShouldNotStartQuestWithUnmetPrerequisites" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldNotStartQuestWithUnmetPrerequisites" methodname="StartQuest_ShouldNotStartQuestWithUnmetPrerequisites" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="936522982" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000067" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1113" name="StartQuest_ShouldReturnTrueForValidQuest" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.StartQuest_ShouldReturnTrueForValidQuest" methodname="StartQuest_ShouldReturnTrueForValidQuest" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1620141799" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1120" name="UpdateObjective_ShouldCompleteWhenCountReached" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldCompleteWhenCountReached" methodname="UpdateObjective_ShouldCompleteWhenCountReached" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="1529788654" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000205" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldCompleteWhenCountReached () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:139 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1137" name="UpdateObjective_ShouldEmitProgressEvent" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldEmitProgressEvent" methodname="UpdateObjective_ShouldEmitProgressEvent" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="2073920730" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000225" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1119" name="UpdateObjective_ShouldIncrementProgress" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldIncrementProgress" methodname="UpdateObjective_ShouldIncrementProgress" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="428472472" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000149" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldIncrementProgress () [0x00011] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:125 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1121" name="UpdateObjective_ShouldNotExceedRequiredCount" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldNotExceedRequiredCount" methodname="UpdateObjective_ShouldNotExceedRequiredCount" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="37492974" result="Failed" label="Error" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000143" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Collection was modified; enumeration operation may not execute.]]></message>
+                  <stack-trace><![CDATA[  at System.Collections.Generic.List`1+Enumerator[T].MoveNextRare () [0x00013] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Collections.Generic.List`1+Enumerator[T].MoveNext () [0x0004a] in <032c206a1674455bacfc3546f1de5ef3>:0 
+  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext () [0x0004e] in <2a8fff6ff3e54cfa88259e180adc29eb>:0 
+  at IronFrontier.Tests.EditMode.QuestController.UpdateObjective (IronFrontier.Tests.EditMode.ObjectiveType type, System.String target, System.Int32 amount) [0x00152] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:579 
+  at IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldNotExceedRequiredCount () [0x00015] in /Users/jbogaty/src/arcade-cabinet/iron-frontier/Assets/Tests/EditMode/QuestSystemTests.cs:155 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <032c206a1674455bacfc3546f1de5ef3>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1122" name="UpdateObjective_ShouldOnlyAffectMatchingObjectives" fullname="IronFrontier.Tests.EditMode.QuestSystemTests.UpdateObjective_ShouldOnlyAffectMatchingObjectives" methodname="UpdateObjective_ShouldOnlyAffectMatchingObjectives" classname="IronFrontier.Tests.EditMode.QuestSystemTests" runstate="Runnable" seed="133905905" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000082" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1143" name="SaveSystemTests" fullname="IronFrontier.Tests.EditMode.SaveSystemTests" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" testcasecount="30" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.040125" total="30" passed="30" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="Category" value="SaveSystem" />
+              </properties>
+              <test-case id="1156" name="AutoSave_ShouldUseAutoSaveSlot" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.AutoSave_ShouldUseAutoSaveSlot" methodname="AutoSave_ShouldUseAutoSaveSlot" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="855980468" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.004998" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1161" name="DeleteSlot_ShouldRemoveSave" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.DeleteSlot_ShouldRemoveSave" methodname="DeleteSlot_ShouldRemoveSave" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1259002503" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001415" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1166" name="ExportSave_ShouldReturnEncodedString" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.ExportSave_ShouldReturnEncodedString" methodname="ExportSave_ShouldReturnEncodedString" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1281712863" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001383" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1159" name="GetAllSlots_ShouldReturnAllSaves" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.GetAllSlots_ShouldReturnAllSaves" methodname="GetAllSlots_ShouldReturnAllSaves" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="2069481337" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.002057" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1160" name="GetManualSlots_ShouldExcludeQuickAndAutoSaves" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.GetManualSlots_ShouldExcludeQuickAndAutoSaves" methodname="GetManualSlots_ShouldExcludeQuickAndAutoSaves" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1735660690" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001415" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1162" name="GetNextSlotId_ShouldReturnFirstAvailable" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.GetNextSlotId_ShouldReturnFirstAvailable" methodname="GetNextSlotId_ShouldReturnFirstAvailable" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="572971395" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001382" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1163" name="GetNextSlotId_ShouldSkipUsedSlots" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.GetNextSlotId_ShouldSkipUsedSlots" methodname="GetNextSlotId_ShouldSkipUsedSlots" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="80853510" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000922" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1157" name="HasAutoSave_ShouldReturnTrueAfterAutoSave" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.HasAutoSave_ShouldReturnTrueAfterAutoSave" methodname="HasAutoSave_ShouldReturnTrueAfterAutoSave" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1500198590" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001251" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1155" name="HasQuickSave_ShouldReturnFalseWhenNoQuickSave" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.HasQuickSave_ShouldReturnFalseWhenNoQuickSave" methodname="HasQuickSave_ShouldReturnFalseWhenNoQuickSave" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1938566211" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001190" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1154" name="HasQuickSave_ShouldReturnTrueAfterQuickSave" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.HasQuickSave_ShouldReturnTrueAfterQuickSave" methodname="HasQuickSave_ShouldReturnTrueAfterQuickSave" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="860750468" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001029" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1167" name="ImportSave_ShouldCreateNewSlot" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.ImportSave_ShouldCreateNewSlot" methodname="ImportSave_ShouldCreateNewSlot" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="2132873184" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001776" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1165" name="Load_ShouldMigrateOldVersions" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Load_ShouldMigrateOldVersions" methodname="Load_ShouldMigrateOldVersions" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="290880272" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001190" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1169" name="Load_ShouldNotifyLoadCallbacks" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Load_ShouldNotifyLoadCallbacks" methodname="Load_ShouldNotifyLoadCallbacks" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="546119252" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001371" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1151" name="Load_ShouldPreserveAllFields" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Load_ShouldPreserveAllFields" methodname="Load_ShouldPreserveAllFields" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="605412660" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001051" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1150" name="Load_ShouldReturnNullForEmptySlot" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Load_ShouldReturnNullForEmptySlot" methodname="Load_ShouldReturnNullForEmptySlot" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="2050086697" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000858" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1149" name="Load_ShouldReturnSavedData" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Load_ShouldReturnSavedData" methodname="Load_ShouldReturnSavedData" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1429258106" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000818" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1170" name="OnSave_ShouldReturnUnsubscribeFunction" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.OnSave_ShouldReturnUnsubscribeFunction" methodname="OnSave_ShouldReturnUnsubscribeFunction" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="972759861" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000312" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1153" name="QuickLoad_ShouldLoadFromQuickSaveSlot" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.QuickLoad_ShouldLoadFromQuickSaveSlot" methodname="QuickLoad_ShouldLoadFromQuickSaveSlot" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="2013697190" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000933" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1152" name="QuickSave_ShouldUseQuickSaveSlot" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.QuickSave_ShouldUseQuickSaveSlot" methodname="QuickSave_ShouldUseQuickSaveSlot" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="558766350" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001139" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1148" name="Save_ShouldIncludeLocation" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldIncludeLocation" methodname="Save_ShouldIncludeLocation" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1660683528" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000900" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1147" name="Save_ShouldIncludePlayTime" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldIncludePlayTime" methodname="Save_ShouldIncludePlayTime" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1739518841" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000935" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1164" name="Save_ShouldIncludeVersion" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldIncludeVersion" methodname="Save_ShouldIncludeVersion" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="847931969" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000833" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1168" name="Save_ShouldNotifySaveCallbacks" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldNotifySaveCallbacks" methodname="Save_ShouldNotifySaveCallbacks" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="2109483653" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001000" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1173" name="Save_ShouldPreserveGameFlags" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldPreserveGameFlags" methodname="Save_ShouldPreserveGameFlags" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="294380108" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001249" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1171" name="Save_ShouldPreserveInventory" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldPreserveInventory" methodname="Save_ShouldPreserveInventory" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1830958446" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001135" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1172" name="Save_ShouldPreserveQuestState" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldPreserveQuestState" methodname="Save_ShouldPreserveQuestState" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1259326638" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001029" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="Save_ShouldReturnSaveSlotMeta" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldReturnSaveSlotMeta" methodname="Save_ShouldReturnSaveSlotMeta" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1766272156" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000830" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1146" name="Save_ShouldSetCorrectTimestamp" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldSetCorrectTimestamp" methodname="Save_ShouldSetCorrectTimestamp" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1302033613" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001180" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="Save_ShouldStoreDataInAdapter" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.Save_ShouldStoreDataInAdapter" methodname="Save_ShouldStoreDataInAdapter" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1227507961" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000868" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1158" name="SetAutoSaveEnabled_ShouldUpdateSetting" fullname="IronFrontier.Tests.EditMode.SaveSystemTests.SetAutoSaveEnabled_ShouldUpdateSetting" methodname="SetAutoSaveEnabled_ShouldUpdateSetting" classname="IronFrontier.Tests.EditMode.SaveSystemTests" runstate="Runnable" seed="1618888954" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000307" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <reason>
+                  <message><![CDATA[]]></message>
+                </reason>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1180" name="Unity.Addressables.Editor.Tests.DocExampleCode.dll" fullname="/Users/jbogaty/src/arcade-cabinet/iron-frontier/Library/ScriptAssemblies/Unity.Addressables.Editor.Tests.DocExampleCode.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001309" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76663" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1181" name="AddressableAssets" fullname="AddressableAssets" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.001096" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1182" name="DocExampleCode" fullname="AddressableAssets.DocExampleCode" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000847" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1178" name="TestStub" fullname="AddressableAssets.DocExampleCode.TestStub" classname="AddressableAssets.DocExampleCode.TestStub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000600" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1179" name="RequiredTest" fullname="AddressableAssets.DocExampleCode.TestStub.RequiredTest" methodname="RequiredTest" classname="AddressableAssets.DocExampleCode.TestStub" runstate="Runnable" seed="1257009634" result="Passed" start-time="2026-01-26 06:19:07Z" end-time="2026-01-26 06:19:07Z" duration="0.000074" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /Users/jbogaty/Library/Application Support/Iron Frontier Studios/Iron Frontier/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

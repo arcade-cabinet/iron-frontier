@@ -493,7 +493,7 @@ namespace IronFrontier.Inventory
                 Vector2 mousePos;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     dragCanvas.transform as RectTransform,
-                    Input.mousePosition,
+                    UnityEngine.Input.mousePosition,
                     dragCanvas.worldCamera,
                     out mousePos
                 );
@@ -843,7 +843,7 @@ namespace IronFrontier.Inventory
             if (rect == null)
                 return;
 
-            Vector2 mousePos = Input.mousePosition;
+            Vector2 mousePos = UnityEngine.Input.mousePosition;
             Vector2 tooltipPos = mousePos + tooltipOffset;
 
             // Keep tooltip on screen
@@ -956,7 +956,7 @@ namespace IronFrontier.Inventory
             var rect = contextMenuPanel.GetComponent<RectTransform>();
             if (rect != null)
             {
-                rect.position = Input.mousePosition;
+                rect.position = UnityEngine.Input.mousePosition;
             }
 
             contextMenuPanel.SetActive(true);

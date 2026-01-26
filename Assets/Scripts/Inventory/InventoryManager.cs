@@ -195,6 +195,11 @@ namespace IronFrontier.Inventory
         /// </summary>
         public int QuickSlotCount => quickSlotCount;
 
+        /// <summary>
+        /// Current gold amount.
+        /// </summary>
+        public int Gold { get; private set; }
+
         #endregion
 
         #region Unity Lifecycle
@@ -254,9 +259,50 @@ namespace IronFrontier.Inventory
             }
 
             _currentWeight = 0f;
+            Gold = 0;
             _isInitialized = true;
 
             Log("InventoryManager initialized");
+        }
+
+        #endregion
+
+        #region Gold Management
+
+        /// <summary>
+        /// Add gold to the inventory.
+        /// </summary>
+        /// <param name="amount">Amount of gold to add.</param>
+        public void AddGold(int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            Gold += amount;
+            Log($"Added {amount} gold, total: {Gold}");
+            EventBus.Instance?.Publish(GameEvents.GoldChanged, Gold);
+        }
+
+        /// <summary>
+        /// Remove gold from the inventory.
+        /// </summary>
+        /// <param name="amount">Amount of gold to remove.</param>
+        /// <returns>True if the gold was successfully removed, false if insufficient funds.</returns>
+        public bool RemoveGold(int amount)
+        {
+            if (amount <= 0)
+                return true;
+
+            if (Gold < amount)
+            {
+                LogWarning($"Insufficient gold: have {Gold}, need {amount}");
+                return false;
+            }
+
+            Gold -= amount;
+            Log($"Removed {amount} gold, remaining: {Gold}");
+            EventBus.Instance?.Publish(GameEvents.GoldChanged, Gold);
+            return true;
         }
 
         #endregion
@@ -696,6 +742,86 @@ namespace IronFrontier.Inventory
             return GetItemsByType(ItemType.KeyItem);
         }
 
+        /// <summary>
+        /// Get all non-empty inventory slots.
+        /// </summary>
+        /// <returns>List of all slots containing items.</returns>
+        public List<InventorySlot> GetAllItems()
+        {
+            return _slots
+                .Where(s => !s.IsEmpty)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Check if an item can be added to the inventory.
+        /// </summary>
+        /// <param name="item">The item to check.</param>
+        /// <param name="quantity">Quantity to add (default 1).</param>
+        /// <returns>True if the item can be added, false otherwise.</returns>
+        public bool CanAddItem(ItemData item, int quantity = 1)
+        {
+            if (item == null || quantity <= 0)
+                return false;
+
+            // Check weight limit
+            float additionalWeight = item.weight * quantity;
+            if (_currentWeight + additionalWeight > maxCarryWeight)
+            {
+                // Calculate how many we can fit by weight
+                int maxByWeight = Mathf.FloorToInt(AvailableWeight / item.weight);
+                if (maxByWeight <= 0)
+                    return false;
+            }
+
+            // Check slot availability
+            int remaining = quantity;
+
+            // Count space in existing stacks
+            if (item.stackable)
+            {
+                foreach (var slot in _slots)
+                {
+                    if (slot.CanStackWith(item))
+                    {
+                        remaining -= (item.maxStack - slot.Quantity);
+                        if (remaining <= 0)
+                            return true;
+                    }
+                }
+            }
+
+            // Count empty slots
+            int emptySlots = _slots.Count(s => s.IsEmpty);
+            int slotsNeeded = Mathf.CeilToInt((float)remaining / item.maxStack);
+
+            return emptySlots >= slotsNeeded;
+        }
+
+        /// <summary>
+        /// Check if an item can be added to the inventory by item ID.
+        /// </summary>
+        /// <param name="itemId">The item ID to check.</param>
+        /// <param name="quantity">Quantity to add (default 1).</param>
+        /// <returns>True if the item can be added, false otherwise.</returns>
+        public bool CanAddItemById(string itemId, int quantity = 1)
+        {
+            if (itemDatabase == null)
+            {
+                LogWarning("ItemDatabase not available");
+                return false;
+            }
+
+            var item = itemDatabase.GetItemById(itemId);
+            if (item == null)
+            {
+                LogWarning($"Item not found: {itemId}");
+                return false;
+            }
+
+            return CanAddItem(item, quantity);
+        }
+
         #endregion
 
         #region Quick Slots
@@ -968,6 +1094,7 @@ namespace IronFrontier.Inventory
             public int[] quickSlotBindings;
             public int maxSlots;
             public float maxCarryWeight;
+            public int gold;
         }
 
         /// <summary>
@@ -980,7 +1107,8 @@ namespace IronFrontier.Inventory
                 slots = _slots.Select(s => s.GetSerializedData()).ToArray(),
                 quickSlotBindings = new int[quickSlotCount],
                 maxSlots = maxSlots,
-                maxCarryWeight = maxCarryWeight
+                maxCarryWeight = maxCarryWeight,
+                gold = Gold
             };
 
             for (int i = 0; i < quickSlotCount; i++)
@@ -1018,6 +1146,7 @@ namespace IronFrontier.Inventory
 
             maxSlots = state.maxSlots;
             maxCarryWeight = state.maxCarryWeight;
+            Gold = state.gold;
             RecalculateWeight();
 
             Log("Restored inventory from serialized state");

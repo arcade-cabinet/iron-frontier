@@ -757,7 +757,7 @@ namespace IronFrontier.Combat
             var enemies = GetLivingEnemies();
 
             float avgEnemySpeed = enemies.Count > 0
-                ? enemies.Average(e => e.Stats.Speed)
+                ? (float)enemies.Average(e => e.Stats.Speed)
                 : actorStats.Speed;
 
             float speedDiff = actorStats.Speed - avgEnemySpeed;

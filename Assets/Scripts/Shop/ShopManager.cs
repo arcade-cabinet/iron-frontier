@@ -917,7 +917,7 @@ namespace IronFrontier.Shop
         /// </summary>
         protected virtual bool PlayerHasItem(string itemId, int quantity)
         {
-            return InventoryManager.Instance?.HasItem(itemId, quantity) ?? false;
+            return InventoryManager.Instance?.HasItemById(itemId, quantity) ?? false;
         }
 
         /// <summary>
@@ -925,7 +925,7 @@ namespace IronFrontier.Shop
         /// </summary>
         protected virtual bool CanPlayerHoldItem(string itemId, int quantity)
         {
-            return InventoryManager.Instance?.CanAddItem(itemId, quantity) ?? true;
+            return InventoryManager.Instance?.CanAddItemById(itemId, quantity) ?? true;
         }
 
         /// <summary>
@@ -933,7 +933,7 @@ namespace IronFrontier.Shop
         /// </summary>
         protected virtual void AddItemToPlayer(string itemId, int quantity)
         {
-            InventoryManager.Instance?.AddItem(itemId, quantity);
+            InventoryManager.Instance?.AddItemById(itemId, quantity);
         }
 
         /// <summary>
@@ -941,7 +941,7 @@ namespace IronFrontier.Shop
         /// </summary>
         protected virtual void RemoveItemFromPlayer(string itemId, int quantity)
         {
-            InventoryManager.Instance?.RemoveItem(itemId, quantity);
+            InventoryManager.Instance?.RemoveItemById(itemId, quantity);
         }
 
         /// <summary>

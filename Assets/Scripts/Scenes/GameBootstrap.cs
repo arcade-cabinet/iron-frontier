@@ -313,30 +313,25 @@ namespace IronFrontier.Scenes
         {
             SetState(BootstrapState.InitializingCoreSystems, 0.05f, "Initializing core systems...");
 
-            try
+            // Ensure EventBus exists
+            var eventBus = EventBus.Instance;
+            if (eventBus == null)
             {
-                // Ensure EventBus exists
-                var eventBus = EventBus.Instance;
-                if (eventBus == null)
-                {
-                    throw new Exception("Failed to create EventBus");
-                }
-
-                yield return new WaitForSecondsRealtime(stepDelay);
-
-                // Ensure GameManager exists
-                var gameManager = GameManager.Instance;
-                if (gameManager == null)
-                {
-                    throw new Exception("Failed to create GameManager");
-                }
-
-                Log("Core systems initialized");
+                FailBootstrap("Core systems initialization failed: Failed to create EventBus");
+                yield break;
             }
-            catch (Exception e)
+
+            yield return new WaitForSecondsRealtime(stepDelay);
+
+            // Ensure GameManager exists
+            var gameManager = GameManager.Instance;
+            if (gameManager == null)
             {
-                FailBootstrap($"Core systems initialization failed: {e.Message}");
+                FailBootstrap("Core systems initialization failed: Failed to create GameManager");
+                yield break;
             }
+
+            Log("Core systems initialized");
 
             yield return new WaitForSecondsRealtime(stepDelay);
         }

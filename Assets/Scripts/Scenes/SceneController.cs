@@ -149,7 +149,7 @@ namespace IronFrontier.Scenes
         [Header("Scene Transition")]
         [SerializeField]
         [Tooltip("Scene transition component reference")]
-        private SceneTransition sceneTransition;
+        internal SceneTransition sceneTransition;
 
         [Header("Debug")]
         [SerializeField]
