@@ -34,10 +34,10 @@ export function GameCanvas({
   cameraPosition = [0, 15, 20],
   onSceneReady,
 }: GameCanvasProps) {
-  const sceneRef = useRef<THREE.Scene>();
-  const cameraRef = useRef<THREE.PerspectiveCamera>();
-  const rendererRef = useRef<Renderer>();
-  const animationFrameRef = useRef<number>();
+  const sceneRef = useRef<THREE.Scene | undefined>(undefined);
+  const cameraRef = useRef<THREE.PerspectiveCamera | undefined>(undefined);
+  const rendererRef = useRef<Renderer | undefined>(undefined);
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     return () => {
@@ -85,8 +85,7 @@ export function GameCanvas({
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 10, 5);
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.mapSize.set(2048, 2048);
     directionalLight.shadow.camera.far = 200;
     directionalLight.shadow.camera.left = -50;
     directionalLight.shadow.camera.right = 50;

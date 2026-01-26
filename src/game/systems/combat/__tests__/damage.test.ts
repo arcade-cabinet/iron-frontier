@@ -2,7 +2,7 @@
  * Tests for the damage calculation system
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from '@jest/globals';
 import {
   calculateBaseDamage,
   applyVariance,

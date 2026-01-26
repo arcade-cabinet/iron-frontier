@@ -5,10 +5,12 @@
  * Data is persisted to localStorage as a binary blob.
  */
 
-import type { Database as SqlJsDatabase } from 'sql.js';
 import initSqlJs from 'sql.js';
 import type { Database } from './database';
 import { DB_SCHEMA } from './database';
+
+// Type for sql.js Database
+type SqlJsDatabase = any; // sql.js doesn't export types properly
 
 const STORAGE_KEY = 'iron-frontier-db';
 const SQL_WASM_URL = 'https://sql.js.org/dist/sql-wasm.wasm';

@@ -4,16 +4,14 @@
  * @module systems/__tests__/time
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import {
-  GameClock,
-  createGameClock,
-  realMsToGameMinutes,
-  gameMinutesToRealMs,
-  realMsToGameHours,
-  DEFAULT_CLOCK_CONFIG,
-  DEFAULT_CLOCK_STATE,
-  type TimePhase,
+    DEFAULT_CLOCK_STATE,
+    GameClock,
+    createGameClock,
+    gameMinutesToRealMs,
+    realMsToGameHours,
+    realMsToGameMinutes
 } from '../time';
 
 describe('GameClock', () => {
@@ -21,12 +19,12 @@ describe('GameClock', () => {
 
   beforeEach(() => {
     clock = new GameClock();
-    vi.useFakeTimers();
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     clock.dispose();
-    vi.useRealTimers();
+    jest.useRealTimers();
   });
 
   describe('initialization', () => {
@@ -263,7 +261,7 @@ describe('GameClock', () => {
 
   describe('event system', () => {
     it('should emit hourChanged events', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       clock.on('hourChanged', callback);
 
       clock.setTime(10, 0);
@@ -277,7 +275,7 @@ describe('GameClock', () => {
       // Start fresh at a time in dusk phase
       clock.setTime(18, 0); // Dusk starts at 18
 
-      const callback = vi.fn();
+      const callback = jest.fn();
       clock.on('phaseChanged', callback);
 
       clock.advanceTime(125); // 125 minutes = 2 hours 5 min, should cross into night at 20:05
@@ -292,7 +290,7 @@ describe('GameClock', () => {
     });
 
     it('should emit dayChanged events', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       clock.on('dayChanged', callback);
 
       clock.setTime(23, 30);
@@ -303,7 +301,7 @@ describe('GameClock', () => {
     });
 
     it('should remove listeners', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       const unsubscribe = clock.on('hourChanged', callback);
 
       clock.advanceHours(1);
@@ -315,8 +313,8 @@ describe('GameClock', () => {
     });
 
     it('should remove all listeners', () => {
-      const callback1 = vi.fn();
-      const callback2 = vi.fn();
+      const callback1 = jest.fn();
+      const callback2 = jest.fn();
 
       clock.on('hourChanged', callback1);
       clock.on('phaseChanged', callback2);

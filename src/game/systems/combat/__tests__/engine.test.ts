@@ -2,7 +2,7 @@
  * Tests for the combat engine
  */
 
-import { describe, expect, it, beforeEach } from 'vitest';
+import { describe, expect, it, beforeEach } from '@jest/globals';
 import {
   createPlayerCombatant,
   createEnemyCombatant,

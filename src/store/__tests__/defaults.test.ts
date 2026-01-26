@@ -2,7 +2,7 @@
  * Tests for store defaults
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from '@jest/globals';
 import {
   DEFAULT_CAMERA_STATE,
   DEFAULT_EQUIPMENT,

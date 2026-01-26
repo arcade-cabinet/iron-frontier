@@ -4,7 +4,7 @@
  * @module systems/__tests__/fatigue
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import {
   FatigueSystem,
   createFatigueSystem,

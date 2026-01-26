@@ -4,7 +4,7 @@
  * @module systems/__tests__/camping
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import {
   CampingSystem,
   createCampingSystem,

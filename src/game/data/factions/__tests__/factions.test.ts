@@ -2,7 +2,7 @@
  * Tests for the Faction Reputation System
  */
 
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect, beforeEach } from '@jest/globals';
 import {
   // Faction data
   IVRC_FACTION,

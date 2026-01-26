@@ -4,16 +4,15 @@
  * Tests for the Pokemon-style random encounter system.
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import {
-  EncounterSystem,
-  createRouteEncounterZones,
-  type EncounterZone,
-  type EncounterTrigger,
+    EncounterSystem,
+    createRouteEncounterZones,
+    type EncounterZone
 } from '../EncounterSystem';
 
 // Silence console.log during tests
-vi.spyOn(console, 'log').mockImplementation(() => {});
+jest.spyOn(console, 'log').mockImplementation(() => {});
 
 describe('EncounterSystem', () => {
   let system: EncounterSystem;
@@ -30,11 +29,11 @@ describe('EncounterSystem', () => {
 
   beforeEach(() => {
     system = new EncounterSystem();
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('Initialization', () => {
@@ -89,7 +88,7 @@ describe('EncounterSystem', () => {
       system.registerZone(testZone);
       system.setCurrentZone('test_zone');
       // Mock Math.random to never trigger encounters
-      vi.spyOn(Math, 'random').mockReturnValue(0.99);
+      jest.spyOn(Math, 'random').mockReturnValue(0.99);
     });
 
     it('increments steps when moving in encounter zone', () => {
@@ -145,11 +144,11 @@ describe('EncounterSystem', () => {
     });
 
     it('does not trigger encounter before minimum steps', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
 
       // Force encounter on first eligible step
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       // Move 4 steps (below minSteps of 5)
       system.updatePosition(0, 0);
@@ -161,11 +160,11 @@ describe('EncounterSystem', () => {
     });
 
     it('can trigger encounter after minimum steps', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
 
       // Force encounter trigger
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       // Move enough steps to exceed minSteps
       system.updatePosition(0, 0);
@@ -177,7 +176,7 @@ describe('EncounterSystem', () => {
     });
 
     it('resets step counter after encounter', () => {
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
@@ -189,12 +188,12 @@ describe('EncounterSystem', () => {
     });
 
     it('passes correct encounter trigger data', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
       system.setTimeOfDay('night');
 
       // Force specific encounter selection
-      vi.spyOn(Math, 'random')
+      jest.spyOn(Math, 'random')
         .mockReturnValueOnce(0) // Trigger encounter
         .mockReturnValueOnce(0); // Select first encounter in pool
 
@@ -222,10 +221,10 @@ describe('EncounterSystem', () => {
       system.registerZone(emptyZone);
       system.setCurrentZone('empty_zone');
 
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
 
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
@@ -241,7 +240,7 @@ describe('EncounterSystem', () => {
       system.registerZone(testZone);
       system.setCurrentZone('test_zone');
       // Get past minSteps
-      vi.spyOn(Math, 'random').mockReturnValue(0.99);
+      jest.spyOn(Math, 'random').mockReturnValue(0.99);
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
         system.updatePosition(i, 0);
@@ -275,11 +274,11 @@ describe('EncounterSystem', () => {
     });
 
     it('prevents encounters while repel is active', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
 
       system.applyRepel(100);
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
@@ -291,7 +290,7 @@ describe('EncounterSystem', () => {
 
     it('decrements repel steps on movement', () => {
       system.applyRepel(5);
-      vi.spyOn(Math, 'random').mockReturnValue(0.99);
+      jest.spyOn(Math, 'random').mockReturnValue(0.99);
 
       system.updatePosition(0, 0);
       system.updatePosition(1, 0);
@@ -312,11 +311,11 @@ describe('EncounterSystem', () => {
     });
 
     it('allows encounters after repel expires', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       system.onEncounter(callback);
 
       system.applyRepel(3);
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       // Use up repel
@@ -348,8 +347,8 @@ describe('EncounterSystem', () => {
 
   describe('Callback Management', () => {
     it('supports multiple callbacks', () => {
-      const callback1 = vi.fn();
-      const callback2 = vi.fn();
+      const callback1 = jest.fn();
+      const callback2 = jest.fn();
 
       system.onEncounter(callback1);
       system.onEncounter(callback2);
@@ -357,7 +356,7 @@ describe('EncounterSystem', () => {
       system.registerZone(testZone);
       system.setCurrentZone('test_zone');
 
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
@@ -369,7 +368,7 @@ describe('EncounterSystem', () => {
     });
 
     it('returns unsubscribe function', () => {
-      const callback = vi.fn();
+      const callback = jest.fn();
       const unsubscribe = system.onEncounter(callback);
 
       unsubscribe();
@@ -377,7 +376,7 @@ describe('EncounterSystem', () => {
       system.registerZone(testZone);
       system.setCurrentZone('test_zone');
 
-      vi.spyOn(Math, 'random').mockReturnValue(0);
+      jest.spyOn(Math, 'random').mockReturnValue(0);
 
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
@@ -393,7 +392,7 @@ describe('EncounterSystem', () => {
       system.registerZone(testZone);
       system.setCurrentZone('test_zone');
 
-      vi.spyOn(Math, 'random').mockReturnValue(0.99);
+      jest.spyOn(Math, 'random').mockReturnValue(0.99);
       system.updatePosition(0, 0);
       for (let i = 1; i <= 10; i++) {
         system.updatePosition(i, 0);
