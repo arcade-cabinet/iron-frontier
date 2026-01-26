@@ -1,0 +1,653 @@
+/* Iron Frontier - Inventory UI Stylesheet */
+/* Unity UI Toolkit Inventory and Item Styles */
+
+/* ============================================================================
+   INVENTORY PANEL
+   ============================================================================ */
+
+.inventory-panel {
+    background-color: rgba(20, 15, 10, 0.95);
+    border-width: 4px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 12px;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.inventory-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(100, 70, 40);
+}
+
+.inventory-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+.inventory-capacity {
+    font-size: 14px;
+    color: rgb(180, 170, 150);
+}
+
+/* ============================================================================
+   ITEM GRID
+   ============================================================================ */
+
+.item-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 8px;
+}
+
+.item-grid-compact {
+    padding: 4px;
+}
+
+/* ============================================================================
+   ITEM SLOTS
+   ============================================================================ */
+
+.item-slot {
+    width: 64px;
+    height: 64px;
+    margin: 4px;
+    background-color: rgba(35, 28, 20, 0.9);
+    border-width: 2px;
+    border-color: rgb(80, 60, 40);
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    transition-property: border-color, background-color, scale;
+    transition-duration: 0.15s;
+}
+
+.item-slot:hover {
+    border-color: rgb(139, 90, 43);
+    background-color: rgba(50, 40, 30, 0.9);
+}
+
+.item-slot-sm {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+}
+
+.item-slot-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+
+/* Selected slot */
+.item-slot-selected {
+    border-color: rgb(218, 165, 32);
+    border-width: 3px;
+    background-color: rgba(60, 50, 35, 0.95);
+}
+
+/* Empty slot */
+.item-slot-empty {
+    background-color: rgba(25, 20, 15, 0.7);
+    border-style: dashed;
+}
+
+/* Locked slot */
+.item-slot-locked {
+    background-color: rgba(40, 40, 45, 0.9);
+    border-color: rgb(60, 60, 70);
+    opacity: 0.6;
+}
+
+.item-slot-locked::after {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
+
+/* ============================================================================
+   ITEM ICON
+   ============================================================================ */
+
+.item-icon {
+    width: 48px;
+    height: 48px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.item-icon-sm {
+    width: 36px;
+    height: 36px;
+}
+
+.item-icon-lg {
+    width: 64px;
+    height: 64px;
+}
+
+/* ============================================================================
+   ITEM RARITY INDICATORS
+   ============================================================================ */
+
+/* Common items (gray/white) */
+.item-slot-common {
+    border-color: rgb(140, 135, 130);
+}
+
+.item-slot-common:hover {
+    border-color: rgb(170, 165, 160);
+}
+
+.item-rarity-common {
+    background-color: rgba(140, 135, 130, 0.3);
+}
+
+.item-name-rarity-common {
+    color: rgb(200, 195, 190);
+}
+
+/* Uncommon items (green) */
+.item-slot-uncommon {
+    border-color: rgb(80, 160, 80);
+}
+
+.item-slot-uncommon:hover {
+    border-color: rgb(100, 200, 100);
+}
+
+.item-rarity-uncommon {
+    background-color: rgba(80, 160, 80, 0.3);
+}
+
+.item-name-rarity-uncommon {
+    color: rgb(100, 200, 100);
+}
+
+/* Rare items (blue) */
+.item-slot-rare {
+    border-color: rgb(80, 130, 200);
+}
+
+.item-slot-rare:hover {
+    border-color: rgb(100, 150, 255);
+}
+
+.item-rarity-rare {
+    background-color: rgba(80, 130, 200, 0.3);
+}
+
+.item-name-rarity-rare {
+    color: rgb(100, 150, 255);
+}
+
+/* Epic items (purple) */
+.item-slot-epic {
+    border-color: rgb(160, 80, 200);
+}
+
+.item-slot-epic:hover {
+    border-color: rgb(190, 110, 255);
+}
+
+.item-rarity-epic {
+    background-color: rgba(160, 80, 200, 0.3);
+}
+
+.item-name-rarity-epic {
+    color: rgb(190, 130, 255);
+}
+
+/* Legendary items (orange/gold) */
+.item-slot-legendary {
+    border-color: rgb(218, 130, 40);
+    border-width: 3px;
+}
+
+.item-slot-legendary:hover {
+    border-color: rgb(255, 165, 50);
+}
+
+.item-rarity-legendary {
+    background-color: rgba(218, 130, 40, 0.3);
+}
+
+.item-name-rarity-legendary {
+    color: rgb(255, 165, 50);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(100, 60, 20);
+}
+
+/* Artifact/Unique items (brass steampunk) */
+.item-slot-artifact {
+    border-color: rgb(184, 115, 51);
+    border-width: 3px;
+}
+
+.item-slot-artifact:hover {
+    border-color: rgb(218, 165, 32);
+}
+
+.item-rarity-artifact {
+    background-color: rgba(184, 115, 51, 0.3);
+}
+
+.item-name-rarity-artifact {
+    color: rgb(218, 165, 32);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(80, 50, 20);
+}
+
+/* ============================================================================
+   ITEM QUANTITY BADGE
+   ============================================================================ */
+
+.item-quantity {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-radius: 4px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+    -unity-text-align: middle-center;
+}
+
+.item-quantity-low {
+    color: rgb(200, 80, 80);
+}
+
+/* ============================================================================
+   EQUIPMENT SLOTS
+   ============================================================================ */
+
+.equipment-panel {
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+}
+
+.equipment-row {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.equipment-slot {
+    width: 72px;
+    height: 72px;
+    margin: 6px;
+    background-color: rgba(40, 32, 24, 0.9);
+    border-width: 3px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+.equipment-slot:hover {
+    border-color: rgb(139, 90, 43);
+    background-color: rgba(55, 45, 35, 0.9);
+}
+
+.equipment-slot-highlight {
+    border-color: rgb(218, 165, 32);
+    background-color: rgba(70, 55, 40, 0.95);
+}
+
+/* Equipment slot types */
+.equipment-slot-head {
+    border-radius: 8px 8px 50% 50%;
+}
+
+.equipment-slot-weapon {
+    width: 80px;
+    height: 80px;
+    border-color: rgb(180, 60, 60);
+}
+
+.equipment-slot-weapon:hover {
+    border-color: rgb(200, 80, 80);
+}
+
+.equipment-slot-armor {
+    width: 80px;
+    height: 96px;
+    border-color: rgb(112, 128, 144);
+}
+
+.equipment-slot-armor:hover {
+    border-color: rgb(142, 158, 174);
+}
+
+.equipment-slot-accessory {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+/* Slot label */
+.equipment-slot-label {
+    position: absolute;
+    bottom: -18px;
+    font-size: 10px;
+    color: rgb(150, 140, 120);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+}
+
+/* ============================================================================
+   DRAG AND DROP FEEDBACK
+   ============================================================================ */
+
+/* Dragging item */
+.item-dragging {
+    position: absolute;
+    opacity: 0.9;
+    scale: 1.1;
+}
+
+.item-dragging > .item-icon {
+    -unity-background-tint-color: rgb(255, 255, 255);
+}
+
+/* Slot being dragged from */
+.item-slot-drag-source {
+    background-color: rgba(40, 40, 50, 0.7);
+    border-style: dashed;
+    border-color: rgb(100, 100, 120);
+}
+
+/* Valid drop target */
+.item-slot-drop-valid {
+    border-color: rgb(100, 200, 100);
+    border-width: 3px;
+    background-color: rgba(50, 80, 50, 0.5);
+}
+
+/* Invalid drop target */
+.item-slot-drop-invalid {
+    border-color: rgb(200, 80, 80);
+    border-width: 3px;
+    background-color: rgba(80, 40, 40, 0.5);
+}
+
+/* Swap indicator */
+.item-slot-drop-swap {
+    border-color: rgb(218, 165, 32);
+    border-width: 3px;
+    background-color: rgba(80, 60, 30, 0.5);
+}
+
+/* ============================================================================
+   ITEM TOOLTIP
+   ============================================================================ */
+
+.item-tooltip {
+    position: absolute;
+    min-width: 250px;
+    max-width: 350px;
+    background-color: rgba(15, 12, 8, 0.98);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.item-tooltip-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(80, 60, 40);
+}
+
+.item-tooltip-name {
+    font-size: 17px;
+    -unity-font-style: bold;
+    flex-grow: 1;
+}
+
+.item-tooltip-type {
+    font-size: 12px;
+    color: rgb(150, 140, 120);
+    margin-top: 4px;
+}
+
+.item-tooltip-icon {
+    width: 48px;
+    height: 48px;
+    margin-left: 12px;
+    border-width: 2px;
+    border-radius: 4px;
+}
+
+.item-tooltip-stats {
+    margin-bottom: 10px;
+}
+
+.item-tooltip-stat {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.item-tooltip-stat-label {
+    font-size: 13px;
+    color: rgb(180, 170, 150);
+}
+
+.item-tooltip-stat-value {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+}
+
+.item-tooltip-stat-value-positive {
+    color: rgb(100, 200, 100);
+}
+
+.item-tooltip-stat-value-negative {
+    color: rgb(200, 80, 80);
+}
+
+.item-tooltip-description {
+    font-size: 13px;
+    color: rgb(200, 190, 170);
+    white-space: normal;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(80, 60, 40);
+}
+
+.item-tooltip-flavor {
+    font-size: 12px;
+    color: rgb(160, 140, 100);
+    -unity-font-style: italic;
+    white-space: normal;
+    margin-bottom: 10px;
+}
+
+.item-tooltip-requirements {
+    margin-bottom: 10px;
+}
+
+.item-tooltip-requirement {
+    font-size: 12px;
+    color: rgb(200, 80, 80);
+    margin-bottom: 2px;
+}
+
+.item-tooltip-requirement-met {
+    color: rgb(150, 140, 120);
+}
+
+.item-tooltip-price {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top-width: 1px;
+    border-top-color: rgb(80, 60, 40);
+}
+
+.item-tooltip-price-label {
+    font-size: 12px;
+    color: rgb(150, 140, 120);
+}
+
+.item-tooltip-price-value {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+/* ============================================================================
+   INVENTORY TABS
+   ============================================================================ */
+
+.inventory-tabs {
+    flex-direction: row;
+    margin-bottom: 12px;
+}
+
+.inventory-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: rgb(180, 170, 150);
+    background-color: transparent;
+    border-width: 0;
+    border-bottom-width: 3px;
+    border-bottom-color: transparent;
+    transition-property: color, border-bottom-color;
+    transition-duration: 0.15s;
+}
+
+.inventory-tab:hover {
+    color: rgb(230, 220, 200);
+}
+
+.inventory-tab-active {
+    color: rgb(218, 165, 32);
+    border-bottom-color: rgb(218, 165, 32);
+}
+
+/* Tab with icon */
+.inventory-tab-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* ============================================================================
+   ITEM ACTIONS
+   ============================================================================ */
+
+.item-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top-width: 1px;
+    border-top-color: rgb(80, 60, 40);
+}
+
+.item-action-button {
+    padding: 8px 16px;
+    margin-left: 8px;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+/* ============================================================================
+   ITEM COMPARISON
+   ============================================================================ */
+
+.item-comparison {
+    flex-direction: row;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top-width: 1px;
+    border-top-color: rgb(80, 60, 40);
+}
+
+.comparison-arrow {
+    font-size: 16px;
+    color: rgb(150, 140, 120);
+    margin: 0 8px;
+    align-self: center;
+}
+
+.comparison-stat-better {
+    color: rgb(100, 200, 100);
+}
+
+.comparison-stat-worse {
+    color: rgb(200, 80, 80);
+}
+
+.comparison-stat-same {
+    color: rgb(180, 170, 150);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes item-pickup {
+    from {
+        scale: 1.5;
+        opacity: 0;
+    }
+    to {
+        scale: 1;
+        opacity: 1;
+    }
+}
+
+@keyframes item-new {
+    0% {
+        border-color: rgb(218, 165, 32);
+    }
+    50% {
+        border-color: rgb(255, 200, 100);
+    }
+    100% {
+        border-color: rgb(218, 165, 32);
+    }
+}
+
+@keyframes rarity-legendary-glow {
+    0% {
+        border-color: rgb(218, 130, 40);
+    }
+    50% {
+        border-color: rgb(255, 180, 80);
+    }
+    100% {
+        border-color: rgb(218, 130, 40);
+    }
+}
+
+@keyframes slot-highlight {
+    0% {
+        background-color: rgba(218, 165, 32, 0.2);
+    }
+    100% {
+        background-color: rgba(218, 165, 32, 0);
+    }
+}

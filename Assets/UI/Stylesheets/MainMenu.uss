@@ -1,0 +1,837 @@
+/* Iron Frontier - Main Menu Stylesheet */
+/* Ported from TypeScript TitleScreen.tsx with Tailwind CSS */
+
+/* ============================================================================
+   MAIN MENU ROOT CONTAINER
+   bg-gradient-to-b from-stone-900 via-stone-850 to-stone-950
+   ============================================================================ */
+
+.main-menu-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1c1917;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   BACKGROUND EFFECTS LAYER
+   Animated gears, glowing orbs
+   ============================================================================ */
+
+.background-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Glowing orb effect - top left */
+.glow-orb-1 {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 256px;
+    height: 256px;
+    border-radius: 128px;
+    background-color: rgba(245, 158, 11, 0.1);
+    opacity: 0.5;
+}
+
+/* Glowing orb effect - bottom right */
+.glow-orb-2 {
+    position: absolute;
+    bottom: 25%;
+    right: 25%;
+    width: 192px;
+    height: 192px;
+    border-radius: 96px;
+    background-color: rgba(234, 88, 12, 0.1);
+    opacity: 0.5;
+}
+
+/* Vignette overlay */
+.vignette-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+}
+
+/* ============================================================================
+   ANIMATED GEAR DECORATIONS
+   Three gears at different sizes and speeds
+   ============================================================================ */
+
+.gear {
+    position: absolute;
+    background-color: transparent;
+}
+
+.gear-icon {
+    width: 100%;
+    height: 100%;
+}
+
+/* Large gear - top right */
+.gear--large {
+    top: 40px;
+    right: 40px;
+    width: 96px;
+    height: 96px;
+    opacity: 0.2;
+    animation-name: spin;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/* Medium gear - bottom left */
+.gear--medium {
+    bottom: 80px;
+    left: 40px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.15;
+    animation-name: spin;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
+}
+
+/* Small gear - center right */
+.gear--small {
+    top: 50%;
+    right: 25%;
+    width: 80px;
+    height: 80px;
+    opacity: 0.1;
+    animation-name: spin;
+    animation-duration: 25s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from { rotate: 0deg; }
+    to { rotate: 360deg; }
+}
+
+/* ============================================================================
+   CONTENT CONTAINER
+   Centered content with z-index above background
+   ============================================================================ */
+
+.content-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* ============================================================================
+   TITLE SECTION
+   Game logo, title, and subtitle
+   ============================================================================ */
+
+.title-section {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+    animation-name: fade-in-down;
+    animation-duration: 0.8s;
+}
+
+/* Game logo placeholder */
+.game-logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 48px;
+    background-color: rgba(180, 83, 9, 0.3);
+    border-width: 2px;
+    border-color: #b45309;
+    margin-bottom: 16px;
+}
+
+/* Main title - gradient text effect approximation */
+/* text-5xl md:text-6xl font-bold text-transparent bg-clip-text
+   bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 */
+.game-title {
+    font-size: 48px;
+    -unity-font-style: bold;
+    color: #fcd34d;
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtitle - "Tales of the Steam Frontier" */
+/* text-amber-600/80 text-sm md:text-base mt-2 tracking-widest uppercase */
+.game-subtitle {
+    font-size: 14px;
+    color: rgba(217, 119, 6, 0.8);
+    letter-spacing: 4px;
+    margin-top: 8px;
+    -unity-text-align: middle-center;
+}
+
+/* Tagline text */
+/* text-stone-400 text-center max-w-sm mb-12 text-sm */
+.tagline {
+    font-size: 14px;
+    color: #a8a29e;
+    -unity-text-align: middle-center;
+    max-width: 384px;
+    margin-bottom: 48px;
+    padding: 0 16px;
+    animation-name: fade-in;
+    animation-duration: 0.8s;
+    animation-delay: 0.3s;
+}
+
+/* ============================================================================
+   VERSION LABEL
+   Top-right corner version display
+   ============================================================================ */
+
+.version-label {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 11px;
+    color: #78716c;
+}
+
+/* ============================================================================
+   MENU BUTTONS CONTAINER
+   Vertical stack of menu buttons
+   ============================================================================ */
+
+.menu-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    animation-name: fade-in-up;
+    animation-duration: 0.6s;
+    animation-delay: 0.5s;
+}
+
+/* ============================================================================
+   MENU BUTTON STYLES
+   Matching TypeScript button design
+   ============================================================================ */
+
+/* Base menu button */
+/* w-full py-4 px-6 rounded-lg font-medium text-lg */
+.menu-button {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-width: 1px;
+    border-color: transparent;
+    transition-duration: 0.15s;
+    background-color: #44403c;
+    color: #e7e5e4;
+}
+
+.menu-button:hover {
+    background-color: #57534e;
+    scale: 1.02;
+}
+
+.menu-button:active {
+    scale: 0.98;
+}
+
+/* Primary button style (New Game when no save, Continue) */
+/* bg-gradient-to-r from-amber-700 to-amber-600 text-white
+   shadow-lg shadow-amber-900/30 border border-amber-500/30 */
+.menu-button--primary {
+    background-color: #b45309;
+    color: white;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.menu-button--primary:hover {
+    background-color: #d97706;
+}
+
+/* Danger button style (Quit) */
+.menu-button--danger {
+    background-color: #292524;
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.menu-button--danger:hover {
+    background-color: #3f3837;
+    color: #f87171;
+}
+
+/* Disabled button state */
+.menu-button--disabled {
+    opacity: 0.5;
+}
+
+.menu-button:disabled {
+    opacity: 0.5;
+}
+
+/* Button icon container */
+.button-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Icon variants */
+.button-icon--new-game {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.button-icon--continue {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.button-icon--load {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.button-icon--settings {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.button-icon--credits {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.button-icon--quit {
+    background-color: rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+}
+
+/* ============================================================================
+   NAME INPUT SECTION
+   Shown when starting new game
+   ============================================================================ */
+
+.name-input-container {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    animation-name: fade-in;
+    animation-duration: 0.3s;
+}
+
+/* Name input field */
+/* w-full px-4 py-3 rounded-lg text-center
+   bg-stone-800 border-2 border-amber-700/50
+   text-amber-100 placeholder:text-stone-500 */
+.name-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #292524;
+    border-width: 2px;
+    border-color: rgba(180, 83, 9, 0.5);
+    color: #fef3c7;
+    font-size: 18px;
+    -unity-text-align: middle-center;
+}
+
+.name-input:focus {
+    border-color: #f59e0b;
+}
+
+.name-input > .unity-text-field__input {
+    background-color: transparent;
+    border-width: 0;
+    color: #fef3c7;
+    -unity-text-align: middle-center;
+}
+
+/* Input buttons row */
+.name-input-buttons {
+    flex-direction: row;
+    gap: 8px;
+}
+
+/* Back button */
+.btn-back {
+    flex-grow: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #44403c;
+    color: #d6d3d1;
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    border-width: 0;
+}
+
+.btn-back:hover {
+    background-color: #57534e;
+}
+
+/* Start button */
+.btn-start {
+    flex-grow: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #b45309;
+    color: white;
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-width: 0;
+}
+
+.btn-start:hover {
+    background-color: #d97706;
+}
+
+.btn-start:disabled {
+    opacity: 0.5;
+}
+
+/* ============================================================================
+   FOOTER SECTION
+   Copyright, About button
+   ============================================================================ */
+
+.footer {
+    position: absolute;
+    bottom: 24px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Copyright label */
+.copyright-label {
+    font-size: 12px;
+    color: #57534e;
+}
+
+/* About button */
+/* text-stone-500 hover:text-stone-400 */
+.btn-about {
+    font-size: 14px;
+    color: #78716c;
+    background-color: transparent;
+    border-width: 0;
+    padding: 4px 8px;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-about:hover {
+    color: #a8a29e;
+}
+
+/* ============================================================================
+   LOADING OVERLAY
+   Full-screen loading state
+   ============================================================================ */
+
+.loading-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(12, 10, 9, 0.95);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-overlay--hidden {
+    display: none;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    border-width: 3px;
+    border-color: rgba(180, 83, 9, 0.3);
+    border-top-color: #f59e0b;
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/* Loading text */
+.loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #a8a29e;
+    letter-spacing: 2px;
+}
+
+/* Loading progress bar */
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    margin-top: 16px;
+    background-color: rgba(68, 64, 60, 0.5);
+    border-radius: 2px;
+}
+
+.loading-progress > .unity-progress-bar__background {
+    background-color: rgba(68, 64, 60, 0.5);
+    border-radius: 2px;
+}
+
+.loading-progress > .unity-progress-bar__progress {
+    background-color: #f59e0b;
+    border-radius: 2px;
+}
+
+/* ============================================================================
+   SPLASH SCREEN STYLES
+   Initial loading screen with animated gears
+   ============================================================================ */
+
+.splash-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #0c0a09;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-gears {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+}
+
+.splash-gear-large {
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    animation-name: spin;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.splash-gear-small {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    animation-name: spin;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
+}
+
+.splash-title {
+    margin-top: 32px;
+    font-size: 30px;
+    -unity-font-style: bold;
+    color: #f59e0b;
+    letter-spacing: 2px;
+}
+
+.splash-subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #b45309;
+    letter-spacing: 4px;
+}
+
+/* ============================================================================
+   ABOUT MODAL
+   Information overlay
+   ============================================================================ */
+
+.about-modal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.about-modal-overlay--hidden {
+    display: none;
+}
+
+.about-modal {
+    background-color: #292524;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 384px;
+    border-width: 1px;
+    border-color: rgba(180, 83, 9, 0.3);
+}
+
+.about-modal-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: #fcd34d;
+    margin-bottom: 12px;
+}
+
+.about-modal-text {
+    font-size: 14px;
+    color: #d6d3d1;
+    margin-bottom: 16px;
+}
+
+.about-modal-subtext {
+    font-size: 12px;
+    color: #78716c;
+    margin-bottom: 16px;
+}
+
+.about-modal-close {
+    width: 100%;
+    padding: 8px 16px;
+    background-color: #44403c;
+    border-radius: 8px;
+    border-width: 0;
+    color: #d6d3d1;
+    font-size: 14px;
+    -unity-text-align: middle-center;
+}
+
+.about-modal-close:hover {
+    background-color: #57534e;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-in-down {
+    from {
+        opacity: 0;
+        translate: 0 -20px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        translate: 0 20px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+/* Tablet/Desktop - larger text and spacing */
+@media (min-width: 768px) {
+    .game-title {
+        font-size: 60px;
+    }
+
+    .game-subtitle {
+        font-size: 16px;
+    }
+
+    .menu-button {
+        padding: 18px 28px;
+        font-size: 20px;
+    }
+}
+
+/* ============================================================================
+   LOAD GAME PANEL
+   Save slot selection screen
+   ============================================================================ */
+
+.load-game-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(28, 25, 23, 0.98);
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px;
+}
+
+.load-game-panel .menu-title {
+    font-size: 36px;
+    -unity-font-style: bold;
+    color: #fcd34d;
+    margin-bottom: 32px;
+    letter-spacing: 2px;
+}
+
+/* Save slot container */
+.save-slot-container {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.save-slot-empty {
+    font-size: 16px;
+    color: #78716c;
+    -unity-text-align: middle-center;
+    padding: 48px;
+}
+
+/* Individual save slot */
+.save-slot {
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background-color: rgba(41, 37, 36, 0.9);
+    border-width: 2px;
+    border-color: #44403c;
+    border-radius: 8px;
+    transition-duration: 0.15s;
+}
+
+.save-slot:hover {
+    background-color: rgba(68, 64, 60, 0.9);
+    border-color: rgba(180, 83, 9, 0.6);
+}
+
+/* Save slot type label */
+.save-slot-type {
+    width: 80px;
+    padding: 4px 8px;
+    margin-right: 16px;
+    background-color: rgba(120, 53, 15, 0.4);
+    border-radius: 4px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: #fbbf24;
+    -unity-text-align: middle-center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Save slot info */
+.save-slot-info {
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.save-slot-name {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: #fef3c7;
+    margin-bottom: 4px;
+}
+
+.save-slot-details {
+    font-size: 13px;
+    color: #a8a29e;
+    margin-bottom: 2px;
+}
+
+.save-slot-time {
+    font-size: 11px;
+    color: #78716c;
+}
+
+/* Save slot buttons */
+.save-slot-buttons {
+    flex-direction: row;
+    gap: 8px;
+    margin-left: 16px;
+}
+
+.save-slot-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border-width: 1px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    transition-duration: 0.15s;
+}
+
+.save-slot-button--load {
+    background-color: rgba(180, 83, 9, 0.8);
+    border-color: #b45309;
+    color: #fef3c7;
+}
+
+.save-slot-button--load:hover {
+    background-color: rgba(217, 119, 6, 0.8);
+    border-color: #fbbf24;
+}
+
+.save-slot-button--delete {
+    background-color: rgba(68, 64, 60, 0.6);
+    border-color: #57534e;
+    color: #a8a29e;
+}
+
+.save-slot-button--delete:hover {
+    background-color: rgba(153, 27, 27, 0.6);
+    border-color: #dc2626;
+    color: #fca5a5;
+}

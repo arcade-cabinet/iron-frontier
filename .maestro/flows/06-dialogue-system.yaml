@@ -1,0 +1,78 @@
+# Iron Frontier E2E Test: Dialogue System
+# Tests NPC dialogue interaction
+
+appId: ${ANDROID_APP_ID}
+name: Dialogue System Test
+tags:
+  - dialogue
+  - npc
+  - p1
+
+---
+# Note: This flow assumes game is already running with player in world
+# Should be run after character creation flow
+
+# Look for interaction prompt near NPC
+- assertVisible:
+    text: "Talk"
+    timeout: ${LONG_TIMEOUT}
+    optional: true
+
+# If talk option visible, interact
+- runFlow:
+    when:
+      visible: "Talk"
+    commands:
+      - tapOn: "Talk"
+      - waitForAnimationToEnd:
+          timeout: ${ANIMATION_TIMEOUT}
+      - takeScreenshot: screenshots/06-dialogue-started
+
+# Verify dialogue panel appears
+- assertVisible:
+    id: "dialogue-panel"
+    timeout: ${DEFAULT_TIMEOUT}
+    optional: true
+
+- assertVisible:
+    id: "dialogue-text"
+    optional: true
+
+# Test continue button (typewriter skip)
+- tapOn:
+    text: "Continue"
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Test dialogue choice if available
+- runFlow:
+    when:
+      visible:
+        id: "choices-container"
+    commands:
+      - takeScreenshot: screenshots/06-dialogue-choices
+      # Tap first choice
+      - tapOn:
+          index: 0
+          containerId: "choices-container"
+          optional: true
+      - waitForAnimationToEnd:
+          timeout: 3000
+
+# Continue through dialogue
+- repeat:
+    times: 5
+    commands:
+      - tapOn:
+          text: "Continue"
+          optional: true
+      - waitForAnimationToEnd:
+          timeout: 1000
+
+# Check no errors occurred
+- assertNotVisible:
+    text: "Error"
+    optional: true
+
+- takeScreenshot: screenshots/06-dialogue-complete

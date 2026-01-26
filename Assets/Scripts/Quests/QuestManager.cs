@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using IronFrontier.Core;
 using IronFrontier.Data;
+using IronFrontier.Inventory;
+using IronFrontier.Systems;
 
 namespace IronFrontier.Quests
 {
@@ -667,12 +669,13 @@ namespace IronFrontier.Quests
             var prereqs = questData.prerequisites;
 
             // Check completed quests
-            if (prereqs.completedQuestIds != null)
+            if (prereqs.completedQuestIds != null && prereqs.completedQuestIds.Count > 0)
             {
                 foreach (var prereqId in prereqs.completedQuestIds)
                 {
-                    if (!_completedQuests.Contains(prereqId))
+                    if (!string.IsNullOrEmpty(prereqId) && !_completedQuests.Contains(prereqId))
                     {
+                        Log($"Quest {questData.id} blocked: requires completed quest {prereqId}");
                         return false;
                     }
                 }
@@ -681,23 +684,112 @@ namespace IronFrontier.Quests
             // Check minimum level
             if (prereqs.minLevel > 1)
             {
-                // TODO: Integrate with player stats system
-                // For now, assume level check passes
+                int playerLevel = GetPlayerLevel();
+                if (playerLevel < prereqs.minLevel)
+                {
+                    Log($"Quest {questData.id} blocked: requires level {prereqs.minLevel}, player is {playerLevel}");
+                    return false;
+                }
             }
 
             // Check required items
-            if (prereqs.requiredItemIds != null)
+            if (prereqs.requiredItemIds != null && prereqs.requiredItemIds.Count > 0)
             {
-                // TODO: Integrate with inventory system
+                foreach (var itemId in prereqs.requiredItemIds)
+                {
+                    if (!string.IsNullOrEmpty(itemId) && !PlayerHasItem(itemId))
+                    {
+                        Log($"Quest {questData.id} blocked: requires item {itemId}");
+                        return false;
+                    }
+                }
             }
 
             // Check faction reputation
             if (prereqs.factionReputation != null && prereqs.factionReputation.Count > 0)
             {
-                // TODO: Integrate with reputation system
+                foreach (var repReq in prereqs.factionReputation)
+                {
+                    if (!CheckFactionReputation(repReq.factionId, repReq.minReputation))
+                    {
+                        Log($"Quest {questData.id} blocked: requires {repReq.minReputation} rep with {repReq.factionId}");
+                        return false;
+                    }
+                }
+            }
+
+            // Check time of day restriction
+            if (prereqs.timeRestriction != TimeRestriction.None)
+            {
+                if (!CheckTimeRestriction(prereqs.timeRestriction))
+                {
+                    Log($"Quest {questData.id} blocked: time restriction {prereqs.timeRestriction}");
+                    return false;
+                }
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Get the player's current level.
+        /// </summary>
+        private int GetPlayerLevel()
+        {
+            // Try to get from GameManager or player stats
+            if (GameManager.Instance != null)
+            {
+                return GameManager.Instance.PlayerLevel;
+            }
+            return 1; // Default level
+        }
+
+        /// <summary>
+        /// Check if the player has a specific item.
+        /// </summary>
+        private bool PlayerHasItem(string itemId)
+        {
+            if (InventoryManager.Instance == null)
+                return false;
+
+            return InventoryManager.Instance.HasItemById(itemId, 1);
+        }
+
+        /// <summary>
+        /// Check if the player meets a faction reputation requirement.
+        /// </summary>
+        private bool CheckFactionReputation(string factionId, int minReputation)
+        {
+            if (string.IsNullOrEmpty(factionId))
+                return true;
+
+            if (ReputationSystem.Instance == null)
+                return true; // Assume met if no reputation system
+
+            int currentRep = ReputationSystem.Instance.GetReputation(factionId);
+            return currentRep >= minReputation;
+        }
+
+        /// <summary>
+        /// Check if the current time meets a time restriction.
+        /// </summary>
+        private bool CheckTimeRestriction(TimeRestriction restriction)
+        {
+            if (TimeSystem.Instance == null)
+                return true; // Assume met if no time system
+
+            int hour = TimeSystem.Instance.Hour;
+
+            return restriction switch
+            {
+                TimeRestriction.DayOnly => hour >= 6 && hour < 18,
+                TimeRestriction.NightOnly => hour < 6 || hour >= 18,
+                TimeRestriction.MorningOnly => hour >= 5 && hour < 12,
+                TimeRestriction.AfternoonOnly => hour >= 12 && hour < 18,
+                TimeRestriction.EveningOnly => hour >= 18 && hour < 22,
+                TimeRestriction.LateNightOnly => hour >= 22 || hour < 5,
+                _ => true
+            };
         }
 
         /// <summary>

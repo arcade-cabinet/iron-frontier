@@ -520,7 +520,8 @@ namespace IronFrontier.Tests.EditMode
                 ActiveQuests = new List<ActiveQuest>(),
                 CompletedQuests = new List<string>(),
                 FailedQuests = new List<string>(),
-                TrackedQuestId = null
+                TrackedQuestId = null,
+                CompletedQuestData = new Dictionary<string, ActiveQuest>()
             };
         }
 
@@ -576,7 +577,8 @@ namespace IronFrontier.Tests.EditMode
 
         public void UpdateObjective(ObjectiveType type, string target, int amount = 1)
         {
-            foreach (var quest in _state.ActiveQuests.Where(q => q.Status == QuestStatus.Active))
+            // Use ToList() to create a copy to avoid collection modification during enumeration
+            foreach (var quest in _state.ActiveQuests.Where(q => q.Status == QuestStatus.Active).ToList())
             {
                 foreach (var objective in quest.Objectives)
                 {
@@ -664,6 +666,8 @@ namespace IronFrontier.Tests.EditMode
                 _dataAccess.GrantRewards(definition.Rewards);
             }
 
+            // Store full quest data before removing from active list
+            _state.CompletedQuestData[questId] = quest;
             _state.ActiveQuests.Remove(quest);
             _state.CompletedQuests.Add(questId);
 
@@ -708,11 +712,26 @@ namespace IronFrontier.Tests.EditMode
         public bool IsQuestCompleted(string questId) =>
             _state.CompletedQuests.Contains(questId);
 
-        public ActiveQuest GetQuest(string questId) =>
-            _state.ActiveQuests.Find(q => q.QuestId == questId) ??
-            (_state.CompletedQuests.Contains(questId)
-                ? new ActiveQuest { QuestId = questId, Status = QuestStatus.Completed }
-                : null);
+        public ActiveQuest GetQuest(string questId)
+        {
+            // First check active quests
+            var activeQuest = _state.ActiveQuests.Find(q => q.QuestId == questId);
+            if (activeQuest != null) return activeQuest;
+
+            // Then check completed quests - return full data if available
+            if (_state.CompletedQuestData.TryGetValue(questId, out var completedQuest))
+            {
+                return completedQuest;
+            }
+
+            // Fallback for completed quests without full data (e.g., from old saves)
+            if (_state.CompletedQuests.Contains(questId))
+            {
+                return new ActiveQuest { QuestId = questId, Status = QuestStatus.Completed };
+            }
+
+            return null;
+        }
 
         public List<ActiveQuest> GetActiveQuests() => _state.ActiveQuests.ToList();
 
@@ -739,7 +758,8 @@ namespace IronFrontier.Tests.EditMode
             ActiveQuests = _state.ActiveQuests.ToList(),
             CompletedQuests = _state.CompletedQuests.ToList(),
             FailedQuests = _state.FailedQuests.ToList(),
-            TrackedQuestId = _state.TrackedQuestId
+            TrackedQuestId = _state.TrackedQuestId,
+            CompletedQuestData = new Dictionary<string, ActiveQuest>(_state.CompletedQuestData)
         };
 
         public QuestControllerState GetSaveData() => GetState();
@@ -751,7 +771,10 @@ namespace IronFrontier.Tests.EditMode
                 ActiveQuests = data.ActiveQuests.ToList(),
                 CompletedQuests = data.CompletedQuests.ToList(),
                 FailedQuests = data.FailedQuests.ToList(),
-                TrackedQuestId = data.TrackedQuestId
+                TrackedQuestId = data.TrackedQuestId,
+                CompletedQuestData = data.CompletedQuestData != null
+                    ? new Dictionary<string, ActiveQuest>(data.CompletedQuestData)
+                    : new Dictionary<string, ActiveQuest>()
             };
         }
 
@@ -1047,6 +1070,8 @@ namespace IronFrontier.Tests.EditMode
         public List<string> CompletedQuests { get; set; }
         public List<string> FailedQuests { get; set; }
         public string TrackedQuestId { get; set; }
+        // Store full quest data for completed quests for retrieval
+        public Dictionary<string, ActiveQuest> CompletedQuestData { get; set; } = new Dictionary<string, ActiveQuest>();
     }
 
     public class QuestEvent

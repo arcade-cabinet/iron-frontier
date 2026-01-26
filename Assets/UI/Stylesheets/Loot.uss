@@ -1,0 +1,294 @@
+/* Iron Frontier - Loot UI Stylesheet */
+/* Styles for chest/container loot display */
+
+/* ============================================================================
+   OVERLAY BACKGROUND
+   ============================================================================ */
+
+.loot-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================================
+   LOOT PANEL
+   bg-amber-950/95 border border-amber-700/60 rounded-lg
+   ============================================================================ */
+
+.loot-panel {
+    width: 320px;
+    max-height: 480px;
+    background-color: rgba(69, 26, 3, 0.95);
+    border-width: 2px;
+    border-color: rgba(180, 83, 9, 0.6);
+    border-radius: 12px;
+    padding: 16px;
+    flex-direction: column;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.loot-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(180, 83, 9, 0.4);
+}
+
+.loot-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: #fef3c7;
+}
+
+.loot-close-button {
+    width: 28px;
+    height: 28px;
+    background-color: rgba(120, 53, 15, 0.6);
+    border-width: 1px;
+    border-color: rgba(180, 83, 9, 0.4);
+    border-radius: 4px;
+    color: #fcd34d;
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 0;
+}
+
+.loot-close-button:hover {
+    background-color: rgba(180, 83, 9, 0.6);
+    border-color: #fbbf24;
+}
+
+/* ============================================================================
+   GOLD DISPLAY
+   ============================================================================ */
+
+.loot-gold-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background-color: rgba(120, 53, 15, 0.4);
+    border-radius: 6px;
+}
+
+.loot-gold-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #eab308;
+    border-radius: 10px;
+}
+
+.loot-gold-text {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #facc15;
+}
+
+/* ============================================================================
+   ITEMS CONTAINER
+   ============================================================================ */
+
+.loot-items {
+    flex-grow: 1;
+    min-height: 100px;
+    max-height: 280px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.loot-empty {
+    font-size: 14px;
+    color: rgba(214, 211, 209, 0.6);
+    -unity-text-align: middle-center;
+    padding: 24px;
+}
+
+/* ============================================================================
+   ITEM ROW
+   ============================================================================ */
+
+.loot-item-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 4px;
+    background-color: rgba(41, 37, 36, 0.6);
+    border-width: 1px;
+    border-color: rgba(68, 64, 60, 0.6);
+    border-radius: 6px;
+    transition-duration: 0.15s;
+}
+
+.loot-item-row:hover {
+    background-color: rgba(68, 64, 60, 0.6);
+    border-color: rgba(180, 83, 9, 0.4);
+}
+
+/* Item icon */
+.loot-item-icon {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(120, 53, 15, 0.6);
+    border-width: 2px;
+    border-color: #78716c;
+    border-radius: 4px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+/* Rarity colors for icon border */
+.loot-item-icon--common {
+    border-color: #78716c;
+}
+
+.loot-item-icon--uncommon {
+    border-color: #22c55e;
+}
+
+.loot-item-icon--rare {
+    border-color: #3b82f6;
+}
+
+.loot-item-icon--epic {
+    border-color: #a855f7;
+}
+
+.loot-item-icon--legendary {
+    border-color: #f59e0b;
+}
+
+/* Item details */
+.loot-item-details {
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.loot-item-name {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #e7e5e4;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Rarity colors for name */
+.loot-item-name--common {
+    color: #d6d3d1;
+}
+
+.loot-item-name--uncommon {
+    color: #4ade80;
+}
+
+.loot-item-name--rare {
+    color: #60a5fa;
+}
+
+.loot-item-name--epic {
+    color: #c084fc;
+}
+
+.loot-item-name--legendary {
+    color: #fbbf24;
+}
+
+.loot-item-quantity {
+    font-size: 11px;
+    color: rgba(168, 162, 158, 0.8);
+}
+
+/* Take button */
+.loot-item-button {
+    padding: 4px 10px;
+    background-color: rgba(120, 53, 15, 0.6);
+    border-width: 1px;
+    border-color: rgba(180, 83, 9, 0.4);
+    border-radius: 4px;
+    color: #fcd34d;
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.loot-item-button:hover {
+    background-color: rgba(180, 83, 9, 0.6);
+    border-color: #fbbf24;
+}
+
+/* ============================================================================
+   BUTTONS ROW
+   ============================================================================ */
+
+.loot-buttons {
+    flex-direction: row;
+    gap: 8px;
+    padding-top: 12px;
+    border-top-width: 1px;
+    border-top-color: rgba(180, 83, 9, 0.4);
+}
+
+.loot-button {
+    flex-grow: 1;
+    padding: 10px 16px;
+    background-color: rgba(41, 37, 36, 0.9);
+    border-width: 2px;
+    border-color: #44403c;
+    border-radius: 6px;
+    color: #e7e5e4;
+    font-size: 14px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    transition-duration: 0.15s;
+}
+
+.loot-button:hover {
+    background-color: rgba(68, 64, 60, 0.9);
+    border-color: #78716c;
+}
+
+.loot-button--primary {
+    background-color: rgba(180, 83, 9, 0.8);
+    border-color: #b45309;
+    color: #fef3c7;
+}
+
+.loot-button--primary:hover {
+    background-color: rgba(217, 119, 6, 0.8);
+    border-color: #fbbf24;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes loot-panel-enter {
+    from {
+        opacity: 0;
+        scale: 0.9;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.loot-panel {
+    animation-name: loot-panel-enter;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-out;
+}

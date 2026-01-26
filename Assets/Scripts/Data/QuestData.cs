@@ -60,6 +60,27 @@ namespace IronFrontier.Data
     }
 
     /// <summary>
+    /// Time restrictions for when a quest can be started or progressed.
+    /// </summary>
+    public enum TimeRestriction
+    {
+        /// <summary>No time restriction.</summary>
+        None,
+        /// <summary>Only available during day hours (6:00-18:00).</summary>
+        DayOnly,
+        /// <summary>Only available during night hours (18:00-6:00).</summary>
+        NightOnly,
+        /// <summary>Only available in the morning (5:00-12:00).</summary>
+        MorningOnly,
+        /// <summary>Only available in the afternoon (12:00-18:00).</summary>
+        AfternoonOnly,
+        /// <summary>Only available in the evening (18:00-22:00).</summary>
+        EveningOnly,
+        /// <summary>Only available late at night (22:00-5:00).</summary>
+        LateNightOnly
+    }
+
+    /// <summary>
     /// Map marker information for quest objectives.
     /// </summary>
     [Serializable]
@@ -256,6 +277,19 @@ namespace IronFrontier.Data
     }
 
     /// <summary>
+    /// Reputation requirement for quest prerequisites.
+    /// </summary>
+    [Serializable]
+    public struct ReputationRequirement
+    {
+        /// <summary>Faction ID.</summary>
+        public string factionId;
+
+        /// <summary>Minimum reputation required.</summary>
+        public int minReputation;
+    }
+
+    /// <summary>
     /// Prerequisites required to start a quest.
     /// </summary>
     [Serializable]
@@ -272,7 +306,7 @@ namespace IronFrontier.Data
         public int minLevel;
 
         /// <summary>Required faction reputation.</summary>
-        public List<ReputationChange> factionReputation;
+        public List<ReputationRequirement> factionReputation;
 
         /// <summary>Required items in inventory.</summary>
         public List<ItemData> requiredItems;
@@ -280,14 +314,18 @@ namespace IronFrontier.Data
         /// <summary>Required item IDs for serialization.</summary>
         public List<string> requiredItemIds;
 
+        /// <summary>Time of day restriction.</summary>
+        public TimeRestriction timeRestriction;
+
         public static QuestPrerequisites None => new QuestPrerequisites
         {
             completedQuests = new List<QuestData>(),
             completedQuestIds = new List<string>(),
             minLevel = 1,
-            factionReputation = new List<ReputationChange>(),
+            factionReputation = new List<ReputationRequirement>(),
             requiredItems = new List<ItemData>(),
-            requiredItemIds = new List<string>()
+            requiredItemIds = new List<string>(),
+            timeRestriction = TimeRestriction.None
         };
     }
 

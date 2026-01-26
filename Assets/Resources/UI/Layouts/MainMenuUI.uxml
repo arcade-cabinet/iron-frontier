@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Main Menu UI
+    Unity 6 UI Toolkit Layout
+
+    Title screen with navigation to game modes and settings.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Root container with full-screen background -->
+    <ui:VisualElement name="main-menu-root" class="main-menu-root">
+
+        <!-- Background layer for parallax or animated effects -->
+        <ui:VisualElement name="background-layer" class="background-layer" />
+
+        <!-- Vignette overlay for atmosphere -->
+        <ui:VisualElement name="vignette-overlay" class="vignette-overlay" />
+
+        <!-- Main content container -->
+        <ui:VisualElement name="content-container" class="content-container">
+
+            <!-- Game logo and title section -->
+            <ui:VisualElement name="title-section" class="title-section">
+                <ui:VisualElement name="game-logo" class="game-logo" />
+                <ui:Label name="game-title" text="Iron Frontier" class="game-title" />
+                <ui:Label name="game-subtitle" text="Forge Your Legacy" class="game-subtitle" />
+            </ui:VisualElement>
+
+            <!-- Version info (top-right corner) -->
+            <ui:Label name="version-label" text="v0.1.0" class="version-label" />
+
+            <!-- Main menu buttons container -->
+            <ui:VisualElement name="menu-buttons" class="menu-buttons">
+
+                <ui:Button name="new-game-button" text="New Game" class="menu-button menu-button--primary" tabindex="0">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--new-game" />
+                </ui:Button>
+
+                <ui:Button name="continue-button" text="Continue" class="menu-button" tabindex="1">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--continue" />
+                </ui:Button>
+
+                <ui:Button name="load-game-button" text="Load Game" class="menu-button" tabindex="2">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--load" />
+                </ui:Button>
+
+                <ui:Button name="settings-button" text="Settings" class="menu-button" tabindex="3">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--settings" />
+                </ui:Button>
+
+                <ui:Button name="credits-button" text="Credits" class="menu-button" tabindex="4">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--credits" />
+                </ui:Button>
+
+                <ui:Button name="quit-button" text="Quit" class="menu-button menu-button--danger" tabindex="5">
+                    <ui:VisualElement name="button-icon" class="button-icon button-icon--quit" />
+                </ui:Button>
+
+            </ui:VisualElement>
+
+            <!-- Footer with copyright and links -->
+            <ui:VisualElement name="footer" class="footer">
+                <ui:Label name="copyright-label" text="2024 Iron Frontier Studios" class="copyright-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Loading overlay (initially hidden) -->
+        <ui:VisualElement name="loading-overlay" class="loading-overlay loading-overlay--hidden">
+            <ui:VisualElement name="loading-spinner" class="loading-spinner" />
+            <ui:Label name="loading-text" text="Loading..." class="loading-text" />
+            <ui:ProgressBar name="loading-progress" class="loading-progress" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

@@ -1,0 +1,84 @@
+# Iron Frontier E2E Test: Main Menu Navigation
+# Tests all main menu interactions
+#
+# Platforms: Android (Pixel 8a, Pixel Tablet)
+# Priority: P0 (Critical)
+
+appId: ${ANDROID_APP_ID}
+name: Main Menu Navigation
+tags:
+  - menu
+  - navigation
+  - p0
+
+---
+# Ensure we're on main menu
+- assertVisible:
+    text: "New Game"
+    timeout: ${DEFAULT_TIMEOUT}
+
+- takeScreenshot: screenshots/02-main-menu-initial
+
+# Test Settings navigation
+- tapOn:
+    text: "Settings"
+    retryTapIfNoChange: true
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+# Verify settings screen elements
+- assertVisible:
+    text: "Audio"
+    optional: true
+    timeout: ${DEFAULT_TIMEOUT}
+
+- assertVisible:
+    text: "Graphics"
+    optional: true
+
+- assertVisible:
+    text: "Controls"
+    optional: true
+
+- takeScreenshot: screenshots/02-settings-menu
+
+# Return to main menu
+- tapOn:
+    text: "Back"
+    optional: true
+
+- tapOn:
+    text: "Close"
+    optional: true
+
+- back:
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+# Verify we're back on main menu
+- assertVisible:
+    text: "New Game"
+    timeout: ${DEFAULT_TIMEOUT}
+
+# Test Credits if available
+- tapOn:
+    text: "Credits"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+- tapOn:
+    text: "Back"
+    optional: true
+
+- back:
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: ${ANIMATION_TIMEOUT}
+
+- takeScreenshot: screenshots/02-main-menu-complete

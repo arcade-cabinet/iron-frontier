@@ -432,6 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 100000031}
   - component: {fileID: 100000032}
+  - component: {fileID: 100000033}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -470,6 +471,27 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 0}
   m_SortingOrder: 0
+--- !u!114 &100000033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 663f76608ed544e6eabf99bf8aeb5538, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _menuLayout: {fileID: 0}
+  _mainTheme: {fileID: 0}
+  _mainMenuStyle: {fileID: 0}
+  _buttonStyle: {fileID: 0}
+  _newGameScene: Overworld
+  _loadGameScene: Loading
+  _buttonHoverSound: {fileID: 0}
+  _buttonClickSound: {fileID: 0}
+  _menuMusic: {fileID: 0}
 --- !u!1 &100000040
 GameObject:
   m_ObjectHideFlags: 0

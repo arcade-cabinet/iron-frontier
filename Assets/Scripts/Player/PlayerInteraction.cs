@@ -731,13 +731,36 @@ namespace IronFrontier.Player
 
         public void OnInteract(PlayerController player)
         {
-            // TODO: Get ItemData from WorldItem component and add to inventory
-            EventBus.Instance?.Publish(GameEvents.ItemAdded, _itemId);
+            if (_itemObject == null) return;
 
-            // Destroy the world item
-            if (_itemObject != null)
+            // Try to get WorldItem component for proper item data
+            var worldItem = _itemObject.GetComponent<Inventory.WorldItem>();
+            if (worldItem != null)
             {
-                UnityEngine.Object.Destroy(_itemObject);
+                // Use WorldItem's pickup method which handles inventory and events
+                if (worldItem.Pickup())
+                {
+                    return; // WorldItem handles destruction
+                }
+            }
+            else
+            {
+                // Fallback: try to add item by ID
+                if (Inventory.InventoryManager.Instance != null)
+                {
+                    int added = Inventory.InventoryManager.Instance.AddItemById(_itemId, 1);
+                    if (added > 0)
+                    {
+                        EventBus.Instance?.Publish(GameEvents.ItemAdded, _itemId);
+                        UnityEngine.Object.Destroy(_itemObject);
+                    }
+                }
+                else
+                {
+                    // Last resort: just destroy and fire event
+                    EventBus.Instance?.Publish(GameEvents.ItemAdded, _itemId);
+                    UnityEngine.Object.Destroy(_itemObject);
+                }
             }
         }
 
@@ -777,7 +800,51 @@ namespace IronFrontier.Player
             _isOpen = !_isOpen;
             EventBus.Instance?.Publish("door_interact", _door.name);
 
-            // TODO: Trigger door animation
+            // Trigger door animation
+            TriggerDoorAnimation();
+        }
+
+        private void TriggerDoorAnimation()
+        {
+            if (_door == null) return;
+
+            // Try to get Animator component
+            var animator = _door.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("IsOpen", _isOpen);
+                return;
+            }
+
+            // Fallback: Simple rotation animation using coroutine
+            var doorMono = _door.GetComponent<MonoBehaviour>();
+            if (doorMono != null)
+            {
+                doorMono.StartCoroutine(AnimateDoor());
+            }
+        }
+
+        private System.Collections.IEnumerator AnimateDoor()
+        {
+            float duration = 0.5f;
+            float elapsed = 0f;
+
+            Quaternion startRotation = _door.transform.rotation;
+            Quaternion targetRotation = _isOpen
+                ? Quaternion.Euler(0, 90, 0) * startRotation
+                : Quaternion.Euler(0, -90, 0) * startRotation;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                // Ease out cubic
+                t = 1f - Mathf.Pow(1f - t, 3f);
+                _door.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+                yield return null;
+            }
+
+            _door.transform.rotation = targetRotation;
         }
 
         public void OnPlayerEnterRange() { }
@@ -790,30 +857,72 @@ namespace IronFrontier.Player
     internal class ChestInteractableWrapper : IInteractable
     {
         private readonly GameObject _chest;
-        private bool _isOpened;
+        private readonly Inventory.ChestContainer _container;
 
         public ChestInteractableWrapper(GameObject chest)
         {
             _chest = chest;
-            _isOpened = false;
+            _container = chest.GetComponent<Inventory.ChestContainer>();
         }
 
         public string InteractableId => _chest.name;
         public InteractableType InteractableType => InteractableType.Chest;
-        public string DisplayName => "Chest";
-        public string InteractionPrompt => _isOpened ? "Search chest" : "Open chest";
-        public bool CanInteract => _chest != null;
+        public string DisplayName => _container != null ? _container.DisplayName : "Chest";
+        public string InteractionPrompt
+        {
+            get
+            {
+                if (_container != null)
+                {
+                    if (_container.HasBeenLooted) return "Empty chest";
+                    return _container.IsOpened ? "Search chest" : "Open chest";
+                }
+                return "Open chest";
+            }
+        }
+        public bool CanInteract => _chest != null && (_container == null || !_container.HasBeenLooted);
 
         public void OnInteract(PlayerController player)
         {
-            _isOpened = true;
             EventBus.Instance?.Publish("chest_interact", _chest.name);
 
-            // TODO: Open chest UI and show loot
+            // Use ChestContainer if available
+            if (_container != null)
+            {
+                // Open chest and show loot UI
+                _container.Open();
+
+                // Show loot UI
+                if (UI.LootUI.Instance != null)
+                {
+                    UI.LootUI.Instance.Show(_container);
+                }
+                else
+                {
+                    // Fallback: auto-collect all loot
+                    _container.CollectAllLoot();
+                }
+            }
+            else
+            {
+                // Fallback: trigger animation and publish event
+                var animator = _chest.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.SetBool("IsOpen", true);
+                }
+            }
         }
 
-        public void OnPlayerEnterRange() { }
-        public void OnPlayerExitRange() { }
+        public void OnPlayerEnterRange()
+        {
+            _container?.Highlight();
+        }
+
+        public void OnPlayerExitRange()
+        {
+            _container?.RemoveHighlight();
+        }
     }
 
     #endregion

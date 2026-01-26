@@ -1,0 +1,38 @@
+# Iron Frontier - Maestro E2E Test Configuration
+# Target devices: Android (Pixel 8a, Pixel Tablet)
+#
+# Run locally: maestro test .maestro/flows/
+# Run specific: maestro test .maestro/flows/01-app-launch.yaml
+
+name: Iron Frontier E2E Tests
+executionOrder: continue
+
+flows:
+  - flows/01-app-launch.yaml
+  - flows/02-main-menu.yaml
+  - flows/03-new-game.yaml
+  - flows/04-character-creation.yaml
+  - flows/05-tutorial-combat.yaml
+  - flows/06-dialogue-system.yaml
+  - flows/07-inventory-shop.yaml
+  - flows/08-quest-tracking.yaml
+  - flows/09-save-load.yaml
+  - flows/10-settings.yaml
+
+# Environment variables
+env:
+  # App identifiers
+  ANDROID_APP_ID: com.ironfrontier.game
+  IOS_APP_ID: com.ironfrontier.game
+
+  # Timeouts (milliseconds)
+  DEFAULT_TIMEOUT: 15000
+  LONG_TIMEOUT: 30000
+  ANIMATION_TIMEOUT: 5000
+
+  # Game-specific settings
+  PLAYER_NAME: "Dusty Rhodes"
+
+# OnFlowStart hook - runs before each flow
+onFlowStart:
+  - clearState

@@ -5,6 +5,7 @@ using UnityEngine;
 using IronFrontier.Core;
 using IronFrontier.Data;
 using IronFrontier.Inventory;
+using IronFrontier.Systems;
 
 namespace IronFrontier.Shop
 {
@@ -871,21 +872,28 @@ namespace IronFrontier.Shop
         #region Player Interface (to be connected to actual player systems)
 
         /// <summary>
-        /// Get current game hour. Override with TimeSystem integration.
+        /// Get current game hour from TimeSystem.
         /// </summary>
         protected virtual int GetCurrentGameHour()
         {
-            // TODO: Integrate with TimeSystem
-            return 12; // Default to noon
+            if (TimeSystem.Instance != null)
+            {
+                return TimeSystem.Instance.Hour;
+            }
+            return 12; // Default to noon if TimeSystem not available
         }
 
         /// <summary>
-        /// Get current game time in hours. Override with TimeSystem integration.
+        /// Get current game time in total hours from TimeSystem.
         /// </summary>
         protected virtual float GetCurrentGameTime()
         {
-            // TODO: Integrate with TimeSystem
-            return Time.time / 60f; // 1 minute = 1 game hour for testing
+            if (TimeSystem.Instance != null)
+            {
+                // Total hours since game start (day * 24 + hour + minute/60)
+                return TimeSystem.Instance.TotalMinutes / 60f;
+            }
+            return Time.time / 60f; // Fallback: 1 minute = 1 game hour
         }
 
         /// <summary>
@@ -945,12 +953,44 @@ namespace IronFrontier.Shop
         }
 
         /// <summary>
-        /// Get player's reputation. Override with reputation system integration.
+        /// Get player's reputation with the current shop's faction.
         /// </summary>
         protected virtual int GetPlayerReputation()
         {
-            // TODO: Integrate with reputation system
-            return 50; // Neutral
+            if (ReputationSystem.Instance == null || _currentShop == null)
+            {
+                return 50; // Neutral default
+            }
+
+            // Get faction from shop's location
+            string factionId = GetFactionForLocation(_currentShop.ShopData.locationId);
+            if (string.IsNullOrEmpty(factionId))
+            {
+                return 50; // Neutral if no faction mapping
+            }
+
+            return ReputationSystem.Instance.GetReputation(factionId);
+        }
+
+        /// <summary>
+        /// Get the faction ID associated with a location.
+        /// </summary>
+        protected virtual string GetFactionForLocation(string locationId)
+        {
+            if (string.IsNullOrEmpty(locationId))
+                return null;
+
+            // Map known locations to factions
+            // This could be loaded from data or configured per-shop
+            return locationId.ToLowerInvariant() switch
+            {
+                "dusty_gulch" => "dusty_gulch_merchants",
+                "iron_ridge" => "iron_ridge_collective",
+                "copper_springs" => "copper_springs_guild",
+                "rattlesnake_hollow" => "rattlesnake_hollow_traders",
+                "gold_creek" => "gold_creek_consortium",
+                _ => "general_merchants" // Default faction
+            };
         }
 
         /// <summary>

@@ -1,0 +1,461 @@
+/* Iron Frontier - Button Stylesheet */
+/* Unity UI Toolkit Button Styles */
+
+/* ============================================================================
+   BASE BUTTON STYLES
+   ============================================================================ */
+
+.btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+    border-radius: 6px;
+    border-width: 2px;
+    transition-property: background-color, border-color, scale, color;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+    cursor: pointer;
+}
+
+.btn:hover {
+    scale: 1.02;
+}
+
+.btn:active {
+    scale: 0.98;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    scale: 1;
+}
+
+/* ============================================================================
+   PRIMARY BUTTONS (Brass/Gold Accent)
+   ============================================================================ */
+
+.btn-primary {
+    background-color: rgb(139, 90, 43);
+    border-color: rgb(184, 115, 51);
+    color: rgb(255, 250, 230);
+}
+
+.btn-primary:hover {
+    background-color: rgb(159, 110, 63);
+    border-color: rgb(218, 165, 32);
+}
+
+.btn-primary:active {
+    background-color: rgb(119, 70, 23);
+}
+
+.btn-primary:disabled {
+    background-color: rgb(80, 70, 60);
+    border-color: rgb(100, 90, 80);
+}
+
+.btn-primary:focus {
+    border-color: rgb(218, 165, 32);
+}
+
+/* ============================================================================
+   SECONDARY BUTTONS (Iron/Steel)
+   ============================================================================ */
+
+.btn-secondary {
+    background-color: rgb(82, 98, 114);
+    border-color: rgb(112, 128, 144);
+    color: rgb(230, 230, 240);
+}
+
+.btn-secondary:hover {
+    background-color: rgb(102, 118, 134);
+    border-color: rgb(142, 158, 174);
+}
+
+.btn-secondary:active {
+    background-color: rgb(62, 78, 94);
+}
+
+.btn-secondary:disabled {
+    background-color: rgb(60, 65, 70);
+    border-color: rgb(80, 85, 90);
+}
+
+.btn-secondary:focus {
+    border-color: rgb(142, 158, 174);
+}
+
+/* ============================================================================
+   DANGER BUTTONS (Warning Red)
+   ============================================================================ */
+
+.btn-danger {
+    background-color: rgb(140, 50, 50);
+    border-color: rgb(180, 60, 60);
+    color: rgb(255, 240, 240);
+}
+
+.btn-danger:hover {
+    background-color: rgb(170, 60, 60);
+    border-color: rgb(200, 80, 80);
+}
+
+.btn-danger:active {
+    background-color: rgb(120, 40, 40);
+}
+
+.btn-danger:disabled {
+    background-color: rgb(80, 50, 50);
+    border-color: rgb(100, 70, 70);
+}
+
+.btn-danger:focus {
+    border-color: rgb(220, 100, 100);
+}
+
+/* ============================================================================
+   SUCCESS BUTTONS (Green)
+   ============================================================================ */
+
+.btn-success {
+    background-color: rgb(56, 113, 56);
+    border-color: rgb(76, 153, 76);
+    color: rgb(240, 255, 240);
+}
+
+.btn-success:hover {
+    background-color: rgb(76, 143, 76);
+    border-color: rgb(100, 180, 100);
+}
+
+.btn-success:active {
+    background-color: rgb(46, 93, 46);
+}
+
+.btn-success:disabled {
+    background-color: rgb(50, 70, 50);
+    border-color: rgb(70, 90, 70);
+}
+
+.btn-success:focus {
+    border-color: rgb(100, 200, 100);
+}
+
+/* ============================================================================
+   WARNING BUTTONS (Amber/Gold)
+   ============================================================================ */
+
+.btn-warning {
+    background-color: rgb(160, 120, 30);
+    border-color: rgb(200, 150, 40);
+    color: rgb(40, 35, 30);
+}
+
+.btn-warning:hover {
+    background-color: rgb(180, 140, 40);
+    border-color: rgb(220, 170, 50);
+}
+
+.btn-warning:active {
+    background-color: rgb(140, 100, 20);
+}
+
+.btn-warning:disabled {
+    background-color: rgb(100, 90, 60);
+    border-color: rgb(120, 110, 80);
+}
+
+.btn-warning:focus {
+    border-color: rgb(255, 191, 0);
+}
+
+/* ============================================================================
+   GHOST BUTTONS (Transparent with Border)
+   ============================================================================ */
+
+.btn-ghost {
+    background-color: transparent;
+    border-color: rgb(139, 90, 43);
+    color: rgb(218, 165, 32);
+}
+
+.btn-ghost:hover {
+    background-color: rgba(139, 90, 43, 0.3);
+    border-color: rgb(184, 115, 51);
+}
+
+.btn-ghost:active {
+    background-color: rgba(139, 90, 43, 0.5);
+}
+
+.btn-ghost:disabled {
+    border-color: rgb(80, 70, 60);
+    color: rgb(130, 120, 100);
+}
+
+.btn-ghost:focus {
+    border-color: rgb(218, 165, 32);
+}
+
+/* ============================================================================
+   LINK BUTTONS (Text Only)
+   ============================================================================ */
+
+.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    border-width: 0;
+    color: rgb(218, 165, 32);
+    padding: 5px 10px;
+}
+
+.btn-link:hover {
+    color: rgb(255, 200, 100);
+    scale: 1;
+}
+
+.btn-link:active {
+    color: rgb(178, 135, 12);
+}
+
+.btn-link:disabled {
+    color: rgb(130, 120, 100);
+}
+
+/* ============================================================================
+   BUTTON SIZES
+   ============================================================================ */
+
+.btn-xs {
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    min-height: 24px;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 4px;
+    min-height: 32px;
+}
+
+.btn-md {
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    min-height: 40px;
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 18px;
+    border-radius: 8px;
+    min-height: 50px;
+}
+
+.btn-xl {
+    padding: 18px 36px;
+    font-size: 22px;
+    border-radius: 10px;
+    min-height: 60px;
+}
+
+/* ============================================================================
+   ICON BUTTONS
+   ============================================================================ */
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-icon-sm {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.btn-icon-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.btn-icon-round {
+    border-radius: 50%;
+}
+
+.btn-icon > .icon {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* ============================================================================
+   BUTTON WITH ICON AND TEXT
+   ============================================================================ */
+
+.btn-with-icon {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-with-icon > .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.btn-with-icon > .icon-right {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+/* ============================================================================
+   BUTTON GROUPS
+   ============================================================================ */
+
+.btn-group {
+    flex-direction: row;
+}
+
+.btn-group > .btn {
+    border-radius: 0;
+    margin-left: -2px;
+}
+
+.btn-group > .btn:first-child {
+    border-radius: 6px 0 0 6px;
+    margin-left: 0;
+}
+
+.btn-group > .btn:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+/* Vertical button group */
+.btn-group-vertical {
+    flex-direction: column;
+}
+
+.btn-group-vertical > .btn {
+    border-radius: 0;
+    margin-top: -2px;
+}
+
+.btn-group-vertical > .btn:first-child {
+    border-radius: 6px 6px 0 0;
+    margin-top: 0;
+}
+
+.btn-group-vertical > .btn:last-child {
+    border-radius: 0 0 6px 6px;
+}
+
+/* ============================================================================
+   SPECIAL BUTTON STYLES
+   ============================================================================ */
+
+/* Steampunk ornate button */
+.btn-ornate {
+    background-color: rgb(50, 40, 30);
+    border-width: 3px;
+    border-color: rgb(184, 115, 51);
+    color: rgb(218, 165, 32);
+    padding: 12px 24px;
+    border-radius: 8px;
+}
+
+.btn-ornate:hover {
+    background-color: rgb(70, 55, 40);
+    border-color: rgb(218, 165, 32);
+    color: rgb(255, 200, 100);
+}
+
+.btn-ornate:active {
+    background-color: rgb(90, 70, 50);
+}
+
+/* Copper riveted button */
+.btn-copper {
+    background-color: rgb(136, 68, 44);
+    border-width: 3px;
+    border-color: rgb(176, 88, 64);
+    color: rgb(255, 240, 230);
+}
+
+.btn-copper:hover {
+    background-color: rgb(156, 88, 64);
+    border-color: rgb(196, 108, 84);
+}
+
+.btn-copper:active {
+    background-color: rgb(116, 48, 24);
+}
+
+/* Metal plate button */
+.btn-metal {
+    background-color: rgb(82, 98, 114);
+    border-width: 3px;
+    border-color: rgb(112, 128, 144);
+    color: rgb(230, 235, 240);
+}
+
+.btn-metal:hover {
+    background-color: rgb(102, 118, 134);
+    border-color: rgb(142, 158, 174);
+}
+
+.btn-metal:active {
+    background-color: rgb(62, 78, 94);
+}
+
+/* ============================================================================
+   TOGGLE BUTTONS
+   ============================================================================ */
+
+.btn-toggle {
+    background-color: rgb(50, 45, 40);
+    border-color: rgb(100, 90, 70);
+}
+
+.btn-toggle.active {
+    background-color: rgb(139, 90, 43);
+    border-color: rgb(218, 165, 32);
+    color: rgb(255, 250, 230);
+}
+
+.btn-toggle:hover {
+    background-color: rgb(70, 60, 50);
+}
+
+.btn-toggle.active:hover {
+    background-color: rgb(159, 110, 63);
+}
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+
+.btn-loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.btn-loading > .spinner {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}

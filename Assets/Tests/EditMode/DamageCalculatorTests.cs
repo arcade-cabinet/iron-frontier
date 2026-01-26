@@ -209,7 +209,9 @@ namespace IronFrontier.Tests.EditMode
         [Test]
         [TestCase(5, ExpectedResult = true)]
         [TestCase(10, ExpectedResult = true)]
-        [TestCase(0, ExpectedResult = false)]
+        [TestCase(0, ExpectedResult = true)]  // 0% crit is valid (no crits possible)
+        [TestCase(-5, ExpectedResult = false)]  // Negative is invalid
+        [TestCase(105, ExpectedResult = false)]  // Over 100 is invalid
         public bool CriticalChance_ShouldBeInValidRange(int critChance)
         {
             // Crit chance should be between 0 and 100

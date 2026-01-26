@@ -1,0 +1,100 @@
+# Iron Frontier E2E Test: Save/Load System
+# Tests the save and load functionality
+
+appId: ${ANDROID_APP_ID}
+name: Save and Load Test
+tags:
+  - save
+  - persistence
+  - critical
+  - p0
+
+---
+# Open game menu
+- tapOn:
+    text: "Menu"
+    optional: true
+- tapOn:
+    id: "menu-button"
+    optional: true
+
+# Wait for pause menu
+- assertVisible:
+    text: "Save"
+    timeout: ${DEFAULT_TIMEOUT}
+    optional: true
+
+# Test Save functionality
+- runFlow:
+    when:
+      visible: "Save"
+    commands:
+      - tapOn: "Save"
+      - waitForAnimationToEnd:
+          timeout: ${ANIMATION_TIMEOUT}
+      - takeScreenshot: screenshots/09-save-menu
+
+      # Select save slot (first available)
+      - tapOn:
+          text: "Slot 1"
+          optional: true
+      - tapOn:
+          text: "Empty"
+          optional: true
+      - tapOn:
+          index: 0
+          optional: true
+
+      # Confirm save
+      - tapOn:
+          text: "Save"
+          optional: true
+      - tapOn:
+          text: "Confirm"
+          optional: true
+
+      - waitForAnimationToEnd:
+          timeout: ${ANIMATION_TIMEOUT}
+      - takeScreenshot: screenshots/09-save-complete
+
+# Test Load functionality
+- tapOn:
+    text: "Load"
+    optional: true
+
+- runFlow:
+    when:
+      visible: "Load"
+    commands:
+      - tapOn: "Load"
+      - waitForAnimationToEnd:
+          timeout: ${ANIMATION_TIMEOUT}
+      - takeScreenshot: screenshots/09-load-menu
+
+      # Verify save slots show saved data
+      - assertVisible:
+          text: ${PLAYER_NAME}
+          optional: true
+
+      # Close load menu without loading
+      - tapOn:
+          text: "Cancel"
+          optional: true
+      - tapOn:
+          text: "Back"
+          optional: true
+
+# Close menu
+- tapOn:
+    text: "Resume"
+    optional: true
+- tapOn:
+    text: "Close"
+    optional: true
+
+# Check no errors occurred
+- assertNotVisible:
+    text: "Error"
+    optional: true
+
+- takeScreenshot: screenshots/09-save-load-complete

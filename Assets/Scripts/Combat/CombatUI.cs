@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using IronFrontier.Data;
+using IronFrontier.Inventory;
 
 namespace IronFrontier.Combat
 {
@@ -59,6 +61,11 @@ namespace IronFrontier.Combat
 
         // Target selection
         private VisualElement _targetContainer;
+
+        // Item selection
+        private VisualElement _itemSelectionPanel;
+        private VisualElement _itemContainer;
+        private Label _noItemsLabel;
 
         // Result display
         private Label _resultLabel;
@@ -126,6 +133,7 @@ namespace IronFrontier.Combat
             InitializeActionPanel();
             InitializeLogPanel();
             InitializeTargetSelectionPanel();
+            InitializeItemSelectionPanel();
             InitializeResultPanel();
 
             // Initially hide combat UI
@@ -276,6 +284,45 @@ namespace IronFrontier.Combat
             container.AddToClassList("target-container");
             container.style.flexDirection = FlexDirection.Row;
             panel.Add(container);
+
+            _combatPanel.Add(panel);
+            return panel;
+        }
+
+        private void InitializeItemSelectionPanel()
+        {
+            _itemSelectionPanel = _combatPanel.Q<VisualElement>("item-selection-panel") ?? CreateItemSelectionPanel();
+            _itemContainer = _itemSelectionPanel.Q<VisualElement>("item-container") ?? _itemSelectionPanel;
+            _noItemsLabel = _itemSelectionPanel.Q<Label>("no-items-label");
+            _itemSelectionPanel.style.display = DisplayStyle.None;
+        }
+
+        private VisualElement CreateItemSelectionPanel()
+        {
+            var panel = new VisualElement { name = "item-selection-panel" };
+            panel.AddToClassList("item-selection-panel");
+
+            var header = new Label { text = "Select Item" };
+            header.AddToClassList("item-selection-header");
+            panel.Add(header);
+
+            var container = new VisualElement { name = "item-container" };
+            container.AddToClassList("item-container");
+            container.style.flexDirection = FlexDirection.Column;
+            container.style.maxHeight = 300;
+            container.style.overflow = Overflow.Hidden;
+            panel.Add(container);
+
+            var noItems = new Label { name = "no-items-label", text = "No usable items" };
+            noItems.AddToClassList("no-items-label");
+            noItems.style.display = DisplayStyle.None;
+            panel.Add(noItems);
+
+            // Add cancel button
+            var cancelButton = new Button { text = "Cancel" };
+            cancelButton.AddToClassList("cancel-button");
+            cancelButton.clicked += HideItemSelection;
+            panel.Add(cancelButton);
 
             _combatPanel.Add(panel);
             return panel;
@@ -587,6 +634,227 @@ namespace IronFrontier.Combat
 
         #endregion
 
+        #region Item Selection
+
+        private void ShowItemSelection()
+        {
+            _itemSelectionPanel.style.display = DisplayStyle.Flex;
+            _actionPanel.style.display = DisplayStyle.None;
+
+            _itemContainer.Clear();
+
+            // Get consumable items from inventory
+            var consumables = GetUsableConsumables();
+
+            if (consumables.Count == 0)
+            {
+                if (_noItemsLabel != null)
+                {
+                    _noItemsLabel.style.display = DisplayStyle.Flex;
+                }
+                return;
+            }
+
+            if (_noItemsLabel != null)
+            {
+                _noItemsLabel.style.display = DisplayStyle.None;
+            }
+
+            foreach (var slot in consumables)
+            {
+                var itemElement = CreateItemElement(slot);
+                _itemContainer.Add(itemElement);
+            }
+        }
+
+        private void HideItemSelection()
+        {
+            _itemSelectionPanel.style.display = DisplayStyle.None;
+            _actionPanel.style.display = DisplayStyle.Flex;
+        }
+
+        private List<InventorySlot> GetUsableConsumables()
+        {
+            if (InventoryManager.Instance == null)
+                return new List<InventorySlot>();
+
+            return InventoryManager.Instance.GetConsumables()
+                .Where(slot => !slot.IsEmpty && slot.ItemData.usable && IsCombatUsable(slot.ItemData))
+                .ToList();
+        }
+
+        private bool IsCombatUsable(ItemData item)
+        {
+            // Check if item has any combat-relevant effects
+            if (!item.hasConsumableStats)
+                return false;
+
+            var stats = item.consumableStats;
+
+            // Allow healing items
+            if (stats.healAmount > 0)
+                return true;
+
+            // Allow stamina restoration
+            if (stats.staminaAmount > 0)
+                return true;
+
+            // Allow buff items
+            if (stats.buffType != BuffType.None)
+                return true;
+
+            return false;
+        }
+
+        private VisualElement CreateItemElement(InventorySlot slot)
+        {
+            var container = new VisualElement();
+            container.AddToClassList("item-row");
+
+            // Item icon placeholder
+            var icon = new VisualElement();
+            icon.AddToClassList("item-icon");
+            icon.AddToClassList($"item-icon--{slot.ItemData.rarity.ToString().ToLower()}");
+            container.Add(icon);
+
+            // Item info
+            var infoContainer = new VisualElement();
+            infoContainer.AddToClassList("item-info");
+
+            var nameLabel = new Label { text = slot.ItemData.displayName };
+            nameLabel.AddToClassList("item-name");
+            nameLabel.AddToClassList($"item-name--{slot.ItemData.rarity.ToString().ToLower()}");
+            infoContainer.Add(nameLabel);
+
+            var effectLabel = new Label { text = GetItemEffectDescription(slot.ItemData) };
+            effectLabel.AddToClassList("item-effect");
+            infoContainer.Add(effectLabel);
+
+            container.Add(infoContainer);
+
+            // Quantity
+            var quantityLabel = new Label { text = $"x{slot.Quantity}" };
+            quantityLabel.AddToClassList("item-quantity");
+            container.Add(quantityLabel);
+
+            // Use button
+            var useButton = new Button(() => OnItemUsed(slot));
+            useButton.text = "Use";
+            useButton.AddToClassList("item-use-button");
+            container.Add(useButton);
+
+            return container;
+        }
+
+        private string GetItemEffectDescription(ItemData item)
+        {
+            var effects = new List<string>();
+
+            if (item.hasConsumableStats)
+            {
+                var stats = item.consumableStats;
+
+                if (stats.healAmount > 0)
+                    effects.Add($"+{stats.healAmount} HP");
+
+                if (stats.staminaAmount > 0)
+                    effects.Add($"+{stats.staminaAmount} SP");
+
+                if (stats.buffType != BuffType.None)
+                    effects.Add($"{stats.buffType} ({stats.buffDuration}s)");
+            }
+
+            return effects.Count > 0 ? string.Join(", ", effects) : "No effect";
+        }
+
+        private void OnItemUsed(InventorySlot slot)
+        {
+            if (slot == null || slot.IsEmpty)
+                return;
+
+            var item = slot.ItemData;
+
+            // Apply item effects
+            ApplyItemEffects(item);
+
+            // Remove from inventory
+            InventoryManager.Instance?.RemoveItem(item, 1);
+
+            // Log the action
+            AddLogEntry($"Used {item.displayName}");
+
+            // Hide item selection and end turn
+            HideItemSelection();
+
+            // The item use counts as the player's action
+            _combatManager.SelectAction(CombatActionType.Item);
+            _combatManager.ExecuteAction();
+            RefreshUI();
+        }
+
+        private void ApplyItemEffects(ItemData item)
+        {
+            var player = _combatManager.GetPlayer();
+            if (player == null)
+                return;
+
+            if (item.hasConsumableStats)
+            {
+                var stats = item.consumableStats;
+
+                // Apply healing
+                if (stats.healAmount > 0)
+                {
+                    player.Heal(stats.healAmount);
+                    AddLogEntry($"Healed for {stats.healAmount} HP");
+                }
+
+                // Apply stamina restoration
+                if (stats.staminaAmount > 0)
+                {
+                    // Stamina would be implemented on the combatant
+                    AddLogEntry($"Restored {stats.staminaAmount} stamina");
+                }
+
+                // Apply buff
+                if (stats.buffType != BuffType.None && stats.buffDuration > 0)
+                {
+                    var effect = CreateBuffEffect(stats.buffType, stats.buffStrength, (int)stats.buffDuration);
+                    if (effect != null)
+                    {
+                        player.ApplyStatusEffect(effect);
+                        AddLogEntry($"Gained {stats.buffType} buff");
+                    }
+                }
+            }
+        }
+
+        private StatusEffect CreateBuffEffect(BuffType buffType, int strength, int duration)
+        {
+            StatusEffectType? effectType = buffType switch
+            {
+                BuffType.DamageBoost => StatusEffectType.Buffed,
+                BuffType.DefenseBoost => StatusEffectType.Defending,
+                BuffType.SpeedBoost => StatusEffectType.Hasted,
+                BuffType.DamageResist => StatusEffectType.Defending,
+                BuffType.HealthRegen => StatusEffectType.Regenerating,
+                _ => null
+            };
+
+            if (effectType == null)
+                return null;
+
+            return new StatusEffect
+            {
+                Type = effectType.Value,
+                TurnsRemaining = duration,
+                Value = strength,
+                SourceId = "item"
+            };
+        }
+
+        #endregion
+
         #region Button Handlers
 
         private void OnAttackClicked()
@@ -604,8 +872,7 @@ namespace IronFrontier.Combat
 
         private void OnItemClicked()
         {
-            // TODO: Show item selection panel
-            Debug.Log("[CombatUI] Item selection not yet implemented");
+            ShowItemSelection();
         }
 
         private void OnFleeClicked()

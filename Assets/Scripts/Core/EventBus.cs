@@ -487,6 +487,7 @@ namespace IronFrontier.Core
         public const string ItemUsed = "item_used";
         public const string ItemEquipped = "item_equipped";
         public const string ItemUnequipped = "item_unequipped";
+        public const string ItemDropped = "item_dropped";
         public const string GoldChanged = "gold_changed";
 
         // Shop Events

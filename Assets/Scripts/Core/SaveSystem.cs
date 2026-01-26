@@ -99,6 +99,7 @@ namespace IronFrontier.Core
         public float totalPlayTime;
         public string currentPhase;
         public string currentTownId;
+        public int playerLevel = 1;
     }
 
     /// <summary>
@@ -362,7 +363,7 @@ namespace IronFrontier.Core
         private SaveFileData CreateSaveData(string slotId)
         {
             var gameState = GameManager.Instance?.GetGameState() ??
-                           ("Unknown", 0f, GamePhase.Title, null);
+                           ("Unknown", 0f, GamePhase.Title, (string)null, 1);
 
             var timeState = TimeSystem.Instance?.GetSaveData() ??
                            new TimeSystemSaveData { hour = 10, minute = 0, day = 1, totalMinutes = 600 };
@@ -410,7 +411,8 @@ namespace IronFrontier.Core
                 playerName = gameState.playerName,
                 totalPlayTime = gameState.playTime,
                 currentPhase = gameState.phase.ToString(),
-                currentTownId = gameState.townId
+                currentTownId = gameState.townId,
+                playerLevel = gameState.playerLevel
             };
 
             // Collect custom data
@@ -505,7 +507,8 @@ namespace IronFrontier.Core
                     saveData.gameManager.playerName,
                     saveData.gameManager.totalPlayTime,
                     phase,
-                    saveData.gameManager.currentTownId
+                    saveData.gameManager.currentTownId,
+                    saveData.gameManager.playerLevel
                 );
             }
 

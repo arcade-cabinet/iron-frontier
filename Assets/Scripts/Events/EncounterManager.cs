@@ -20,7 +20,7 @@ namespace IronFrontier.Events
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<EncounterManager>();
+                    _instance = FindFirstObjectByType<EncounterManager>();
                     if (_instance == null)
                     {
                         var go = new GameObject("EncounterManager");

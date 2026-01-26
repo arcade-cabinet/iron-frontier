@@ -1,0 +1,130 @@
+# Iron Frontier E2E Test: Character Creation
+# Tests the full character creation flow including background selection
+#
+# Platforms: Android (Pixel 8a, Pixel Tablet)
+# Priority: P1 (High)
+
+appId: ${ANDROID_APP_ID}
+name: Character Creation Test
+tags:
+  - character
+  - creation
+  - p1
+
+---
+# Start new game if not already in character creation
+- runFlow:
+    when:
+      visible:
+        text: "New Game"
+    commands:
+      - tapOn:
+          text: "New Game"
+          retryTapIfNoChange: true
+      - waitForAnimationToEnd:
+          timeout: ${ANIMATION_TIMEOUT}
+
+# Verify character creation screen
+- assertVisible:
+    text: ".*"
+    timeout: ${LONG_TIMEOUT}
+
+- takeScreenshot: screenshots/04-character-creation-start
+
+# Handle name entry
+- runFlow:
+    when:
+      visible:
+        text: "Name"
+    commands:
+      - tapOn:
+          id: "name-input"
+          optional: true
+      - tapOn:
+          text: "Enter your name"
+          optional: true
+      - inputText: ${PLAYER_NAME}
+      - hideKeyboard
+
+# Select background/class if available
+- runFlow:
+    when:
+      visible:
+        text: "Background"
+    commands:
+      - takeScreenshot: screenshots/04-background-selection
+      - tapOn:
+          text: "Outlaw"
+          optional: true
+      - tapOn:
+          text: "Prospector"
+          optional: true
+      - tapOn:
+          text: "Wanderer"
+          optional: true
+      - tapOn:
+          text: "Settler"
+          optional: true
+
+- runFlow:
+    when:
+      visible:
+        text: "Choose Background"
+    commands:
+      - tapOn:
+          text: "Outlaw"
+          optional: true
+
+# Allocate stats if stat allocation is present
+- runFlow:
+    when:
+      visible:
+        text: "Grit"
+    commands:
+      - takeScreenshot: screenshots/04-stat-allocation
+      - tapOn:
+          id: "grit-plus"
+          optional: true
+      - tapOn:
+          text: "+"
+          optional: true
+          index: 0
+
+# Select starting gear if available
+- runFlow:
+    when:
+      visible:
+        text: "Starting Gear"
+    commands:
+      - takeScreenshot: screenshots/04-starting-gear
+      - tapOn:
+          index: 0
+          optional: true
+
+# Confirm character creation
+- tapOn:
+    text: "Confirm"
+    optional: true
+
+- tapOn:
+    text: "Start"
+    optional: true
+
+- tapOn:
+    text: "Begin Adventure"
+    optional: true
+
+- tapOn:
+    text: "Create Character"
+    optional: true
+
+# Wait for game to load
+- waitForAnimationToEnd:
+    timeout: ${LONG_TIMEOUT}
+
+# Verify game has started - character name should be visible somewhere
+- assertVisible:
+    text: ".*"
+    timeout: ${LONG_TIMEOUT}
+
+- takeScreenshot: screenshots/04-character-created

@@ -602,10 +602,66 @@ namespace IronFrontier.Inventory
 
             NotifyInventoryChanged(item, -quantity, InventoryChangeType.Dropped);
 
-            // TODO: Spawn world item at player position
+            // Spawn world item at player position
+            SpawnDroppedItem(item, quantity);
 
             Log($"Dropped {quantity}x {item.displayName}");
             return InventoryOperationResult.Success;
+        }
+
+        /// <summary>
+        /// Drop an item from the inventory by item data.
+        /// </summary>
+        /// <param name="item">The item to drop.</param>
+        /// <param name="quantity">Quantity to drop.</param>
+        /// <returns>Result of the operation.</returns>
+        public InventoryOperationResult DropItem(Data.ItemData item, int quantity = 1)
+        {
+            if (item == null)
+                return InventoryOperationResult.ItemNotFound;
+
+            // Find slot with this item
+            var slot = _slots.FirstOrDefault(s => !s.IsEmpty && s.ItemData.id == item.id);
+            if (slot == null)
+                return InventoryOperationResult.ItemNotFound;
+
+            return DropItem(slot, quantity);
+        }
+
+        /// <summary>
+        /// Spawn a dropped item in the world near the player.
+        /// </summary>
+        private void SpawnDroppedItem(Data.ItemData item, int quantity)
+        {
+            // Get player position
+            Vector3 spawnPosition = GetDropPosition();
+
+            // Create world item
+            WorldItem.Create(item, spawnPosition, quantity);
+
+            // Publish event
+            Core.EventBus.Instance?.Publish(Core.GameEvents.ItemDropped, item.id);
+        }
+
+        /// <summary>
+        /// Get a position in front of the player to drop items.
+        /// </summary>
+        private Vector3 GetDropPosition()
+        {
+            // Try to find player
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                // Drop slightly in front of and below the player
+                Vector3 forward = player.transform.forward;
+                forward.y = 0;
+                forward.Normalize();
+
+                return player.transform.position + forward * 1.5f + Vector3.down * 0.5f;
+            }
+
+            // Fallback to origin
+            return Vector3.zero;
         }
 
         #endregion

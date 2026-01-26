@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using IronFrontier.Core;
+using IronFrontier.Inventory;
+using IronFrontier.Quests;
+using IronFrontier.Systems;
 
 namespace IronFrontier.Events
 {
@@ -285,7 +288,7 @@ namespace IronFrontier.Events
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<WorldEventManager>();
+                    _instance = FindFirstObjectByType<WorldEventManager>();
                     if (_instance == null)
                     {
                         var go = new GameObject("WorldEventManager");
@@ -987,17 +990,256 @@ namespace IronFrontier.Events
                 if (!effect.ShouldOccur())
                     continue;
 
-                // TODO: Actually apply effects through GameManager
-                // For now, just log them
-                if (debugMode)
-                    Debug.Log($"[WorldEventManager] Applying effect: {effect.type} = {effect.GetValue()} ({effect.target})");
-
+                ApplySingleEffect(effect);
                 appliedEffects.Add(effect);
             }
 
             if (appliedEffects.Count > 0)
                 OnEffectsApplied?.Invoke(appliedEffects);
         }
+
+        /// <summary>
+        /// Applies a single event effect to the game systems.
+        /// </summary>
+        private void ApplySingleEffect(EventEffect effect)
+        {
+            int value = effect.GetValue();
+            string target = effect.target;
+
+            if (debugMode)
+                Debug.Log($"[WorldEventManager] Applying effect: {effect.type} = {value} ({target})");
+
+            switch (effect.type)
+            {
+                case EventEffectType.GiveGold:
+                    ApplyGoldChange(value);
+                    break;
+
+                case EventEffectType.TakeGold:
+                    ApplyGoldChange(-value);
+                    break;
+
+                case EventEffectType.GiveItem:
+                    ApplyGiveItem(target, value > 0 ? value : 1);
+                    break;
+
+                case EventEffectType.TakeItem:
+                    ApplyTakeItem(target, value > 0 ? value : 1);
+                    break;
+
+                case EventEffectType.GiveXp:
+                    ApplyXpGain(value);
+                    break;
+
+                case EventEffectType.Heal:
+                    ApplyHeal(value);
+                    break;
+
+                case EventEffectType.Damage:
+                    ApplyDamage(value);
+                    break;
+
+                case EventEffectType.ChangeMorale:
+                    ApplyMoraleChange(value);
+                    break;
+
+                case EventEffectType.ChangeReputation:
+                    ApplyReputationChange(target, value);
+                    break;
+
+                case EventEffectType.SetFlag:
+                    ApplySetFlag(effect.stringValue ?? target, true);
+                    break;
+
+                case EventEffectType.RemoveFlag:
+                    ApplySetFlag(effect.stringValue ?? target, false);
+                    break;
+
+                case EventEffectType.TriggerCombat:
+                    ApplyTriggerCombat(target);
+                    break;
+
+                case EventEffectType.StartQuest:
+                    ApplyStartQuest(target);
+                    break;
+
+                case EventEffectType.UnlockLocation:
+                    ApplyUnlockLocation(target);
+                    break;
+
+                case EventEffectType.RevealLore:
+                    ApplyRevealLore(effect.stringValue ?? target);
+                    break;
+
+                case EventEffectType.TriggerEvent:
+                    TriggerEventById(target);
+                    break;
+
+                default:
+                    Debug.LogWarning($"[WorldEventManager] Unknown effect type: {effect.type}");
+                    break;
+            }
+        }
+
+        #region Effect Application Methods
+
+        private void ApplyGoldChange(int amount)
+        {
+            if (InventoryManager.Instance != null)
+            {
+                InventoryManager.Instance.AddGold(amount);
+
+                string message = amount >= 0
+                    ? $"Gained {amount} gold"
+                    : $"Lost {-amount} gold";
+                EventBus.Instance?.Publish(GameEvents.NotificationInfo, message);
+            }
+            EventBus.Instance?.Publish(GameEvents.GoldChanged, amount.ToString());
+        }
+
+        private void ApplyGiveItem(string itemId, int quantity)
+        {
+            if (string.IsNullOrEmpty(itemId)) return;
+
+            if (InventoryManager.Instance != null)
+            {
+                int added = InventoryManager.Instance.AddItemById(itemId, quantity);
+                if (added > 0)
+                {
+                    var itemData = ItemDatabase.Instance?.GetItemById(itemId);
+                    string itemName = itemData?.displayName ?? itemId;
+                    EventBus.Instance?.Publish(GameEvents.NotificationSuccess, $"Received: {itemName} x{added}");
+                }
+            }
+        }
+
+        private void ApplyTakeItem(string itemId, int quantity)
+        {
+            if (string.IsNullOrEmpty(itemId)) return;
+
+            if (InventoryManager.Instance != null)
+            {
+                InventoryManager.Instance.RemoveItemById(itemId, quantity);
+
+                var itemData = ItemDatabase.Instance?.GetItemById(itemId);
+                string itemName = itemData?.displayName ?? itemId;
+                EventBus.Instance?.Publish(GameEvents.NotificationInfo, $"Lost: {itemName} x{quantity}");
+            }
+        }
+
+        private void ApplyXpGain(int amount)
+        {
+            if (amount <= 0) return;
+
+            // Publish XP gain event - a leveling system should handle this
+            EventBus.Instance?.Publish(GameEvents.NotificationSuccess, $"Gained {amount} XP");
+
+            // The actual XP tracking would be handled by a dedicated XP/Leveling system
+            // For now, publish to EventBus for any subscribers
+            EventBus.Instance?.Publish("xp_gained", amount.ToString());
+        }
+
+        private void ApplyHeal(int amount)
+        {
+            if (amount <= 0) return;
+
+            EventBus.Instance?.Publish(GameEvents.PlayerHealed, amount.ToString());
+            EventBus.Instance?.Publish(GameEvents.NotificationSuccess, $"Healed for {amount} HP");
+        }
+
+        private void ApplyDamage(int amount)
+        {
+            if (amount <= 0) return;
+
+            EventBus.Instance?.Publish(GameEvents.PlayerDamaged, amount.ToString());
+            EventBus.Instance?.Publish(GameEvents.NotificationWarning, $"Took {amount} damage");
+        }
+
+        private void ApplyMoraleChange(int amount)
+        {
+            // Morale system - publish event for any subscribers
+            string message = amount >= 0
+                ? $"Morale increased by {amount}"
+                : $"Morale decreased by {-amount}";
+            EventBus.Instance?.Publish(GameEvents.NotificationInfo, message);
+            EventBus.Instance?.Publish("morale_changed", amount.ToString());
+        }
+
+        private void ApplyReputationChange(string factionId, int amount)
+        {
+            if (string.IsNullOrEmpty(factionId)) return;
+
+            if (ReputationSystem.Instance != null)
+            {
+                ReputationSystem.Instance.ModifyReputation(factionId, amount);
+            }
+
+            // Also publish through EventBus
+            var repChange = new Data.ReputationChange { factionId = factionId, amount = amount };
+            EventBus.Instance?.Publish(GameEvents.ReputationChanged, repChange);
+        }
+
+        private void ApplySetFlag(string flagName, bool value)
+        {
+            if (string.IsNullOrEmpty(flagName)) return;
+
+            if (QuestManager.Instance != null)
+            {
+                QuestManager.Instance.SetQuestFlag(flagName, value);
+            }
+
+            if (debugMode)
+                Debug.Log($"[WorldEventManager] Flag '{flagName}' set to {value}");
+        }
+
+        private void ApplyTriggerCombat(string encounterId)
+        {
+            if (string.IsNullOrEmpty(encounterId)) return;
+
+            EventBus.Instance?.Publish(GameEvents.CombatStarted, encounterId);
+
+            if (debugMode)
+                Debug.Log($"[WorldEventManager] Combat triggered: {encounterId}");
+        }
+
+        private void ApplyStartQuest(string questId)
+        {
+            if (string.IsNullOrEmpty(questId)) return;
+
+            if (QuestManager.Instance != null)
+            {
+                QuestManager.Instance.StartQuest(questId);
+            }
+            else
+            {
+                // Fallback: publish event
+                EventBus.Instance?.Publish(GameEvents.QuestStarted, questId);
+            }
+        }
+
+        private void ApplyUnlockLocation(string locationId)
+        {
+            if (string.IsNullOrEmpty(locationId)) return;
+
+            // Set a flag for the location being unlocked
+            ApplySetFlag($"location_{locationId}_unlocked", true);
+
+            EventBus.Instance?.Publish("location_unlocked", locationId);
+            EventBus.Instance?.Publish(GameEvents.NotificationSuccess, $"New location discovered!");
+        }
+
+        private void ApplyRevealLore(string loreEntry)
+        {
+            if (string.IsNullOrEmpty(loreEntry)) return;
+
+            // Set a flag for the lore being revealed
+            ApplySetFlag($"lore_{loreEntry}_revealed", true);
+
+            EventBus.Instance?.Publish("lore_revealed", loreEntry);
+            EventBus.Instance?.Publish(GameEvents.NotificationInfo, "New lore entry discovered!");
+        }
+
+        #endregion
 
         private void UpdateWorldEvents()
         {

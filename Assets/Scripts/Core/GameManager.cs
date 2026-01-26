@@ -183,6 +183,7 @@ namespace IronFrontier.Core
         private float _autoSaveTimer = 0f;
         private string _currentTownId = null;
         private string _playerName = "Stranger";
+        private int _playerLevel = 1;
 
         #endregion
 
@@ -222,6 +223,11 @@ namespace IronFrontier.Core
         /// Player's character name.
         /// </summary>
         public string PlayerName => _playerName;
+
+        /// <summary>
+        /// Player's current level.
+        /// </summary>
+        public int PlayerLevel => _playerLevel;
 
         /// <summary>
         /// Whether a game session is currently active.
@@ -319,6 +325,7 @@ namespace IronFrontier.Core
             Log($"Starting new game for player: {playerName}");
 
             _playerName = playerName;
+            _playerLevel = 1;
             _totalPlayTime = 0f;
             _autoSaveTimer = 0f;
 
@@ -626,9 +633,10 @@ namespace IronFrontier.Core
         /// <summary>
         /// Apply state from a loaded save.
         /// </summary>
-        public void ApplyLoadedState(string playerName, float playTime, GamePhase phase, string townId)
+        public void ApplyLoadedState(string playerName, float playTime, GamePhase phase, string townId, int playerLevel = 1)
         {
             _playerName = playerName;
+            _playerLevel = Mathf.Max(1, playerLevel);
             _totalPlayTime = playTime;
             _currentTownId = townId;
             SetPhase(phase);
@@ -637,9 +645,9 @@ namespace IronFrontier.Core
         /// <summary>
         /// Get current game state for saving.
         /// </summary>
-        public (string playerName, float playTime, GamePhase phase, string townId) GetGameState()
+        public (string playerName, float playTime, GamePhase phase, string townId, int playerLevel) GetGameState()
         {
-            return (_playerName, _totalPlayTime, _currentPhase, _currentTownId);
+            return (_playerName, _totalPlayTime, _currentPhase, _currentTownId, _playerLevel);
         }
 
         /// <summary>
@@ -647,8 +655,17 @@ namespace IronFrontier.Core
         /// </summary>
         public void NotifyLevelUp(int newLevel)
         {
+            _playerLevel = newLevel;
             OnPlayerLevelUp?.Invoke(this, newLevel);
             EventBus.Instance?.Publish("player_level_up", newLevel.ToString());
+        }
+
+        /// <summary>
+        /// Set the player's level directly (used when loading saves).
+        /// </summary>
+        public void SetPlayerLevel(int level)
+        {
+            _playerLevel = Mathf.Max(1, level);
         }
 
         #endregion
