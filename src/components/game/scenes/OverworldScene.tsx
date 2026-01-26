@@ -19,6 +19,7 @@ import { useFrame } from '@react-three/fiber';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
+import type { GamePhase, WorldPosition } from '@/store/types';
 
 // ============================================================================
 // CONSTANTS
