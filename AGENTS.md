@@ -61,34 +61,33 @@ iron-frontier/
 │   │   └── settings.tsx          # Settings screen
 │   └── _layout.tsx               # Root layout
 │
-├── components/                   # React components
-│   ├── ui/                       # Base UI components
-│   │   ├── Button.tsx
-│   │   ├── Card.tsx
-│   │   ├── Modal.tsx
-│   │   ├── Input.tsx
-│   │   └── Progress.tsx
-│   └── game/                     # Game-specific components
-│       ├── GameCanvas.web.tsx    # R3F canvas (web)
-│       ├── GameCanvas.native.tsx # expo-gl canvas (native)
-│       ├── hud/                  # HUD components
-│       │   ├── AdaptiveHUD.tsx
-│       │   ├── MinimalHUD.tsx
-│       │   ├── CompactHUD.tsx
-│       │   └── FullHUD.tsx
-│       ├── ui/                   # Game UI panels
-│       │   ├── ActionBar.tsx
-│       │   ├── DialogueBox.tsx
-│       │   ├── InventoryPanel.tsx
-│       │   ├── CombatPanel.tsx
-│       │   ├── QuestPanel.tsx
-│       │   ├── ShopPanel.tsx
-│       │   └── SettingsPanel.tsx
-│       └── scenes/               # 3D scenes
-│           ├── OverworldScene.tsx
-│           └── CombatScene.tsx
-│
-├── src/                          # Game logic
+├── src/                          # All source code
+│   ├── components/               # React components
+│   │   ├── ui/                   # Base UI components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Modal.tsx
+│   │   │   ├── Input.tsx
+│   │   │   └── Progress.tsx
+│   │   └── game/                 # Game-specific components
+│   │       ├── GameCanvas.web.tsx    # R3F canvas (web)
+│   │       ├── GameCanvas.native.tsx # expo-gl canvas (native)
+│   │       ├── hud/              # HUD components
+│   │       │   ├── AdaptiveHUD.tsx
+│   │       │   ├── MinimalHUD.tsx
+│   │       │   ├── CompactHUD.tsx
+│   │       │   └── FullHUD.tsx
+│   │       ├── ui/               # Game UI panels
+│   │       │   ├── ActionBar.tsx
+│   │       │   ├── DialogueBox.tsx
+│   │       │   ├── InventoryPanel.tsx
+│   │       │   ├── CombatPanel.tsx
+│   │       │   ├── QuestPanel.tsx
+│   │       │   ├── ShopPanel.tsx
+│   │       │   └── SettingsPanel.tsx
+│   │       └── scenes/           # 3D scenes
+│   │           ├── OverworldScene.tsx
+│   │           └── CombatScene.tsx
 │   ├── store/                    # Zustand store
 │   │   ├── createGameStore.ts    # Store factory
 │   │   ├── gameStateSlice.ts     # Game state slice
@@ -100,7 +99,8 @@ iron-frontier/
 │   │   ├── database.native.ts    # expo-sqlite implementation
 │   │   ├── assets.ts             # Asset loading
 │   │   └── utils.ts              # Helpers
-│   └── game/                     # Game systems (future)
+│   ├── game/                     # Game systems
+│   └── types/                    # TypeScript types
 │
 ├── assets/                       # Static assets
 │   ├── models/                   # 3D models (Git LFS)
@@ -123,9 +123,9 @@ iron-frontier/
 | `app/(tabs)/index.tsx` | Main game screen |
 | `src/store/createGameStore.ts` | Zustand store factory |
 | `src/lib/database.ts` | Platform-agnostic database interface |
-| `components/game/GameCanvas.web.tsx` | Web 3D rendering (R3F) |
-| `components/game/GameCanvas.native.tsx` | Native 3D rendering (expo-gl) |
-| `components/game/hud/AdaptiveHUD.tsx` | Responsive HUD |
+| `src/components/game/GameCanvas.web.tsx` | Web 3D rendering (R3F) |
+| `src/components/game/GameCanvas.native.tsx` | Native 3D rendering (expo-gl) |
+| `src/components/game/hud/AdaptiveHUD.tsx` | Responsive HUD |
 | `app.json` | Expo configuration |
 | `metro.config.ts` | Metro bundler config |
 | `tailwind.config.ts` | Tailwind/NativeWind config |
@@ -202,10 +202,10 @@ All interactive elements: `min-h-[44px]` minimum (iOS HIG)
 Use `.web.tsx` and `.native.tsx` extensions for platform-specific implementations:
 
 ```typescript
-// components/game/GameCanvas.web.tsx - React Three Fiber
+// src/components/game/GameCanvas.web.tsx - React Three Fiber
 import { Canvas } from '@react-three/fiber';
 
-// components/game/GameCanvas.native.tsx - expo-gl
+// src/components/game/GameCanvas.native.tsx - expo-gl
 import { GLView } from 'expo-gl';
 ```
 
@@ -235,7 +235,7 @@ maestro test .maestro/basic-gameplay.yaml
 
 ### Adding New UI Components
 
-1. Create component in `components/ui/` or `components/game/ui/`
+1. Create component in `src/components/ui/` or `src/components/game/ui/`
 2. Use NativeWind for styling
 3. Ensure 44px minimum touch targets
 4. Add tests in `__tests__/components/`

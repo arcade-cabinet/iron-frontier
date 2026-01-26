@@ -1,8 +1,8 @@
 // Button.test.tsx - Test for Button component
+import { Button } from '@/components/ui/Button';
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from 'react-native';
-import { Button } from '../../../components/ui/Button';
 
 describe('Button', () => {
   it('renders correctly', () => {

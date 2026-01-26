@@ -13,8 +13,8 @@ import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-import { useGameStore } from '@/src/store';
-import type { Combatant } from '@/src/store/types';
+import { useGameStore } from '@/store';
+import type { Combatant } from '@/store/types';
 
 // ============================================================================
 // CONSTANTS

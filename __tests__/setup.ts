@@ -1,5 +1,4 @@
 // __tests__/setup.ts - Jest test environment setup
-import '@testing-library/jest-native/extend-expect';
 
 // Mock expo-asset
 jest.mock('expo-asset', () => ({
@@ -33,9 +32,6 @@ jest.mock('react-native-reanimated', () => {
   Reanimated.default.call = () => {};
   return Reanimated;
 });
-
-// Silence the warning: Animated: `useNativeDriver` is not supported
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // Mock Platform
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
