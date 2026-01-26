@@ -93,7 +93,7 @@ export function useGameControllers(
     playerConfig,
     combatDataAccess,
     dialogueDataAccess,
-    initialPosition = { x: 0, z: 0 },
+    initialPosition = { x: 0, y: 0, z: 0 },
   } = config;
 
   // State
@@ -304,7 +304,7 @@ export function useGameControllers(
  * Simple hook for player position only
  */
 export function usePlayerPosition(): WorldPosition {
-  const [position, setPosition] = useState<WorldPosition>({ x: 0, z: 0 });
+  const [position, setPosition] = useState<WorldPosition>({ x: 0, y: 0, z: 0 });
 
   useEffect(() => {
     const unsub = getGameController().onEvent((event) => {
