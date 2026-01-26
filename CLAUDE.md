@@ -2,16 +2,17 @@
 
 > **IMPORTANT**: Upon starting a new session, read `memory-bank/activeContext.md` and `memory-bank/projectbrief.md` to understand the current project state.
 
-## Monorepo Structure
+## Unified Expo Structure
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/          # Vite + React + Babylon.js (WebGPU)
-│   ├── mobile/       # Expo + React Native + Filament
-│   └── docs/         # Astro + Starlight documentation
-├── packages/
-│   └── shared/       # Shared schemas, data, types (Zod)
+├── app/              # Expo Router pages
+├── components/       # React components (UI + Game)
+├── src/              # Game logic (store, lib, game systems)
+├── assets/           # 3D models, textures (Git LFS)
+├── __tests__/        # Jest tests
+├── .maestro/         # Mobile E2E tests
+├── docs/             # Documentation
 └── memory-bank/      # AI agent context files
 ```
 
@@ -21,22 +22,18 @@ iron-frontier/
 # Install dependencies
 pnpm install
 
-# Web development
-pnpm dev              # Start web dev server (port 8080)
-pnpm build            # Build web app
-pnpm test             # Run Vitest tests (203 tests)
+# Expo development
+pnpm expo:start       # Start Expo dev server
+pnpm expo:web         # Start web
+pnpm expo:ios         # Start iOS
+pnpm expo:android     # Start Android
 
-# Mobile development
-pnpm dev:mobile       # Start Expo dev server
-pnpm build:android    # Build Android APK
-pnpm build:ios        # Build iOS app
-
-# Documentation
-pnpm docs:dev         # Start docs dev server
-pnpm docs:build       # Build docs site
+# Export
+pnpm expo:export:web  # Export web build
 
 # Quality
-pnpm typecheck        # TypeScript check all packages
+pnpm test             # Run Jest tests
+pnpm typecheck        # TypeScript check
 pnpm lint             # Biome linting
 pnpm lint:fix         # Auto-fix lint issues
 ```
@@ -44,12 +41,12 @@ pnpm lint:fix         # Auto-fix lint issues
 ## Code Style
 
 - **React**: Functional components, hooks, strong typing
-- **State**: Zustand for global state, minimal `useState`
-- **3D Web**: Babylon.js via Reactylon pattern (declarative)
-- **3D Mobile**: React Native Filament
-- **Styling**: Tailwind CSS v4
-- **Schemas**: Zod for runtime validation
-- **Naming**: `PascalCase` components, `camelCase` functions
+- **State**: Zustand for global state
+- **3D Web**: React Three Fiber
+- **3D Native**: expo-gl + Three.js
+- **Styling**: NativeWind (Tailwind CSS v4)
+- **Routing**: Expo Router
+- **Platform-specific**: Use `.web.tsx` and `.native.tsx` extensions
 
 ## Memory Bank
 
@@ -64,11 +61,15 @@ Context files in `memory-bank/` for AI agent continuity:
 | `productContext.md` | Product vision and UX |
 | `progress.md` | Completed and planned work |
 
-## Key Packages
+## Key Technologies
 
-| Package | Path | Purpose |
-|---------|------|---------|
-| `@iron-frontier/shared` | `packages/shared/` | Schemas, data, types |
-| `@iron-frontier/web` | `apps/web/` | Web game client |
-| `@iron-frontier/mobile` | `apps/mobile/` | Mobile game client |
-| `@iron-frontier/docs` | `apps/docs/` | Documentation site |
+- **Expo SDK 54** + React Native 0.81
+- **React 19** + React Native Web
+- **Zustand** for state management
+- **NativeWind** for styling
+- **React Three Fiber** (web) + **expo-gl** (native)
+- **sql.js** (web) + **expo-sqlite** (native)
+
+## Architecture Notes
+
+This is a unified Expo application targeting web, iOS, and Android. Platform-specific code uses `.web.tsx` and `.native.tsx` extensions. The project was migrated from a pnpm workspace monorepo to this unified structure.

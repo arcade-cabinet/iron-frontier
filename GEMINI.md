@@ -4,10 +4,10 @@
 
 **Iron Frontier** is a cross-platform isometric RPG set in a Steampunk American Frontier (circa 1887). It features procedural generation, turn-based interactions, and a distinct "diorama" visual style.
 
-*   **Type:** Monorepo (pnpm workspaces)
-*   **Status:** Alpha v0.1 (Release Candidate)
-*   **Platforms:** Web (React + Babylon.js) and Mobile (Expo + React Native Filament)
-*   **Core Architecture:** Shared data/logic package, platform-specific UI/Rendering.
+*   **Type:** Unified Expo Application
+*   **Status:** Alpha v0.1 (Expo Migration Complete)
+*   **Platforms:** Web, iOS, and Android (single codebase)
+*   **Core Architecture:** Platform-specific rendering with shared game logic
 
 ## Technical Architecture
 
@@ -15,23 +15,27 @@
 
 | Component | Technology | Details |
 | :--- | :--- | :--- |
-| **Monorepo** | pnpm | Workspaces: `apps/web`, `apps/mobile`, `apps/docs`, `packages/shared` |
-| **Web** | React 19, Vite 7 | Babylon.js 8 (WebGPU) via Reactylon pattern |
-| **Mobile** | Expo SDK 54 | React Native Filament (native 3D rendering) |
-| **Shared** | TypeScript | Zod v4 Schemas, Game Data, Procedural Generation Logic |
-| **State** | Zustand | Persisted via `sql.js` (Web) and `expo-sqlite` (Mobile) |
-| **Styling** | Tailwind CSS v4 | NativeWind (Mobile), shadcn/ui (Web) |
-| **Testing** | Vitest, Playwright | Unit tests (Vitest), E2E (Playwright/Maestro) |
+| **Framework** | Expo SDK 54 | React Native 0.81 |
+| **Web** | React 19 | React Native Web |
+| **3D (Web)** | React Three Fiber | Declarative Three.js |
+| **3D (Native)** | expo-gl | Three.js with WebGL |
+| **State** | Zustand | Persisted via sql.js (web) and expo-sqlite (native) |
+| **Styling** | NativeWind | Tailwind CSS v4 |
+| **Routing** | Expo Router | File-based routing |
+| **Testing** | Jest | jest-expo preset |
+| **E2E** | Maestro | Mobile E2E tests |
 | **Linting** | Biome | Linting and Formatting |
 
 ### Key Directories
 
-*   `apps/web/`: Web application source.
-*   `apps/mobile/`: Mobile application source.
-*   `apps/docs/`: Documentation site (Astro).
-*   `packages/shared/`: **CRITICAL**. Contains all game data, schemas (Zod), and procedural generation logic. **Modify this for gameplay changes.**
-*   `memory-bank/`: Context files for AI agents.
-*   `.github/workflows/`: CI/CD pipelines (pinned to specific SHAs).
+*   `app/`: Expo Router pages (file-based routing)
+*   `components/`: React components (UI + Game)
+*   `src/`: Game logic (store, lib, game systems)
+*   `assets/`: 3D models, textures (Git LFS)
+*   `__tests__/`: Jest tests
+*   `.maestro/`: Mobile E2E tests
+*   `memory-bank/`: Context files for AI agents
+*   `docs/`: Documentation
 
 ## Development Workflow
 
@@ -40,32 +44,41 @@
 Run these from the project root:
 
 *   **Install:** `pnpm install`
-*   **Dev (Web):** `pnpm dev` (Port 8080)
-*   **Dev (Mobile):** `pnpm dev:mobile`
-*   **Test (All):** `pnpm test` (Runs 203+ tests)
-*   **Typecheck:** `pnpm typecheck` (Strict TypeScript)
+*   **Dev (Expo):** `pnpm expo:start`
+*   **Dev (Web):** `pnpm expo:web`
+*   **Dev (iOS):** `pnpm expo:ios`
+*   **Dev (Android):** `pnpm expo:android`
+*   **Test:** `pnpm test`
+*   **Typecheck:** `pnpm typecheck`
 *   **Lint:** `pnpm lint`
-*   **Build (Web):** `pnpm build`
-*   **Build (Docs):** `pnpm docs:build`
+*   **Export (Web):** `pnpm expo:export:web`
 
 ### Conventions
 
-1.  **Strict Typing:** No `any`. Explicit types required. Zod schemas used for runtime validation.
-2.  **Shared Logic:** Game logic, data, and schemas MUST reside in `packages/shared`. Platform apps only handle rendering and input.
-3.  **Reactylon (Web):** Use declarative JSX for Babylon.js meshes (e.g., `<box options={{...}} />`).
-4.  **State Management:** Use Zustand. Avoid frequent re-renders by selecting specific state slices.
-5.  **Testing:** Add tests for new features. Use `test-utils.tsx` for component testing.
-6.  **Git:** Use Conventional Commits (e.g., `feat:`, `fix:`, `chore:`).
+1.  **Strict Typing:** No `any`. Explicit types required.
+2.  **Platform-Specific Code:** Use `.web.tsx` and `.native.tsx` extensions
+3.  **State Management:** Use Zustand. Avoid frequent re-renders.
+4.  **Styling:** Use NativeWind (Tailwind CSS v4)
+5.  **Touch Targets:** Minimum 44px for all interactive elements
+6.  **Testing:** Add tests for new features
+7.  **Git:** Use Conventional Commits (e.g., `feat:`, `fix:`, `chore:`)
 
 ## Current Status & Goals
 
-*   **Current Branch:** `release/v0.1-candidate`
-*   **Immediate Goal:** Merge PR #1 and deploy v0.1.
-*   **Focus:** Stability, Performance (60fps), and Robustness.
+*   **Current Branch:** `feature/expo-unified-architecture`
+*   **Immediate Goal:** Complete migration testing and merge
+*   **Focus:** Stability, Performance (60fps), Cross-platform compatibility
 
 ## Critical Files
 
-*   `packages/shared/src/data/schemas/*.ts`: Data definitions (Zod).
-*   `apps/web/src/game/store/webGameStore.ts`: Web-specific state.
-*   `apps/web/src/engine/hex/HexSceneManager.ts`: 3D rendering logic.
-*   `docs/DEVELOPMENT_GUIDE.md`: Detailed developer instructions.
+*   `app/(tabs)/index.tsx`: Main game screen
+*   `src/store/createGameStore.ts`: Zustand store factory
+*   `src/lib/database.ts`: Platform-agnostic database interface
+*   `components/game/GameCanvas.web.tsx`: Web 3D rendering
+*   `components/game/GameCanvas.native.tsx`: Native 3D rendering
+*   `components/game/hud/AdaptiveHUD.tsx`: Responsive HUD
+*   `docs/ARCHITECTURE_V2.md`: New architecture documentation
+
+## Migration Notes
+
+This project was migrated from a pnpm workspace monorepo (`apps/web/`, `apps/mobile/`, `packages/shared/`) to a unified Expo application. Platform-specific code now uses `.web.tsx` and `.native.tsx` extensions instead of separate app directories.

@@ -2,8 +2,8 @@
 # https://render.com/docs/blueprint-spec
 #
 # Iron Frontier - Steampunk Western RPG
-# Single-page application built with Vite + React + Babylon.js
-# Build outputs to a single HTML file with inlined assets
+# Expo unified application with web, iOS, and Android support
+# Web build outputs to dist/ directory
 
 services:
   - type: web
@@ -12,8 +12,8 @@ services:
     repo: https://github.com/arcade-cabinet/iron-frontier
     branch: main
     rootDir: .
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
-    staticPublishPath: apps/web/dist
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm expo:export:web
+    staticPublishPath: dist
     pullRequestPreviewsEnabled: true
 
     # Build environment

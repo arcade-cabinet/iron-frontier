@@ -14,17 +14,23 @@
 # Install dependencies
 pnpm install
 
-# Start web dev server
-pnpm dev
+# Start Expo dev server
+pnpm expo:start
 
-# Run tests (203 tests)
+# Start web
+pnpm expo:web
+
+# Start iOS
+pnpm expo:ios
+
+# Start Android
+pnpm expo:android
+
+# Run tests
 pnpm test
 
-# Type check all packages
+# Type check
 pnpm typecheck
-
-# Build for production
-pnpm build
 ```
 
 ## Project Overview
@@ -33,79 +39,80 @@ pnpm build
 
 ### Tech Stack
 
-| Layer | Web | Mobile |
-|-------|-----|--------|
-| **Framework** | React 19 + Vite | Expo SDK 54 + React Native |
-| **3D Engine** | Babylon.js (WebGPU) | React Native Filament |
-| **State** | Zustand | Zustand |
-| **Persistence** | sql.js + IndexedDB | expo-sqlite |
-| **Styling** | Tailwind CSS v4 | NativeWind |
+| Layer | Technology |
+|-------|------------|
+| **Framework** | Expo SDK 54 + React Native 0.81 |
+| **Web** | React 19 + React Native Web |
+| **3D Rendering** | React Three Fiber (web) + expo-gl (native) |
+| **State** | Zustand |
+| **Persistence** | sql.js (web) + expo-sqlite (native) |
+| **Styling** | NativeWind (Tailwind CSS v4) |
+| **Routing** | Expo Router |
 
-### Shared Code
-
-All game logic, schemas, and data live in `packages/shared/`:
-- **Schemas**: Zod-validated types for items, NPCs, quests, combat, etc.
-- **Data**: Item definitions, quest templates, dialogue trees
-- **Generation**: Procedural content generators (Daggerfall-style)
-
-## Monorepo Structure
+## Unified Expo Structure
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/                      # Web game client
-│   │   ├── src/
-│   │   │   ├── game/
-│   │   │   │   ├── Game.tsx              # Root game component
-│   │   │   │   ├── components/
-│   │   │   │   │   └── GameScene.tsx     # Babylon.js 3D scene
-│   │   │   │   ├── screens/
-│   │   │   │   │   └── TitleScreen.tsx   # Splash + menu
-│   │   │   │   ├── ui/                   # UI components
-│   │   │   │   │   ├── ActionBar.tsx     # Bottom navigation
-│   │   │   │   │   ├── DialogueBox.tsx   # NPC dialogue
-│   │   │   │   │   ├── InventoryPanel.tsx
-│   │   │   │   │   ├── CombatPanel.tsx
-│   │   │   │   │   ├── ShopPanel.tsx
-│   │   │   │   │   └── ...
-│   │   │   │   ├── store/
-│   │   │   │   │   └── webGameStore.ts   # Web-specific store
-│   │   │   │   └── lib/
-│   │   │   │       ├── procgen.ts        # Sector generator
-│   │   │   │       └── prng.ts           # Seeded RNG
-│   │   │   ├── engine/                   # Babylon.js rendering
-│   │   │   │   ├── hex/                  # Hex grid system
-│   │   │   │   ├── rendering/            # SceneManager
-│   │   │   │   └── terrain/              # Heightmap, chunks
-│   │   │   └── components/ui/            # shadcn/ui
-│   │   └── public/assets/                # 3D models (Git LFS)
-│   │
-│   ├── mobile/                   # Mobile game client
-│   │   ├── app/                  # Expo Router pages
-│   │   └── src/components/       # Filament renderer
-│   │
-│   └── docs/                     # Astro documentation site
-│       └── src/content/docs/     # MDX documentation
+├── app/                          # Expo Router pages
+│   ├── (tabs)/                   # Tab navigation
+│   │   ├── _layout.tsx           # Tab layout
+│   │   ├── index.tsx             # Game screen
+│   │   ├── inventory.tsx         # Inventory screen
+│   │   └── settings.tsx          # Settings screen
+│   └── _layout.tsx               # Root layout
 │
-├── packages/
-│   └── shared/                   # Shared code (DRY)
-│       └── src/
-│           ├── data/
-│           │   ├── schemas/      # Zod schemas
-│           │   │   ├── item.ts
-│           │   │   ├── npc.ts
-│           │   │   ├── quest.ts
-│           │   │   ├── combat.ts
-│           │   │   └── ...
-│           │   ├── items/        # Item definitions
-│           │   ├── npcs/         # NPC definitions
-│           │   ├── quests/       # Quest definitions
-│           │   └── generation/   # Procedural generators
-│           ├── store/            # Shared store types
-│           └── index.ts          # Package exports
+├── components/                   # React components
+│   ├── ui/                       # Base UI components
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Modal.tsx
+│   │   ├── Input.tsx
+│   │   └── Progress.tsx
+│   └── game/                     # Game-specific components
+│       ├── GameCanvas.web.tsx    # R3F canvas (web)
+│       ├── GameCanvas.native.tsx # expo-gl canvas (native)
+│       ├── hud/                  # HUD components
+│       │   ├── AdaptiveHUD.tsx
+│       │   ├── MinimalHUD.tsx
+│       │   ├── CompactHUD.tsx
+│       │   └── FullHUD.tsx
+│       ├── ui/                   # Game UI panels
+│       │   ├── ActionBar.tsx
+│       │   ├── DialogueBox.tsx
+│       │   ├── InventoryPanel.tsx
+│       │   ├── CombatPanel.tsx
+│       │   ├── QuestPanel.tsx
+│       │   ├── ShopPanel.tsx
+│       │   └── SettingsPanel.tsx
+│       └── scenes/               # 3D scenes
+│           ├── OverworldScene.tsx
+│           └── CombatScene.tsx
 │
-├── .github/workflows/            # CI/CD (pinned to SHAs)
+├── src/                          # Game logic
+│   ├── store/                    # Zustand store
+│   │   ├── createGameStore.ts    # Store factory
+│   │   ├── gameStateSlice.ts     # Game state slice
+│   │   ├── defaults.ts           # Default values
+│   │   └── types.ts              # Store types
+│   ├── lib/                      # Utilities
+│   │   ├── database.ts           # Platform-agnostic DB
+│   │   ├── database.web.ts       # sql.js implementation
+│   │   ├── database.native.ts    # expo-sqlite implementation
+│   │   ├── assets.ts             # Asset loading
+│   │   └── utils.ts              # Helpers
+│   └── game/                     # Game systems (future)
+│
+├── assets/                       # Static assets
+│   ├── models/                   # 3D models (Git LFS)
+│   ├── textures/                 # Textures (Git LFS)
+│   └── fonts/                    # Fonts
+│
+├── __tests__/                    # Jest tests
+│   ├── setup.ts                  # Test setup
+│   └── components/               # Component tests
+│
 ├── .maestro/                     # Mobile E2E tests
+├── docs/                         # Documentation
 └── memory-bank/                  # AI context files
 ```
 
@@ -113,12 +120,15 @@ iron-frontier/
 
 | File | Purpose |
 |------|---------|
-| `apps/web/src/game/Game.tsx` | Main game component, phase routing |
-| `apps/web/src/game/store/webGameStore.ts` | Web-specific Zustand store |
-| `packages/shared/src/store/index.ts` | Shared store types and actions |
-| `packages/shared/src/data/schemas/*.ts` | All Zod schemas |
-| `packages/shared/src/data/generation/*.ts` | Procedural generators |
-| `apps/web/src/engine/hex/HexSceneManager.ts` | Babylon.js scene orchestration |
+| `app/(tabs)/index.tsx` | Main game screen |
+| `src/store/createGameStore.ts` | Zustand store factory |
+| `src/lib/database.ts` | Platform-agnostic database interface |
+| `components/game/GameCanvas.web.tsx` | Web 3D rendering (R3F) |
+| `components/game/GameCanvas.native.tsx` | Native 3D rendering (expo-gl) |
+| `components/game/hud/AdaptiveHUD.tsx` | Responsive HUD |
+| `app.json` | Expo configuration |
+| `metro.config.ts` | Metro bundler config |
+| `tailwind.config.ts` | Tailwind/NativeWind config |
 
 ## Game Flow
 
@@ -138,42 +148,22 @@ iron-frontier/
 
 ## State Management
 
-**Zustand** is the single source of truth. Key concepts:
+**Zustand** is the single source of truth:
 
 ```typescript
 // Game phases
 type GamePhase = 'title' | 'playing' | 'dialogue' | 'combat' | 'travel' | 'game_over';
 
-// Core state slices
+// Core state
 interface GameState {
   phase: GamePhase;
   playerStats: PlayerStats;
   inventory: InventoryItem[];
   activeQuests: ActiveQuest[];
   currentLocationId: string;
-  loadedWorld: LoadedWorld | null;
   activePanel: PanelType | null;
   // ... and more
 }
-```
-
-## Procedural Generation
-
-The game uses Daggerfall-style seeded generation:
-
-```typescript
-// All generation is deterministic from seed
-const worldSeed = 12345;
-const locationSeed = hashCombine(worldSeed, locationId);
-
-// Generators in packages/shared/src/data/generation/
-- nameGenerator.ts      // NPC names from cultural pools
-- npcGenerator.ts       // NPCs from archetypes
-- questGenerator.ts     // Multi-stage quests
-- encounterGenerator.ts // Combat encounters
-- dialogueGenerator.ts  // Dialogue trees
-- itemGenerator.ts      // Weapons, armor, consumables
-- worldGenerator.ts     // Master orchestrator
 ```
 
 ## Styling Guidelines
@@ -207,94 +197,95 @@ lg: 1024px+    /* Desktop - full layouts */
 
 All interactive elements: `min-h-[44px]` minimum (iOS HIG)
 
-## Common Tasks
+## Platform-Specific Code
 
-### Adding New Items
+Use `.web.tsx` and `.native.tsx` extensions for platform-specific implementations:
 
-1. Add item schema to `packages/shared/src/data/schemas/item.ts`
-2. Add item definition to `packages/shared/src/data/items/`
-3. Export from `packages/shared/src/data/items/index.ts`
+```typescript
+// components/game/GameCanvas.web.tsx - React Three Fiber
+import { Canvas } from '@react-three/fiber';
 
-### Adding New NPCs
-
-1. Add NPC definition to `packages/shared/src/data/npcs/`
-2. Create dialogue tree in `packages/shared/src/data/dialogues/`
-3. Link via `dialogueTreeIds` in NPC definition
-
-### Adding New Quests
-
-1. Define quest in `packages/shared/src/data/quests/`
-2. Associate with NPC via `questIds` array
-3. Export from `packages/shared/src/data/quests/index.ts`
-
-### Adding UI Panels
-
-1. Create component in `apps/web/src/game/ui/NewPanel.tsx`
-2. Add panel type to store: `activePanel: 'new_panel' | ...`
-3. Render in `Game.tsx` based on `activePanel`
+// components/game/GameCanvas.native.tsx - expo-gl
+import { GLView } from 'expo-gl';
+```
 
 ## Testing
 
 ```bash
-pnpm test              # Run all 203 tests
-pnpm test --watch      # Watch mode
-pnpm test:e2e          # Playwright E2E (web)
+pnpm test              # Run Jest tests
+pnpm test:watch        # Watch mode
+pnpm test:coverage     # Coverage report
 ```
 
-Test structure mirrors source:
-- `apps/web/src/test/` - Web-specific tests
-- Unit tests for store, UI components, game flow
+Test structure:
+- `__tests__/setup.ts` - Jest configuration
+- `__tests__/components/` - Component tests
 
-## CI/CD
-
-GitHub Actions workflows (`.github/workflows/`):
-- `ci.yml` - Lint, typecheck, test, build, E2E
-- `mobile.yml` - Android APK build, Maestro E2E
-
-All actions pinned to exact SHAs for reproducibility.
-
-## Mobile Development
+## Mobile E2E Testing
 
 ```bash
-# Start Expo dev server
-pnpm dev:mobile
-
-# Build debug APK
-pnpm build:android
-
-# Run Maestro E2E tests
+# Run Maestro tests
 maestro test .maestro/
+
+# Specific test
+maestro test .maestro/basic-gameplay.yaml
 ```
+
+## Common Tasks
+
+### Adding New UI Components
+
+1. Create component in `components/ui/` or `components/game/ui/`
+2. Use NativeWind for styling
+3. Ensure 44px minimum touch targets
+4. Add tests in `__tests__/components/`
+
+### Adding New Screens
+
+1. Create file in `app/` directory
+2. Use Expo Router conventions
+3. Import and use game components
+
+### Platform-Specific Features
+
+1. Create `.web.tsx` and `.native.tsx` versions
+2. Export common interface from base file
+3. Metro will automatically select correct version
 
 ## Known Patterns
 
-### Reactylon (Babylon.js)
+### React Three Fiber (Web)
 
 ```tsx
-// CORRECT - use options prop
-<box name="myBox" options={{ width: 1, height: 2 }} position={pos} />
+import { Canvas } from '@react-three/fiber';
 
-// WRONG - will cause TypeScript errors
-<box name="myBox" width={1} height={2} />
+<Canvas>
+  <mesh>
+    <boxGeometry args={[1, 1, 1]} />
+    <meshStandardMaterial color="orange" />
+  </mesh>
+</Canvas>
 ```
 
-### Import from Shared Package
+### expo-gl (Native)
 
-```typescript
-// Import schemas
-import { ItemSchema, type Item } from '@iron-frontier/shared/data/schemas/item';
+```tsx
+import { GLView } from 'expo-gl';
+import * as THREE from 'three';
 
-// Import data
-import { getItem, getAllItems } from '@iron-frontier/shared/data/items';
-
-// Import store types
-import type { GameState } from '@iron-frontier/shared/store';
+<GLView onContextCreate={onContextCreate} />
 ```
 
-## Current Status (v0.1-candidate)
+## Current Status (Expo Unified Architecture)
 
-- **203 tests passing**
-- **Build succeeds** (7.7 MB single-file output)
-- **PR #1 open** with all AI review comments resolved
-- **Monorepo complete** with DRY architecture
-- **Responsive UI** implemented across all panels
+- **Expo SDK 54** with React Native 0.81
+- **Platform-specific rendering** (R3F web, expo-gl native)
+- **Unified codebase** with single Expo app
+- **Adaptive HUD** with responsive breakpoints
+- **All game UI panels** implemented
+- **Jest testing** configured
+- **Maestro E2E** tests ready
+
+## Migration Notes
+
+This project was migrated from a pnpm workspace monorepo to a unified Expo application. The old structure with `apps/web/`, `apps/mobile/`, and `packages/shared/` has been consolidated into a single Expo app with platform-specific code using `.web.tsx` and `.native.tsx` extensions.
