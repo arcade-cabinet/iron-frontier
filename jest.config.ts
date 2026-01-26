@@ -1,5 +1,7 @@
-// jest.config.js - Jest configuration for Expo unified app
-module.exports = {
+// jest.config.ts - Jest configuration for Expo unified app
+import type { Config } from 'jest';
+
+const config: Config = {
   preset: 'jest-expo',
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   transformIgnorePatterns: [
@@ -30,3 +32,5 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
 };
+
+export default config;

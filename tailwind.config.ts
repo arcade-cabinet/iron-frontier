@@ -1,11 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+// tailwind.config.ts - Tailwind CSS configuration for Expo unified app
+import type { Config } from 'tailwindcss';
+// @ts-ignore - nativewind/preset doesn't have types
+import nativewindPreset from 'nativewind/preset';
+
+const config: Config = {
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
     './src/**/*.{js,jsx,ts,tsx}',
   ],
-  presets: [require('nativewind/preset')],
+  presets: [nativewindPreset],
   theme: {
     extend: {
       colors: {
@@ -48,3 +52,5 @@ module.exports = {
   },
   plugins: [],
 };
+
+export default config;
