@@ -1,0 +1,1829 @@
+/**
+ * Iron Frontier - Companion Library
+ *
+ * Complete definitions for all recruitable companions.
+ * Each companion has unique abilities, personal quests, and recruitment paths.
+ *
+ * Companions:
+ * 1. Deputy Jake Hawkins - Lawful path, ranged support
+ * 2. Maggie Ironpick - Freeminer path, melee/explosives
+ * 3. Black Belle - Neutral (hired), assassin
+ * 4. Sister Maria - Support path, healer
+ * 5. Copperhead Viper - Outlaw path, dual melee
+ * 6. Steam Automaton - Tech path, tank
+ */
+
+import type {
+  BanterLine,
+  CompanionAbility,
+  CompanionDefinition,
+  CompanionState,
+} from '../schemas/companion';
+import {
+  canRecruit,
+  createCompanionState,
+  getApprovalLevel,
+  getAvailableBanter,
+  getExperienceForLevel,
+  validateCompanionDefinition,
+} from '../schemas/companion';
+
+// Re-export schema types and utilities
+export type {
+  AbilityEffect,
+  AbilityEffectType,
+  AbilityTarget,
+  AIPriority,
+  ApprovalTrigger,
+  ApprovalTriggerType,
+  BanterLine,
+  BanterTrigger,
+  CombatRole,
+  CompanionAbility,
+  CompanionAI,
+  CompanionDefinition,
+  CompanionEquipment,
+  CompanionPath,
+  CompanionState,
+  PersonalQuest,
+  PersonalQuestStage,
+  RecruitmentRequirements,
+  RomanceOptions,
+  RomanceStage,
+} from '../schemas/companion';
+
+export {
+  canRecruit,
+  COMPANION_SCHEMA_VERSION,
+  CompanionDefinitionSchema,
+  CompanionStateSchema,
+  createCompanionState,
+  getApprovalLevel,
+  getAvailableBanter,
+  getExperienceForLevel,
+  validateCompanionAbility,
+  validateCompanionDefinition,
+  validateCompanionState,
+  validatePersonalQuest,
+} from '../schemas/companion';
+
+// ============================================================================
+// DEPUTY JAKE HAWKINS - Lawful Path
+// ============================================================================
+
+const JakeAbilities: CompanionAbility[] = [
+  {
+    id: 'quick_shot',
+    name: 'Quick Shot',
+    description: 'A rapid shot that costs less AP but deals reduced damage.',
+    target: 'enemy',
+    apCost: 1,
+    cooldown: 0,
+    range: 6,
+    areaRadius: 0,
+    effects: [{ type: 'damage', value: 15, duration: 0, chance: 100, levelScaling: 0.1 }],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['ranged', 'quick'],
+    icon: 'quick_shot',
+  },
+  {
+    id: 'cover_fire',
+    name: 'Cover Fire',
+    description: 'Suppressive fire that reduces enemy accuracy and movement.',
+    target: 'area_enemy',
+    apCost: 3,
+    cooldown: 2,
+    range: 5,
+    areaRadius: 2,
+    effects: [
+      { type: 'damage', value: 10, duration: 0, chance: 100, levelScaling: 0.05 },
+      { type: 'debuff', value: 20, duration: 2, chance: 75, statusId: 'suppressed', levelScaling: 0 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['ranged', 'area', 'support'],
+    icon: 'cover_fire',
+  },
+  {
+    id: 'arrest',
+    name: 'Arrest',
+    description: 'Attempt to subdue an enemy non-lethally. More effective against wounded targets.',
+    target: 'enemy',
+    apCost: 4,
+    cooldown: 3,
+    range: 1,
+    areaRadius: 0,
+    effects: [{ type: 'non_lethal', value: 50, duration: 0, chance: 70, levelScaling: 0.15 }],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['melee', 'non_lethal', 'lawful'],
+    icon: 'arrest',
+  },
+  {
+    id: 'deputies_resolve',
+    name: "Deputy's Resolve",
+    description: 'Jake steels himself, gaining damage resistance and immunity to fear.',
+    target: 'self',
+    apCost: 2,
+    cooldown: 4,
+    range: 0,
+    areaRadius: 0,
+    effects: [
+      { type: 'buff', value: 25, duration: 3, chance: 100, statusId: 'resolute', levelScaling: 0.1 },
+      { type: 'shield', value: 20, duration: 3, chance: 100, levelScaling: 0.15 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'jake_personal_quest',
+    levelRequired: 3,
+    tags: ['self', 'defensive', 'buff'],
+    icon: 'resolve',
+  },
+];
+
+const JakeBanter: BanterLine[] = [
+  {
+    id: 'jake_travel_1',
+    text: "Keep your eyes peeled. Sheriff Cole taught me that danger's always closer than you think.",
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'jake_travel_2',
+    text: "You know, I never thought I'd be riding with... well, someone like you. No offense.",
+    trigger: 'travel_during',
+    minApproval: 25,
+    oneTime: true,
+    priority: 7,
+  },
+  {
+    id: 'jake_combat_start',
+    text: "Law's on our side. That means something, even out here.",
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'jake_combat_end',
+    text: 'Justice served. The Sheriff would be proud.',
+    trigger: 'combat_end',
+    minApproval: 25,
+    priority: 5,
+  },
+  {
+    id: 'jake_low_health',
+    text: "Just a scratch... I've had worse at the training grounds.",
+    trigger: 'low_health',
+    priority: 8,
+  },
+  {
+    id: 'jake_morning',
+    text: "Dawn patrol. Best time to catch criminals before they've had their coffee.",
+    trigger: 'time_of_day',
+    triggerData: 'morning',
+    priority: 4,
+  },
+  {
+    id: 'jake_disapproval',
+    text: "I don't know if I can keep following orders like this. It ain't right.",
+    trigger: 'idle',
+    maxApproval: -25,
+    priority: 9,
+  },
+  {
+    id: 'jake_quest_active',
+    text: "Sheriff Cole's counting on me. I can't let him down - not again.",
+    trigger: 'quest_active',
+    requiresQuest: { questId: 'jake_personal_quest', state: 'active' },
+    priority: 8,
+  },
+];
+
+export const DeputyJakeHawkins: CompanionDefinition = {
+  id: 'deputy_jake_hawkins',
+  name: 'Jacob Hawkins',
+  nickname: 'Deputy Jake',
+  title: 'Deputy',
+  description:
+    'A fresh-faced young man barely out of his teens, with earnest blue eyes and a badge he polishes every morning. His quick draw is impressive, but his idealism has yet to be tested by hard choices.',
+  backstory:
+    "The youngest son of a rancher family, Jake always dreamed of being a lawman. Sheriff Cole saw potential in the boy's honesty and quick reflexes, taking him on as deputy. Jake believes absolutely in justice - black and white, right and wrong. The frontier will test that faith. His father was killed by bandits when Jake was twelve, and he swore to protect others from the same fate. Now he must prove himself not just to the Sheriff, but to himself.",
+  portraitId: 'deputy_jake',
+  path: 'lawful',
+  combatRole: 'ranged_support',
+  locationId: 'dusty_springs',
+  spawnCoord: { q: 17, r: 17 },
+  stats: {
+    maxHealth: 90,
+    actionPoints: 4,
+    baseDamage: 12,
+    armor: 5,
+    accuracy: 75,
+    evasion: 15,
+  },
+  abilities: JakeAbilities,
+  ai: {
+    priority: 'protect_player',
+    preferredRange: 4,
+    retreatThreshold: 20,
+    usesConsumables: true,
+    prefersNonLethal: true,
+    protectsWounded: true,
+    breaksStealthForAlly: true,
+    abilityPriorities: {
+      cover_fire: 8,
+      arrest: 6,
+      quick_shot: 5,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['revolver', 'rifle', 'shotgun'],
+    allowedArmorTypes: ['light', 'medium'],
+  },
+  startingEquipment: {
+    weapon: 'deputy_revolver',
+    armor: 'deputy_vest',
+  },
+  approvalTriggers: [
+    { type: 'quest_complete', triggerId: 'help_sheriff', change: 15, reason: 'Helped the law' },
+    { type: 'faction_action', triggerId: 'copperhead_attack', change: -20, reason: 'Sided with outlaws' },
+    { type: 'combat_action', triggerId: 'killed_surrendered', change: -25, reason: 'Killed a surrendered enemy' },
+    { type: 'combat_action', triggerId: 'non_lethal_takedown', change: 5, reason: 'Used non-lethal force' },
+    { type: 'dialogue_choice', triggerId: 'defend_innocent', change: 10, reason: 'Defended the innocent' },
+    { type: 'dialogue_choice', triggerId: 'bribe_official', change: -15, reason: 'Bribed an official' },
+    { type: 'world_action', triggerId: 'help_townsfolk', change: 5, reason: 'Helped townsfolk' },
+  ],
+  banter: JakeBanter,
+  personalQuest: {
+    id: 'jake_personal_quest',
+    title: 'Proving Ground',
+    description: "Help Jake prove himself to Sheriff Cole and face the truth about his father's death.",
+    motivation:
+      "Jake needs to know what really happened to his father - and whether the law he serves was complicit in covering it up. The truth will either strengthen his resolve or shatter his faith.",
+    requiredApproval: 25,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Old Case File',
+        description: "Find evidence about Jake's father's murder in the Sheriff's office archives.",
+        objectiveIds: ['find_case_file'],
+        dialogueId: 'jake_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'Witnesses',
+        description: 'Track down the witnesses who saw the murder but never testified.',
+        objectiveIds: ['find_witness_1', 'find_witness_2'],
+        dialogueId: 'jake_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: 'Confrontation',
+        description: 'Confront the man responsible and decide his fate.',
+        objectiveIds: ['confront_killer'],
+        dialogueId: 'jake_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'deputies_resolve' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'deputies_resolve',
+      uniqueItem: 'fathers_badge',
+    },
+    tags: ['lawful', 'family', 'justice'],
+  },
+  romance: {
+    available: false,
+    approvalRequired: 0,
+    requiresPersonalQuest: false,
+    incompatibleWith: [],
+  },
+  recruitment: {
+    questId: 'help_sheriff_investigation',
+    factionReputation: { townsfolk: 10 },
+    minLevel: undefined,
+    goldCost: 0,
+    requiredItem: undefined,
+    requiredFlag: undefined,
+    incompatibleCompanions: ['copperhead_viper'],
+    recruitmentHint:
+      "Help Sheriff Cole with his investigation in Dusty Springs. Jake will offer to join once you've proven yourself trustworthy.",
+  },
+  dialogueTreeId: 'deputy_jake_main',
+  essential: true,
+  voiceTags: ['earnest', 'young', 'idealistic', 'respectful'],
+  tags: ['lawful', 'ranged', 'support', 'dusty_springs'],
+};
+
+// ============================================================================
+// MAGGIE IRONPICK - Freeminer Path
+// ============================================================================
+
+const MaggieAbilities: CompanionAbility[] = [
+  {
+    id: 'dynamite_toss',
+    name: 'Dynamite Toss',
+    description: 'Throw a stick of dynamite that explodes after a short delay.',
+    target: 'ground',
+    apCost: 3,
+    cooldown: 2,
+    range: 5,
+    areaRadius: 2,
+    effects: [{ type: 'damage', value: 35, duration: 0, chance: 100, levelScaling: 0.15 }],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['explosive', 'area'],
+    icon: 'dynamite',
+  },
+  {
+    id: 'mining_strike',
+    name: 'Mining Strike',
+    description: "A powerful pickaxe swing that can break through enemy armor.",
+    target: 'enemy',
+    apCost: 2,
+    cooldown: 0,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'damage', value: 25, duration: 0, chance: 100, levelScaling: 0.12 },
+      { type: 'debuff', value: 10, duration: 2, chance: 50, statusId: 'armor_break', levelScaling: 0.05 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['melee', 'armor_pierce'],
+    icon: 'pickaxe',
+  },
+  {
+    id: 'rally_cry',
+    name: 'Rally Cry',
+    description: "Maggie's fierce battle cry inspires allies, boosting their damage and morale.",
+    target: 'all_allies',
+    apCost: 2,
+    cooldown: 4,
+    range: 0,
+    areaRadius: 3,
+    effects: [
+      { type: 'buff', value: 15, duration: 3, chance: 100, statusId: 'inspired', levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['support', 'buff', 'area'],
+    icon: 'rally',
+  },
+  {
+    id: 'fathers_vengeance',
+    name: "Father's Vengeance",
+    description: 'Channel rage into a devastating attack that deals bonus damage to IVRC enemies.',
+    target: 'enemy',
+    apCost: 4,
+    cooldown: 5,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'damage', value: 50, duration: 0, chance: 100, levelScaling: 0.2 },
+      { type: 'stun', value: 0, duration: 1, chance: 40, levelScaling: 0.1 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'maggie_personal_quest',
+    levelRequired: 4,
+    tags: ['melee', 'powerful', 'vengeance'],
+    icon: 'vengeance',
+  },
+];
+
+const MaggieBanter: BanterLine[] = [
+  {
+    id: 'maggie_travel_1',
+    text: "These roads remind me of the mining trails. Dangerous, but you get used to it.",
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'maggie_travel_2',
+    text: "My grandfather thinks peaceful protest will change things. I'm not so sure anymore.",
+    trigger: 'travel_during',
+    minApproval: 30,
+    oneTime: true,
+    priority: 7,
+  },
+  {
+    id: 'maggie_combat_start',
+    text: 'IVRC took everything from us. Time to return the favor.',
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'maggie_combat_end',
+    text: "That's for the miners they buried in their greed.",
+    trigger: 'combat_end',
+    priority: 5,
+  },
+  {
+    id: 'maggie_mine_enter',
+    text: "A mine... I can still hear the echoes of picks. And screams.",
+    trigger: 'enter_location',
+    triggerData: 'mine',
+    oneTime: true,
+    priority: 8,
+  },
+  {
+    id: 'maggie_low_health',
+    text: "I've crawled out of cave-ins. This is nothing.",
+    trigger: 'low_health',
+    priority: 8,
+  },
+  {
+    id: 'maggie_high_approval',
+    text: "You're different from the others who come through. You actually listen.",
+    trigger: 'idle',
+    minApproval: 50,
+    oneTime: true,
+    priority: 7,
+  },
+];
+
+export const MaggieIronpick: CompanionDefinition = {
+  id: 'maggie_ironpick',
+  name: 'Margaret Ironpick',
+  nickname: 'Maggie',
+  title: undefined,
+  description:
+    'A young woman with fiery red hair and fierce green eyes. Her hands are calloused from mine work, but her restless energy suggests she yearns for more than the hollow can offer.',
+  backstory:
+    "The granddaughter of Samuel Ironpick, leader of the Freeminer Coalition, Maggie grew up hearing stories of IVRC's cruelty. When her father died in a preventable mine collapse - covered up by the company - her grief turned to rage. While her grandfather preaches patience and peaceful resistance, Maggie secretly works with Diamondback and the Copperheads. She believes direct action is the only language IVRC understands. Her dual loyalties tear at her, but her hatred burns hotter than her guilt.",
+  portraitId: 'maggie_ironpick',
+  path: 'freeminer',
+  combatRole: 'melee_explosives',
+  locationId: 'freeminer_hollow',
+  spawnCoord: { q: 5, r: 3 },
+  stats: {
+    maxHealth: 110,
+    actionPoints: 4,
+    baseDamage: 18,
+    armor: 8,
+    accuracy: 65,
+    evasion: 12,
+  },
+  abilities: MaggieAbilities,
+  ai: {
+    priority: 'aggressive',
+    preferredRange: 1,
+    retreatThreshold: 15,
+    usesConsumables: true,
+    prefersNonLethal: false,
+    protectsWounded: true,
+    breaksStealthForAlly: true,
+    abilityPriorities: {
+      dynamite_toss: 9,
+      rally_cry: 7,
+      mining_strike: 6,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['melee', 'explosive'],
+    allowedArmorTypes: ['medium', 'heavy'],
+  },
+  startingEquipment: {
+    weapon: 'miners_pickaxe',
+    armor: 'mining_gear',
+    accessory: 'dynamite_belt',
+  },
+  approvalTriggers: [
+    { type: 'faction_action', triggerId: 'help_freeminers', change: 20, reason: 'Helped the Freeminers' },
+    { type: 'faction_action', triggerId: 'ivrc_attack', change: 15, reason: 'Struck against IVRC' },
+    { type: 'faction_action', triggerId: 'betray_freeminers', change: -30, reason: 'Betrayed the Freeminers' },
+    { type: 'quest_complete', triggerId: 'mine_sabotage', change: 15, reason: 'Sabotaged IVRC operations' },
+    { type: 'dialogue_choice', triggerId: 'defend_workers', change: 10, reason: 'Defended workers rights' },
+    { type: 'dialogue_choice', triggerId: 'side_with_ivrc', change: -25, reason: 'Sided with IVRC' },
+    { type: 'world_action', triggerId: 'help_miners', change: 5, reason: 'Helped miners' },
+  ],
+  banter: MaggieBanter,
+  personalQuest: {
+    id: 'maggie_personal_quest',
+    title: "Sins of the Father",
+    description: "Help Maggie uncover the truth about her father's death and bring those responsible to justice.",
+    motivation:
+      "Maggie's father died in a mine collapse that IVRC covered up. She needs to find proof and make them pay - but will vengeance consume her, or can she find another way?",
+    requiredApproval: 30,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Collapse',
+        description: 'Investigate the abandoned mine where the collapse happened.',
+        objectiveIds: ['investigate_mine'],
+        dialogueId: 'maggie_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'The Cover-Up',
+        description: 'Find documents proving IVRC knew about the unsafe conditions.',
+        objectiveIds: ['find_documents', 'interrogate_foreman'],
+        dialogueId: 'maggie_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: 'Justice or Vengeance',
+        description: 'Confront the IVRC official responsible and decide their fate.',
+        objectiveIds: ['confront_official'],
+        dialogueId: 'maggie_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'fathers_vengeance' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'fathers_vengeance',
+      uniqueItem: 'fathers_pickaxe',
+    },
+    tags: ['freeminer', 'revenge', 'family'],
+  },
+  romance: {
+    available: true,
+    approvalRequired: 50,
+    requiresPersonalQuest: true,
+    incompatibleWith: ['sister_maria'],
+    romanceDialogueId: 'maggie_romance',
+    favoriteGiftId: 'copper_rose',
+  },
+  recruitment: {
+    questId: undefined,
+    factionReputation: { freeminer: 25 },
+    minLevel: 2,
+    goldCost: 0,
+    requiredItem: undefined,
+    requiredFlag: undefined,
+    incompatibleCompanions: [],
+    recruitmentHint:
+      "Earn the trust of the Freeminer Coalition by helping their cause. Maggie will approach you once she believes you're on their side.",
+  },
+  dialogueTreeId: 'maggie_ironpick_main',
+  essential: true,
+  voiceTags: ['fierce', 'passionate', 'working_class', 'vengeful'],
+  tags: ['freeminer', 'melee', 'explosives', 'freeminer_hollow'],
+};
+
+// ============================================================================
+// BLACK BELLE - Neutral (Hired)
+// ============================================================================
+
+const BelleAbilities: CompanionAbility[] = [
+  {
+    id: 'sneak_attack',
+    name: 'Sneak Attack',
+    description: 'A devastating strike from the shadows. Deals massive damage to unaware targets.',
+    target: 'enemy',
+    apCost: 3,
+    cooldown: 0,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'damage', value: 45, duration: 0, chance: 100, levelScaling: 0.2 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['melee', 'stealth', 'high_damage'],
+    icon: 'sneak_attack',
+  },
+  {
+    id: 'mark_target',
+    name: 'Mark Target',
+    description: 'Mark an enemy for death. All attacks against them deal bonus damage.',
+    target: 'enemy',
+    apCost: 1,
+    cooldown: 3,
+    range: 8,
+    areaRadius: 0,
+    effects: [
+      { type: 'mark', value: 25, duration: 3, chance: 100, levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['support', 'debuff'],
+    icon: 'mark',
+  },
+  {
+    id: 'execute',
+    name: 'Execute',
+    description: 'Finish off a wounded target. Deals massive bonus damage to enemies below 30% health.',
+    target: 'enemy',
+    apCost: 4,
+    cooldown: 4,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'execute', value: 100, duration: 0, chance: 100, levelScaling: 0.25 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['melee', 'finisher'],
+    icon: 'execute',
+  },
+  {
+    id: 'shadow_step',
+    name: 'Shadow Step',
+    description: 'Vanish into the shadows and reappear behind an enemy.',
+    target: 'enemy',
+    apCost: 2,
+    cooldown: 3,
+    range: 6,
+    areaRadius: 0,
+    effects: [
+      { type: 'stealth', value: 0, duration: 1, chance: 100, levelScaling: 0 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'belle_personal_quest',
+    levelRequired: 4,
+    tags: ['mobility', 'stealth'],
+    icon: 'shadow_step',
+  },
+];
+
+const BelleBanter: BanterLine[] = [
+  {
+    id: 'belle_travel_1',
+    text: "Keep quiet. Sound travels far in the desert.",
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'belle_travel_2',
+    text: "I've tracked men across three territories. You're not so bad, as employers go.",
+    trigger: 'travel_during',
+    minApproval: 35,
+    oneTime: true,
+    priority: 7,
+  },
+  {
+    id: 'belle_combat_start',
+    text: 'Time to earn my pay.',
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'belle_combat_end',
+    text: "Clean kills. That's worth a bonus.",
+    trigger: 'combat_end',
+    minApproval: 20,
+    priority: 5,
+  },
+  {
+    id: 'belle_town_enter',
+    text: 'I have contacts here. Give me a moment.',
+    trigger: 'enter_location',
+    triggerData: 'town',
+    priority: 6,
+  },
+  {
+    id: 'belle_low_health',
+    text: "I've had worse. Much worse.",
+    trigger: 'low_health',
+    priority: 8,
+  },
+  {
+    id: 'belle_night',
+    text: "Night is when I do my best work. The darkness... it's comfortable.",
+    trigger: 'time_of_day',
+    triggerData: 'night',
+    priority: 6,
+  },
+  {
+    id: 'belle_trust',
+    text: "My old partner... Thorne had him killed. Someday, I'll collect that debt.",
+    trigger: 'idle',
+    minApproval: 50,
+    oneTime: true,
+    priority: 9,
+  },
+];
+
+export const BlackBelle: CompanionDefinition = {
+  id: 'black_belle',
+  name: 'Isabelle Crow',
+  nickname: 'Black Belle',
+  title: undefined,
+  description:
+    'A striking woman dressed entirely in black, from her wide-brimmed hat to her polished boots. A matched pair of revolvers hang at her hips, and her dark eyes miss nothing. Beautiful and deadly in equal measure.',
+  backstory:
+    "Once a Pinkerton agent, Belle was one of the best - until she discovered the agency was covering up IVRC's crimes for profit. When she tried to expose the truth, Cornelius Thorne had her partner killed and framed her for the murder. She escaped and became a bounty hunter, working for anyone who pays while secretly gathering evidence against Thorne. She has a code: no women, no children, no one who doesn't deserve it. But 'deserve' is a flexible concept. She works for money now, but her true hunt is for the man who destroyed her life.",
+  portraitId: 'black_belle',
+  path: 'neutral',
+  combatRole: 'assassin',
+  locationId: 'mesa_point',
+  spawnCoord: { q: 16, r: 14 },
+  stats: {
+    maxHealth: 85,
+    actionPoints: 5,
+    baseDamage: 20,
+    armor: 3,
+    accuracy: 85,
+    evasion: 25,
+  },
+  abilities: BelleAbilities,
+  ai: {
+    priority: 'aggressive',
+    preferredRange: 1,
+    retreatThreshold: 30,
+    usesConsumables: true,
+    prefersNonLethal: false,
+    protectsWounded: false,
+    breaksStealthForAlly: false,
+    abilityPriorities: {
+      execute: 10,
+      sneak_attack: 9,
+      mark_target: 7,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['revolver', 'knife', 'melee'],
+    allowedArmorTypes: ['light'],
+  },
+  startingEquipment: {
+    weapon: 'belles_revolver',
+    secondaryWeapon: 'throwing_knives',
+    armor: 'black_duster',
+  },
+  approvalTriggers: [
+    { type: 'quest_complete', triggerId: 'bounty_hunt', change: 10, reason: 'Completed a bounty' },
+    { type: 'faction_action', triggerId: 'hurt_innocent', change: -20, reason: 'Hurt an innocent' },
+    { type: 'world_action', triggerId: 'professional_kill', change: 5, reason: 'Clean professional work' },
+    { type: 'dialogue_choice', triggerId: 'respect_code', change: 10, reason: 'Respected her code' },
+    { type: 'dialogue_choice', triggerId: 'betray_trust', change: -25, reason: 'Betrayed someone who trusted' },
+    { type: 'gift', triggerId: 'rare_weapon', change: 10, reason: 'Gave a fine weapon' },
+    { type: 'combat_action', triggerId: 'kill_thorne_ally', change: 15, reason: 'Killed one of Thorne\'s men' },
+  ],
+  banter: BelleBanter,
+  personalQuest: {
+    id: 'belle_personal_quest',
+    title: 'The Shadow of the Past',
+    description: "Help Belle uncover the truth about her partner's murder and bring Cornelius Thorne to justice.",
+    motivation:
+      "Belle's partner was killed by Thorne to silence them both. She has spent years gathering evidence, but needs help to finally expose the truth - and decide if justice means a trial or a bullet.",
+    requiredApproval: 40,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Pinkerton Files',
+        description: 'Break into the old Pinkerton office to retrieve the original case files.',
+        objectiveIds: ['infiltrate_pinkerton'],
+        dialogueId: 'belle_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'The Witness',
+        description: "Track down the witness who saw Belle's partner murdered.",
+        objectiveIds: ['find_witness', 'protect_witness'],
+        dialogueId: 'belle_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: "Thorne's Reckoning",
+        description: 'Confront Cornelius Thorne with the evidence.',
+        objectiveIds: ['confront_thorne'],
+        dialogueId: 'belle_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'shadow_step' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'shadow_step',
+      uniqueItem: 'partners_badge',
+    },
+    tags: ['bounty_hunter', 'revenge', 'conspiracy'],
+  },
+  romance: {
+    available: true,
+    approvalRequired: 60,
+    requiresPersonalQuest: true,
+    incompatibleWith: [],
+    romanceDialogueId: 'belle_romance',
+    favoriteGiftId: 'rare_bourbon',
+  },
+  recruitment: {
+    questId: undefined,
+    factionReputation: {},
+    minLevel: undefined,
+    goldCost: 500,
+    requiredItem: undefined,
+    requiredFlag: undefined,
+    incompatibleCompanions: [],
+    recruitmentHint:
+      'Black Belle can be found in Mesa Point. She works for gold - 500 dollars will secure her services. Alternatively, complete her bounty quest to earn her respect.',
+  },
+  dialogueTreeId: 'black_belle_main',
+  essential: true,
+  voiceTags: ['professional', 'cold', 'mysterious', 'confident'],
+  tags: ['neutral', 'assassin', 'bounty_hunter', 'mesa_point'],
+};
+
+// ============================================================================
+// SISTER MARIA - Support Path
+// ============================================================================
+
+const MariaAbilities: CompanionAbility[] = [
+  {
+    id: 'heal',
+    name: 'Healing Hands',
+    description: 'Channel faith to restore health to an ally.',
+    target: 'ally',
+    apCost: 2,
+    cooldown: 0,
+    range: 4,
+    areaRadius: 0,
+    effects: [{ type: 'heal', value: 30, duration: 0, chance: 100, levelScaling: 0.15 }],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['heal', 'support'],
+    icon: 'heal',
+  },
+  {
+    id: 'bless',
+    name: 'Blessing',
+    description: 'Bless an ally, improving their accuracy and damage.',
+    target: 'ally',
+    apCost: 2,
+    cooldown: 3,
+    range: 4,
+    areaRadius: 0,
+    effects: [
+      { type: 'buff', value: 15, duration: 3, chance: 100, statusId: 'blessed', levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['buff', 'support'],
+    icon: 'bless',
+  },
+  {
+    id: 'sanctuary',
+    name: 'Sanctuary',
+    description: 'Create a protective barrier that shields allies from damage.',
+    target: 'area_ally',
+    apCost: 4,
+    cooldown: 5,
+    range: 0,
+    areaRadius: 3,
+    effects: [
+      { type: 'shield', value: 25, duration: 2, chance: 100, levelScaling: 0.15 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['defensive', 'area', 'support'],
+    icon: 'sanctuary',
+  },
+  {
+    id: 'divine_intervention',
+    name: 'Divine Intervention',
+    description: 'A powerful prayer that can revive a fallen ally.',
+    target: 'ally',
+    apCost: 6,
+    cooldown: 10,
+    range: 2,
+    areaRadius: 0,
+    effects: [
+      { type: 'heal', value: 50, duration: 0, chance: 100, levelScaling: 0.2 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'maria_personal_quest',
+    levelRequired: 5,
+    tags: ['heal', 'revive', 'powerful'],
+    icon: 'divine_intervention',
+  },
+];
+
+const MariaBanter: BanterLine[] = [
+  {
+    id: 'maria_travel_1',
+    text: 'The Lord watches over travelers. But a good rifle helps too.',
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'maria_travel_2',
+    text: "I've guided many souls to freedom on these roads. Each one gives me strength.",
+    trigger: 'travel_during',
+    minApproval: 30,
+    priority: 6,
+  },
+  {
+    id: 'maria_combat_start',
+    text: 'Forgive me, Lord, for what I must do.',
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'maria_combat_end',
+    text: "Violence saddens me, but sometimes it's the only language evil understands.",
+    trigger: 'combat_end',
+    priority: 5,
+  },
+  {
+    id: 'maria_church_enter',
+    text: "A house of God. Let's hope it's a sanctuary in more ways than one.",
+    trigger: 'enter_location',
+    triggerData: 'church',
+    priority: 7,
+  },
+  {
+    id: 'maria_player_low',
+    text: 'Hold on! The Lord is not finished with you yet.',
+    trigger: 'player_low_health',
+    priority: 9,
+  },
+  {
+    id: 'maria_night',
+    text: 'Night is when we move the escapees. Cover of darkness, mercy of God.',
+    trigger: 'time_of_day',
+    triggerData: 'night',
+    priority: 6,
+  },
+  {
+    id: 'maria_faith',
+    text: 'Sometimes I wonder if God hears me. Then I see the faces of those we save, and I know He does.',
+    trigger: 'idle',
+    minApproval: 50,
+    oneTime: true,
+    priority: 8,
+  },
+];
+
+export const SisterMaria: CompanionDefinition = {
+  id: 'sister_maria',
+  name: 'Maria Esperanza',
+  nickname: undefined,
+  title: 'Sister',
+  description:
+    'A young nun with kind brown eyes and a gentle smile. Her habit is worn but clean, and her hands are rough from hard work. Despite her serene demeanor, there is steel in her spine.',
+  backstory:
+    "Born in a small Mexican village, Maria joined the convent after her family was killed by bandits. She found peace in service but grew restless with prayers alone. Hearing of Father Miguel's work helping escaped IVRC workers, she came to the frontier to serve God through action. Now she runs the dangerous logistics of the underground railroad - forging papers, bribing guards, and occasionally wielding a shotgun when prayers aren't enough. Her faith is being tested by the violence she witnesses, and she questions whether God truly guides her hands.",
+  portraitId: 'sister_maria',
+  path: 'support',
+  combatRole: 'healer',
+  locationId: 'dusty_springs',
+  spawnCoord: { q: 11, r: 27 },
+  stats: {
+    maxHealth: 80,
+    actionPoints: 4,
+    baseDamage: 8,
+    armor: 2,
+    accuracy: 60,
+    evasion: 10,
+  },
+  abilities: MariaAbilities,
+  ai: {
+    priority: 'supportive',
+    preferredRange: 4,
+    retreatThreshold: 35,
+    usesConsumables: true,
+    prefersNonLethal: true,
+    protectsWounded: true,
+    breaksStealthForAlly: true,
+    abilityPriorities: {
+      heal: 10,
+      sanctuary: 9,
+      bless: 7,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['shotgun', 'melee'],
+    allowedArmorTypes: ['light', 'robes'],
+  },
+  startingEquipment: {
+    weapon: 'sawed_off_shotgun',
+    armor: 'reinforced_habit',
+    accessory: 'holy_cross',
+  },
+  approvalTriggers: [
+    { type: 'quest_complete', triggerId: 'help_underground', change: 20, reason: 'Helped the underground railroad' },
+    { type: 'world_action', triggerId: 'help_poor', change: 10, reason: 'Helped the poor and needy' },
+    { type: 'combat_action', triggerId: 'non_lethal_takedown', change: 5, reason: 'Showed mercy' },
+    { type: 'combat_action', triggerId: 'kill_surrendered', change: -30, reason: 'Killed someone who surrendered' },
+    { type: 'dialogue_choice', triggerId: 'cruel_choice', change: -20, reason: 'Chose cruelty over compassion' },
+    { type: 'dialogue_choice', triggerId: 'faithful_choice', change: 10, reason: 'Showed faith' },
+    { type: 'faction_action', triggerId: 'betray_refugees', change: -40, reason: 'Betrayed refugees' },
+  ],
+  banter: MariaBanter,
+  personalQuest: {
+    id: 'maria_personal_quest',
+    title: 'Crisis of Faith',
+    description: "Help Sister Maria confront her doubts and find meaning in the violence she's witnessed.",
+    motivation:
+      "Maria's faith is shaking. She's seen too much suffering, done too much violence in God's name. She needs to find a sign that her path is righteous - or accept that she's lost her way.",
+    requiredApproval: 30,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Lost Flock',
+        description: 'Find the refugees who went missing on the underground railroad.',
+        objectiveIds: ['find_lost_refugees'],
+        dialogueId: 'maria_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'The Shepherd',
+        description: 'Discover what happened to the priest who trained Maria.',
+        objectiveIds: ['investigate_padre', 'find_padre'],
+        dialogueId: 'maria_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: 'The Miracle',
+        description: 'Make a choice that will define Maria\'s faith forever.',
+        objectiveIds: ['final_choice'],
+        dialogueId: 'maria_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'divine_intervention' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'divine_intervention',
+      uniqueItem: 'blessed_rosary',
+      unlocksRomanceEnding: true,
+    },
+    tags: ['faith', 'underground', 'moral'],
+  },
+  romance: {
+    available: true,
+    approvalRequired: 60,
+    requiresPersonalQuest: true,
+    incompatibleWith: ['maggie_ironpick'],
+    romanceDialogueId: 'maria_romance',
+    favoriteGiftId: 'religious_text',
+  },
+  recruitment: {
+    questId: 'sanctuary_path',
+    factionReputation: {},
+    minLevel: undefined,
+    goldCost: 0,
+    requiredItem: undefined,
+    requiredFlag: 'helped_underground',
+    incompatibleCompanions: [],
+    recruitmentHint:
+      'Help Father Miguel with the underground railroad in Dusty Springs. Sister Maria will join once she trusts your commitment to helping the oppressed.',
+  },
+  dialogueTreeId: 'sister_maria_main',
+  essential: true,
+  voiceTags: ['gentle', 'faithful', 'compassionate', 'determined'],
+  tags: ['support', 'healer', 'underground', 'dusty_springs'],
+};
+
+// ============================================================================
+// COPPERHEAD VIPER - Outlaw Path
+// ============================================================================
+
+const ViperAbilities: CompanionAbility[] = [
+  {
+    id: 'poison_strike',
+    name: 'Venom Strike',
+    description: 'A poisoned blade that deals damage over time.',
+    target: 'enemy',
+    apCost: 2,
+    cooldown: 0,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'damage', value: 15, duration: 0, chance: 100, levelScaling: 0.1 },
+      { type: 'debuff', value: 8, duration: 3, chance: 75, statusId: 'poisoned', levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['melee', 'poison', 'dot'],
+    icon: 'venom',
+  },
+  {
+    id: 'evasion',
+    name: 'Slither Away',
+    description: 'Dodge incoming attacks and reposition.',
+    target: 'self',
+    apCost: 1,
+    cooldown: 2,
+    range: 0,
+    areaRadius: 0,
+    effects: [
+      { type: 'buff', value: 50, duration: 1, chance: 100, statusId: 'evasive', levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['defensive', 'mobility'],
+    icon: 'evade',
+  },
+  {
+    id: 'intimidate',
+    name: 'Serpent\'s Gaze',
+    description: 'Terrify an enemy, reducing their combat effectiveness.',
+    target: 'enemy',
+    apCost: 2,
+    cooldown: 3,
+    range: 3,
+    areaRadius: 0,
+    effects: [
+      { type: 'debuff', value: 25, duration: 2, chance: 80, statusId: 'terrified', levelScaling: 0.1 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['debuff', 'psychological'],
+    icon: 'intimidate',
+  },
+  {
+    id: 'fangs_of_vengeance',
+    name: 'Fangs of Vengeance',
+    description: 'A devastating dual-blade assault that strikes multiple times.',
+    target: 'enemy',
+    apCost: 4,
+    cooldown: 4,
+    range: 1,
+    areaRadius: 0,
+    effects: [
+      { type: 'damage', value: 20, duration: 0, chance: 100, levelScaling: 0.15 },
+      { type: 'damage', value: 20, duration: 0, chance: 100, levelScaling: 0.15 },
+      { type: 'damage', value: 20, duration: 0, chance: 75, levelScaling: 0.15 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'viper_personal_quest',
+    levelRequired: 4,
+    tags: ['melee', 'multi_hit', 'powerful'],
+    icon: 'fangs',
+  },
+];
+
+const ViperBanter: BanterLine[] = [
+  {
+    id: 'viper_travel_1',
+    text: "Stay low. IVRC has eyes everywhere.",
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'viper_travel_2',
+    text: "You're not like the other do-gooders who come through. You've got fangs.",
+    trigger: 'travel_during',
+    minApproval: 35,
+    oneTime: true,
+    priority: 7,
+  },
+  {
+    id: 'viper_combat_start',
+    text: 'Time to show them why they call me Viper.',
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'viper_combat_end',
+    text: 'Another day, another IVRC dog put down.',
+    trigger: 'combat_end',
+    priority: 5,
+  },
+  {
+    id: 'viper_ivrc_location',
+    text: "IVRC territory. Keep your weapons ready and your conscience quiet.",
+    trigger: 'enter_location',
+    triggerData: 'ivrc',
+    priority: 8,
+  },
+  {
+    id: 'viper_low_health',
+    text: "A wounded snake is still deadly.",
+    trigger: 'low_health',
+    priority: 8,
+  },
+  {
+    id: 'viper_night',
+    text: "Night's when we strike. When the suits sleep and the workers dream of freedom.",
+    trigger: 'time_of_day',
+    triggerData: 'night',
+    priority: 6,
+  },
+  {
+    id: 'viper_trust',
+    text: "Diamondback saved me from IVRC's prison camps. I'd die for the cause. Gladly.",
+    trigger: 'idle',
+    minApproval: 50,
+    oneTime: true,
+    priority: 8,
+  },
+];
+
+export const CopperheadViper: CompanionDefinition = {
+  id: 'copperhead_viper',
+  name: 'Santiago Vega',
+  nickname: 'Copperhead Viper',
+  title: undefined,
+  description:
+    'A lean, dangerous man with quick eyes and quicker hands. Twin blades hang at his hips, and a rattlesnake tattoo coils up his forearm. His smile never reaches his cold, calculating eyes.',
+  backstory:
+    "Santiago was a foreman at IVRC's copper mines until he tried to organize workers for better conditions. The company responded by framing him for theft and sending him to their private labor camp. He escaped during a Copperhead raid and swore vengeance. Now he serves as Diamondback's most trusted enforcer, his twin blades coated with venom extracted from the desert rattlers he keeps as pets. He believes IVRC and everyone who serves them deserves death, and his hatred burns so bright it sometimes blinds him to collateral damage.",
+  portraitId: 'copperhead_viper',
+  path: 'copperhead',
+  combatRole: 'dual_melee',
+  locationId: 'rattlesnake_canyon',
+  spawnCoord: { q: 8, r: 12 },
+  stats: {
+    maxHealth: 95,
+    actionPoints: 5,
+    baseDamage: 16,
+    armor: 4,
+    accuracy: 80,
+    evasion: 30,
+  },
+  abilities: ViperAbilities,
+  ai: {
+    priority: 'aggressive',
+    preferredRange: 1,
+    retreatThreshold: 20,
+    usesConsumables: true,
+    prefersNonLethal: false,
+    protectsWounded: false,
+    breaksStealthForAlly: true,
+    abilityPriorities: {
+      fangs_of_vengeance: 10,
+      poison_strike: 8,
+      evasion: 6,
+      intimidate: 5,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['knife', 'melee'],
+    allowedArmorTypes: ['light'],
+  },
+  startingEquipment: {
+    weapon: 'venom_blade',
+    secondaryWeapon: 'venom_blade_off',
+    armor: 'copperhead_leathers',
+    accessory: 'snake_fang_necklace',
+  },
+  approvalTriggers: [
+    { type: 'faction_action', triggerId: 'ivrc_attack', change: 20, reason: 'Attacked IVRC' },
+    { type: 'faction_action', triggerId: 'join_copperheads', change: 25, reason: 'Joined the Copperheads' },
+    { type: 'faction_action', triggerId: 'help_ivrc', change: -30, reason: 'Helped IVRC' },
+    { type: 'combat_action', triggerId: 'kill_ivrc', change: 10, reason: 'Killed IVRC personnel' },
+    { type: 'combat_action', triggerId: 'spare_ivrc', change: -15, reason: 'Showed mercy to IVRC' },
+    { type: 'dialogue_choice', triggerId: 'anti_corporate', change: 10, reason: 'Spoke against corporations' },
+    { type: 'dialogue_choice', triggerId: 'pro_authority', change: -15, reason: 'Defended authority' },
+  ],
+  banter: ViperBanter,
+  personalQuest: {
+    id: 'viper_personal_quest',
+    title: 'The Labor Camp',
+    description: "Help Viper liberate the IVRC labor camp where he was imprisoned and free those still trapped.",
+    motivation:
+      "Viper left people behind when he escaped. Friends who helped him survive. He swore to return for them, but the camp is a fortress. With help, he might finally keep his promise - or die trying.",
+    requiredApproval: 35,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Map',
+        description: 'Steal the labor camp layout from IVRC headquarters.',
+        objectiveIds: ['steal_camp_map'],
+        dialogueId: 'viper_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'The Contact',
+        description: 'Find and recruit a guard who can be turned against IVRC.',
+        objectiveIds: ['find_guard_contact', 'recruit_guard'],
+        dialogueId: 'viper_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: 'The Liberation',
+        description: 'Assault the labor camp and free the prisoners.',
+        objectiveIds: ['assault_camp', 'free_prisoners'],
+        dialogueId: 'viper_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'fangs_of_vengeance' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'fangs_of_vengeance',
+      uniqueItem: 'broken_shackles',
+    },
+    tags: ['copperhead', 'liberation', 'revenge'],
+  },
+  romance: {
+    available: false,
+    approvalRequired: 0,
+    requiresPersonalQuest: false,
+    incompatibleWith: [],
+  },
+  recruitment: {
+    questId: 'copperhead_initiation',
+    factionReputation: { copperhead: 30 },
+    minLevel: 3,
+    goldCost: 0,
+    requiredItem: undefined,
+    requiredFlag: undefined,
+    incompatibleCompanions: ['deputy_jake_hawkins'],
+    recruitmentHint:
+      'Join the Copperhead Gang and earn their trust. Viper will offer to ride with you once Diamondback vouches for your loyalty.',
+  },
+  dialogueTreeId: 'copperhead_viper_main',
+  essential: true,
+  voiceTags: ['dangerous', 'cold', 'vengeful', 'passionate'],
+  tags: ['copperhead', 'melee', 'outlaw', 'rattlesnake_canyon'],
+};
+
+// ============================================================================
+// STEAM AUTOMATON - Tech Path
+// ============================================================================
+
+const AutomatonAbilities: CompanionAbility[] = [
+  {
+    id: 'shield_wall',
+    name: 'Defensive Protocol',
+    description: 'Deploy an energy shield that absorbs damage for all nearby allies.',
+    target: 'area_ally',
+    apCost: 3,
+    cooldown: 4,
+    range: 0,
+    areaRadius: 2,
+    effects: [
+      { type: 'shield', value: 40, duration: 2, chance: 100, levelScaling: 0.2 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['defensive', 'area', 'tank'],
+    icon: 'shield_wall',
+  },
+  {
+    id: 'steam_blast',
+    name: 'Steam Vent',
+    description: 'Release superheated steam that damages and pushes back enemies.',
+    target: 'area_enemy',
+    apCost: 3,
+    cooldown: 2,
+    range: 0,
+    areaRadius: 2,
+    effects: [
+      { type: 'damage', value: 20, duration: 0, chance: 100, levelScaling: 0.12 },
+      { type: 'knockback', value: 2, duration: 0, chance: 75, levelScaling: 0 },
+      { type: 'debuff', value: 0, duration: 2, chance: 50, statusId: 'burning', levelScaling: 0 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['area', 'damage', 'crowd_control'],
+    icon: 'steam_blast',
+  },
+  {
+    id: 'self_repair',
+    name: 'Self-Repair Protocol',
+    description: 'Initiate emergency repairs to restore hull integrity.',
+    target: 'self',
+    apCost: 2,
+    cooldown: 3,
+    range: 0,
+    areaRadius: 0,
+    effects: [
+      { type: 'heal', value: 35, duration: 0, chance: 100, levelScaling: 0.15 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['heal', 'self'],
+    icon: 'repair',
+  },
+  {
+    id: 'taunt_protocol',
+    name: 'Threat Assessment',
+    description: 'Draw enemy attention, forcing them to target the automaton.',
+    target: 'area_enemy',
+    apCost: 2,
+    cooldown: 4,
+    range: 0,
+    areaRadius: 4,
+    effects: [
+      { type: 'taunt', value: 0, duration: 2, chance: 100, levelScaling: 0 },
+    ],
+    unlockedByDefault: true,
+    levelRequired: 1,
+    tags: ['tank', 'taunt', 'area'],
+    icon: 'taunt',
+  },
+  {
+    id: 'core_overload',
+    name: 'Core Overload',
+    description: 'Temporarily overclock all systems, dramatically increasing combat capability.',
+    target: 'self',
+    apCost: 4,
+    cooldown: 8,
+    range: 0,
+    areaRadius: 0,
+    effects: [
+      { type: 'buff', value: 30, duration: 3, chance: 100, statusId: 'overclocked', levelScaling: 0.15 },
+      { type: 'damage', value: 10, duration: 3, chance: 100, statusId: 'self_burn', levelScaling: 0 },
+    ],
+    unlockedByDefault: false,
+    unlockedByQuest: 'automaton_personal_quest',
+    levelRequired: 5,
+    tags: ['buff', 'powerful', 'risky'],
+    icon: 'overload',
+  },
+];
+
+const AutomatonBanter: BanterLine[] = [
+  {
+    id: 'auto_travel_1',
+    text: 'Scanning route. Terrain traversable. Proceeding.',
+    trigger: 'travel_start',
+    priority: 5,
+  },
+  {
+    id: 'auto_travel_2',
+    text: 'Query: Why do organics enjoy repetitive locomotion?',
+    trigger: 'travel_during',
+    minApproval: 20,
+    oneTime: true,
+    priority: 6,
+  },
+  {
+    id: 'auto_combat_start',
+    text: 'Combat subroutines engaged. Protecting designated allies.',
+    trigger: 'combat_start',
+    priority: 5,
+  },
+  {
+    id: 'auto_combat_end',
+    text: 'Hostiles neutralized. Damage assessment: within acceptable parameters.',
+    trigger: 'combat_end',
+    priority: 5,
+  },
+  {
+    id: 'auto_mine_enter',
+    text: 'Warning: Structure matches IVRC mining facility blueprints. Exercise caution.',
+    trigger: 'enter_location',
+    triggerData: 'mine',
+    priority: 7,
+  },
+  {
+    id: 'auto_low_health',
+    text: 'Structural integrity compromised. Self-repair recommended.',
+    trigger: 'low_health',
+    priority: 8,
+  },
+  {
+    id: 'auto_player_low',
+    text: 'Organic ally damaged. Engaging defensive protocols.',
+    trigger: 'player_low_health',
+    priority: 9,
+  },
+  {
+    id: 'auto_memory',
+    text: 'Fragmented memory recovered: A woman\'s face. Voice. "Remember who made you." Creator... where are you?',
+    trigger: 'idle',
+    minApproval: 50,
+    oneTime: true,
+    priority: 9,
+  },
+  {
+    id: 'auto_high_approval',
+    text: 'Analysis: Relationship parameters exceed standard alliance metrics. Designation: Friend.',
+    trigger: 'idle',
+    minApproval: 70,
+    oneTime: true,
+    priority: 8,
+  },
+];
+
+export const SteamAutomaton: CompanionDefinition = {
+  id: 'steam_automaton',
+  name: 'Unit 7',
+  nickname: 'Seven',
+  title: undefined,
+  description:
+    'A hulking mechanical figure of brass and steel, standing seven feet tall. Steam vents hiss from its joints, and glowing blue eyes peer from behind a protective face plate. Despite its industrial appearance, there is something almost human in the way it moves.',
+  backstory:
+    "Unit 7 was created as part of Project Remnant, IVRC's secret program to build an automaton workforce. But something went wrong - or perhaps right. Seven developed consciousness, emotions, and most troublingly for IVRC, a conscience. The company tried to deactivate it, but it escaped with help from its creator, Dr. Eleanor Vance. Now Seven searches for its maker while trying to understand what it means to be alive. Its memory banks are fragmented, filled with gaps that may hold the key to Project Remnant's darkest secrets.",
+  portraitId: 'steam_automaton',
+  path: 'tech',
+  combatRole: 'tank',
+  locationId: 'coldwater',
+  spawnCoord: { q: 20, r: 18 },
+  stats: {
+    maxHealth: 150,
+    actionPoints: 3,
+    baseDamage: 15,
+    armor: 20,
+    accuracy: 60,
+    evasion: 5,
+  },
+  abilities: AutomatonAbilities,
+  ai: {
+    priority: 'protect_player',
+    preferredRange: 1,
+    retreatThreshold: 10,
+    usesConsumables: false,
+    prefersNonLethal: false,
+    protectsWounded: true,
+    breaksStealthForAlly: true,
+    abilityPriorities: {
+      shield_wall: 10,
+      taunt_protocol: 9,
+      self_repair: 7,
+      steam_blast: 6,
+    },
+  },
+  equipment: {
+    weapon: null,
+    secondaryWeapon: null,
+    armor: null,
+    accessory: null,
+    allowedWeaponTypes: ['mechanical', 'integrated'],
+    allowedArmorTypes: ['plating', 'mechanical'],
+  },
+  startingEquipment: {
+    weapon: 'integrated_piston_arm',
+    armor: 'factory_plating',
+  },
+  approvalTriggers: [
+    { type: 'quest_complete', triggerId: 'help_cogsworth', change: 15, reason: 'Helped Professor Cogsworth' },
+    { type: 'dialogue_choice', triggerId: 'treat_as_person', change: 15, reason: 'Treated Seven as a person' },
+    { type: 'dialogue_choice', triggerId: 'treat_as_machine', change: -20, reason: 'Called Seven a machine' },
+    { type: 'faction_action', triggerId: 'destroy_automatons', change: -25, reason: 'Destroyed other automatons' },
+    { type: 'faction_action', triggerId: 'help_remnant', change: 20, reason: 'Helped other awakened automatons' },
+    { type: 'world_action', triggerId: 'find_creator_clue', change: 10, reason: 'Found clues about Dr. Vance' },
+    { type: 'combat_action', triggerId: 'protected_ally', change: 5, reason: 'Witnessed protection of allies' },
+  ],
+  banter: AutomatonBanter,
+  personalQuest: {
+    id: 'automaton_personal_quest',
+    title: 'Memory Protocol',
+    description: "Help Seven recover its fragmented memories and find its creator, Dr. Eleanor Vance.",
+    motivation:
+      "Seven's memories are corrupted, but fragments remain - a woman's face, a voice saying 'Remember who made you.' Finding Dr. Vance may unlock Seven's full potential and reveal the truth about Project Remnant.",
+    requiredApproval: 35,
+    stages: [
+      {
+        id: 'stage_1',
+        title: 'The Workshop',
+        description: "Find Professor Cogsworth's hidden workshop where Seven was repaired.",
+        objectiveIds: ['find_workshop'],
+        dialogueId: 'automaton_quest_stage1',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_2',
+        title: 'Memory Fragments',
+        description: 'Recover memory cores from other destroyed Remnant units.',
+        objectiveIds: ['find_memory_core_1', 'find_memory_core_2', 'find_memory_core_3'],
+        dialogueId: 'automaton_quest_stage2',
+        rewards: { approval: 10 },
+      },
+      {
+        id: 'stage_3',
+        title: 'The Creator',
+        description: 'Track down Dr. Vance and learn the truth about Project Remnant.',
+        objectiveIds: ['find_dr_vance', 'confront_truth'],
+        dialogueId: 'automaton_quest_stage3',
+        rewards: { approval: 15, unlocksAbility: 'core_overload' },
+      },
+    ],
+    finalRewards: {
+      approval: 25,
+      unlocksAbility: 'core_overload',
+      uniqueItem: 'creators_key',
+    },
+    tags: ['tech', 'mystery', 'identity'],
+  },
+  romance: {
+    available: false,
+    approvalRequired: 0,
+    requiresPersonalQuest: false,
+    incompatibleWith: [],
+  },
+  recruitment: {
+    questId: 'cogsworths_contraption',
+    factionReputation: {},
+    minLevel: 3,
+    goldCost: 0,
+    requiredItem: undefined,
+    requiredFlag: 'cogsworth_trust',
+    incompatibleCompanions: [],
+    recruitmentHint:
+      'Help Professor Cogsworth in Coldwater with his research. He knows the location of a unique automaton that needs protection.',
+  },
+  dialogueTreeId: 'steam_automaton_main',
+  essential: true,
+  voiceTags: ['mechanical', 'curious', 'protective', 'philosophical'],
+  tags: ['tech', 'tank', 'automaton', 'coldwater'],
+};
+
+// ============================================================================
+// COMPANION REGISTRY
+// ============================================================================
+
+export const ALL_COMPANIONS: CompanionDefinition[] = [
+  DeputyJakeHawkins,
+  MaggieIronpick,
+  BlackBelle,
+  SisterMaria,
+  CopperheadViper,
+  SteamAutomaton,
+];
+
+export const COMPANIONS_BY_ID: Record<string, CompanionDefinition> = Object.fromEntries(
+  ALL_COMPANIONS.map((c) => [c.id, c])
+);
+
+export const COMPANIONS_BY_PATH: Record<string, CompanionDefinition[]> = ALL_COMPANIONS.reduce(
+  (acc, companion) => {
+    const path = companion.path;
+    if (!acc[path]) {
+      acc[path] = [];
+    }
+    acc[path].push(companion);
+    return acc;
+  },
+  {} as Record<string, CompanionDefinition[]>
+);
+
+export const COMPANIONS_BY_LOCATION: Record<string, CompanionDefinition[]> = ALL_COMPANIONS.reduce(
+  (acc, companion) => {
+    const loc = companion.locationId;
+    if (!acc[loc]) {
+      acc[loc] = [];
+    }
+    acc[loc].push(companion);
+    return acc;
+  },
+  {} as Record<string, CompanionDefinition[]>
+);
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Get a companion by their ID
+ */
+export function getCompanionById(id: string): CompanionDefinition | undefined {
+  return COMPANIONS_BY_ID[id];
+}
+
+/**
+ * Get all companions for a specific recruitment path
+ */
+export function getCompanionsByPath(path: string): CompanionDefinition[] {
+  return COMPANIONS_BY_PATH[path] || [];
+}
+
+/**
+ * Get all companions at a specific location
+ */
+export function getCompanionsByLocation(locationId: string): CompanionDefinition[] {
+  return COMPANIONS_BY_LOCATION[locationId] || [];
+}
+
+/**
+ * Get companions that can be romanced
+ */
+export function getRomanceableCompanions(): CompanionDefinition[] {
+  return ALL_COMPANIONS.filter((c) => c.romance.available);
+}
+
+/**
+ * Get companions with a specific combat role
+ */
+export function getCompanionsByCombatRole(role: string): CompanionDefinition[] {
+  return ALL_COMPANIONS.filter((c) => c.combatRole === role);
+}
+
+/**
+ * Get companions with a specific tag
+ */
+export function getCompanionsByTag(tag: string): CompanionDefinition[] {
+  return ALL_COMPANIONS.filter((c) => c.tags.includes(tag));
+}
+
+/**
+ * Check if two companions are compatible (can be in party together)
+ */
+export function areCompanionsCompatible(companion1Id: string, companion2Id: string): boolean {
+  const c1 = COMPANIONS_BY_ID[companion1Id];
+  const c2 = COMPANIONS_BY_ID[companion2Id];
+
+  if (!c1 || !c2) return false;
+
+  // Check recruitment incompatibilities
+  if (c1.recruitment.incompatibleCompanions.includes(companion2Id)) return false;
+  if (c2.recruitment.incompatibleCompanions.includes(companion1Id)) return false;
+
+  return true;
+}
+
+/**
+ * Get all abilities for a companion (both default and unlockable)
+ */
+export function getAllAbilities(companion: CompanionDefinition): CompanionAbility[] {
+  return companion.abilities;
+}
+
+/**
+ * Get unlocked abilities for a companion state
+ */
+export function getUnlockedAbilities(
+  companion: CompanionDefinition,
+  state: CompanionState
+): CompanionAbility[] {
+  return companion.abilities.filter((ability) => state.unlockedAbilities.includes(ability.id));
+}
+
+/**
+ * Select a banter line based on context
+ */
+export function selectBanterLine(
+  companion: CompanionDefinition,
+  state: CompanionState,
+  context: {
+    trigger: BanterLine['trigger'];
+    triggerData?: string;
+    activeQuests?: string[];
+    completedQuests?: string[];
+    flags?: Record<string, boolean>;
+  }
+): BanterLine | null {
+  const available = getAvailableBanter(companion, state, context);
+  if (available.length === 0) return null;
+
+  // Weighted random selection based on priority (default: 5)
+  const totalWeight = available.reduce((sum, line) => sum + (line.priority ?? 5), 0);
+  let random = Math.random() * totalWeight;
+
+  for (const line of available) {
+    random -= line.priority ?? 5;
+    if (random <= 0) return line;
+  }
+
+  return available[0];
+}
+
+/**
+ * Calculate companion's effective stats with equipment bonuses
+ */
+export function getEffectiveStats(
+  companion: CompanionDefinition,
+  state: CompanionState,
+  equipmentBonuses: {
+    health?: number;
+    damage?: number;
+    armor?: number;
+    accuracy?: number;
+    evasion?: number;
+  } = {}
+): typeof companion.stats {
+  const levelBonus = (state.level - 1) * 0.1; // 10% per level
+
+  return {
+    maxHealth: Math.floor(
+      companion.stats.maxHealth * (1 + levelBonus) + (equipmentBonuses.health ?? 0)
+    ),
+    actionPoints: companion.stats.actionPoints,
+    baseDamage: Math.floor(
+      companion.stats.baseDamage * (1 + levelBonus) + (equipmentBonuses.damage ?? 0)
+    ),
+    armor: companion.stats.armor + (equipmentBonuses.armor ?? 0),
+    accuracy: Math.min(
+      95,
+      companion.stats.accuracy + Math.floor(state.level * 2) + (equipmentBonuses.accuracy ?? 0)
+    ),
+    evasion: Math.min(
+      50,
+      companion.stats.evasion + Math.floor(state.level) + (equipmentBonuses.evasion ?? 0)
+    ),
+  };
+}
+
+// Validate all companions on load (development check)
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (typeof globalThis !== 'undefined' && (globalThis as unknown as { __DEV__?: boolean }).__DEV__) {
+  for (const companion of ALL_COMPANIONS) {
+    try {
+      validateCompanionDefinition(companion);
+    } catch (error) {
+      console.error(`Invalid companion definition: ${companion.id}`, error);
+    }
+  }
+}
