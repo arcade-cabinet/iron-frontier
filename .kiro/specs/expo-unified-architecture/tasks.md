@@ -184,19 +184,19 @@ This task list breaks down the migration from a pnpm workspace monorepo to a sin
 ## Phase 4: Migrate UI Components (3-4 days)
 
 ### 4.1 Create Base UI Components
-- [ ] 4.1.1 Create `components/ui/Button.tsx` with NativeWind styling
-- [ ] 4.1.2 Create `components/ui/Card.tsx` with Steampunk theme
-- [ ] 4.1.3 Create `components/ui/Modal.tsx` using React Native Modal
-- [ ] 4.1.4 Create `components/ui/Input.tsx` with TextInput
-- [ ] 4.1.5 Create `components/ui/Progress.tsx` for health/XP bars
-- [ ] 4.1.6 Test all base components on web and native
+- [x] 4.1.1 Create `components/ui/Button.tsx` with NativeWind styling
+- [x] 4.1.2 Create `components/ui/Card.tsx` with Steampunk theme
+- [x] 4.1.3 Create `components/ui/Modal.tsx` using React Native Modal
+- [x] 4.1.4 Create `components/ui/Input.tsx` with TextInput
+- [x] 4.1.5 Create `components/ui/Progress.tsx` for health/XP bars
+- [x] 4.1.6 Test all base components on web and native
 
 ### 4.2 Create Adaptive HUD Components
-- [ ] 4.2.1 Create `components/game/hud/MinimalHUD.tsx` (portrait phone)
-- [ ] 4.2.2 Create `components/game/hud/CompactHUD.tsx` (landscape phone)
-- [ ] 4.2.3 Create `components/game/hud/FullHUD.tsx` (tablet/foldable)
-- [ ] 4.2.4 Create `components/game/hud/AdaptiveHUD.tsx` with mode switching
-- [ ] 4.2.5 Test HUD adapts correctly on all devices and orientations
+- [x] 4.2.1 Create `components/game/hud/MinimalHUD.tsx` (portrait phone)
+- [x] 4.2.2 Create `components/game/hud/CompactHUD.tsx` (landscape phone)
+- [x] 4.2.3 Create `components/game/hud/FullHUD.tsx` (tablet/foldable)
+- [x] 4.2.4 Create `components/game/hud/AdaptiveHUD.tsx` with mode switching
+- [x] 4.2.5 Test HUD adapts correctly on all devices and orientations
 
 ### 4.3 Migrate Game UI Panels
 - [ ] 4.3.1 Migrate ActionBar with NativeWind (bottom navigation)
