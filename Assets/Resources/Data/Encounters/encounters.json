@@ -1,0 +1,835 @@
+{
+  "version": "1.0.0",
+  "description": "Iron Frontier - Complete Encounter Database. All combat encounter templates organized by category.",
+  "encounters": [
+    {
+      "id": "lone_bandit",
+      "name": "Lone Bandit",
+      "descriptionTemplate": "A desperate {{adjective}} outlaw blocks the {{terrain}}. They demand your valuables or your life.",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [1, 1], "levelScale": 0.8 }
+      ],
+      "difficultyRange": [1, 2],
+      "validBiomes": ["desert", "badlands", "grassland", "scrubland", "mountain"],
+      "validLocationTypes": ["wilderness", "trail", "road"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_basic",
+      "xpRange": [15, 25],
+      "goldRange": [5, 15],
+      "tags": ["bandit", "easy", "common", "roadside"]
+    },
+    {
+      "id": "bandit_ambush",
+      "name": "Bandit Ambush",
+      "descriptionTemplate": "Bandits spring from behind {{cover}}! \"Drop your guns and nobody gets hurt!\"",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [1, 2], "levelScale": 0.9 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands", "scrubland", "mountain"],
+      "validLocationTypes": ["wilderness", "trail", "road", "waystation"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_standard",
+      "xpRange": [40, 70],
+      "goldRange": [15, 35],
+      "tags": ["bandit", "medium", "common", "ambush"]
+    },
+    {
+      "id": "gang_raid",
+      "name": "Gang Raid",
+      "descriptionTemplate": "A well-armed gang surrounds you. Their leader, a {{adjective}} figure in a {{clothing}}, signals the attack.",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_sharpshooter", "countRange": [1, 1], "levelScale": 1.2 }
+      ],
+      "difficultyRange": [5, 7],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "hideout", "camp", "ruins"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_elite",
+      "xpRange": [100, 150],
+      "goldRange": [40, 80],
+      "tags": ["bandit", "hard", "uncommon", "gang"]
+    },
+    {
+      "id": "stagecoach_robbery",
+      "name": "Stagecoach Robbery",
+      "descriptionTemplate": "A stagecoach lies overturned on the road. Bandits are rifling through the luggage while passengers cower nearby.",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [2, 3], "levelScale": 0.9 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["desert", "grassland", "scrubland"],
+      "validLocationTypes": ["wilderness", "trail", "road"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_stagecoach",
+      "xpRange": [60, 90],
+      "goldRange": [30, 60],
+      "tags": ["bandit", "medium", "event", "rescue"]
+    },
+    {
+      "id": "bandit_camp_assault",
+      "name": "Bandit Camp",
+      "descriptionTemplate": "You've found their camp. Tents, a smoldering fire, and {{count}} bandits who don't take kindly to visitors.",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [3, 5], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_sharpshooter", "countRange": [1, 2], "levelScale": 1.1 }
+      ],
+      "difficultyRange": [6, 8],
+      "validBiomes": ["desert", "badlands", "scrubland", "mountain"],
+      "validLocationTypes": ["camp", "hideout", "ruins"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_cache",
+      "xpRange": [150, 220],
+      "goldRange": [60, 120],
+      "tags": ["bandit", "hard", "location", "clearable"]
+    },
+    {
+      "id": "wanted_outlaw",
+      "name": "Wanted Outlaw",
+      "descriptionTemplate": "\"{{outlaw_name}}\" - you recognize the face from the wanted posters. A ${{bounty}} reward awaits if you can bring them in.",
+      "category": "bandit",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_sharpshooter", "countRange": [1, 1], "levelScale": 1.5 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [0, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 7],
+      "validBiomes": ["desert", "badlands", "scrubland", "grassland"],
+      "validLocationTypes": ["wilderness", "hideout", "camp", "hamlet", "waystation"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bounty_target",
+      "xpRange": [80, 130],
+      "goldRange": [50, 100],
+      "tags": ["bandit", "medium", "bounty", "named"]
+    },
+    {
+      "id": "coyote_pack",
+      "name": "Coyote Pack",
+      "descriptionTemplate": "A pack of hungry {{adjective}} coyotes circles you, drawn by the scent of your provisions.",
+      "category": "wildlife",
+      "enemies": [
+        { "enemyIdOrTag": "coyote", "countRange": [2, 4], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [1, 3],
+      "validBiomes": ["desert", "badlands", "scrubland", "grassland"],
+      "validLocationTypes": ["wilderness", "trail", "camp"],
+      "validTimeOfDay": ["evening", "night"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_canine",
+      "xpRange": [25, 45],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "easy", "common", "animal"]
+    },
+    {
+      "id": "rattlesnake_nest",
+      "name": "Rattlesnake Nest",
+      "descriptionTemplate": "The warning rattle comes too late. Serpents emerge from beneath the {{terrain}} around your feet!",
+      "category": "wildlife",
+      "enemies": [
+        { "enemyIdOrTag": "rattlesnake", "countRange": [3, 6], "levelScale": 0.8 }
+      ],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "ruins", "cave"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_snake",
+      "xpRange": [30, 50],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "medium", "common", "poison", "surprise"]
+    },
+    {
+      "id": "bear_encounter",
+      "name": "Grizzly Bear",
+      "descriptionTemplate": "A massive grizzly rises on its hind legs, blocking the {{terrain}}. It bellows a thunderous warning.",
+      "category": "wildlife",
+      "enemies": [
+        { "enemyIdOrTag": "mountain_lion", "countRange": [1, 1], "levelScale": 1.5 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["mountain", "grassland", "riverside"],
+      "validLocationTypes": ["wilderness", "cave", "camp"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_bear",
+      "xpRange": [60, 90],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "medium", "uncommon", "animal", "dangerous"]
+    },
+    {
+      "id": "stampede",
+      "name": "Stampede",
+      "descriptionTemplate": "The ground trembles. A herd of {{animal}} charges toward you in blind panic, driven by {{cause}}!",
+      "category": "wildlife",
+      "enemies": [
+        { "enemyIdOrTag": "mountain_lion", "countRange": [3, 5], "levelScale": 0.7 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["grassland", "scrubland", "desert"],
+      "validLocationTypes": ["wilderness", "ranch", "farm"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_herd",
+      "xpRange": [40, 70],
+      "goldRange": [0, 5],
+      "tags": ["wildlife", "medium", "event", "environmental"]
+    },
+    {
+      "id": "scorpion_swarm",
+      "name": "Scorpion Swarm",
+      "descriptionTemplate": "Disturbed from their hiding places, a swarm of {{adjective}} scorpions scuttles toward you.",
+      "category": "wildlife",
+      "enemies": [
+        { "enemyIdOrTag": "scorpion", "countRange": [4, 8], "levelScale": 0.6 }
+      ],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands", "salt_flat"],
+      "validLocationTypes": ["wilderness", "ruins", "cave", "mine"],
+      "validTimeOfDay": ["night"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_insect",
+      "xpRange": [35, 55],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "medium", "common", "poison", "swarm"]
+    },
+    {
+      "id": "railroad_thugs",
+      "name": "Railroad Enforcers",
+      "descriptionTemplate": "IVRC company men in {{uniform}} step from the shadows. \"This here's company property. You ain't welcome.\"",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "ivrc_guard", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "ivrc_marksman", "countRange": [0, 1], "levelScale": 1.1 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["grassland", "scrubland", "desert"],
+      "validLocationTypes": ["train_station", "outpost", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["ivrc_guards"],
+      "lootTableId": "ivrc_standard",
+      "xpRange": [70, 110],
+      "goldRange": [20, 45],
+      "tags": ["faction", "ivrc", "medium", "hostile"]
+    },
+    {
+      "id": "mine_guards",
+      "name": "Mine Security",
+      "descriptionTemplate": "Armed guards patrol the mine entrance. \"Turn around, stranger. No trespassers on company ground.\"",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "ivrc_guard", "countRange": [3, 5], "levelScale": 1.0 },
+        { "enemyIdOrTag": "ivrc_marksman", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["mountain", "badlands"],
+      "validLocationTypes": ["mine", "quarry"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["ivrc_guards"],
+      "lootTableId": "ivrc_mining",
+      "xpRange": [90, 140],
+      "goldRange": [30, 60],
+      "tags": ["faction", "ivrc", "medium", "location"]
+    },
+    {
+      "id": "cattle_rustlers",
+      "name": "Cattle Rustlers",
+      "descriptionTemplate": "You catch rustlers red-handed, driving stolen cattle toward the {{direction}}. They reach for their guns.",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_thug", "countRange": [1, 2], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["grassland", "scrubland"],
+      "validLocationTypes": ["ranch", "farm", "wilderness"],
+      "validTimeOfDay": ["night", "evening"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_rustler",
+      "xpRange": [60, 95],
+      "goldRange": [25, 50],
+      "tags": ["faction", "raiders", "medium", "theft", "event"]
+    },
+    {
+      "id": "claim_jumpers",
+      "name": "Claim Jumpers",
+      "descriptionTemplate": "Prospectors with more guns than picks have set up on someone else's claim. They don't plan on sharing.",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_sharpshooter", "countRange": [1, 1], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["mountain", "badlands", "riverside"],
+      "validLocationTypes": ["mine", "quarry", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["raiders"],
+      "lootTableId": "prospector_loot",
+      "xpRange": [75, 115],
+      "goldRange": [40, 80],
+      "tags": ["faction", "raiders", "medium", "mining"]
+    },
+    {
+      "id": "corrupt_deputies",
+      "name": "Corrupt Deputies",
+      "descriptionTemplate": "Men wearing {{worn}} deputy badges block your path. \"Sheriff says you're under arrest. Dead or alive.\"",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "ivrc_guard", "countRange": [2, 3], "levelScale": 1.1 },
+        { "enemyIdOrTag": "ivrc_captain", "countRange": [0, 1], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 7],
+      "validBiomes": ["grassland", "scrubland", "desert"],
+      "validLocationTypes": ["town", "village", "hamlet", "road"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["ivrc_guards"],
+      "lootTableId": "lawman_corrupt",
+      "xpRange": [85, 135],
+      "goldRange": [35, 70],
+      "tags": ["faction", "ivrc", "hard", "lawless"]
+    },
+    {
+      "id": "mercenary_group",
+      "name": "Hired Guns",
+      "descriptionTemplate": "Professional killers in {{attire}} fan out to surround you. \"Nothing personal, friend. Just business.\"",
+      "category": "faction",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_enforcer", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [5, 7],
+      "validBiomes": ["desert", "badlands", "grassland", "scrubland"],
+      "validLocationTypes": ["wilderness", "town", "waystation", "outpost"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "lootTableId": "mercenary_elite",
+      "xpRange": [110, 160],
+      "goldRange": [50, 95],
+      "tags": ["faction", "copperhead", "hard", "professional"]
+    },
+    {
+      "id": "automaton_malfunction",
+      "name": "Rogue Automaton",
+      "descriptionTemplate": "A {{model}} automaton sparks and whirs erratically. Its targeting lens locks onto you with a menacing red glow.",
+      "category": "special",
+      "enemies": [
+        { "enemyIdOrTag": "remnant_sentry", "countRange": [1, 2], "levelScale": 1.0 },
+        { "enemyIdOrTag": "remnant_scout", "countRange": [0, 1], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["badlands", "desert", "mountain"],
+      "validLocationTypes": ["ruins", "mine", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["remnant"],
+      "lootTableId": "automaton_scrap",
+      "xpRange": [80, 130],
+      "goldRange": [10, 30],
+      "tags": ["special", "automaton", "medium", "tech"]
+    },
+    {
+      "id": "steam_wagon_bandits",
+      "name": "Steam Wagon Heist",
+      "descriptionTemplate": "Bandits on a stolen steam-wagon barrel toward you, guns blazing from the armored chassis!",
+      "category": "special",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [2, 3], "levelScale": 1.1 },
+        { "enemyIdOrTag": "copperhead_dynamiter", "countRange": [1, 1], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [5, 8],
+      "validBiomes": ["desert", "grassland", "scrubland"],
+      "validLocationTypes": ["road", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["copperhead"],
+      "lootTableId": "vehicle_loot",
+      "xpRange": [120, 180],
+      "goldRange": [60, 110],
+      "tags": ["special", "copperhead", "hard", "vehicle", "chase"]
+    },
+    {
+      "id": "dynamite_ambush",
+      "name": "Dynamite Ambush",
+      "descriptionTemplate": "Click. The fuse ignites. Dynamite has been rigged along the {{terrain}}. Outlaws emerge as explosions rock the ground!",
+      "category": "special",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_dynamiter", "countRange": [1, 2], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [2, 3], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [5, 7],
+      "validBiomes": ["mountain", "badlands", "desert"],
+      "validLocationTypes": ["wilderness", "mine", "trail"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "lootTableId": "explosives_cache",
+      "xpRange": [100, 155],
+      "goldRange": [45, 85],
+      "tags": ["special", "copperhead", "hard", "explosive", "trap"]
+    },
+    {
+      "id": "duel_challenge",
+      "name": "Duel at High Noon",
+      "descriptionTemplate": "A {{adjective}} stranger in a {{clothing}} steps into the street. \"You and me. Right here. Right now.\"",
+      "category": "special",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [1, 1], "levelScale": 1.3 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["desert", "grassland", "scrubland", "badlands"],
+      "validLocationTypes": ["town", "village", "hamlet", "outpost"],
+      "validTimeOfDay": ["afternoon"],
+      "factionTags": ["copperhead", "raiders"],
+      "lootTableId": "duelist_loot",
+      "xpRange": [70, 110],
+      "goldRange": [30, 60],
+      "tags": ["special", "duel", "medium", "honorable", "one_on_one"]
+    },
+    {
+      "id": "cave_creatures",
+      "name": "Cave Dwellers",
+      "descriptionTemplate": "The darkness stirs. {{creature}} eyes gleam in the torchlight as the cave's inhabitants defend their territory.",
+      "category": "environmental",
+      "enemies": [
+        { "enemyIdOrTag": "rattlesnake", "countRange": [2, 4], "levelScale": 0.9 },
+        { "enemyIdOrTag": "mountain_lion", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["mountain", "badlands"],
+      "validLocationTypes": ["cave", "mine", "ruins"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "cave_treasure",
+      "xpRange": [55, 85],
+      "goldRange": [5, 25],
+      "tags": ["environmental", "wildlife", "medium", "underground"]
+    },
+    {
+      "id": "desert_survival",
+      "name": "Desert Predators",
+      "descriptionTemplate": "The merciless sun beats down. Desperate predators, driven by thirst, see you as their next meal.",
+      "category": "environmental",
+      "enemies": [
+        { "enemyIdOrTag": "coyote", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "rattlesnake", "countRange": [1, 2], "levelScale": 0.8 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["desert", "salt_flat", "badlands"],
+      "validLocationTypes": ["wilderness"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_desert",
+      "xpRange": [45, 75],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "wildlife", "medium", "survival"]
+    },
+    {
+      "id": "storm_danger",
+      "name": "Storm Stalkers",
+      "descriptionTemplate": "Lightning cracks overhead. Something has been driven from shelter by the storm - and it's heading your way.",
+      "category": "environmental",
+      "enemies": [
+        { "enemyIdOrTag": "coyote", "countRange": [3, 5], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["grassland", "scrubland", "desert"],
+      "validLocationTypes": ["wilderness", "trail"],
+      "validTimeOfDay": ["afternoon", "evening", "night"],
+      "factionTags": ["wildlife"],
+      "lootTableId": "wildlife_canine",
+      "xpRange": [50, 80],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "wildlife", "medium", "weather"]
+    },
+    {
+      "id": "quicksand_trap",
+      "name": "Quicksand Ambush",
+      "descriptionTemplate": "The ground gives way beneath your feet! As you struggle, {{enemies}} close in on their trapped prey.",
+      "category": "environmental",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_thug", "countRange": [1, 2], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["riverside", "salt_flat", "desert"],
+      "validLocationTypes": ["wilderness", "trail"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "lootTableId": "bandit_trap",
+      "xpRange": [65, 100],
+      "goldRange": [20, 45],
+      "tags": ["environmental", "bandit", "medium", "trap", "debuff"]
+    },
+    {
+      "id": "copperhead_patrol",
+      "name": "Copperhead Patrol",
+      "descriptionTemplate": "Gang members wearing the copper snake insignia block the {{terrain}}. \"This is Copperhead territory, stranger.\"",
+      "category": "copperhead",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_enforcer", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "trail", "hideout"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "lootTableId": "copperhead_standard",
+      "xpRange": [90, 140],
+      "goldRange": [40, 75],
+      "tags": ["faction", "copperhead", "medium", "patrol"]
+    },
+    {
+      "id": "copperhead_raid",
+      "name": "Copperhead Raid",
+      "descriptionTemplate": "The Copperhead Gang descends on the {{target}} in force. Gunfire and dynamite fill the air!",
+      "category": "copperhead",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [3, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_enforcer", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_dynamiter", "countRange": [1, 2], "levelScale": 1.1 }
+      ],
+      "difficultyRange": [6, 9],
+      "validBiomes": ["desert", "badlands", "scrubland", "grassland"],
+      "validLocationTypes": ["town", "village", "outpost", "trading_post"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "lootTableId": "copperhead_elite",
+      "xpRange": [160, 240],
+      "goldRange": [80, 150],
+      "tags": ["faction", "copperhead", "hard", "event", "siege"]
+    },
+    {
+      "id": "remnant_awakening",
+      "name": "Awakened Machines",
+      "descriptionTemplate": "Ancient mechanisms whir to life. Lights flicker in long-dormant eyes as automatons rise to defend the {{location}}.",
+      "category": "remnant",
+      "enemies": [
+        { "enemyIdOrTag": "remnant_sentry", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "remnant_scout", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [5, 7],
+      "validBiomes": ["badlands", "mountain", "desert"],
+      "validLocationTypes": ["ruins", "cave", "mine"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["remnant"],
+      "lootTableId": "automaton_standard",
+      "xpRange": [100, 150],
+      "goldRange": [15, 40],
+      "tags": ["faction", "remnant", "hard", "tech", "exploration"]
+    },
+    {
+      "id": "juggernaut_encounter",
+      "name": "The Juggernaut",
+      "descriptionTemplate": "The ground trembles. A massive war machine, bristling with weapons, emerges from the {{location}}. It has marked you as hostile.",
+      "category": "remnant",
+      "enemies": [
+        { "enemyIdOrTag": "remnant_juggernaut", "countRange": [1, 1], "levelScale": 1.0 },
+        { "enemyIdOrTag": "remnant_sentry", "countRange": [1, 2], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [8, 10],
+      "validBiomes": ["badlands", "mountain"],
+      "validLocationTypes": ["ruins", "cave"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["remnant"],
+      "lootTableId": "automaton_rare",
+      "xpRange": [200, 300],
+      "goldRange": [40, 80],
+      "tags": ["faction", "remnant", "boss", "tech", "mini_boss"]
+    },
+    {
+      "id": "merchant_caravan",
+      "name": "Traveling Merchant",
+      "descriptionTemplate": "A heavily laden wagon approaches, guarded by hired hands. The merchant waves a friendly greeting.",
+      "category": "npc",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["desert", "grassland", "scrubland"],
+      "validLocationTypes": ["road", "trail", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["neutral"],
+      "lootTableId": "",
+      "xpRange": [10, 20],
+      "goldRange": [0, 0],
+      "tags": ["npc", "merchant", "peaceful", "trading"],
+      "isNonCombat": true,
+      "npcId": "traveling_merchant"
+    },
+    {
+      "id": "freeminer_camp",
+      "name": "Freeminer Camp",
+      "descriptionTemplate": "A group of independent miners have set up camp here. They eye you warily but don't reach for their guns.",
+      "category": "npc",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["mountain", "badlands", "riverside"],
+      "validLocationTypes": ["wilderness", "camp", "mine"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["freeminer"],
+      "lootTableId": "",
+      "xpRange": [15, 25],
+      "goldRange": [0, 0],
+      "tags": ["npc", "freeminer", "peaceful", "camp"],
+      "isNonCombat": true,
+      "npcId": "freeminer_group"
+    },
+    {
+      "id": "injured_traveler",
+      "name": "Wounded Traveler",
+      "descriptionTemplate": "A bloodied figure stumbles toward you, clutching their side. They collapse before reaching you.",
+      "category": "npc",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["desert", "badlands", "grassland", "scrubland"],
+      "validLocationTypes": ["wilderness", "road", "trail"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["neutral"],
+      "lootTableId": "",
+      "xpRange": [20, 40],
+      "goldRange": [0, 0],
+      "tags": ["npc", "rescue", "moral", "event"],
+      "isNonCombat": true,
+      "npcId": "injured_traveler"
+    },
+    {
+      "id": "mysterious_stranger",
+      "name": "Mysterious Stranger",
+      "descriptionTemplate": "A hooded figure watches you from the roadside. They seem to be waiting for you specifically.",
+      "category": "npc",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["desert", "badlands", "mountain"],
+      "validLocationTypes": ["wilderness", "crossroads", "ruins"],
+      "validTimeOfDay": ["evening", "night", "dawn"],
+      "factionTags": ["unknown"],
+      "lootTableId": "",
+      "xpRange": [30, 50],
+      "goldRange": [0, 0],
+      "tags": ["npc", "mystery", "lore", "rare"],
+      "isNonCombat": true,
+      "npcId": "mysterious_stranger"
+    },
+    {
+      "id": "prospector_discovery",
+      "name": "Excited Prospector",
+      "descriptionTemplate": "An old prospector waves you down excitedly. \"I've found it! I've found the mother lode! But I need help...\"",
+      "category": "npc",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["mountain", "badlands", "riverside"],
+      "validLocationTypes": ["wilderness", "mine", "trail"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["neutral"],
+      "lootTableId": "",
+      "xpRange": [25, 40],
+      "goldRange": [0, 0],
+      "tags": ["npc", "quest", "treasure", "uncommon"],
+      "isNonCombat": true,
+      "npcId": "prospector_pete"
+    },
+    {
+      "id": "dust_storm",
+      "name": "Dust Storm",
+      "descriptionTemplate": "A massive wall of dust rolls across the desert, blotting out the sun. You must find shelter immediately.",
+      "category": "environmental_event",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["desert", "badlands", "salt_flat"],
+      "validLocationTypes": ["wilderness", "trail", "road"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": [],
+      "lootTableId": "",
+      "xpRange": [15, 30],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "weather", "hazard", "common"],
+      "isNonCombat": true,
+      "environmentalEffect": "dust_storm"
+    },
+    {
+      "id": "flash_flood",
+      "name": "Flash Flood",
+      "descriptionTemplate": "A wall of water rushes through the canyon! The flash flood sweeps everything in its path.",
+      "category": "environmental_event",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["badlands", "riverside", "mountain"],
+      "validLocationTypes": ["canyon", "wilderness", "trail"],
+      "validTimeOfDay": ["afternoon", "evening"],
+      "factionTags": [],
+      "lootTableId": "",
+      "xpRange": [20, 40],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "weather", "hazard", "uncommon"],
+      "isNonCombat": true,
+      "environmentalEffect": "flash_flood"
+    },
+    {
+      "id": "heat_wave",
+      "name": "Scorching Heat",
+      "descriptionTemplate": "The temperature soars to unbearable levels. Without water and shade, survival becomes the priority.",
+      "category": "environmental_event",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["desert", "salt_flat", "badlands"],
+      "validLocationTypes": ["wilderness"],
+      "validTimeOfDay": ["afternoon"],
+      "factionTags": [],
+      "lootTableId": "",
+      "xpRange": [10, 25],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "weather", "hazard", "common"],
+      "isNonCombat": true,
+      "environmentalEffect": "heat_wave"
+    },
+    {
+      "id": "thunderstorm",
+      "name": "Thunderstorm",
+      "descriptionTemplate": "Lightning cracks across the sky as a violent storm rolls in. Thunder shakes the ground.",
+      "category": "environmental_event",
+      "enemies": [],
+      "difficultyRange": [0, 0],
+      "validBiomes": ["grassland", "scrubland", "mountain"],
+      "validLocationTypes": ["wilderness", "trail", "camp"],
+      "validTimeOfDay": ["afternoon", "evening", "night"],
+      "factionTags": [],
+      "lootTableId": "",
+      "xpRange": [15, 30],
+      "goldRange": [0, 0],
+      "tags": ["environmental", "weather", "hazard", "common"],
+      "isNonCombat": true,
+      "environmentalEffect": "thunderstorm"
+    }
+  ],
+  "zoneEncounterTables": {
+    "desert": {
+      "weights": {
+        "lone_bandit": 15,
+        "bandit_ambush": 10,
+        "coyote_pack": 20,
+        "rattlesnake_nest": 15,
+        "scorpion_swarm": 10,
+        "desert_survival": 10,
+        "dust_storm": 10,
+        "heat_wave": 5,
+        "merchant_caravan": 5
+      },
+      "minLevel": 1,
+      "maxLevel": 10,
+      "encounterChance": 0.15
+    },
+    "badlands": {
+      "weights": {
+        "bandit_ambush": 15,
+        "gang_raid": 5,
+        "rattlesnake_nest": 10,
+        "scorpion_swarm": 10,
+        "automaton_malfunction": 10,
+        "remnant_awakening": 5,
+        "cave_creatures": 15,
+        "copperhead_patrol": 10,
+        "dust_storm": 10,
+        "mysterious_stranger": 5,
+        "prospector_discovery": 5
+      },
+      "minLevel": 2,
+      "maxLevel": 10,
+      "encounterChance": 0.18
+    },
+    "grassland": {
+      "weights": {
+        "lone_bandit": 10,
+        "bandit_ambush": 10,
+        "coyote_pack": 15,
+        "bear_encounter": 5,
+        "stampede": 10,
+        "cattle_rustlers": 10,
+        "railroad_thugs": 10,
+        "storm_danger": 10,
+        "thunderstorm": 10,
+        "merchant_caravan": 10
+      },
+      "minLevel": 1,
+      "maxLevel": 8,
+      "encounterChance": 0.12
+    },
+    "mountain": {
+      "weights": {
+        "bandit_camp_assault": 10,
+        "bear_encounter": 15,
+        "mine_guards": 10,
+        "claim_jumpers": 10,
+        "remnant_awakening": 10,
+        "juggernaut_encounter": 2,
+        "cave_creatures": 15,
+        "freeminer_camp": 10,
+        "prospector_discovery": 10,
+        "flash_flood": 8
+      },
+      "minLevel": 3,
+      "maxLevel": 10,
+      "encounterChance": 0.16
+    },
+    "scrubland": {
+      "weights": {
+        "lone_bandit": 15,
+        "bandit_ambush": 10,
+        "coyote_pack": 15,
+        "rattlesnake_nest": 10,
+        "copperhead_patrol": 10,
+        "cattle_rustlers": 10,
+        "mercenary_group": 5,
+        "storm_danger": 10,
+        "injured_traveler": 10,
+        "merchant_caravan": 5
+      },
+      "minLevel": 1,
+      "maxLevel": 8,
+      "encounterChance": 0.14
+    },
+    "town": {
+      "weights": {
+        "duel_challenge": 20,
+        "corrupt_deputies": 15,
+        "copperhead_raid": 5,
+        "mercenary_group": 10,
+        "railroad_thugs": 15,
+        "mysterious_stranger": 10,
+        "merchant_caravan": 25
+      },
+      "minLevel": 1,
+      "maxLevel": 10,
+      "encounterChance": 0.08
+    },
+    "ruins": {
+      "weights": {
+        "remnant_awakening": 25,
+        "juggernaut_encounter": 10,
+        "automaton_malfunction": 20,
+        "cave_creatures": 15,
+        "bandit_camp_assault": 10,
+        "mysterious_stranger": 15,
+        "prospector_discovery": 5
+      },
+      "minLevel": 4,
+      "maxLevel": 10,
+      "encounterChance": 0.22
+    }
+  },
+  "rarityWeights": {
+    "common": 50,
+    "uncommon": 30,
+    "rare": 15,
+    "legendary": 5
+  }
+}

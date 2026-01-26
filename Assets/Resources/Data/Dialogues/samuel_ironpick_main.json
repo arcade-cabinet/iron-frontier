@@ -1,0 +1,907 @@
+{
+  "id": "samuel_ironpick_main",
+  "name": "Samuel Ironpick - Main Conversation",
+  "description": "Primary dialogue tree for Samuel Ironpick, elderly miner and town historian",
+  "tags": ["dusty_springs", "historian", "mines", "lore"],
+  "entryPoints": [
+    {
+      "nodeId": "first_meeting",
+      "conditions": [{ "type": "FirstMeeting" }],
+      "priority": 10
+    },
+    {
+      "nodeId": "knows_symbol",
+      "conditions": [{ "type": "FlagSet", "target": "knows_gear_symbol" }],
+      "priority": 8
+    },
+    {
+      "nodeId": "after_thorne_reveal",
+      "conditions": [{ "type": "FlagSet", "target": "thorne_villain_revealed" }],
+      "priority": 7
+    },
+    {
+      "nodeId": "return_greeting",
+      "conditions": [],
+      "priority": 0
+    }
+  ],
+  "nodes": [
+    {
+      "id": "first_meeting",
+      "text": "*An old man with weathered hands and distant eyes looks up from a worn journal* Hmm? A visitor? Don't get many of those anymore. Name's Samuel. Samuel Ironpick. Used to be someone 'round these parts, 'fore the fire took everything. Now I'm just an old man with too many memories and not enough sense to forget 'em.",
+      "expression": "melancholy",
+      "choices": [
+        {
+          "text": "I'm sorry for your loss.",
+          "nextNodeId": "sympathy_response"
+        },
+        {
+          "text": "What happened in the fire?",
+          "nextNodeId": "fire_story"
+        },
+        {
+          "text": "I heard you know the history of these parts.",
+          "nextNodeId": "historian_response"
+        }
+      ]
+    },
+    {
+      "id": "sympathy_response",
+      "text": "*He nods slowly* Kind of ya to say. Most folks 'round here just think I'm touched in the head. Maybe I am. But I remember. I remember everything. The good times, 'fore Thorne came. 'Fore the machines started whirrin' in the night.",
+      "expression": "grateful",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": 10, "target": "samuel" }
+      ],
+      "choices": [
+        {
+          "text": "Machines? What machines?",
+          "nextNodeId": "machines_hint"
+        },
+        {
+          "text": "Tell me about the old days.",
+          "nextNodeId": "old_days"
+        }
+      ]
+    },
+    {
+      "id": "fire_story",
+      "text": "*His eyes go distant* Thirty years ago, come autumn. Our homestead, the mining claims my pa built up over a lifetime... all gone in one night. They said it was an accident. A lantern knocked over. But I know better. I seen 'em, in the shadows. Metal men with glowin' eyes.",
+      "expression": "haunted",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "heard_ironpick_fire" },
+        { "type": "SetFlag", "target": "samuel_automaton_hint" }
+      ],
+      "choices": [
+        {
+          "text": "Metal men? Like machines?",
+          "nextNodeId": "metal_men_detail"
+        },
+        {
+          "text": "No one believed you.",
+          "nextNodeId": "no_one_believed"
+        },
+        {
+          "text": "I believe you, Samuel.",
+          "nextNodeId": "believe_him",
+          "effects": [{ "type": "ChangeReputation", "value": 15, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "metal_men_detail",
+      "text": "*He leans in close, his voice dropping* Automatons. That's what the old books call 'em. Clockwork servants, built by genius or madness - hard to tell the difference sometimes. I thought I was seein' things, smoke and grief playin' tricks. But I've seen 'em since. In the deep mines. In the rail yards at night. They're real.",
+      "expression": "intense",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_automatons" }
+      ],
+      "choices": [
+        {
+          "text": "Who's building them?",
+          "nextNodeId": "builder_question"
+        },
+        {
+          "text": "Can you show me where you've seen them?",
+          "nextNodeId": "show_location"
+        },
+        {
+          "text": "That sounds impossible.",
+          "nextNodeId": "impossible_response"
+        }
+      ]
+    },
+    {
+      "id": "builder_question",
+      "text": "Thorne. Has to be Thorne. He arrived just 'fore the fire, all fancy suits and big plans. Bought up every claim he could get his hands on. Said it was for the railroad, but the railroad don't need half what he's minin'. He's buildin' somethin' down there. Somethin' terrible.",
+      "expression": "knowing",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_accuses_thorne" }
+      ],
+      "choices": [
+        {
+          "text": "Do you have any proof?",
+          "nextNodeId": "proof_question"
+        },
+        {
+          "text": "Why hasn't anyone stopped him?",
+          "nextNodeId": "why_not_stopped"
+        }
+      ]
+    },
+    {
+      "id": "proof_question",
+      "text": "*He pulls out a small, tarnished gear* Found this in the ashes of my home. It ain't like any gear I've seen in regular machinery. Too precise. Too... perfect. And look - *he points to a symbol etched into the metal* - same mark I've seen on crates goin' into Thorne's private warehouses.",
+      "expression": "secretive",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_gear_symbol" },
+        { "type": "AddItem", "target": "ironpick_gear" }
+      ],
+      "choices": [
+        {
+          "text": "Can I keep this?",
+          "nextNodeId": "keep_gear"
+        },
+        {
+          "text": "The gear symbol... I've seen it before.",
+          "nextNodeId": "seen_symbol_before",
+          "conditions": [{ "type": "FlagSet", "target": "sheriff_knows_letter" }]
+        }
+      ]
+    },
+    {
+      "id": "keep_gear",
+      "text": "Take it. Been weighin' on me for thirty years. Maybe it'll do some good in younger hands. Just... be careful who you show it to. Thorne's got eyes everywhere. People who ask too many questions have a way of... disappearin'.",
+      "expression": "concerned",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "gear_investigation" }
+      ],
+      "choices": [
+        {
+          "text": "I'll be careful.",
+          "nextNodeId": null
+        },
+        {
+          "text": "Tell me more about Thorne's operations.",
+          "nextNodeId": "thorne_operations"
+        }
+      ]
+    },
+    {
+      "id": "seen_symbol_before",
+      "text": "*His eyes widen* You've seen it? Where? The Sheriff? *He grabs your arm* Then maybe there's hope after all. Marcus Cole's a good man, but he's been fightin' this battle alone for too long. If you're helpin' him... I'll tell you everything I know.",
+      "expression": "hopeful",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": 20, "target": "samuel" }
+      ],
+      "choices": [
+        {
+          "text": "Tell me everything.",
+          "nextNodeId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "everything",
+      "text": "*He takes a deep breath* It started 'fore the railroad. My pa found somethin' in the deep mines - an old workshop, sealed away for God knows how long. Blueprints for machines that could think, move, work without rest. Pa wanted to share it with the world. Thorne wanted to own it. And he always gets what he wants.",
+      "expression": "grave",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_ancient_workshop" }
+      ],
+      "choices": [
+        {
+          "text": "Where is this workshop?",
+          "nextNodeId": "workshop_location"
+        },
+        {
+          "text": "The blueprints still exist?",
+          "nextNodeId": "blueprints"
+        }
+      ]
+    },
+    {
+      "id": "workshop_location",
+      "text": "Deep in the old Ironpick mine - what Thorne calls 'Shaft Seven' now. The main entrance is guarded day and night, but there's another way in. A tunnel my pa dug, hidden behind the old waterfall near Miner's Creek. I ain't been able to go back... too many memories. But if you're brave enough...",
+      "expression": "pained",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_secret_entrance" },
+        { "type": "UpdateQuest", "target": "gear_investigation", "objective": "find_shaft_seven" }
+      ],
+      "choices": [
+        {
+          "text": "I'll investigate.",
+          "nextNodeId": "investigate_response_samuel"
+        },
+        {
+          "text": "Come with me. Face your past.",
+          "nextNodeId": "come_with_me"
+        }
+      ]
+    },
+    {
+      "id": "investigate_response_samuel",
+      "text": "Be careful down there. The automatons patrol them tunnels. And there's worse things too - failed experiments, cast-offs that didn't work quite right. They call 'em 'Scrappers' - mindless, violent, unpredictable. Take this. *He hands you an old revolver* It was my pa's. May it serve you better than it served him.",
+      "expression": "solemn",
+      "onEnterEffects": [
+        { "type": "AddItem", "target": "ironpick_revolver" }
+      ],
+      "choices": [
+        {
+          "text": "Thank you, Samuel. I won't let you down.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 10, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "come_with_me",
+      "text": "*He looks down at his trembling hands* I... I ain't as strong as I used to be. These old bones wouldn't last a mile in them tunnels. But... *he steels himself* ...if you find what you're lookin' for, come back for me. I'll testify. I'll tell everyone what Thorne did. Even if it means my life.",
+      "expression": "determined",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_will_testify" }
+      ],
+      "choices": [
+        {
+          "text": "You're braver than you know.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 15, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "blueprints",
+      "text": "Pa hid copies - scattered 'em in places Thorne would never think to look. One's in the church basement, sealed in a prayer book. Another's with my sister's grave in the Dusty Springs cemetery. The third... *he taps his temple* ...is up here. I memorized what I could 'fore I had to burn the rest.",
+      "expression": "cunning",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_blueprint_locations" },
+        { "type": "StartQuest", "target": "find_blueprints" }
+      ],
+      "choices": [
+        {
+          "text": "I'll gather them.",
+          "nextNodeId": "gather_blueprints"
+        },
+        {
+          "text": "Can you recreate what you memorized?",
+          "nextNodeId": "recreate_blueprints"
+        }
+      ]
+    },
+    {
+      "id": "gather_blueprints",
+      "text": "Be discreet. Father Miguel knows about the one in his church - he's a good man, helped me hide it years ago. The cemetery... well, you'll have to dig. Literally. My sister always said she'd take her secrets to the grave. Turns out she did.",
+      "expression": "sad",
+      "choices": [
+        {
+          "text": "I'll handle it respectfully.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "recreate_blueprints",
+      "text": "*He nods slowly* Give me time and paper, I can sketch out the basics. Won't be pretty, but it'll show you how the automatons work. Their weak points. How to shut 'em down... or *he hesitates* ...how to control 'em, if it comes to that.",
+      "expression": "thoughtful",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_drawing_blueprints" }
+      ],
+      "choices": [
+        {
+          "text": "Take your time. This is important.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "wait_for_blueprints" }]
+        }
+      ]
+    },
+    {
+      "id": "why_not_stopped",
+      "text": "Money. Power. Fear. Thorne owns half the territory's politicians and the other half owe him favors. Sheriff Cole's been tryin' for years, but every witness either disappears or changes their story. I'm the only one old and crazy enough to keep talkin'... and too worthless to bother silencin'.",
+      "expression": "bitter",
+      "choices": [
+        {
+          "text": "You're not worthless. Your knowledge is valuable.",
+          "nextNodeId": "encourage_samuel"
+        },
+        {
+          "text": "Maybe it's time that changed.",
+          "nextNodeId": "time_to_change"
+        }
+      ]
+    },
+    {
+      "id": "encourage_samuel",
+      "text": "*A spark of life returns to his eyes* Been a long time since anyone said that. Maybe... maybe you're right. I've been hidin' in this shack feelin' sorry for myself while Thorne builds his army. My pa didn't raise a coward. What do you need from me?",
+      "expression": "determined",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": 20, "target": "samuel" },
+        { "type": "SetFlag", "target": "samuel_motivated" }
+      ],
+      "choices": [
+        {
+          "text": "Tell me everything about the mines.",
+          "nextNodeId": "mine_knowledge"
+        },
+        {
+          "text": "Help me understand the automatons.",
+          "nextNodeId": "automaton_knowledge"
+        }
+      ]
+    },
+    {
+      "id": "time_to_change",
+      "text": "Change? *He laughs bitterly* I've been waitin' for change for thirty years. But maybe... maybe you're different. You got that look in your eyes - the same look my pa had 'fore he went down into that mine for the last time. Just promise me you won't end up the same way.",
+      "expression": "cautious",
+      "choices": [
+        {
+          "text": "I promise.",
+          "nextNodeId": "encourage_samuel"
+        },
+        {
+          "text": "No promises. But I'll try.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "mine_knowledge",
+      "text": "The Ironpick claims stretch for miles underground. Three main shafts - One through Three are still bein' worked by regular miners. Four and Five are 'closed for safety' - which means Thorne's hidin' somethin'. Six collapsed years ago. And Seven... Seven's where it all began. And where it'll end, one way or another.",
+      "expression": "knowledgeable",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_mine_layout" }
+      ],
+      "choices": [
+        {
+          "text": "How do I get into the restricted shafts?",
+          "nextNodeId": "restricted_access"
+        },
+        {
+          "text": "What collapsed Shaft Six?",
+          "nextNodeId": "shaft_six"
+        }
+      ]
+    },
+    {
+      "id": "restricted_access",
+      "text": "Guards at every entrance, day and night. But there's service tunnels connectin' all the shafts - old ventilation routes from 'fore Thorne took over. I can mark 'em on a map for ya. Just watch out for the gas pockets - one spark in the wrong place and you'll join my family in the hereafter.",
+      "expression": "helpful",
+      "onEnterEffects": [
+        { "type": "AddItem", "target": "mine_map" }
+      ],
+      "choices": [
+        {
+          "text": "This map could save my life.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 10, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "shaft_six",
+      "text": "That wasn't no natural collapse. I was there, workin' a double shift when the earth started shakin'. Thorne's people were diggin' too deep, too fast. Hit somethin' they shouldn't have. An underground river, maybe. Or somethin' worse. Twenty-three men died that day. Their ghosts still haunt them tunnels.",
+      "expression": "haunted",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_shaft_six_secret" }
+      ],
+      "choices": [
+        {
+          "text": "What did they find down there?",
+          "nextNodeId": "what_they_found"
+        },
+        {
+          "text": "Ghosts?",
+          "nextNodeId": "ghost_response"
+        }
+      ]
+    },
+    {
+      "id": "what_they_found",
+      "text": "*He lowers his voice to a whisper* The original workshop. Not the one my pa found - somethin' older. Much older. The automatons Thorne's buildin'... they're copies. Copies of somethin' that was down there long before any of us. Somethin' that wasn't built by human hands.",
+      "expression": "fearful",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_ancient_origin" }
+      ],
+      "choices": [
+        {
+          "text": "That's... impossible.",
+          "nextNodeId": "impossible_response"
+        },
+        {
+          "text": "Where did they come from?",
+          "nextNodeId": "origin_mystery"
+        }
+      ]
+    },
+    {
+      "id": "origin_mystery",
+      "text": "Nobody knows. Cave paintings in the deep tunnels - older than anythin' the natives remember - show metal figures walkin' among the stars. Some say they came from the sky thousands of years ago. Others think they were built by a civilization we ain't never heard of. All I know is... they were here first. And maybe they want their home back.",
+      "expression": "mystical",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "ancient_origin_revealed" }
+      ],
+      "choices": [
+        {
+          "text": "This changes everything.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ghost_response",
+      "text": "Call 'em what you want - ghosts, echoes, memories trapped in stone. But miners who work them tunnels hear voices. See lights movin' where no light should be. Some say the automatons are haunted by the spirits of the men Thorne sacrificed to build 'em. I believe 'em.",
+      "expression": "superstitious",
+      "choices": [
+        {
+          "text": "I'll keep that in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "automaton_knowledge",
+      "text": "They run on steam and somethin' else - a blue liquid that glows in the dark. Thorne calls it 'essence.' I call it devil's blood. Without it, they're just fancy scarecrows. With it... they're stronger than ten men, faster than a rattlesnake, and they don't feel pain or fear.",
+      "expression": "serious",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_essence" }
+      ],
+      "choices": [
+        {
+          "text": "Where does the essence come from?",
+          "nextNodeId": "essence_source"
+        },
+        {
+          "text": "How do I stop them?",
+          "nextNodeId": "stop_automatons"
+        }
+      ]
+    },
+    {
+      "id": "essence_source",
+      "text": "Deep underground, there's pools of it. Natural, if you can call anythin' down there natural. Thorne's been pumpin' it out for years. But here's the thing - the supply ain't unlimited. He's runnin' low. That's why he's gettin' more desperate. More dangerous.",
+      "expression": "knowing",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_essence_supply" }
+      ],
+      "choices": [
+        {
+          "text": "We could cut off his supply.",
+          "nextNodeId": "cut_supply"
+        },
+        {
+          "text": "What happens when he runs out?",
+          "nextNodeId": "runs_out"
+        }
+      ]
+    },
+    {
+      "id": "cut_supply",
+      "text": "*He nods eagerly* Now you're thinkin' like a miner. Collapse the right tunnel, destroy the pumpin' station... his whole operation grinds to a halt. But you'd need explosives. Good ones. And someone who knows how to use 'em without bringin' the whole mountain down on your head.",
+      "expression": "excited",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "sabotage_essence" }
+      ],
+      "choices": [
+        {
+          "text": "Know anyone who fits that description?",
+          "nextNodeId": "demolition_expert"
+        }
+      ]
+    },
+    {
+      "id": "demolition_expert",
+      "text": "*He grins, showing missing teeth* You're lookin' at him. Spent forty years blastin' tunnels through solid rock. Still got the touch, even if these old hands shake a bit. Get me the materials and get me in there... I'll give Thorne a fireworks show he'll never forget.",
+      "expression": "determined",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_demolition_available" }
+      ],
+      "choices": [
+        {
+          "text": "You've got yourself a deal.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 20, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "runs_out",
+      "text": "His automatons'll stop workin'. Simple as that. But Thorne ain't the type to go down quietly. He's got plans - contingencies, he calls 'em. I've heard whispers of a final solution. Somethin' that'd let him control everyone, not just machines. We need to stop him 'fore he gets that desperate.",
+      "expression": "worried",
+      "choices": [
+        {
+          "text": "What kind of solution?",
+          "nextNodeId": "final_solution"
+        }
+      ]
+    },
+    {
+      "id": "final_solution",
+      "text": "I don't know the details. But I've seen plans for somethin' called 'The Conductor' - a giant automaton, bigger than anythin' he's built before. Big enough to level a town. Some say it can control all the other automatons at once. If he finishes it... *he shudders* ...God help us all.",
+      "expression": "terrified",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_conductor" },
+        { "type": "StartQuest", "target": "stop_conductor" }
+      ],
+      "choices": [
+        {
+          "text": "We won't let that happen.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "stop_automatons",
+      "text": "Aim for the joints - knees, elbows, neck. That's where the gears are most vulnerable. Electricity'll fry their innards if you can get close enough. And if you find one that's runnin' low on essence, you can sometimes confuse it - give it conflictin' orders and watch it tear itself apart.",
+      "expression": "tactical",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_automaton_weaknesses" }
+      ],
+      "choices": [
+        {
+          "text": "Good to know.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "impossible_response",
+      "text": "*He chuckles darkly* Impossible? I've seen metal men walk. I've seen a man control machines with his mind. I've seen enough impossibilities in my life to fill a dime novel. The frontier's a strange place, stranger. Best accept that now, 'fore it gets you killed.",
+      "expression": "cynical",
+      "choices": [
+        {
+          "text": "Maybe you're right.",
+          "nextNodeId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "no_one_believed",
+      "text": "Not a soul. They said it was grief talkin'. Madness from the smoke and the screams. Even Marcus - Sheriff Cole - thought I was seein' things. But he's come around, over the years. Seen too much himself to doubt anymore.",
+      "expression": "resigned",
+      "choices": [
+        {
+          "text": "The Sheriff believes you now?",
+          "nextNodeId": "sheriff_believes"
+        }
+      ]
+    },
+    {
+      "id": "sheriff_believes",
+      "text": "He does. We've been collectin' evidence together, quiet-like. But we need more. Need proof that can't be explained away or buried. Need someone willin' to go where we can't. Someone like you, maybe.",
+      "expression": "hopeful",
+      "choices": [
+        {
+          "text": "I'll help however I can.",
+          "nextNodeId": "help_offer",
+          "effects": [
+            { "type": "ChangeReputation", "value": 15, "target": "samuel" },
+            { "type": "ChangeReputation", "value": 10, "target": "sheriff_cole" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help_offer",
+      "text": "Then let me tell you what we know. And what we need. It'll be dangerous - folks have died for less. But if we pull this off... we might just save this whole valley from Thorne's metal nightmare.",
+      "expression": "determined",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "samuel_investigation" }
+      ],
+      "choices": [
+        {
+          "text": "I'm ready.",
+          "nextNodeId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "machines_hint",
+      "text": "*He looks around nervously* Can't talk about that here. Too many ears. But if you want to know the truth about what's happenin' in this valley... find me tonight, after dark. I'll show you somethin' that'll change everythin' you thought you knew.",
+      "expression": "paranoid",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_night_meeting" }
+      ],
+      "choices": [
+        {
+          "text": "I'll be there.",
+          "nextNodeId": null
+        },
+        {
+          "text": "Can't you tell me now?",
+          "nextNodeId": "not_safe_now"
+        }
+      ]
+    },
+    {
+      "id": "not_safe_now",
+      "text": "Thorne's got spies everywhere. Paid informants, mechanical listeners hidden in the walls... I ain't crazy, I'm careful. There's a difference. Meet me at the old waterfall near Miner's Creek. Come alone.",
+      "expression": "cautious",
+      "choices": [
+        {
+          "text": "Understood.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "old_days",
+      "text": "*A wistful smile crosses his face* Ah, the old days... Iron Valley was just a handful of prospectors and dreamers back then. My pa was one of the first. Found the richest copper vein this side of the Rockies. Built this town with his own two hands. Then came Thorne, with his railroad and his promises... and his machines.",
+      "expression": "nostalgic",
+      "choices": [
+        {
+          "text": "What changed?",
+          "nextNodeId": "what_changed"
+        }
+      ]
+    },
+    {
+      "id": "what_changed",
+      "text": "Progress. At least, that's what Thorne called it. First it was just the railroad. Then the new mines, the factories, the company towns. People started disappearin'. Accidents in the tunnels. Strange lights in the mountains at night. And by the time folks realized what was happenin'... it was too late to stop it.",
+      "expression": "bitter",
+      "choices": [
+        {
+          "text": "Maybe it's not too late.",
+          "nextNodeId": "time_to_change"
+        }
+      ]
+    },
+    {
+      "id": "historian_response",
+      "text": "*He straightens up with a hint of pride* That I do. Fifty years in these mountains, workin' the mines, raisin' a family. I've seen this valley change from pristine wilderness to... whatever it is now. Ask me anythin' - about the land, the people, the secrets buried beneath the rock.",
+      "expression": "proud",
+      "choices": [
+        {
+          "text": "Tell me about the original settlers.",
+          "nextNodeId": "original_settlers"
+        },
+        {
+          "text": "What secrets are buried here?",
+          "nextNodeId": "secrets"
+        },
+        {
+          "text": "I've heard rumors about strange happenings.",
+          "nextNodeId": "strange_happenings"
+        }
+      ]
+    },
+    {
+      "id": "original_settlers",
+      "text": "First came the trappers, chasin' beaver pelts. Then the prospectors - my pa among 'em - seekin' gold and silver. Found copper instead, which turned out to be more valuable in the long run. The railroad came twenty years back, and with it came Cornelius Thorne. Nothin's been the same since.",
+      "expression": "informative",
+      "choices": [
+        {
+          "text": "What do you know about Thorne?",
+          "nextNodeId": "about_thorne"
+        },
+        {
+          "text": "Was there anyone here before the trappers?",
+          "nextNodeId": "before_settlers"
+        }
+      ]
+    },
+    {
+      "id": "about_thorne",
+      "text": "Thorne? *He spits* Thorne's a snake in a fancy suit. Came from back East with money and ambition and not a lick of conscience. Bought up every claim he could get his hands on, built his railroad on the bones of honest folk. Whatever he's plannin', it ain't good for the rest of us.",
+      "expression": "angry",
+      "choices": [
+        {
+          "text": "You sound like you have a personal grudge.",
+          "nextNodeId": "fire_story"
+        }
+      ]
+    },
+    {
+      "id": "before_settlers",
+      "text": "*His voice drops* The native tribes have stories - passed down for generations. They say this valley was sacred. Forbidden. That metal spirits walked the earth here, long before any human set foot on this soil. They warned my pa not to dig too deep. He shoulda listened.",
+      "expression": "mystical",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_native_legends" }
+      ],
+      "choices": [
+        {
+          "text": "Metal spirits?",
+          "nextNodeId": "origin_mystery"
+        }
+      ]
+    },
+    {
+      "id": "secrets",
+      "text": "*He leans in close* More secrets than there are stars in the sky. Hidden tunnels under the town. Mass graves from the early mining disasters - or what they called disasters. Ancient carvings in the deepest caves, showing machines that shouldn't exist. And at the heart of it all... Shaft Seven.",
+      "expression": "conspiratorial",
+      "choices": [
+        {
+          "text": "Tell me about Shaft Seven.",
+          "nextNodeId": "workshop_location"
+        },
+        {
+          "text": "What kind of carvings?",
+          "nextNodeId": "origin_mystery"
+        }
+      ]
+    },
+    {
+      "id": "strange_happenings",
+      "text": "You've noticed too, then. The lights in the mountains. The mechanical sounds in the night. People vanishin' without a trace. Miners comin' up from the deep shafts mumblin' about metal men. Most folks pretend not to see. It's safer that way. But you don't strike me as the type who looks away.",
+      "expression": "knowing",
+      "choices": [
+        {
+          "text": "What are these metal men?",
+          "nextNodeId": "metal_men_detail"
+        },
+        {
+          "text": "Show me what you've seen.",
+          "nextNodeId": "show_location"
+        }
+      ]
+    },
+    {
+      "id": "show_location",
+      "text": "Not here. Not now. But come nightfall, meet me at the old waterfall near Miner's Creek. I'll show you things that'll make you question everythin' you thought you knew about this world. Just make sure you ain't followed.",
+      "expression": "mysterious",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_night_meeting" },
+        { "type": "StartQuest", "target": "night_meeting" }
+      ],
+      "choices": [
+        {
+          "text": "I'll be there.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "knows_symbol",
+      "text": "*He looks at you with recognition* You've seen it, haven't you? The gear symbol. I can tell by the look in your eyes. You're startin' to understand what's really goin' on in this valley. Question is... what are you gonna do about it?",
+      "expression": "testing",
+      "choices": [
+        {
+          "text": "I'm going to stop it.",
+          "nextNodeId": "encourage_samuel"
+        },
+        {
+          "text": "I need more information first.",
+          "nextNodeId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "after_thorne_reveal",
+      "text": "*He grips your arm* I heard what happened. The whole valley's talkin'. Thorne's true colors, finally shown. This is it, friend. This is the moment we've been waitin' for. Time to end this, once and for all.",
+      "expression": "urgent",
+      "choices": [
+        {
+          "text": "Are you ready to fight?",
+          "nextNodeId": "ready_to_fight"
+        },
+        {
+          "text": "We need a plan.",
+          "nextNodeId": "final_plan"
+        }
+      ]
+    },
+    {
+      "id": "ready_to_fight",
+      "text": "Been ready for thirty years. Every night I close my eyes and see my family burnin'. Every mornin' I wake up and remember why I'm still breathin'. For this. For vengeance. For justice. Give me a target, and I'll show you what this old miner can do.",
+      "expression": "fierce",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "samuel_combat_ready" }
+      ],
+      "choices": [
+        {
+          "text": "We attack at dawn.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "final_plan",
+      "text": "Smart. Thorne won't go down easy. He's got an army of automatons, loyal guards, and that devil machine he's been buildin'. We need to hit him on multiple fronts - cut his essence supply, disable his factory, and destroy The Conductor 'fore he can use it. It'll take everyone we've got.",
+      "expression": "strategic",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "final_assault" }
+      ],
+      "choices": [
+        {
+          "text": "Let's get everyone together.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "return_greeting",
+      "text": "*He looks up from his journal* Back again? Good. Means you ain't dead yet. What can this old miner do for ya?",
+      "expression": "gruff",
+      "choices": [
+        {
+          "text": "I have questions about the mines.",
+          "nextNodeId": "mine_knowledge"
+        },
+        {
+          "text": "Tell me more about the automatons.",
+          "nextNodeId": "automaton_knowledge"
+        },
+        {
+          "text": "Just checking in.",
+          "nextNodeId": "checking_in"
+        }
+      ]
+    },
+    {
+      "id": "checking_in",
+      "text": "Appreciate that. Gets lonely, keepin' secrets for thirty years. But I got hope now. You've given this old man somethin' to believe in again. Don't let me down.",
+      "expression": "grateful",
+      "choices": [
+        {
+          "text": "I won't.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "samuel" }]
+        }
+      ]
+    },
+    {
+      "id": "believe_him",
+      "text": "*Tears well up in his eyes* You... you do? Nobody's ever... *He composes himself* Thank you, friend. You don't know what that means to an old man who's been called crazy for half his life. Let me tell you everythin'. Everythin' I know.",
+      "expression": "emotional",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": 25, "target": "samuel" }
+      ],
+      "choices": [
+        {
+          "text": "I'm listening.",
+          "nextNodeId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "thorne_operations",
+      "text": "Thorne runs everythin' through the railroad - that's his cover. Shipments go in marked as 'mining equipment' and come out as... nothin'. Whatever he's buildin' down there, it don't leave them tunnels until it walks out on its own two legs. Or four. Or eight. I've seen all kinds.",
+      "expression": "knowing",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_thorne_operations" }
+      ],
+      "choices": [
+        {
+          "text": "Eight legs?",
+          "nextNodeId": "spider_automaton"
+        },
+        {
+          "text": "How do I get inside his operation?",
+          "nextNodeId": "infiltrate_question"
+        }
+      ]
+    },
+    {
+      "id": "spider_automaton",
+      "text": "*He shudders* Seen one once, from a distance. Big as a wagon, eight legs like a spider, eyes that glow red in the dark. Patrol automaton, I reckon. Guard dog made of steel. You don't want to meet one up close. Trust me.",
+      "expression": "fearful",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_spider_automatons" }
+      ],
+      "choices": [
+        {
+          "text": "How do I avoid them?",
+          "nextNodeId": "avoid_spiders"
+        }
+      ]
+    },
+    {
+      "id": "avoid_spiders",
+      "text": "They hunt by sound and heat. Move slow, stay cool, and for God's sake don't make any loud noises. There's also blind spots - their eyes are on the front, so if you can get behind 'em... But I wouldn't recommend tryin'. Better to just stay hidden.",
+      "expression": "tactical",
+      "choices": [
+        {
+          "text": "Good to know.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "infiltrate_question",
+      "text": "There's three ways in. The front door - if you've got an IVRC badge or brass balls. The ventilation shafts - if you're small enough and don't mind rats. Or my pa's secret tunnel - the one I told you about. That's your best bet, but it comes out right in the heart of it all. No room for mistakes.",
+      "expression": "strategic",
+      "choices": [
+        {
+          "text": "The tunnel sounds like our best option.",
+          "nextNodeId": "workshop_location"
+        }
+      ]
+    }
+  ]
+}

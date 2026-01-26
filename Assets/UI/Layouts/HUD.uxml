@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - In-Game HUD
+    Unity 6 UI Toolkit Layout
+
+    Heads-up display showing vital stats, minimap, quest tracking, and currency.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Root HUD container (full screen, pointer-events pass-through) -->
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+
+        <!-- ========== TOP BAR ========== -->
+        <ui:VisualElement name="top-bar" class="hud-top-bar" picking-mode="Ignore">
+
+            <!-- Left section: Player vitals -->
+            <ui:VisualElement name="vitals-container" class="vitals-container">
+
+                <!-- Player portrait and level -->
+                <ui:VisualElement name="player-portrait-frame" class="portrait-frame">
+                    <ui:VisualElement name="player-portrait" class="player-portrait" />
+                    <ui:Label name="player-level" text="12" class="player-level" />
+                </ui:VisualElement>
+
+                <!-- Health bar -->
+                <ui:VisualElement name="health-container" class="stat-bar-container">
+                    <ui:VisualElement name="health-icon" class="stat-icon stat-icon--health" />
+                    <ui:ProgressBar name="health-bar" value="75" high-value="100" class="stat-bar health-bar" />
+                    <ui:Label name="health-label" text="750 / 1000" class="stat-label" />
+                </ui:VisualElement>
+
+                <!-- Stamina bar -->
+                <ui:VisualElement name="stamina-container" class="stat-bar-container">
+                    <ui:VisualElement name="stamina-icon" class="stat-icon stat-icon--stamina" />
+                    <ui:ProgressBar name="stamina-bar" value="60" high-value="100" class="stat-bar stamina-bar" />
+                    <ui:Label name="stamina-label" text="60 / 100" class="stat-label" />
+                </ui:VisualElement>
+
+                <!-- Experience bar -->
+                <ui:VisualElement name="experience-container" class="stat-bar-container stat-bar-container--xp">
+                    <ui:ProgressBar name="experience-bar" value="35" high-value="100" class="stat-bar experience-bar" />
+                    <ui:Label name="experience-label" text="3,500 / 10,000 XP" class="stat-label stat-label--xp" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Center section: Status effects and notifications -->
+            <ui:VisualElement name="center-section" class="hud-center-section" picking-mode="Ignore">
+
+                <!-- Status effects row -->
+                <ui:VisualElement name="status-effects" class="status-effects-row">
+                    <!-- Status effect icons are added dynamically -->
+                </ui:VisualElement>
+
+                <!-- Notification area -->
+                <ui:VisualElement name="notification-area" class="notification-area">
+                    <!-- Notifications appear here temporarily -->
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Right section: Currency display -->
+            <ui:VisualElement name="currency-container" class="currency-container">
+
+                <ui:VisualElement name="gold-display" class="currency-display">
+                    <ui:VisualElement name="gold-icon" class="currency-icon currency-icon--gold" />
+                    <ui:Label name="gold-amount" text="12,450" class="currency-amount" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="premium-display" class="currency-display">
+                    <ui:VisualElement name="premium-icon" class="currency-icon currency-icon--premium" />
+                    <ui:Label name="premium-amount" text="150" class="currency-amount" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== LEFT PANEL: Quest Tracker ========== -->
+        <ui:VisualElement name="quest-tracker" class="quest-tracker">
+
+            <ui:VisualElement name="quest-tracker-header" class="quest-tracker-header">
+                <ui:Label text="Active Quests" class="quest-tracker-title" />
+                <ui:Button name="expand-quests-button" class="icon-button icon-button--expand" />
+            </ui:VisualElement>
+
+            <ui:ScrollView name="quest-list" class="quest-list" horizontal-scroller-visibility="Hidden">
+
+                <!-- Active quest entries (dynamically populated) -->
+                <ui:VisualElement name="quest-entry-template" class="quest-entry">
+                    <ui:VisualElement name="quest-icon" class="quest-icon quest-icon--main" />
+                    <ui:VisualElement name="quest-info" class="quest-info">
+                        <ui:Label name="quest-name" text="The Iron Path" class="quest-name" />
+                        <ui:Label name="quest-objective" text="Speak with the Blacksmith" class="quest-objective" />
+                    </ui:VisualElement>
+                    <ui:Button name="track-button" class="icon-button icon-button--pin" />
+                </ui:VisualElement>
+
+            </ui:ScrollView>
+
+        </ui:VisualElement>
+
+        <!-- ========== RIGHT PANEL: Minimap ========== -->
+        <ui:VisualElement name="minimap-container" class="minimap-container">
+
+            <ui:VisualElement name="minimap-frame" class="minimap-frame">
+                <ui:VisualElement name="minimap-content" class="minimap-content">
+                    <!-- Map renders here -->
+                    <ui:VisualElement name="player-marker" class="minimap-marker minimap-marker--player" />
+                </ui:VisualElement>
+
+                <!-- Compass directions -->
+                <ui:Label name="compass-n" text="N" class="compass-label compass-label--n" />
+                <ui:Label name="compass-e" text="E" class="compass-label compass-label--e" />
+                <ui:Label name="compass-s" text="S" class="compass-label compass-label--s" />
+                <ui:Label name="compass-w" text="W" class="compass-label compass-label--w" />
+            </ui:VisualElement>
+
+            <!-- Location name -->
+            <ui:Label name="location-name" text="Rustwood Valley" class="location-name" />
+
+            <!-- Minimap controls -->
+            <ui:VisualElement name="minimap-controls" class="minimap-controls">
+                <ui:Button name="zoom-in-button" text="+" class="minimap-button" />
+                <ui:Button name="zoom-out-button" text="-" class="minimap-button" />
+                <ui:Button name="open-map-button" class="icon-button icon-button--fullscreen" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== BOTTOM BAR: Action Bar & Hotkeys ========== -->
+        <ui:VisualElement name="bottom-bar" class="hud-bottom-bar" picking-mode="Ignore">
+
+            <!-- Quick slots / Action bar -->
+            <ui:VisualElement name="action-bar" class="action-bar">
+
+                <ui:VisualElement name="slot-1" class="action-slot">
+                    <ui:VisualElement name="slot-1-icon" class="action-slot-icon" />
+                    <ui:Label name="slot-1-key" text="1" class="action-slot-key" />
+                    <ui:Label name="slot-1-cooldown" class="action-slot-cooldown" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="slot-2" class="action-slot">
+                    <ui:VisualElement name="slot-2-icon" class="action-slot-icon" />
+                    <ui:Label name="slot-2-key" text="2" class="action-slot-key" />
+                    <ui:Label name="slot-2-cooldown" class="action-slot-cooldown" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="slot-3" class="action-slot">
+                    <ui:VisualElement name="slot-3-icon" class="action-slot-icon" />
+                    <ui:Label name="slot-3-key" text="3" class="action-slot-key" />
+                    <ui:Label name="slot-3-cooldown" class="action-slot-cooldown" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="slot-4" class="action-slot">
+                    <ui:VisualElement name="slot-4-icon" class="action-slot-icon" />
+                    <ui:Label name="slot-4-key" text="4" class="action-slot-key" />
+                    <ui:Label name="slot-4-cooldown" class="action-slot-cooldown" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="slot-5" class="action-slot">
+                    <ui:VisualElement name="slot-5-icon" class="action-slot-icon" />
+                    <ui:Label name="slot-5-key" text="5" class="action-slot-key" />
+                    <ui:Label name="slot-5-cooldown" class="action-slot-cooldown" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Menu shortcuts -->
+            <ui:VisualElement name="menu-shortcuts" class="menu-shortcuts">
+                <ui:Button name="inventory-shortcut" class="shortcut-button shortcut-button--inventory" tooltip="Inventory (I)">
+                    <ui:Label text="I" class="shortcut-key" />
+                </ui:Button>
+                <ui:Button name="journal-shortcut" class="shortcut-button shortcut-button--journal" tooltip="Journal (J)">
+                    <ui:Label text="J" class="shortcut-key" />
+                </ui:Button>
+                <ui:Button name="map-shortcut" class="shortcut-button shortcut-button--map" tooltip="Map (M)">
+                    <ui:Label text="M" class="shortcut-key" />
+                </ui:Button>
+                <ui:Button name="menu-shortcut" class="shortcut-button shortcut-button--menu" tooltip="Menu (Esc)">
+                    <ui:Label text="Esc" class="shortcut-key" />
+                </ui:Button>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== INTERACTION PROMPT ========== -->
+        <ui:VisualElement name="interaction-prompt" class="interaction-prompt interaction-prompt--hidden">
+            <ui:Label name="interaction-key" text="E" class="interaction-key" />
+            <ui:Label name="interaction-text" text="Talk to Blacksmith" class="interaction-text" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Character Creation UI
+    Unity 6 UI Toolkit Layout
+
+    Character creation with name input, appearance customization, and stat allocation.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Root container -->
+    <ui:VisualElement name="character-creation-root" class="character-creation-root">
+
+        <!-- Background -->
+        <ui:VisualElement name="background" class="creation-background" />
+
+        <!-- Main panel -->
+        <ui:VisualElement name="creation-panel" class="creation-panel">
+
+            <!-- Header -->
+            <ui:VisualElement name="creation-header" class="creation-header">
+                <ui:Label text="Create Your Character" class="creation-title" />
+                <ui:Label text="Forge your legend in the Iron Frontier" class="creation-subtitle" />
+            </ui:VisualElement>
+
+            <!-- Main content -->
+            <ui:VisualElement name="creation-content" class="creation-content">
+
+                <!-- Left panel: Character preview -->
+                <ui:VisualElement name="preview-section" class="preview-section">
+
+                    <!-- 3D character preview area -->
+                    <ui:VisualElement name="character-preview" class="character-preview">
+                        <!-- 3D render target goes here -->
+                        <ui:VisualElement name="preview-frame" class="preview-frame" />
+                    </ui:VisualElement>
+
+                    <!-- Rotation controls -->
+                    <ui:VisualElement name="preview-controls" class="preview-controls">
+                        <ui:Button name="rotate-left" text="<" class="rotate-button" tabindex="1" />
+                        <ui:Label text="Rotate" class="rotate-label" />
+                        <ui:Button name="rotate-right" text=">" class="rotate-button" tabindex="2" />
+                    </ui:VisualElement>
+
+                    <!-- Preview poses -->
+                    <ui:VisualElement name="pose-selector" class="pose-selector">
+                        <ui:Button name="pose-idle" text="Idle" class="pose-button pose-button--active" tabindex="3" />
+                        <ui:Button name="pose-combat" text="Combat" class="pose-button" tabindex="4" />
+                        <ui:Button name="pose-action" text="Action" class="pose-button" tabindex="5" />
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+                <!-- Center panel: Customization options -->
+                <ui:VisualElement name="customization-section" class="customization-section">
+
+                    <ui:ScrollView name="customization-scroll" class="customization-scroll" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="customization-content" class="customization-content">
+
+                            <!-- Name input -->
+                            <ui:VisualElement name="name-section" class="creation-section">
+                                <ui:Label text="Character Name" class="section-title" />
+                                <ui:TextField name="character-name-input" placeholder-text="Enter your name..." max-length="20" class="name-input" tabindex="10" />
+                                <ui:Button name="random-name-button" text="Random" class="random-button" tabindex="11" />
+                                <ui:Label name="name-validation" text="" class="validation-message" />
+                            </ui:VisualElement>
+
+                            <!-- Class selection -->
+                            <ui:VisualElement name="class-section" class="creation-section">
+                                <ui:Label text="Class" class="section-title" />
+                                <ui:VisualElement name="class-options" class="class-options">
+
+                                    <ui:VisualElement name="class-warrior" class="class-option class-option--selected" tabindex="20">
+                                        <ui:VisualElement name="warrior-icon" class="class-icon class-icon--warrior" />
+                                        <ui:Label text="Warrior" class="class-name" />
+                                        <ui:Label text="Master of melee combat" class="class-desc" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement name="class-ranger" class="class-option" tabindex="21">
+                                        <ui:VisualElement name="ranger-icon" class="class-icon class-icon--ranger" />
+                                        <ui:Label text="Ranger" class="class-name" />
+                                        <ui:Label text="Swift and precise archer" class="class-desc" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement name="class-mage" class="class-option" tabindex="22">
+                                        <ui:VisualElement name="mage-icon" class="class-icon class-icon--mage" />
+                                        <ui:Label text="Mage" class="class-name" />
+                                        <ui:Label text="Wielder of arcane power" class="class-desc" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement name="class-rogue" class="class-option" tabindex="23">
+                                        <ui:VisualElement name="rogue-icon" class="class-icon class-icon--rogue" />
+                                        <ui:Label text="Rogue" class="class-name" />
+                                        <ui:Label text="Cunning and deadly" class="class-desc" />
+                                    </ui:VisualElement>
+
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- Appearance -->
+                            <ui:VisualElement name="appearance-section" class="creation-section">
+                                <ui:Label text="Appearance" class="section-title" />
+
+                                <!-- Gender -->
+                                <ui:VisualElement name="gender-row" class="appearance-row">
+                                    <ui:Label text="Body Type" class="option-label" />
+                                    <ui:VisualElement name="gender-options" class="toggle-options">
+                                        <ui:Button name="body-type-1" text="Type A" class="toggle-button toggle-button--active" tabindex="30" />
+                                        <ui:Button name="body-type-2" text="Type B" class="toggle-button" tabindex="31" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                                <!-- Skin tone -->
+                                <ui:VisualElement name="skin-row" class="appearance-row">
+                                    <ui:Label text="Skin Tone" class="option-label" />
+                                    <ui:VisualElement name="skin-options" class="color-options">
+                                        <ui:VisualElement name="skin-1" class="color-swatch color-swatch--selected skin-tone-1" tabindex="32" />
+                                        <ui:VisualElement name="skin-2" class="color-swatch skin-tone-2" tabindex="33" />
+                                        <ui:VisualElement name="skin-3" class="color-swatch skin-tone-3" tabindex="34" />
+                                        <ui:VisualElement name="skin-4" class="color-swatch skin-tone-4" tabindex="35" />
+                                        <ui:VisualElement name="skin-5" class="color-swatch skin-tone-5" tabindex="36" />
+                                        <ui:VisualElement name="skin-6" class="color-swatch skin-tone-6" tabindex="37" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                                <!-- Hair style -->
+                                <ui:VisualElement name="hair-style-row" class="appearance-row">
+                                    <ui:Label text="Hair Style" class="option-label" />
+                                    <ui:VisualElement name="hair-style-selector" class="selector-row">
+                                        <ui:Button name="hair-prev" text="<" class="selector-button" tabindex="38" />
+                                        <ui:Label name="hair-style-label" text="Style 1 / 12" class="selector-label" />
+                                        <ui:Button name="hair-next" text=">" class="selector-button" tabindex="39" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                                <!-- Hair color -->
+                                <ui:VisualElement name="hair-color-row" class="appearance-row">
+                                    <ui:Label text="Hair Color" class="option-label" />
+                                    <ui:VisualElement name="hair-color-options" class="color-options">
+                                        <ui:VisualElement name="hair-black" class="color-swatch color-swatch--selected hair-black" tabindex="40" />
+                                        <ui:VisualElement name="hair-brown" class="color-swatch hair-brown" tabindex="41" />
+                                        <ui:VisualElement name="hair-blonde" class="color-swatch hair-blonde" tabindex="42" />
+                                        <ui:VisualElement name="hair-red" class="color-swatch hair-red" tabindex="43" />
+                                        <ui:VisualElement name="hair-gray" class="color-swatch hair-gray" tabindex="44" />
+                                        <ui:VisualElement name="hair-white" class="color-swatch hair-white" tabindex="45" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                                <!-- Face -->
+                                <ui:VisualElement name="face-row" class="appearance-row">
+                                    <ui:Label text="Face" class="option-label" />
+                                    <ui:VisualElement name="face-selector" class="selector-row">
+                                        <ui:Button name="face-prev" text="<" class="selector-button" tabindex="46" />
+                                        <ui:Label name="face-label" text="Face 1 / 8" class="selector-label" />
+                                        <ui:Button name="face-next" text=">" class="selector-button" tabindex="47" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                                <!-- Facial hair (conditional) -->
+                                <ui:VisualElement name="facial-hair-row" class="appearance-row">
+                                    <ui:Label text="Facial Hair" class="option-label" />
+                                    <ui:VisualElement name="facial-hair-selector" class="selector-row">
+                                        <ui:Button name="facial-prev" text="<" class="selector-button" tabindex="48" />
+                                        <ui:Label name="facial-hair-label" text="None" class="selector-label" />
+                                        <ui:Button name="facial-next" text=">" class="selector-button" tabindex="49" />
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
+
+                            </ui:VisualElement>
+
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+
+                </ui:VisualElement>
+
+                <!-- Right panel: Stats -->
+                <ui:VisualElement name="stats-section" class="stats-section">
+
+                    <ui:Label text="Attributes" class="section-title" />
+
+                    <!-- Points remaining -->
+                    <ui:VisualElement name="points-remaining" class="points-remaining">
+                        <ui:Label text="Points Remaining:" class="points-label" />
+                        <ui:Label name="points-value" text="5" class="points-value" />
+                    </ui:VisualElement>
+
+                    <!-- Stat allocation -->
+                    <ui:VisualElement name="stat-allocations" class="stat-allocations">
+
+                        <!-- Strength -->
+                        <ui:VisualElement name="stat-strength" class="stat-row">
+                            <ui:Label text="Strength" class="stat-name" tooltip="Increases melee damage and carrying capacity" />
+                            <ui:Button name="str-minus" text="-" class="stat-button stat-button--minus" tabindex="50" />
+                            <ui:Label name="str-value" text="10" class="stat-value" />
+                            <ui:Button name="str-plus" text="+" class="stat-button stat-button--plus" tabindex="51" />
+                            <ui:VisualElement name="str-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="str-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Dexterity -->
+                        <ui:VisualElement name="stat-dexterity" class="stat-row">
+                            <ui:Label text="Dexterity" class="stat-name" tooltip="Increases ranged damage and evasion" />
+                            <ui:Button name="dex-minus" text="-" class="stat-button stat-button--minus" tabindex="52" />
+                            <ui:Label name="dex-value" text="10" class="stat-value" />
+                            <ui:Button name="dex-plus" text="+" class="stat-button stat-button--plus" tabindex="53" />
+                            <ui:VisualElement name="dex-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="dex-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Constitution -->
+                        <ui:VisualElement name="stat-constitution" class="stat-row">
+                            <ui:Label text="Constitution" class="stat-name" tooltip="Increases health and stamina" />
+                            <ui:Button name="con-minus" text="-" class="stat-button stat-button--minus" tabindex="54" />
+                            <ui:Label name="con-value" text="10" class="stat-value" />
+                            <ui:Button name="con-plus" text="+" class="stat-button stat-button--plus" tabindex="55" />
+                            <ui:VisualElement name="con-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="con-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Intelligence -->
+                        <ui:VisualElement name="stat-intelligence" class="stat-row">
+                            <ui:Label text="Intelligence" class="stat-name" tooltip="Increases magic damage and mana" />
+                            <ui:Button name="int-minus" text="-" class="stat-button stat-button--minus" tabindex="56" />
+                            <ui:Label name="int-value" text="10" class="stat-value" />
+                            <ui:Button name="int-plus" text="+" class="stat-button stat-button--plus" tabindex="57" />
+                            <ui:VisualElement name="int-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="int-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Wisdom -->
+                        <ui:VisualElement name="stat-wisdom" class="stat-row">
+                            <ui:Label text="Wisdom" class="stat-name" tooltip="Increases mana regeneration and resistance" />
+                            <ui:Button name="wis-minus" text="-" class="stat-button stat-button--minus" tabindex="58" />
+                            <ui:Label name="wis-value" text="10" class="stat-value" />
+                            <ui:Button name="wis-plus" text="+" class="stat-button stat-button--plus" tabindex="59" />
+                            <ui:VisualElement name="wis-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="wis-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Charisma -->
+                        <ui:VisualElement name="stat-charisma" class="stat-row">
+                            <ui:Label text="Charisma" class="stat-name" tooltip="Affects dialogue options and prices" />
+                            <ui:Button name="cha-minus" text="-" class="stat-button stat-button--minus" tabindex="60" />
+                            <ui:Label name="cha-value" text="10" class="stat-value" />
+                            <ui:Button name="cha-plus" text="+" class="stat-button stat-button--plus" tabindex="61" />
+                            <ui:VisualElement name="cha-bar" class="stat-bar-mini">
+                                <ui:VisualElement name="cha-fill" class="stat-bar-fill" style="width: 50%;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                    <!-- Derived stats -->
+                    <ui:VisualElement name="derived-stats" class="derived-stats">
+                        <ui:Label text="Derived Stats" class="section-subtitle" />
+                        <ui:VisualElement class="derived-row">
+                            <ui:Label text="Health" class="derived-name" />
+                            <ui:Label name="derived-health" text="100" class="derived-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="derived-row">
+                            <ui:Label text="Mana" class="derived-name" />
+                            <ui:Label name="derived-mana" text="50" class="derived-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="derived-row">
+                            <ui:Label text="Stamina" class="derived-name" />
+                            <ui:Label name="derived-stamina" text="100" class="derived-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- Reset button -->
+                    <ui:Button name="reset-stats-button" text="Reset Stats" class="reset-button" tabindex="62" />
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Footer with navigation -->
+            <ui:VisualElement name="creation-footer" class="creation-footer">
+                <ui:Button name="back-button" text="Back" class="footer-button footer-button--back" tabindex="90" />
+                <ui:VisualElement name="footer-spacer" class="footer-spacer" />
+                <ui:Button name="randomize-button" text="Randomize All" class="footer-button" tabindex="91" />
+                <ui:Button name="start-button" text="Begin Journey" class="footer-button footer-button--primary" tabindex="92" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

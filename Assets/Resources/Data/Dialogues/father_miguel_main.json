@@ -1,0 +1,2374 @@
+{
+  "id": "father_miguel_main",
+  "name": "Father Miguel - Main Dialogue",
+  "description": "The parish priest who secretly runs an underground railroad helping indebted workers escape IVRC",
+  "tags": ["church", "underground", "quest_giver", "sanctuary", "faith"],
+
+  "entryPoints": [
+    {
+      "nodeId": "player_harmed_workers",
+      "conditions": [{ "type": "FlagSet", "target": "harmed_ivrc_workers" }],
+      "priority": 20
+    },
+    {
+      "nodeId": "sanctuary_quest_complete",
+      "conditions": [{ "type": "QuestComplete", "target": "sanctuary" }],
+      "priority": 15
+    },
+    {
+      "nodeId": "sanctuary_quest_active",
+      "conditions": [{ "type": "QuestActive", "target": "sanctuary" }],
+      "priority": 12
+    },
+    {
+      "nodeId": "first_meeting",
+      "conditions": [{ "type": "FirstMeeting" }],
+      "priority": 10
+    },
+    {
+      "nodeId": "underground_revealed",
+      "conditions": [{ "type": "FlagSet", "target": "knows_underground" }],
+      "priority": 8
+    },
+    {
+      "nodeId": "trusted_greeting",
+      "conditions": [{ "type": "ReputationGte", "value": 50 }],
+      "priority": 5
+    },
+    {
+      "nodeId": "night_greeting",
+      "conditions": [{ "type": "TimeOfDay", "value": "night" }],
+      "priority": 3
+    },
+    {
+      "nodeId": "return_greeting",
+      "conditions": [{ "type": "ReturnVisit" }],
+      "priority": 0
+    }
+  ],
+
+  "nodes": [
+    {
+      "id": "first_meeting",
+      "text": "*A middle-aged man in simple priest's vestments looks up from where he's arranging candles near the altar. His face is weathered but kind, with deep lines around eyes that have seen too much suffering.* Bienvenido, my child. Welcome to San Miguel's. *He wipes his hands on his cassock* I am Father Miguel. You are new to Dusty Springs, yes?",
+      "expression": "warm",
+      "choices": [
+        {
+          "text": "Yes, I just arrived. This is a beautiful church.",
+          "nextNodeId": "beautiful_church"
+        },
+        {
+          "text": "I'm looking for information, Father.",
+          "nextNodeId": "looking_for_info"
+        },
+        {
+          "text": "I've heard you help people in trouble.",
+          "nextNodeId": "help_people",
+          "conditions": [{ "type": "FlagSet", "target": "heard_about_underground" }]
+        }
+      ]
+    },
+
+    {
+      "id": "beautiful_church",
+      "text": "*His face lights up with genuine pleasure* Gracias. We built it together, the community and I. Every nail, every plank placed with prayer. *He gestures around* It is small, but it is ours. IVRC offered to build us a grand cathedral once. *His smile turns knowing* We declined.",
+      "choices": [
+        {
+          "text": "Why did you decline?",
+          "nextNodeId": "why_declined"
+        },
+        {
+          "text": "That seems foolish, to refuse money.",
+          "nextNodeId": "foolish_decline"
+        }
+      ]
+    },
+
+    {
+      "id": "why_declined",
+      "text": "*He leads you to a pew, sitting* When a wolf offers to build the sheepfold, one must wonder about the design of the gate. IVRC's gifts always come with chains attached. We may be poor, but our souls are our own. *He sighs* Not everyone in this territory can say the same.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "You don't trust IVRC.",
+          "nextNodeId": "dont_trust_ivrc"
+        },
+        {
+          "text": "Tell me about those chains.",
+          "nextNodeId": "tell_about_chains"
+        }
+      ]
+    },
+
+    {
+      "id": "foolish_decline",
+      "text": "*He chuckles softly* Perhaps. But I have learned that the most expensive gifts are those that appear free. Cornelius Thorne would have built us a palace and expected to own our consciences in return. Better a humble church where truth can still be spoken.",
+      "choices": [
+        {
+          "text": "You speak of Thorne like an enemy.",
+          "nextNodeId": "thorne_enemy"
+        },
+        {
+          "text": "A pragmatic philosophy.",
+          "nextNodeId": "pragmatic_philosophy"
+        }
+      ]
+    },
+
+    {
+      "id": "dont_trust_ivrc",
+      "text": "*His eyes grow distant* I have given last rites to too many miners who died in 'accidents.' I have blessed too many children who will never see their fathers again. *His voice hardens* IVRC counts profits. I count graves. We have... different perspectives.",
+      "choices": [
+        {
+          "text": "Is there anything being done to help the workers?",
+          "nextNodeId": "help_workers"
+        },
+        {
+          "text": "That sounds like dangerous talk, Father.",
+          "nextNodeId": "dangerous_talk"
+        }
+      ]
+    },
+
+    {
+      "id": "tell_about_chains",
+      "text": "The contract workers. *He lowers his voice* Men and women who came here promised wages, only to find themselves deeper in debt each month. Company scrip, company stores, company housing. They cannot leave - their debt follows them. Some call it employment. *He pauses* I call it what it is.",
+      "choices": [
+        {
+          "text": "Slavery by another name.",
+          "nextNodeId": "slavery_comment"
+        },
+        {
+          "text": "They signed contracts willingly.",
+          "nextNodeId": "signed_willingly"
+        }
+      ]
+    },
+
+    {
+      "id": "slavery_comment",
+      "text": "*He meets your eyes with sudden intensity* Yes. Exactly. *He seems to be measuring you* You understand more than most newcomers. Tell me - are you the kind of person who merely understands injustice, or the kind who acts against it?",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_testing_player" }],
+      "choices": [
+        {
+          "text": "I believe in action when action is possible.",
+          "nextNodeId": "believe_in_action"
+        },
+        {
+          "text": "I'm still learning what's possible here.",
+          "nextNodeId": "still_learning"
+        },
+        {
+          "text": "I'm no crusader, Father.",
+          "nextNodeId": "no_crusader"
+        }
+      ]
+    },
+
+    {
+      "id": "believe_in_action",
+      "text": "*A small smile* Good. Action is what changes the world. Words comfort, but deeds save. *He glances toward the church door, checking that you are alone* Perhaps... perhaps we should speak more privately. There are things I could tell you. Things I could show you. If you prove trustworthy.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_considering_trust" }],
+      "choices": [
+        {
+          "text": "How do I prove myself?",
+          "nextNodeId": "prove_trustworthy"
+        },
+        {
+          "text": "What kind of things?",
+          "nextNodeId": "what_things"
+        }
+      ]
+    },
+
+    {
+      "id": "prove_trustworthy",
+      "text": "*He considers* There is a family. The Ortegas. They live in the mining camp north of town. The father is ill - lung sickness from the mines. The company wants to evict them since he cannot work. *He meets your eyes* If you could bring them food, medicine... check on them... without IVRC knowing... that would tell me much about your character.",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "mercy_mission" },
+        { "type": "SetFlag", "target": "miguel_trust_test" }
+      ],
+      "choices": [
+        {
+          "text": "I'll help them.",
+          "nextNodeId": "will_help_ortega"
+        },
+        {
+          "text": "Why the secrecy?",
+          "nextNodeId": "why_secrecy"
+        }
+      ]
+    },
+
+    {
+      "id": "will_help_ortega",
+      "text": "*He presses a small bundle into your hands* Medicine from Doc Chen. Some food. *He crosses himself* Go carefully. IVRC does not like charity that they do not control. If they ask, you are merely visiting as a friend. *His eyes shine* Vaya con Dios, my child.",
+      "onEnterEffects": [
+        { "type": "GiveItem", "target": "medical_supplies" },
+        { "type": "GiveItem", "target": "food_bundle" }
+      ],
+      "choices": [
+        {
+          "text": "I'll return with news.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "why_secrecy",
+      "text": "*His face darkens* Because IVRC sees charity to workers as... subversive. They claim it 'disrupts the labor economy.' *His voice drips with contempt* As if human beings are mere numbers in a ledger. They have punished those who help before. I would not see you harmed for kindness.",
+      "choices": [
+        {
+          "text": "I can handle myself. I'll help the Ortegas.",
+          "nextNodeId": "will_help_ortega"
+        },
+        {
+          "text": "What happened to those who helped before?",
+          "nextNodeId": "what_happened_helpers"
+        }
+      ]
+    },
+
+    {
+      "id": "what_happened_helpers",
+      "text": "*He is silent for a long moment* A teacher. Maria Rosalia. She taught the miners' children to read, for free. IVRC said she was 'inciting discontent.' *His voice breaks slightly* She disappeared one night. Her body was found in the desert three days later. They called it an accident.",
+      "expression": "grief",
+      "choices": [
+        {
+          "text": "I'm sorry, Father.",
+          "nextNodeId": "sorry_father"
+        },
+        {
+          "text": "And you continue her work?",
+          "nextNodeId": "continue_her_work"
+        }
+      ]
+    },
+
+    {
+      "id": "sorry_father",
+      "text": "*He composes himself* She is with God now. And her spirit lives on in everyone she taught. *He straightens* But you see why I am careful. Why I ask strangers to prove themselves before I... share certain truths. The stakes are not merely my life. Many depend on my discretion.",
+      "choices": [
+        {
+          "text": "I understand. I'll help the Ortegas and return.",
+          "nextNodeId": "will_help_ortega"
+        }
+      ]
+    },
+
+    {
+      "id": "continue_her_work",
+      "text": "*His eyes blaze with quiet fire* Someone must. 'Whatever you did for one of the least of these brothers and sisters of mine, you did for me.' *He touches his cross* Maria Rosalia died because she believed every soul deserves dignity. I will not let her death be meaningless.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "Let me help. I'll check on the Ortegas.",
+          "nextNodeId": "will_help_ortega"
+        }
+      ]
+    },
+
+    {
+      "id": "still_learning",
+      "text": "*He nods slowly* A wise answer. This territory has many lessons to teach. Some of them are harsh. *He gestures around the church* When you have learned more, come back. My door is always open. And if you find yourself needing... guidance... I may be able to help.",
+      "choices": [
+        {
+          "text": "Thank you, Father. I'll return.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "no_crusader",
+      "text": "*He sighs* Few are. It is easier to look away, to tell ourselves that the suffering of others is not our concern. *He stands, moving back to his candles* I do not judge you. But know this - if you ever wish to be more than a bystander, you know where to find me.",
+      "choices": [
+        {
+          "text": "I'll keep that in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "what_things",
+      "text": "*He glances again at the door, voice dropping to barely a whisper* There is... a path. For those trapped in IVRC's grip. A way out of the territory that the company does not watch. *He studies your face* Some call it an underground railroad. I call it mercy.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "heard_about_underground" }],
+      "choices": [
+        {
+          "text": "You help people escape.",
+          "nextNodeId": "help_people_escape"
+        },
+        {
+          "text": "That's incredibly dangerous.",
+          "nextNodeId": "incredibly_dangerous"
+        }
+      ]
+    },
+
+    {
+      "id": "help_people_escape",
+      "text": "*He neither confirms nor denies, but his eyes say everything* I help people find... freedom. The kind IVRC's contracts deny them. *He touches his cross* When a man must choose between his family starving and working himself to death in a mine... that is not a choice. That is coercion. I offer another option.",
+      "choices": [
+        {
+          "text": "How can I help?",
+          "nextNodeId": "how_can_help"
+        },
+        {
+          "text": "Who else is involved?",
+          "nextNodeId": "who_else_involved"
+        }
+      ]
+    },
+
+    {
+      "id": "incredibly_dangerous",
+      "text": "*He nods gravely* Si. It is. IVRC has... enforcers. People disappear when they try to run. *His jaw sets* But it is more dangerous to do nothing. To watch families destroyed, children grow up in debt bondage. Some risks are worth taking. The question is whether you agree.",
+      "choices": [
+        {
+          "text": "I agree. Let me help.",
+          "nextNodeId": "how_can_help"
+        },
+        {
+          "text": "I need to think about this.",
+          "nextNodeId": "need_to_think"
+        }
+      ]
+    },
+
+    {
+      "id": "how_can_help",
+      "text": "*Relief and caution war in his eyes* First, we must know we can trust you. *He gestures toward the north* The Ortega family - help them, as I asked. Prove you can move unseen, that your heart is true. Then... then I will show you more. The network. The safe houses. The routes.",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "mercy_mission" },
+        { "type": "SetFlag", "target": "joining_underground" }
+      ],
+      "choices": [
+        {
+          "text": "I'll help the Ortegas and return.",
+          "nextNodeId": "will_help_ortega"
+        }
+      ]
+    },
+
+    {
+      "id": "who_else_involved",
+      "text": "*His face closes off* That... I cannot say. Not yet. Not until I know you better. *He softens* Understand - it is not distrust. It is protection. If you are caught, you cannot reveal what you do not know. That keeps everyone safe. Including you.",
+      "choices": [
+        {
+          "text": "A wise precaution. How do I earn your trust?",
+          "nextNodeId": "prove_trustworthy"
+        },
+        {
+          "text": "Fair enough. I'll prove myself.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "need_to_think",
+      "text": "*He nods without judgment* Of course. This is not a decision to make lightly. *He touches your shoulder* But remember - not deciding is also a choice. When you are ready, come back. The offer will remain open. And those who need help will still need it.",
+      "choices": [
+        {
+          "text": "I'll return when I've decided.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "looking_for_info",
+      "text": "*He tilts his head, curious* Information? This is a church, not a library. *But his eyes are sharp, assessing* What kind of information does a stranger seek in a house of God?",
+      "choices": [
+        {
+          "text": "About the territory. The power structures here.",
+          "nextNodeId": "power_structures"
+        },
+        {
+          "text": "About IVRC and Cornelius Thorne.",
+          "nextNodeId": "about_ivrc_thorne"
+        },
+        {
+          "text": "About helping those in need.",
+          "nextNodeId": "helping_need"
+        }
+      ]
+    },
+
+    {
+      "id": "power_structures",
+      "text": "*He laughs softly, without humor* Power structures. A delicate phrase for what exists here. *He gestures for you to sit* Very well. In this territory, there is one true power - IVRC. The railroad company owns the mines, the water, the land. Everything else is... theater.",
+      "choices": [
+        {
+          "text": "What about the town government?",
+          "nextNodeId": "town_government"
+        },
+        {
+          "text": "Are there any who resist?",
+          "nextNodeId": "any_who_resist"
+        }
+      ]
+    },
+
+    {
+      "id": "town_government",
+      "text": "*He sighs* Mayor Holt means well. I believe that. But her hands are tied. She dances on strings held by Thorne, and if she pulls too hard, she falls. Sheriff Cole tries to enforce law, but IVRC has its own law. The company is the government here, whatever the paperwork says.",
+      "choices": [
+        {
+          "text": "A bleak picture.",
+          "nextNodeId": "bleak_picture"
+        },
+        {
+          "text": "There must be hope somewhere.",
+          "nextNodeId": "hope_somewhere"
+        }
+      ]
+    },
+
+    {
+      "id": "bleak_picture",
+      "text": "*He shrugs* I paint what I see. But bleakness is not the same as hopelessness. Where there is oppression, there is also resistance. It simply... wears different faces. Some fight openly. Some work in shadows. *His eyes hold yours* And some help in ways that never make the papers.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "You sound like you know about this shadow resistance.",
+          "nextNodeId": "shadow_resistance"
+        },
+        {
+          "text": "Thank you for your honesty, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "hope_somewhere",
+      "text": "*His face softens* Always. Hope is what I traffic in, my child. Without it, faith means nothing. *He leans closer* There are good people in this territory. People who care. Doc Chen. Sheriff Cole, despite his limitations. The Freeminers in the hills. And... others. Working quietly.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "Tell me about these quiet workers.",
+          "nextNodeId": "quiet_workers"
+        },
+        {
+          "text": "Thank you, Father. I'll seek them out.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "shadow_resistance",
+      "text": "*He is silent for a long moment, studying your face* Perhaps. *He stands, moving to light a candle* There are those who believe every soul deserves freedom. Who help the desperate escape their chains. But speaking of such things... requires trust. And trust must be earned.",
+      "choices": [
+        {
+          "text": "How do I earn your trust?",
+          "nextNodeId": "prove_trustworthy"
+        },
+        {
+          "text": "I understand. Another time, perhaps.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "quiet_workers",
+      "text": "*He smiles mysteriously* When you are ready to meet them, they will find you. Good deeds have a way of being noticed. Do right by the people of this territory, and doors will open. *He touches his cross* God guides the righteous to each other.",
+      "choices": [
+        {
+          "text": "Cryptic, but I appreciate the advice.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "about_ivrc_thorne",
+      "text": "*His expression tightens* Cornelius Thorne. The spider at the center of the web. *He crosses himself* I should not speak ill of any man, but... *He pauses* Thorne believes he is bringing civilization to the wilderness. And perhaps he is. But the cost... the cost is paid in blood.",
+      "choices": [
+        {
+          "text": "You've seen this firsthand?",
+          "nextNodeId": "seen_firsthand"
+        },
+        {
+          "text": "Is there any way to stop him?",
+          "nextNodeId": "way_to_stop"
+        }
+      ]
+    },
+
+    {
+      "id": "seen_firsthand",
+      "text": "*He moves to the window, looking out at the dusty street* I bury his victims. I hear their last confessions. Men who die in mine 'accidents' that could have been prevented. Women who waste away when their husbands disappear. Children who never grow up because there is no medicine, no food, no hope.",
+      "expression": "grief",
+      "choices": [
+        {
+          "text": "And yet you stay.",
+          "nextNodeId": "yet_you_stay"
+        },
+        {
+          "text": "This is why you help people escape.",
+          "nextNodeId": "why_help_escape"
+        }
+      ]
+    },
+
+    {
+      "id": "yet_you_stay",
+      "text": "*He turns back to you, fire in his eyes* Because if I leave, who will stand with them? Who will speak last rites? Who will remind them that they have worth beyond their labor? *He grips his cross* I stay because I am needed. And I will stay until God calls me home or Thorne's men silence me.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "You're a brave man, Father.",
+          "nextNodeId": "brave_man"
+        },
+        {
+          "text": "Let me help you.",
+          "nextNodeId": "let_me_help"
+        }
+      ]
+    },
+
+    {
+      "id": "brave_man",
+      "text": "*He shakes his head* Brave? No. Stubborn, perhaps. Too angry to give up. *He almost smiles* Bravery would be confronting Thorne directly. I work in shadows, like a rat. But rats can gnaw through chains, given time.",
+      "choices": [
+        {
+          "text": "Shadows can be effective.",
+          "nextNodeId": "shadows_effective"
+        }
+      ]
+    },
+
+    {
+      "id": "shadows_effective",
+      "text": "*He nods* More effective than martyrdom, certainly. Dead men save no one. *He studies you* You seem to understand this. Perhaps... perhaps you could be useful. If you wished to help.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_considering_trust" }],
+      "choices": [
+        {
+          "text": "I do wish to help. Tell me how.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "let_me_help",
+      "text": "*Hope flickers in his eyes, quickly guarded* Help? Many offer help. Few follow through. *He measures you with his gaze* But you... there is something in your eyes. Determination. Pain, perhaps. The look of one who has seen injustice.",
+      "choices": [
+        {
+          "text": "I know what it means to be powerless. I won't stand by.",
+          "nextNodeId": "wont_stand_by"
+        },
+        {
+          "text": "Tell me what needs to be done.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "wont_stand_by",
+      "text": "*He clasps your hands in his* Then you are already one of us, whether you know it or not. *He releases you* But trust must still be earned. For your safety as much as ours. Let me give you a small task. Succeed, and I will tell you more.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "Name the task.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "why_help_escape",
+      "text": "*He does not deny it* You know of this? *He searches your face for threat, finds none* Yes. When a man is drowning, you do not ask if he signed a contract with the sea. You throw him a rope. That is what we do. We throw ropes.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_underground" }],
+      "choices": [
+        {
+          "text": "I want to help throw ropes.",
+          "nextNodeId": "help_throw_ropes"
+        },
+        {
+          "text": "How many have you saved?",
+          "nextNodeId": "how_many_saved"
+        }
+      ]
+    },
+
+    {
+      "id": "help_throw_ropes",
+      "text": "*Relief and caution mix in his expression* You would join us? It is dangerous work. IVRC has killed those who help. *He studies you intently* But we need people. Good people. People who can move unseen and keep their mouths shut.",
+      "choices": [
+        {
+          "text": "I can do that. What do you need?",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "how_many_saved",
+      "text": "*He smiles sadly* I stopped counting after the first hundred. Each one weighs on me differently. The children especially. *His voice grows fierce* Every child who grows up free instead of in a company camp - that is a victory worth any risk.",
+      "choices": [
+        {
+          "text": "A hundred souls. That's remarkable.",
+          "nextNodeId": "hundred_remarkable"
+        }
+      ]
+    },
+
+    {
+      "id": "hundred_remarkable",
+      "text": "*He shakes his head* Not remarkable. Necessary. And not nearly enough. For every one we save, ten more arrive on company trains, full of hope that will turn to despair. *He straightens* But we save who we can. That is all anyone can do.",
+      "choices": [
+        {
+          "text": "Let me help you save more.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "way_to_stop",
+      "text": "*He is quiet for a long moment* Stop Thorne? *He laughs bitterly* Many have tried. The Copperheads attack his railroad. The Freeminers resist in the hills. Politicians in the East send investigators who never return. *He shakes his head* He is too powerful to confront directly.",
+      "choices": [
+        {
+          "text": "There must be a weakness.",
+          "nextNodeId": "thorne_weakness"
+        },
+        {
+          "text": "Then how do you fight him?",
+          "nextNodeId": "how_fight"
+        }
+      ]
+    },
+
+    {
+      "id": "thorne_weakness",
+      "text": "*He considers* His weakness is his confidence. He believes he controls everything - sees everything. But he does not see us. The ones who help in shadows. The ones who move people beyond his reach. *His eyes gleam* Empires fall not from direct assault, but from a thousand small rebellions.",
+      "choices": [
+        {
+          "text": "I'd like to be one of those rebellions.",
+          "nextNodeId": "be_rebellion"
+        }
+      ]
+    },
+
+    {
+      "id": "be_rebellion",
+      "text": "*He smiles - the first genuine smile you've seen* Good. Then perhaps we can work together. But first... *he grows serious* ...first you must prove yourself. Trust is not given freely here. Too much depends on it.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_considering_trust" }],
+      "choices": [
+        {
+          "text": "Tell me what to do.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "how_fight",
+      "text": "*He spreads his hands* Not by fighting. By helping. Every soul that escapes his grip is a small victory. Every family reunited, every child saved from the mines - these chip away at his empire. It is slow work. But it is holy work.",
+      "choices": [
+        {
+          "text": "I want to be part of this work.",
+          "nextNodeId": "be_rebellion"
+        },
+        {
+          "text": "It sounds futile against such power.",
+          "nextNodeId": "sounds_futile"
+        }
+      ]
+    },
+
+    {
+      "id": "sounds_futile",
+      "text": "*His eyes flash* Futile? Tell that to the families now free in Oregon. Tell that to the children learning to read in California. Tell that to the man who last month held his newborn son for the first time as a free man. *His voice rises* Nothing done in love is futile.",
+      "expression": "passionate",
+      "choices": [
+        {
+          "text": "I apologize. You're right.",
+          "nextNodeId": "youre_right"
+        }
+      ]
+    },
+
+    {
+      "id": "youre_right",
+      "text": "*He calms* No, I apologize. My passion overtakes me sometimes. *He touches your arm* I understand doubt. I feel it myself, some nights. But then I think of Maria Rosalia, of all those we have saved, and I know - I know - that we must continue. Will you help us?",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "Yes. Tell me what to do.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "helping_need",
+      "text": "*His expression warms* A kind heart. That is rare here. *He gestures around* I do what I can - food for the hungry, comfort for the grieving. But the needs are endless. *He studies you* If you truly wish to help, there is much to do.",
+      "choices": [
+        {
+          "text": "I do wish to help. Put me to work.",
+          "nextNodeId": "put_to_work"
+        },
+        {
+          "text": "What kind of help is most needed?",
+          "nextNodeId": "most_needed"
+        }
+      ]
+    },
+
+    {
+      "id": "put_to_work",
+      "text": "*He nods approvingly* Eager hands are always welcome. There is a family in need - the Ortegas in the mining camp. The father is sick, unable to work. IVRC cares nothing for their suffering. If you could bring them supplies...",
+      "choices": [
+        {
+          "text": "Of course. What do they need?",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "most_needed",
+      "text": "*He sighs* Everything. Medicine. Food. Hope. *He pauses* But more than anything... freedom. There are people trapped here who dream only of escape. Some help them find a way out. *His eyes are careful* But that is dangerous work. Not for everyone.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "I'm not afraid of danger.",
+          "nextNodeId": "not_afraid"
+        },
+        {
+          "text": "Let me start with supplies. I'll prove myself.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "not_afraid",
+      "text": "*He smiles slightly* Brave words. But bravery without wisdom is just recklessness. *He places a hand on your shoulder* Start small. Help the Ortegas. Show me you can move carefully, keep secrets. Then... perhaps we can discuss more.",
+      "choices": [
+        {
+          "text": "Agreed. I'll prove my worth.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "help_people",
+      "text": "*He goes very still, his expression careful* Help people. *He glances toward the door, then back to you* That is a broad statement. Who told you this?",
+      "choices": [
+        {
+          "text": "A worker at the camp. She whispered your name like a prayer.",
+          "nextNodeId": "like_a_prayer"
+        },
+        {
+          "text": "I've heard rumors. Nothing specific.",
+          "nextNodeId": "just_rumors"
+        },
+        {
+          "text": "Doc Chen mentioned you might know people who... help.",
+          "nextNodeId": "chen_mentioned"
+        }
+      ]
+    },
+
+    {
+      "id": "like_a_prayer",
+      "text": "*His face softens with something like grief* Which worker? *He shakes his head* No, do not tell me. The less I know of how word spreads, the better. *He takes a deep breath* Yes. I help people. In ways the company would not approve of. Are you here to assist... or to report?",
+      "choices": [
+        {
+          "text": "To assist. I want to help.",
+          "nextNodeId": "want_to_assist"
+        },
+        {
+          "text": "I would never report you. I hate IVRC.",
+          "nextNodeId": "hate_ivrc"
+        }
+      ]
+    },
+
+    {
+      "id": "want_to_assist",
+      "text": "*He studies you intently for a long moment* Perhaps you do. I have learned to read faces, and yours... *He nods slowly* I see pain in you. Purpose. Something drove you here beyond mere chance. *He gestures* Sit. Let us talk properly.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_sees_potential" }],
+      "choices": [
+        {
+          "text": "*Sit and talk*",
+          "nextNodeId": "trust_conversation"
+        }
+      ]
+    },
+
+    {
+      "id": "trust_conversation",
+      "text": "*He sits across from you, voice low* I will be direct. There is a network that helps indentured workers escape the territory. I am part of it. *He holds up a hand* But joining is not simple. Trust must be earned. Lives depend on it.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_underground" }],
+      "choices": [
+        {
+          "text": "I understand. How do I earn that trust?",
+          "nextNodeId": "prove_trustworthy"
+        },
+        {
+          "text": "Tell me more about this network.",
+          "nextNodeId": "more_about_network"
+        }
+      ]
+    },
+
+    {
+      "id": "more_about_network",
+      "text": "*He shakes his head* Not until you prove yourself. *He softens* I do not say this to be cruel. But if you are caught, you cannot reveal what you do not know. This protects you as much as us. First, a test of trust. Then, knowledge.",
+      "choices": [
+        {
+          "text": "Fair enough. What's the test?",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "hate_ivrc",
+      "text": "*He raises a cautioning hand* Hate is dangerous. It burns the one who carries it. *He studies you* But I understand it. Many here feel the same. The question is what you do with that hate. Destroy? Or save?",
+      "choices": [
+        {
+          "text": "Save. I want to save people from them.",
+          "nextNodeId": "want_to_assist"
+        },
+        {
+          "text": "Why not both?",
+          "nextNodeId": "why_not_both"
+        }
+      ]
+    },
+
+    {
+      "id": "why_not_both",
+      "text": "*He sighs* Because destruction draws attention. The Copperheads blow up trains, and what changes? IVRC sends more guards, more soldiers. But quiet rescue? *He smiles faintly* That they do not see coming. We save more through silence than violence ever could.",
+      "choices": [
+        {
+          "text": "Wisdom, Father. I'll follow your lead.",
+          "nextNodeId": "follow_lead"
+        }
+      ]
+    },
+
+    {
+      "id": "follow_lead",
+      "text": "*He nods approvingly* Good. Then let us begin. But slowly, carefully. There is a family that needs help...",
+      "choices": [
+        {
+          "text": "Tell me about them.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "just_rumors",
+      "text": "*He relaxes slightly* Rumors. They spread like wildfire in a place like this. *He waves dismissively* I am simply a priest who feeds the hungry and comforts the grieving. Nothing more. *His eyes hold yours* Unless you need there to be something more?",
+      "choices": [
+        {
+          "text": "I need to help people escape IVRC.",
+          "nextNodeId": "need_to_help"
+        },
+        {
+          "text": "I'm just curious.",
+          "nextNodeId": "just_curious"
+        }
+      ]
+    },
+
+    {
+      "id": "need_to_help",
+      "text": "*He is silent, measuring you with his eyes* Escape. A powerful word. *After a long moment, he seems to reach a decision* I may know of people who do such things. But knowing and trusting are different. Prove yourself first.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_testing_player" }],
+      "choices": [
+        {
+          "text": "How?",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "just_curious",
+      "text": "*He nods, his expression closing off* Curiosity is healthy. But in this territory, it can also be dangerous. *He gestures to the door* If you have no other business, I must return to my duties. Go with God.",
+      "choices": [
+        {
+          "text": "Wait - I want to help. Truly.",
+          "nextNodeId": "truly_help"
+        },
+        {
+          "text": "Thank you, Father. Good day.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "truly_help",
+      "text": "*He pauses, turning back* Truly? *He studies your face* Then start small. There is a sick family in the mining camp. Help them, and we will talk again. *He returns to his candles* Prove your heart with deeds, not words.",
+      "choices": [
+        {
+          "text": "I will.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "chen_mentioned",
+      "text": "*His expression warms* Wei sent you? *He relaxes visibly* Then you come with better credentials than most. Wei and I have worked together for years. If he trusts you enough to speak my name... *He nods* Come. Let us talk freely.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "chen_vouched" },
+        { "type": "ChangeReputation", "value": 15 }
+      ],
+      "choices": [
+        {
+          "text": "*Sit with him*",
+          "nextNodeId": "chen_trust_fast"
+        }
+      ]
+    },
+
+    {
+      "id": "chen_trust_fast",
+      "text": "*He sits close, voice low* Wei's trust is not given lightly. If he believes in you, that is recommendation enough. *He meets your eyes* We run an underground railroad. We help workers escape IVRC's grip. If you wish to join us, I will tell you how.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_underground" }],
+      "choices": [
+        {
+          "text": "I want to join. Tell me everything.",
+          "nextNodeId": "tell_everything"
+        },
+        {
+          "text": "How can I help immediately?",
+          "nextNodeId": "help_immediately"
+        }
+      ]
+    },
+
+    {
+      "id": "tell_everything",
+      "text": "*He holds up a hand* Not everything. Not yet. Even with Wei's word, full knowledge must be earned. *He softens* But I will tell you this - we have safe houses across the territory. Routes through the mountains. People in key positions. A family can disappear in one night and be free by morning.",
+      "choices": [
+        {
+          "text": "Incredible. How do you coordinate?",
+          "nextNodeId": "how_coordinate"
+        },
+        {
+          "text": "Put me to work. I'm ready.",
+          "nextNodeId": "sanctuary_intro"
+        }
+      ]
+    },
+
+    {
+      "id": "how_coordinate",
+      "text": "*He smiles* Very carefully. Coded messages. Trusted carriers. We never write names. Everything is memory and trust. *He taps his temple* I keep the network in here. If I am captured... *his face darkens* ...I pray I have the strength to stay silent.",
+      "choices": [
+        {
+          "text": "That's a heavy burden.",
+          "nextNodeId": "heavy_burden"
+        }
+      ]
+    },
+
+    {
+      "id": "heavy_burden",
+      "text": "*He nods* It is. But lighter than the burden of doing nothing. *He straightens* Now - there is a family that needs help. The first test. Are you ready?",
+      "choices": [
+        {
+          "text": "I'm ready. What do I need to do?",
+          "nextNodeId": "sanctuary_intro"
+        }
+      ]
+    },
+
+    {
+      "id": "help_immediately",
+      "text": "*He nods approvingly* That is the attitude we need. There is indeed something urgent. A woman, Maria, with two children. Her husband died in the mines last month. IVRC says she must now work off his debt - or they take the children to the work camps.",
+      "expression": "urgent",
+      "choices": [
+        {
+          "text": "They can't do that. They're just children!",
+          "nextNodeId": "cant_do_that"
+        },
+        {
+          "text": "When do we move her?",
+          "nextNodeId": "sanctuary_intro"
+        }
+      ]
+    },
+
+    {
+      "id": "cant_do_that",
+      "text": "*His face is grim* They can. They do. Children as young as eight work in the sorting houses. 'Light duty,' they call it. *He grips your arm* This is why we fight. This is why the risk is worth it. Will you help Maria escape?",
+      "choices": [
+        {
+          "text": "Yes. Whatever it takes.",
+          "nextNodeId": "sanctuary_intro"
+        }
+      ]
+    },
+
+    {
+      "id": "sanctuary_intro",
+      "text": "*Father Miguel leads you to a back room of the church, revealing a hidden door behind a cabinet* Maria and her children are hiding here. We must move them to Freeminer's Hollow before IVRC's search reaches the church. I need you to scout the route - the old mine tunnel north of town. Can it be used safely?",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "sanctuary" },
+        { "type": "UnlockLocation", "target": "mine_tunnel_north" }
+      ],
+      "choices": [
+        {
+          "text": "I'll scout the tunnel tonight.",
+          "nextNodeId": "scout_tonight"
+        },
+        {
+          "text": "What should I look for?",
+          "nextNodeId": "what_look_for"
+        }
+      ]
+    },
+
+    {
+      "id": "scout_tonight",
+      "text": "*He grips your shoulder* Be careful. If IVRC men are watching it, do not engage. Just report back. Maria and the children can hide here for two more days at most. After that... *He does not finish the sentence* God speed, my friend.",
+      "choices": [
+        {
+          "text": "I won't let you down.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "what_look_for",
+      "text": "*He draws a rough map* The tunnel entrance is here, hidden by brush. Check if the supports are stable, if the path is clear. Most importantly, look for signs of IVRC presence - guards, patrols, tracks. If they are watching it, we must find another way.",
+      "onEnterEffects": [{ "type": "GiveItem", "target": "tunnel_map" }],
+      "choices": [
+        {
+          "text": "Understood. I'll report back.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "return_greeting",
+      "text": "*Father Miguel looks up from his prayers as you enter* Ah, my friend. You return. *He sets aside his rosary* How can I serve you today?",
+      "choices": [
+        {
+          "text": "I wanted to check in. How are things?",
+          "nextNodeId": "how_are_things"
+        },
+        {
+          "text": "Is there anything that needs doing?",
+          "nextNodeId": "anything_needed"
+        },
+        {
+          "text": "I need spiritual guidance, Father.",
+          "nextNodeId": "spiritual_guidance"
+        }
+      ]
+    },
+
+    {
+      "id": "how_are_things",
+      "text": "*He sighs* The work continues. Always more souls to save, more families in need. *He manages a smile* But knowing you are out there helping... that gives me hope. What news do you bring?",
+      "choices": [
+        {
+          "text": "Just wanted to see how you're holding up.",
+          "nextNodeId": "holding_up"
+        },
+        {
+          "text": "I've learned more about the network.",
+          "nextNodeId": "learned_more"
+        }
+      ]
+    },
+
+    {
+      "id": "holding_up",
+      "text": "*He touches his cross* By God's grace, I endure. Some nights are darker than others. *He looks at you with gratitude* Having allies makes the burden lighter. Thank you for asking.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "We're in this together.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "anything_needed",
+      "text": "*He considers* There is always work. But tell me first - how goes your other... activities? Are you staying safe? IVRC's eyes are everywhere.",
+      "choices": [
+        {
+          "text": "I'm being careful. What needs doing?",
+          "nextNodeId": "current_needs"
+        },
+        {
+          "text": "I've had some close calls, but I'm managing.",
+          "nextNodeId": "close_calls"
+        }
+      ]
+    },
+
+    {
+      "id": "current_needs",
+      "text": "*He nods* Good. Right now, we are preparing for another move. But first... *he lowers his voice* ...I have heard disturbing news. Someone may be informing to IVRC. We must be even more careful than usual.",
+      "choices": [
+        {
+          "text": "An informer? Who?",
+          "nextNodeId": "who_informer"
+        },
+        {
+          "text": "I'll keep my ears open.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "who_informer",
+      "text": "*He shakes his head* I do not know yet. Only that IVRC has been too accurate in their raids lately. Too informed. *He looks worried* Be wary of who you trust. Even those who seem friendly.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_suspects_informer" }],
+      "choices": [
+        {
+          "text": "I'll investigate quietly.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "find_informer" }]
+        },
+        {
+          "text": "I'll be careful.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "close_calls",
+      "text": "*His face creases with concern* Close calls. *He touches your arm* Be cautious, my friend. You are valuable - not just to our cause, but as a person. Do not take unnecessary risks. There is no shame in retreating to fight another day.",
+      "choices": [
+        {
+          "text": "I'll be more careful. I promise.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+
+    {
+      "id": "spiritual_guidance",
+      "text": "*His expression softens* Of course, my child. What troubles your soul?",
+      "choices": [
+        {
+          "text": "I've done things I'm not proud of.",
+          "nextNodeId": "not_proud"
+        },
+        {
+          "text": "I struggle with doubt. About everything.",
+          "nextNodeId": "struggle_doubt"
+        },
+        {
+          "text": "How do you keep faith in a place like this?",
+          "nextNodeId": "still_believe"
+        }
+      ]
+    },
+
+    {
+      "id": "not_proud",
+      "text": "*He guides you to a pew* None of us are proud of everything we have done. The measure of a person is not in their mistakes, but in how they seek to make amends. *He sits beside you* Tell me what troubles you. Confession is the first step to healing.",
+      "choices": [
+        {
+          "text": "*Confess your burdens*",
+          "nextNodeId": "confession_scene"
+        },
+        {
+          "text": "I'm not sure I can put it into words yet.",
+          "nextNodeId": "cant_put_words"
+        }
+      ]
+    },
+
+    {
+      "id": "confession_scene",
+      "text": "*Father Miguel listens quietly as you speak, his face compassionate but not judging. When you finish, he takes your hands* Thank you for trusting me. What you carry is heavy. But carrying it alone makes it heavier still. *He makes the sign of the cross* Go in peace. And know that redemption is always possible.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "Thank you, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "cant_put_words",
+      "text": "*He nods understandingly* That is alright. Sometimes the weight is too heavy to name. *He squeezes your shoulder* When you are ready, I am here. In the meantime, know that God sees your heart, even when you cannot.",
+      "choices": [
+        {
+          "text": "That... helps. Thank you.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "struggle_doubt",
+      "text": "*He sits beside you with a weary sigh* Doubt. My old companion. *He looks at the crucifix above the altar* I have questioned everything, my friend. God's plan. My purpose. Whether any of this matters. *He turns to you* Would you like to know what I've concluded?",
+      "choices": [
+        {
+          "text": "Please.",
+          "nextNodeId": "doubt_conclusion"
+        }
+      ]
+    },
+
+    {
+      "id": "doubt_conclusion",
+      "text": "*He speaks slowly* That doubt is not the enemy of faith - indifference is. As long as you question, as long as you struggle, you are still searching for truth. It is when we stop caring that we are truly lost. *He smiles gently* Your doubt proves your heart is still alive.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "I never thought of it that way.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "night_greeting",
+      "text": "*Father Miguel holds a candle, the church dimly lit around him. He looks unsurprised to see you* You come at a late hour, my friend. *He glances toward the back of the church* Are you here for... regular business, or the other kind?",
+      "choices": [
+        {
+          "text": "The other kind. Is someone being moved tonight?",
+          "nextNodeId": "moving_tonight"
+        },
+        {
+          "text": "I couldn't sleep. I needed to think.",
+          "nextNodeId": "couldnt_sleep"
+        }
+      ]
+    },
+
+    {
+      "id": "moving_tonight",
+      "text": "*He nods, lowering his voice* Yes. The Rodriguez family. Father, mother, three children. *He looks at you* Would you help escort them to the first waypoint? Two more hands would make the journey safer.",
+      "choices": [
+        {
+          "text": "Of course. Let's go.",
+          "nextNodeId": "escort_mission"
+        },
+        {
+          "text": "Tell me about the route first.",
+          "nextNodeId": "route_details"
+        }
+      ]
+    },
+
+    {
+      "id": "escort_mission",
+      "text": "*He leads you to the hidden room where a terrified family huddles together. The children cling to their parents, eyes wide* These are my friends, the ones I told you about. They will keep you safe. *He turns to you* The first waypoint is the old Henderson barn. From there, others will guide them onward.",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "escort_rodriguez" }],
+      "choices": [
+        {
+          "text": "We won't let you down.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "route_details",
+      "text": "*He draws a quick map in the dust of the floor* Through the back alleys, past the mill - it's abandoned at night - then to the Henderson barn. Avoid the main road entirely. If you encounter IVRC patrols... *his face hardens* ...do whatever you must to keep the family safe.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_escape_route" }],
+      "choices": [
+        {
+          "text": "Understood. I'm ready.",
+          "nextNodeId": "escort_mission"
+        }
+      ]
+    },
+
+    {
+      "id": "couldnt_sleep",
+      "text": "*He nods with understanding* The nights are long here, and full of ghosts. *He gestures to a pew* Sit. Keep me company. Sometimes the best prayer is simply not being alone.",
+      "choices": [
+        {
+          "text": "*Sit and talk quietly*",
+          "nextNodeId": "night_conversation"
+        }
+      ]
+    },
+
+    {
+      "id": "night_conversation",
+      "text": "*The two of you sit in companionable silence, candles flickering around you. After a while, Father Miguel speaks* Tell me what weighs on you. I find burdens grow lighter when shared.",
+      "choices": [
+        {
+          "text": "I'm worried about what comes next.",
+          "nextNodeId": "worried_next"
+        },
+        {
+          "text": "I keep thinking about those we couldn't save.",
+          "nextNodeId": "couldnt_save"
+        }
+      ]
+    },
+
+    {
+      "id": "worried_next",
+      "text": "*He nods slowly* The future is always uncertain. We make our plans, we do our work, and we trust that it matters. *He touches his cross* What specifically worries you?",
+      "choices": [
+        {
+          "text": "That IVRC will find us. That we'll fail.",
+          "nextNodeId": "fear_of_failure"
+        },
+        {
+          "text": "That even if we succeed, nothing will change.",
+          "nextNodeId": "nothing_changes"
+        }
+      ]
+    },
+
+    {
+      "id": "fear_of_failure",
+      "text": "*His eyes are kind but steady* We may fail. Many before us have. But failure is not the end - only giving up is. *He gestures around* This church has survived fires, droughts, and IVRC's displeasure. It still stands. And so will we.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "Thank you, Father. I needed to hear that.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "nothing_changes",
+      "text": "*He sighs* I have felt this despair too. The weight of fighting an enemy that never tires. *He looks at the candles* But change comes slowly. The slaves in Egypt were freed. Empires fall. IVRC will fall too, someday. Perhaps because of what we do tonight.",
+      "choices": [
+        {
+          "text": "You really believe that?",
+          "nextNodeId": "really_believe"
+        }
+      ]
+    },
+
+    {
+      "id": "really_believe",
+      "text": "*He smiles* I choose to believe it. Faith is not certainty - it is hope in the face of evidence. And hope is what keeps me rising each morning. *He squeezes your shoulder* Hold onto hope, my friend. It is the most powerful weapon we have.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "I'll try.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "couldnt_save",
+      "text": "*His face fills with sorrow* Ah. The hardest burden of all. *He is silent for a moment* I think of them too. Every face. Every name. *His voice breaks slightly* Maria Rosalia. The Chen family. So many others.",
+      "expression": "grief",
+      "choices": [
+        {
+          "text": "How do you bear it?",
+          "nextNodeId": "how_bear_it"
+        }
+      ]
+    },
+
+    {
+      "id": "how_bear_it",
+      "text": "*He wipes his eyes* By remembering the ones we saved. By believing their suffering was not in vain. *He looks at you with fierce intensity* Every soul we free is a tribute to those we lost. Every life saved makes their sacrifice mean something.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "That's... beautiful, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "trusted_greeting",
+      "text": "*Father Miguel's face brightens as you enter* My friend! It does my heart good to see you. *He embraces you warmly* Word of your deeds has spread. You have become a true blessing to our cause.",
+      "expression": "joyful",
+      "choices": [
+        {
+          "text": "I'm just doing what's right.",
+          "nextNodeId": "just_right"
+        },
+        {
+          "text": "Is there more I can do?",
+          "nextNodeId": "more_to_do"
+        }
+      ]
+    },
+
+    {
+      "id": "just_right",
+      "text": "*He nods approvingly* And that is exactly why you are so valuable. Not for glory or reward, but simply because it is right. *He squeezes your shoulder* You are a rare soul in this dark territory.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "Thank you, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "more_to_do",
+      "text": "*He lowers his voice* There is always more. But first, tell me - have you had any trouble? Any signs that IVRC suspects you?",
+      "choices": [
+        {
+          "text": "I've been careful. No problems so far.",
+          "nextNodeId": "no_problems"
+        },
+        {
+          "text": "There have been some close calls.",
+          "nextNodeId": "some_close_calls"
+        }
+      ]
+    },
+
+    {
+      "id": "no_problems",
+      "text": "*He sighs with relief* Good. We cannot be too careful. *He glances toward the hidden door* There is a new family ready to move. When you are prepared, let me know.",
+      "choices": [
+        {
+          "text": "I'm ready now.",
+          "nextNodeId": "ready_now"
+        },
+        {
+          "text": "I need a little more time. I'll return soon.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "some_close_calls",
+      "text": "*His face creases with worry* Close calls? Tell me what happened. We may need to change our methods.",
+      "choices": [
+        {
+          "text": "*Describe the incidents*",
+          "nextNodeId": "describe_incidents"
+        }
+      ]
+    },
+
+    {
+      "id": "describe_incidents",
+      "text": "*He listens intently, then nods slowly* We must be more careful. Perhaps new routes, new signals. *He touches your arm* Thank you for telling me. This information may save lives.",
+      "choices": [
+        {
+          "text": "Whatever it takes to keep everyone safe.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "ready_now",
+      "text": "*He leads you to the hidden room* This is Elena and her daughter, Rosa. The husband was killed in the mines three months ago. IVRC wants to put Rosa in the work camps to pay off the debt. *He looks at you* Will you guide them to safety?",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "escort_elena" }],
+      "choices": [
+        {
+          "text": "I'll get them out. You have my word.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "underground_revealed",
+      "text": "*Father Miguel ushers you quickly into the back room* You know now what we do. *His eyes are intense* How can I help you today? Are you here to assist... or is there trouble?",
+      "choices": [
+        {
+          "text": "I need information about the network.",
+          "nextNodeId": "network_info"
+        },
+        {
+          "text": "I'm ready for another mission.",
+          "nextNodeId": "another_mission"
+        },
+        {
+          "text": "There's a problem. IVRC is getting closer.",
+          "nextNodeId": "ivrc_closer"
+        }
+      ]
+    },
+
+    {
+      "id": "network_info",
+      "text": "*He sits across from you* What do you need to know?",
+      "choices": [
+        {
+          "text": "Who else is involved?",
+          "nextNodeId": "who_involved"
+        },
+        {
+          "text": "Where do the routes lead?",
+          "nextNodeId": "where_routes"
+        },
+        {
+          "text": "How long has this been going on?",
+          "nextNodeId": "how_long"
+        }
+      ]
+    },
+
+    {
+      "id": "who_involved",
+      "text": "*He hesitates, then nods* You have earned this trust. Doc Chen provides medical supplies and care. Samuel Ironpick helps with the final stage - getting people to Freeminer territory. There are others - farmers who provide shelter, merchants who look the other way. An invisible army of the righteous.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_network_members" }],
+      "choices": [
+        {
+          "text": "What about in town? Anyone in a position of power?",
+          "nextNodeId": "power_positions"
+        },
+        {
+          "text": "A remarkable network.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "power_positions",
+      "text": "*He speaks carefully* Mayor Holt... sympathizes, I believe. But she is too watched to act directly. Sheriff Cole helps when he can turn a blind eye. *He pauses* There may be others. Not everyone shows their true face.",
+      "choices": [
+        {
+          "text": "Good to know. Thank you.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "where_routes",
+      "text": "*He traces an invisible map in the air* North through the mountains to Freeminer's Hollow. From there, guides take them further - to Oregon territory, California, places beyond IVRC's reach. It takes weeks, but at the end... freedom.",
+      "choices": [
+        {
+          "text": "How many have made it?",
+          "nextNodeId": "how_many_made_it"
+        }
+      ]
+    },
+
+    {
+      "id": "how_many_made_it",
+      "text": "*His face lights up* Hundreds. Families, children, men who would have died in the mines. *He crosses himself* Every one of them is a victory. A prayer answered.",
+      "choices": [
+        {
+          "text": "Inspiring work, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "how_long",
+      "text": "*He settles back* Nearly fifteen years now. It started small - one family I couldn't bear to see destroyed. Then another. And another. *He smiles sadly* Before I knew it, I was running an underground railroad.",
+      "choices": [
+        {
+          "text": "Fifteen years. That's dedication.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "another_mission",
+      "text": "*He nods* There is always need. *He checks that no one can overhear* A single man this time. His name is Carlos. He witnessed something in the deep mines - something IVRC wants buried. They will kill him if they find him. He needs to reach safety.",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "escort_carlos" }],
+      "choices": [
+        {
+          "text": "What did he witness?",
+          "nextNodeId": "what_witnessed"
+        },
+        {
+          "text": "Where is he now?",
+          "nextNodeId": "where_is_carlos"
+        }
+      ]
+    },
+
+    {
+      "id": "what_witnessed",
+      "text": "*Father Miguel's face darkens* Mass graves. Workers who 'disappeared' buried beneath the new railway extension. IVRC's secret shame. *His voice shakes with anger* This information could bring Thorne down. That is why Carlos must survive.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_mass_graves" }],
+      "choices": [
+        {
+          "text": "Then we get him out. No matter what.",
+          "nextNodeId": "where_is_carlos"
+        }
+      ]
+    },
+
+    {
+      "id": "where_is_carlos",
+      "text": "*He gives you coordinates* He is hiding in an abandoned mine shaft south of town. IVRC patrols are searching for him. You must reach him before they do and guide him to the first waypoint.",
+      "choices": [
+        {
+          "text": "I'll find him. He won't die.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "ivrc_closer",
+      "text": "*His face goes pale* Closer? Tell me everything.",
+      "choices": [
+        {
+          "text": "*Describe the threat*",
+          "nextNodeId": "describe_threat"
+        }
+      ]
+    },
+
+    {
+      "id": "describe_threat",
+      "text": "*He listens with growing alarm* This is bad. Very bad. *He paces* We must move the family we have hidden immediately. And warn the others in the network. *He grabs your arm* Can you help coordinate? Time is critical.",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "emergency_evacuation" }],
+      "choices": [
+        {
+          "text": "Tell me what to do.",
+          "nextNodeId": "checking_churches"
+        }
+      ]
+    },
+
+    {
+      "id": "checking_churches",
+      "text": "*He nods grimly* Then we have time, but not much. *He moves toward the back of the church* Help me move the families to the secondary location - there is a root cellar beneath the old Henderson barn. IVRC does not know about it... yet.",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "emergency_evacuation" }],
+      "choices": [
+        {
+          "text": "Lead the way.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "possible_informer",
+      "text": "*His face hardens* An informer. *He crosses himself* 'Even my close friend in whom I trusted has lifted up his heel against me.' If there is a traitor among us... *he takes a deep breath* ...we must find them before more lives are lost. Will you help?",
+      "choices": [
+        {
+          "text": "I'll investigate quietly.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "find_informer" }]
+        }
+      ]
+    },
+
+    {
+      "id": "sanctuary_quest_active",
+      "text": "*Father Miguel hurries to you as you enter* Have you scouted the tunnel? Is the path clear for Maria and her children?",
+      "expression": "anxious",
+      "choices": [
+        {
+          "text": "The tunnel is clear. We can move them tonight.",
+          "nextNodeId": "tunnel_clear"
+        },
+        {
+          "text": "There's a problem. The tunnel is watched.",
+          "nextNodeId": "tunnel_watched"
+        },
+        {
+          "text": "Still working on it. I need more time.",
+          "nextNodeId": "need_more_time"
+        }
+      ]
+    },
+
+    {
+      "id": "tunnel_clear",
+      "text": "*Relief floods his face* Gracias a Dios! *He embraces you* Tonight then. I will prepare Maria and the children. Meet us at the church's back entrance after midnight. You will guide them to the Freeminers. God willing, by dawn they will be free.",
+      "onEnterEffects": [{ "type": "AdvanceQuest", "target": "sanctuary", "stringValue": "tunnel_clear" }],
+      "choices": [
+        {
+          "text": "I'll be there.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "tunnel_watched",
+      "text": "*His face falls* Watched? By IVRC? *He paces anxiously* Then we need another route. There is an old mining trail over Iron Ridge - longer, more exposed, but if we time it right... can you scout that path as well?",
+      "choices": [
+        {
+          "text": "I'll find another way.",
+          "nextNodeId": null,
+          "effects": [{ "type": "UnlockLocation", "target": "iron_ridge_trail" }]
+        }
+      ]
+    },
+
+    {
+      "id": "need_more_time",
+      "text": "*He nods, though worry creases his brow* I understand. But time is not our friend. Every day Maria and her children remain hidden is another day we risk discovery. Please... work quickly if you can.",
+      "choices": [
+        {
+          "text": "I will.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "sanctuary_quest_complete",
+      "text": "*Father Miguel's eyes fill with tears as you enter* You did it. Word came this morning - Maria and her children reached Freeminer's Hollow safely. They are free. *He clasps both your hands* You have performed a miracle, my friend. A true miracle.",
+      "expression": "joyful",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 25 }],
+      "choices": [
+        {
+          "text": "It was worth every step.",
+          "nextNodeId": "worth_every_step"
+        },
+        {
+          "text": "What about the next family?",
+          "nextNodeId": "next_family_after_success"
+        }
+      ]
+    },
+
+    {
+      "id": "worth_every_step",
+      "text": "*He wipes his eyes* Maria wanted me to give you something. *He presses a small medallion into your hand* Saint Joseph, patron of workers and travelers. She said you are both now. May he watch over you always.",
+      "onEnterEffects": [{ "type": "GiveItem", "target": "saint_joseph_medallion" }],
+      "choices": [
+        {
+          "text": "I'll treasure it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "next_family_after_success",
+      "text": "*He laughs through his tears* Already thinking of the next souls to save. You have the heart of a true shepherd. Yes, there are more waiting. When you are ready, we will talk. But for now... let us give thanks for this victory.",
+      "choices": [
+        {
+          "text": "A moment to breathe.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "player_harmed_workers",
+      "text": "*Father Miguel's face is cold, his usual warmth completely absent* I have heard what you have done. The workers at the northern camp - beaten, some killed. By your hand or your order. *His voice shakes with barely controlled anger* Why have you come here?",
+      "expression": "angry",
+      "choices": [
+        {
+          "text": "I had no choice. It was them or me.",
+          "nextNodeId": "no_choice_excuse"
+        },
+        {
+          "text": "I was wrong. I have come to confess.",
+          "nextNodeId": "confession"
+        },
+        {
+          "text": "They were IVRC loyalists. They deserved it.",
+          "nextNodeId": "deserved_it"
+        }
+      ]
+    },
+
+    {
+      "id": "no_choice_excuse",
+      "text": "*He shakes his head slowly* There is always a choice. Always. 'Thou shalt not kill' is not a suggestion, it is a commandment. Those workers were prisoners of IVRC, just as much as those I try to free. And you treated them as enemies.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": -25 }],
+      "choices": [
+        {
+          "text": "How can I make it right?",
+          "nextNodeId": "make_it_right"
+        },
+        {
+          "text": "You don't understand what I faced.",
+          "nextNodeId": "dont_understand"
+        }
+      ]
+    },
+
+    {
+      "id": "confession",
+      "text": "*Something softens in his eyes, though the pain remains* Confession is the first step. But words alone cannot heal the harm you have done. Those people had families, dreams. They trusted that God would send help, and instead... *he cannot finish*",
+      "choices": [
+        {
+          "text": "Tell me how to atone.",
+          "nextNodeId": "make_it_right"
+        }
+      ]
+    },
+
+    {
+      "id": "deserved_it",
+      "text": "*His face hardens further* Deserved it? *He steps back* Then you are no different from IVRC. They also believe their victims deserve their fate. 'It's just business,' they say. 'They signed contracts.' Different words, same evil. Leave this church.",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": -50 },
+        { "type": "SetFlag", "target": "banished_from_church" }
+      ],
+      "choices": [
+        {
+          "text": "*Leave*",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "make_it_right",
+      "text": "*He considers for a long moment* I do not know if you can make it right. Some things cannot be undone. But... *he sighs* ...redemption is always possible. If you truly wish to change, prove it. Help those you harmed - their families, their communities. Not for reward, not for forgiveness. Simply because it is right.",
+      "onEnterEffects": [{ "type": "StartQuest", "target": "redemption" }],
+      "choices": [
+        {
+          "text": "I will try.",
+          "nextNodeId": "will_try"
+        }
+      ]
+    },
+
+    {
+      "id": "will_try",
+      "text": "Trying is all we can ever do. Go now. Return when you have shown through actions, not words, that you have changed. Until then... *he turns away* ...my door remains open, but my trust does not.",
+      "choices": [
+        {
+          "text": "*Leave*",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "dont_understand",
+      "text": "Perhaps I do not. I have never been forced to choose between killing and dying. But I have watched children die in mines, families torn apart, men broken by labor. I understand suffering. And I know that adding to it - for any reason - cannot be the answer God wants.",
+      "choices": [
+        {
+          "text": "What would God have me do now?",
+          "nextNodeId": "make_it_right"
+        },
+        {
+          "text": "Then your God and I have nothing to discuss.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": -20 }]
+        }
+      ]
+    },
+
+    {
+      "id": "escape_stories",
+      "text": "*Father Miguel settles into a pew, his eyes distant with memory* You want to know about those we have helped? There are so many stories. Some triumphant, some... *his voice catches* ...some that still haunt me.",
+      "choices": [
+        {
+          "text": "Tell me about a triumph.",
+          "nextNodeId": "triumph_story"
+        },
+        {
+          "text": "Tell me about one who haunts you.",
+          "nextNodeId": "haunting_story"
+        }
+      ]
+    },
+
+    {
+      "id": "triumph_story",
+      "text": "The Morales family. Five people - grandmother, mother, three children. The father died in the mines, left them with his debt. They would have been trapped for twenty years. *His face brightens* We moved them on Christmas Eve, through a blizzard. The children thought it was an adventure.",
+      "choices": [
+        {
+          "text": "Where are they now?",
+          "nextNodeId": "morales_now"
+        }
+      ]
+    },
+
+    {
+      "id": "morales_now",
+      "text": "Oregon territory. The grandmother passed last year - peacefully, surrounded by family. The mother remarried, a good man. The children... *his eyes shine* ...the oldest is studying to be a teacher. Can you imagine? From a life of slavery to educating others. That is why we fight.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "That is beautiful.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "haunting_story",
+      "text": "*His voice drops* The Chen family. Not Wei's blood, but he treated them like his own. We had planned everything perfectly - the route, the timing, the safe houses. But someone talked. IVRC was waiting. The father tried to fight so the others could run...",
+      "expression": "grief",
+      "choices": [
+        {
+          "text": "What happened?",
+          "nextNodeId": "chen_fate"
+        },
+        {
+          "text": "You don't have to tell me.",
+          "nextNodeId": "dont_tell_me"
+        }
+      ]
+    },
+
+    {
+      "id": "chen_fate",
+      "text": "*He crosses himself* The father was killed. The mother and daughter were taken back to the camps. I never learned what happened to them after. Wei... he does not speak of it. But I see it in his eyes sometimes, when he thinks no one is watching. That failure binds us together.",
+      "choices": [
+        {
+          "text": "It was not your fault.",
+          "nextNodeId": "not_your_fault"
+        }
+      ]
+    },
+
+    {
+      "id": "not_your_fault",
+      "text": "*He shakes his head* It was someone's fault. The informer, yes. IVRC, certainly. But also me - I should have been more careful, planned better. *He looks up* That is why I am so cautious now. Every failure teaches us to be better. It must, or the suffering is for nothing.",
+      "choices": [
+        {
+          "text": "I understand.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "dont_tell_me",
+      "text": "*He nods* Some memories are too heavy to share. It is enough to know that not every story ends well. That is why each success matters so much. We balance the scales, one soul at a time.",
+      "choices": [
+        {
+          "text": "Let me help balance those scales.",
+          "nextNodeId": "offer_help_underground"
+        }
+      ]
+    },
+
+    {
+      "id": "offer_help_underground",
+      "text": "*Hope and caution war in his expression* You would help? Then speak with me more. There is always work for willing hands.",
+      "choices": [
+        {
+          "text": "Tell me what you need.",
+          "nextNodeId": "current_needs"
+        }
+      ]
+    },
+
+    {
+      "id": "still_believe",
+      "text": "*He touches the cross at his neck* Some days more than others. Faith is not certainty - it is choosing to believe despite the darkness. When I see a child suffer, I rage at God. When I see that same child reach freedom, I weep with gratitude. Both are prayers.",
+      "expression": "thoughtful",
+      "choices": [
+        {
+          "text": "That is a strange kind of faith.",
+          "nextNodeId": "strange_faith"
+        },
+        {
+          "text": "It sounds exhausting.",
+          "nextNodeId": "exhausting_faith"
+        }
+      ]
+    },
+
+    {
+      "id": "strange_faith",
+      "text": "*He laughs softly* All faith is strange, if you look at it closely. To believe in something you cannot see, cannot prove? It is madness. But it is also what makes us human. We reach for meaning in a world that offers none. That reaching itself is holy.",
+      "choices": [
+        {
+          "text": "I wish I had your faith.",
+          "nextNodeId": "wish_faith"
+        }
+      ]
+    },
+
+    {
+      "id": "wish_faith",
+      "text": "*He places a hand over his heart* Then start small. Believe that helping one person matters. Believe that kindness is not weakness. Believe that tomorrow can be better than today. These are acts of faith too. The rest... the rest comes in time. Or it does not. Either way, the kindness remains.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "Thank you, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "exhausting_faith",
+      "text": "Si, it is. *He sits heavily* Some nights I want nothing more than to walk away, find a quiet parish in the East where no one is dying, no one is fleeing. But then I think of Maria Rosalia. And I know I cannot stop. Not while children are still suffering.",
+      "choices": [
+        {
+          "text": "You carry a heavy burden.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+
+    {
+      "id": "thorne_enemy",
+      "text": "*He nods slowly* Enemy? Perhaps. Though I try not to think in such terms. *He sighs* Cornelius Thorne believes he is building civilization. I believe he is building it on the bones of the innocent. We see the world... differently.",
+      "choices": [
+        {
+          "text": "And you oppose him?",
+          "nextNodeId": "oppose_him"
+        }
+      ]
+    },
+
+    {
+      "id": "oppose_him",
+      "text": "*He spreads his hands* I save who I can. It is not opposition in the way the Copperheads oppose - I do not blow up trains. But every soul that escapes his grip is a small defeat for him. *His eyes gleam* He does not even know it happens. That is its own victory.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "You help people escape.",
+          "nextNodeId": "help_people_escape"
+        }
+      ]
+    },
+
+    {
+      "id": "pragmatic_philosophy",
+      "text": "*He nods* Pragmatic, yes. I have learned that survival sometimes matters more than pride. *He gestures around the humble church* This building may be small, but it is free. That freedom lets me do... other work. Work that matters.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "What kind of other work?",
+          "nextNodeId": "what_other_work"
+        }
+      ]
+    },
+
+    {
+      "id": "what_other_work",
+      "text": "*He studies your face carefully* That depends on who is asking. And why. *He tilts his head* You have an honest face. But I have been deceived before. What brings you to Dusty Springs?",
+      "choices": [
+        {
+          "text": "A letter. Someone wanted me here.",
+          "nextNodeId": "letter_brought_me"
+        },
+        {
+          "text": "I'm looking for a new start.",
+          "nextNodeId": "new_start"
+        }
+      ]
+    },
+
+    {
+      "id": "letter_brought_me",
+      "text": "*His eyes sharpen* A letter? From whom? *He leans forward* Many letters are sent from this territory. Some in hope. Some in desperation. The right letter, to the right person... can change everything.",
+      "choices": [
+        {
+          "text": "I don't know who sent it. Just cryptic hints.",
+          "nextNodeId": "cryptic_hints"
+        }
+      ]
+    },
+
+    {
+      "id": "cryptic_hints",
+      "text": "*He nods slowly, something changing in his expression* Mysterious summons to the frontier. Hints of injustice. *He almost smiles* Someone has been planting seeds. Perhaps they grow now before me. *He stands* Come back when you have learned more. I think we will have much to discuss.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_intrigued" }],
+      "choices": [
+        {
+          "text": "I'll return.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "new_start",
+      "text": "*He nods with understanding* Many come here seeking new beginnings. The frontier promises that - a chance to be someone different. *He pauses* What kind of person do you wish to become?",
+      "choices": [
+        {
+          "text": "Someone who makes a difference.",
+          "nextNodeId": "makes_difference"
+        },
+        {
+          "text": "I'm still figuring that out.",
+          "nextNodeId": "still_figuring"
+        }
+      ]
+    },
+
+    {
+      "id": "makes_difference",
+      "text": "*His eyes light up* Then you have come to the right place. There is much to be done here. Much suffering to ease, much injustice to fight. *He extends a hand* Perhaps we can help each other.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "I'd like that.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "still_figuring",
+      "text": "*He nods wisely* An honest answer. Most people arrive with their minds already closed. *He gestures to the church* This is a good place for reflection. Come when you need to think. The doors are always open.",
+      "choices": [
+        {
+          "text": "Thank you, Father.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "any_who_resist",
+      "text": "*He glances around carefully before answering* There are always those who resist. Some loudly, like the Copperheads with their dynamite. Some quietly. *His voice drops* Some so quietly that even IVRC does not see them.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "You're one of the quiet ones.",
+          "nextNodeId": "quiet_one"
+        }
+      ]
+    },
+
+    {
+      "id": "quiet_one",
+      "text": "*He neither confirms nor denies* I am a simple priest. I feed the hungry, comfort the grieving, speak words over the dead. *His eyes hold yours* Whatever else I may do... is between me and God.",
+      "choices": [
+        {
+          "text": "I think I understand.",
+          "nextNodeId": "think_understand"
+        }
+      ]
+    },
+
+    {
+      "id": "think_understand",
+      "text": "*A small smile* Understanding is the first step to trust. *He places a hand on your shoulder* Come back when you have seen more of this territory. When you have learned what IVRC truly is. Then... perhaps we can talk more freely.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_considering_trust" }],
+      "choices": [
+        {
+          "text": "I will return.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "signed_willingly",
+      "text": "*His face grows sad* Willingly. *He shakes his head* When a man is starving, and someone offers food in exchange for his freedom, is that truly a choice? When a mother must choose between watching her children die and signing away her life, is that consent?",
+      "choices": [
+        {
+          "text": "I see your point.",
+          "nextNodeId": "see_point"
+        },
+        {
+          "text": "It's more complicated than that.",
+          "nextNodeId": "more_complicated"
+        }
+      ]
+    },
+
+    {
+      "id": "see_point",
+      "text": "*He nods* Coercion wears many masks. The most insidious kind looks like choice. IVRC is very good at creating the appearance of freedom while binding people in chains of debt and desperation.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "What can be done about it?",
+          "nextNodeId": "what_can_be_done"
+        }
+      ]
+    },
+
+    {
+      "id": "what_can_be_done",
+      "text": "*He is quiet for a moment* Fight where you can. Help where you can. Never look away from suffering. *He meets your eyes* And perhaps... if you prove yourself trustworthy... join those of us who work in shadows.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "I'm interested. Tell me more.",
+          "nextNodeId": "what_things"
+        }
+      ]
+    },
+
+    {
+      "id": "more_complicated",
+      "text": "*He spreads his hands* Perhaps it is. Everything is complicated. But some things are also simple. *He stands, moving to the window* Children should not die in mines. Families should not be torn apart. These things I know.",
+      "choices": [
+        {
+          "text": "Fair enough. I can't argue with that.",
+          "nextNodeId": "cant_argue"
+        }
+      ]
+    },
+
+    {
+      "id": "cant_argue",
+      "text": "*He turns back to you* No. No one can, when they look with honest eyes. *He returns to sit near you* Perhaps your eyes are becoming honest. Perhaps that is why you came here.",
+      "choices": [
+        {
+          "text": "Perhaps it is.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+
+    {
+      "id": "dangerous_talk",
+      "text": "*He laughs softly, without humor* Dangerous? Perhaps. But what is danger compared to silence while innocents suffer? *He touches his cross* 'Greater love has no one than this: to lay down one's life for one's friends.' I choose love over safety.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "You're a brave man.",
+          "nextNodeId": "brave_man"
+        },
+        {
+          "text": "Love without wisdom gets people killed.",
+          "nextNodeId": "love_without_wisdom"
+        }
+      ]
+    },
+
+    {
+      "id": "love_without_wisdom",
+      "text": "*He nods seriously* True. Which is why I am also careful. Brave words without careful plans save no one. *He studies you* You think strategically. That is a valuable trait. Perhaps... perhaps you could be useful to those who wish to help.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_sees_potential" }],
+      "choices": [
+        {
+          "text": "I'm listening.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "help_workers",
+      "text": "*He glances around the empty church before speaking* There are those who try. Some openly, like the Freeminers who resist in the mountains. Some... less openly. *His eyes hold meaning* The question is whether you wish merely to know about such efforts, or to join them.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "miguel_hints_underground" }],
+      "choices": [
+        {
+          "text": "I want to join them.",
+          "nextNodeId": "want_to_join"
+        },
+        {
+          "text": "Tell me more first.",
+          "nextNodeId": "tell_more_first"
+        }
+      ]
+    },
+
+    {
+      "id": "want_to_join",
+      "text": "*Hope flickers in his eyes, quickly guarded* That is... good to hear. But trust must be earned. IVRC has sent infiltrators before. *He studies your face* You will need to prove yourself first. Are you willing?",
+      "choices": [
+        {
+          "text": "Yes. What do I need to do?",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "tell_more_first",
+      "text": "*He nods* A cautious approach. Wise, in this territory. *He sits beside you* There is a network. People who help workers escape their contracts, reach safety beyond IVRC's reach. Some call it an underground railroad. I call it mercy.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "heard_about_underground" }],
+      "choices": [
+        {
+          "text": "You're part of this network.",
+          "nextNodeId": "part_of_network"
+        }
+      ]
+    },
+
+    {
+      "id": "part_of_network",
+      "text": "*He neither confirms nor denies explicitly* I help where I can. As do others - good people scattered across this territory. *He meets your eyes* If you truly wish to help, there is work to be done. But first, trust must be established.",
+      "choices": [
+        {
+          "text": "Tell me how to prove myself.",
+          "nextNodeId": "prove_trustworthy"
+        }
+      ]
+    },
+
+    {
+      "id": "learned_more",
+      "text": "*He leans forward with interest* What have you learned?",
+      "choices": [
+        {
+          "text": "About the safe houses and routes.",
+          "nextNodeId": "safe_houses_routes"
+        },
+        {
+          "text": "About IVRC's methods of tracking escapees.",
+          "nextNodeId": "ivrc_tracking"
+        }
+      ]
+    },
+
+    {
+      "id": "safe_houses_routes",
+      "text": "*He nods approvingly* Good. The more you understand, the more effectively you can help. Share what you have learned - perhaps I can fill in the gaps.",
+      "choices": [
+        {
+          "text": "*Share information*",
+          "nextNodeId": "share_information"
+        }
+      ]
+    },
+
+    {
+      "id": "share_information",
+      "text": "*He listens carefully, occasionally nodding or asking clarifying questions* Yes... yes, this is valuable. *He adds a few details of his own* Together, we are stronger. Thank you for this.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "We're in this together.",
+          "nextNodeId": null
+        }
+      ]
+    },
+
+    {
+      "id": "ivrc_tracking",
+      "text": "*His face grows serious* Their methods. Yes, this is crucial. What have you discovered?",
+      "choices": [
+        {
+          "text": "*Explain what you've learned*",
+          "nextNodeId": "explain_tracking"
+        }
+      ]
+    },
+
+    {
+      "id": "explain_tracking",
+      "text": "*He listens intently, his expression growing more concerned* This is worse than I feared. We must adjust our methods. *He grips your hand* Thank you for this warning. You may have saved lives.",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": 15 },
+        { "type": "SetFlag", "target": "warned_miguel_tracking" }
+      ],
+      "choices": [
+        {
+          "text": "Whatever I can do to help.",
+          "nextNodeId": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1034 @@
+{
+  "$schema": "LocationData",
+  "version": "1.0.0",
+  "description": "All town and settlement location data for Iron Frontier",
+  "towns": [
+    {
+      "id": "frontiers_edge",
+      "name": "Frontier's Edge",
+      "displayName": "Frontier's Edge",
+      "type": "town",
+      "size": "medium",
+      "description": "A frontier town clinging to the edge of civilization. The railroad brought hope here, but the Iron Valley Railroad Company brought something else entirely.",
+      "lore": "Founded in 1879 when prospectors found a reliable spring in the otherwise parched plains. The arrival of the railroad in '84 transformed it from a dusty waystation to a proper town. Now it serves as IVRC's gateway to the western territories - for better or worse.",
+      "region": "Central Plains",
+      "level": 1,
+      "isStartingLocation": true,
+      "coordinates": {
+        "worldX": 11,
+        "worldY": 9
+      },
+      "mapDimensions": {
+        "width": 40,
+        "height": 40
+      },
+      "baseTerrain": "sand",
+      "atmosphere": {
+        "dangerLevel": 1,
+        "wealthLevel": 4,
+        "populationDensity": "sparse",
+        "lawLevel": "frontier",
+        "estimatedPopulation": 200
+      },
+      "buildings": [
+        {
+          "id": "rusty_spur_saloon",
+          "name": "The Rusty Spur Saloon",
+          "type": "tavern",
+          "position": { "q": 20, "r": 18 },
+          "importance": 5,
+          "description": "Two-story establishment where deals are made and secrets spill like whiskey",
+          "tags": ["main_street", "social_hub"]
+        },
+        {
+          "id": "holts_mercantile",
+          "name": "Holt's Mercantile",
+          "type": "general_store",
+          "position": { "q": 24, "r": 18 },
+          "importance": 4,
+          "description": "The Holt family has controlled commerce here for a decade",
+          "tags": ["main_street", "commerce", "holt_family"]
+        },
+        {
+          "id": "sheriff_office",
+          "name": "Sheriff's Office",
+          "type": "law_office",
+          "position": { "q": 16, "r": 18 },
+          "importance": 5,
+          "description": "Marcus Cole's domain - understaffed and underfunded",
+          "tags": ["main_street", "law", "sheriff_cole"]
+        },
+        {
+          "id": "town_well",
+          "name": "Town Well",
+          "type": "water_source",
+          "position": { "q": 20, "r": 14 },
+          "importance": 3,
+          "description": "Central gathering spot where gossip flows as freely as water",
+          "tags": ["town_center", "gathering"]
+        },
+        {
+          "id": "gunsmith",
+          "name": "Gunsmith",
+          "type": "gunsmith",
+          "position": { "q": 14, "r": 18 },
+          "importance": 3,
+          "description": "Weapons and ammunition shop next to the sheriff's office",
+          "tags": ["main_street", "weapons"]
+        },
+        {
+          "id": "st_michaels_church",
+          "name": "St. Michael's Church",
+          "type": "church",
+          "position": { "q": 10, "r": 26 },
+          "importance": 4,
+          "description": "Father Miguel's sanctuary - more than a place of worship",
+          "tags": ["religious", "sanctuary", "father_miguel"]
+        },
+        {
+          "id": "train_depot",
+          "name": "Train Depot",
+          "type": "train_station",
+          "position": { "q": 32, "r": 12 },
+          "importance": 5,
+          "description": "The iron umbilical cord that ties Frontier's Edge to IVRC",
+          "tags": ["transport", "ivrc", "railroad"]
+        },
+        {
+          "id": "telegraph_office",
+          "name": "Telegraph Office",
+          "type": "telegraph",
+          "position": { "q": 30, "r": 16 },
+          "importance": 3,
+          "description": "Communication hub near the depot",
+          "tags": ["communication", "ivrc"]
+        },
+        {
+          "id": "murphys_livery",
+          "name": "Murphy's Livery",
+          "type": "stable",
+          "position": { "q": 6, "r": 20 },
+          "importance": 4,
+          "description": "Old Murphy knows every horse and most of the secrets in town",
+          "tags": ["mounts", "town_edge", "murphy"]
+        },
+        {
+          "id": "holt_mansion",
+          "name": "Holt Mansion",
+          "type": "residence_wealthy",
+          "position": { "q": 28, "r": 24 },
+          "importance": 5,
+          "description": "Mayor Josephine Holt's residence - the finest house in town",
+          "tags": ["residential", "wealthy", "holt_family", "mayor"]
+        },
+        {
+          "id": "doc_chen_office",
+          "name": "Doc Chen Wei's Office",
+          "type": "doctor",
+          "position": { "q": 26, "r": 18 },
+          "importance": 4,
+          "description": "A Chinese immigrant who's seen too much and knows everyone's secrets",
+          "tags": ["main_street", "medical", "doc_chen"]
+        },
+        {
+          "id": "dusty_rose_hotel",
+          "name": "The Dusty Rose Hotel",
+          "type": "hotel",
+          "position": { "q": 18, "r": 18 },
+          "importance": 4,
+          "description": "Where drifters lay their heads and secrets pass through",
+          "tags": ["main_street", "rest", "travelers"]
+        },
+        {
+          "id": "blacksmith",
+          "name": "Blacksmith",
+          "type": "workshop",
+          "position": { "q": 10, "r": 18 },
+          "importance": 3,
+          "description": "Equipment repair and upgrades",
+          "tags": ["main_street", "crafting", "repair"]
+        },
+        {
+          "id": "water_tower",
+          "name": "Water Tower",
+          "type": "landmark",
+          "position": { "q": 20, "r": 10 },
+          "importance": 2,
+          "description": "Visible from miles away, marks the town on the horizon",
+          "tags": ["landmark", "water", "visible"]
+        },
+        {
+          "id": "graveyard",
+          "name": "Boot Hill Cemetery",
+          "type": "landmark",
+          "position": { "q": 8, "r": 30 },
+          "importance": 2,
+          "description": "Those who came seeking fortune but found only dust",
+          "tags": ["cemetery", "somber", "secrets"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "sheriff_cole",
+          "name": "Sheriff Marcus Cole",
+          "role": "lawman",
+          "location": "sheriff_office",
+          "description": "Honest lawman, overwhelmed by IVRC's influence",
+          "questGiver": true
+        },
+        {
+          "id": "mayor_holt",
+          "name": "Mayor Josephine Holt",
+          "role": "mayor",
+          "location": "holt_mansion",
+          "description": "In IVRC's pocket, but conflicted about it",
+          "questGiver": true
+        },
+        {
+          "id": "doc_chen",
+          "name": "Doc Chen Wei",
+          "role": "doctor",
+          "location": "doc_chen_office",
+          "description": "Town doctor who knows everyone's secrets",
+          "questGiver": true
+        },
+        {
+          "id": "father_miguel",
+          "name": "Father Miguel",
+          "role": "priest",
+          "location": "st_michaels_church",
+          "description": "Runs an underground railroad for escaped workers",
+          "questGiver": true
+        },
+        {
+          "id": "murphy",
+          "name": "Old Murphy",
+          "role": "stable_master",
+          "location": "murphys_livery",
+          "description": "Knows every horse and most of the town's secrets",
+          "questGiver": false
+        }
+      ],
+      "shops": [
+        {
+          "id": "holts_store",
+          "name": "Holt's Mercantile",
+          "type": "general",
+          "location": "holts_mercantile",
+          "priceModifier": 1.0,
+          "inventory": ["supplies", "tools", "provisions", "ammunition"]
+        },
+        {
+          "id": "gunsmith_shop",
+          "name": "Frontier Arms",
+          "type": "weapons",
+          "location": "gunsmith",
+          "priceModifier": 1.0,
+          "inventory": ["pistols", "rifles", "shotguns", "ammunition"]
+        },
+        {
+          "id": "livery_shop",
+          "name": "Murphy's Livery",
+          "type": "mounts",
+          "location": "murphys_livery",
+          "priceModifier": 1.0,
+          "inventory": ["horses", "tack", "feed"]
+        }
+      ],
+      "entryPoints": [
+        {
+          "id": "west_road",
+          "position": { "q": 2, "r": 19 },
+          "direction": "west",
+          "connectionType": "road",
+          "isDefault": true,
+          "connectedTo": "desert_pass"
+        },
+        {
+          "id": "east_road",
+          "position": { "q": 38, "r": 19 },
+          "direction": "east",
+          "connectionType": "road",
+          "connectedTo": "iron_gulch"
+        },
+        {
+          "id": "train_depot_entry",
+          "position": { "q": 34, "r": 12 },
+          "direction": "east",
+          "connectionType": "railroad",
+          "connectedTo": "iron_gulch"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 4, "r": 19 },
+        "facing": 0
+      },
+      "tags": ["starter", "western", "town", "main", "central_plains"]
+    },
+    {
+      "id": "iron_gulch",
+      "name": "Iron Gulch",
+      "displayName": "Iron Gulch",
+      "type": "town",
+      "size": "large",
+      "description": "Railroad company headquarters. Smokestacks and steam, brass and blood. Where the iron road begins and empires are built on the backs of working men.",
+      "lore": "Founded five years ago when Cornelius Thorne drove the golden spike himself. Every building, every deed, every soul here belongs to the Iron Valley Railroad Company. They don't call it a company town. They call it 'progress.'",
+      "region": "Central Plains",
+      "level": 2,
+      "isStartingLocation": false,
+      "coordinates": {
+        "worldX": 14,
+        "worldY": 10
+      },
+      "mapDimensions": {
+        "width": 50,
+        "height": 35
+      },
+      "baseTerrain": "dirt",
+      "atmosphere": {
+        "dangerLevel": 2,
+        "wealthLevel": 7,
+        "populationDensity": "crowded",
+        "lawLevel": "strict",
+        "estimatedPopulation": 800
+      },
+      "buildings": [
+        {
+          "id": "grand_station",
+          "name": "Grand Station",
+          "type": "train_station",
+          "position": { "q": 25, "r": 17 },
+          "importance": 5,
+          "description": "The crown jewel of IVRC, dominates the center of town",
+          "tags": ["ivrc", "landmark", "primary"]
+        },
+        {
+          "id": "telegraph_office",
+          "name": "Telegraph Office",
+          "type": "telegraph",
+          "position": { "q": 20, "r": 16 },
+          "importance": 4,
+          "description": "Communication hub adjacent to the station",
+          "tags": ["ivrc", "communication"]
+        },
+        {
+          "id": "ivrc_headquarters",
+          "name": "IVRC Headquarters",
+          "type": "quest_location",
+          "position": { "q": 25, "r": 8 },
+          "importance": 5,
+          "description": "Imposing office building with restricted access",
+          "tags": ["ivrc", "corporate", "restricted", "important"]
+        },
+        {
+          "id": "ironclad_hotel",
+          "name": "The Ironclad Hotel",
+          "type": "hotel",
+          "position": { "q": 32, "r": 8 },
+          "importance": 4,
+          "description": "Upscale lodging for company men",
+          "tags": ["ivrc", "wealthy", "lodging"]
+        },
+        {
+          "id": "company_bank",
+          "name": "Company Bank",
+          "type": "bank",
+          "position": { "q": 18, "r": 8 },
+          "importance": 4,
+          "description": "IVRC-controlled financial institution",
+          "tags": ["ivrc", "finance", "secure"]
+        },
+        {
+          "id": "company_store",
+          "name": "Company Store",
+          "type": "general_store",
+          "position": { "q": 38, "r": 10 },
+          "importance": 3,
+          "description": "IVRC-owned store with inflated prices",
+          "tags": ["ivrc", "commerce", "overpriced"]
+        },
+        {
+          "id": "pinkerton_office",
+          "name": "Pinkerton Office",
+          "type": "law_office",
+          "position": { "q": 12, "r": 10 },
+          "importance": 4,
+          "description": "IVRC security force headquarters",
+          "tags": ["ivrc", "security", "enforcement", "hostile"]
+        },
+        {
+          "id": "brake_house_saloon",
+          "name": "The Brake House Saloon",
+          "type": "tavern",
+          "position": { "q": 20, "r": 26 },
+          "importance": 4,
+          "description": "Worker hangout where rumors flow and Copperhead sympathizers gather",
+          "tags": ["workers", "social", "rumors", "copperhead_sympathy"]
+        },
+        {
+          "id": "roundhouse",
+          "name": "Roundhouse",
+          "type": "workshop",
+          "position": { "q": 38, "r": 17 },
+          "importance": 4,
+          "description": "Train maintenance facility",
+          "tags": ["ivrc", "industrial", "maintenance"]
+        },
+        {
+          "id": "water_tower",
+          "name": "Industrial Water Tower",
+          "type": "landmark",
+          "position": { "q": 44, "r": 17 },
+          "importance": 3,
+          "description": "Industrial-scale water storage for the railroad",
+          "tags": ["ivrc", "industrial", "landmark"]
+        },
+        {
+          "id": "coal_yard",
+          "name": "Coal Yard",
+          "type": "workshop",
+          "position": { "q": 6, "r": 17 },
+          "importance": 3,
+          "description": "Fuel storage for the railroad operations",
+          "tags": ["ivrc", "industrial", "fuel"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "cornelius_thorne",
+          "name": "Cornelius Thorne",
+          "role": "railroad_baron",
+          "location": "ivrc_headquarters",
+          "description": "The ruthless owner of IVRC who controls the territory",
+          "questGiver": true
+        },
+        {
+          "id": "pinkerton_captain",
+          "name": "Captain Briggs",
+          "role": "security_chief",
+          "location": "pinkerton_office",
+          "description": "Enforcer of IVRC's will",
+          "questGiver": true
+        }
+      ],
+      "shops": [
+        {
+          "id": "company_general",
+          "name": "Company Store",
+          "type": "general",
+          "location": "company_store",
+          "priceModifier": 1.5,
+          "inventory": ["supplies", "tools", "provisions"]
+        },
+        {
+          "id": "company_bank_services",
+          "name": "Company Bank",
+          "type": "bank",
+          "location": "company_bank",
+          "priceModifier": 1.0,
+          "inventory": ["loans", "deposits", "transfers"]
+        }
+      ],
+      "entryPoints": [
+        {
+          "id": "west_tracks",
+          "position": { "q": 0, "r": 17 },
+          "direction": "west",
+          "connectionType": "railroad",
+          "connectedTo": "frontiers_edge"
+        },
+        {
+          "id": "east_tracks",
+          "position": { "q": 49, "r": 17 },
+          "direction": "east",
+          "connectionType": "railroad",
+          "connectedTo": "coppertown"
+        },
+        {
+          "id": "south_road",
+          "position": { "q": 25, "r": 34 },
+          "direction": "south",
+          "connectionType": "road",
+          "isDefault": true,
+          "connectedTo": "dusty_trail"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 25, "r": 32 },
+        "facing": 5
+      },
+      "tags": ["railroad", "ivrc", "industrial", "corporate", "central_plains", "class_divide", "mid_game"]
+    },
+    {
+      "id": "mesa_point",
+      "name": "Mesa Point",
+      "displayName": "Mesa Point",
+      "type": "special",
+      "size": "small",
+      "description": "A towering rock formation with ancient carvings and a signal fire platform",
+      "lore": "Travelers have used Mesa Point as a waypoint since before anyone can remember. The native peoples carved strange symbols into its base - symbols no one living can read. The Copperheads claimed it years back for their lookout. From the top, you can see three canyons and the dust cloud of any approaching riders for miles.",
+      "region": "Devil's Backbone",
+      "level": 3,
+      "isStartingLocation": false,
+      "coordinates": {
+        "worldX": 6,
+        "worldY": 3
+      },
+      "mapDimensions": {
+        "width": 20,
+        "height": 20
+      },
+      "baseTerrain": "badlands",
+      "atmosphere": {
+        "dangerLevel": 4,
+        "wealthLevel": 2,
+        "populationDensity": "sparse",
+        "lawLevel": "lawless",
+        "estimatedPopulation": 15
+      },
+      "buildings": [
+        {
+          "id": "hidden_camp",
+          "name": "Hidden Camp",
+          "type": "camp",
+          "position": { "q": 6, "r": 8 },
+          "importance": 3,
+          "description": "Small tent camp hidden behind the rock formation",
+          "tags": ["outlaw", "camp", "hidden"]
+        },
+        {
+          "id": "lookout_platform",
+          "name": "Lookout Platform",
+          "type": "landmark",
+          "position": { "q": 11, "r": 6 },
+          "importance": 4,
+          "description": "Wooden structure on the rock for watching the trails",
+          "tags": ["constructed", "lookout", "outlaw"]
+        },
+        {
+          "id": "signal_fire_pit",
+          "name": "Signal Fire",
+          "type": "landmark",
+          "position": { "q": 10, "r": 5 },
+          "importance": 4,
+          "description": "Fire pit for sending messages to other outlaw hideouts",
+          "tags": ["communication", "signal", "outlaw_network"]
+        },
+        {
+          "id": "ancient_carvings_site",
+          "name": "Carved Stone",
+          "type": "landmark",
+          "position": { "q": 8, "r": 9 },
+          "importance": 3,
+          "description": "Ancient mysterious symbols carved into the rock",
+          "tags": ["ancient", "mysterious", "lore_hook", "quest_potential"]
+        },
+        {
+          "id": "trail_markers",
+          "name": "Trail Junction",
+          "type": "landmark",
+          "position": { "q": 14, "r": 14 },
+          "importance": 2,
+          "description": "Markers showing secret paths to other hideouts",
+          "tags": ["navigation", "outlaw_trails", "information"]
+        },
+        {
+          "id": "traveler_cache",
+          "name": "Rock Cache",
+          "type": "hidden_cache",
+          "position": { "q": 5, "r": 11 },
+          "importance": 2,
+          "description": "Hidden supplies for travelers who know where to look",
+          "tags": ["hidden", "supplies", "outlaw_hospitality"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "lookout_guard",
+          "name": "Copperhead Lookout",
+          "role": "guard",
+          "location": "lookout_platform",
+          "description": "Outlaw watching the trails below",
+          "questGiver": false
+        }
+      ],
+      "shops": [],
+      "entryPoints": [
+        {
+          "id": "south_trail",
+          "position": { "q": 10, "r": 19 },
+          "direction": "south",
+          "connectionType": "trail",
+          "isDefault": true,
+          "connectedTo": "badlands_trail"
+        },
+        {
+          "id": "east_trail",
+          "position": { "q": 18, "r": 10 },
+          "direction": "east",
+          "connectionType": "trail",
+          "connectedTo": "rattlesnake_canyon"
+        },
+        {
+          "id": "north_trail",
+          "position": { "q": 10, "r": 2 },
+          "direction": "north",
+          "connectionType": "trail",
+          "connectedTo": "dead_mans_gulch"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 10, "r": 17 },
+        "facing": 5
+      },
+      "tags": ["landmark", "outlaw", "lookout", "ancient", "navigation", "dangerous", "devils_backbone"]
+    },
+    {
+      "id": "coldwater",
+      "name": "Coldwater",
+      "displayName": "Coldwater Springs",
+      "type": "outpost",
+      "size": "small",
+      "description": "A welcome rest stop in the unforgiving desert, built around a natural spring",
+      "lore": "In the burning wasteland of the Western Desert, water means life. The springs here have saved countless travelers from a sandy grave. The waystation keeper charges fair prices and asks no questions - the kind of hospitality that makes the frontier bearable.",
+      "region": "Western Desert",
+      "level": 2,
+      "isStartingLocation": false,
+      "coordinates": {
+        "worldX": 4,
+        "worldY": 8
+      },
+      "mapDimensions": {
+        "width": 16,
+        "height": 16
+      },
+      "baseTerrain": "sand",
+      "atmosphere": {
+        "dangerLevel": 2,
+        "wealthLevel": 2,
+        "populationDensity": "sparse",
+        "lawLevel": "frontier",
+        "estimatedPopulation": 25
+      },
+      "buildings": [
+        {
+          "id": "main_station",
+          "name": "Waystation",
+          "type": "waystation",
+          "position": { "q": 8, "r": 6 },
+          "importance": 5,
+          "description": "Main rest stop building with lodging and supplies",
+          "tags": ["service", "rest"]
+        },
+        {
+          "id": "spring",
+          "name": "The Spring",
+          "type": "water_source",
+          "position": { "q": 5, "r": 9 },
+          "importance": 5,
+          "description": "Natural oasis that gives the settlement its name",
+          "tags": ["water", "valuable", "oasis"]
+        },
+        {
+          "id": "traveler_camp",
+          "name": "Traveler's Camp",
+          "type": "camp",
+          "position": { "q": 10, "r": 10 },
+          "importance": 3,
+          "description": "Campfire area where travelers share stories and news",
+          "tags": ["travelers", "social"]
+        },
+        {
+          "id": "shade_rocks",
+          "name": "Shade Rocks",
+          "type": "landmark",
+          "position": { "q": 3, "r": 5 },
+          "importance": 2,
+          "description": "Natural rock formation providing shade from the desert sun",
+          "tags": ["natural", "cover"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "waystation_keeper",
+          "name": "Old Jeb",
+          "role": "innkeeper",
+          "location": "main_station",
+          "description": "Grizzled waystation keeper who's seen it all",
+          "questGiver": true
+        }
+      ],
+      "shops": [
+        {
+          "id": "waystation_supplies",
+          "name": "Waystation Supplies",
+          "type": "general",
+          "location": "main_station",
+          "priceModifier": 1.2,
+          "inventory": ["water", "provisions", "basic_supplies"]
+        }
+      ],
+      "entryPoints": [
+        {
+          "id": "west_trail",
+          "position": { "q": 1, "r": 8 },
+          "direction": "west",
+          "connectionType": "trail",
+          "isDefault": true,
+          "connectedTo": "desert_pass"
+        },
+        {
+          "id": "east_trail",
+          "position": { "q": 14, "r": 8 },
+          "direction": "east",
+          "connectionType": "trail",
+          "connectedTo": "frontiers_edge"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 3, "r": 8 },
+        "facing": 0
+      },
+      "tags": ["desert", "rest_stop", "water", "trade_route", "oasis"]
+    },
+    {
+      "id": "salvation",
+      "name": "Salvation",
+      "displayName": "The Old Works",
+      "type": "special",
+      "size": "huge",
+      "description": "An abandoned Civil War automaton factory, hidden deep in the Iron Mountains. Steam-powered machines still patrol these halls, following orders from 1864.",
+      "lore": "During the darkest days of the Civil War, the Union constructed this secret facility to produce steam-powered soldiers - automatons that could fight without rest, fear, or mercy. When the war ended, the project was abandoned and sealed. But the machines were never shut down. The Foreman still runs his factory, waiting for orders that will never come.",
+      "region": "Iron Mountains",
+      "level": 5,
+      "isStartingLocation": false,
+      "isFinalDungeon": true,
+      "coordinates": {
+        "worldX": 18,
+        "worldY": 1
+      },
+      "mapDimensions": {
+        "width": 60,
+        "height": 50
+      },
+      "baseTerrain": "stone",
+      "atmosphere": {
+        "dangerLevel": 8,
+        "wealthLevel": 7,
+        "populationDensity": "sparse",
+        "lawLevel": "lawless",
+        "estimatedPopulation": 0
+      },
+      "buildings": [
+        {
+          "id": "hidden_entrance",
+          "name": "Hidden Entrance",
+          "type": "hideout",
+          "position": { "q": 30, "r": 48 },
+          "importance": 5,
+          "description": "Concealed entrance in the cliff face",
+          "tags": ["entrance", "hidden", "exterior"]
+        },
+        {
+          "id": "entry_tunnel",
+          "name": "Entry Tunnel",
+          "type": "hidden_cache",
+          "position": { "q": 30, "r": 43 },
+          "importance": 3,
+          "description": "Dark collapsed tunnel with eerie sounds",
+          "tags": ["tunnel", "dark", "collapsed"]
+        },
+        {
+          "id": "assembly_hall",
+          "name": "Assembly Hall",
+          "type": "workshop",
+          "position": { "q": 30, "r": 34 },
+          "importance": 5,
+          "description": "The heart of the factory - where automatons were built",
+          "tags": ["industrial", "main_area", "combat", "machinery"]
+        },
+        {
+          "id": "power_station",
+          "name": "Power Station",
+          "type": "workshop",
+          "position": { "q": 17, "r": 33 },
+          "importance": 4,
+          "description": "Steam generators with hazardous steam vents",
+          "tags": ["industrial", "power", "hazardous", "steam"]
+        },
+        {
+          "id": "barracks",
+          "name": "Workers Barracks",
+          "type": "residence",
+          "position": { "q": 43, "r": 33 },
+          "importance": 2,
+          "description": "Where workers lived - now empty with personal effects scattered",
+          "tags": ["residential", "abandoned", "story", "safe"]
+        },
+        {
+          "id": "command_center",
+          "name": "Command Center",
+          "type": "law_office",
+          "position": { "q": 30, "r": 23 },
+          "importance": 5,
+          "description": "The Foreman's domain - the malfunctioning command automaton",
+          "tags": ["boss", "critical", "story", "finale"]
+        },
+        {
+          "id": "armory",
+          "name": "Armory",
+          "type": "gunsmith",
+          "position": { "q": 42, "r": 22 },
+          "importance": 4,
+          "description": "Civil War weapons cache - rifles, ammunition, explosives",
+          "tags": ["weapons", "loot", "valuable"]
+        },
+        {
+          "id": "testing_ground",
+          "name": "Testing Ground",
+          "type": "ambush_point",
+          "position": { "q": 44, "r": 13 },
+          "importance": 4,
+          "description": "Open area for automaton testing with active patrol routes",
+          "tags": ["combat", "patrol", "dangerous", "open"]
+        },
+        {
+          "id": "the_furnace",
+          "name": "The Furnace",
+          "type": "workshop",
+          "position": { "q": 12, "r": 22 },
+          "importance": 4,
+          "description": "Deep heat source powering everything - dangerous and dramatic",
+          "tags": ["industrial", "power", "hazardous", "heat", "dramatic"]
+        },
+        {
+          "id": "storage_vaults",
+          "name": "Storage Vaults",
+          "type": "hidden_cache",
+          "position": { "q": 19, "r": 22 },
+          "importance": 4,
+          "description": "Locked rooms with secrets, blueprints, and historical items",
+          "tags": ["storage", "secrets", "loot", "story"]
+        },
+        {
+          "id": "escape_route",
+          "name": "Escape Route",
+          "type": "hidden_cache",
+          "position": { "q": 55, "r": 5 },
+          "importance": 5,
+          "description": "Back exit after the final confrontation",
+          "tags": ["escape", "exit", "finale"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "the_foreman",
+          "name": "The Foreman",
+          "role": "boss",
+          "location": "command_center",
+          "description": "Malfunctioning command automaton - the final boss",
+          "questGiver": false
+        }
+      ],
+      "shops": [],
+      "encounterZones": [
+        {
+          "id": "assembly_combat",
+          "name": "Assembly Hall Combat",
+          "area": [
+            { "q": 28, "r": 34 }, { "q": 32, "r": 34 },
+            { "q": 28, "r": 35 }, { "q": 32, "r": 35 }
+          ],
+          "enemyTypes": ["automaton_patrol", "automaton_worker"],
+          "difficulty": "hard"
+        },
+        {
+          "id": "boss_arena",
+          "name": "Command Center",
+          "area": [
+            { "q": 29, "r": 22 }, { "q": 31, "r": 22 },
+            { "q": 29, "r": 24 }, { "q": 31, "r": 24 }
+          ],
+          "enemyTypes": ["the_foreman", "automaton_elite"],
+          "difficulty": "boss"
+        }
+      ],
+      "entryPoints": [
+        {
+          "id": "hidden_entrance",
+          "position": { "q": 30, "r": 48 },
+          "direction": "south",
+          "connectionType": "trail",
+          "isDefault": true,
+          "connectedTo": "mountain_road"
+        },
+        {
+          "id": "escape_exit",
+          "position": { "q": 55, "r": 3 },
+          "direction": "north",
+          "connectionType": "trail",
+          "connectedTo": "iron_mountains_wilderness"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 30, "r": 47 },
+        "facing": 2
+      },
+      "tags": ["dungeon", "final", "industrial", "automaton", "civil_war", "dangerous", "story_critical", "boss", "ivrc"]
+    },
+    {
+      "id": "coppertown",
+      "name": "Coppertown",
+      "displayName": "Coppertown",
+      "type": "town",
+      "size": "large",
+      "description": "IVRC company town carved into the Iron Mountains. Every soul here owes their life to the Company - and the Company never forgets a debt.",
+      "lore": "Founded in 1879 when IVRC surveyors found the largest copper deposit in the Territories. Within two years, a town of three hundred souls had sprouted from the mountainside like a copper-green fungus. The workers call it 'The Cage' - you can check in any time you like, but the company script won't spend anywhere else.",
+      "region": "Iron Mountains",
+      "level": 3,
+      "isStartingLocation": false,
+      "coordinates": {
+        "worldX": 16,
+        "worldY": 3
+      },
+      "mapDimensions": {
+        "width": 45,
+        "height": 40
+      },
+      "baseTerrain": "stone",
+      "atmosphere": {
+        "dangerLevel": 4,
+        "wealthLevel": 2,
+        "populationDensity": "crowded",
+        "lawLevel": "strict",
+        "estimatedPopulation": 300
+      },
+      "buildings": [
+        {
+          "id": "the_big_dig",
+          "name": "The Big Dig",
+          "type": "mine",
+          "position": { "q": 35, "r": 8 },
+          "importance": 5,
+          "description": "Main mine entrance and dungeon entrance",
+          "tags": ["primary", "dungeon_entrance", "ivrc", "dangerous"]
+        },
+        {
+          "id": "company_office",
+          "name": "Company Office",
+          "type": "law_office",
+          "position": { "q": 20, "r": 6 },
+          "importance": 5,
+          "description": "Mine administration and IVRC authority hub",
+          "tags": ["ivrc", "administration", "important"]
+        },
+        {
+          "id": "foreman_house",
+          "name": "Foreman's House",
+          "type": "residence_wealthy",
+          "position": { "q": 14, "r": 8 },
+          "importance": 4,
+          "description": "Nicer accommodations than the workers get",
+          "tags": ["ivrc", "management", "comfortable"]
+        },
+        {
+          "id": "processing_mill",
+          "name": "Processing Mill",
+          "type": "smelter",
+          "position": { "q": 30, "r": 15 },
+          "importance": 5,
+          "description": "Ore smelting facility - dangerous and loud",
+          "tags": ["industrial", "processing", "dangerous", "loud"]
+        },
+        {
+          "id": "company_store",
+          "name": "Company Store",
+          "type": "general_store",
+          "position": { "q": 15, "r": 22 },
+          "importance": 5,
+          "description": "The only store - accepts script currency only",
+          "tags": ["ivrc", "commerce", "monopoly", "essential"]
+        },
+        {
+          "id": "mess_hall",
+          "name": "Mess Hall",
+          "type": "tavern",
+          "position": { "q": 20, "r": 24 },
+          "importance": 4,
+          "description": "Company cafeteria where workers gather",
+          "tags": ["ivrc", "social", "food", "workers"]
+        },
+        {
+          "id": "infirmary",
+          "name": "Infirmary",
+          "type": "doctor",
+          "position": { "q": 12, "r": 24 },
+          "importance": 4,
+          "description": "Underfunded medical facility",
+          "tags": ["medical", "underfunded", "essential"]
+        },
+        {
+          "id": "guard_post",
+          "name": "Guard Post",
+          "type": "hideout",
+          "position": { "q": 10, "r": 14 },
+          "importance": 4,
+          "description": "Company security checkpoint",
+          "tags": ["ivrc", "security", "checkpoint"]
+        },
+        {
+          "id": "old_assay_office",
+          "name": "Old Assay Office",
+          "type": "ruins",
+          "position": { "q": 5, "r": 18 },
+          "importance": 3,
+          "description": "Abandoned cabin - secret meeting spot for resistance",
+          "tags": ["abandoned", "secret", "resistance"]
+        }
+      ],
+      "npcs": [
+        {
+          "id": "mine_foreman",
+          "name": "Foreman Blackwood",
+          "role": "foreman",
+          "location": "foreman_house",
+          "description": "Cruel overseer of the mining operations",
+          "questGiver": true
+        }
+      ],
+      "shops": [
+        {
+          "id": "company_supplies",
+          "name": "Company Store",
+          "type": "general",
+          "location": "company_store",
+          "priceModifier": 2.0,
+          "currency": "company_script",
+          "inventory": ["supplies", "tools", "provisions"]
+        }
+      ],
+      "entryPoints": [
+        {
+          "id": "mountain_trail",
+          "position": { "q": 15, "r": 39 },
+          "direction": "south",
+          "connectionType": "trail",
+          "isDefault": true,
+          "connectedTo": "mountain_road"
+        },
+        {
+          "id": "rail_spur",
+          "position": { "q": 43, "r": 20 },
+          "direction": "east",
+          "connectionType": "railroad",
+          "connectedTo": "iron_gulch"
+        }
+      ],
+      "playerSpawn": {
+        "position": { "q": 15, "r": 36 },
+        "facing": 5
+      },
+      "tags": ["company_town", "mining", "ivrc", "industrial", "oppressive", "iron_mountains", "level_3", "resistance", "exploitation"]
+    }
+  ]
+}

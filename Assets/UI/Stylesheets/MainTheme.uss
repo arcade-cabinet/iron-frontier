@@ -1,0 +1,304 @@
+/* Iron Frontier - Main Theme Stylesheet */
+/* Unity UI Toolkit Base Theme Variables and Styles */
+
+/* ============================================================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   ============================================================================ */
+
+:root {
+    /* Primary Colors - Steampunk Metal Palette */
+    --color-brass: rgb(184, 115, 51);
+    --color-brass-light: rgb(205, 127, 50);
+    --color-brass-dark: rgb(139, 90, 43);
+    --color-copper: rgb(176, 88, 64);
+    --color-copper-light: rgb(196, 108, 84);
+    --color-copper-dark: rgb(136, 68, 44);
+    --color-iron: rgb(112, 128, 144);
+    --color-iron-light: rgb(142, 158, 174);
+    --color-iron-dark: rgb(82, 98, 114);
+    --color-steel: rgb(130, 140, 150);
+    --color-gold: rgb(218, 165, 32);
+    --color-gold-light: rgb(238, 185, 52);
+    --color-gold-dark: rgb(178, 135, 12);
+
+    /* Accent Colors */
+    --color-amber: rgb(255, 191, 0);
+    --color-amber-glow: rgb(255, 200, 100);
+    --color-rust: rgb(183, 65, 14);
+    --color-patina: rgb(74, 116, 108);
+
+    /* Semantic Colors */
+    --color-success: rgb(76, 153, 76);
+    --color-success-light: rgb(100, 180, 100);
+    --color-warning: rgb(220, 160, 40);
+    --color-warning-light: rgb(240, 180, 60);
+    --color-danger: rgb(180, 60, 60);
+    --color-danger-light: rgb(200, 80, 80);
+    --color-info: rgb(70, 130, 180);
+    --color-info-light: rgb(100, 160, 210);
+
+    /* Background Colors */
+    --bg-dark: rgb(20, 15, 10);
+    --bg-medium: rgb(35, 28, 20);
+    --bg-light: rgb(50, 40, 30);
+    --bg-panel: rgba(20, 15, 10, 0.95);
+    --bg-overlay: rgba(10, 8, 5, 0.85);
+    --bg-parchment: rgb(235, 220, 195);
+    --bg-aged-paper: rgb(215, 195, 165);
+
+    /* Text Colors */
+    --text-primary: rgb(230, 220, 200);
+    --text-secondary: rgb(180, 170, 150);
+    --text-muted: rgb(130, 120, 100);
+    --text-highlight: rgb(255, 250, 230);
+    --text-gold: rgb(218, 165, 32);
+    --text-dark: rgb(40, 35, 30);
+
+    /* Border Colors */
+    --border-brass: rgb(139, 90, 43);
+    --border-brass-light: rgb(169, 120, 73);
+    --border-iron: rgb(82, 98, 114);
+    --border-dark: rgb(60, 50, 40);
+    --border-light: rgb(100, 90, 70);
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-xxl: 32px;
+
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+
+    /* Transitions */
+    --transition-fast: 0.1s;
+    --transition-normal: 0.15s;
+    --transition-slow: 0.3s;
+
+    /* Font Sizes */
+    --font-xs: 11px;
+    --font-sm: 13px;
+    --font-md: 15px;
+    --font-lg: 18px;
+    --font-xl: 22px;
+    --font-xxl: 28px;
+    --font-display: 36px;
+}
+
+/* ============================================================================
+   BASE ELEMENT STYLES
+   ============================================================================ */
+
+.root {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+/* ============================================================================
+   COMMON UTILITY CLASSES
+   ============================================================================ */
+
+/* Flex utilities */
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+/* Spacing utilities */
+.padding-xs { padding: var(--spacing-xs); }
+.padding-sm { padding: var(--spacing-sm); }
+.padding-md { padding: var(--spacing-md); }
+.padding-lg { padding: var(--spacing-lg); }
+.padding-xl { padding: var(--spacing-xl); }
+
+.margin-xs { margin: var(--spacing-xs); }
+.margin-sm { margin: var(--spacing-sm); }
+.margin-md { margin: var(--spacing-md); }
+.margin-lg { margin: var(--spacing-lg); }
+.margin-xl { margin: var(--spacing-xl); }
+
+/* Text alignment */
+.text-left { -unity-text-align: middle-left; }
+.text-center { -unity-text-align: middle-center; }
+.text-right { -unity-text-align: middle-right; }
+
+/* ============================================================================
+   STEAMPUNK DECORATIVE ELEMENTS
+   ============================================================================ */
+
+/* Riveted border style */
+.border-riveted {
+    border-width: 3px;
+    border-color: var(--border-brass);
+    border-radius: var(--radius-md);
+}
+
+/* Ornate frame style */
+.border-ornate {
+    border-width: 4px;
+    border-color: var(--color-gold);
+    border-radius: var(--radius-lg);
+}
+
+/* Metal plate style */
+.metal-plate {
+    background-color: var(--bg-medium);
+    border-width: 2px;
+    border-color: var(--border-iron);
+    border-radius: var(--radius-sm);
+}
+
+/* Brass accent bar */
+.brass-bar {
+    height: 4px;
+    background-color: var(--color-brass);
+    border-radius: 2px;
+}
+
+/* Copper accent bar */
+.copper-bar {
+    height: 4px;
+    background-color: var(--color-copper);
+    border-radius: 2px;
+}
+
+/* ============================================================================
+   SCROLLBAR STYLES
+   ============================================================================ */
+
+.unity-scroller--vertical {
+    width: 10px;
+}
+
+.unity-scroller--vertical > .unity-slider {
+    width: 10px;
+}
+
+.unity-base-slider__dragger {
+    background-color: var(--color-brass);
+    border-radius: var(--radius-sm);
+    border-width: 1px;
+    border-color: var(--border-brass-light);
+}
+
+.unity-base-slider__dragger:hover {
+    background-color: var(--color-brass-light);
+}
+
+.unity-base-slider__tracker {
+    background-color: var(--bg-dark);
+    border-radius: var(--radius-sm);
+}
+
+/* ============================================================================
+   COMMON ANIMATIONS
+   ============================================================================ */
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        translate: 0 20px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes fade-in-down {
+    from {
+        opacity: 0;
+        translate: 0 -20px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes pulse-glow {
+    0% {
+        border-color: var(--border-brass);
+    }
+    50% {
+        border-color: var(--color-gold);
+    }
+    100% {
+        border-color: var(--border-brass);
+    }
+}
+
+@keyframes brass-shimmer {
+    0% {
+        background-color: var(--color-brass);
+    }
+    50% {
+        background-color: var(--color-brass-light);
+    }
+    100% {
+        background-color: var(--color-brass);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { translate: 0 0; }
+    20% { translate: -4px 0; }
+    40% { translate: 4px 0; }
+    60% { translate: -4px 0; }
+    80% { translate: 4px 0; }
+}
+
+@keyframes bounce {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -8px; }
+}
+
+/* ============================================================================
+   HIDDEN/VISIBLE STATES
+   ============================================================================ */
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.disabled {
+    opacity: 0.5;
+}

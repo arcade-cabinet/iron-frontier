@@ -1,0 +1,690 @@
+{
+  "id": "deputy_jake_main",
+  "name": "Deputy Hawkins - Main Conversation",
+  "description": "Primary dialogue tree for Deputy Jacob \"Jake\" Hawkins",
+  "tags": ["dusty_springs", "law", "authority", "idealistic"],
+  "entryPoints": [
+    {
+      "nodeId": "first_meeting",
+      "conditions": [{ "type": "FirstMeeting" }],
+      "priority": 10
+    },
+    {
+      "nodeId": "high_rep_greeting",
+      "conditions": [{ "type": "ReputationGte", "value": 30 }],
+      "priority": 5
+    },
+    {
+      "nodeId": "quest_active",
+      "conditions": [{ "type": "QuestActive", "target": "jakes_dilemma" }],
+      "priority": 8
+    },
+    {
+      "nodeId": "return_greeting",
+      "conditions": [],
+      "priority": 0
+    }
+  ],
+  "nodes": [
+    {
+      "id": "first_meeting",
+      "text": "*A fresh-faced young man with a shiny badge looks up from cleaning his revolver* Howdy, stranger! Welcome to Dusty Springs. I'm Deputy Jake Hawkins. Something I can help you with today?",
+      "expression": "friendly",
+      "choices": [
+        { "text": "Just arrived in town. Getting my bearings.", "nextNodeId": "new_arrival" },
+        { "text": "I have information about criminal activity.", "nextNodeId": "criminal_info" },
+        { "text": "Sheriff Cole around?", "nextNodeId": "sheriff_location" }
+      ]
+    },
+    {
+      "id": "new_arrival",
+      "text": "*He stands a bit straighter* Well, welcome! Dusty Springs is a good town - honest folk, mostly. The Sheriff keeps the peace, and I help where I can. *He grins* We've got a general store, a saloon - though I'd recommend the store - and Doc Chen if you need patching up. Anything specific you're looking for?",
+      "choices": [
+        { "text": "What should I know about this place?", "nextNodeId": "town_info" },
+        { "text": "Any trouble I should watch out for?", "nextNodeId": "trouble_warning" },
+        { "text": "Just taking it easy. Thanks for the welcome.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "town_info",
+      "text": "Dusty Springs is a railroad town - IVRC runs a lot of operations through here. *His enthusiasm dims slightly* Some folks don't like the company much, but they bring jobs and money. Sheriff says we got to keep the peace between everyone, not take sides.",
+      "choices": [
+        { "text": "You sound uncertain about IVRC.", "nextNodeId": "ivrc_uncertain" },
+        { "text": "Sounds like good advice.", "nextNodeId": "good_advice" },
+        { "text": "What about the Copperhead Gang?", "nextNodeId": "copperhead_view" }
+      ]
+    },
+    {
+      "id": "ivrc_uncertain",
+      "text": "*He glances around, then lowers his voice* I... I just hear things sometimes. Workers complaining about conditions. Families saying their men disappeared. *He straightens* But I'm sure there's explanations. IVRC's a legitimate company. They wouldn't do anything wrong.",
+      "choices": [
+        { "text": "Are you trying to convince me, or yourself?", "nextNodeId": "convince_himself" },
+        { "text": "You're right to have questions.", "nextNodeId": "right_to_question" },
+        { "text": "Has the Sheriff looked into it?", "nextNodeId": "sheriff_investigation" }
+      ]
+    },
+    {
+      "id": "convince_himself",
+      "text": "*He looks taken aback, then troubled* I... *He sighs* Maybe a bit of both. The law's supposed to be clear - right and wrong, good and bad. But out here, things are... messier than I expected.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        { "text": "That's called growing up.", "nextNodeId": "growing_up" },
+        { "text": "The law can still guide you.", "nextNodeId": "law_guides" }
+      ]
+    },
+    {
+      "id": "growing_up",
+      "text": "*He manages a rueful smile* I suppose it is. Sheriff Cole says the same thing. That justice isn't always what's written in the law books. *He shakes his head* I'm still figuring out what that means.",
+      "choices": [
+        { "text": "You'll find your way.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "law_guides",
+      "text": "*He nods, looking relieved* That's what I keep telling myself. The law is there for a reason - to protect people, to keep order. Even if some folks misuse it, the principles are sound. *He touches his badge* I have to believe that.",
+      "choices": [
+        { "text": "Hold onto that belief.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "right_to_question",
+      "text": "*He looks surprised, then grateful* You think so? Sometimes I worry I'm being... disloyal. Questioning the people I'm supposed to work with. *He takes a breath* But Sheriff Cole always says a good lawman asks questions. Even uncomfortable ones.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        { "text": "The Sheriff sounds wise.", "nextNodeId": "sheriff_wise" },
+        { "text": "Those questions might matter someday.", "nextNodeId": "questions_matter" }
+      ]
+    },
+    {
+      "id": "sheriff_wise",
+      "text": "*His face lights up* He is! He's taught me so much since I joined. Not just about shooting or tracking, but about what it means to wear the badge. *He touches it reverently* Being a lawman isn't just about following rules. It's about protecting people who can't protect themselves.",
+      "choices": [
+        { "text": "A good philosophy.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "questions_matter",
+      "text": "*He nods slowly* Maybe you're right. *He lowers his voice* Between us, I've been keeping notes. Things that don't add up. Patterns in the 'accidents' and disappearances. If there's something wrong going on... *He straightens* Well, that's what the law is for.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_keeping_notes" }],
+      "choices": [
+        { "text": "Would you share those notes with me?", "nextNodeId": "share_notes" },
+        { "text": "Be careful who you tell about that.", "nextNodeId": "be_careful" }
+      ]
+    },
+    {
+      "id": "share_notes",
+      "text": "*He hesitates* I don't know... they're just observations, nothing official. *He studies you* But you seem like someone who cares about the truth. Maybe... maybe come by the office later, when things are quiet. I'll show you what I've found.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_will_share_notes" }],
+      "choices": [
+        { "text": "I'll do that. Thank you, Deputy.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "be_careful",
+      "text": "*He nods seriously* I know. I haven't told anyone except the Sheriff. He said to keep gathering information quietly, not to make accusations we can't prove. *He straightens his badge* When we have enough evidence, we'll do this properly. By the book.",
+      "choices": [
+        { "text": "That's the right approach.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "sheriff_investigation",
+      "text": "*He nods* He's tried. Multiple times. But every time he gets close to something, IVRC lawyers show up with paperwork, or witnesses suddenly can't remember anything. *He frowns* It's frustrating. The Sheriff's the most honest man I know, and he keeps hitting walls.",
+      "choices": [
+        { "text": "Maybe those walls need to come down.", "nextNodeId": "walls_down" },
+        { "text": "The system is working against him.", "nextNodeId": "system_against" }
+      ]
+    },
+    {
+      "id": "walls_down",
+      "text": "*He looks at you sharply* What do you mean? *He lowers his voice* If you're talking about going outside the law... I can't be part of that. But... *He hesitates* If there was a legal way to break through... I'd want to help.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_wants_to_help" }],
+      "choices": [
+        { "text": "There might be. Stay alert.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "system_against",
+      "text": "*He looks genuinely troubled* That's... that's not how it's supposed to work. The law is supposed to be impartial. Justice for everyone. *He touches his badge* If the system is broken... what do we do?",
+      "choices": [
+        { "text": "Fix it. From inside or outside.", "nextNodeId": "fix_system" },
+        { "text": "Good men like you keep trying.", "nextNodeId": "keep_trying" }
+      ]
+    },
+    {
+      "id": "fix_system",
+      "text": "*He takes a deep breath* From inside. It has to be from inside. If we abandon the law, we're no better than the criminals. *He meets your eyes* But I won't turn a blind eye to injustice either. Even if the criminals wear suits and carry contracts.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        { "text": "That's the spirit.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "keep_trying",
+      "text": "*He nods, somewhat comforted* That's what Sheriff Cole says. Even if we can't win every battle, we have to keep fighting. Every small victory matters. *He manages a smile* Thanks for... for understanding.",
+      "choices": [
+        { "text": "You're doing good work, Deputy.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "good_advice",
+      "text": "*He nods enthusiastically* Sheriff Cole's full of good advice. He's taught me everything about being a lawman - not just the shooting and tracking, but the thinking too. *His voice fills with admiration* There's no one I'd rather learn from.",
+      "choices": [
+        { "text": "How long have you been deputy?", "nextNodeId": "how_long_deputy" },
+        { "text": "He's lucky to have you.", "nextNodeId": "lucky_have_you" }
+      ]
+    },
+    {
+      "id": "how_long_deputy",
+      "text": "*He grins* Six months now. Feels longer - so much has happened. Before this, I was working my family's ranch up north. But I always wanted to wear a badge, make a difference. When Sheriff Cole was looking for a deputy... *He shrugs* Here I am.",
+      "choices": [
+        { "text": "Living the dream, then.", "nextNodeId": "living_dream" },
+        { "text": "Six months isn't long. Are you ready for this?", "nextNodeId": "ready_for_this" }
+      ]
+    },
+    {
+      "id": "living_dream",
+      "text": "*He laughs* Something like that. Though the dream didn't include so much paperwork. Or so many drunks to drag out of the saloon. *His expression turns serious* But when something real happens - when someone needs help - that's when the dream comes alive.",
+      "choices": [
+        { "text": "Hold onto that feeling.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "ready_for_this",
+      "text": "*He straightens defensively, then deflates slightly* Honestly? I don't know. I'm good with a gun - grew up shooting on the ranch. But the law stuff, the judgment calls... *He sighs* Sometimes I feel like I'm just pretending to be a lawman.",
+      "choices": [
+        { "text": "Everyone feels that way at first.", "nextNodeId": "everyone_feels" },
+        { "text": "The fact that you doubt yourself is a good sign.", "nextNodeId": "doubt_good_sign" }
+      ]
+    },
+    {
+      "id": "everyone_feels",
+      "text": "*He looks hopeful* You think so? Even Sheriff Cole? *He considers this* I suppose even he was young once. Started somewhere. *He nods to himself* I'll get there. Just have to keep learning.",
+      "choices": [
+        { "text": "You will. I believe that.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "doubt_good_sign",
+      "text": "*He looks confused* How's doubting myself good? *He listens as you explain* Oh. Because overconfident people make mistakes. Because questioning means I'm thinking. *He nods slowly* Sheriff Cole says something similar. 'The day you stop questioning is the day you become dangerous.'",
+      "choices": [
+        { "text": "Wise man, your Sheriff.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "lucky_have_you",
+      "text": "*He blushes* I don't know about that. I'm still learning, making mistakes. But I try to do right. *He pats his badge* This thing means something. It means people trust me to protect them. I won't betray that trust.",
+      "choices": [
+        { "text": "That's all anyone can ask.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "copperhead_view",
+      "text": "*His jaw tightens* The Copperheads are criminals. Thieves and killers, no matter what excuses people make for them. *He crosses his arms* Some folks call them heroes because they rob IVRC, but robbery is robbery. Murder is murder. The law doesn't make exceptions.",
+      "choices": [
+        { "text": "What about when the law protects criminals?", "nextNodeId": "law_protects_criminals" },
+        { "text": "A clear view of right and wrong.", "nextNodeId": "clear_view" },
+        { "text": "Have you ever met any Copperheads?", "nextNodeId": "met_copperheads" }
+      ]
+    },
+    {
+      "id": "law_protects_criminals",
+      "text": "*He falters* I... *He struggles with the question* The law is supposed to protect everyone equally. If someone's using it wrong, that doesn't make the law wrong. It makes the people wrong. *He sounds less certain than his words* Right?",
+      "choices": [
+        { "text": "Right. But people can corrupt any system.", "nextNodeId": "corrupt_system" },
+        { "text": "That's idealistic. The world is more complex.", "nextNodeId": "world_complex" }
+      ]
+    },
+    {
+      "id": "corrupt_system",
+      "text": "*He nods reluctantly* I know. I've seen it - judges who take bribes, lawmen who look the other way. *He touches his badge* But that's why people like me and Sheriff Cole matter. We try to do it right, even when others don't.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        { "text": "And that matters more than you know.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "world_complex",
+      "text": "*He looks pained* I'm starting to figure that out. *He stares at his badge* When I took this job, I thought it would be simple. Stop bad guys, protect good people. But out here... *He shakes his head* Sometimes I can't tell which is which.",
+      "choices": [
+        { "text": "Trust your instincts. You seem like a good judge.", "nextNodeId": "trust_instincts" },
+        { "text": "That's the hardest part of growing up.", "nextNodeId": "growing_up" }
+      ]
+    },
+    {
+      "id": "trust_instincts",
+      "text": "*He manages a smile* Thanks. Sheriff Cole says the same thing - that the law is a guide, but your conscience is the compass. *He straightens* I'll keep trying to figure it out.",
+      "choices": [
+        { "text": "That's all any of us can do.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "clear_view",
+      "text": "*He nods firmly* That's what the badge demands. Clear lines, no exceptions. *He pauses* Though... Sheriff Cole's been teaching me that justice isn't always that simple. That sometimes the law and what's right don't perfectly overlap.",
+      "choices": [
+        { "text": "A good lesson to learn.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "met_copperheads",
+      "text": "*He shakes his head* No, and I hope I never do. Except to arrest them, of course. *He touches his gun* They say Diamondback is dangerous - fast as a rattlesnake, cold as a winter moon. *Despite himself, a hint of admiration creeps in* She's outsmarted every lawman who's tried to catch her.",
+      "choices": [
+        { "text": "You sound almost impressed.", "nextNodeId": "almost_impressed" },
+        { "text": "Maybe she has good reasons for what she does.", "nextNodeId": "good_reasons" }
+      ]
+    },
+    {
+      "id": "almost_impressed",
+      "text": "*He catches himself* I... no, that's not... *He sighs* Okay, maybe a little. You have to respect someone who's that good at what they do, even if what they do is wrong. *He shakes his head* But don't tell Sheriff Cole I said that.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        { "text": "*Smile* Your secret is safe.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "good_reasons",
+      "text": "*He frowns* Good reasons don't excuse bad actions. Whatever IVRC did to her - and I don't doubt they did something - that doesn't give her the right to rob and kill. *He pauses* Does it?",
+      "choices": [
+        { "text": "Sometimes there are no good choices.", "nextNodeId": "no_good_choices" },
+        { "text": "You're right. The ends don't justify the means.", "nextNodeId": "ends_means" }
+      ]
+    },
+    {
+      "id": "no_good_choices",
+      "text": "*He looks troubled* Sheriff Cole says that too. That sometimes you're choosing between bad and worse, not right and wrong. *He shakes his head* I hope I never face a choice like that.",
+      "choices": [
+        { "text": "In your line of work, you probably will.", "nextNodeId": "probably_will" }
+      ]
+    },
+    {
+      "id": "probably_will",
+      "text": "*He takes a deep breath* Then I hope I choose wisely. And I hope I can live with the choice afterward. *He straightens his badge* That's all anyone can do, right? Make the best choice you can, and accept the consequences?",
+      "choices": [
+        { "text": "That's exactly right.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "ends_means",
+      "text": "*He nods, looking relieved* That's what I believe. Even if IVRC is corrupt - and I'm not saying they are - we can't become criminals to fight them. We have to be better. Otherwise, what's the point of the law?",
+      "choices": [
+        { "text": "A principled stance.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "trouble_warning",
+      "text": "*He grows more serious* Well, the Copperhead Gang's been active lately. Don't travel the roads alone at night if you can help it. And... *He hesitates* ...some of the IVRC enforcers can be rough. If they give you trouble, come find me or the Sheriff.",
+      "choices": [
+        { "text": "IVRC enforcers causing problems?", "nextNodeId": "enforcers_problems" },
+        { "text": "I appreciate the warning.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "enforcers_problems",
+      "text": "*He lowers his voice* Sometimes. They're supposed to protect company property, but some of them... *He shakes his head* Let's just say they interpret 'protection' pretty broadly. Sheriff's had words with their captain more than once.",
+      "choices": [
+        { "text": "Sounds like tension between the law and the company.", "nextNodeId": "law_company_tension" },
+        { "text": "Thanks for letting me know.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "law_company_tension",
+      "text": "*He nods reluctantly* There is. Sheriff Cole won't say it outright, but I can tell IVRC makes him uncomfortable. He believes in the law applying equally to everyone - rich or poor, company or worker. Not everyone agrees with that.",
+      "choices": [
+        { "text": "The Sheriff sounds like a good man.", "nextNodeId": "sheriff_good_man" },
+        { "text": "That must be difficult for both of you.", "nextNodeId": "difficult_position" }
+      ]
+    },
+    {
+      "id": "sheriff_good_man",
+      "text": "*His face lights up* The best! He's taught me everything about being a lawman. Not just the practical stuff, but the principles. *He touches his badge* He says this badge is a promise - a promise to protect everyone, not just the powerful.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_admires_cole" }],
+      "choices": [
+        { "text": "You're lucky to have him as a mentor.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "difficult_position",
+      "text": "*He sighs* It is. Sheriff tries to keep the peace, but IVRC has lawyers and money and connections we don't. Sometimes we have to let things go that we shouldn't. *He straightens* But we do what we can. Every day.",
+      "choices": [
+        { "text": "That's all anyone can ask.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "criminal_info",
+      "text": "*He perks up, hand going to his notebook* Criminal activity? What kind? I should take a report. The Sheriff will want to know.",
+      "choices": [
+        { "text": "IVRC enforcers roughing up workers.", "nextNodeId": "report_enforcers" },
+        { "text": "Suspicious activity in the mountains.", "nextNodeId": "report_mountains" },
+        { "text": "Actually, maybe I should speak to the Sheriff directly.", "nextNodeId": "speak_sheriff" }
+      ]
+    },
+    {
+      "id": "report_enforcers",
+      "text": "*He takes careful notes* IVRC enforcers... roughing up workers... *He frowns* I've heard similar reports before. The Sheriff's investigated, but IVRC always has explanations. 'Training incidents,' they call them. Or 'misunderstandings.'",
+      "choices": [
+        { "text": "And you believe them?", "nextNodeId": "believe_ivrc" },
+        { "text": "That doesn't sound like justice.", "nextNodeId": "not_justice" }
+      ]
+    },
+    {
+      "id": "believe_ivrc",
+      "text": "*He hesitates* I... I believe in evidence. And the evidence is always... convenient for IVRC. *He meets your eyes* But Sheriff Cole taught me to trust my instincts too. And my instincts say something's wrong.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        { "text": "Trust those instincts.", "nextNodeId": "trust_instincts" }
+      ]
+    },
+    {
+      "id": "not_justice",
+      "text": "*He looks pained* No, it doesn't. But what can we do? We need evidence, witnesses willing to testify, judges willing to hear the case. Without that... *He sighs* The law needs proof. Feelings aren't enough.",
+      "choices": [
+        { "text": "What if someone gathered that proof?", "nextNodeId": "gather_proof" },
+        { "text": "It's a frustrating system.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "gather_proof",
+      "text": "*His eyes light up* If someone had real proof - documents, witness statements, physical evidence - then maybe we could actually do something. The Sheriff's tried, but IVRC always manages to hide or destroy the evidence before we can act.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_wants_proof" }],
+      "choices": [
+        { "text": "I might be able to help with that.", "nextNodeId": "offer_help" },
+        { "text": "I will keep that in mind.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "offer_help",
+      "text": "*He looks hopeful but cautious* You would? How? *He glances around* I should warn you - if you're planning anything outside the law, I can't be part of it. But if you find evidence through legitimate means... bring it to us. We'll use it.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_accepts_help" }],
+      "choices": [
+        { "text": "I'll find a way.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "report_mountains",
+      "text": "*He writes quickly* Suspicious activity in the mountains... can you be more specific? What kind of activity? Where exactly?",
+      "choices": [
+        { "text": "IVRC is hiding something in the restricted zones.", "nextNodeId": "restricted_zones" },
+        { "text": "Miners going missing near certain tunnels.", "nextNodeId": "miners_missing" }
+      ]
+    },
+    {
+      "id": "restricted_zones",
+      "text": "*He nods slowly* The restricted zones. Yeah, I've wondered about those. IVRC says they're dangerous - old tunnels, bad air. But they've got an awful lot of guards for just dangerous tunnels. *He makes a note* I'll pass this to the Sheriff.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_notified_zones" }],
+      "choices": [
+        { "text": "Thank you, Deputy.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "miners_missing",
+      "text": "*His expression grows troubled* More missing miners? We've had several reports like this. IVRC says they quit, or had accidents, or moved away. But the families... *He shakes his head* The families say they'd never leave without word.",
+      "choices": [
+        { "text": "What does the Sheriff think?", "nextNodeId": "sheriff_thinks" },
+        { "text": "Something's very wrong.", "nextNodeId": "something_wrong" }
+      ]
+    },
+    {
+      "id": "sheriff_thinks",
+      "text": "*He lowers his voice* The Sheriff thinks IVRC is covering something up. But we can't prove it. Every time we investigate, the trail goes cold. Witnesses change their stories. Evidence disappears. *He clenches his fist* It's like fighting ghosts.",
+      "choices": [
+        { "text": "Maybe you need different tactics.", "nextNodeId": "different_tactics" },
+        { "text": "Don't give up.", "nextNodeId": "dont_give_up" }
+      ]
+    },
+    {
+      "id": "different_tactics",
+      "text": "*He looks intrigued* What do you mean? The Sheriff's tried everything - interviews, searches, subpoenas. Everything gets blocked by IVRC's lawyers or the territorial judge. *He sighs* It's like the whole system is stacked against us.",
+      "choices": [
+        { "text": "Find evidence they cannot bury.", "nextNodeId": "unburyable_evidence" },
+        { "text": "Maybe the system needs to change.", "nextNodeId": "system_change" }
+      ]
+    },
+    {
+      "id": "unburyable_evidence",
+      "text": "*His eyes widen* Evidence so big they can't hide it? What would that even look like? *He leans in* If you know something - if you have a way to get that kind of evidence - tell me. Tell the Sheriff. We want to do the right thing.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_eager_evidence" }],
+      "choices": [
+        { "text": "I'm working on it.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "system_change",
+      "text": "*He shakes his head* That's above my pay grade. But... *He hesitates* Sometimes I wonder if we're trying to fix a broken wagon with broken tools. If the whole thing needs to be rebuilt. *He catches himself* Don't tell the Sheriff I said that.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        { "text": "Your secret's safe.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "dont_give_up",
+      "text": "*He straightens* I won't. Neither will the Sheriff. Every day we put on these badges, we promise to try. Even when it feels hopeless. *He manages a smile* That's what being a lawman means.",
+      "choices": [
+        { "text": "I admire that.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "something_wrong",
+      "text": "*He nods grimly* I know. We all know. But knowing isn't the same as proving, and proving isn't the same as getting justice. *He looks at his badge* Sometimes this thing feels heavier than it should.",
+      "choices": [
+        { "text": "It means something that you keep wearing it.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "speak_sheriff",
+      "text": "*He nods, looking slightly disappointed* Of course. The Sheriff's usually at his office or making rounds. If it's urgent, I can fetch him for you.",
+      "choices": [
+        { "text": "I'll find him. Thanks, Deputy.", "nextNodeId": null },
+        { "text": "Actually, maybe you can help after all.", "nextNodeId": "criminal_info" }
+      ]
+    },
+    {
+      "id": "sheriff_location",
+      "text": "*He gestures down the street* Sheriff Cole should be at his office about now - the building with the cells. If not there, try the saloon. Not drinking! *He adds quickly* He likes to keep an eye on things there. Trouble usually starts where the whiskey flows.",
+      "choices": [
+        { "text": "Thanks, Deputy.", "nextNodeId": null },
+        { "text": "Actually, maybe you can help me.", "nextNodeId": "new_arrival" }
+      ]
+    },
+    {
+      "id": "return_greeting",
+      "text": "*Jake looks up with a friendly smile* Hey there! Back again. Something on your mind, or just passing through?",
+      "expression": "friendly",
+      "choices": [
+        { "text": "Any news around town?", "nextNodeId": "town_news" },
+        { "text": "Wanted to check in on those notes you mentioned.", "nextNodeId": "check_notes", "conditions": [{ "type": "FlagSet", "target": "jake_will_share_notes" }] },
+        { "text": "Just passing through.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "town_news",
+      "text": "*He thinks* Well, there was a fight at the saloon last night - handled that easy enough. And Sheriff Cole's been meeting with some IVRC folks. Looked tense when he came back. *He shrugs* Same old, I suppose.",
+      "choices": [
+        { "text": "Tense how?", "nextNodeId": "tense_meeting" },
+        { "text": "Keep your eyes open, Deputy.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "tense_meeting",
+      "text": "*He lowers his voice* Like they were threatening him, or he was threatening them. Hard to say which. He won't talk about it, just said 'politics.' *He shakes his head* I don't like it when the Sheriff looks worried.",
+      "choices": [
+        { "text": "He has good reason to be.", "nextNodeId": "good_reason_worried" },
+        { "text": "I'm sure he can handle it.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "good_reason_worried",
+      "text": "*He nods grimly* Yeah. I'm starting to figure that out. IVRC's getting bolder, pushing harder. Something's coming to a head. *He touches his gun* Whatever it is, I'll be ready.",
+      "choices": [
+        { "text": "Good man.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "check_notes",
+      "text": "*He glances around, then pulls out a worn notebook* Here - but not for long. I've been documenting everything - disappearances, IVRC activity, strange shipments going to the mountains. *He hands it over* See anything useful?",
+      "choices": [
+        { "text": "[Study the notes carefully]", "nextNodeId": "study_notes" }
+      ]
+    },
+    {
+      "id": "study_notes",
+      "text": "*You flip through pages of meticulous observations. Dates, times, names, locations - all carefully recorded. There's definitely a pattern here, linking the disappearances to specific IVRC operations.*",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "has_jake_notes_info" }],
+      "choices": [
+        { "text": "This is valuable. Can I keep a copy?", "nextNodeId": "keep_copy" },
+        { "text": "You've done good work here.", "nextNodeId": "good_work" }
+      ]
+    },
+    {
+      "id": "keep_copy",
+      "text": "*He hesitates, then nods* I... yes. If it helps bring them to justice, yes. *He copies several key pages* Just... be careful with it. If IVRC finds out I've been tracking this...",
+      "onEnterEffects": [{ "type": "GiveItem", "target": "deputy_notes_copy" }],
+      "choices": [
+        { "text": "Your name won't be attached to it.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 10 }] }
+      ]
+    },
+    {
+      "id": "good_work",
+      "text": "*He looks pleased and embarrassed* Thanks. I don't know if it'll ever amount to anything, but... at least it's something. At least I'm trying.",
+      "choices": [
+        { "text": "It matters more than you know.", "nextNodeId": null, "effects": [{ "type": "ChangeReputation", "value": 5 }] }
+      ]
+    },
+    {
+      "id": "high_rep_greeting",
+      "text": "*Jake's face lights up when he sees you* There you are! I was hoping you'd come by. *He pulls you aside* Something's happened. Something you should know about.",
+      "expression": "urgent",
+      "choices": [
+        { "text": "What is it?", "nextNodeId": "urgent_news" }
+      ]
+    },
+    {
+      "id": "urgent_news",
+      "text": "*He speaks quickly* IVRC's brought in a new enforcer squad - tough-looking men, military bearing. They've been asking questions about anyone investigating the company. *He looks worried* They asked about the Sheriff. And about you.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "ivrc_investigating_player" }],
+      "choices": [
+        { "text": "What did you tell them?", "nextNodeId": "what_told_them" },
+        { "text": "That's to be expected.", "nextNodeId": "expected" }
+      ]
+    },
+    {
+      "id": "what_told_them",
+      "text": "*He stands straighter* Nothing. I played dumb, said you were just a traveler passing through. Don't know if they believed me, but... *He meets your eyes* You're doing something important. I won't betray that.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 15 }],
+      "choices": [
+        { "text": "Thank you, Jake. That took courage.", "nextNodeId": "took_courage" }
+      ]
+    },
+    {
+      "id": "took_courage",
+      "text": "*He nods slowly* The Sheriff always says - you don't measure a lawman by the easy choices. It's the hard ones that matter. *He straightens his badge* Lying to those enforcers was hard. But it was right.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_protected_player" }],
+      "choices": [
+        { "text": "You're becoming a true lawman.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "expected",
+      "text": "*He looks impressed by your calm* You knew they'd come looking? *He nods slowly* You're deeper into this than I realized. *He lowers his voice* Whatever you're planning, whatever you need - I want to help. If I can do it without breaking my oath.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_ready_to_help" }],
+      "choices": [
+        { "text": "When the time comes, I may need you.", "nextNodeId": "when_time_comes" }
+      ]
+    },
+    {
+      "id": "when_time_comes",
+      "text": "*He nods firmly* I'll be ready. Sheriff Cole's taught me that justice sometimes takes courage. That wearing this badge means standing up, even when it's dangerous. *He puts his hand on his gun* Whatever's coming, I won't back down.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_ally_ready" }],
+      "choices": [
+        { "text": "I'm counting on that, Deputy.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "quest_active",
+      "text": "*Jake catches your eye urgently* We need to talk. *He leads you somewhere private* I found something - something big. But I don't know what to do with it.",
+      "expression": "troubled",
+      "choices": [
+        { "text": "What did you find?", "nextNodeId": "found_what" }
+      ]
+    },
+    {
+      "id": "found_what",
+      "text": "*He pulls out a crumpled paper* This was in the office trash - correspondence between IVRC and the territorial judge. They're planning to issue warrants for the Freeminer leaders. Arrest them on trumped-up charges. *His hand shakes* This isn't justice. This is persecution.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_found_warrant_plan" }],
+      "choices": [
+        { "text": "What are you going to do?", "nextNodeId": "what_will_do" },
+        { "text": "This is exactly what we needed.", "nextNodeId": "what_needed" }
+      ]
+    },
+    {
+      "id": "what_will_do",
+      "text": "*He looks tortured* I don't know! If I report this, IVRC's lawyers will make it disappear. If I don't... innocent people get arrested. *He meets your eyes* What would you do?",
+      "choices": [
+        { "text": "Warn the Freeminers.", "nextNodeId": "warn_freeminers" },
+        { "text": "Take it to Sheriff Cole.", "nextNodeId": "take_to_cole" },
+        { "text": "Make copies and spread the word.", "nextNodeId": "spread_word" }
+      ]
+    },
+    {
+      "id": "warn_freeminers",
+      "text": "*He hesitates* That's... that's obstruction of justice. Legally. *He stares at the paper* But if these warrants are themselves unjust... *He takes a deep breath* Maybe sometimes following the law means breaking it. Is that possible?",
+      "choices": [
+        { "text": "Higher law. Justice over legality.", "nextNodeId": "higher_law" },
+        { "text": "It is a hard choice. Only you can make it.", "nextNodeId": "your_choice" }
+      ]
+    },
+    {
+      "id": "higher_law",
+      "text": "*Something shifts in his eyes* Higher law. *He nods slowly* Sheriff Cole talks about that sometimes. The spirit of the law versus the letter. *He folds the paper carefully* I know what I have to do. Even if it costs me my badge.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "jake_will_warn_freeminers" },
+        { "type": "ChangeReputation", "value": 20 }
+      ],
+      "choices": [
+        { "text": "You're doing the right thing.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "your_choice",
+      "text": "*He's quiet for a long moment* My choice. *He looks at his badge, then at the paper* I became a lawman to protect people. Not to help powerful men crush the weak. *He straightens* I'll warn them. And face whatever comes after.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "jake_will_warn_freeminers" },
+        { "type": "ChangeReputation", "value": 15 }
+      ],
+      "choices": [
+        { "text": "I am proud of you, Jake.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "take_to_cole",
+      "text": "*He nods* The Sheriff should know. He'll... *He pauses* He'll probably tell me to stay out of it. To trust the system. *He looks conflicted* But what if the system is wrong?",
+      "choices": [
+        { "text": "Then good men like you fix it.", "nextNodeId": "fix_system" }
+      ]
+    },
+    {
+      "id": "spread_word",
+      "text": "*He looks shocked, then thoughtful* Make it public? So IVRC can't bury it? *He considers* That's... actually clever. If everyone knows about the warrants, they can't pretend they're legitimate. *He nods slowly* I could leak this to the newspaper...",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "jake_will_leak" }],
+      "choices": [
+        { "text": "Do it. The truth is the best weapon.", "nextNodeId": "truth_weapon" }
+      ]
+    },
+    {
+      "id": "truth_weapon",
+      "text": "*He takes a deep breath* Alright. I'll do it. *He carefully copies the document* If this ends my career... at least I'll know I stood for something. That I was a real lawman, not just someone wearing a badge.",
+      "onEnterEffects": [
+        { "type": "CompleteQuest", "target": "jakes_dilemma" },
+        { "type": "ChangeReputation", "value": 20 }
+      ],
+      "choices": [
+        { "text": "That is all that matters.", "nextNodeId": null }
+      ]
+    },
+    {
+      "id": "what_needed",
+      "text": "*He looks at you* Needed? *Understanding dawns* This is evidence - evidence they can't hide. Proof that IVRC is corrupting the justice system. *He grips the paper* This could change everything.",
+      "choices": [
+        { "text": "What will you do with it?", "nextNodeId": "what_will_do" }
+      ]
+    }
+  ]
+}

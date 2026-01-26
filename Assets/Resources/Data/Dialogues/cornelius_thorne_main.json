@@ -1,0 +1,573 @@
+{
+  "id": "cornelius_thorne_main",
+  "name": "Cornelius Thorne - Main Conversation",
+  "description": "Primary dialogue tree for Cornelius Thorne, wealthy railroad baron and antagonist",
+  "tags": ["ironhaven", "antagonist", "railroad", "ivrc"],
+  "entryPoints": [
+    {
+      "nodeId": "first_meeting",
+      "conditions": [{ "type": "FirstMeeting" }],
+      "priority": 10
+    },
+    {
+      "nodeId": "after_revelation",
+      "conditions": [{ "type": "FlagSet", "target": "thorne_villain_revealed" }],
+      "priority": 8
+    },
+    {
+      "nodeId": "quest_progress",
+      "conditions": [{ "type": "QuestActive", "target": "thorne_investigation" }],
+      "priority": 5
+    },
+    {
+      "nodeId": "return_greeting",
+      "conditions": [],
+      "priority": 0
+    }
+  ],
+  "nodes": [
+    {
+      "id": "first_meeting",
+      "text": "*A tall man in an immaculate three-piece suit regards you with cold, calculating eyes* Ah, another drifter seeking fortune in our little frontier paradise. I am Cornelius Thorne, President of the Iron Valley Railroad Company. And you are... nobody of consequence, I presume?",
+      "expression": "dismissive",
+      "choices": [
+        {
+          "text": "I'm looking into some strange occurrences.",
+          "nextNodeId": "investigate_response"
+        },
+        {
+          "text": "I hear the railroad's hiring.",
+          "nextNodeId": "hiring_response"
+        },
+        {
+          "text": "Your presumption is your weakness.",
+          "nextNodeId": "defiant_response",
+          "tags": ["aggressive"]
+        },
+        {
+          "text": "[Leave without a word]",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": -5, "target": "thorne" }]
+        }
+      ]
+    },
+    {
+      "id": "investigate_response",
+      "text": "*His smile doesn't reach his eyes* Strange occurrences? My dear friend, the frontier is full of... peculiarities. Superstitious miners seeing ghosts in the tunnels. Drunk cowboys claiming mechanical men walk the rail yards at night. Surely you don't believe such nonsense?",
+      "expression": "amused",
+      "choices": [
+        {
+          "text": "What do you know about the gear symbol?",
+          "nextNodeId": "gear_question",
+          "conditions": [{ "type": "FlagSet", "target": "knows_gear_symbol" }]
+        },
+        {
+          "text": "People have gone missing.",
+          "nextNodeId": "missing_people"
+        },
+        {
+          "text": "Perhaps you're right. Just rumors.",
+          "nextNodeId": "backing_off",
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "thorne" }]
+        }
+      ]
+    },
+    {
+      "id": "gear_question",
+      "text": "*For a split second, his composure falters* The gear symbol? I'm afraid I don't know what you're referring to. Now if you'll excuse me, I have a railroad empire to manage. Progress waits for no one.",
+      "expression": "guarded",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_suspicious_of_player" }
+      ],
+      "choices": [
+        {
+          "text": "You're lying. I can see it in your eyes.",
+          "nextNodeId": "accusation",
+          "tags": ["aggressive"]
+        },
+        {
+          "text": "Of course. My apologies for taking your time.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "accusation",
+      "text": "*His face hardens* You overstep, stranger. I have built this valley into something magnificent, and I will not have my name besmirched by vagrants asking impertinent questions. I suggest you enjoy what hospitality Ironhaven has to offer... while you still can.",
+      "expression": "threatening",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": -20, "target": "thorne" },
+        { "type": "SetFlag", "target": "thorne_enemy" }
+      ],
+      "choices": [
+        {
+          "text": "Is that a threat?",
+          "nextNodeId": "threat_response"
+        },
+        {
+          "text": "[Walk away]",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "threat_response",
+      "text": "*He straightens his cufflinks* Merely a friendly observation. The frontier can be... dangerous for those who ask the wrong questions. Accidents happen. People disappear. Even the most careful travelers sometimes meet unfortunate ends. Good day.",
+      "expression": "menacing",
+      "onEnterEffects": [
+        { "type": "StartQuest", "target": "thorne_investigation" }
+      ],
+      "choices": [
+        {
+          "text": "I'll be watching you, Thorne.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "threatened_thorne" }]
+        }
+      ]
+    },
+    {
+      "id": "hiring_response",
+      "text": "Indeed we are. The Iron Valley Railroad Company is always in need of... capable workers. Strong backs to lay track, sharp eyes to guard shipments. The pay is fair, the work is honest. Report to the foreman at the rail yard if you're interested.",
+      "expression": "businesslike",
+      "choices": [
+        {
+          "text": "What kind of shipments need guarding?",
+          "nextNodeId": "shipments_question"
+        },
+        {
+          "text": "I'll consider it. Thank you.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "ivrc" }]
+        }
+      ]
+    },
+    {
+      "id": "shipments_question",
+      "text": "*He waves a hand dismissively* Oh, the usual. Mining equipment, processed ore, supplies for the settlements. Nothing that should concern a prospective employee. Unless... you have a particular interest in our cargo?",
+      "expression": "suspicious",
+      "choices": [
+        {
+          "text": "Just curious about the job requirements.",
+          "nextNodeId": "job_details"
+        },
+        {
+          "text": "I've heard rumors about secret shipments.",
+          "nextNodeId": "secret_shipments",
+          "conditions": [{ "type": "FlagSet", "target": "heard_shipment_rumors" }]
+        }
+      ]
+    },
+    {
+      "id": "secret_shipments",
+      "text": "*His pleasant demeanor vanishes* Rumors are the currency of fools and gossips. I would advise you to be careful which coins you spend, stranger. Some debts cannot be repaid.",
+      "expression": "cold",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_suspicious_of_player" }
+      ],
+      "choices": [
+        {
+          "text": "I meant no offense.",
+          "nextNodeId": null
+        },
+        {
+          "text": "The truth has a way of coming out.",
+          "nextNodeId": "accusation",
+          "tags": ["aggressive"]
+        }
+      ]
+    },
+    {
+      "id": "defiant_response",
+      "text": "*He raises an eyebrow* My, my. A spark of fire in this one. How refreshing. Most people in this valley know their place. It seems you have yet to learn yours. In time, you will.",
+      "expression": "intrigued",
+      "onEnterEffects": [
+        { "type": "ChangeReputation", "value": -10, "target": "thorne" }
+      ],
+      "choices": [
+        {
+          "text": "I don't answer to you.",
+          "nextNodeId": "defiance_escalation"
+        },
+        {
+          "text": "We'll see about that.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "defiance_escalation",
+      "text": "No? Perhaps not yet. But everyone answers to something, eventually. Money. Power. Fear. I have learned to wield all three with equal skill. Run along now, little sparrow. We'll speak again when you've learned to sing a different tune.",
+      "expression": "amused",
+      "choices": [
+        {
+          "text": "[Leave]",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "missing_people",
+      "text": "People go missing on the frontier all the time. It's a harsh land - bandits, wild animals, the unforgiving elements. Surely you don't expect me to account for every unfortunate soul who wanders off into the wilderness?",
+      "expression": "dismissive",
+      "choices": [
+        {
+          "text": "These disappearances are different. Organized.",
+          "nextNodeId": "organized_response"
+        },
+        {
+          "text": "You're probably right.",
+          "nextNodeId": "backing_off"
+        }
+      ]
+    },
+    {
+      "id": "organized_response",
+      "text": "*He studies you with renewed interest* Organized, you say? That's quite an accusation to make without evidence. I do hope you're not implying that the IVRC has anything to do with such... unpleasantness. That would be most unfortunate. For you.",
+      "expression": "threatening",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_suspicious_of_player" }
+      ],
+      "choices": [
+        {
+          "text": "I'm just following the evidence.",
+          "nextNodeId": "accusation"
+        },
+        {
+          "text": "I didn't mean to imply anything.",
+          "nextNodeId": "backing_off"
+        }
+      ]
+    },
+    {
+      "id": "backing_off",
+      "text": "A wise choice. There's nothing to be gained from chasing shadows. Focus on building a future here in Iron Valley. The railroad offers opportunities for those willing to work hard and... keep their curiosities in check.",
+      "expression": "satisfied",
+      "choices": [
+        {
+          "text": "I'll keep that in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "job_details",
+      "text": "Guards earn three dollars a day, plus meals. Track workers get two-fifty. Both come with company housing in the rail camp. It's honest work, and we take care of our people. As long as they follow the rules.",
+      "expression": "businesslike",
+      "choices": [
+        {
+          "text": "What kind of rules?",
+          "nextNodeId": "company_rules"
+        },
+        {
+          "text": "I'll think about it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "company_rules",
+      "text": "Simple ones. Show up on time. Do your job. Don't ask questions about things that don't concern you. Don't wander into restricted areas. Follow these, and you'll find the IVRC a generous employer. Break them... well, let's just say the frontier can be unforgiving.",
+      "expression": "stern",
+      "choices": [
+        {
+          "text": "Restricted areas?",
+          "nextNodeId": "restricted_areas"
+        },
+        {
+          "text": "Understood. I'll report to the foreman.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "SetFlag", "target": "ivrc_job_available" },
+            { "type": "ChangeReputation", "value": 10, "target": "ivrc" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "restricted_areas",
+      "text": "*His expression flickers with annoyance* Certain sections of the rail yard house expensive equipment. Proprietary machinery. Trade secrets that competitors would pay dearly to acquire. We protect our investments. Surely you understand.",
+      "expression": "guarded",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_restricted_areas" }
+      ],
+      "choices": [
+        {
+          "text": "Of course. Business is business.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "thorne" }]
+        },
+        {
+          "text": "What are you really hiding?",
+          "nextNodeId": "accusation",
+          "tags": ["aggressive"]
+        }
+      ]
+    },
+    {
+      "id": "after_revelation",
+      "text": "*He claps slowly* So, you've discovered my little project. I had hoped we could be allies, but you've chosen the harder path. No matter. The Automatons will reshape this valley, with or without your cooperation.",
+      "expression": "villainous",
+      "choices": [
+        {
+          "text": "I'll stop you, Thorne.",
+          "nextNodeId": "villain_monologue"
+        },
+        {
+          "text": "Why? Why all this destruction?",
+          "nextNodeId": "motivation_reveal"
+        }
+      ]
+    },
+    {
+      "id": "villain_monologue",
+      "text": "Stop me? My dear fool, I am the future. Humanity is weak, inefficient, unpredictable. My Automatons are none of these things. They will build the railroads, mine the ore, patrol the streets. A perfect society, engineered by my genius. And there is nothing you can do to prevent it.",
+      "expression": "megalomaniac",
+      "choices": [
+        {
+          "text": "We'll see about that.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "stop_thorne" }]
+        }
+      ]
+    },
+    {
+      "id": "motivation_reveal",
+      "text": "Destruction? I prefer 'progress.' This frontier is chaos - lawless, unpredictable, inefficient. I lost everything to such chaos once. My family, my fortune, my future. I rebuilt myself, piece by piece, like my Automatons. And I will rebuild this valley the same way. Perfect. Orderly. Under my control.",
+      "expression": "bitter",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_backstory_known" }
+      ],
+      "choices": [
+        {
+          "text": "Your past doesn't justify this.",
+          "nextNodeId": "villain_monologue"
+        },
+        {
+          "text": "There must be another way.",
+          "nextNodeId": "redemption_attempt"
+        }
+      ]
+    },
+    {
+      "id": "redemption_attempt",
+      "text": "*For a moment, something human flickers in his eyes* Another way? I've spent twenty years pursuing this dream. Twenty years of sacrifice, of planning, of building. You think I can simply... stop? No. The machine is in motion. Even I cannot halt it now.",
+      "expression": "conflicted",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_redemption_possible" }
+      ],
+      "choices": [
+        {
+          "text": "Help me shut it down. It's not too late.",
+          "nextNodeId": "redemption_choice",
+          "conditions": [{ "type": "ReputationAbove", "target": "thorne", "value": 30 }]
+        },
+        {
+          "text": "Then I'll stop it myself.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "redemption_choice",
+      "text": "*He stands silent for a long moment* Perhaps... perhaps you're right. I've become the very chaos I sought to eliminate. If we're to do this, it must be done carefully. Thorne Industries' board will try to continue the project without me. Meet me at the old Ironpick mine at midnight. Bring no one else.",
+      "expression": "resolved",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_allied" },
+        { "type": "StartQuest", "target": "thorne_redemption" }
+      ],
+      "choices": [
+        {
+          "text": "I'll be there.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "return_greeting",
+      "text": "*He acknowledges you with a curt nod* Back again? I trust you've been keeping yourself productively occupied. The frontier has no patience for idle hands.",
+      "expression": "neutral",
+      "choices": [
+        {
+          "text": "I have some questions.",
+          "nextNodeId": "return_questions"
+        },
+        {
+          "text": "Just passing through.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "return_questions",
+      "text": "Questions? I'm a busy man, but I can spare a moment. What is it you wish to know?",
+      "expression": "impatient",
+      "choices": [
+        {
+          "text": "Tell me about the railroad expansion.",
+          "nextNodeId": "railroad_expansion"
+        },
+        {
+          "text": "What's your interest in the old mines?",
+          "nextNodeId": "mine_interest"
+        },
+        {
+          "text": "Never mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "railroad_expansion",
+      "text": "The Iron Valley Railroad is the lifeblood of this region. We're expanding west to connect with the transcontinental line, and east to the coastal ports. Within five years, every settlement in this territory will be within a day's travel of our stations. Progress, my friend. Unstoppable progress.",
+      "expression": "proud",
+      "choices": [
+        {
+          "text": "Impressive.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5, "target": "thorne" }]
+        },
+        {
+          "text": "At what cost?",
+          "nextNodeId": "cost_question"
+        }
+      ]
+    },
+    {
+      "id": "cost_question",
+      "text": "Cost? Progress always has a cost. The question is whether the benefits outweigh the price. I believe they do. History will judge me kindly, I think. Or it won't matter, because history will be written by my machines.",
+      "expression": "philosophical",
+      "choices": [
+        {
+          "text": "Your machines?",
+          "nextNodeId": "machines_slip",
+          "conditions": [{ "type": "FlagNotSet", "target": "thorne_villain_revealed" }]
+        },
+        {
+          "text": "I see. Thank you for your time.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "machines_slip",
+      "text": "*He catches himself* A figure of speech. The locomotives, the steam engines - they're all machines, are they not? Mechanical servants doing the work of a hundred men. Nothing more.",
+      "expression": "guarded",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "thorne_machines_mentioned" }
+      ],
+      "choices": [
+        {
+          "text": "Of course.",
+          "nextNodeId": null
+        },
+        {
+          "text": "You seemed to mean something else.",
+          "nextNodeId": "gear_question"
+        }
+      ]
+    },
+    {
+      "id": "mine_interest",
+      "text": "The mines? Simple economics. Iron ore for the railroad, copper for electrical components, gold and silver for... well, one must fund progress somehow. The old Ironpick claims are particularly rich. A shame about what happened to the family.",
+      "expression": "calculating",
+      "choices": [
+        {
+          "text": "What happened to the Ironpicks?",
+          "nextNodeId": "ironpick_history"
+        },
+        {
+          "text": "I've heard you're expanding into abandoned claims.",
+          "nextNodeId": "abandoned_claims"
+        }
+      ]
+    },
+    {
+      "id": "ironpick_history",
+      "text": "A tragic tale. The patriarch, old Samuel's father, refused to sell his claims to the railroad. Shortly after, there was a fire. An accident, the authorities concluded. Only Samuel survived, half-mad with grief. The claims reverted to the territory, and I acquired them at auction. Legally, of course.",
+      "expression": "rehearsed",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "heard_ironpick_fire" }
+      ],
+      "choices": [
+        {
+          "text": "Convenient accident.",
+          "nextNodeId": "accusation",
+          "tags": ["aggressive"]
+        },
+        {
+          "text": "A sad story.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "abandoned_claims",
+      "text": "I acquire what is legally available, nothing more. If miners cannot maintain their claims, they forfeit them. That is the law of the frontier. I simply... take advantage of opportunities when they arise.",
+      "expression": "businesslike",
+      "choices": [
+        {
+          "text": "Some say those miners didn't leave voluntarily.",
+          "nextNodeId": "organized_response"
+        },
+        {
+          "text": "Business is business.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "quest_progress",
+      "text": "*His eyes narrow as he spots you* You again. I've heard reports of someone poking around in places they shouldn't be. I do hope that's not you. Such behavior tends to have... consequences.",
+      "expression": "threatening",
+      "choices": [
+        {
+          "text": "I'm just doing my job.",
+          "nextNodeId": "job_cover"
+        },
+        {
+          "text": "Your secrets won't stay hidden forever.",
+          "nextNodeId": "accusation"
+        },
+        {
+          "text": "[Say nothing and leave]",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "job_cover",
+      "text": "Your job? And what job would that be, exactly? I make it my business to know what happens in my valley. Every shipment, every new face, every whispered rumor. So tell me - who are you working for?",
+      "expression": "suspicious",
+      "choices": [
+        {
+          "text": "I work for myself.",
+          "nextNodeId": null
+        },
+        {
+          "text": "Sheriff Cole asked me to investigate.",
+          "nextNodeId": "sheriff_response",
+          "conditions": [{ "type": "QuestActive", "target": "sheriff_investigation" }]
+        },
+        {
+          "text": "None of your business.",
+          "nextNodeId": "defiant_response"
+        }
+      ]
+    },
+    {
+      "id": "sheriff_response",
+      "text": "*A cold smile crosses his face* Ah, Marcus. Still tilting at windmills, I see. The good Sheriff has been a thorn in my side for years, but he lacks the evidence to act. And he never will. You're wasting your time.",
+      "expression": "contemptuous",
+      "choices": [
+        {
+          "text": "We'll find the evidence.",
+          "nextNodeId": "threat_response"
+        },
+        {
+          "text": "Maybe he's wrong about you.",
+          "nextNodeId": "backing_off"
+        }
+      ]
+    }
+  ]
+}

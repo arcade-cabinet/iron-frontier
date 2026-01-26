@@ -1,0 +1,514 @@
+{
+  "items": [
+    {
+      "id": "leather_vest",
+      "displayName": "Leather Vest",
+      "description": "A worn leather vest. Provides basic protection.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 20,
+      "weight": 2.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "vest_leather",
+      "tags": ["armor", "body", "light"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 2,
+        "slot": "Body",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "reinforced_leather",
+      "displayName": "Reinforced Leather",
+      "description": "Leather armor with metal studs. Better protection without sacrificing mobility.",
+      "type": "Armor",
+      "rarity": "Uncommon",
+      "value": 60,
+      "weight": 3.5,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "vest_reinforced",
+      "tags": ["armor", "body", "medium"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 5,
+        "slot": "Body",
+        "movementPenalty": 0.05,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "chain_shirt",
+      "displayName": "Chain Shirt",
+      "description": "A shirt of interlocking metal rings. Solid protection against blades.",
+      "type": "Armor",
+      "rarity": "Uncommon",
+      "value": 120,
+      "weight": 8.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "chainmail",
+      "tags": ["armor", "body", "medium"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 8,
+        "slot": "Body",
+        "movementPenalty": 0.1,
+        "resistances": [
+          { "type": "slashing", "value": 20 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "steam_plated_armor",
+      "displayName": "Steam-Plated Armor",
+      "description": "Heavy armor with brass plates and steam vents. Maximum protection for the late game.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 250,
+      "weight": 15.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "armor_steampunk",
+      "tags": ["armor", "body", "heavy", "steampunk", "late_game"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 12,
+        "slot": "Body",
+        "movementPenalty": 0.2,
+        "resistances": [
+          { "type": "fire", "value": 15 },
+          { "type": "slashing", "value": 25 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "quickdraw_holster",
+      "displayName": "Quickdraw Holster",
+      "description": "A specially designed holster for faster draws. Worth every penny.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 75,
+      "weight": 0.5,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "holster",
+      "tags": ["armor", "accessory", "speed"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 0,
+        "slot": "Accessory",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "lucky_charm",
+      "displayName": "Lucky Charm",
+      "description": "A rabbit's foot on a chain. Some say it brings good fortune.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 30,
+      "weight": 0.1,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "charm",
+      "tags": ["armor", "accessory", "luck"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 0,
+        "slot": "Accessory",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "sheriffs_star",
+      "displayName": "Sheriff's Star",
+      "description": "The enchanted badge of Sheriff Samuel Justice, who brought law to the lawless frontier. Those who wear it speak with the authority of the law itself. The star pulses with a warm light that strengthens the wearer's resolve.",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "value": 400,
+      "weight": 0.2,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": false,
+      "iconId": "badge_legendary",
+      "tags": ["armor", "accessory", "unique", "legendary", "quest_reward", "authority", "dialogue_boost"],
+      "effects": [
+        { "type": "Buff", "value": 20, "duration": 0.0, "buffType": "DamageBoost" },
+        { "type": "Heal", "value": 10, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 5,
+        "slot": "Accessory",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "intimidation", "value": 20 },
+          { "type": "fear", "value": 15 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "preachers_vestments",
+      "displayName": "Preacher's Vestments",
+      "description": "Blessed robes worn by Father Morrison during the Salvation plague. His prayers saved many, and his faith lingers in every thread. The wearer feels an unshakeable calm and heals faster from all wounds. Evil cannot take root in the heart of the faithful.",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "value": 450,
+      "weight": 2.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": false,
+      "iconId": "robes_legendary",
+      "tags": ["armor", "body", "unique", "legendary", "quest_reward", "holy", "healing_boost"],
+      "effects": [
+        { "type": "Buff", "value": 30, "duration": 0.0, "buffType": "HealthRegen" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 8,
+        "slot": "Body",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "fear", "value": 100 },
+          { "type": "curse", "value": 50 },
+          { "type": "poison", "value": 20 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "freeminers_harness",
+      "displayName": "Freeminer's Harness",
+      "description": "Heavy-duty mining gear modified for combat by the Free Miners' Union. Reinforced leather and iron plating protect against cave-ins and company thugs alike. The rope and anchor system prevents fatal falls.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 180,
+      "weight": 6.5,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "harness_rare",
+      "tags": ["armor", "body", "unique", "rare", "purchase", "mining", "fall_immunity"],
+      "effects": [
+        { "type": "Buff", "value": 15, "duration": 0.0, "buffType": "DamageResist" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 18,
+        "slot": "Body",
+        "movementPenalty": 0.1,
+        "resistances": [
+          { "type": "physical", "value": 15 },
+          { "type": "fall", "value": 100 },
+          { "type": "crushing", "value": 25 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "ivrc_executive_suit",
+      "displayName": "IVRC Executive Suit",
+      "description": "A tailored three-piece suit of the finest eastern fabric, with steel-threaded lining hidden beneath the silk. IVRC executives don't just look important - they're protected like it. The mere sight of this suit opens doors and loosens tongues.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 350,
+      "weight": 2.5,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "suit_rare",
+      "tags": ["armor", "body", "unique", "rare", "found", "corporate", "intimidation", "hidden_armor"],
+      "effects": [
+        { "type": "Buff", "value": 10, "duration": 0.0, "buffType": "DamageResist" },
+        { "type": "Buff", "value": 20, "duration": 0.0, "buffType": "DamageBoost" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 12,
+        "slot": "Body",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "physical", "value": 10 },
+          { "type": "fire", "value": 10 },
+          { "type": "cold", "value": 10 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "outlaws_duster",
+      "displayName": "Outlaw's Duster",
+      "description": "The iconic long coat of the legendary outlaw Black Jack McGraw. Countless bullet holes have been patched, each one a story of narrow escapes. Hidden pockets throughout can conceal weapons of all sizes. They say the coat chooses its next owner.",
+      "type": "Armor",
+      "rarity": "Rare",
+      "value": 200,
+      "weight": 3.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "duster_rare",
+      "tags": ["armor", "body", "unique", "rare", "quest_reward", "outlaw", "dodge", "concealment"],
+      "effects": [
+        { "type": "Buff", "value": 10, "duration": 0.0, "buffType": "SpeedBoost" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 10,
+        "slot": "Body",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "cold", "value": 20 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "cowboy_hat",
+      "displayName": "Cowboy Hat",
+      "description": "A wide-brimmed hat offering protection from the sun.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 10,
+      "weight": 0.3,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "hat_cowboy",
+      "tags": ["armor", "head", "light"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 1,
+        "slot": "Head",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "heat", "value": 10 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "bowler_hat",
+      "displayName": "Bowler Hat",
+      "description": "A sturdy rounded hat favored by businessmen and bounty hunters alike.",
+      "type": "Armor",
+      "rarity": "Uncommon",
+      "value": 25,
+      "weight": 0.4,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "hat_bowler",
+      "tags": ["armor", "head", "medium"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 2,
+        "slot": "Head",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "bandana",
+      "displayName": "Bandana",
+      "description": "A simple cloth face covering. Protects from dust and hides identity.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 5,
+      "weight": 0.1,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bandana",
+      "tags": ["armor", "head", "disguise"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 0,
+        "slot": "Head",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "dust", "value": 25 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "riding_boots",
+      "displayName": "Riding Boots",
+      "description": "Sturdy leather boots with spurs. Built for the saddle and the trail.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 15,
+      "weight": 1.5,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "boots_riding",
+      "tags": ["armor", "feet", "mobility"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 1,
+        "slot": "Legs",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "reinforced_boots",
+      "displayName": "Reinforced Boots",
+      "description": "Boots with metal toe caps and thick soles. Protection for rough terrain.",
+      "type": "Armor",
+      "rarity": "Uncommon",
+      "value": 35,
+      "weight": 2.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "boots_reinforced",
+      "tags": ["armor", "feet", "heavy"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 3,
+        "slot": "Legs",
+        "movementPenalty": 0.02,
+        "resistances": [
+          { "type": "crushing", "value": 15 }
+        ]
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "leather_gloves",
+      "displayName": "Leather Gloves",
+      "description": "Tough leather gloves for handling rope, reins, and revolvers.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 8,
+      "weight": 0.2,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "gloves_leather",
+      "tags": ["armor", "accessory", "grip"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 1,
+        "slot": "Accessory",
+        "movementPenalty": 0.0,
+        "resistances": []
+      },
+      "hasConsumableStats": false
+    },
+    {
+      "id": "miners_helmet",
+      "displayName": "Miner's Helmet",
+      "description": "A hardhat with an attached lamp. Essential for underground work.",
+      "type": "Armor",
+      "rarity": "Common",
+      "value": 20,
+      "weight": 1.0,
+      "stackable": false,
+      "maxStack": 1,
+      "usable": false,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "helmet_miner",
+      "tags": ["armor", "head", "mining", "light_source"],
+      "effects": [],
+      "hasWeaponStats": false,
+      "hasArmorStats": true,
+      "armorStats": {
+        "defense": 3,
+        "slot": "Head",
+        "movementPenalty": 0.0,
+        "resistances": [
+          { "type": "crushing", "value": 20 }
+        ]
+      },
+      "hasConsumableStats": false
+    }
+  ]
+}

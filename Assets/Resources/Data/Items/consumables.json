@@ -1,0 +1,796 @@
+{
+  "items": [
+    {
+      "id": "whiskey",
+      "displayName": "Bottle of Whiskey",
+      "description": "Frontier medicine. Takes the edge off and numbs the pain.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 3,
+      "weight": 0.5,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bottle",
+      "tags": ["consumable", "alcohol", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 20, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 20,
+        "staminaAmount": 0,
+        "buffType": "DamageBoost",
+        "buffDuration": 30.0,
+        "buffStrength": 5
+      }
+    },
+    {
+      "id": "beer",
+      "displayName": "Beer",
+      "description": "A cold brew from the saloon. Refreshing after a long ride.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 1,
+      "weight": 0.4,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bottle",
+      "tags": ["consumable", "alcohol", "drink"],
+      "effects": [
+        { "type": "Heal", "value": 5, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 10, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 10,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "moonshine",
+      "displayName": "Moonshine",
+      "description": "Homemade rotgut. Strong enough to strip paint.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 5,
+      "weight": 0.5,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bottle",
+      "tags": ["consumable", "alcohol", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 30, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 30,
+        "staminaAmount": -10,
+        "buffType": "DamageBoost",
+        "buffDuration": 60.0,
+        "buffStrength": 10
+      }
+    },
+    {
+      "id": "bandages",
+      "displayName": "Bandages",
+      "description": "Clean cloth strips for binding wounds.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 2,
+      "weight": 0.1,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bandage",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 15, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 15,
+        "staminaAmount": 0,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "bandages_basic",
+      "displayName": "Bandages",
+      "description": "Clean cloth strips for binding wounds. Basic but effective.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 5,
+      "weight": 0.1,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "bandage",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 15, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 15,
+        "staminaAmount": 0,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "laudanum",
+      "displayName": "Laudanum",
+      "description": "Opium-based tincture. Powerful painkiller with sedative effects.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 8,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "medicine",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 35, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 35,
+        "staminaAmount": -15,
+        "buffType": "DamageResist",
+        "buffDuration": 60.0,
+        "buffStrength": 15
+      }
+    },
+    {
+      "id": "medical_kit",
+      "displayName": "Medical Kit",
+      "description": "A complete medical kit with bandages, sutures, and medicines.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 15,
+      "weight": 1.0,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "medical",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 50, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 50,
+        "staminaAmount": 0,
+        "buffType": "HealthRegen",
+        "buffDuration": 120.0,
+        "buffStrength": 3
+      }
+    },
+    {
+      "id": "herbal_remedy",
+      "displayName": "Herbal Remedy",
+      "description": "Traditional medicine made from native plants.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 4,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 15,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "herbs",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 20, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 20,
+        "staminaAmount": 5,
+        "buffType": "HealthRegen",
+        "buffDuration": 60.0,
+        "buffStrength": 2
+      }
+    },
+    {
+      "id": "antivenom",
+      "displayName": "Antivenom",
+      "description": "Extract to treat snake and spider bites. Essential in desert country.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 12,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "medicine",
+      "tags": ["consumable", "medical", "cure"],
+      "effects": [
+        { "type": "Heal", "value": 25, "duration": 0.0, "buffType": "None" },
+        { "type": "Cure", "value": 1, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 25,
+        "staminaAmount": 0,
+        "buffType": "PoisonResist",
+        "buffDuration": 300.0,
+        "buffStrength": 100
+      }
+    },
+    {
+      "id": "antidote",
+      "displayName": "Antidote",
+      "description": "Extract to cure poison from snake and scorpion venom.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 8,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion_green",
+      "tags": ["consumable", "medical", "cure"],
+      "effects": [
+        { "type": "Cure", "value": 1, "duration": 0.0, "buffType": "None" },
+        { "type": "Heal", "value": 10, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 10,
+        "staminaAmount": 0,
+        "buffType": "PoisonResist",
+        "buffDuration": 120.0,
+        "buffStrength": 50
+      }
+    },
+    {
+      "id": "stimulant",
+      "displayName": "Stimulant",
+      "description": "A powerful pick-me-up that sharpens reflexes. Use sparingly.",
+      "type": "Consumable",
+      "rarity": "Rare",
+      "value": 25,
+      "weight": 0.1,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "medicine",
+      "tags": ["consumable", "medical", "buff"],
+      "effects": [
+        { "type": "Buff", "value": 20, "duration": 120.0, "buffType": "SpeedBoost" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 0,
+        "staminaAmount": 50,
+        "buffType": "SpeedBoost",
+        "buffDuration": 120.0,
+        "buffStrength": 20
+      }
+    },
+    {
+      "id": "stimulant_tonic",
+      "displayName": "Stimulant",
+      "description": "A powerful pick-me-up. Reduces fatigue by 25% temporarily.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 15,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion_yellow",
+      "tags": ["consumable", "medical", "buff"],
+      "effects": [
+        { "type": "Buff", "value": 25, "duration": 180.0, "buffType": "StaminaRegen" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 0,
+        "staminaAmount": 50,
+        "buffType": "StaminaRegen",
+        "buffDuration": 180.0,
+        "buffStrength": 25
+      }
+    },
+    {
+      "id": "trail_biscuits",
+      "displayName": "Trail Biscuits",
+      "description": "Hard tack that lasts forever. Not tasty, but filling.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 1,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "food",
+      "tags": ["consumable", "food"],
+      "effects": [
+        { "type": "Heal", "value": 5, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 15, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 15,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "dried_jerky",
+      "displayName": "Dried Jerky",
+      "description": "Salted and dried meat. Keeps well on long trails.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 2,
+      "weight": 0.1,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "food",
+      "tags": ["consumable", "food"],
+      "effects": [
+        { "type": "Heal", "value": 10, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 20, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 10,
+        "staminaAmount": 20,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "hot_meal",
+      "displayName": "Hot Meal",
+      "description": "A proper cooked meal with meat and vegetables.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 5,
+      "weight": 0.5,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "food",
+      "tags": ["consumable", "food"],
+      "effects": [
+        { "type": "Heal", "value": 20, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 40, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 20,
+        "staminaAmount": 40,
+        "buffType": "HealthRegen",
+        "buffDuration": 120.0,
+        "buffStrength": 2
+      }
+    },
+    {
+      "id": "rations",
+      "displayName": "Trail Rations",
+      "description": "Dried meat and hardtack. One meal for the road.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 3,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 20,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "food_rations",
+      "tags": ["consumable", "food", "provisions"],
+      "effects": [
+        { "type": "Heal", "value": 5, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 20, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 20,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "coffee_beans",
+      "displayName": "Coffee Beans",
+      "description": "Roasted coffee beans. Make a pot over the fire.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 2,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "coffee",
+      "tags": ["consumable", "drink", "stamina"],
+      "effects": [
+        { "type": "Stamina", "value": 25, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 0,
+        "staminaAmount": 25,
+        "buffType": "StaminaRegen",
+        "buffDuration": 90.0,
+        "buffStrength": 2
+      }
+    },
+    {
+      "id": "coffee",
+      "displayName": "Strong Coffee",
+      "description": "Black as midnight, hot as hell. Keeps you sharp on the trail.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 1,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "coffee",
+      "tags": ["consumable", "drink", "stamina"],
+      "effects": [
+        { "type": "Stamina", "value": 30, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 0,
+        "staminaAmount": 30,
+        "buffType": "StaminaRegen",
+        "buffDuration": 120.0,
+        "buffStrength": 3
+      }
+    },
+    {
+      "id": "coffee_hot",
+      "displayName": "Hot Coffee",
+      "description": "Black as midnight, hot as hell. Reduces fatigue and boosts speed.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 4,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "coffee",
+      "tags": ["consumable", "drink", "stamina", "buff"],
+      "effects": [
+        { "type": "Stamina", "value": 25, "duration": 0.0, "buffType": "None" },
+        { "type": "Buff", "value": 10, "duration": 120.0, "buffType": "SpeedBoost" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 0,
+        "staminaAmount": 25,
+        "buffType": "SpeedBoost",
+        "buffDuration": 120.0,
+        "buffStrength": 10
+      }
+    },
+    {
+      "id": "medicine",
+      "displayName": "Dr. Thornton's Tonic",
+      "description": "Patent medicine. Cures what ails you, or so the label claims.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 8,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "medicine",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 40, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 40,
+        "staminaAmount": 10,
+        "buffType": "HealthRegen",
+        "buffDuration": 60.0,
+        "buffStrength": 2
+      }
+    },
+    {
+      "id": "beans",
+      "displayName": "Can of Beans",
+      "description": "Trail food. Fills the belly, if not the soul.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 1,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "food",
+      "tags": ["consumable", "food", "stamina"],
+      "effects": [
+        { "type": "Heal", "value": 5, "duration": 0.0, "buffType": "None" },
+        { "type": "Stamina", "value": 20, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 20,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "snake_oil",
+      "displayName": "Snake Oil",
+      "description": "Dubious elixir sold by traveling salesmen. Might work, might not.",
+      "type": "Consumable",
+      "rarity": "Rare",
+      "value": 20,
+      "weight": 0.2,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion",
+      "tags": ["consumable", "medical", "buff"],
+      "effects": [
+        { "type": "Buff", "value": 10, "duration": 180.0, "buffType": "DamageBoost" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 10,
+        "staminaAmount": 10,
+        "buffType": "DamageBoost",
+        "buffDuration": 180.0,
+        "buffStrength": 10
+      }
+    },
+    {
+      "id": "water_canteen",
+      "displayName": "Water Canteen",
+      "description": "A tin canteen for carrying water. Essential in the desert.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 3,
+      "weight": 0.5,
+      "stackable": true,
+      "maxStack": 5,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "canteen",
+      "tags": ["consumable", "drink", "survival"],
+      "effects": [
+        { "type": "Stamina", "value": 30, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 30,
+        "buffType": "HeatResist",
+        "buffDuration": 180.0,
+        "buffStrength": 20
+      }
+    },
+    {
+      "id": "canteen_refill",
+      "displayName": "Canteen Water",
+      "description": "Fresh water. Essential for desert travel.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 5,
+      "weight": 0.5,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "canteen",
+      "tags": ["consumable", "drink", "provisions"],
+      "effects": [
+        { "type": "Stamina", "value": 30, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 5,
+        "staminaAmount": 30,
+        "buffType": "HeatResist",
+        "buffDuration": 180.0,
+        "buffStrength": 25
+      }
+    },
+    {
+      "id": "health_potion",
+      "displayName": "Health Tonic",
+      "description": "Dr. Thornton's patent medicine. Restores 30 health points.",
+      "type": "Consumable",
+      "rarity": "Common",
+      "value": 10,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 15,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion_red",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 30, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 30,
+        "staminaAmount": 0,
+        "buffType": "None",
+        "buffDuration": 0.0,
+        "buffStrength": 0
+      }
+    },
+    {
+      "id": "health_potion_greater",
+      "displayName": "Greater Health Tonic",
+      "description": "A potent medicinal brew. Restores 75 health points.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 25,
+      "weight": 0.4,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion_red_large",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 75, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 75,
+        "staminaAmount": 0,
+        "buffType": "HealthRegen",
+        "buffDuration": 30.0,
+        "buffStrength": 2
+      }
+    },
+    {
+      "id": "item_healing_tonic",
+      "displayName": "Healing Tonic",
+      "description": "A potent healing tonic prepared by Doc Chen.",
+      "type": "Consumable",
+      "rarity": "Uncommon",
+      "value": 15,
+      "weight": 0.3,
+      "stackable": true,
+      "maxStack": 10,
+      "usable": true,
+      "droppable": true,
+      "sellable": true,
+      "iconId": "potion_red",
+      "tags": ["consumable", "medical", "healing"],
+      "effects": [
+        { "type": "Heal", "value": 40, "duration": 0.0, "buffType": "None" }
+      ],
+      "hasWeaponStats": false,
+      "hasArmorStats": false,
+      "hasConsumableStats": true,
+      "consumableStats": {
+        "healAmount": 40,
+        "staminaAmount": 10,
+        "buffType": "HealthRegen",
+        "buffDuration": 60.0,
+        "buffStrength": 3
+      }
+    }
+  ]
+}

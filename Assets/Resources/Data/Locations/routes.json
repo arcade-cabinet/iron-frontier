@@ -1,0 +1,1478 @@
+{
+  "$schema": "RouteData",
+  "version": "1.0.0",
+  "description": "All route and travel path data for Iron Frontier",
+  "routes": [
+    {
+      "id": "dusty_trail",
+      "name": "Dusty Trail",
+      "displayName": "The Dusty Trail",
+      "description": "A well-worn path connecting the frontier outpost to the mining settlement of Iron Gulch. The trail winds through open plains before entering rockier terrain near the gulch.",
+      "lore": "The Dusty Trail has connected the frontier settlements since before the gold rush. Once a Native American trade route, it now sees miners, merchants, and drifters seeking fortune in Iron Gulch. Despite its proximity to civilization, the trail is not without danger - desperate men and hungry predators still claim the unwary.",
+      "fromTown": "frontiers_edge",
+      "toTown": "iron_gulch",
+      "terrain": "plains",
+      "secondaryTerrain": "desert",
+      "length": 15,
+      "condition": "clear",
+      "dangerLevel": 2,
+      "encounterFrequency": 0.8,
+      "bidirectional": true,
+      "passable": true,
+      "level": 1,
+      "encounters": [
+        {
+          "id": "dusty_trail_coyote_pack",
+          "name": "Coyote Pack",
+          "type": "wildlife",
+          "weight": 40,
+          "description": "A pack of mangy coyotes emerges from the brush, circling your position with hungry eyes.",
+          "enemies": [
+            { "enemyId": "desert_wolf", "count": 2, "levelScale": 0.8 },
+            { "enemyId": "desert_wolf", "count": 1, "levelScale": 0.7 }
+          ],
+          "conditions": {
+            "timeOfDay": ["morning", "afternoon", "evening"]
+          },
+          "rewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [{ "itemId": "wolf_pelt", "quantity": 1, "chance": 0.3 }]
+          },
+          "tags": ["wildlife", "easy", "tutorial"]
+        },
+        {
+          "id": "dusty_trail_lone_bandit",
+          "name": "Lone Bandit",
+          "type": "combat",
+          "weight": 30,
+          "description": "A desperate man steps onto the trail ahead, rusty pistol raised with shaking hands. \"Your gold or your life, stranger!\"",
+          "enemies": [{ "enemyId": "bandit_thug", "count": 1, "levelScale": 0.9 }],
+          "rewards": {
+            "xp": 20,
+            "gold": 8,
+            "items": [
+              { "itemId": "bandages", "quantity": 1, "chance": 0.5 },
+              { "itemId": "worn_revolver", "quantity": 1, "chance": 0.1 }
+            ]
+          },
+          "tags": ["bandit", "easy", "tutorial", "human"]
+        },
+        {
+          "id": "dusty_trail_snake_nest",
+          "name": "Snake Nest",
+          "type": "wildlife",
+          "weight": 20,
+          "description": "You nearly step on a nest of rattlesnakes sunning themselves on the rocks. Their rattles fill the air with warning.",
+          "enemies": [{ "enemyId": "rattlesnake", "count": 3, "levelScale": 1.0 }],
+          "conditions": {
+            "timeOfDay": ["morning", "afternoon"]
+          },
+          "rewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [{ "itemId": "snake_venom", "quantity": 1, "chance": 0.4 }]
+          },
+          "tags": ["wildlife", "easy", "avoidable", "poison"]
+        },
+        {
+          "id": "dusty_trail_night_coyotes",
+          "name": "Prowling Coyotes",
+          "type": "wildlife",
+          "weight": 25,
+          "description": "Glowing eyes surround you in the darkness. The coyotes are bolder at night.",
+          "enemies": [
+            { "enemyId": "desert_wolf", "count": 3, "levelScale": 0.9 },
+            { "enemyId": "desert_wolf", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": {
+            "timeOfDay": ["night"]
+          },
+          "rewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [{ "itemId": "wolf_pelt", "quantity": 2, "chance": 0.25 }]
+          },
+          "tags": ["wildlife", "easy", "night"]
+        }
+      ],
+      "events": [
+        {
+          "id": "dusty_trail_abandoned_wagon",
+          "name": "Abandoned Wagon",
+          "description": "An overturned wagon lies beside the trail, its contents scattered across the dirt. Fresh tracks lead away into the brush, but there is no sign of the driver. A torn journal page flutters in the wind.",
+          "triggerType": "distance",
+          "triggerValue": 0.5,
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "found_prospector_wagon" },
+            { "type": "give_item", "target": "prospector_journal_page", "value": 1 },
+            { "type": "give_item", "target": "bandages", "value": 2 },
+            { "type": "give_item", "target": "canned_beans", "value": 3 }
+          ],
+          "tags": ["lore", "loot", "story", "prospector_mystery"]
+        },
+        {
+          "id": "dusty_trail_campsite_remains",
+          "name": "Old Campsite",
+          "description": "The remains of a campfire mark where previous travelers rested. The ashes are cold, but the site is sheltered from the wind. You might find some useful supplies left behind.",
+          "triggerType": "distance",
+          "triggerValue": 0.75,
+          "repeatable": true,
+          "effects": [
+            { "type": "give_item", "target": "firewood", "value": 2 },
+            { "type": "give_item", "target": "water_canteen", "value": 1 }
+          ],
+          "tags": ["rest", "loot", "campsite"]
+        },
+        {
+          "id": "dusty_trail_tutorial_provisions",
+          "name": "Trail Wisdom",
+          "description": "As you walk, you notice your provisions depleting. The old-timers always said: \"A wise traveler stocks up before leaving town.\" You should manage your supplies carefully on longer journeys.",
+          "triggerType": "first_visit",
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "tutorial_provisions_shown" }],
+          "tags": ["tutorial", "tips"]
+        },
+        {
+          "id": "dusty_trail_traveling_merchant",
+          "name": "Traveling Peddler",
+          "description": "A hunched figure approaches with a mule laden with goods. \"Supplies, friend? Fair prices for weary travelers!\"",
+          "triggerType": "random",
+          "triggerValue": 0.1,
+          "repeatable": true,
+          "dialogueTreeId": "traveling_peddler_basic",
+          "tags": ["merchant", "random"]
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "dusty_trail_old_windmill",
+          "name": "Old Windmill",
+          "type": "ruins",
+          "description": "A decrepit windmill stands against the sky, its blades long since broken. Local legend says a prospector used it as a landmark before the gold rush.",
+          "position": 0.25,
+          "startDiscovered": true,
+          "canRest": false,
+          "restQuality": 0.5,
+          "resources": [],
+          "containers": [{ "id": "windmill_chest", "lootTableId": "common_supplies", "locked": false }],
+          "lore": "Built by the Harmon family in 1847, abandoned after the well ran dry.",
+          "tags": ["historic", "ruins"]
+        },
+        {
+          "id": "dusty_trail_dried_riverbed",
+          "name": "Dried Riverbed",
+          "type": "crossroads",
+          "description": "A wide, cracked riverbed cuts across the trail. In spring, they say the water runs swift and cold. Now it is just dust and memories.",
+          "position": 0.4,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.7,
+          "resources": [{ "type": "water", "quantity": 1, "respawnHours": 48 }],
+          "lore": "The Iron Creek used to flow here before the mining operations upstream diverted the water.",
+          "tags": ["nature", "water"]
+        },
+        {
+          "id": "dusty_trail_sentinel_rock",
+          "name": "The Sentinel",
+          "type": "monument",
+          "description": "A towering rock formation shaped vaguely like a cloaked figure watching over the trail. Travelers have carved their initials into its base for decades.",
+          "position": 0.65,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.8,
+          "lore": "Native peoples called this place \"The Watcher.\" They said it protects travelers who show respect.",
+          "tags": ["nature", "historic", "scenic"]
+        },
+        {
+          "id": "dusty_trail_gulch_overlook",
+          "name": "Gulch Overlook",
+          "type": "overlook",
+          "description": "From this rise, you can see Iron Gulch spread out in the valley below. Smoke rises from the smelters, and the distant clang of pickaxes carries on the wind.",
+          "position": 0.9,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 1.0,
+          "lore": "First glimpse of civilization for many hopeful prospectors. Some turned back here, daunted by the industrial sprawl.",
+          "tags": ["scenic", "destination"]
+        }
+      ],
+      "travelMethods": [
+        { "method": "walk", "available": true, "speedModifier": 1.0, "cost": 0 },
+        { "method": "horse", "available": true, "speedModifier": 1.5, "cost": 0 },
+        { "method": "stagecoach", "available": true, "speedModifier": 2.0, "cost": 5 }
+      ],
+      "weatherPatterns": [
+        { "type": "clear", "probability": 0.6 },
+        { "type": "sandstorm", "probability": 0.1 },
+        { "type": "fog", "probability": 0.1, "seasonRestriction": ["fall", "winter"] }
+      ],
+      "waypoints": [
+        { "x": 0, "z": 0 },
+        { "x": 50, "z": 25 },
+        { "x": 100, "z": 30 },
+        { "x": 160, "z": 45 },
+        { "x": 220, "z": 60 },
+        { "x": 280, "z": 80 },
+        { "x": 320, "z": 100 }
+      ],
+      "tags": ["tutorial", "main_route", "act1"]
+    },
+    {
+      "id": "desert_pass",
+      "name": "Desert Pass",
+      "displayName": "The Desert Pass",
+      "description": "A treacherous route through scorching desert and winding canyons. Bandits use the narrow passages for ambushes, and the heat claims those unprepared for the journey. Yet hidden oases and ancient ruins offer refuge for the resourceful.",
+      "lore": "The Desert Pass was once avoided by all but the most desperate. Then the outlaws came, establishing Mesa Point as a haven for those running from the law. Now the pass sees regular traffic - smugglers, bounty hunters, and fools seeking fortune in the lawless settlement beyond. The ancient ruins along the way hint at darker secrets buried beneath the sands.",
+      "fromTown": "iron_gulch",
+      "toTown": "mesa_point",
+      "terrain": "desert",
+      "secondaryTerrain": "badlands",
+      "length": 20,
+      "condition": "clear",
+      "dangerLevel": 5,
+      "encounterFrequency": 1.2,
+      "bidirectional": true,
+      "passable": true,
+      "level": 2,
+      "encounters": [
+        {
+          "id": "desert_pass_bandit_ambush",
+          "name": "Canyon Ambush",
+          "type": "ambush",
+          "weight": 35,
+          "description": "Rocks tumble from above as bandits emerge from hidden alcoves in the canyon walls. \"Nobody passes without paying the toll!\"",
+          "enemies": [
+            { "enemyId": "bandit_gunman", "count": 2, "levelScale": 1.0 },
+            { "enemyId": "bandit_thug", "count": 2, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 2 },
+          "rewards": {
+            "xp": 60,
+            "gold": 25,
+            "items": [
+              { "itemId": "revolver_ammo", "quantity": 12, "chance": 0.7 },
+              { "itemId": "bandages", "quantity": 2, "chance": 0.5 },
+              { "itemId": "whiskey", "quantity": 1, "chance": 0.3 }
+            ]
+          },
+          "tags": ["bandit", "medium", "ambush", "human"]
+        },
+        {
+          "id": "desert_pass_rattlesnakes",
+          "name": "Rattlesnake Den",
+          "type": "wildlife",
+          "weight": 25,
+          "description": "The hissing of rattles fills the narrow passage. A colony of venomous snakes has made their home among the sun-warmed rocks.",
+          "enemies": [
+            { "enemyId": "rattlesnake", "count": 4, "levelScale": 1.0 },
+            { "enemyId": "rattlesnake", "count": 2, "levelScale": 1.1 }
+          ],
+          "conditions": { "timeOfDay": ["morning", "afternoon"] },
+          "rewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [
+              { "itemId": "snake_venom", "quantity": 2, "chance": 0.4 },
+              { "itemId": "antivenom", "quantity": 1, "chance": 0.2 }
+            ]
+          },
+          "tags": ["wildlife", "medium", "poison"]
+        },
+        {
+          "id": "desert_pass_scorpions",
+          "name": "Scorpion Swarm",
+          "type": "wildlife",
+          "weight": 20,
+          "description": "Armored shapes scuttle across the sand as massive desert scorpions emerge from their burrows. Their chitinous shells glint in the harsh sunlight.",
+          "enemies": [
+            { "enemyId": "desert_scorpion", "count": 3, "levelScale": 1.0 },
+            { "enemyId": "giant_scorpion", "count": 1, "levelScale": 1.0 }
+          ],
+          "rewards": {
+            "xp": 50,
+            "gold": 0,
+            "items": [
+              { "itemId": "scorpion_chitin", "quantity": 2, "chance": 0.5 },
+              { "itemId": "scorpion_stinger", "quantity": 1, "chance": 0.3 }
+            ]
+          },
+          "tags": ["wildlife", "medium", "armored"]
+        },
+        {
+          "id": "desert_pass_sandstorm",
+          "name": "Sudden Sandstorm",
+          "type": "event",
+          "weight": 15,
+          "description": "The sky darkens as a wall of sand approaches. There is no shelter - you must push through or be buried. The storm batters you mercilessly.",
+          "enemies": [],
+          "rewards": { "xp": 10, "gold": 0, "items": [] },
+          "tags": ["environmental", "no_combat", "fatigue"]
+        },
+        {
+          "id": "desert_pass_night_bandits",
+          "name": "Nighttime Raiders",
+          "type": "ambush",
+          "weight": 30,
+          "description": "Shadowy figures emerge from the darkness, their faces wrapped against the cold desert night. These bandits are better equipped than common road thugs.",
+          "enemies": [
+            { "enemyId": "bandit_gunman", "count": 2, "levelScale": 1.1 },
+            { "enemyId": "bandit_sharpshooter", "count": 1, "levelScale": 1.0 },
+            { "enemyId": "bandit_thug", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "timeOfDay": ["night"], "minLevel": 3 },
+          "rewards": {
+            "xp": 85,
+            "gold": 40,
+            "items": [
+              { "itemId": "hunting_rifle", "quantity": 1, "chance": 0.15 },
+              { "itemId": "rifle_ammo", "quantity": 10, "chance": 0.6 }
+            ]
+          },
+          "tags": ["bandit", "medium", "night", "ambush"]
+        },
+        {
+          "id": "desert_pass_sniper",
+          "name": "Canyon Sniper",
+          "type": "ambush",
+          "weight": 10,
+          "description": "A shot rings out, kicking up dust at your feet. High on the canyon rim, a lone figure chambers another round.",
+          "enemies": [{ "enemyId": "bandit_sharpshooter", "count": 1, "levelScale": 1.2 }],
+          "conditions": { "minLevel": 3 },
+          "rewards": {
+            "xp": 45,
+            "gold": 20,
+            "items": [
+              { "itemId": "hunting_rifle", "quantity": 1, "chance": 0.25 },
+              { "itemId": "rifle_ammo", "quantity": 15, "chance": 0.8 }
+            ]
+          },
+          "tags": ["bandit", "medium", "sniper", "rare"]
+        }
+      ],
+      "events": [
+        {
+          "id": "desert_pass_hidden_oasis",
+          "name": "Hidden Oasis",
+          "description": "Following a narrow side canyon, you discover an unexpected paradise - a spring-fed pool surrounded by date palms. The water is cool and clear, and ripe dates hang within reach.",
+          "triggerType": "distance",
+          "triggerValue": 0.45,
+          "repeatable": true,
+          "effects": [
+            { "type": "give_item", "target": "fresh_water", "value": 5 },
+            { "type": "give_item", "target": "dates", "value": 3 },
+            { "type": "set_flag", "target": "discovered_desert_oasis" }
+          ],
+          "tags": ["rest", "provisions", "discovery", "water"]
+        },
+        {
+          "id": "desert_pass_ancient_ruins",
+          "name": "Forgotten Ruins",
+          "description": "Weathered stone structures emerge from the sand - remnants of a civilization that predates the frontier. Strange symbols are carved into the walls, and the entrance to an underground chamber yawns before you.",
+          "triggerType": "distance",
+          "triggerValue": 0.6,
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "discovered_desert_ruins" },
+            { "type": "discovery", "target": "desert_ruins_dungeon" }
+          ],
+          "tags": ["dungeon", "lore", "discovery", "ancient"]
+        },
+        {
+          "id": "desert_pass_dying_prospector",
+          "name": "Dying Prospector",
+          "description": "A man lies against a boulder, his lips cracked and skin burned. He weakly raises a hand. \"Water... please... I know... where the gold is...\"",
+          "triggerType": "random",
+          "triggerValue": 0.15,
+          "repeatable": false,
+          "dialogueTreeId": "dying_prospector_desert",
+          "effects": [{ "type": "set_flag", "target": "met_dying_prospector" }],
+          "tags": ["npc", "choice", "prospector_mystery"]
+        },
+        {
+          "id": "desert_pass_bandit_warning",
+          "name": "Grim Warning",
+          "description": "Three bodies hang from a makeshift gallows beside the trail. A sign reads: \"TOLL EVADERS.\" The Mesa Point outlaws mark their territory with blood.",
+          "triggerType": "distance",
+          "triggerValue": 0.25,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "seen_bandit_warning" }],
+          "tags": ["lore", "warning", "dark"]
+        },
+        {
+          "id": "desert_pass_stagecoach_robbery",
+          "name": "Robbery in Progress",
+          "description": "Gunshots echo through the canyon ahead. Rounding a bend, you see a stagecoach surrounded by masked bandits. The passengers cower as the outlaws demand valuables.",
+          "triggerType": "random",
+          "triggerValue": 0.2,
+          "repeatable": true,
+          "combatEncounterId": "stagecoach_rescue",
+          "effects": [{ "type": "set_flag", "target": "witnessed_robbery" }],
+          "tags": ["combat", "choice", "reputation"]
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "desert_pass_canyon_entrance",
+          "name": "Red Canyon Entrance",
+          "type": "crossroads",
+          "description": "Towering red rock walls mark the entrance to the canyon system. The temperature drops noticeably as you enter the shadowed passage.",
+          "position": 0.2,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.8,
+          "lore": "The Natives called this place \"Red Door\" - the gateway between the green lands and the desert beyond.",
+          "tags": ["nature", "scenic", "transition"]
+        },
+        {
+          "id": "desert_pass_oasis",
+          "name": "Palm Spring Oasis",
+          "type": "oasis",
+          "description": "A miracle in the desert - a spring-fed pool surrounded by palm trees. The water tastes of minerals but is blessedly cool.",
+          "position": 0.45,
+          "startDiscovered": false,
+          "canRest": true,
+          "restQuality": 1.5,
+          "resources": [
+            { "type": "water", "quantity": 10, "respawnHours": 24 },
+            { "type": "food", "quantity": 5, "respawnHours": 72 }
+          ],
+          "lore": "Travelers have used this oasis for centuries. Petroglyphs on nearby rocks show it was sacred to the ancient peoples.",
+          "tags": ["water", "rest", "sacred"]
+        },
+        {
+          "id": "desert_pass_ruins",
+          "name": "Ancestral Ruins",
+          "type": "ruins",
+          "description": "Crumbling stone walls and worn carvings hint at a sophisticated civilization long vanished. The entrance to a partially buried structure leads underground.",
+          "position": 0.6,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.5,
+          "containers": [
+            { "id": "ruins_urn_1", "lootTableId": "ancient_artifacts", "locked": false },
+            { "id": "ruins_chest", "lootTableId": "rare_supplies", "locked": true, "lockDifficulty": 40 }
+          ],
+          "lore": "Some say these ruins predate even the Natives. Strange machinery has been found in the lower chambers - technology that should not exist.",
+          "tags": ["dungeon_entrance", "ancient", "mystery"]
+        },
+        {
+          "id": "desert_pass_mesa_view",
+          "name": "Mesa Point Vista",
+          "type": "overlook",
+          "description": "The great mesa rises from the desert floor like a fortress. At its base, you can make out the ramshackle buildings of Mesa Point - the outlaw settlement that answers to no law.",
+          "position": 0.85,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 1.0,
+          "lore": "Mesa Point was founded by deserters from both sides of the War. They carved out a place where a man's past did not matter - only his gun hand.",
+          "tags": ["scenic", "destination", "outlaw"]
+        },
+        {
+          "id": "desert_pass_mine_shaft",
+          "name": "Abandoned Mine Shaft",
+          "type": "mine_entrance",
+          "description": "A boarded-up mine entrance, marked with faded warning signs. The boards look recently disturbed.",
+          "position": 0.35,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.3,
+          "resources": [{ "type": "ore", "quantity": 5, "respawnHours": 168 }],
+          "containers": [{ "id": "mine_cache", "lootTableId": "mining_supplies", "locked": false }],
+          "lore": "Played out decades ago, they said. But fresh tracks in the dust suggest someone has been using it for... something.",
+          "tags": ["mine", "suspicious", "hidden"]
+        }
+      ],
+      "travelMethods": [
+        { "method": "walk", "available": true, "speedModifier": 1.0, "cost": 0 },
+        { "method": "horse", "available": true, "speedModifier": 1.3, "cost": 0 },
+        { "method": "stagecoach", "available": false, "speedModifier": 1.0, "cost": 0 }
+      ],
+      "weatherPatterns": [
+        { "type": "clear", "probability": 0.5 },
+        { "type": "sandstorm", "probability": 0.25 },
+        { "type": "fog", "probability": 0.05, "seasonRestriction": ["winter"] }
+      ],
+      "waypoints": [
+        { "x": 320, "z": 100 },
+        { "x": 380, "z": 130 },
+        { "x": 420, "z": 160 },
+        { "x": 460, "z": 200 },
+        { "x": 500, "z": 230 },
+        { "x": 550, "z": 270 },
+        { "x": 600, "z": 310 },
+        { "x": 650, "z": 350 }
+      ],
+      "tags": ["main_route", "dangerous", "outlaw_territory", "act2"]
+    },
+    {
+      "id": "mountain_road",
+      "name": "Mountain Road",
+      "displayName": "The Mountain Road",
+      "description": "A winding road through the Iron Mountains, climbing through pine forests before descending into the green valleys of Coldwater. The air grows thin and cold, but the views are breathtaking. Wildlife rules these peaks.",
+      "lore": "The Mountain Road was carved by prospectors seeking a shortcut to the rich valleys beyond the Iron Range. Many died in avalanches and bear attacks before the route was properly marked. Today it serves as the main artery between the mining communities and the ranching settlements, though wise travelers still respect the dangers of the high country.",
+      "fromTown": "iron_gulch",
+      "toTown": "coldwater",
+      "terrain": "mountains",
+      "secondaryTerrain": "forest",
+      "length": 25,
+      "condition": "clear",
+      "dangerLevel": 5,
+      "encounterFrequency": 1.0,
+      "bidirectional": true,
+      "passable": true,
+      "level": 2,
+      "encounters": [
+        {
+          "id": "mountain_road_wolf_pack",
+          "name": "Mountain Wolf Pack",
+          "type": "wildlife",
+          "weight": 35,
+          "description": "A chorus of howls echoes through the pines. Grey shapes move between the trees - a pack of mountain wolves has found your scent.",
+          "enemies": [
+            { "enemyId": "mountain_wolf", "count": 3, "levelScale": 1.0 },
+            { "enemyId": "mountain_wolf", "count": 1, "levelScale": 1.1 }
+          ],
+          "conditions": { "timeOfDay": ["morning", "evening", "night"] },
+          "rewards": {
+            "xp": 55,
+            "gold": 0,
+            "items": [
+              { "itemId": "wolf_pelt", "quantity": 2, "chance": 0.4 },
+              { "itemId": "wolf_fang", "quantity": 1, "chance": 0.3 }
+            ]
+          },
+          "tags": ["wildlife", "medium", "pack"]
+        },
+        {
+          "id": "mountain_road_bear",
+          "name": "Grizzly Bear",
+          "type": "wildlife",
+          "weight": 20,
+          "description": "A massive grizzly bear rises on its hind legs, towering above you. It has been surprised - and it is not happy. The beast lets out a thunderous roar that shakes your bones.",
+          "enemies": [{ "enemyId": "grizzly_bear", "count": 1, "levelScale": 1.0 }],
+          "conditions": { "timeOfDay": ["morning", "afternoon", "evening"], "minLevel": 3 },
+          "rewards": {
+            "xp": 80,
+            "gold": 0,
+            "items": [
+              { "itemId": "bear_pelt", "quantity": 1, "chance": 0.5 },
+              { "itemId": "bear_claw", "quantity": 2, "chance": 0.4 },
+              { "itemId": "bear_meat", "quantity": 3, "chance": 0.6 }
+            ]
+          },
+          "tags": ["wildlife", "hard", "boss", "single"]
+        },
+        {
+          "id": "mountain_road_bandits",
+          "name": "Mountain Bandits",
+          "type": "combat",
+          "weight": 25,
+          "description": "A fallen tree blocks the road - too convenient to be natural. Armed men emerge from the tree line, their clothing patched with animal furs.",
+          "enemies": [
+            { "enemyId": "bandit_gunman", "count": 2, "levelScale": 1.0 },
+            { "enemyId": "bandit_thug", "count": 1, "levelScale": 1.0 },
+            { "enemyId": "mountain_bandit_leader", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 2 },
+          "rewards": {
+            "xp": 70,
+            "gold": 35,
+            "items": [
+              { "itemId": "revolver_ammo", "quantity": 12, "chance": 0.7 },
+              { "itemId": "warm_coat", "quantity": 1, "chance": 0.2 },
+              { "itemId": "hunting_rifle", "quantity": 1, "chance": 0.1 }
+            ]
+          },
+          "tags": ["bandit", "medium", "human", "mountain"]
+        },
+        {
+          "id": "mountain_road_rockslide",
+          "name": "Rockslide",
+          "type": "event",
+          "weight": 15,
+          "description": "The rumble of falling rock fills the air. Boulders tumble down the mountainside toward you! You must move quickly or be crushed.",
+          "enemies": [],
+          "rewards": { "xp": 15, "gold": 0, "items": [] },
+          "tags": ["environmental", "no_combat", "damage"]
+        },
+        {
+          "id": "mountain_road_mountain_lion",
+          "name": "Mountain Lion Ambush",
+          "type": "ambush",
+          "weight": 15,
+          "description": "A tawny blur launches from an overhead ledge. The mountain lion has been stalking you, and now it strikes!",
+          "enemies": [{ "enemyId": "mountain_lion", "count": 1, "levelScale": 1.1 }],
+          "conditions": { "minLevel": 2 },
+          "rewards": {
+            "xp": 40,
+            "gold": 0,
+            "items": [
+              { "itemId": "lion_pelt", "quantity": 1, "chance": 0.4 },
+              { "itemId": "lion_fang", "quantity": 1, "chance": 0.3 }
+            ]
+          },
+          "tags": ["wildlife", "medium", "ambush", "single"]
+        },
+        {
+          "id": "mountain_road_night_wolves",
+          "name": "Nighttime Hunters",
+          "type": "wildlife",
+          "weight": 30,
+          "description": "Glowing eyes ring your campfire. The wolves are hunting, and tonight you are the prey. Their howls coordinate the pack for the attack.",
+          "enemies": [
+            { "enemyId": "mountain_wolf", "count": 4, "levelScale": 1.0 },
+            { "enemyId": "dire_wolf", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "timeOfDay": ["night"], "minLevel": 3 },
+          "rewards": {
+            "xp": 75,
+            "gold": 0,
+            "items": [
+              { "itemId": "wolf_pelt", "quantity": 3, "chance": 0.35 },
+              { "itemId": "dire_wolf_pelt", "quantity": 1, "chance": 0.25 }
+            ]
+          },
+          "tags": ["wildlife", "medium", "night", "pack"]
+        },
+        {
+          "id": "mountain_road_bear_family",
+          "name": "Bear Mother",
+          "type": "wildlife",
+          "weight": 10,
+          "description": "Two bear cubs tumble across the path ahead. Cute - until their mother emerges from the brush, massive and enraged at the threat to her young.",
+          "enemies": [{ "enemyId": "grizzly_bear", "count": 1, "levelScale": 1.2 }],
+          "conditions": { "timeOfDay": ["morning", "afternoon"], "minLevel": 4, "excludeIfFlag": "winter_season" },
+          "rewards": {
+            "xp": 100,
+            "gold": 0,
+            "items": [
+              { "itemId": "bear_pelt", "quantity": 1, "chance": 0.6 },
+              { "itemId": "bear_claw", "quantity": 3, "chance": 0.5 }
+            ]
+          },
+          "tags": ["wildlife", "hard", "single", "rare"]
+        }
+      ],
+      "events": [
+        {
+          "id": "mountain_road_mine_entrance",
+          "name": "The Old Ironside Mine",
+          "description": "A weathered sign marks the entrance to the Ironside Mine - one of the first claims in the territory. The shaft descends into darkness, but you can hear the echo of dripping water... and something else. Glittering ore veins are visible even from the entrance.",
+          "triggerType": "distance",
+          "triggerValue": 0.4,
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "discovered_ironside_mine" },
+            { "type": "discovery", "target": "ironside_mine_dungeon" }
+          ],
+          "tags": ["dungeon", "discovery", "mine", "lore"]
+        },
+        {
+          "id": "mountain_road_overlook",
+          "name": "Eagle's Rest Overlook",
+          "description": "The trail opens onto a breathtaking vista. To the east, you can see the smoke of Iron Gulch rising from the valley floor. To the west, the green pastures of Coldwater spread like a quilt beneath snow-capped peaks. For a moment, the hardships of the frontier feel very far away.",
+          "triggerType": "distance",
+          "triggerValue": 0.7,
+          "repeatable": true,
+          "effects": [{ "type": "set_flag", "target": "visited_eagles_rest" }],
+          "tags": ["scenic", "lore", "rest"]
+        },
+        {
+          "id": "mountain_road_injured_traveler",
+          "name": "Injured Traveler",
+          "description": "A man sits against a tree, clutching his leg. His horse lies dead nearby, victim of the rockslide. \"Please,\" he gasps, \"I cannot make it to Coldwater alone.\"",
+          "triggerType": "random",
+          "triggerValue": 0.2,
+          "repeatable": false,
+          "dialogueTreeId": "injured_traveler_mountain",
+          "effects": [{ "type": "set_flag", "target": "met_injured_traveler" }],
+          "tags": ["npc", "choice", "reputation"]
+        },
+        {
+          "id": "mountain_road_hermit_cabin",
+          "name": "The Hermit's Cabin",
+          "description": "Smoke rises from a small cabin nestled in a clearing. An old man sits on the porch, whittling. He watches you approach with wary but not unfriendly eyes.",
+          "triggerType": "distance",
+          "triggerValue": 0.55,
+          "repeatable": true,
+          "dialogueTreeId": "old_hermit_tom",
+          "effects": [{ "type": "set_flag", "target": "met_hermit_tom" }],
+          "tags": ["npc", "rest", "trade", "lore"]
+        },
+        {
+          "id": "mountain_road_waterfall",
+          "name": "Crystal Falls",
+          "description": "A magnificent waterfall cascades down the cliff face, creating a rainbow in its mist. The pool at its base is crystal clear and ice cold. A perfect place to rest and refill your canteen.",
+          "triggerType": "distance",
+          "triggerValue": 0.5,
+          "repeatable": true,
+          "effects": [{ "type": "give_item", "target": "fresh_water", "value": 5 }],
+          "tags": ["water", "rest", "scenic"]
+        },
+        {
+          "id": "mountain_road_strange_tracks",
+          "name": "Strange Tracks",
+          "description": "Unusual tracks cross the path - too large for any animal you know. Whatever made them walked on two legs but was barefoot, and its stride was impossibly long.",
+          "triggerType": "random",
+          "triggerValue": 0.15,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "seen_strange_tracks" }],
+          "tags": ["mystery", "lore", "supernatural"]
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "mountain_road_ironside_mine",
+          "name": "Ironside Mine",
+          "type": "mine_entrance",
+          "description": "The abandoned Ironside Mine, once the richest claim in the territory. Strange noises echo from its depths, and locals say it is haunted by the ghosts of miners who died in the collapse of '73.",
+          "position": 0.4,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.4,
+          "resources": [{ "type": "ore", "quantity": 10, "respawnHours": 168 }],
+          "containers": [{ "id": "mine_office_safe", "lootTableId": "valuable_ore", "locked": true, "lockDifficulty": 50 }],
+          "lore": "Twenty-three men died when the main shaft collapsed. Their bodies were never recovered. Some say you can still hear them tapping on the walls, trying to find a way out.",
+          "tags": ["dungeon_entrance", "haunted", "mine"]
+        },
+        {
+          "id": "mountain_road_crystal_falls",
+          "name": "Crystal Falls",
+          "type": "spring",
+          "description": "A stunning waterfall fed by snowmelt from the peaks above. The pool at its base is frigid but pure, and the spray catches the light in a permanent rainbow.",
+          "position": 0.5,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 1.3,
+          "resources": [{ "type": "water", "quantity": 20, "respawnHours": 0 }],
+          "lore": "The Natives considered this place sacred. They would come here for spiritual cleansing before important journeys.",
+          "tags": ["water", "rest", "scenic", "sacred"]
+        },
+        {
+          "id": "mountain_road_hermit_cabin",
+          "name": "Tom's Cabin",
+          "type": "camp",
+          "description": "A small but well-maintained cabin where Old Tom the Hermit has lived for thirty years. He trades in pelts and medicinal herbs, and knows more about these mountains than any living man.",
+          "position": 0.55,
+          "startDiscovered": false,
+          "canRest": true,
+          "restQuality": 1.2,
+          "resources": [{ "type": "herbs", "quantity": 3, "respawnHours": 48 }],
+          "npcIds": ["hermit_tom"],
+          "lore": "Tom came to the mountains after the war, seeking solitude. He has outlived three wives and two generations of townsfolk.",
+          "tags": ["npc", "trade", "shelter"]
+        },
+        {
+          "id": "mountain_road_eagles_rest",
+          "name": "Eagle's Rest",
+          "type": "overlook",
+          "description": "The highest point on the mountain road, offering views of both Iron Gulch and Coldwater valleys. Eagles nest in the nearby crags, hence the name.",
+          "position": 0.7,
+          "startDiscovered": false,
+          "canRest": true,
+          "restQuality": 1.0,
+          "lore": "Surveyor James MacReady mapped the entire territory from this spot in 1851. His cairn of stones still marks the exact location.",
+          "tags": ["scenic", "historic"]
+        },
+        {
+          "id": "mountain_road_pine_camp",
+          "name": "Pinewood Camp",
+          "type": "camp",
+          "description": "A clearing in the pines where travelers have camped for generations. Fire-blackened stones mark the central hearth, and the surrounding trees provide shelter from wind.",
+          "position": 0.85,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 1.1,
+          "resources": [{ "type": "wood", "quantity": 10, "respawnHours": 24 }],
+          "containers": [{ "id": "camp_cache", "lootTableId": "common_supplies", "locked": false }],
+          "lore": "Carved into one of the ancient pines are the initials of hundreds of travelers, some dating back to before the territory was even named.",
+          "tags": ["camp", "rest", "historic"]
+        }
+      ],
+      "travelMethods": [
+        { "method": "walk", "available": true, "speedModifier": 0.8, "cost": 0 },
+        { "method": "horse", "available": true, "speedModifier": 1.2, "cost": 0 },
+        { "method": "stagecoach", "available": false, "speedModifier": 1.0, "cost": 0 }
+      ],
+      "weatherPatterns": [
+        { "type": "clear", "probability": 0.4 },
+        { "type": "rain", "probability": 0.2 },
+        { "type": "fog", "probability": 0.15 },
+        { "type": "storm", "probability": 0.1 },
+        { "type": "snow", "probability": 0.15, "seasonRestriction": ["fall", "winter"] }
+      ],
+      "waypoints": [
+        { "x": 320, "z": 100 },
+        { "x": 290, "z": 130 },
+        { "x": 260, "z": 170 },
+        { "x": 240, "z": 220 },
+        { "x": 220, "z": 260 },
+        { "x": 210, "z": 300 },
+        { "x": 200, "z": 340 },
+        { "x": 180, "z": 380 },
+        { "x": 150, "z": 420 }
+      ],
+      "tags": ["main_route", "scenic", "wildlife", "act2"]
+    },
+    {
+      "id": "badlands_trail",
+      "name": "Badlands Trail",
+      "displayName": "The Badlands Trail",
+      "description": "A desolate path through eroded canyons and strange rock formations. The abandoned town of Dustfall lies along the route, a grim reminder of the territory's violent past. Outlaws from Mesa Point patrol these lands, and travelers speak of restless spirits among the bones of the dead.",
+      "lore": "The Badlands Trail is cursed, they say. It passes through the territory's darkest places - the Bone Yard, the Hoodoos, and the ghost town of Dustfall. The Mesa Point outlaws use the trail's evil reputation to their advantage, knowing that superstitious travelers will pay well for safe passage. But even the outlaws avoid the trail at night, when the dead of Dustfall are said to walk.",
+      "fromTown": "mesa_point",
+      "toTown": "coldwater",
+      "terrain": "badlands",
+      "secondaryTerrain": "desert",
+      "length": 20,
+      "condition": "clear",
+      "dangerLevel": 6,
+      "encounterFrequency": 1.1,
+      "bidirectional": true,
+      "passable": true,
+      "level": 3,
+      "encounters": [
+        {
+          "id": "badlands_trail_outlaw_patrol",
+          "name": "Mesa Point Patrol",
+          "type": "combat",
+          "weight": 30,
+          "description": "Riders approach flying the black bandana of Mesa Point. \"This is our territory, stranger. You got business here, or are you just looking for trouble?\"",
+          "enemies": [
+            { "enemyId": "copperhead_gunslinger", "count": 2, "levelScale": 1.0 },
+            { "enemyId": "copperhead_enforcer", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 3 },
+          "rewards": {
+            "xp": 90,
+            "gold": 45,
+            "items": [
+              { "itemId": "revolver_ammo", "quantity": 18, "chance": 0.8 },
+              { "itemId": "mesa_point_token", "quantity": 1, "chance": 0.3 },
+              { "itemId": "whiskey", "quantity": 2, "chance": 0.4 }
+            ]
+          },
+          "tags": ["outlaw", "medium", "human", "mesa_point"]
+        },
+        {
+          "id": "badlands_trail_buzzards",
+          "name": "Circling Buzzards",
+          "type": "wildlife",
+          "weight": 25,
+          "description": "A flock of enormous buzzards descends from the sky, drawn by the smell of your provisions. They are bold, hungry, and unafraid of humans.",
+          "enemies": [
+            { "enemyId": "giant_buzzard", "count": 4, "levelScale": 0.9 },
+            { "enemyId": "giant_buzzard", "count": 2, "levelScale": 1.0 }
+          ],
+          "rewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [{ "itemId": "buzzard_feather", "quantity": 3, "chance": 0.5 }]
+          },
+          "tags": ["wildlife", "easy", "provisions_drain"]
+        },
+        {
+          "id": "badlands_trail_dust_devils",
+          "name": "Dust Devil Storm",
+          "type": "event",
+          "weight": 20,
+          "description": "The wind picks up suddenly, and swirling columns of dust spring up across the badlands. These dust devils batter you with grit and debris, making progress exhausting.",
+          "enemies": [],
+          "rewards": { "xp": 10, "gold": 0, "items": [] },
+          "tags": ["environmental", "no_combat", "fatigue"]
+        },
+        {
+          "id": "badlands_trail_spirits",
+          "name": "Restless Spirits",
+          "type": "combat",
+          "weight": 15,
+          "description": "The temperature drops. Translucent figures emerge from the ruined buildings, their faces twisted in eternal agony. The dead of Dustfall have not found peace.",
+          "enemies": [
+            { "enemyId": "vengeful_spirit", "count": 2, "levelScale": 1.0 },
+            { "enemyId": "lost_soul", "count": 3, "levelScale": 0.9 }
+          ],
+          "conditions": { "timeOfDay": ["evening", "night"], "minLevel": 4, "requiresFlag": "entered_ghost_town" },
+          "rewards": {
+            "xp": 100,
+            "gold": 0,
+            "items": [
+              { "itemId": "ectoplasm", "quantity": 2, "chance": 0.4 },
+              { "itemId": "spirit_essence", "quantity": 1, "chance": 0.2 }
+            ]
+          },
+          "tags": ["supernatural", "hard", "ghost_town", "night"]
+        },
+        {
+          "id": "badlands_trail_night_ambush",
+          "name": "Nighttime Ambush",
+          "type": "ambush",
+          "weight": 25,
+          "description": "Gunshots shatter the night silence. You have ridden into an outlaw ambush - they have been waiting for someone carrying valuables.",
+          "enemies": [
+            { "enemyId": "copperhead_gunslinger", "count": 2, "levelScale": 1.1 },
+            { "enemyId": "copperhead_dynamiter", "count": 1, "levelScale": 1.0 },
+            { "enemyId": "copperhead_enforcer", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "timeOfDay": ["night"], "minLevel": 4 },
+          "rewards": {
+            "xp": 120,
+            "gold": 60,
+            "items": [
+              { "itemId": "dynamite", "quantity": 2, "chance": 0.5 },
+              { "itemId": "revolver", "quantity": 1, "chance": 0.2 }
+            ]
+          },
+          "tags": ["outlaw", "hard", "night", "ambush"]
+        },
+        {
+          "id": "badlands_trail_coyotes",
+          "name": "Badlands Coyotes",
+          "type": "wildlife",
+          "weight": 20,
+          "description": "Lean, scarred coyotes emerge from the rock formations. These badlands predators are tougher and meaner than their plains cousins.",
+          "enemies": [{ "enemyId": "desert_wolf", "count": 4, "levelScale": 1.1 }],
+          "rewards": {
+            "xp": 40,
+            "gold": 0,
+            "items": [{ "itemId": "wolf_pelt", "quantity": 2, "chance": 0.35 }]
+          },
+          "tags": ["wildlife", "medium"]
+        },
+        {
+          "id": "badlands_trail_scavengers",
+          "name": "Bone Yard Scavengers",
+          "type": "combat",
+          "weight": 15,
+          "description": "Figures rise from among the bones - not spirits, but living scavengers who have made the bone yard their home. Their eyes are wild, and their weapons are made from the remains of the dead.",
+          "enemies": [
+            { "enemyId": "bone_scavenger", "count": 3, "levelScale": 1.0 },
+            { "enemyId": "scavenger_chief", "count": 1, "levelScale": 1.1 }
+          ],
+          "conditions": { "minLevel": 3, "requiresFlag": "visited_bone_yard" },
+          "rewards": {
+            "xp": 75,
+            "gold": 20,
+            "items": [
+              { "itemId": "bone_knife", "quantity": 1, "chance": 0.3 },
+              { "itemId": "strange_amulet", "quantity": 1, "chance": 0.15 }
+            ]
+          },
+          "tags": ["human", "medium", "scavenger"]
+        }
+      ],
+      "events": [
+        {
+          "id": "badlands_trail_ghost_town",
+          "name": "The Town of Dustfall",
+          "description": "The abandoned town of Dustfall emerges from the badlands like a fever dream. Buildings lean at impossible angles, and the wind moans through empty windows. A faded sign creaks: \"DUSTFALL - POP. 847.\" The entire population vanished in a single night, forty years ago. No one knows why.",
+          "triggerType": "distance",
+          "triggerValue": 0.5,
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "entered_ghost_town" },
+            { "type": "discovery", "target": "dustfall_ghost_town" }
+          ],
+          "tags": ["lore", "discovery", "supernatural", "dungeon"]
+        },
+        {
+          "id": "badlands_trail_outlaw_stash",
+          "name": "Hidden Stash",
+          "description": "Behind a distinctive rock formation, you find what the informant described - a cache of outlaw supplies hidden beneath loose stones. Maps, ammunition, and a ledger of criminal activities.",
+          "triggerType": "flag",
+          "flagName": "informant_stash_location",
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "found_outlaw_stash" },
+            { "type": "give_item", "target": "outlaw_ledger", "value": 1 },
+            { "type": "give_item", "target": "revolver_ammo", "value": 30 },
+            { "type": "give_item", "target": "gold_coins", "value": 50 }
+          ],
+          "tags": ["loot", "quest", "informant"]
+        },
+        {
+          "id": "badlands_trail_bone_yard",
+          "name": "The Bone Yard",
+          "description": "The path winds through a field of bleached bones - animal and human alike. Skulls grin from the dust, and ribcages arc like macabre arches. Whether this was a massacre site or a natural graveyard is unclear, but the sense of death is overwhelming.",
+          "triggerType": "distance",
+          "triggerValue": 0.35,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "visited_bone_yard" }],
+          "tags": ["lore", "dark", "atmospheric"]
+        },
+        {
+          "id": "badlands_trail_whispers",
+          "name": "Whispers on the Wind",
+          "description": "You could swear you hear voices on the wind - fragments of conversations, a child's laugh, a woman's scream. But when you stop to listen, there is only silence.",
+          "triggerType": "random",
+          "triggerValue": 0.25,
+          "repeatable": true,
+          "tags": ["atmospheric", "supernatural", "creepy"]
+        },
+        {
+          "id": "badlands_trail_prospector_ghost",
+          "name": "The Lost Prospector",
+          "description": "A figure sits by a cold campfire ahead. As you approach, you realize you can see through him. The ghostly prospector looks up with hollow eyes. \"Have you seen my claim? They took it from me. Killed me for it. But I cannot leave until I find it...\"",
+          "triggerType": "random",
+          "triggerValue": 0.15,
+          "repeatable": false,
+          "dialogueTreeId": "ghost_prospector_dustfall",
+          "effects": [{ "type": "set_flag", "target": "met_prospector_ghost" }],
+          "tags": ["npc", "supernatural", "quest", "prospector_mystery"]
+        },
+        {
+          "id": "badlands_trail_rancher_patrol",
+          "name": "Coldwater Patrol",
+          "description": "Armed riders approach from the Coldwater direction. They are ranchers, keeping watch for rustlers and outlaws. \"You coming from Mesa Point? Keep your hands where we can see them.\"",
+          "triggerType": "distance",
+          "triggerValue": 0.85,
+          "repeatable": true,
+          "dialogueTreeId": "coldwater_patrol",
+          "tags": ["npc", "faction", "coldwater"]
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "badlands_trail_dustfall",
+          "name": "Dustfall Ghost Town",
+          "type": "ruins",
+          "description": "The abandoned town of Dustfall stands frozen in time. Plates still sit on tables, beds remain made, and personal belongings gather dust. Whatever happened here, it happened fast.",
+          "position": 0.5,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.2,
+          "containers": [
+            { "id": "dustfall_general_store", "lootTableId": "abandoned_shop", "locked": false },
+            { "id": "dustfall_saloon_safe", "lootTableId": "valuable_cache", "locked": true, "lockDifficulty": 60 },
+            { "id": "dustfall_church_offering", "lootTableId": "religious_items", "locked": false }
+          ],
+          "lore": "On October 13th, 1873, every man, woman, and child in Dustfall vanished. No bodies were ever found. The only clue was a single word scrawled in blood on the church wall: \"SALVATION.\"",
+          "tags": ["dungeon_entrance", "haunted", "major_lore"]
+        },
+        {
+          "id": "badlands_trail_bone_yard_landmark",
+          "name": "The Bone Yard",
+          "type": "grave",
+          "description": "A vast field of bones stretching across the badlands. Some believe it was a massacre site from the territory wars. Others say the bones are far older, and far stranger, than that.",
+          "position": 0.35,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.1,
+          "lore": "Scientists from back East came to study the bones once. They left in a hurry, refusing to discuss what they found. Their report was sealed by the territorial governor.",
+          "tags": ["dark", "mystery", "ancient"]
+        },
+        {
+          "id": "badlands_trail_hoodoos",
+          "name": "The Hoodoos",
+          "type": "monument",
+          "description": "Bizarre rock formations carved by wind and time into shapes that almost look deliberate. Some resemble figures, others buildings, and one unmistakably looks like a screaming face.",
+          "position": 0.25,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.7,
+          "lore": "The Natives avoided this place. They said the rocks were the petrified remains of an ancient people who angered the spirits.",
+          "tags": ["scenic", "eerie", "natural"]
+        },
+        {
+          "id": "badlands_trail_watchtower",
+          "name": "Buzzard Tower",
+          "type": "ruins",
+          "description": "A crumbling watchtower used by the Mesa Point outlaws to spot approaching travelers. A ragged black flag flies from its top, and vultures roost in its upper windows.",
+          "position": 0.15,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.5,
+          "containers": [{ "id": "tower_supply_cache", "lootTableId": "outlaw_supplies", "locked": false }],
+          "lore": "The outlaws built this tower from the stones of an older structure. Some say it was a Spanish mission; others claim it was something far older.",
+          "tags": ["outlaw", "tactical"]
+        },
+        {
+          "id": "badlands_trail_valley_view",
+          "name": "Coldwater Valley Overlook",
+          "type": "overlook",
+          "description": "The badlands end abruptly at a cliff edge, revealing the lush green valley of Coldwater below. Cattle dot the pastures, and the town's white church steeple gleams in the distance.",
+          "position": 0.9,
+          "startDiscovered": false,
+          "canRest": true,
+          "restQuality": 1.1,
+          "lore": "The contrast between the badlands and Coldwater valley could not be more stark. It is like crossing from hell into paradise.",
+          "tags": ["scenic", "transition", "destination"]
+        }
+      ],
+      "travelMethods": [
+        { "method": "walk", "available": true, "speedModifier": 0.9, "cost": 0 },
+        { "method": "horse", "available": true, "speedModifier": 1.2, "cost": 0 },
+        { "method": "stagecoach", "available": false, "speedModifier": 1.0, "cost": 0 }
+      ],
+      "weatherPatterns": [
+        { "type": "clear", "probability": 0.35 },
+        { "type": "sandstorm", "probability": 0.3 },
+        { "type": "fog", "probability": 0.15 },
+        { "type": "storm", "probability": 0.1 }
+      ],
+      "waypoints": [
+        { "x": 650, "z": 350 },
+        { "x": 620, "z": 380 },
+        { "x": 580, "z": 400 },
+        { "x": 520, "z": 410 },
+        { "x": 450, "z": 415 },
+        { "x": 380, "z": 420 },
+        { "x": 300, "z": 425 },
+        { "x": 220, "z": 430 },
+        { "x": 150, "z": 420 }
+      ],
+      "tags": ["dangerous", "supernatural", "outlaw_territory", "act2"]
+    },
+    {
+      "id": "final_trail",
+      "name": "The Final Trail",
+      "displayName": "The Final Trail",
+      "description": "The road to Salvation is paved with danger. This treacherous path crosses every terrain the frontier has to offer - desert, badlands, mountains, and something worse. Strange mechanical creatures roam the wastelands, and the wildlife has been twisted by forces unknown. Only the brave or the desperate travel this road.",
+      "lore": "The Final Trail leads to Salvation - but salvation from what? The town was founded by a mysterious preacher who claimed to have found evidence of divine intervention in the old mines. Now the town glows with unholy light, its citizens speak of transcendence through machinery, and none who enter ever seem to leave. This road is a one-way journey into the heart of the frontier's darkest secret.",
+      "fromTown": "mesa_point",
+      "toTown": "salvation",
+      "terrain": "badlands",
+      "secondaryTerrain": "mountains",
+      "length": 30,
+      "condition": "dangerous",
+      "dangerLevel": 8,
+      "encounterFrequency": 1.5,
+      "bidirectional": true,
+      "passable": true,
+      "level": 5,
+      "unlockCondition": {
+        "type": "flag",
+        "target": "act3_unlocked"
+      },
+      "encounters": [
+        {
+          "id": "final_trail_elite_bandits",
+          "name": "Desperado Gang",
+          "type": "ambush",
+          "weight": 30,
+          "description": "These are not common road thugs - they are hardened killers, veterans of a dozen battles. Their leader wears the star of a murdered lawman, and their eyes hold nothing but murder.",
+          "enemies": [
+            { "enemyId": "desperado_gunslinger", "count": 2, "levelScale": 1.1 },
+            { "enemyId": "desperado_sharpshooter", "count": 1, "levelScale": 1.0 },
+            { "enemyId": "desperado_leader", "count": 1, "levelScale": 1.2 }
+          ],
+          "conditions": { "minLevel": 5 },
+          "rewards": {
+            "xp": 150,
+            "gold": 80,
+            "items": [
+              { "itemId": "elite_revolver", "quantity": 1, "chance": 0.2 },
+              { "itemId": "rifle_ammo", "quantity": 20, "chance": 0.8 },
+              { "itemId": "superior_bandages", "quantity": 2, "chance": 0.5 },
+              { "itemId": "lawman_star", "quantity": 1, "chance": 0.1 }
+            ]
+          },
+          "tags": ["bandit", "hard", "elite", "human"]
+        },
+        {
+          "id": "final_trail_corrupted_wildlife",
+          "name": "Twisted Beasts",
+          "type": "wildlife",
+          "weight": 25,
+          "description": "The animals here are wrong. Their eyes glow with an unnatural light, their movements are jerky and mechanical, and their cries sound like grinding gears. Something has corrupted them.",
+          "enemies": [
+            { "enemyId": "corrupted_wolf", "count": 3, "levelScale": 1.1 },
+            { "enemyId": "corrupted_bear", "count": 1, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 5 },
+          "rewards": {
+            "xp": 120,
+            "gold": 0,
+            "items": [
+              { "itemId": "corrupted_pelt", "quantity": 2, "chance": 0.4 },
+              { "itemId": "strange_gland", "quantity": 1, "chance": 0.3 },
+              { "itemId": "mysterious_ore", "quantity": 1, "chance": 0.2 }
+            ]
+          },
+          "tags": ["wildlife", "hard", "corrupted", "supernatural"]
+        },
+        {
+          "id": "final_trail_mechanical_horrors",
+          "name": "Rogue Automatons",
+          "type": "combat",
+          "weight": 20,
+          "description": "Metal creatures emerge from the twisted landscape - impossible machines of brass and iron, their gears grinding and steam hissing. They move with deadly purpose, red lights blazing where eyes should be.",
+          "enemies": [
+            { "enemyId": "remnant_sentry", "count": 2, "levelScale": 1.1 },
+            { "enemyId": "remnant_scout", "count": 2, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 5 },
+          "rewards": {
+            "xp": 130,
+            "gold": 25,
+            "items": [
+              { "itemId": "scrap_metal", "quantity": 5, "chance": 0.7 },
+              { "itemId": "automaton_core", "quantity": 1, "chance": 0.15 },
+              { "itemId": "oil_can", "quantity": 2, "chance": 0.5 },
+              { "itemId": "strange_blueprint", "quantity": 1, "chance": 0.1 }
+            ]
+          },
+          "tags": ["automaton", "hard", "steampunk", "remnant"]
+        },
+        {
+          "id": "final_trail_hazards",
+          "name": "Deadly Terrain",
+          "type": "event",
+          "weight": 20,
+          "description": "The land itself seems to fight against you. Sudden chasms open, poison gas seeps from fissures, and the ground trembles with underground activity.",
+          "enemies": [],
+          "rewards": { "xp": 20, "gold": 0, "items": [] },
+          "tags": ["environmental", "no_combat", "damage", "fatigue"]
+        },
+        {
+          "id": "final_trail_juggernaut",
+          "name": "Mechanical Titan",
+          "type": "combat",
+          "weight": 10,
+          "description": "The ground shakes with each step. A massive war machine lumbers into view, bristling with weapons and armored in plates of blackened steel. This is not some relic - it is a weapon of war, and it has found a target.",
+          "enemies": [
+            { "enemyId": "remnant_juggernaut", "count": 1, "levelScale": 1.0 },
+            { "enemyId": "remnant_sentry", "count": 2, "levelScale": 1.0 }
+          ],
+          "conditions": { "minLevel": 6 },
+          "rewards": {
+            "xp": 200,
+            "gold": 50,
+            "items": [
+              { "itemId": "automaton_core", "quantity": 2, "chance": 0.5 },
+              { "itemId": "rare_blueprint", "quantity": 1, "chance": 0.25 },
+              { "itemId": "juggernaut_plating", "quantity": 1, "chance": 0.3 }
+            ]
+          },
+          "tags": ["automaton", "very_hard", "mini_boss", "rare"]
+        },
+        {
+          "id": "final_trail_cultists",
+          "name": "Salvation Cultists",
+          "type": "combat",
+          "weight": 15,
+          "description": "Robed figures block the path, their faces hidden beneath cowls. \"Turn back, sinner,\" their leader intones. \"Salvation is not for the likes of you.\" Their hands reach for hidden weapons.",
+          "enemies": [
+            { "enemyId": "cultist_acolyte", "count": 3, "levelScale": 1.0 },
+            { "enemyId": "cultist_zealot", "count": 1, "levelScale": 1.1 }
+          ],
+          "conditions": { "minLevel": 5 },
+          "rewards": {
+            "xp": 100,
+            "gold": 30,
+            "items": [
+              { "itemId": "cultist_robe", "quantity": 1, "chance": 0.3 },
+              { "itemId": "salvation_pamphlet", "quantity": 1, "chance": 0.5 },
+              { "itemId": "strange_elixir", "quantity": 1, "chance": 0.2 }
+            ]
+          },
+          "tags": ["human", "hard", "cultist", "salvation"]
+        },
+        {
+          "id": "final_trail_night_horror",
+          "name": "The Thing in the Dark",
+          "type": "ambush",
+          "weight": 15,
+          "description": "Something massive moves in the darkness. You catch glimpses of metal and flesh fused together, of too many eyes and too many limbs. Whatever it was, it is neither machine nor animal now.",
+          "enemies": [{ "enemyId": "fusion_horror", "count": 1, "levelScale": 1.2 }],
+          "conditions": { "timeOfDay": ["night"], "minLevel": 6 },
+          "rewards": {
+            "xp": 180,
+            "gold": 0,
+            "items": [
+              { "itemId": "horror_trophy", "quantity": 1, "chance": 0.5 },
+              { "itemId": "corrupted_core", "quantity": 1, "chance": 0.4 }
+            ]
+          },
+          "tags": ["supernatural", "very_hard", "boss", "night", "horror"]
+        }
+      ],
+      "events": [
+        {
+          "id": "final_trail_warning",
+          "name": "Point of No Return",
+          "description": "A weathered signpost stands at a crossroads. One arrow points back the way you came, labeled with familiar town names. The other points forward into darkness, bearing only a single word: \"SALVATION.\" Below it, someone has carved: \"TURN BACK. THERE IS NOTHING BUT DEATH AHEAD.\" You sense that continuing will change everything.",
+          "triggerType": "distance",
+          "triggerValue": 0.1,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "passed_point_of_no_return" }],
+          "tags": ["warning", "checkpoint", "save_prompt"]
+        },
+        {
+          "id": "final_trail_ally_meetup",
+          "name": "Unexpected Ally",
+          "description": "A familiar figure emerges from cover - an ally you helped during your journey. \"Heard you were headed to Salvation. You will need backup. Mind if I tag along?\"",
+          "triggerType": "flag",
+          "flagName": "recruited_companion",
+          "repeatable": false,
+          "dialogueTreeId": "ally_reunion_final_trail",
+          "effects": [{ "type": "set_flag", "target": "ally_joined_final_push" }],
+          "tags": ["ally", "companion", "narrative"]
+        },
+        {
+          "id": "final_trail_last_camp",
+          "name": "The Last Camp",
+          "description": "A sheltered alcove offers a final chance to rest before the final stretch to Salvation. The church spire is visible on the horizon, and an unnatural light glows from within the town. This may be your last peaceful moment.",
+          "triggerType": "distance",
+          "triggerValue": 0.8,
+          "repeatable": true,
+          "effects": [{ "type": "set_flag", "target": "visited_last_camp" }],
+          "tags": ["rest", "checkpoint", "last_chance"]
+        },
+        {
+          "id": "final_trail_dying_cultist",
+          "name": "The Apostate",
+          "description": "A robed figure lies bleeding against a rock, cast out from Salvation. \"I saw what they are building,\" he rasps. \"The Preacher... he found something in the old mines. Something that should have stayed buried. The machines, the corruption... it all comes from that thing.\" He presses a key into your hand before the light leaves his eyes.",
+          "triggerType": "distance",
+          "triggerValue": 0.3,
+          "repeatable": false,
+          "effects": [
+            { "type": "set_flag", "target": "learned_salvation_truth" },
+            { "type": "give_item", "target": "old_mine_key", "value": 1 }
+          ],
+          "tags": ["lore", "exposition", "quest", "key_item"]
+        },
+        {
+          "id": "final_trail_mech_graveyard",
+          "name": "The Machine Graveyard",
+          "description": "You come upon a field of destroyed automatons - hundreds of them, torn apart and scattered across the blasted landscape. Some are ancient, rusted hulks. Others look freshly destroyed. Whatever killed them, it was powerful beyond measure.",
+          "triggerType": "distance",
+          "triggerValue": 0.55,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "visited_machine_graveyard" }],
+          "tags": ["lore", "atmospheric", "mystery"]
+        },
+        {
+          "id": "final_trail_vision",
+          "name": "Echoes of Catastrophe",
+          "description": "The air shimmers, and for a moment you see the land as it once was - green and fertile, with a thriving settlement where Salvation now stands. Then fire rains from the sky. Machines march. People scream. The vision fades, leaving you shaken.",
+          "triggerType": "random",
+          "triggerValue": 0.2,
+          "repeatable": false,
+          "effects": [{ "type": "set_flag", "target": "saw_apocalypse_vision" }],
+          "tags": ["supernatural", "lore", "revelation"]
+        },
+        {
+          "id": "final_trail_coldwater_junction",
+          "name": "Coldwater Junction",
+          "description": "A path branches off toward Coldwater. Travelers from both Mesa Point and Coldwater converge here before the final approach to Salvation.",
+          "triggerType": "distance",
+          "triggerValue": 0.15,
+          "repeatable": true,
+          "effects": [{ "type": "set_flag", "target": "visited_coldwater_junction" }],
+          "tags": ["junction", "navigation"]
+        }
+      ],
+      "landmarks": [
+        {
+          "id": "final_trail_signpost",
+          "name": "The Last Signpost",
+          "type": "crossroads",
+          "description": "A weathered signpost marking the point of no return. Travelers have left tokens and prayers here - some for luck, others as memorials to those who did not return.",
+          "position": 0.1,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.8,
+          "lore": "The signpost has stood for decades. Hundreds of names are carved into its base, some crossed out, others with dates of death.",
+          "tags": ["checkpoint", "memorial"]
+        },
+        {
+          "id": "final_trail_debris_field",
+          "name": "The Scattered Remains",
+          "type": "wreckage",
+          "description": "A vast field of mechanical debris - gears, pistons, shattered armor plating, and things less identifiable. Some of it is clearly automaton. Some of it looks disturbingly organic.",
+          "position": 0.35,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.3,
+          "resources": [{ "type": "ore", "quantity": 8, "respawnHours": 168 }],
+          "containers": [{ "id": "debris_cache", "lootTableId": "automaton_rare", "locked": false }],
+          "lore": "Some great battle was fought here long ago. Or perhaps not so long ago - some of the wreckage still sparks with residual power.",
+          "tags": ["scavenge", "automaton", "battlefield"]
+        },
+        {
+          "id": "final_trail_machine_graveyard",
+          "name": "Machine Graveyard",
+          "type": "grave",
+          "description": "Row upon row of destroyed automatons, arranged with unnerving precision. Someone - or something - has been collecting the fallen machines and bringing them here.",
+          "position": 0.55,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.2,
+          "containers": [{ "id": "graveyard_core_pile", "lootTableId": "automaton_cores", "locked": false }],
+          "lore": "The machines are arranged in concentric circles around a central depression. At the center lies a single human skeleton, its hands clasped as if in prayer.",
+          "tags": ["mystery", "eerie", "important"]
+        },
+        {
+          "id": "final_trail_last_camp_landmark",
+          "name": "Final Rest",
+          "type": "camp",
+          "description": "A natural alcove offering shelter from the elements. Previous travelers have left supplies here, knowing they may not return. A tradition of hope in hopeless times.",
+          "position": 0.8,
+          "startDiscovered": false,
+          "canRest": true,
+          "restQuality": 1.5,
+          "resources": [
+            { "type": "water", "quantity": 5, "respawnHours": 0 },
+            { "type": "food", "quantity": 5, "respawnHours": 72 }
+          ],
+          "containers": [
+            { "id": "camp_supply_cache", "lootTableId": "survival_supplies", "locked": false },
+            { "id": "camp_weapon_cache", "lootTableId": "quality_weapons", "locked": true, "lockDifficulty": 40 }
+          ],
+          "lore": "Names are carved into the rock walls - travelers who passed through. Some are recent. Many have no return date.",
+          "tags": ["camp", "rest", "last_chance", "tradition"]
+        },
+        {
+          "id": "final_trail_salvation_view",
+          "name": "First Sight of Salvation",
+          "type": "overlook",
+          "description": "From this ridge, you see Salvation for the first time. The town clusters around a massive church, its spire reaching impossibly high. An unnatural light pulses from within, and even from this distance you can hear the grinding of vast machinery.",
+          "position": 0.9,
+          "startDiscovered": false,
+          "canRest": false,
+          "restQuality": 0.5,
+          "lore": "The church was built on the site of an ancient mine. What the early settlers found in those depths changed everything - and sealed the fate of all who came after.",
+          "tags": ["scenic", "destination", "revelation", "important"]
+        },
+        {
+          "id": "final_trail_coldwater_junction_landmark",
+          "name": "Coldwater Junction",
+          "type": "crossroads",
+          "description": "A trail marker where the paths from Mesa Point and Coldwater converge. Both routes are equally dangerous from this point.",
+          "position": 0.15,
+          "startDiscovered": true,
+          "canRest": true,
+          "restQuality": 0.9,
+          "lore": "Travelers from both towns meet here to share information about conditions ahead. Some pool their resources for safety.",
+          "tags": ["junction", "social"]
+        }
+      ],
+      "travelMethods": [
+        { "method": "walk", "available": true, "speedModifier": 0.7, "cost": 0 },
+        { "method": "horse", "available": true, "speedModifier": 1.0, "cost": 0 },
+        { "method": "stagecoach", "available": false, "speedModifier": 1.0, "cost": 0 }
+      ],
+      "weatherPatterns": [
+        { "type": "clear", "probability": 0.2 },
+        { "type": "sandstorm", "probability": 0.2 },
+        { "type": "fog", "probability": 0.2 },
+        { "type": "storm", "probability": 0.3 }
+      ],
+      "waypoints": [
+        { "x": 650, "z": 350 },
+        { "x": 680, "z": 400 },
+        { "x": 720, "z": 450 },
+        { "x": 770, "z": 510 },
+        { "x": 830, "z": 560 },
+        { "x": 880, "z": 600 },
+        { "x": 930, "z": 650 },
+        { "x": 970, "z": 710 },
+        { "x": 1000, "z": 760 },
+        { "x": 1020, "z": 800 }
+      ],
+      "tags": ["endgame", "final_act", "boss_route", "act3", "point_of_no_return"]
+    }
+  ]
+}

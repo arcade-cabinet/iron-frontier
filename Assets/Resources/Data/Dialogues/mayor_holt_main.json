@@ -1,0 +1,1692 @@
+{
+  "id": "mayor_holt_main",
+  "name": "Mayor Holt - Main Conversation",
+  "description": "Primary dialogue tree for Mayor Reginald Holt of Ironhaven",
+  "tags": ["ironhaven", "authority", "quest_giver", "politician"],
+  "entryPoints": [
+    {
+      "nodeId": "first_meeting",
+      "conditions": [{ "type": "FirstMeeting" }],
+      "priority": 10
+    },
+    {
+      "nodeId": "thorne_visit_warning",
+      "conditions": [{ "type": "FlagSet", "target": "thorne_arriving_soon" }],
+      "priority": 8
+    },
+    {
+      "nodeId": "quest_town_image",
+      "conditions": [{ "type": "QuestActive", "target": "restore_town_reputation" }],
+      "priority": 5
+    },
+    {
+      "nodeId": "high_reputation_greeting",
+      "conditions": [{ "type": "ReputationGte", "value": 50 }],
+      "priority": 3
+    },
+    {
+      "nodeId": "return_greeting",
+      "conditions": [],
+      "priority": 0
+    }
+  ],
+  "nodes": [
+    {
+      "id": "first_meeting",
+      "text": "*A portly man in an immaculate waistcoat and brass-buttoned jacket rises from behind an ornate desk, adjusting his monocle* Ah! A visitor! Do come in, do come in. I am Mayor Reginald Holt, duly elected steward of this fine community of Ironhaven. And you are...?",
+      "expression": "pompous",
+      "choices": [
+        {
+          "text": "Just a traveler passing through.",
+          "nextNodeId": "traveler_response"
+        },
+        {
+          "text": "I'm looking for work.",
+          "nextNodeId": "work_response"
+        },
+        {
+          "text": "I've heard this town has problems.",
+          "nextNodeId": "problems_response"
+        },
+        {
+          "text": "Never mind the pleasantries. What's really going on here?",
+          "nextNodeId": "direct_response",
+          "tags": ["aggressive"]
+        }
+      ]
+    },
+    {
+      "id": "traveler_response",
+      "text": "*He clasps his hands together* A traveler! Splendid, splendid. We do so enjoy visitors here in Ironhaven. I trust you'll find our accommodations... adequate. The Brass Lantern Inn is quite respectable. *He leans in conspiratorially* Do be sure to mention the town's prosperity to anyone you meet on the road, won't you?",
+      "choices": [
+        {
+          "text": "Is the town's reputation that important to you?",
+          "nextNodeId": "reputation_importance"
+        },
+        {
+          "text": "What can you tell me about Ironhaven?",
+          "nextNodeId": "town_overview"
+        },
+        {
+          "text": "I'll keep that in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "reputation_importance",
+      "text": "*His smile tightens almost imperceptibly* Important? My dear friend, reputation is EVERYTHING on the frontier. We are competing with a dozen other settlements for railroad investment, merchant trade, settler interest. One whisper of trouble, and IVRC redirects their resources elsewhere. *His voice drops* And between us, we simply cannot afford that.",
+      "expression": "worried",
+      "choices": [
+        {
+          "text": "What kind of trouble are you trying to hide?",
+          "nextNodeId": "hiding_trouble"
+        },
+        {
+          "text": "IVRC holds that much power over you?",
+          "nextNodeId": "ivrc_power"
+        },
+        {
+          "text": "I understand. Image matters.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+    {
+      "id": "hiding_trouble",
+      "text": "*He waves his hand dismissively, a bit too quickly* Hide? Nonsense! There's nothing to hide. Every frontier town has its... minor inconveniences. Bandits on the roads, the occasional mining dispute. Nothing Ironhaven cannot handle with proper management. *He tugs at his collar* Though if you happen to hear any unfortunate rumors, I do hope you'll come to me first. For context, you understand.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_evasive_about_trouble" }],
+      "choices": [
+        {
+          "text": "What rumors should I be listening for?",
+          "nextNodeId": "what_rumors"
+        },
+        {
+          "text": "You seem nervous, Mayor.",
+          "nextNodeId": "nervous_accusation"
+        },
+        {
+          "text": "I'll keep my ears open.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "what_rumors",
+      "text": "*He exhales heavily* There have been... whispers. About the mines. About workers going missing. About strange lights in the mountains at night. All nonsense, of course! Superstitious prattle from uneducated laborers. But such stories can frighten away investors, and we simply cannot have that. *He meets your eyes* If you could help put these rumors to rest - discreetly - I would be most grateful.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_rumors" }],
+      "choices": [
+        {
+          "text": "What would 'putting rumors to rest' involve?",
+          "nextNodeId": "rumors_quest_offer"
+        },
+        {
+          "text": "What if the rumors are true?",
+          "nextNodeId": "rumors_true"
+        },
+        {
+          "text": "I'm not interested in politics.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "rumors_quest_offer",
+      "text": "Simply... investigate. Find the source of these tales and provide a rational explanation. If there IS something amiss - which I'm certain there isn't - we can address it properly. But do try to be circumspect about it. IVRC has representatives in town, and they do so love to make reports. *He reaches into his desk and produces a small purse* There would be compensation, of course. Generous compensation.",
+      "choices": [
+        {
+          "text": "[Accept Quest] I'll look into it quietly.",
+          "nextNodeId": "quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        },
+        {
+          "text": "How much are we talking?",
+          "nextNodeId": "compensation_details"
+        },
+        {
+          "text": "I need to think about it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "compensation_details",
+      "text": "One hundred gold pieces upon resolution of this matter to my satisfaction. Plus, of course, my personal gratitude - which carries considerable weight in this town, I assure you. *He leans back in his chair* I can also arrange introductions to influential people, access to restricted areas. Whatever you might need to... conduct your investigation.",
+      "choices": [
+        {
+          "text": "[Accept Quest] Very well. I'll help.",
+          "nextNodeId": "quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        },
+        {
+          "text": "I want 150 gold, or no deal.",
+          "nextNodeId": "negotiate_payment",
+          "conditions": [{ "type": "SkillGte", "target": "charisma", "value": 3 }]
+        },
+        {
+          "text": "Not interested in being your fixer.",
+          "nextNodeId": "refuse_quest"
+        }
+      ]
+    },
+    {
+      "id": "negotiate_payment",
+      "text": "*He sputters for a moment, then regains composure* One hundred fifty... *He calculates silently* Very well. You drive a hard bargain, but these are desperate times. One hundred fifty gold upon completion. But I expect results, not excuses. Do we have an understanding?",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "negotiated_higher_pay" }],
+      "choices": [
+        {
+          "text": "[Accept Quest] We have a deal.",
+          "nextNodeId": "quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        },
+        {
+          "text": "Let me consider it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "quest_accepted",
+      "text": "Excellent! Excellent! *He practically beams with relief* I knew you were a person of discernment. Now, I suggest you begin at the Rusty Pick Saloon - that's where most of these idle tales seem to originate. Miners with too much drink and too little sense. *He hands you a small badge* Show this if anyone questions your authority. It grants you... certain privileges.",
+      "onEnterEffects": [
+        { "type": "GiveItem", "target": "mayors_badge" },
+        { "type": "ChangeReputation", "value": 10 }
+      ],
+      "choices": [
+        {
+          "text": "What can you tell me about the specific incidents?",
+          "nextNodeId": "specific_incidents"
+        },
+        {
+          "text": "Who should I talk to first?",
+          "nextNodeId": "who_to_talk"
+        },
+        {
+          "text": "I'll get started.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "specific_incidents",
+      "text": "Three miners have gone missing in the past month. The official explanation is that they simply moved on - not uncommon for the transient labor force. But their families claim they wouldn't leave without word. *He waves dismissively* There's also been talk of strange noises from the old Ironpick shaft - the one that collapsed years ago. Merely settling rock, I'm sure.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_missing_miners" }],
+      "choices": [
+        {
+          "text": "Why was the Ironpick shaft sealed?",
+          "nextNodeId": "ironpick_shaft_history"
+        },
+        {
+          "text": "Can I get the names of the missing miners?",
+          "nextNodeId": "missing_miner_names"
+        },
+        {
+          "text": "I'll investigate.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ironpick_shaft_history",
+      "text": "*His expression darkens* A tragedy. Cave-in some ten years past. Fourteen men lost. The Ironpick family owned that claim before... well, before circumstances forced them to sell. Old Samuel Ironpick never forgave the town for not doing more. Fled to the mountains with his granddaughter. *He sighs* Ancient history now. But some say the shaft is cursed. Nonsense, of course.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_told_ironpick_history" }],
+      "choices": [
+        {
+          "text": "Who owns the claim now?",
+          "nextNodeId": "who_owns_claim"
+        },
+        {
+          "text": "Do you believe in curses?",
+          "nextNodeId": "curse_belief"
+        },
+        {
+          "text": "I should investigate that shaft.",
+          "nextNodeId": null,
+          "effects": [{ "type": "UnlockLocation", "target": "ironpick_shaft" }]
+        }
+      ]
+    },
+    {
+      "id": "who_owns_claim",
+      "text": "*He clears his throat* IVRC purchased the mineral rights after the collapse. At a fair price, I should note - they helped compensate the families of the deceased. The shaft itself remains sealed, too dangerous to reopen. Though IVRC's engineers have been... surveying the area recently. For safety purposes, I'm told.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_ivrc_owns_shaft" }],
+      "choices": [
+        {
+          "text": "IVRC seems to be everywhere.",
+          "nextNodeId": "ivrc_power"
+        },
+        {
+          "text": "What are they really doing there?",
+          "nextNodeId": "ivrc_surveying"
+        },
+        {
+          "text": "Thank you, Mayor.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ivrc_surveying",
+      "text": "*He shifts uncomfortably* I... am not entirely certain. Director Thorne does not always share the details of company operations with local authorities. But I trust their judgment. IVRC has been a generous partner to Ironhaven. *His eyes dart to the window* Without their investment, this town would have dried up years ago.",
+      "choices": [
+        {
+          "text": "At what cost?",
+          "nextNodeId": "ivrc_cost"
+        },
+        {
+          "text": "You seem afraid of them.",
+          "nextNodeId": "afraid_of_ivrc"
+        },
+        {
+          "text": "I understand.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ivrc_cost",
+      "text": "*He laughs, but it's hollow* Cost? Progress always has a cost, my friend. We provide labor and resources; they provide capital and connections. A fair exchange. *His voice drops* Though I sometimes wonder... No. No, it's nothing. Just the worries of an old politician. IVRC is our partner. Our future depends on them.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_has_doubts" }],
+      "choices": [
+        {
+          "text": "What were you about to say?",
+          "nextNodeId": "mayor_confession"
+        },
+        {
+          "text": "You don't sound convinced.",
+          "nextNodeId": "mayor_doubt"
+        },
+        {
+          "text": "I'll keep your concerns in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "mayor_confession",
+      "text": "*He glances at the door, then speaks barely above a whisper* There are... things I've been asked to overlook. Safety reports that never get filed. Workers who complain and then vanish from the payroll. Shipments that come in at night and are never logged. *He grips his desk* I've built my career on this town. I cannot afford to ask too many questions.",
+      "expression": "worried",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "mayor_confessed" },
+        { "type": "ChangeReputation", "value": 15 }
+      ],
+      "choices": [
+        {
+          "text": "You could help me expose them.",
+          "nextNodeId": "expose_offer"
+        },
+        {
+          "text": "Your secret is safe with me.",
+          "nextNodeId": "secret_safe"
+        },
+        {
+          "text": "Cowardice disguised as pragmatism.",
+          "nextNodeId": "cowardice_accusation",
+          "tags": ["aggressive"]
+        }
+      ]
+    },
+    {
+      "id": "expose_offer",
+      "text": "*His face pales* Expose them? Do you know what they would do to me? To this town? *He shakes his head* No. No, I cannot risk it. Not openly. But... if you were to find evidence on your own, evidence that couldn't be traced back to me... *He swallows* I might be persuaded to look the other way while you... investigate certain restricted areas.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_willing_to_help_secretly" }],
+      "choices": [
+        {
+          "text": "What areas might those be?",
+          "nextNodeId": "restricted_areas"
+        },
+        {
+          "text": "Plausible deniability. I understand.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 10 }]
+        }
+      ]
+    },
+    {
+      "id": "restricted_areas",
+      "text": "The old Ironpick shaft, for one. IVRC's warehouse by the rail yard - they keep it heavily guarded. And... *He hesitates* There's a telegraph office that receives coded messages from IVRC headquarters. The operator is loyal to Thorne, but he drinks at the Rusty Pick. Heavily. Perhaps you could... learn something useful during his cups.",
+      "onEnterEffects": [
+        { "type": "UnlockLocation", "target": "ironpick_shaft" },
+        { "type": "UnlockLocation", "target": "ivrc_warehouse" },
+        { "type": "SetFlag", "target": "knows_about_telegraph_operator" }
+      ],
+      "choices": [
+        {
+          "text": "Thank you for the information.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 10 }]
+        }
+      ]
+    },
+    {
+      "id": "secret_safe",
+      "text": "*Relief washes over his face* Thank you. I... I do want what's best for this town. Truly. But there are forces at work here that are beyond my control. *He composes himself* Do what you can. Find the truth. And when you do, come to me first. Together, perhaps we can find a way forward that doesn't destroy everything I've built.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "You have my word.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "cowardice_accusation",
+      "text": "*His face flushes red* Cowardice?! You dare... *He deflates* Perhaps you're right. Perhaps I am a coward. But I have a wife, children. A life here. It's easy to judge from the outside, stranger. When you have something to lose, we'll see how brave you are.",
+      "expression": "angry",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": -10 }],
+      "choices": [
+        {
+          "text": "I apologize. That was unfair.",
+          "nextNodeId": "apologize_response",
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        },
+        {
+          "text": "Fair point. I spoke out of turn.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "apologize_response",
+      "text": "*He sighs heavily* No... you're not entirely wrong. I've made compromises I'm not proud of. But every decision was made to protect this town. Or so I tell myself. *He meets your eyes* Just... be careful. Thorne has eyes everywhere. And his reach is longer than you know.",
+      "choices": [
+        {
+          "text": "I'll watch my back.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "afraid_of_ivrc",
+      "text": "*He stiffens* Afraid? A strong word. Let us say... respectful of their capabilities. IVRC has resources that can make or break towns like ours with a stroke of a pen. Director Thorne is not a man to cross lightly. *He lowers his voice* I've seen what happens to those who oppose him. It is not pleasant.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_warned_about_thorne" }],
+      "choices": [
+        {
+          "text": "What happens to them?",
+          "nextNodeId": "thorne_victims"
+        },
+        {
+          "text": "You're basically his puppet, then.",
+          "nextNodeId": "puppet_accusation",
+          "tags": ["aggressive"]
+        },
+        {
+          "text": "I appreciate the warning.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_victims",
+      "text": "They lose their businesses. Their homes. Their families find themselves unwelcome in every settlement for a hundred miles. And some... *He pauses* Some simply disappear. No bodies. No evidence. Just... gone. The Sheriff investigates, of course. He never finds anything. *His voice drops to barely a whisper* Because there's nothing left to find.",
+      "expression": "afraid",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_thorne_disappearances" }],
+      "choices": [
+        {
+          "text": "Someone needs to stop him.",
+          "nextNodeId": "stop_thorne"
+        },
+        {
+          "text": "That's... disturbing.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "stop_thorne",
+      "text": "*He laughs bitterly* Stop him? With what? He has the law in his pocket, the Pinkertons at his call, and more money than God. The only way to stop a man like Thorne is with evidence so damning that even his allies cannot ignore it. Evidence that proves crimes against the state, not just against simple folk. *He pauses* Or a bullet. But that would just make a martyr.",
+      "choices": [
+        {
+          "text": "Where would such evidence be?",
+          "nextNodeId": "evidence_location"
+        },
+        {
+          "text": "Maybe both.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "evidence_location",
+      "text": "If I knew that, do you think I'd still be playing puppet for him? *He sighs* There are rumors that the Ironpicks had something. Documents, ledgers. Proof of IVRC's early crimes in the territory. But their house burned, and Samuel took whatever survived to the mountains. *He shakes his head* Perhaps it's all just wishful thinking.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_ironpick_documents" }],
+      "choices": [
+        {
+          "text": "The Ironpicks might help if approached right.",
+          "nextNodeId": "ironpick_approach"
+        },
+        {
+          "text": "I'll keep looking.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ironpick_approach",
+      "text": "Perhaps. Old Samuel has no love for anyone associated with this town - myself included. I was on the council when the shaft collapsed, you see. Voted to accept IVRC's 'compensation' rather than demand a proper investigation. *His voice is heavy with regret* It seemed practical at the time. Now it haunts me.",
+      "choices": [
+        {
+          "text": "Guilt can be a powerful motivator for change.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+    {
+      "id": "puppet_accusation",
+      "text": "*His jaw tightens* I am NO ONE'S puppet. I do what I must to keep this town alive. Every compromise, every blind eye, every swallowed piece of pride - it's all for Ironhaven. *He glares* Judge me when you've held a community's future in your hands and watched it slip through your fingers.",
+      "expression": "angry",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": -10 }],
+      "choices": [
+        {
+          "text": "Then prove it. Help me fight back.",
+          "nextNodeId": "prove_it"
+        },
+        {
+          "text": "I've heard enough.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "prove_it",
+      "text": "*He stares at you for a long moment* Fight back... *He laughs, but there's something desperate in it* You're either very brave or very foolish. But perhaps... perhaps that's exactly what's needed. *He straightens* Very well. I cannot act openly, but I can provide information. Access. Just... don't let them trace anything back to me.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "mayor_secret_ally" },
+        { "type": "ChangeReputation", "value": 15 }
+      ],
+      "choices": [
+        {
+          "text": "You won't regret this.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ivrc_power",
+      "text": "*He gestures broadly at the room* Look around you. This desk - IVRC imported it from Chicago. The gaslights, the telegraph lines, the rail station - all IVRC investments. Half the town works for them directly or indirectly. Without IVRC, Ironhaven would be just another ghost town waiting to happen.",
+      "choices": [
+        {
+          "text": "There must be limits to what you'd accept.",
+          "nextNodeId": "limits_question"
+        },
+        {
+          "text": "Dependency breeds vulnerability.",
+          "nextNodeId": "dependency_response"
+        },
+        {
+          "text": "I see.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "limits_question",
+      "text": "*His composure cracks slightly* Limits? I... yes. There must be limits. *He's quiet for a moment* If I ever had proof that they were harming the people of this town - real proof, not just rumors - I would act. I swear it. But until then... *He trails off* Until then, I play the game.",
+      "choices": [
+        {
+          "text": "I might be able to get you that proof.",
+          "nextNodeId": "proof_offer"
+        },
+        {
+          "text": "Convenient threshold.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "proof_offer",
+      "text": "*His eyes widen* You... could do that? *He leans forward* If you find evidence of crimes against the citizens of Ironhaven, bring it to me. Not to the Sheriff - he reports to Thorne. Bring it to ME. I may be a politician, but I am not a monster. If given the chance to do the right thing... I will take it.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_wants_evidence" }],
+      "choices": [
+        {
+          "text": "I'll hold you to that.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 10 }]
+        }
+      ]
+    },
+    {
+      "id": "dependency_response",
+      "text": "A poet's observation, perhaps. But poetry doesn't feed families or build schools. *He sighs* I know what we've become. A company town in all but name. But the alternative was worse - watching good people starve while their farms dried up and their mines ran empty. IVRC offered salvation. The price... the price came later.",
+      "choices": [
+        {
+          "text": "Salvation is an interesting choice of words.",
+          "nextNodeId": "salvation_reference"
+        },
+        {
+          "text": "Sometimes the cure is worse than the disease.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "salvation_reference",
+      "text": "*He blinks* Is it? Merely a turn of phrase. *But there's something in his expression - a flicker of recognition* Though now that you mention it... Director Thorne has used that word as well. 'Salvation awaits,' he once said. I thought it merely corporate platitude. Why do you ask?",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_heard_salvation" }],
+      "choices": [
+        {
+          "text": "I've heard it before. It may be significant.",
+          "nextNodeId": "salvation_significance"
+        },
+        {
+          "text": "Just curious. Nevermind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "salvation_significance",
+      "text": "Significant how? *He frowns* I know there's a town called Salvation further west. Desert country. Supposedly run by some religious community. Thorne mentioned sending 'guests' there once - troublemakers, I assumed. Workers who needed to... cool off. *His face pales slightly* You don't think...?",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "mayor_mentioned_salvation_town" },
+        { "type": "UnlockLocation", "target": "salvation" }
+      ],
+      "choices": [
+        {
+          "text": "I intend to find out.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "investigating_salvation" }]
+        }
+      ]
+    },
+    {
+      "id": "work_response",
+      "text": "*He brightens* Work? Splendid! Ironhaven is a town of opportunity. The mines are always hiring, though the labor is... demanding. Or if you have other skills - a steady hand, a sharp mind - I occasionally have need of individuals who can handle... sensitive matters.",
+      "choices": [
+        {
+          "text": "What kind of sensitive matters?",
+          "nextNodeId": "sensitive_matters"
+        },
+        {
+          "text": "Tell me about the mines.",
+          "nextNodeId": "mines_info"
+        },
+        {
+          "text": "I'll consider my options.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "sensitive_matters",
+      "text": "This and that. Occasionally a message needs delivering to someone who doesn't want to be found. Or a... disagreement needs mediating between parties who prefer to remain anonymous. Nothing illegal, I assure you! *He adjusts his monocle* Well, nothing too illegal. The frontier requires flexibility in such matters.",
+      "choices": [
+        {
+          "text": "Do you have anything that needs doing now?",
+          "nextNodeId": "current_jobs"
+        },
+        {
+          "text": "I prefer to know exactly what I'm getting into.",
+          "nextNodeId": "specifics_demand"
+        }
+      ]
+    },
+    {
+      "id": "current_jobs",
+      "text": "As a matter of fact... *He glances at a stack of papers* There's a merchant named Hargrove who owes certain debts to certain parties. He's been avoiding collection, hiding out in the abandoned trading post north of town. I need someone to... remind him of his obligations. Persuade him to pay. Non-violently, if possible.",
+      "choices": [
+        {
+          "text": "[Accept Quest] I can be persuasive.",
+          "nextNodeId": "debt_quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "hargrove_debt" }]
+        },
+        {
+          "text": "How much does he owe?",
+          "nextNodeId": "debt_amount"
+        },
+        {
+          "text": "Debt collection isn't my line.",
+          "nextNodeId": "decline_debt"
+        }
+      ]
+    },
+    {
+      "id": "debt_quest_accepted",
+      "text": "Excellent! The debt is fifty gold. Bring me forty, and you may keep ten for your trouble. Hargrove is a coward at heart - a stern word should suffice. If he claims poverty, search his belongings. The man's a packrat; he'll have something of value hidden away.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "accepted_hargrove_quest" }],
+      "choices": [
+        {
+          "text": "Consider it done.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "debt_amount",
+      "text": "Fifty gold pieces. A gambling debt, I'm told. The creditor is... anxious to reclaim it. Hargrove had three weeks to pay; he chose to flee instead. *He shrugs* A foolish decision. The frontier is not so large that a man can simply disappear. Not from those who know how to look.",
+      "choices": [
+        {
+          "text": "[Accept Quest] I'll track him down.",
+          "nextNodeId": "debt_quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "hargrove_debt" }]
+        },
+        {
+          "text": "Not my problem.",
+          "nextNodeId": "decline_debt"
+        }
+      ]
+    },
+    {
+      "id": "decline_debt",
+      "text": "*He waves dismissively* No matter, no matter. The task will find someone. If you change your mind, my door is open. Ironhaven values those who can solve problems, whatever their methods.",
+      "choices": [
+        {
+          "text": "I'll keep that in mind.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "mines_info",
+      "text": "The IVRC Iron Mountain complex is the economic heart of this region. Copper, iron, and occasionally something more exotic. Pay is reasonable, conditions are... well, mining conditions. *He pauses* The foreman, Burke, can be difficult. But hard workers are rewarded. Eventually.",
+      "choices": [
+        {
+          "text": "I've heard the mines can be dangerous.",
+          "nextNodeId": "mine_dangers"
+        },
+        {
+          "text": "What's this 'something more exotic'?",
+          "nextNodeId": "exotic_minerals"
+        },
+        {
+          "text": "Thank you for the information.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "mine_dangers",
+      "text": "Dangerous? All mines carry risk. Cave-ins, gas pockets, equipment failures. IVRC maintains... adequate safety standards. *He says it like he's reading from a script* The recent incidents are... anomalies. Being investigated. *He looks uncomfortable* I'm sure everything is fine.",
+      "choices": [
+        {
+          "text": "You don't sound sure.",
+          "nextNodeId": "hiding_trouble"
+        },
+        {
+          "text": "What incidents?",
+          "nextNodeId": "what_rumors"
+        }
+      ]
+    },
+    {
+      "id": "exotic_minerals",
+      "text": "*He looks around nervously* I've said too much already. IVRC considers their mining operations proprietary information. Suffice to say, the mountains hold treasures beyond mere iron and copper. *He lowers his voice* Aetherium, some call it. A substance with... unusual properties. But you didn't hear that from me.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_aetherium" }],
+      "choices": [
+        {
+          "text": "Aetherium? What does it do?",
+          "nextNodeId": "aetherium_properties"
+        },
+        {
+          "text": "Your secret is safe.",
+          "nextNodeId": null,
+          "effects": [{ "type": "ChangeReputation", "value": 5 }]
+        }
+      ]
+    },
+    {
+      "id": "aetherium_properties",
+      "text": "I'm no scientist. But I've seen the machinery IVRC builds with it. Engines that run on steam and... something else. Lights that glow without flame. *He shudders slightly* Weapons, too, if the rumors are true. The future, they call it. Progress. *He doesn't sound convinced* Some things perhaps should remain buried.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_about_aetherium" }],
+      "choices": [
+        {
+          "text": "Where does IVRC ship this aetherium?",
+          "nextNodeId": "aetherium_destination"
+        },
+        {
+          "text": "Progress has a price.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "aetherium_destination",
+      "text": "East, mostly. Factories and research facilities back in civilization. But some of it... *He hesitates* Some goes to a place they call 'Project Remnant.' I don't know where or what it is. Only that it's Thorne's personal obsession. Very hush-hush. Very... concerning.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_project_remnant" }],
+      "choices": [
+        {
+          "text": "Project Remnant sounds important. I'll look into it.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "investigating_remnant" }]
+        },
+        {
+          "text": "Thorne seems to have many secrets.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "problems_response",
+      "text": "*His smile freezes* Problems? I... wouldn't characterize it that way. Every frontier settlement faces challenges. We are no different. *He straightens his waistcoat* Whatever you may have heard, I assure you that Ironhaven is a stable, prosperous community with excellent growth potential.",
+      "choices": [
+        {
+          "text": "That sounds rehearsed.",
+          "nextNodeId": "rehearsed_accusation"
+        },
+        {
+          "text": "I've heard about missing miners.",
+          "nextNodeId": "missing_miners_direct"
+        },
+        {
+          "text": "Fair enough. What about opportunities here?",
+          "nextNodeId": "work_response"
+        }
+      ]
+    },
+    {
+      "id": "rehearsed_accusation",
+      "text": "*He deflates slightly* Perhaps because I've had to say it many times. To investors, to IVRC inspectors, to my own mirror some mornings. *He removes his monocle and polishes it* The truth is... complicated. But you seem like someone who appreciates complexity. What, specifically, brings you to ask?",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "I want to help, but I need to know what's really happening.",
+          "nextNodeId": "help_offer_direct"
+        },
+        {
+          "text": "Just gathering information.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "help_offer_direct",
+      "text": "*He studies you carefully* Help. A dangerous word. Help for whom? The town? The workers? IVRC? Me? *He leans back* Tell me - if you had to choose between stability and truth, which would you pick?",
+      "choices": [
+        {
+          "text": "Truth. Always truth.",
+          "nextNodeId": "truth_choice"
+        },
+        {
+          "text": "Stability, if it protects innocent people.",
+          "nextNodeId": "stability_choice"
+        },
+        {
+          "text": "Depends on the situation.",
+          "nextNodeId": "pragmatic_choice"
+        }
+      ]
+    },
+    {
+      "id": "truth_choice",
+      "text": "*He sighs* An idealist. The frontier does not treat idealists kindly, I'm afraid. *He pauses* But perhaps that's exactly what we need. Someone who won't accept comfortable lies. *He meets your eyes* Very well. If it's truth you want, start at the Ironpick shaft. Something is happening there that IVRC doesn't want anyone to see.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "mayor_respects_idealism" },
+        { "type": "UnlockLocation", "target": "ironpick_shaft" },
+        { "type": "ChangeReputation", "value": 10 }
+      ],
+      "choices": [
+        {
+          "text": "I'll find out what they're hiding.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "stability_choice",
+      "text": "*He nods slowly* A practical mind. Good. The truth can be a weapon, but weapons cut both ways. *He straightens* I have a task that requires someone who understands discretion. Help me calm the workers' fears, and I'll make sure you're well compensated.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "What do you need?",
+          "nextNodeId": "rumors_quest_offer"
+        },
+        {
+          "text": "Calm their fears how?",
+          "nextNodeId": "calm_fears_method"
+        }
+      ]
+    },
+    {
+      "id": "calm_fears_method",
+      "text": "Find the source of these rumors and... provide an alternative explanation. The strange lights are swamp gas. The missing miners left for better opportunities. The noises from the shaft are merely settling rock. *He spreads his hands* Truth is subjective, my friend. What matters is what people believe.",
+      "choices": [
+        {
+          "text": "You want me to lie for you.",
+          "nextNodeId": "lying_accusation"
+        },
+        {
+          "text": "[Accept Quest] I'll see what I can do.",
+          "nextNodeId": "quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        }
+      ]
+    },
+    {
+      "id": "lying_accusation",
+      "text": "*He winces* 'Lie' is such an ugly word. I prefer 'strategic reframing.' *He sighs* Look, I don't know what's happening at that shaft. Perhaps there IS a rational explanation. But even if there isn't, panic helps no one. If you find proof of something truly dangerous, bring it to me. We'll... address it. Quietly.",
+      "choices": [
+        {
+          "text": "Fine. But I report what I find, not what you want to hear.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "StartQuest", "target": "restore_town_reputation" },
+            { "type": "SetFlag", "target": "will_report_truth" }
+          ]
+        },
+        {
+          "text": "This isn't the job for me.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "pragmatic_choice",
+      "text": "*He actually smiles - a genuine one* Now THAT is an answer I understand. Context matters. Nuance. The ability to adapt. *He leans forward* I think we could work well together. What would you say to a... mutually beneficial arrangement?",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "I'm listening.",
+          "nextNodeId": "rumors_quest_offer"
+        },
+        {
+          "text": "Depends on the benefits.",
+          "nextNodeId": "compensation_details"
+        }
+      ]
+    },
+    {
+      "id": "missing_miners_direct",
+      "text": "*His face falls* Ah. Yes. Three men in the past month. Their families are... understandably distressed. *He clasps his hands* The official position is that they moved on. Transient workers do that. But I've seen the look in their wives' eyes. They don't believe it. Neither, if I'm honest, do I.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_admitted_missing_miners" }],
+      "choices": [
+        {
+          "text": "What do you think happened to them?",
+          "nextNodeId": "missing_theory"
+        },
+        {
+          "text": "Why hasn't anyone investigated?",
+          "nextNodeId": "investigation_blocked"
+        }
+      ]
+    },
+    {
+      "id": "missing_theory",
+      "text": "*He lowers his voice* I don't know. And that terrifies me. Men don't simply vanish. Not without... *He trails off* There are rumors about the old Ironpick shaft. Sounds. Movement. Some say the collapse never killed everyone inside. That something survived down there. *He shudders* Nonsense, surely. But...",
+      "choices": [
+        {
+          "text": "Something survived?",
+          "nextNodeId": "survival_theory"
+        },
+        {
+          "text": "I could investigate if you authorize it.",
+          "nextNodeId": "investigation_authorization"
+        }
+      ]
+    },
+    {
+      "id": "survival_theory",
+      "text": "Ghost stories. The ravings of drunk miners. *But he doesn't sound convinced* Though I've heard that IVRC has been conducting... experiments. Using that strange mineral they mine. Aetherium. Perhaps they disturbed something they shouldn't have. Or created something. *He looks genuinely frightened* I don't know anymore.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_fears_experiments" }],
+      "choices": [
+        {
+          "text": "I'll find out what's really happening.",
+          "nextNodeId": "investigation_authorization"
+        },
+        {
+          "text": "This is above my pay grade.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "investigation_blocked",
+      "text": "*He laughs bitterly* Investigated? By whom? The Sheriff takes his orders from IVRC. The territorial marshal is three days ride away and has no interest in 'labor disputes.' I've sent letters to the governor - they were returned unopened. We are isolated here, my friend. On our own.",
+      "choices": [
+        {
+          "text": "Then let me investigate unofficially.",
+          "nextNodeId": "investigation_authorization"
+        },
+        {
+          "text": "Someone must be able to help.",
+          "nextNodeId": "outside_help"
+        }
+      ]
+    },
+    {
+      "id": "investigation_authorization",
+      "text": "*He stares at you for a long moment* You would do that? Knowing the risks? *He reaches into his desk and produces a document* This grants you authority to investigate matters of public safety on behalf of my office. It won't protect you from IVRC, but it might slow them down. *He signs it with a flourish* Find the truth. Please.",
+      "onEnterEffects": [
+        { "type": "GiveItem", "target": "investigation_warrant" },
+        { "type": "StartQuest", "target": "restore_town_reputation" },
+        { "type": "ChangeReputation", "value": 15 }
+      ],
+      "choices": [
+        {
+          "text": "I won't let you down.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "outside_help",
+      "text": "The Freeminers in the mountains - they have no love for IVRC. Samuel Ironpick's people. But they're as likely to shoot a stranger as talk to one. *He pauses* There's also the Copperheads. Outlaws, yes, but they've been hitting IVRC operations. The enemy of my enemy... but I cannot be seen associating with criminals.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_potential_allies" }],
+      "choices": [
+        {
+          "text": "Maybe I could reach out to them.",
+          "nextNodeId": "reach_out"
+        },
+        {
+          "text": "What about legitimate channels?",
+          "nextNodeId": "investigation_blocked"
+        }
+      ]
+    },
+    {
+      "id": "reach_out",
+      "text": "If you could... *He hesitates* I cannot officially sanction any contact with outlaws or separatist groups. But if someone were to, hypothetically, establish communication... I would be very interested in what they might have to say. Hypothetically.",
+      "choices": [
+        {
+          "text": "Hypothetically understood.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "mayor_wants_outlaw_contact" }]
+        }
+      ]
+    },
+    {
+      "id": "direct_response",
+      "text": "*His pleasant mask slips for a moment, revealing exhaustion underneath* Going on? *He laughs hollowly* The same thing that's always going on. A town trying to survive between the greed of corporations and the desperation of common folk. *He meets your eyes* You want the truth? The truth is I don't know what's happening anymore. I just try to keep everyone alive until morning.",
+      "expression": "tired",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 5 }],
+      "choices": [
+        {
+          "text": "That's surprisingly honest.",
+          "nextNodeId": "honest_moment"
+        },
+        {
+          "text": "Then help me help this town.",
+          "nextNodeId": "help_offer_direct"
+        }
+      ]
+    },
+    {
+      "id": "honest_moment",
+      "text": "Honesty is a luxury I cannot often afford. *He gestures to the window* Out there, I am Mayor Holt - confident, in control, optimistic about Ironhaven's future. In here... *He slumps slightly* In here, I am a man watching his town slip away, piece by piece, to forces I cannot control.",
+      "choices": [
+        {
+          "text": "What forces?",
+          "nextNodeId": "ivrc_power"
+        },
+        {
+          "text": "Perhaps it's time to fight back.",
+          "nextNodeId": "prove_it"
+        }
+      ]
+    },
+    {
+      "id": "curse_belief",
+      "text": "*He laughs nervously* Curses? I am a man of reason and progress. Science. Engineering. The marvels of the modern age. *He pauses* But in the quiet hours of the night, when I hear the wind howling through the canyons... I wonder. Some things on the frontier seem beyond rational explanation.",
+      "choices": [
+        {
+          "text": "Like what?",
+          "nextNodeId": "unexplained_things"
+        },
+        {
+          "text": "Science explains everything eventually.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "unexplained_things",
+      "text": "Lights in the mountains with no visible source. The way certain machinery behaves when exposed to aetherium. *He lowers his voice* The things IVRC's scientists mutter about when they think no one's listening. 'Resonance patterns.' 'Temporal anomalies.' Words that mean nothing to me but seem to terrify them.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_mentioned_anomalies" }],
+      "choices": [
+        {
+          "text": "Sounds like IVRC is experimenting with something dangerous.",
+          "nextNodeId": "dangerous_experiments"
+        },
+        {
+          "text": "Scientists always speak in jargon.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "dangerous_experiments",
+      "text": "Perhaps. Director Thorne calls it 'progress.' But I've seen progress before. This feels... different. Wrong, somehow. Like they're trying to control something that doesn't want to be controlled. *He shakes his head* Listen to me. Raving like old Samuel in his mountain cave. Forget I said anything.",
+      "choices": [
+        {
+          "text": "Some things shouldn't be forgotten.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "mayor_shared_fears" }]
+        }
+      ]
+    },
+    {
+      "id": "missing_miner_names",
+      "text": "Of course. *He consults a ledger* Thomas Harwell, age 34. Marcus Chen, age 28. And young William Prescott, barely 19. All good workers, according to their foreman. All with families who are now left to wonder. *He slides the ledger toward you* Their addresses are listed here, if you wish to speak with their kin.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "knows_missing_miner_names" },
+        { "type": "GiveItem", "target": "miner_family_addresses" }
+      ],
+      "choices": [
+        {
+          "text": "I'll speak with them.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "who_to_talk",
+      "text": "Start with the families, perhaps. They'll tell you what the official reports won't. The foreman, Burke, knows more than he says - but he's loyal to IVRC, so tread carefully. And there's an old prospector who drinks at the Rusty Pick - 'Goldtooth' Pete. Half-mad, but he knows these mountains better than anyone.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_gave_leads" }],
+      "choices": [
+        {
+          "text": "I'll follow up on all of them.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "rumors_true",
+      "text": "*He pales* If... if the rumors are true, then we have a much larger problem than public relations. But surely... surely there's a rational explanation. There must be. *He doesn't sound convinced* Find out. Find out and tell me. Please. I need to know what I'm dealing with.",
+      "choices": [
+        {
+          "text": "[Accept Quest] I'll get to the bottom of this.",
+          "nextNodeId": "quest_accepted",
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        },
+        {
+          "text": "And if the truth is worse than the rumors?",
+          "nextNodeId": "worse_than_rumors"
+        }
+      ]
+    },
+    {
+      "id": "worse_than_rumors",
+      "text": "*He's quiet for a long moment* Then I will have to decide whether I'm still the politician who bows to IVRC... or the man I used to be, before the compromises and the fear. *He meets your eyes* Find the truth. Whatever it is. I'll face it when the time comes.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_ready_for_truth" }],
+      "choices": [
+        {
+          "text": "You might have to choose sooner than you think.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "restore_town_reputation" }]
+        }
+      ]
+    },
+    {
+      "id": "refuse_quest",
+      "text": "*He sighs* Very well. I understand. Not everyone wishes to involve themselves in... complicated matters. But if you change your mind, my door is open. This town needs people willing to help. Even if help sometimes looks different than expected.",
+      "choices": [
+        {
+          "text": "I'll think about it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_visit_warning",
+      "text": "*The Mayor looks up from his desk with barely concealed panic* You! Thank goodness. I've just received word - Director Thorne himself is coming to Ironhaven. Arriving tomorrow. He wants a full report on town operations and... and anything 'unusual' that's been happening. *He wrings his hands* This is very bad.",
+      "expression": "afraid",
+      "choices": [
+        {
+          "text": "Why is his visit a problem?",
+          "nextNodeId": "thorne_visit_problem"
+        },
+        {
+          "text": "What do you need from me?",
+          "nextNodeId": "thorne_visit_help"
+        },
+        {
+          "text": "This could be an opportunity.",
+          "nextNodeId": "thorne_visit_opportunity"
+        }
+      ]
+    },
+    {
+      "id": "thorne_visit_problem",
+      "text": "Thorne doesn't make social calls. When he visits, it means someone has drawn unwanted attention. Someone has been asking questions they shouldn't ask, investigating things they shouldn't investigate. *He looks at you pointedly* Sound familiar? If he learns what you've been doing...",
+      "choices": [
+        {
+          "text": "Let him come. I'm not afraid.",
+          "nextNodeId": "not_afraid"
+        },
+        {
+          "text": "What do you suggest?",
+          "nextNodeId": "thorne_visit_help"
+        }
+      ]
+    },
+    {
+      "id": "not_afraid",
+      "text": "*He stares at you* Not afraid? Of Cornelius Thorne? *He laughs, but it's bitter* Then you're either very brave or very foolish. Perhaps both. *He pauses* But perhaps... perhaps that's exactly what's needed. Someone who won't back down.",
+      "onEnterEffects": [{ "type": "ChangeReputation", "value": 10 }],
+      "choices": [
+        {
+          "text": "Help me prepare for his arrival.",
+          "nextNodeId": "thorne_visit_help"
+        },
+        {
+          "text": "I'll handle Thorne my own way.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_visit_help",
+      "text": "I need you to... disappear for a few days. Or at least stay out of sight while he's here. Keep your head down. Once he leaves, we can resume our... arrangement. *He hesitates* Unless you'd rather confront him directly. But I warn you - that rarely ends well.",
+      "choices": [
+        {
+          "text": "I'll lay low.",
+          "nextNodeId": "lay_low"
+        },
+        {
+          "text": "Maybe it's time to force his hand.",
+          "nextNodeId": "force_hand"
+        }
+      ]
+    },
+    {
+      "id": "lay_low",
+      "text": "Wise. Very wise. *He looks relieved* I'll try to keep Thorne occupied with meaningless reports and tours of facilities he doesn't care about. When he leaves, find me. We'll discuss next steps. *He pauses* And please... be careful.",
+      "choices": [
+        {
+          "text": "You too, Mayor.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "force_hand",
+      "text": "*His eyes widen* Force his... are you MAD? *He takes a breath* But perhaps... perhaps if you had evidence. Real evidence. Something that would force even Thorne to answer questions. *He thinks* The telegraph office. IVRC transmissions. If you could intercept something incriminating while he's distracted...",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "plan_to_expose_thorne" }],
+      "choices": [
+        {
+          "text": "Tell me more about this plan.",
+          "nextNodeId": "exposure_plan"
+        },
+        {
+          "text": "That's very risky.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "exposure_plan",
+      "text": "While Thorne is here, security will be tight - but focused on him. The telegraph office might be less guarded than usual. If you could access the message logs, find proof of... anything illegal... *He swallows* I could present it to the territorial authorities. Claim I discovered it myself. It would destroy IVRC's hold on this town.",
+      "choices": [
+        {
+          "text": "And if it fails?",
+          "nextNodeId": "plan_failure"
+        },
+        {
+          "text": "I'll do it.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "intercept_transmissions" }]
+        }
+      ]
+    },
+    {
+      "id": "plan_failure",
+      "text": "Then we both disappear. Permanently. *He meets your eyes* I know the risk. But I've spent years being Thorne's puppet. Smiling while he hollows out my town. *His voice hardens* Some things are worth dying for. Is this one of them? That's for you to decide.",
+      "choices": [
+        {
+          "text": "It is for me. Count me in.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "StartQuest", "target": "intercept_transmissions" },
+            { "type": "SetFlag", "target": "mayor_committed_to_rebellion" }
+          ]
+        },
+        {
+          "text": "I need to think about this.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_visit_opportunity",
+      "text": "*He looks at you like you've grown a second head* Opportunity? How could Thorne's visit possibly be... *He trails off, thinking* Unless... you mean to use it against him somehow. Draw him out. Make him reveal something. *A spark of hope appears in his eyes* That's incredibly dangerous. And possibly brilliant.",
+      "choices": [
+        {
+          "text": "I have a few ideas.",
+          "nextNodeId": "exposure_plan"
+        },
+        {
+          "text": "We'll need to work together.",
+          "nextNodeId": "work_together"
+        }
+      ]
+    },
+    {
+      "id": "work_together",
+      "text": "Together... *He considers this* I've never had a real ally in this. Someone willing to take risks. *He extends his hand* Very well. Whatever happens, we face it together. Ironhaven deserves better than what IVRC has planned for it. And so do its people.",
+      "onEnterEffects": [
+        { "type": "SetFlag", "target": "mayor_full_ally" },
+        { "type": "ChangeReputation", "value": 25 }
+      ],
+      "choices": [
+        {
+          "text": "Let's make a plan.",
+          "nextNodeId": null,
+          "effects": [{ "type": "StartQuest", "target": "thorne_confrontation" }]
+        }
+      ]
+    },
+    {
+      "id": "quest_town_image",
+      "text": "*The Mayor looks up anxiously* Any progress on our little... situation? The workers grow more restless by the day, and IVRC's representatives have been asking questions. Very pointed questions.",
+      "choices": [
+        {
+          "text": "I've found evidence of something at the old shaft.",
+          "nextNodeId": "shaft_evidence",
+          "conditions": [{ "type": "FlagSet", "target": "found_shaft_evidence" }]
+        },
+        {
+          "text": "The missing miners - I know what happened.",
+          "nextNodeId": "miners_fate",
+          "conditions": [{ "type": "FlagSet", "target": "knows_miner_fate" }]
+        },
+        {
+          "text": "Still investigating. Need more time.",
+          "nextNodeId": "more_time"
+        }
+      ]
+    },
+    {
+      "id": "shaft_evidence",
+      "text": "*His face goes pale* Evidence? What kind of evidence? *He rises from his desk* Show me. Whatever you've found, I need to see it. This could change everything - for better or worse.",
+      "choices": [
+        {
+          "text": "[Show Evidence] See for yourself.",
+          "nextNodeId": "evidence_shown",
+          "conditions": [{ "type": "HasItem", "target": "shaft_evidence" }]
+        },
+        {
+          "text": "Not here. Too many eyes.",
+          "nextNodeId": "meet_privately"
+        }
+      ]
+    },
+    {
+      "id": "evidence_shown",
+      "text": "*He examines the evidence with shaking hands* This is... this is worse than I feared. IVRC isn't just mining. They're... *He looks up* We need to act. Now. Before Thorne covers this up like everything else. Will you help me take this to the authorities?",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_ready_to_act" }],
+      "choices": [
+        {
+          "text": "I'm with you.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "CompleteQuest", "target": "restore_town_reputation" },
+            { "type": "StartQuest", "target": "expose_ivrc" }
+          ]
+        },
+        {
+          "text": "What's your plan?",
+          "nextNodeId": "mayors_plan"
+        }
+      ]
+    },
+    {
+      "id": "mayors_plan",
+      "text": "I have contacts in the territorial capital. Politicians who owe me favors. If we can get this evidence to them before IVRC intercepts it... *He thinks* You'll need to ride fast. Take the mountain pass - it's dangerous but faster than the main road. I'll create a distraction here.",
+      "choices": [
+        {
+          "text": "Consider it done.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "CompleteQuest", "target": "restore_town_reputation" },
+            { "type": "StartQuest", "target": "ride_to_capital" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meet_privately",
+      "text": "You're right. Meet me at the old church, after midnight. The one on the hill. No one goes there anymore. *He lowers his voice* And watch your back. If you've found what I think you've found, IVRC will be very interested in silencing you.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "meeting_scheduled" }],
+      "choices": [
+        {
+          "text": "I'll be there.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "miners_fate",
+      "text": "*He grips the edge of his desk* The miners... you know what happened? *His voice is barely a whisper* Tell me. Even if it's terrible. I need to know what kind of monster I've been serving.",
+      "choices": [
+        {
+          "text": "[Reveal Truth] They were taken for experiments.",
+          "nextNodeId": "experiments_revealed",
+          "conditions": [{ "type": "FlagSet", "target": "discovered_experiments" }]
+        },
+        {
+          "text": "[Reveal Truth] IVRC killed them to hide something.",
+          "nextNodeId": "murder_revealed",
+          "conditions": [{ "type": "FlagSet", "target": "found_bodies" }]
+        }
+      ]
+    },
+    {
+      "id": "experiments_revealed",
+      "text": "*He staggers back as if struck* Experiments? On living people? *He covers his mouth* All this time I turned a blind eye to safety violations, missing reports, suspicious shipments... and THIS is what they were doing? *His expression hardens* No more. No more silence. What do we do?",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_fully_committed" }],
+      "choices": [
+        {
+          "text": "We expose them. Together.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "CompleteQuest", "target": "restore_town_reputation" },
+            { "type": "StartQuest", "target": "bring_down_ivrc" },
+            { "type": "ChangeReputation", "value": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "murder_revealed",
+      "text": "*He sinks into his chair* Murdered. They murdered them. *He's quiet for a long moment* I am complicit in this. Every time I signed a document without reading it, every time I looked away... their blood is on my hands too. *He looks up with hollow eyes* Tell me how to make this right.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "mayor_seeking_redemption" }],
+      "choices": [
+        {
+          "text": "Help me take IVRC down.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "CompleteQuest", "target": "restore_town_reputation" },
+            { "type": "StartQuest", "target": "bring_down_ivrc" },
+            { "type": "ChangeReputation", "value": 25 }
+          ]
+        },
+        {
+          "text": "You can start by telling me everything you know.",
+          "nextNodeId": "everything_known"
+        }
+      ]
+    },
+    {
+      "id": "everything_known",
+      "text": "*He nods slowly* Everything. Yes. *He pulls out papers, ledgers* Financial records. Meeting notes. Names of IVRC contacts. Everything I've collected over the years, hoping I'd never need it. *He pushes them toward you* Take it all. Use it. Make them pay for what they've done.",
+      "onEnterEffects": [
+        { "type": "GiveItem", "target": "mayors_evidence_cache" },
+        { "type": "ChangeReputation", "value": 20 }
+      ],
+      "choices": [
+        {
+          "text": "This will help. Thank you, Mayor.",
+          "nextNodeId": null,
+          "effects": [
+            { "type": "CompleteQuest", "target": "restore_town_reputation" },
+            { "type": "StartQuest", "target": "bring_down_ivrc" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "more_time",
+      "text": "*He nods, though anxiety lines his face* Time. Yes. But we may not have much of it. IVRC's patience is not infinite, and neither is my ability to deflect their questions. Work quickly, please. Before this situation spirals beyond our control.",
+      "choices": [
+        {
+          "text": "I'll report as soon as I have something solid.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "high_reputation_greeting",
+      "text": "*The Mayor rises with a genuine smile* My friend! Come in, come in. Your efforts on behalf of Ironhaven have not gone unnoticed. The workers trust you. Even some of IVRC's people speak well of you - which is saying something. What can this humble public servant do for you today?",
+      "expression": "friendly",
+      "choices": [
+        {
+          "text": "Any new developments I should know about?",
+          "nextNodeId": "new_developments"
+        },
+        {
+          "text": "I need your help with something.",
+          "nextNodeId": "help_request"
+        },
+        {
+          "text": "Just checking in.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "new_developments",
+      "text": "Always developments on the frontier. *He consults his notes* There's been increased activity at the old shaft - more guards, more shipments. IVRC claims it's just geological survey work, but... *He lowers his voice* I've also heard whispers about Director Thorne. He's planning something. Something big. The question is what.",
+      "choices": [
+        {
+          "text": "Do you have any specifics?",
+          "nextNodeId": "thorne_specifics"
+        },
+        {
+          "text": "I'll keep my ears open.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_specifics",
+      "text": "Nothing concrete. But he's been recalling all his agents from across the territory. Consolidating power, resources. Either he's preparing for war with someone... or he's about to unveil something he thinks will change everything. Given what we know about Project Remnant, that concerns me greatly.",
+      "choices": [
+        {
+          "text": "We should prepare for the worst.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "preparing_for_thorne" }]
+        }
+      ]
+    },
+    {
+      "id": "help_request",
+      "text": "Of course! After everything you've done for this town, any request you have will be given serious consideration. *He leans forward* What do you need?",
+      "choices": [
+        {
+          "text": "I need access to restricted IVRC areas.",
+          "nextNodeId": "restricted_access_request"
+        },
+        {
+          "text": "I need you to create a distraction.",
+          "nextNodeId": "distraction_request"
+        },
+        {
+          "text": "I need information about Project Remnant.",
+          "nextNodeId": "remnant_info_request"
+        }
+      ]
+    },
+    {
+      "id": "restricted_access_request",
+      "text": "*He winces* That's... a significant ask. IVRC guards those areas jealously. But for you... *He thinks* I can arrange a 'safety inspection' that requires your presence as an independent observer. It won't get you everywhere, but it's a start.",
+      "onEnterEffects": [{ "type": "GiveItem", "target": "inspection_papers" }],
+      "choices": [
+        {
+          "text": "That will help. Thank you.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "distraction_request",
+      "text": "A distraction? *He smiles slightly* Well, I AM a politician. Creating distractions is practically in the job description. What sort of distraction, and for how long?",
+      "choices": [
+        {
+          "text": "Keep the guards busy while I search the warehouse.",
+          "nextNodeId": "warehouse_distraction"
+        },
+        {
+          "text": "Draw Thorne's attention while I investigate.",
+          "nextNodeId": "thorne_distraction"
+        }
+      ]
+    },
+    {
+      "id": "warehouse_distraction",
+      "text": "The warehouse... *He nods* I'll arrange an 'impromptu inspection' of the rail yard facilities. That should pull most of the guards from the warehouse for at least an hour. Use the time wisely.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "warehouse_distraction_arranged" }],
+      "choices": [
+        {
+          "text": "Perfect. I'll be ready.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "thorne_distraction",
+      "text": "*He pales slightly* Draw Thorne's attention? That's... playing with fire. But if you're sure... *He thinks* I could request an urgent meeting about 'concerning financial irregularities.' That would keep him occupied and annoyed for hours.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "thorne_distraction_arranged" }],
+      "choices": [
+        {
+          "text": "Do it. I'll make it worth the risk.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "remnant_info_request",
+      "text": "Project Remnant... *He glances nervously at the door* What I know is fragmentary. It involves aetherium, certainly. Some kind of device or machine. Thorne treats it as his life's work. *He lowers his voice* There's an engineer, Clara, who used to work on it. She might know more. But be careful - she's still technically IVRC.",
+      "onEnterEffects": [{ "type": "SetFlag", "target": "knows_about_clara_remnant" }],
+      "choices": [
+        {
+          "text": "I'll seek her out carefully.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "return_greeting",
+      "text": "*Mayor Holt looks up from his paperwork* Ah, you again. What brings you to my office today? Town business, personal matters, or merely the pleasure of my sterling company?",
+      "expression": "neutral",
+      "choices": [
+        {
+          "text": "Any work that needs doing?",
+          "nextNodeId": "current_jobs"
+        },
+        {
+          "text": "What's the latest news in town?",
+          "nextNodeId": "town_news"
+        },
+        {
+          "text": "Just passing through.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "town_news",
+      "text": "News? *He shuffles papers* The usual frontier complications. Supply shortages, worker disputes, IVRC breathing down my neck about productivity. Oh, and there's been increased bandit activity on the roads - the Copperheads, presumably. Travel with caution.",
+      "choices": [
+        {
+          "text": "Tell me about the Copperheads.",
+          "nextNodeId": "copperhead_info"
+        },
+        {
+          "text": "What's IVRC pressuring you about?",
+          "nextNodeId": "ivrc_pressure"
+        },
+        {
+          "text": "Thanks for the update.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "copperhead_info",
+      "text": "Outlaws. Rebels. Freedom fighters, depending on who you ask. They've been hitting IVRC shipments with increasing frequency. *He sighs* Officially, I condemn their lawlessness. Unofficially... they've never hurt a townsperson. Only IVRC interests. Draw your own conclusions.",
+      "choices": [
+        {
+          "text": "Sounds like you have some sympathy for them.",
+          "nextNodeId": "copperhead_sympathy"
+        },
+        {
+          "text": "Outlaws are outlaws.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "copperhead_sympathy",
+      "text": "*He glances at the door before speaking* The Copperheads fight because they've been pushed too far. Many of them are former workers, former ranchers - people IVRC destroyed. I cannot condone violence, but I understand the desperation that drives it. *He pauses* And sometimes I wonder if they're the only ones willing to do what's necessary.",
+      "choices": [
+        {
+          "text": "Maybe someone should help them.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "mayor_sympathetic_to_copperheads" }]
+        },
+        {
+          "text": "Violence only begets more violence.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "ivrc_pressure",
+      "text": "What isn't IVRC pressuring me about? Production quotas. Labor costs. 'Security concerns.' *He makes air quotes* They want me to authorize expanded operations at the old shaft, despite my... reservations. Director Thorne has made it clear that refusal is not an option.",
+      "choices": [
+        {
+          "text": "What happens if you refuse?",
+          "nextNodeId": "refusal_consequences"
+        },
+        {
+          "text": "Can I help somehow?",
+          "nextNodeId": "help_with_ivrc"
+        }
+      ]
+    },
+    {
+      "id": "refusal_consequences",
+      "text": "Then I am replaced by someone more... cooperative. At best. At worst... *He trails off* Let's just say Thorne has ways of dealing with obstacles that don't involve paperwork. I've seen too many good people disappear to test his patience.",
+      "choices": [
+        {
+          "text": "That's a terrible way to live.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "help_with_ivrc",
+      "text": "*His eyes light up with hope* You would do that? *He composes himself* If you could find something - anything - that would give me leverage against them... evidence of wrongdoing that even the territorial courts couldn't ignore... it would change everything. For me. For this town.",
+      "choices": [
+        {
+          "text": "I'll see what I can find.",
+          "nextNodeId": null,
+          "effects": [{ "type": "SetFlag", "target": "promised_to_help_mayor" }]
+        }
+      ]
+    },
+    {
+      "id": "town_overview",
+      "text": "Ironhaven is a frontier success story! *He launches into what's clearly a rehearsed speech* Founded fifteen years ago as a simple mining camp, we've grown into a thriving community of over three hundred souls. We have a school, a church, THREE saloons, and direct rail connection to the east. What more could one ask for?",
+      "choices": [
+        {
+          "text": "What about the dark side of success?",
+          "nextNodeId": "dark_side"
+        },
+        {
+          "text": "Sounds prosperous.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "dark_side",
+      "text": "*His smile wavers* Every light casts a shadow, I suppose. The mines are... demanding. Workers come and go. Some don't go where they intended. *He clears his throat* But such is frontier life. Hazardous by nature. Nothing specific to Ironhaven, I assure you.",
+      "choices": [
+        {
+          "text": "That sounded very specific.",
+          "nextNodeId": "hiding_trouble"
+        },
+        {
+          "text": "I'll take your word for it.",
+          "nextNodeId": null
+        }
+      ]
+    },
+    {
+      "id": "specifics_demand",
+      "text": "*He nods approvingly* Prudent. Very well. Sometimes I need messages delivered to parties who prefer to remain anonymous. Sometimes documents need to... disappear. And occasionally, individuals need to be reminded of their obligations through non-violent means. Nothing that would trouble your conscience unduly, I'm sure.",
+      "choices": [
+        {
+          "text": "Do you have something now?",
+          "nextNodeId": "current_jobs"
+        },
+        {
+          "text": "I'll think about it.",
+          "nextNodeId": null
+        }
+      ]
+    }
+  ]
+}

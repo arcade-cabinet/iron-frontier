@@ -1,0 +1,2837 @@
+{
+  "quests": [
+    {
+      "id": "sq1_old_timers_tales",
+      "title": "Old Timer's Tales",
+      "description": "Old Timer Gus has been on this frontier for decades. He has stories to tell, if you have time to listen.",
+      "type": "Side",
+      "giverNpcId": "old_timer_gus",
+      "startLocationId": "frontiers_edge",
+      "recommendedLevel": 1,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "lore", "dialogue", "simple"],
+      "prerequisites": {
+        "completedQuestIds": ["mq1_stranger_arrives"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_first_tale",
+          "title": "The First Tale",
+          "description": "Listen to Old Timer Gus tell his first story.",
+          "onStartText": "Old Timer Gus sits on his favorite bench, watching the world go by. He seems pleased to have company.",
+          "onCompleteText": "Gus tells you about the founding of Frontier's Edge - how it was just a waystation before the railroad came. 'Come back tomorrow,' he says. 'I got more tales.'",
+          "objectives": [
+            {
+              "id": "obj_talk_gus_1",
+              "description": "Listen to Old Timer Gus tell a story",
+              "type": "Talk",
+              "target": "old_timer_gus",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "frontiers_edge",
+                "markerLabel": "Old Timer's Bench"
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 5 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_second_tale",
+          "title": "The Second Tale",
+          "description": "Return to hear another of Gus's stories.",
+          "onStartText": "Gus seems happy to see you return.",
+          "onCompleteText": "This time Gus tells you about the old mining days - before the big companies came. 'Men could make their fortune with just a pan and some luck,' he sighs.",
+          "objectives": [
+            {
+              "id": "obj_talk_gus_2",
+              "description": "Listen to another story",
+              "type": "Talk",
+              "target": "old_timer_gus",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 5 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_third_tale",
+          "title": "The Final Tale",
+          "description": "Hear the last of Gus's stories.",
+          "onStartText": "Gus has one more story to share.",
+          "onCompleteText": "Gus tells you about a place called Salvation - a town founded by a preacher with grand ideas. 'Strange things happening out that way,' he mutters. 'Strange things.' He hands you a small token. 'For listening to an old man ramble.'",
+          "objectives": [
+            {
+              "id": "obj_talk_gus_3",
+              "description": "Listen to the final story",
+              "type": "Talk",
+              "target": "old_timer_gus",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 5,
+            "items": [
+              { "itemId": "lucky_charm", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 50,
+        "gold": 5,
+        "items": [
+          { "itemId": "lucky_charm", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "townsfolk", "amount": 20 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq2_sheriffs_bounty",
+      "title": "Sheriff's Bounty",
+      "description": "A notorious bandit named 'Two-Fingers McGee' has been robbing travelers on Dusty Trail. The Sheriff wants him brought to justice.",
+      "type": "Bounty",
+      "giverNpcId": "sheriff_hank",
+      "startLocationId": "frontiers_edge",
+      "recommendedLevel": 2,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "bounty", "combat"],
+      "prerequisites": {
+        "completedQuestIds": ["mq1_stranger_arrives"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_accept_bounty",
+          "title": "Accept the Bounty",
+          "description": "Take the bounty poster from the Sheriff.",
+          "onStartText": "The Sheriff has a wanted poster on his desk. 'Two-Fingers McGee. Armed and dangerous. Forty dollars reward, dead or alive.'",
+          "onCompleteText": "You take the poster. McGee was last seen on Dusty Trail, near the old campsite.",
+          "objectives": [
+            {
+              "id": "obj_get_poster",
+              "description": "Take the bounty poster",
+              "type": "Collect",
+              "target": "bounty_poster",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [
+              { "itemId": "bounty_poster", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_track_mcgee",
+          "title": "Track McGee",
+          "description": "Find Two-Fingers McGee on Dusty Trail.",
+          "onStartText": "McGee likes to ambush travelers near the old campsite. He's got a gang of three or four.",
+          "onCompleteText": "You spot McGee's camp. He's there with two of his boys, counting stolen goods.",
+          "objectives": [
+            {
+              "id": "obj_find_camp",
+              "description": "Find McGee's camp on Dusty Trail",
+              "type": "Visit",
+              "target": "dt_campsite",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "dusty_trail",
+                "markerLabel": "Bandit Camp"
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_defeat_mcgee",
+          "title": "Bring McGee to Justice",
+          "description": "Defeat Two-Fingers McGee and his gang.",
+          "onStartText": "McGee reaches for his gun. 'You picked the wrong camp to stumble into, stranger.'",
+          "onCompleteText": "McGee and his gang are finished. You collect proof of the deed to bring back to the Sheriff.",
+          "objectives": [
+            {
+              "id": "obj_defeat_mcgee",
+              "description": "Defeat Two-Fingers McGee",
+              "type": "Kill",
+              "target": "bandit",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_defeat_gang",
+              "description": "Defeat the gang members",
+              "type": "Kill",
+              "target": "bandit",
+              "deliverTo": "",
+              "count": 2,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 35,
+            "gold": 15,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_collect_reward",
+          "title": "Collect the Reward",
+          "description": "Return to Sheriff Hank to collect your bounty.",
+          "onStartText": "Time to collect what you are owed.",
+          "onCompleteText": "The Sheriff nods with satisfaction. 'Good work. The trail will be safer now.' He hands over the reward.",
+          "objectives": [
+            {
+              "id": "obj_report_sheriff",
+              "description": "Report to Sheriff Hank",
+              "type": "Talk",
+              "target": "sheriff_hank",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 40,
+            "items": [],
+            "reputation": [
+              { "factionId": "law", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 75,
+        "gold": 40,
+        "items": [],
+        "reputation": [
+          { "factionId": "law", "amount": 25 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq3_saloon_brawl",
+      "title": "Saloon Brawl",
+      "description": "Tensions are running high at the Iron Gulch Saloon. The bartender needs help before things get out of hand.",
+      "type": "Side",
+      "giverNpcId": "bartender_pete",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 2,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "combat", "non-lethal", "reputation"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_trouble_brewing",
+          "title": "Trouble Brewing",
+          "description": "Pete the bartender needs your help.",
+          "onStartText": "The saloon is tense. Two groups of miners are eyeing each other across the room. Pete looks worried.",
+          "onCompleteText": "'Things are about to pop,' Pete whispers. 'I need someone who can handle themselves without killing anyone. These are good men - just stressed.'",
+          "objectives": [
+            {
+              "id": "obj_talk_pete",
+              "description": "Speak with Bartender Pete",
+              "type": "Talk",
+              "target": "bartender_pete",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Saloon"
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_brawl",
+          "title": "Handle the Brawl",
+          "description": "Break up the fight without killing anyone.",
+          "onStartText": "A chair flies across the room. The brawl has begun! Remember - fists only, no guns.",
+          "onCompleteText": "The miners groan on the floor, nursing bruises but alive. Pete looks relieved.",
+          "objectives": [
+            {
+              "id": "obj_defeat_brawlers",
+              "description": "Subdue the brawlers (non-lethal)",
+              "type": "Kill",
+              "target": "bar_brawler",
+              "deliverTo": "",
+              "count": 4,
+              "optional": false,
+              "hidden": false,
+              "hint": "Use fists - no weapons!",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [],
+            "reputation": [
+              { "factionId": "miners", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_aftermath",
+          "title": "Drinks on the House",
+          "description": "Collect your reward from Pete.",
+          "onStartText": "Pete is grateful for your help.",
+          "onCompleteText": "'You saved me a lot of trouble,' Pete says, sliding you a drink and some coins. 'Come back anytime - drinks are on the house.'",
+          "objectives": [
+            {
+              "id": "obj_talk_pete_end",
+              "description": "Speak with Pete",
+              "type": "Talk",
+              "target": "bartender_pete",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 20,
+            "items": [
+              { "itemId": "whiskey", "quantity": 2 }
+            ],
+            "reputation": [
+              { "factionId": "miners", "amount": 10 },
+              { "factionId": "townsfolk", "amount": 5 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 60,
+        "gold": 20,
+        "items": [
+          { "itemId": "whiskey", "quantity": 2 }
+        ],
+        "reputation": [
+          { "factionId": "miners", "amount": 20 },
+          { "factionId": "townsfolk", "amount": 10 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq4_docs_dilemma",
+      "title": "Doc's Dilemma",
+      "description": "Doc Morrison is running low on medical supplies. The nearest cache is in a dangerous part of the mine that's been sealed off.",
+      "type": "Side",
+      "giverNpcId": "doc_morrison",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 3,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "exploration", "medical"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_doc",
+          "title": "Meet the Doctor",
+          "description": "Visit Doc Morrison's office.",
+          "onStartText": "Doc Morrison's office is small but clean. The shelves are nearly empty.",
+          "onCompleteText": "'The mine collapse trapped a supply wagon,' Doc explains. 'Medical supplies worth their weight in gold. If you can retrieve them, I can save lives.'",
+          "objectives": [
+            {
+              "id": "obj_visit_doc",
+              "description": "Visit Doc Morrison's office",
+              "type": "Visit",
+              "target": "ig_doc_office",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_talk_doc",
+              "description": "Speak with Doc Morrison",
+              "type": "Talk",
+              "target": "doc_morrison",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_retrieve_supplies",
+          "title": "Retrieve Supplies",
+          "description": "Enter the sealed section of the mine and find the supplies.",
+          "onStartText": "The sealed section is unstable. Watch your step and watch for wildlife that might have moved in.",
+          "onCompleteText": "You find the supply wagon, partially crushed but with plenty of usable medicine.",
+          "objectives": [
+            {
+              "id": "obj_enter_sealed",
+              "description": "Enter the sealed mine section",
+              "type": "Visit",
+              "target": "ig_mine_deep_section",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_defeat_creatures",
+              "description": "Clear out any creatures",
+              "type": "Kill",
+              "target": "rattlesnake",
+              "deliverTo": "",
+              "count": 3,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_get_supplies",
+              "description": "Retrieve the medical supplies",
+              "type": "Collect",
+              "target": "medical_supplies",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 40,
+            "gold": 0,
+            "items": [
+              { "itemId": "medical_supplies", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_return_supplies",
+          "title": "Return to Doc",
+          "description": "Bring the supplies back to Doc Morrison.",
+          "onStartText": "The Doc will be relieved to have these supplies.",
+          "onCompleteText": "Doc Morrison's eyes light up. 'You have saved lives today, stranger. Here - take some healing supplies, and know that my door is always open to you.'",
+          "objectives": [
+            {
+              "id": "obj_deliver_supplies",
+              "description": "Deliver supplies to Doc Morrison",
+              "type": "Deliver",
+              "target": "medical_supplies",
+              "deliverTo": "doc_morrison",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 25,
+            "items": [
+              { "itemId": "medical_kit", "quantity": 2 },
+              { "itemId": "antivenom", "quantity": 3 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 80,
+        "gold": 25,
+        "items": [
+          { "itemId": "medical_kit", "quantity": 2 },
+          { "itemId": "antivenom", "quantity": 3 }
+        ],
+        "reputation": [
+          { "factionId": "townsfolk", "amount": 25 },
+          { "factionId": "miners", "amount": 10 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq5_the_informant",
+      "title": "The Informant",
+      "description": "Someone in Iron Gulch was feeding information to the saboteur. Find out who and why.",
+      "type": "Side",
+      "giverNpcId": "foreman_burke",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 3,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "investigation", "evidence"],
+      "prerequisites": {
+        "completedQuestIds": ["mq5_confrontation"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_assignment",
+          "title": "Unfinished Business",
+          "description": "Foreman Burke suspects there was someone helping the saboteur.",
+          "onStartText": "Burke pulls you aside. 'Vance didn't work alone. Someone was giving him shift schedules and patrol routes. Find them.'",
+          "onCompleteText": "Burke gives you a list of suspects - people who had access to the information Vance needed.",
+          "objectives": [
+            {
+              "id": "obj_talk_burke",
+              "description": "Speak with Foreman Burke",
+              "type": "Talk",
+              "target": "foreman_burke",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_investigate",
+          "title": "Follow the Trail",
+          "description": "Investigate the suspects and gather evidence.",
+          "onStartText": "Three people had the access: the office clerk, the night watchman, and the supply manager.",
+          "onCompleteText": "The evidence points to 'Rat' - a small-time criminal who works as an errand boy. He's been paid in company scrip that doesn't match his wages.",
+          "objectives": [
+            {
+              "id": "obj_search_office",
+              "description": "Search the mine office for evidence",
+              "type": "Interact",
+              "target": "office_search",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_question_workers",
+              "description": "Question the suspects",
+              "type": "Talk",
+              "target": "miner_silas",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_find_rat",
+              "description": "Find evidence of the real informant",
+              "type": "Collect",
+              "target": "informant_evidence",
+              "deliverTo": "",
+              "count": 3,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_confront",
+          "title": "Confront the Informant",
+          "description": "Find Rat and get the truth out of him.",
+          "onStartText": "Rat hangs around the saloon most nights. Time to have a chat.",
+          "onCompleteText": "Rat breaks down quickly. He was desperate for money - his family is starving. He didn't know people would get hurt. You decide his fate: turn him in or let him go with a warning.",
+          "objectives": [
+            {
+              "id": "obj_find_informant",
+              "description": "Find the informant at the saloon",
+              "type": "Visit",
+              "target": "ig_saloon",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_confront_rat",
+              "description": "Confront Rat",
+              "type": "Talk",
+              "target": "informant_rat",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_report",
+          "title": "Report to Burke",
+          "description": "Tell the Foreman what you found.",
+          "onStartText": "Burke will want to know the truth.",
+          "onCompleteText": "Burke accepts your report. 'The mine can move forward now. Here's your payment - you've earned it.'",
+          "objectives": [
+            {
+              "id": "obj_report_burke",
+              "description": "Report your findings to Foreman Burke",
+              "type": "Talk",
+              "target": "foreman_burke",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 50,
+            "items": [],
+            "reputation": [
+              { "factionId": "miners", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 100,
+        "gold": 50,
+        "items": [],
+        "reputation": [
+          { "factionId": "miners", "amount": 25 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq6_informants_price",
+      "title": "The Informant's Price",
+      "description": "Whisper, Mesa Point's information broker, knows things that could help your investigation. But information has a price.",
+      "type": "Side",
+      "giverNpcId": "whisper",
+      "startLocationId": "mesa_point",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "moral_choice", "information"],
+      "prerequisites": {
+        "completedQuestIds": ["mq6a_honor_among_thieves"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_find_whisper",
+          "title": "Find Whisper",
+          "description": "Locate Whisper's den in Mesa Point.",
+          "onStartText": "Whisper deals in secrets. They say they know everything that happens on the frontier - for the right price.",
+          "onCompleteText": "Whisper's den is hidden in a back alley. A figure in shadows greets you. 'I know what you seek. But first, you do something for me.'",
+          "objectives": [
+            {
+              "id": "obj_find_den",
+              "description": "Find Whisper's den",
+              "type": "Visit",
+              "target": "mp_whispers_den",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_talk_whisper",
+              "description": "Speak with Whisper",
+              "type": "Talk",
+              "target": "whisper",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_price",
+          "title": "Whisper's Price",
+          "description": "Whisper wants you to deliver a message - or silence a rival.",
+          "onStartText": "Whisper's price: deliver a 'message' to a rival information broker. The message could be a warning... or something more permanent.",
+          "onCompleteText": "You've completed Whisper's task - either peacefully or violently. Whisper is satisfied.",
+          "objectives": [
+            {
+              "id": "obj_deliver_warning",
+              "description": "Deliver a warning to the rival (peaceful)",
+              "type": "Talk",
+              "target": "rival_broker",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "The non-violent approach.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_silence_rival",
+              "description": "Silence the rival permanently (violent)",
+              "type": "Kill",
+              "target": "rival_broker",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "The violent approach - Whisper prefers this.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 40,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_information",
+          "title": "Collect Your Payment",
+          "description": "Whisper delivers the promised information.",
+          "onStartText": "With the task complete, Whisper upholds their end of the bargain.",
+          "onCompleteText": "Whisper reveals critical information about the conspiracy - names, dates, and locations. 'Use it well,' they whisper. 'And remember - I know everything.'",
+          "objectives": [
+            {
+              "id": "obj_collect_info",
+              "description": "Receive the information from Whisper",
+              "type": "Collect",
+              "target": "whispers_info",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [
+              { "itemId": "whispers_info", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "outlaws", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 80,
+        "gold": 0,
+        "items": [
+          { "itemId": "whispers_info", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "outlaws", "amount": 15 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq7_bounty_hunters_mark",
+      "title": "Bounty Hunter's Mark",
+      "description": "Bounty Hunter Cole is tracking a mark in Mesa Point. Help him catch the target, or help the target escape.",
+      "type": "Side",
+      "giverNpcId": "bounty_hunter_cole",
+      "startLocationId": "mesa_point",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "choice", "ally_recruitment", "combat"],
+      "prerequisites": {
+        "completedQuestIds": ["mq6a_honor_among_thieves"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_cole",
+          "title": "Meet Bounty Hunter Cole",
+          "description": "Cole is looking for someone who can handle themselves.",
+          "onStartText": "Cole is a weathered hunter with cold eyes. He's tracked his mark to Mesa Point but needs help flushing them out.",
+          "onCompleteText": "'The mark is a woman named Sarah,' Cole explains. 'Wanted for theft back East. She's hiding with the outlaws here.'",
+          "objectives": [
+            {
+              "id": "obj_talk_cole",
+              "description": "Speak with Bounty Hunter Cole",
+              "type": "Talk",
+              "target": "bounty_hunter_cole",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_choice",
+          "title": "The Hunt",
+          "description": "Help Cole capture Sarah, or help her escape. Your choice affects your standing with both parties.",
+          "onStartText": "Sarah stole to feed her family. Cole doesn't care about reasons - only the bounty. What do you do?",
+          "onCompleteText": "Your choice is made. The consequences will follow you.",
+          "objectives": [
+            {
+              "id": "obj_help_cole",
+              "description": "Help Cole capture Sarah (gain Cole as ally)",
+              "type": "Kill",
+              "target": "outlaw_grunt",
+              "deliverTo": "",
+              "count": 2,
+              "optional": true,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_help_sarah",
+              "description": "Help Sarah escape (gain outlaw reputation)",
+              "type": "Talk",
+              "target": "sarah_target",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 50,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_aftermath",
+          "title": "Consequences",
+          "description": "Deal with the aftermath of your choice.",
+          "onStartText": "Every choice has consequences.",
+          "onCompleteText": "If you helped Cole, he offers to stand with you when things get tough. If you helped Sarah, the outlaws respect you more.",
+          "objectives": [
+            {
+              "id": "obj_resolve",
+              "description": "Resolve the situation",
+              "type": "Talk",
+              "target": "bounty_hunter_cole",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 35,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 85,
+        "gold": 35,
+        "items": [],
+        "reputation": [],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq8_cattle_rustlers",
+      "title": "Cattle Rustlers",
+      "description": "Even with the main rustler operation shut down, smaller bands are still causing trouble. Help the ranchers stop them.",
+      "type": "Side",
+      "giverNpcId": "rancher_mcgraw",
+      "startLocationId": "coldwater",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "combat", "tracking"],
+      "prerequisites": {
+        "completedQuestIds": ["mq6b_ranchers_plight"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_report",
+          "title": "More Trouble",
+          "description": "McGraw reports another rustler sighting.",
+          "onStartText": "McGraw looks frustrated. 'Thought we had them beat, but there's another band hitting the ranches north of town.'",
+          "onCompleteText": "McGraw marks the location on your map. Time to deal with these varmints once and for all.",
+          "objectives": [
+            {
+              "id": "obj_talk_mcgraw",
+              "description": "Speak with Rancher McGraw",
+              "type": "Talk",
+              "target": "rancher_mcgraw",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_track",
+          "title": "Track the Rustlers",
+          "description": "Follow the trail to the rustler camp.",
+          "onStartText": "Fresh tracks lead through the brush. The rustlers are getting bolder.",
+          "onCompleteText": "You've found their camp - a makeshift corral hidden in a box canyon.",
+          "objectives": [
+            {
+              "id": "obj_follow_tracks",
+              "description": "Track the rustlers",
+              "type": "Visit",
+              "target": "badlands_trail",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_fight",
+          "title": "End the Rustling",
+          "description": "Defeat the rustlers and free the cattle.",
+          "onStartText": "There are five of them, armed but not expecting trouble. Time to teach them a lesson.",
+          "onCompleteText": "The rustlers are finished. The cattle can be returned to their rightful owners.",
+          "objectives": [
+            {
+              "id": "obj_defeat_rustlers",
+              "description": "Defeat the rustlers",
+              "type": "Kill",
+              "target": "rustler",
+              "deliverTo": "",
+              "count": 5,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_free_cattle",
+              "description": "Free the stolen cattle",
+              "type": "Interact",
+              "target": "cattle_pen",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 50,
+            "gold": 25,
+            "items": [],
+            "reputation": [
+              { "factionId": "ranchers", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_reward",
+          "title": "Rancher's Thanks",
+          "description": "Return to McGraw for your reward.",
+          "onStartText": "McGraw will be relieved to hear the news.",
+          "onCompleteText": "'You've done right by us,' McGraw says, pressing supplies into your hands. 'The ranches are safe because of you.'",
+          "objectives": [
+            {
+              "id": "obj_report_mcgraw",
+              "description": "Report to Rancher McGraw",
+              "type": "Talk",
+              "target": "rancher_mcgraw",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 40,
+            "items": [
+              { "itemId": "dried_jerky", "quantity": 10 },
+              { "itemId": "water_canteen", "quantity": 2 }
+            ],
+            "reputation": [
+              { "factionId": "ranchers", "amount": 20 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 95,
+        "gold": 40,
+        "items": [
+          { "itemId": "dried_jerky", "quantity": 10 },
+          { "itemId": "water_canteen", "quantity": 2 }
+        ],
+        "reputation": [
+          { "factionId": "ranchers", "amount": 35 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq9_wanderers_tale",
+      "title": "The Wanderer's Tale",
+      "description": "The mysterious Wanderer has stories to tell - stories that hint at something greater.",
+      "type": "Side",
+      "giverNpcId": "the_wanderer",
+      "startLocationId": "coldwater",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "lore", "dialogue", "sequel_hook"],
+      "prerequisites": {
+        "completedQuestIds": ["mq6b_ranchers_plight"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_first_meeting",
+          "title": "First Meeting",
+          "description": "Have a longer conversation with The Wanderer.",
+          "onStartText": "The Wanderer's camp is simple but well-maintained. They seem more willing to talk now that you've proven yourself.",
+          "onCompleteText": "The Wanderer speaks of travels across the frontier - places you've never heard of, dangers beyond imagination. 'There are things in this world older than any of us understand,' they say.",
+          "objectives": [
+            {
+              "id": "obj_talk_wanderer_1",
+              "description": "Speak with The Wanderer",
+              "type": "Talk",
+              "target": "the_wanderer",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "coldwater",
+                "markerLabel": "Wanderer's Camp"
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_second_meeting",
+          "title": "The Past",
+          "description": "Learn about The Wanderer's past.",
+          "onStartText": "The Wanderer seems reflective today.",
+          "onCompleteText": "The Wanderer reveals they were once part of something - a group that sought to protect the frontier from 'the darkness between the cracks.' They failed, and now wander alone.",
+          "objectives": [
+            {
+              "id": "obj_talk_wanderer_2",
+              "description": "Have another conversation with The Wanderer",
+              "type": "Talk",
+              "target": "the_wanderer",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_final_meeting",
+          "title": "The Future",
+          "description": "The Wanderer shares a final revelation.",
+          "onStartText": "The Wanderer looks at you with something like hope.",
+          "onCompleteText": "'Whatever happens in Salvation,' The Wanderer says, 'it's just the beginning. There are other threats, other conspiracies. The frontier needs people like you.' They hand you a unique item - a token from their past. 'When the time comes, you'll know what to do with it.'",
+          "objectives": [
+            {
+              "id": "obj_talk_wanderer_3",
+              "description": "Have a final conversation with The Wanderer",
+              "type": "Talk",
+              "target": "the_wanderer",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [
+              { "itemId": "wanderer_token", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 100,
+        "gold": 0,
+        "items": [
+          { "itemId": "wanderer_token", "quantity": 1 }
+        ],
+        "reputation": [],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq10_gamblers_debt",
+      "title": "The Gambler's Debt",
+      "description": "Lucky Lou claims a card shark named 'Cardshark Charlie' cheated him out of a week's wages. He needs help proving the cheat and getting his money back.",
+      "type": "Side",
+      "giverNpcId": "lucky_lou",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 2,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "investigation", "confrontation", "gambling"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_lou",
+          "title": "A Desperate Gambler",
+          "description": "Meet Lucky Lou at the Iron Gulch Saloon.",
+          "onStartText": "A scruffy man waves you over from a corner table. He looks desperate, nursing a watered-down whiskey.",
+          "onCompleteText": "'They call me Lucky Lou, but luck's run out,' he says bitterly. 'Cardshark Charlie took me for everything I had. I know he cheated - I just can't prove it. Help me, and I'll split whatever we recover.'",
+          "objectives": [
+            {
+              "id": "obj_talk_lou",
+              "description": "Speak with Lucky Lou",
+              "type": "Talk",
+              "target": "lucky_lou",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Lucky Lou"
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_find_evidence",
+          "title": "Catching a Cheat",
+          "description": "Find evidence of Charlie cheating at cards.",
+          "onStartText": "Charlie runs a game every night in the back room. Watch him play and look for proof of cheating.",
+          "onCompleteText": "You spot it - marked cards hidden in his sleeve. You've got enough to confront him now.",
+          "objectives": [
+            {
+              "id": "obj_visit_poker_room",
+              "description": "Visit the poker room during a game",
+              "type": "Visit",
+              "target": "ig_poker_room",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Poker Room"
+              }
+            },
+            {
+              "id": "obj_find_marked_cards",
+              "description": "Find evidence of cheating",
+              "type": "Collect",
+              "target": "cheating_evidence",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "Watch his hands carefully.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [
+              { "itemId": "cheating_evidence", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_confront_charlie",
+          "title": "The Showdown",
+          "description": "Confront Cardshark Charlie with the evidence.",
+          "onStartText": "Time to show Charlie his game is up. He won't go quietly - card sharks rarely do.",
+          "onCompleteText": "Charlie's thugs lie groaning on the floor. Charlie himself throws down the stolen winnings. 'Take it! Just leave me be!' He won't be cheating honest folk anymore.",
+          "objectives": [
+            {
+              "id": "obj_confront_charlie",
+              "description": "Confront Cardshark Charlie",
+              "type": "Talk",
+              "target": "cardshark_charlie",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_defeat_thugs",
+              "description": "Defeat Charlie's thugs",
+              "type": "Kill",
+              "target": "cardshark_thug",
+              "deliverTo": "",
+              "count": 2,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_recover_winnings",
+              "description": "Recover the stolen winnings",
+              "type": "Collect",
+              "target": "stolen_winnings",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [
+              { "itemId": "stolen_winnings", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_return_to_lou",
+          "title": "Splitting the Pot",
+          "description": "Return to Lucky Lou with his winnings.",
+          "onStartText": "Lou will be relieved to have his money back.",
+          "onCompleteText": "Lou's eyes light up when he sees the money. 'You did it! Fair's fair - here's your cut.' He hands you a generous share. 'Maybe my luck is changing after all.'",
+          "objectives": [
+            {
+              "id": "obj_return_winnings",
+              "description": "Return the winnings to Lucky Lou",
+              "type": "Deliver",
+              "target": "stolen_winnings",
+              "deliverTo": "lucky_lou",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 50,
+            "items": [
+              { "itemId": "lucky_dice", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 10 },
+              { "factionId": "miners", "amount": 5 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 85,
+        "gold": 50,
+        "items": [
+          { "itemId": "lucky_dice", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "townsfolk", "amount": 20 },
+          { "factionId": "miners", "amount": 10 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq11_cogsworths_contraption",
+      "title": "Cogsworth's Contraption",
+      "description": "Professor Cogsworth, a brilliant but eccentric inventor, needs rare parts to complete his revolutionary steam-powered gadget. Find them, and he'll share his creation with you.",
+      "type": "Side",
+      "giverNpcId": "professor_cogsworth",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 3,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "exploration", "collection", "unique_reward"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_cogsworth",
+          "title": "The Mad Inventor",
+          "description": "Visit Professor Cogsworth's workshop.",
+          "onStartText": "Rumors speak of a strange inventor working in a cluttered workshop at the edge of town. His experiments are the talk of Iron Gulch.",
+          "onCompleteText": "'Eureka! A volunteer!' Cogsworth exclaims, goggles askew. 'I'm so close to completing my Steam-Powered Personal Protection Device! But I need three rare components. Find them, and the prototype is yours!'",
+          "objectives": [
+            {
+              "id": "obj_visit_lab",
+              "description": "Visit Cogsworth's workshop",
+              "type": "Visit",
+              "target": "ig_cogsworth_lab",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Cogsworth's Lab"
+              }
+            },
+            {
+              "id": "obj_talk_cogsworth",
+              "description": "Speak with Professor Cogsworth",
+              "type": "Talk",
+              "target": "professor_cogsworth",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_find_valve",
+          "title": "The Steam Valve",
+          "description": "Find a precision steam valve from the abandoned mining equipment.",
+          "onStartText": "'The valve I need was in a shipment to the old mining equipment storage. Should still be there!'",
+          "onCompleteText": "You find the valve among rusted machinery. It looks intact - Cogsworth will be pleased.",
+          "objectives": [
+            {
+              "id": "obj_search_storage",
+              "description": "Search the old mining equipment storage",
+              "type": "Visit",
+              "target": "ig_mine_deep_section",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_find_valve",
+              "description": "Find the precision steam valve",
+              "type": "Collect",
+              "target": "steam_valve",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 0,
+            "items": [
+              { "itemId": "steam_valve", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_find_gauge",
+          "title": "The Pressure Gauge",
+          "description": "Acquire a pressure gauge from the general store shipment.",
+          "onStartText": "'The pressure gauge was ordered months ago! The merchant should have it by now.'",
+          "onCompleteText": "The merchant reluctantly parts with the gauge - he'd hoped to sell it for triple the price.",
+          "objectives": [
+            {
+              "id": "obj_buy_gauge",
+              "description": "Purchase the pressure gauge from the merchant",
+              "type": "Talk",
+              "target": "merchant_martha",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "May require some negotiation or payment.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_collect_gauge",
+              "description": "Obtain the pressure gauge",
+              "type": "Collect",
+              "target": "pressure_gauge",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": -10,
+            "items": [
+              { "itemId": "pressure_gauge", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_find_coil",
+          "title": "The Copper Coil",
+          "description": "Salvage copper coil from bandits who stole a supply wagon.",
+          "onStartText": "'The copper coil was on a supply wagon that went missing on Dusty Trail. Bandits, no doubt!'",
+          "onCompleteText": "The bandits put up a fight, but you recover the precious copper coil from the stolen goods.",
+          "objectives": [
+            {
+              "id": "obj_track_bandits",
+              "description": "Track the bandits on Dusty Trail",
+              "type": "Visit",
+              "target": "dt_campsite",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "dusty_trail",
+                "markerLabel": "Bandit Camp"
+              }
+            },
+            {
+              "id": "obj_defeat_bandits",
+              "description": "Defeat the bandits",
+              "type": "Kill",
+              "target": "bandit",
+              "deliverTo": "",
+              "count": 3,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_recover_coil",
+              "description": "Recover the copper coil",
+              "type": "Collect",
+              "target": "copper_coil",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 15,
+            "items": [
+              { "itemId": "copper_coil", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "law", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_complete_device",
+          "title": "The Prototype",
+          "description": "Return to Cogsworth with all the parts.",
+          "onStartText": "You have all three components. Time to see what Cogsworth can create.",
+          "onCompleteText": "'MAGNIFICENT!' Cogsworth assembles the parts with practiced precision. Steam hisses, gears turn, and he presents you with a remarkable brass device. 'The Steam-Shield Projector! It creates a temporary protective barrier. Use it wisely!'",
+          "objectives": [
+            {
+              "id": "obj_deliver_parts",
+              "description": "Deliver all parts to Professor Cogsworth",
+              "type": "Talk",
+              "target": "professor_cogsworth",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [
+              { "itemId": "cogsworth_gadget", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 105,
+        "gold": 5,
+        "items": [
+          { "itemId": "cogsworth_gadget", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "townsfolk", "amount": 20 },
+          { "factionId": "law", "amount": 10 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq12_belles_bounty",
+      "title": "Belle's Bounty",
+      "description": "Black Belle, a legendary bounty hunter, has tracked the notorious 'Dynamite' Doyle to Mesa Point. She needs a partner for the takedown - and you get to choose how it ends.",
+      "type": "Bounty",
+      "giverNpcId": "black_belle",
+      "startLocationId": "mesa_point",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "bounty", "moral_choice", "combat", "partner"],
+      "prerequisites": {
+        "completedQuestIds": ["mq6a_honor_among_thieves"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_belle",
+          "title": "The Legendary Hunter",
+          "description": "Meet Black Belle at the Mesa Point hideout.",
+          "onStartText": "Word is a famous bounty hunter is in town, looking for capable help. She has a reputation for getting her mark - always.",
+          "onCompleteText": "Black Belle's eyes are sharp as a hawk's. 'Dynamite Doyle. Killed twelve people, robbed six banks. Five hundred dollar bounty - dead or alive. I'm offering fifty-fifty if you help me bring him in. Interested?'",
+          "objectives": [
+            {
+              "id": "obj_find_belle",
+              "description": "Find Black Belle",
+              "type": "Visit",
+              "target": "mp_hideout",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "mesa_point",
+                "markerLabel": "Black Belle"
+              }
+            },
+            {
+              "id": "obj_talk_belle",
+              "description": "Speak with Black Belle",
+              "type": "Talk",
+              "target": "black_belle",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [
+              { "itemId": "belle_bounty_poster", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_track_doyle",
+          "title": "Tracking Dynamite",
+          "description": "Track Doyle's gang to their hideout.",
+          "onStartText": "'Doyle's been using an old mine shaft as a hideout,' Belle explains. 'We hit them at dawn. Follow my lead.'",
+          "onCompleteText": "You and Belle find Doyle's camp. Three guards outside, Doyle within. 'Remember,' Belle whispers, 'dead or alive. Your choice when the moment comes.'",
+          "objectives": [
+            {
+              "id": "obj_scout_camp",
+              "description": "Scout Doyle's hideout",
+              "type": "Visit",
+              "target": "desert_pass",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "desert_pass",
+                "markerLabel": "Doyle's Hideout"
+              }
+            },
+            {
+              "id": "obj_defeat_guards",
+              "description": "Eliminate the guards",
+              "type": "Kill",
+              "target": "outlaw_grunt",
+              "deliverTo": "",
+              "count": 3,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_confront_doyle",
+          "title": "Dead or Alive",
+          "description": "Confront Dynamite Doyle. Your choice: capture him alive or put him down.",
+          "onStartText": "Doyle is cornered, but dangerous. He's reaching for his gun. This is the moment of truth.",
+          "onCompleteText": "The deed is done. Doyle is either in chains or in the dirt. Belle nods approvingly either way.",
+          "objectives": [
+            {
+              "id": "obj_capture_alive",
+              "description": "Capture Doyle alive (spare him)",
+              "type": "Talk",
+              "target": "notorious_outlaw_doyle",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "Talk him down - harder, but more honorable. Better reputation with Law.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_kill_doyle",
+              "description": "Kill Dynamite Doyle",
+              "type": "Kill",
+              "target": "notorious_outlaw_doyle",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "The easy way. Same bounty, less hassle. Belle prefers this.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 50,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_collect_bounty",
+          "title": "Collect the Bounty",
+          "description": "Return to Mesa Point to collect the bounty reward.",
+          "onStartText": "Time to cash in. Belle knows where to collect.",
+          "onCompleteText": "Belle counts out your share. 'Not bad, partner. Maybe we'll ride together again someday.' She tips her hat and disappears into the desert.",
+          "objectives": [
+            {
+              "id": "obj_report_complete",
+              "description": "Report the bounty completion",
+              "type": "Talk",
+              "target": "black_belle",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 250,
+            "items": [],
+            "reputation": [
+              { "factionId": "law", "amount": 20 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 120,
+        "gold": 250,
+        "items": [],
+        "reputation": [
+          { "factionId": "law", "amount": 25 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq13_widows_locket",
+      "title": "The Widow's Locket",
+      "description": "Widow Margaret's most precious possession - a locket containing her late husband's portrait - has been stolen. Help her recover it and uncover the truth behind the theft.",
+      "type": "Side",
+      "giverNpcId": "widow_margaret",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 3,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "investigation", "lore", "family_secrets"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_meet_widow",
+          "title": "A Grieving Heart",
+          "description": "Visit Widow Margaret's cottage.",
+          "onStartText": "An elderly woman has been asking around town for help. She looks fragile but determined.",
+          "onCompleteText": "'That locket is all I have left of my Thomas,' Margaret weeps. 'Someone broke in while I was at market. Please, I'll give you everything I have - just bring it back.'",
+          "objectives": [
+            {
+              "id": "obj_visit_cottage",
+              "description": "Visit the Widow's cottage",
+              "type": "Visit",
+              "target": "ig_widows_cottage",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Widow's Cottage"
+              }
+            },
+            {
+              "id": "obj_talk_margaret",
+              "description": "Speak with Widow Margaret",
+              "type": "Talk",
+              "target": "widow_margaret",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 10,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_investigate",
+          "title": "Following the Trail",
+          "description": "Investigate the break-in and question witnesses.",
+          "onStartText": "The cottage shows signs of a hurried search. Someone was looking for something specific.",
+          "onCompleteText": "A neighbor saw a young man fleeing the scene - a man matching the description of Thomas's estranged nephew, William. He was last seen heading toward Mesa Point.",
+          "objectives": [
+            {
+              "id": "obj_search_cottage",
+              "description": "Search the cottage for clues",
+              "type": "Interact",
+              "target": "cottage_search",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_question_neighbors",
+              "description": "Question the neighbors",
+              "type": "Talk",
+              "target": "miner_silas",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 20,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_find_thief",
+          "title": "The Prodigal Nephew",
+          "description": "Track down William in Mesa Point.",
+          "onStartText": "William fled to Mesa Point - probably hoping to sell the locket to the black market.",
+          "onCompleteText": "You find William, looking haunted and desperate. 'I didn't want to steal it,' he admits. 'But there's something inside - a letter. My uncle left half his fortune to me, but Aunt Margaret hid the proof. I just wanted what's rightfully mine.'",
+          "objectives": [
+            {
+              "id": "obj_travel_mesa",
+              "description": "Travel to Mesa Point",
+              "type": "Visit",
+              "target": "mesa_point",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_find_william",
+              "description": "Find William at the black market",
+              "type": "Visit",
+              "target": "mp_black_market",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_talk_william",
+              "description": "Confront William",
+              "type": "Talk",
+              "target": "william_nephew",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 0,
+            "items": [
+              { "itemId": "widows_locket", "quantity": 1 },
+              { "itemId": "family_letter", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_return_locket",
+          "title": "Family Truths",
+          "description": "Return to Widow Margaret with the locket and the truth.",
+          "onStartText": "You have the locket and know the full story. Margaret deserves to hear it.",
+          "onCompleteText": "Margaret reads the letter with trembling hands. Tears flow freely. 'Thomas... he never forgot William. I was so jealous, I hid the truth.' She presses some gold into your hands. 'Tell William... tell him I'm sorry. He can have what's rightfully his.'",
+          "objectives": [
+            {
+              "id": "obj_return_locket",
+              "description": "Return the locket to Widow Margaret",
+              "type": "Deliver",
+              "target": "widows_locket",
+              "deliverTo": "widow_margaret",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_show_letter",
+              "description": "Show her the hidden letter",
+              "type": "Deliver",
+              "target": "family_letter",
+              "deliverTo": "widow_margaret",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 25,
+            "gold": 40,
+            "items": [
+              { "itemId": "family_heirloom_ring", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "townsfolk", "amount": 20 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 80,
+        "gold": 40,
+        "items": [
+          { "itemId": "family_heirloom_ring", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "townsfolk", "amount": 25 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq14_mine_shaft_rescue",
+      "title": "Mine Shaft Rescue",
+      "description": "A cave-in has trapped five miners in a collapsed shaft. Air is running out. You have hours, not days, to save them - and multiple ways to attempt the rescue.",
+      "type": "Side",
+      "giverNpcId": "mine_foreman_jenkins",
+      "startLocationId": "iron_gulch",
+      "recommendedLevel": 4,
+      "repeatable": false,
+      "timeLimitHours": 4,
+      "tags": ["side", "timed", "rescue", "multiple_approaches", "urgent"],
+      "prerequisites": {
+        "completedQuestIds": ["mq3_deep_trouble"],
+        "minLevel": 1,
+        "factionReputation": [
+          { "factionId": "miners", "amount": 10 }
+        ],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_emergency",
+          "title": "The Cave-In",
+          "description": "Respond to the emergency at the mine.",
+          "onStartText": "Alarm bells ring through Iron Gulch. Something has gone terribly wrong at the mine.",
+          "onCompleteText": "'Five men are trapped!' Foreman Jenkins shouts over the chaos. 'The main shaft collapsed. They've got maybe four hours of air. We need to get them out!' He shows you a map with three possible approaches.",
+          "objectives": [
+            {
+              "id": "obj_reach_mine",
+              "description": "Reach the mine emergency site",
+              "type": "Visit",
+              "target": "ig_collapsed_shaft",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "iron_gulch",
+                "markerLabel": "Collapsed Shaft"
+              }
+            },
+            {
+              "id": "obj_talk_jenkins",
+              "description": "Speak with Foreman Jenkins",
+              "type": "Talk",
+              "target": "mine_foreman_jenkins",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [
+              { "itemId": "mine_shaft_key", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_choose_approach",
+          "title": "The Rescue",
+          "description": "Choose your approach: dig through debris, find an alternate route, or use explosives.",
+          "onStartText": "'We can dig through the main collapse - slow but safe. There might be an old ventilation shaft - faster but dangerous. Or we could blast through - fastest but risky.' Time is running out.",
+          "onCompleteText": "Your approach works! You break through to the trapped miners. They are exhausted but alive.",
+          "objectives": [
+            {
+              "id": "obj_dig_through",
+              "description": "Dig through the main collapse (slow, safe)",
+              "type": "Interact",
+              "target": "dig_collapse",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "Takes longest but no risk. Gather rescue supplies first.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_ventilation_route",
+              "description": "Navigate the old ventilation shaft (medium, risky)",
+              "type": "Visit",
+              "target": "ig_mine_deep_section",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "Faster but requires defeating creatures in the old tunnels.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_use_explosives",
+              "description": "Use controlled explosives (fast, dangerous)",
+              "type": "Interact",
+              "target": "blast_collapse",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "Fastest but requires finding the right blast points. One wrong move could kill everyone.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_defeat_creatures",
+              "description": "Clear creatures from ventilation shaft (if using that route)",
+              "type": "Kill",
+              "target": "rattlesnake",
+              "deliverTo": "",
+              "count": 4,
+              "optional": true,
+              "hidden": true,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 50,
+            "gold": 0,
+            "items": [],
+            "reputation": [
+              { "factionId": "miners", "amount": 20 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_rescue_miners",
+          "title": "Getting Out",
+          "description": "Help the trapped miners escape to safety.",
+          "onStartText": "The miners are weak but mobile. You need to guide them out safely.",
+          "onCompleteText": "Fresh air has never tasted so sweet. The miners emerge to cheers from the crowd. 'You saved our lives,' their leader says. 'We won't forget this.'",
+          "objectives": [
+            {
+              "id": "obj_collect_supplies",
+              "description": "Gather rescue supplies",
+              "type": "Collect",
+              "target": "rescue_supplies",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_escort_miners",
+              "description": "Lead the miners to safety",
+              "type": "Visit",
+              "target": "ig_mine_entrance",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [],
+            "reputation": [
+              { "factionId": "miners", "amount": 15 },
+              { "factionId": "townsfolk", "amount": 10 }
+            ],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_hero_welcome",
+          "title": "A Hero's Welcome",
+          "description": "Receive thanks from the community.",
+          "onStartText": "Word of your heroism spreads quickly through Iron Gulch.",
+          "onCompleteText": "Foreman Jenkins shakes your hand firmly. 'The company is putting up a reward for the rescuer. You've earned every cent - and the eternal gratitude of five families.' The miners' union also presents you with a special pickaxe - a symbol of honorary membership.",
+          "objectives": [
+            {
+              "id": "obj_receive_thanks",
+              "description": "Speak with Foreman Jenkins",
+              "type": "Talk",
+              "target": "mine_foreman_jenkins",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 100,
+            "items": [
+              { "itemId": "honorary_miners_pick", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "miners", "amount": 25 },
+              { "factionId": "townsfolk", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 130,
+        "gold": 100,
+        "items": [
+          { "itemId": "honorary_miners_pick", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "miners", "amount": 50 },
+          { "factionId": "townsfolk", "amount": 25 }
+        ],
+        "unlocksQuests": []
+      }
+    },
+    {
+      "id": "sq15_preachers_past",
+      "title": "The Preacher's Past",
+      "description": "Father Miguel, the kind-hearted priest of Salvation, is being blackmailed by an IVRC agent over secrets from his past. Discover the truth and choose whether to protect him or expose him.",
+      "type": "Side",
+      "giverNpcId": "father_miguel",
+      "startLocationId": "salvation",
+      "recommendedLevel": 5,
+      "repeatable": false,
+      "timeLimitHours": 0,
+      "tags": ["side", "investigation", "moral_choice", "faction", "blackmail"],
+      "prerequisites": {
+        "completedQuestIds": [],
+        "minLevel": 5,
+        "factionReputation": [],
+        "requiredItemIds": []
+      },
+      "stages": [
+        {
+          "id": "stage_troubled_priest",
+          "title": "A Troubled Soul",
+          "description": "Notice something is wrong with Father Miguel.",
+          "onStartText": "Father Miguel's sermons have become distracted, his hands tremble, and he looks over his shoulder constantly.",
+          "onCompleteText": "'Please,' Miguel whispers, pulling you aside, 'I need help. Someone from my past has found me. They want... they want me to betray everything I've built here. I can't tell you everything, but I can't face this alone.'",
+          "objectives": [
+            {
+              "id": "obj_visit_church",
+              "description": "Visit the church in Salvation",
+              "type": "Visit",
+              "target": "sv_church",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "salvation",
+                "markerLabel": "Salvation Church"
+              }
+            },
+            {
+              "id": "obj_talk_miguel",
+              "description": "Speak with Father Miguel",
+              "type": "Talk",
+              "target": "father_miguel",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 15,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_investigate_blackmailer",
+          "title": "The Shadow",
+          "description": "Investigate the person blackmailing Father Miguel.",
+          "onStartText": "'He calls himself Shaw. Wears an IVRC badge. He has proof of who I used to be... before I found redemption.'",
+          "onCompleteText": "You find Agent Shaw's camp outside town. Among his belongings: a file on Miguel revealing he was once 'Miguel the Merciless,' an outlaw who killed three men before disappearing fifteen years ago. Shaw wants Miguel to spy on the church from within.",
+          "objectives": [
+            {
+              "id": "obj_find_shaw_camp",
+              "description": "Find Agent Shaw's camp",
+              "type": "Visit",
+              "target": "sv_ivrc_camp",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "salvation",
+                "markerLabel": "IVRC Camp"
+              }
+            },
+            {
+              "id": "obj_find_evidence",
+              "description": "Find the blackmail evidence",
+              "type": "Collect",
+              "target": "blackmail_letter",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 0,
+            "items": [
+              { "itemId": "blackmail_letter", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_confront_shaw",
+          "title": "Confrontation",
+          "description": "Confront Agent Shaw about the blackmail.",
+          "onStartText": "Shaw is a cold-eyed IVRC operative. He won't give up his leverage easily.",
+          "onCompleteText": "'The old man killed people,' Shaw sneers. 'Justice doesn't have an expiration date. But you want to play hero? Fine. Take me down if you can.' Shaw and his thugs draw their weapons.",
+          "objectives": [
+            {
+              "id": "obj_confront_shaw",
+              "description": "Confront Agent Shaw",
+              "type": "Talk",
+              "target": "ivrc_agent_shaw",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_defeat_shaw",
+              "description": "Defeat Shaw's men",
+              "type": "Kill",
+              "target": "ivrc_thug",
+              "deliverTo": "",
+              "count": 3,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 40,
+            "gold": 25,
+            "items": [
+              { "itemId": "miguels_confession", "quantity": 1 }
+            ],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_choice",
+          "title": "Judgment",
+          "description": "Decide Father Miguel's fate: protect his secret or expose the truth.",
+          "onStartText": "Shaw is defeated, but you now hold the truth in your hands. Miguel's confession, his past crimes, everything. What do you do with it?",
+          "onCompleteText": "Your choice is made. The consequences will ripple through Salvation for years to come.",
+          "objectives": [
+            {
+              "id": "obj_protect_miguel",
+              "description": "Destroy the evidence and protect Father Miguel",
+              "type": "Interact",
+              "target": "destroy_evidence",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "He has spent 15 years atoning. Let the past die. Gains Church reputation.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            },
+            {
+              "id": "obj_expose_miguel",
+              "description": "Expose Father Miguel to the congregation",
+              "type": "Talk",
+              "target": "preacher_solomon",
+              "deliverTo": "",
+              "count": 1,
+              "optional": true,
+              "hidden": false,
+              "hint": "The truth must come out, regardless of the cost. Gains Law reputation.",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 35,
+            "gold": 0,
+            "items": [],
+            "reputation": [],
+            "unlocksQuests": []
+          }
+        },
+        {
+          "id": "stage_aftermath",
+          "title": "The Aftermath",
+          "description": "See the results of your choice.",
+          "onStartText": "Time to face the consequences of your decision.",
+          "onCompleteText": "If you protected Miguel: 'You've given me a second chance at a second chance,' Miguel says with tears in his eyes. 'I will spend the rest of my days making this right.' If you exposed him: Miguel is led away, but nods at you with strange peace. 'Perhaps this was always meant to be. Thank you for the truth.'",
+          "objectives": [
+            {
+              "id": "obj_speak_miguel_final",
+              "description": "Speak with Father Miguel one last time",
+              "type": "Talk",
+              "target": "father_miguel",
+              "deliverTo": "",
+              "count": 1,
+              "optional": false,
+              "hidden": false,
+              "hint": "",
+              "mapMarker": {
+                "locationId": "",
+                "markerLabel": ""
+              }
+            }
+          ],
+          "stageRewards": {
+            "xp": 30,
+            "gold": 50,
+            "items": [
+              { "itemId": "rosary_of_redemption", "quantity": 1 }
+            ],
+            "reputation": [
+              { "factionId": "church", "amount": 15 }
+            ],
+            "unlocksQuests": []
+          }
+        }
+      ],
+      "rewards": {
+        "xp": 150,
+        "gold": 75,
+        "items": [
+          { "itemId": "rosary_of_redemption", "quantity": 1 }
+        ],
+        "reputation": [
+          { "factionId": "church", "amount": 20 }
+        ],
+        "unlocksQuests": []
+      }
+    }
+  ]
+}

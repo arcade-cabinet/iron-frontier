@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Shop UI
+    Unity 6 UI Toolkit Layout
+
+    Shop interface with buy/sell functionality, item display, and transaction handling.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Modal overlay -->
+    <ui:VisualElement name="shop-overlay" class="modal-overlay">
+
+        <!-- Main shop panel -->
+        <ui:VisualElement name="shop-panel" class="shop-panel">
+
+            <!-- Header -->
+            <ui:VisualElement name="shop-header" class="panel-header">
+
+                <ui:VisualElement name="header-left" class="header-left">
+                    <ui:VisualElement name="shopkeeper-portrait" class="shopkeeper-portrait" />
+                    <ui:VisualElement name="shop-info" class="shop-info">
+                        <ui:Label name="shop-name" text="Marcus's Forge" class="shop-name" />
+                        <ui:Label name="shopkeeper-name" text="Proprietor: Marcus the Blacksmith" class="shopkeeper-name" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="header-right" class="header-right">
+                    <ui:VisualElement name="player-gold" class="player-gold-display">
+                        <ui:Label text="Your Gold:" class="gold-label" />
+                        <ui:VisualElement class="currency-icon currency-icon--gold" />
+                        <ui:Label name="player-gold-amount" text="12,450" class="gold-amount" />
+                    </ui:VisualElement>
+                    <ui:Button name="close-button" class="close-button" tabindex="100">
+                        <ui:Label text="X" class="close-button-label" />
+                    </ui:Button>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Shopkeeper dialogue -->
+            <ui:VisualElement name="shopkeeper-dialogue" class="shopkeeper-dialogue">
+                <ui:Label name="dialogue-text" text="Welcome to my forge! The finest weapons and armor in all of Rustwood, forged with skill passed down through generations. What catches your eye?" class="dialogue-text" />
+            </ui:VisualElement>
+
+            <!-- Main content -->
+            <ui:VisualElement name="shop-content" class="shop-content">
+
+                <!-- Left panel: Shop inventory / Player inventory -->
+                <ui:VisualElement name="items-section" class="shop-items-section">
+
+                    <!-- Buy/Sell tabs -->
+                    <ui:VisualElement name="shop-tabs" class="shop-tabs">
+                        <ui:Button name="buy-tab" text="Buy" class="tab-button tab-button--active" tabindex="1" />
+                        <ui:Button name="sell-tab" text="Sell" class="tab-button" tabindex="2" />
+                        <ui:Button name="buyback-tab" text="Buyback" class="tab-button" tabindex="3" />
+                    </ui:VisualElement>
+
+                    <!-- Category filters -->
+                    <ui:VisualElement name="category-filters" class="category-filters">
+                        <ui:Button name="filter-all" text="All" class="filter-pill filter-pill--active" />
+                        <ui:Button name="filter-weapons" text="Weapons" class="filter-pill" />
+                        <ui:Button name="filter-armor" text="Armor" class="filter-pill" />
+                        <ui:Button name="filter-consumables" text="Consumables" class="filter-pill" />
+                        <ui:Button name="filter-materials" text="Materials" class="filter-pill" />
+                    </ui:VisualElement>
+
+                    <!-- Sort and search -->
+                    <ui:VisualElement name="sort-search-bar" class="sort-search-bar">
+                        <ui:DropdownField name="sort-dropdown" label="Sort:" class="sort-dropdown" choices="Name,Price: Low,Price: High,Type" index="0" />
+                        <ui:TextField name="search-field" placeholder-text="Search..." class="search-field" tabindex="4" />
+                    </ui:VisualElement>
+
+                    <!-- Item grid -->
+                    <ui:ScrollView name="item-grid-scroll" class="item-grid-scroll" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="item-grid" class="shop-item-grid">
+
+                            <!-- Shop item template -->
+                            <ui:VisualElement name="shop-item-template" class="shop-item shop-item--selected">
+                                <ui:VisualElement name="item-icon-container" class="shop-item-icon-container">
+                                    <ui:VisualElement name="item-icon" class="shop-item-icon" />
+                                    <ui:VisualElement name="rarity-border" class="rarity-border rarity-border--rare" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="item-info" class="shop-item-info">
+                                    <ui:Label name="item-name" text="Steel Longsword" class="shop-item-name" />
+                                    <ui:Label name="item-type" text="One-Handed Sword" class="shop-item-type" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="item-price" class="shop-item-price">
+                                    <ui:VisualElement class="currency-icon currency-icon--gold" />
+                                    <ui:Label name="price-amount" text="350" class="price-amount" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- More shop items... -->
+                            <ui:VisualElement class="shop-item">
+                                <ui:VisualElement class="shop-item-icon-container">
+                                    <ui:VisualElement class="shop-item-icon" />
+                                    <ui:VisualElement class="rarity-border rarity-border--common" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="shop-item-info">
+                                    <ui:Label text="Iron Helmet" class="shop-item-name" />
+                                    <ui:Label text="Head Armor" class="shop-item-type" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="shop-item-price">
+                                    <ui:VisualElement class="currency-icon currency-icon--gold" />
+                                    <ui:Label text="150" class="price-amount" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <ui:VisualElement class="shop-item shop-item--cannot-afford">
+                                <ui:VisualElement class="shop-item-icon-container">
+                                    <ui:VisualElement class="shop-item-icon" />
+                                    <ui:VisualElement class="rarity-border rarity-border--epic" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="shop-item-info">
+                                    <ui:Label text="Thunderforged Blade" class="shop-item-name" />
+                                    <ui:Label text="Two-Handed Sword" class="shop-item-type" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="shop-item-price">
+                                    <ui:VisualElement class="currency-icon currency-icon--gold" />
+                                    <ui:Label text="15,000" class="price-amount price-amount--unaffordable" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+
+                </ui:VisualElement>
+
+                <!-- Right panel: Item details -->
+                <ui:VisualElement name="details-section" class="shop-details-section">
+
+                    <!-- No item selected state -->
+                    <ui:VisualElement name="no-selection" class="no-selection-state">
+                        <ui:Label text="Select an item to view details" class="no-selection-label" />
+                    </ui:VisualElement>
+
+                    <!-- Item details -->
+                    <ui:VisualElement name="item-details" class="shop-item-details">
+
+                        <!-- Item header -->
+                        <ui:VisualElement name="item-header" class="item-detail-header">
+                            <ui:VisualElement name="item-large-icon" class="item-large-icon" />
+                            <ui:VisualElement name="item-title" class="item-title-section">
+                                <ui:Label name="detail-item-name" text="Steel Longsword" class="item-name item-name--rare" />
+                                <ui:Label name="detail-item-type" text="One-Handed Sword" class="item-type" />
+                                <ui:Label name="detail-item-level" text="Requires Level 15" class="item-level" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Item stats -->
+                        <ui:VisualElement name="item-stats" class="item-stats">
+                            <ui:Label text="Stats" class="section-subtitle" />
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Damage" class="stat-name" />
+                                <ui:Label name="stat-damage" text="45-65" class="stat-value" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row">
+                                <ui:Label text="Attack Speed" class="stat-name" />
+                                <ui:Label name="stat-speed" text="1.5" class="stat-value" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="stat-row stat-row--bonus">
+                                <ui:Label text="+10 Strength" class="stat-bonus" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Comparison (when applicable) -->
+                        <ui:VisualElement name="item-comparison" class="item-comparison item-comparison--hidden">
+                            <ui:Label text="Compared to Equipped" class="section-subtitle" />
+                            <ui:VisualElement class="comparison-row">
+                                <ui:Label text="Damage" class="comparison-name" />
+                                <ui:Label name="comparison-damage" text="+15" class="comparison-value comparison-value--positive" />
+                            </ui:VisualElement>
+                            <ui:VisualElement class="comparison-row">
+                                <ui:Label text="Speed" class="comparison-name" />
+                                <ui:Label name="comparison-speed" text="-0.2" class="comparison-value comparison-value--negative" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+
+                        <!-- Item description -->
+                        <ui:VisualElement name="item-description-section" class="item-description-section">
+                            <ui:Label name="item-description" text="A well-crafted longsword of tempered steel. The blade holds a keen edge and the balance is excellent." class="item-description" />
+                        </ui:VisualElement>
+
+                        <!-- Purchase section -->
+                        <ui:VisualElement name="purchase-section" class="purchase-section">
+
+                            <ui:VisualElement name="price-display" class="price-display">
+                                <ui:Label name="price-label" text="Price:" class="price-label" />
+                                <ui:VisualElement class="currency-icon currency-icon--gold currency-icon--large" />
+                                <ui:Label name="detail-price" text="350" class="detail-price" />
+                            </ui:VisualElement>
+
+                            <!-- Quantity selector -->
+                            <ui:VisualElement name="quantity-section" class="quantity-section">
+                                <ui:Label text="Quantity:" class="quantity-label" />
+                                <ui:Button name="quantity-decrease" text="-" class="quantity-button" tabindex="50" />
+                                <ui:IntegerField name="quantity-field" value="1" class="quantity-field" tabindex="51" />
+                                <ui:Button name="quantity-increase" text="+" class="quantity-button" tabindex="52" />
+                                <ui:Button name="quantity-max" text="Max" class="quantity-max-button" tabindex="53" />
+                            </ui:VisualElement>
+
+                            <!-- Total -->
+                            <ui:VisualElement name="total-section" class="total-section">
+                                <ui:Label text="Total:" class="total-label" />
+                                <ui:VisualElement class="currency-icon currency-icon--gold currency-icon--large" />
+                                <ui:Label name="total-price" text="350" class="total-price" />
+                            </ui:VisualElement>
+
+                            <!-- Buy/Sell button -->
+                            <ui:Button name="transaction-button" text="Buy" class="transaction-button transaction-button--buy" tabindex="60" />
+
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Transaction confirmation dialog -->
+        <ui:VisualElement name="confirmation-dialog" class="confirmation-dialog confirmation-dialog--hidden">
+            <ui:VisualElement name="dialog-content" class="dialog-content">
+                <ui:Label name="confirmation-title" text="Confirm Purchase" class="dialog-title" />
+                <ui:Label name="confirmation-message" text="Buy Steel Longsword for 350 gold?" class="dialog-message" />
+                <ui:VisualElement name="dialog-buttons" class="dialog-buttons">
+                    <ui:Button name="confirm-button" text="Confirm" class="dialog-button dialog-button--confirm" tabindex="70" />
+                    <ui:Button name="cancel-button" text="Cancel" class="dialog-button dialog-button--cancel" tabindex="71" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

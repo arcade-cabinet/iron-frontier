@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Dialogue UI
+    Unity 6 UI Toolkit Layout
+
+    Dialogue interface with speaker info, portrait, text display, and player choices.
+    Uses styles from DialogueStyles.uss
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Root container (full screen, captures input when dialogue active) -->
+    <ui:VisualElement name="dialogue-root" class="dialogue-root">
+
+        <!-- Click-to-continue overlay area (invisible, above dialogue panel) -->
+        <ui:VisualElement name="click-area" class="dialogue-click-area" picking-mode="Ignore" />
+
+        <!-- Main dialogue panel (bottom of screen) -->
+        <ui:VisualElement name="dialogue-panel" class="dialogue-panel">
+
+            <!-- Portrait section (left side) -->
+            <ui:VisualElement name="portrait-container" class="portrait-container">
+
+                <!-- Portrait frame with character image -->
+                <ui:VisualElement name="portrait-frame" class="portrait-frame">
+                    <ui:VisualElement name="portrait-image" class="dialogue-portrait expression-neutral" />
+                </ui:VisualElement>
+
+                <!-- Relationship indicator -->
+                <ui:VisualElement name="relationship-indicator" class="relationship-indicator">
+                    <ui:VisualElement name="relationship-icon" class="relationship-icon relationship-icon--neutral" />
+                    <ui:Label name="relationship-label" text="Neutral" class="relationship-label" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Text section (center/right) -->
+            <ui:VisualElement name="text-container" class="text-container">
+
+                <!-- Speaker name and info -->
+                <ui:VisualElement name="speaker-header" class="speaker-header">
+                    <ui:Label name="speaker-name" text="Marcus the Blacksmith" class="dialogue-speaker" />
+                    <ui:VisualElement name="speaker-tags" class="speaker-tags">
+                        <!-- Tags like [Quest Giver], [Merchant], etc. -->
+                        <ui:Label name="speaker-tag" text="Quest Giver" class="speaker-tag" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Dialogue text with scroll support for long text -->
+                <ui:ScrollView name="scroll-view" class="dialogue-scroll" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="text-content" class="text-content">
+                        <ui:Label name="dialogue-text" text="Welcome to my forge, traveler. The iron here sings with the heat of a thousand flames. What brings you to Rustwood?" class="dialogue-text" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+
+                <!-- Continue indicator (shown when there's more to read) -->
+                <ui:VisualElement name="continue-indicator" class="continue-indicator continue-indicator--hidden">
+                    <ui:Label text="Click to continue..." class="continue-text" />
+                    <ui:VisualElement name="continue-arrow" class="continue-arrow" />
+                </ui:VisualElement>
+
+                <!-- Player choices container -->
+                <ui:VisualElement name="choices-container" class="dialogue-choices">
+
+                    <!-- Choices are populated dynamically -->
+                    <!-- Template for reference: -->
+                    <!--
+                    <ui:Button class="dialogue-choice choice-tag-kind">
+                        <ui:Label class="choice-number" text="1." />
+                        <ui:Label class="choice-text" text="I'm looking for work. Any jobs available?" />
+                    </ui:Button>
+                    -->
+
+                </ui:VisualElement>
+
+                <!-- Continue button (for non-choice dialogues) -->
+                <ui:Button name="continue-button" text="Continue" class="dialogue-continue dialogue-continue--hidden" tabindex="0" />
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Skip dialogue button (top-right, for replays) -->
+        <ui:Button name="skip-button" text="Skip" class="skip-button skip-button--hidden" tabindex="99" />
+
+        <!-- Dialogue history toggle -->
+        <ui:Button name="history-button" class="history-button" tooltip="View Dialogue History">
+            <ui:VisualElement name="history-icon" class="history-icon" />
+        </ui:Button>
+
+        <!-- Dialogue history panel (hidden by default) -->
+        <ui:VisualElement name="history-panel" class="history-panel history-panel--hidden">
+
+            <ui:VisualElement name="history-header" class="history-header">
+                <ui:Label text="Conversation History" class="history-title" />
+                <ui:Button name="close-history-button" class="close-button">
+                    <ui:Label text="X" class="close-button-label" />
+                </ui:Button>
+            </ui:VisualElement>
+
+            <ui:ScrollView name="history-scroll" class="history-scroll">
+                <ui:VisualElement name="history-content" class="history-content">
+                    <!-- History entries populated dynamically -->
+                    <!--
+                    <ui:VisualElement class="history-entry">
+                        <ui:Label class="history-speaker" text="Marcus:" />
+                        <ui:Label class="history-text" text="Welcome to my forge..." />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="history-entry history-entry--player">
+                        <ui:Label class="history-speaker" text="You:" />
+                        <ui:Label class="history-text" text="I'm looking for work." />
+                    </ui:VisualElement>
+                    -->
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

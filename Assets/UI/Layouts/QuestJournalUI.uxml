@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Quest Journal UI
+    Unity 6 UI Toolkit Layout
+
+    Quest log with active/completed tabs, quest details, and objectives tracking.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Modal overlay -->
+    <ui:VisualElement name="journal-overlay" class="modal-overlay">
+
+        <!-- Main journal panel -->
+        <ui:VisualElement name="journal-panel" class="journal-panel">
+
+            <!-- Header -->
+            <ui:VisualElement name="journal-header" class="panel-header">
+                <ui:VisualElement name="header-left" class="header-left">
+                    <ui:VisualElement name="journal-icon" class="header-icon header-icon--journal" />
+                    <ui:Label text="Quest Journal" class="panel-title" />
+                </ui:VisualElement>
+                <ui:Button name="close-button" class="close-button" tabindex="100">
+                    <ui:Label text="X" class="close-button-label" />
+                </ui:Button>
+            </ui:VisualElement>
+
+            <!-- Main content -->
+            <ui:VisualElement name="journal-content" class="journal-content">
+
+                <!-- Left panel: Quest list -->
+                <ui:VisualElement name="quest-list-section" class="quest-list-section">
+
+                    <!-- Tabs -->
+                    <ui:VisualElement name="quest-tabs" class="quest-tabs">
+                        <ui:Button name="active-tab" text="Active" class="tab-button tab-button--active" tabindex="1" />
+                        <ui:Button name="completed-tab" text="Completed" class="tab-button" tabindex="2" />
+                        <ui:Button name="failed-tab" text="Failed" class="tab-button" tabindex="3" />
+                    </ui:VisualElement>
+
+                    <!-- Category filters -->
+                    <ui:VisualElement name="category-filters" class="category-filters">
+                        <ui:Button name="filter-all" text="All" class="filter-pill filter-pill--active" />
+                        <ui:Button name="filter-main" text="Main" class="filter-pill filter-pill--main" />
+                        <ui:Button name="filter-side" text="Side" class="filter-pill filter-pill--side" />
+                        <ui:Button name="filter-bounty" text="Bounty" class="filter-pill filter-pill--bounty" />
+                    </ui:VisualElement>
+
+                    <!-- Search -->
+                    <ui:TextField name="quest-search" placeholder-text="Search quests..." class="search-field" tabindex="4" />
+
+                    <!-- Quest list -->
+                    <ui:ScrollView name="quest-list-scroll" class="quest-list-scroll" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="quest-list" class="quest-list">
+
+                            <!-- Quest entry template -->
+                            <ui:VisualElement name="quest-entry-template" class="quest-entry quest-entry--selected">
+                                <ui:VisualElement name="quest-entry-icon" class="quest-entry-icon quest-entry-icon--main" />
+                                <ui:VisualElement name="quest-entry-info" class="quest-entry-info">
+                                    <ui:Label name="quest-entry-name" text="The Iron Path" class="quest-entry-name" />
+                                    <ui:Label name="quest-entry-location" text="Rustwood Valley" class="quest-entry-location" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="quest-entry-indicators" class="quest-entry-indicators">
+                                    <ui:VisualElement name="quest-tracked-icon" class="tracked-icon tracked-icon--active" tooltip="Tracked" />
+                                    <ui:Label name="quest-entry-level" text="Lv. 12" class="quest-entry-level" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- More quest entries... -->
+                            <ui:VisualElement class="quest-entry">
+                                <ui:VisualElement class="quest-entry-icon quest-entry-icon--side" />
+                                <ui:VisualElement class="quest-entry-info">
+                                    <ui:Label text="Lost Supplies" class="quest-entry-name" />
+                                    <ui:Label text="Trading Post" class="quest-entry-location" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="quest-entry-indicators">
+                                    <ui:Label text="Lv. 10" class="quest-entry-level" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <ui:VisualElement class="quest-entry">
+                                <ui:VisualElement class="quest-entry-icon quest-entry-icon--bounty" />
+                                <ui:VisualElement class="quest-entry-info">
+                                    <ui:Label text="Bandit Cleanup" class="quest-entry-name" />
+                                    <ui:Label text="0 / 10 Bandits" class="quest-entry-location" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="quest-entry-indicators">
+                                    <ui:Label text="Lv. 8" class="quest-entry-level" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+
+                    <!-- Quest count -->
+                    <ui:Label name="quest-count" text="3 Active Quests" class="quest-count" />
+
+                </ui:VisualElement>
+
+                <!-- Right panel: Quest details -->
+                <ui:VisualElement name="quest-details-section" class="quest-details-section">
+
+                    <!-- No quest selected state -->
+                    <ui:VisualElement name="no-quest-selected" class="no-selection-state">
+                        <ui:VisualElement name="no-selection-icon" class="no-selection-icon" />
+                        <ui:Label text="Select a quest to view details" class="no-selection-label" />
+                    </ui:VisualElement>
+
+                    <!-- Quest details (shown when quest selected) -->
+                    <ui:VisualElement name="quest-details" class="quest-details">
+
+                        <!-- Quest header -->
+                        <ui:VisualElement name="quest-header" class="quest-detail-header">
+                            <ui:VisualElement name="quest-type-badge" class="quest-type-badge quest-type-badge--main">
+                                <ui:Label text="Main Quest" class="quest-type-label" />
+                            </ui:VisualElement>
+                            <ui:Label name="quest-title" text="The Iron Path" class="quest-title" />
+                            <ui:Label name="quest-giver" text="Given by: Marcus the Blacksmith" class="quest-giver" />
+                        </ui:VisualElement>
+
+                        <!-- Quest description -->
+                        <ui:ScrollView name="quest-description-scroll" class="quest-description-scroll" horizontal-scroller-visibility="Hidden">
+                            <ui:VisualElement name="quest-description-content" class="quest-description-content">
+
+                                <ui:Label text="Description" class="section-title" />
+                                <ui:Label name="quest-description" text="Marcus has asked you to investigate the abandoned mine to the north. Strange sounds have been heard echoing from its depths, and supplies have gone missing from the nearby settlements. Find out what lurks within and put an end to the threat." class="quest-description-text" />
+
+                                <!-- Objectives -->
+                                <ui:Label text="Objectives" class="section-title section-title--objectives" />
+                                <ui:VisualElement name="objectives-list" class="objectives-list">
+
+                                    <ui:VisualElement class="objective objective--complete">
+                                        <ui:VisualElement class="objective-checkbox objective-checkbox--checked" />
+                                        <ui:Label text="Speak with Marcus the Blacksmith" class="objective-text" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="objective objective--complete">
+                                        <ui:VisualElement class="objective-checkbox objective-checkbox--checked" />
+                                        <ui:Label text="Travel to the Abandoned Mine" class="objective-text" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="objective objective--current">
+                                        <ui:VisualElement class="objective-checkbox" />
+                                        <ui:Label text="Explore the mine depths" class="objective-text" />
+                                        <ui:Label text="(Current)" class="objective-current-label" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="objective objective--pending">
+                                        <ui:VisualElement class="objective-checkbox" />
+                                        <ui:Label text="Defeat the source of the disturbance" class="objective-text" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="objective objective--pending">
+                                        <ui:VisualElement class="objective-checkbox" />
+                                        <ui:Label text="Return to Marcus" class="objective-text" />
+                                    </ui:VisualElement>
+
+                                </ui:VisualElement>
+
+                                <!-- Rewards -->
+                                <ui:Label text="Rewards" class="section-title section-title--rewards" />
+                                <ui:VisualElement name="rewards-container" class="rewards-container">
+
+                                    <ui:VisualElement class="reward-item">
+                                        <ui:VisualElement class="reward-icon reward-icon--xp" />
+                                        <ui:Label text="1,500 XP" class="reward-text" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="reward-item">
+                                        <ui:VisualElement class="reward-icon reward-icon--gold" />
+                                        <ui:Label text="500 Gold" class="reward-text" />
+                                    </ui:VisualElement>
+
+                                    <ui:VisualElement class="reward-item reward-item--choice">
+                                        <ui:VisualElement class="reward-icon reward-icon--item" />
+                                        <ui:Label text="Choice of Weapon" class="reward-text" />
+                                    </ui:VisualElement>
+
+                                </ui:VisualElement>
+
+                            </ui:VisualElement>
+                        </ui:ScrollView>
+
+                        <!-- Action buttons -->
+                        <ui:VisualElement name="quest-actions" class="quest-actions">
+                            <ui:Button name="track-quest-button" text="Track Quest" class="action-button action-button--primary" tabindex="50" />
+                            <ui:Button name="show-on-map-button" text="Show on Map" class="action-button" tabindex="51" />
+                            <ui:Button name="abandon-quest-button" text="Abandon" class="action-button action-button--danger" tabindex="52" />
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

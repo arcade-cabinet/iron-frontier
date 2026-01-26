@@ -1,0 +1,751 @@
+{
+  "version": "1.0.0",
+  "description": "Iron Frontier - Boss Enemy Database. All major boss encounters organized by story progression.",
+  "bosses": [
+    {
+      "id": "bandit_king",
+      "displayName": "The Bandit King",
+      "type": "Gunslinger",
+      "faction": "Raiders",
+      "description": "The ruthless ruler of the frontier bandits. Act 1 boss with loyal guards.",
+      "maxHealth": 150,
+      "actionPoints": 6,
+      "baseDamage": 24,
+      "armor": 10,
+      "accuracyMod": 15,
+      "evasion": 12,
+      "moveSpeed": 3,
+      "weaponId": "revolver_fancy",
+      "behavior": "Defensive",
+      "preferredRange": 4,
+      "fleeThreshold": 0,
+      "canCallReinforcements": true,
+      "abilities": [
+        {
+          "name": "King's Command",
+          "description": "Orders all allies to attack the same target, granting +30% damage",
+          "cooldown": 3,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["buff", "leadership", "aoe"]
+        },
+        {
+          "name": "Royal Guard",
+          "description": "Summons two elite bandit bodyguards",
+          "cooldown": 5,
+          "apCost": 3,
+          "damageMultiplier": 0,
+          "tags": ["summon"]
+        },
+        {
+          "name": "Execution Shot",
+          "description": "Devastating shot against wounded targets (bonus damage below 30% HP)",
+          "cooldown": 2,
+          "apCost": 3,
+          "damageMultiplier": 2.5,
+          "tags": ["ranged", "execute", "heavy"]
+        }
+      ],
+      "xpReward": 200,
+      "goldReward": 100,
+      "lootTableId": "boss_bandit_king",
+      "lootTable": {
+        "id": "boss_bandit_king",
+        "name": "Bandit King Drops",
+        "entries": [
+          { "itemId": "bandits_pouch", "weight": 100, "minQuantity": 5, "maxQuantity": 8, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "revolver_fancy", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "health_potion_greater", "weight": 80, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "pistol_ammo", "weight": 80, "minQuantity": 24, "maxQuantity": 36, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "stolen_goods", "weight": 60, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "reinforced_leather", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "gold_nugget", "weight": 40, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "stimulant_tonic", "weight": 30, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "bandit_king_crown", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 5,
+        "emptyChance": 0
+      },
+      "spriteId": "bandit_king",
+      "isBoss": true,
+      "phases": 2,
+      "summonIds": ["bandit_brute", "bandit_gunner"],
+      "tags": ["ranged", "legendary", "human", "boss", "act1"],
+      "encounterContext": {
+        "location": "Bandit Stronghold",
+        "minPlayerLevel": 3,
+        "music": "boss_bandit_king",
+        "arena": "bandit_throne_room",
+        "phaseThresholds": [0.5],
+        "phaseAbilities": [
+          ["King's Command", "Execution Shot"],
+          ["King's Command", "Royal Guard", "Execution Shot"]
+        ]
+      }
+    },
+    {
+      "id": "the_saboteur",
+      "displayName": "The Saboteur",
+      "type": "Dynamiter",
+      "faction": "Copperhead",
+      "description": "A master of explosives and gadgets. Uses traps, smoke bombs, and dynamite in combat.",
+      "maxHealth": 100,
+      "actionPoints": 6,
+      "baseDamage": 30,
+      "armor": 6,
+      "accuracyMod": 10,
+      "evasion": 15,
+      "moveSpeed": 4,
+      "weaponId": "dynamite",
+      "behavior": "Ranged",
+      "preferredRange": 6,
+      "fleeThreshold": 0,
+      "canCallReinforcements": false,
+      "abilities": [
+        {
+          "name": "Dynamite Barrage",
+          "description": "Throws multiple sticks of dynamite across the arena",
+          "cooldown": 3,
+          "apCost": 4,
+          "damageMultiplier": 1.2,
+          "tags": ["ranged", "aoe", "explosive", "multi-hit"]
+        },
+        {
+          "name": "Smoke Screen",
+          "description": "Creates a cloud of smoke reducing all enemy accuracy by 40%",
+          "cooldown": 4,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["utility", "debuff", "defensive"]
+        },
+        {
+          "name": "Booby Trap",
+          "description": "Places a hidden trap that explodes when triggered",
+          "cooldown": 2,
+          "apCost": 2,
+          "damageMultiplier": 1.5,
+          "tags": ["trap", "explosive", "control"]
+        },
+        {
+          "name": "Last Resort",
+          "description": "When below 20% HP, detonates all remaining explosives for massive damage",
+          "cooldown": 0,
+          "apCost": 6,
+          "damageMultiplier": 3.0,
+          "tags": ["ranged", "aoe", "explosive", "suicide"]
+        }
+      ],
+      "xpReward": 250,
+      "goldReward": 75,
+      "lootTableId": "boss_saboteur",
+      "lootTable": {
+        "id": "boss_saboteur",
+        "name": "Saboteur Drops",
+        "entries": [
+          { "itemId": "dynamite", "weight": 100, "minQuantity": 5, "maxQuantity": 10, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "mechanical_parts", "weight": 80, "minQuantity": 5, "maxQuantity": 10, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "health_potion_greater", "weight": 80, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "bandits_pouch", "weight": 60, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steam_valve", "weight": 50, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "stimulant_tonic", "weight": 40, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "quickdraw_holster", "weight": 30, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "evidence_documents", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "saboteur_toolkit", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 5,
+        "emptyChance": 0
+      },
+      "spriteId": "saboteur",
+      "isBoss": true,
+      "phases": 2,
+      "summonIds": [],
+      "tags": ["ranged", "legendary", "human", "boss", "explosives", "act2"],
+      "encounterContext": {
+        "location": "Railroad Bridge",
+        "minPlayerLevel": 5,
+        "music": "boss_saboteur",
+        "arena": "railroad_bridge",
+        "phaseThresholds": [0.5],
+        "phaseAbilities": [
+          ["Dynamite Barrage", "Smoke Screen"],
+          ["Dynamite Barrage", "Smoke Screen", "Booby Trap", "Last Resort"]
+        ]
+      }
+    },
+    {
+      "id": "rattlesnake_king",
+      "displayName": "The Rattlesnake King",
+      "type": "Animal",
+      "faction": "Wildlife",
+      "description": "A monstrous rattlesnake of impossible size, mutated by exposure to strange minerals in the deep canyons. Its venom can kill a horse in seconds.",
+      "maxHealth": 180,
+      "actionPoints": 5,
+      "baseDamage": 32,
+      "armor": 10,
+      "accuracyMod": 15,
+      "evasion": 12,
+      "moveSpeed": 3,
+      "behavior": "Aggressive",
+      "preferredRange": 0,
+      "fleeThreshold": 0,
+      "canCallReinforcements": true,
+      "abilities": [
+        {
+          "name": "Venomous Strike",
+          "description": "Powerful bite that applies stacking poison DoT (5 damage/turn, stacks 3x)",
+          "cooldown": 0,
+          "apCost": 2,
+          "damageMultiplier": 1.3,
+          "tags": ["melee", "poison", "dot"]
+        },
+        {
+          "name": "Coil Crush",
+          "description": "Constricts target, disabling them for 1 turn and dealing crushing damage",
+          "cooldown": 3,
+          "apCost": 3,
+          "damageMultiplier": 1.8,
+          "tags": ["melee", "disable", "grab"]
+        },
+        {
+          "name": "Rattling Fear",
+          "description": "Intimidating rattle that debuffs entire party (reduced accuracy by 25% for 2 turns)",
+          "cooldown": 4,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["debuff", "aoe", "fear"]
+        },
+        {
+          "name": "Summon Brood",
+          "description": "Calls smaller rattlesnakes to aid in combat",
+          "cooldown": 5,
+          "apCost": 3,
+          "damageMultiplier": 0,
+          "tags": ["summon"]
+        }
+      ],
+      "xpReward": 350,
+      "goldReward": 0,
+      "lootTableId": "boss_rattlesnake_king",
+      "lootTable": {
+        "id": "boss_rattlesnake_king",
+        "name": "Rattlesnake King Drops",
+        "entries": [
+          { "itemId": "giant_snake_fang", "weight": 100, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "snake_venom_potent", "weight": 100, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "rattlesnake_king_hide", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "serpent_scale_armor", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "antidote", "weight": 80, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "treasure_hoard", "weight": 40, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 4,
+        "emptyChance": 0
+      },
+      "spriteId": "rattlesnake_king",
+      "isBoss": true,
+      "phases": 2,
+      "summonIds": ["rattlesnake"],
+      "tags": ["melee", "legendary", "animal", "boss", "poison", "aoe", "debuff"],
+      "encounterContext": {
+        "location": "Snake's Hollow",
+        "minPlayerLevel": 4,
+        "music": "boss_rattlesnake_king",
+        "arena": "canyon_nest",
+        "canBypass": true,
+        "bypassRequirements": ["snake_venom_x5", "reptile_lore_skill"],
+        "phaseThresholds": [0.5],
+        "phaseAbilities": [
+          ["Venomous Strike", "Coil Crush", "Rattling Fear"],
+          ["Venomous Strike", "Coil Crush", "Rattling Fear", "Summon Brood"]
+        ]
+      }
+    },
+    {
+      "id": "iron_golem",
+      "displayName": "Iron Golem",
+      "type": "Automaton",
+      "faction": "IVRCGuards",
+      "description": "A massive steam-powered enforcer built by IVRC engineers. Belches smoke and steam as it lumbers toward its targets. Nearly impervious to small arms fire.",
+      "maxHealth": 220,
+      "actionPoints": 4,
+      "baseDamage": 35,
+      "armor": 18,
+      "accuracyMod": 5,
+      "evasion": 3,
+      "moveSpeed": 1,
+      "behavior": "Aggressive",
+      "preferredRange": 0,
+      "fleeThreshold": 0,
+      "canCallReinforcements": false,
+      "abilities": [
+        {
+          "name": "Steam Blast",
+          "description": "Cone AoE attack that damages all targets in front",
+          "cooldown": 2,
+          "apCost": 3,
+          "damageMultiplier": 1.3,
+          "tags": ["ranged", "aoe", "steam", "cone"]
+        },
+        {
+          "name": "Iron Fist",
+          "description": "Massive melee strike that knocks target back 2 tiles",
+          "cooldown": 1,
+          "apCost": 2,
+          "damageMultiplier": 2.0,
+          "tags": ["melee", "knockback", "heavy"]
+        },
+        {
+          "name": "Overheat",
+          "description": "Enters overheated state, reflecting 50% damage for 2 turns but cannot move",
+          "cooldown": 5,
+          "apCost": 1,
+          "damageMultiplier": 0,
+          "tags": ["defensive", "reflect", "stance"]
+        },
+        {
+          "name": "Seismic Stomp",
+          "description": "Ground-pound that damages and staggers all nearby enemies",
+          "cooldown": 3,
+          "apCost": 4,
+          "damageMultiplier": 1.5,
+          "tags": ["melee", "aoe", "stagger"]
+        }
+      ],
+      "xpReward": 380,
+      "goldReward": 100,
+      "lootTableId": "boss_iron_golem",
+      "lootTable": {
+        "id": "boss_iron_golem",
+        "name": "Iron Golem Drops",
+        "entries": [
+          { "itemId": "automaton_core", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "automaton_plating", "weight": 100, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steam_valve", "weight": 80, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "mechanical_parts", "weight": 80, "minQuantity": 8, "maxQuantity": 15, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "iron_golem_fist", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steam_powered_armor", "weight": 40, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "ivrc_blueprint", "weight": 60, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 5,
+        "emptyChance": 0
+      },
+      "spriteId": "iron_golem",
+      "isBoss": true,
+      "phases": 3,
+      "summonIds": [],
+      "tags": ["melee", "legendary", "automaton", "boss", "ivrc", "tank", "aoe", "knockback"],
+      "encounterContext": {
+        "location": "IVRC Prototype Lab",
+        "minPlayerLevel": 6,
+        "music": "boss_iron_golem",
+        "arena": "ivrc_factory",
+        "phaseThresholds": [0.66, 0.33],
+        "phaseAbilities": [
+          ["Iron Fist", "Steam Blast"],
+          ["Iron Fist", "Steam Blast", "Seismic Stomp"],
+          ["Iron Fist", "Steam Blast", "Seismic Stomp", "Overheat"]
+        ]
+      }
+    },
+    {
+      "id": "ghost_of_the_gallows",
+      "displayName": "Ghost of the Gallows",
+      "type": "Bandit",
+      "faction": "Remnant",
+      "description": "The vengeful spirit of a notorious outlaw, hanged at Gallows Hill a generation ago. Immune to conventional weapons during its phased state.",
+      "maxHealth": 140,
+      "actionPoints": 6,
+      "baseDamage": 26,
+      "armor": 5,
+      "accuracyMod": 18,
+      "evasion": 25,
+      "moveSpeed": 4,
+      "behavior": "Aggressive",
+      "preferredRange": 2,
+      "fleeThreshold": 0,
+      "canCallReinforcements": false,
+      "abilities": [
+        {
+          "name": "Phase Shift",
+          "description": "Becomes incorporeal, immune to physical damage for 1 turn",
+          "cooldown": 3,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["defensive", "phase", "immunity"]
+        },
+        {
+          "name": "Hangman's Rope",
+          "description": "Spectral noose pulls target adjacent and deals damage",
+          "cooldown": 2,
+          "apCost": 3,
+          "damageMultiplier": 1.5,
+          "tags": ["ranged", "pull", "control"]
+        },
+        {
+          "name": "Wail of the Damned",
+          "description": "Horrifying scream that silences all targets for 1 turn (no abilities)",
+          "cooldown": 4,
+          "apCost": 3,
+          "damageMultiplier": 0.5,
+          "tags": ["aoe", "silence", "fear"]
+        },
+        {
+          "name": "Spectral Touch",
+          "description": "Drains life from target, healing the Ghost",
+          "cooldown": 1,
+          "apCost": 2,
+          "damageMultiplier": 1.2,
+          "tags": ["melee", "lifesteal"]
+        }
+      ],
+      "xpReward": 320,
+      "goldReward": 50,
+      "lootTableId": "boss_ghost",
+      "lootTable": {
+        "id": "boss_ghost",
+        "name": "Ghost of the Gallows Drops",
+        "entries": [
+          { "itemId": "spectral_essence", "weight": 100, "minQuantity": 2, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "hangmans_rope", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "ghost_revolver", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "spectral_cloak", "weight": 40, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "outlaw_journal", "weight": 80, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "gold_nugget", "weight": 60, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 4,
+        "emptyChance": 0
+      },
+      "spriteId": "ghost_of_the_gallows",
+      "isBoss": true,
+      "phases": 2,
+      "summonIds": [],
+      "tags": ["melee", "legendary", "undead", "boss", "spectral", "phase", "pull", "silence"],
+      "encounterContext": {
+        "location": "Old Gallows Hill",
+        "minPlayerLevel": 5,
+        "music": "boss_ghost",
+        "arena": "gallows_hill",
+        "isOptional": true,
+        "phaseThresholds": [0.5],
+        "phaseAbilities": [
+          ["Phase Shift", "Hangman's Rope", "Spectral Touch"],
+          ["Phase Shift", "Hangman's Rope", "Spectral Touch", "Wail of the Damned"]
+        ]
+      }
+    },
+    {
+      "id": "diamondback",
+      "displayName": "Diamondback",
+      "type": "Gunslinger",
+      "faction": "Copperhead",
+      "description": "The legendary leader of the Copperhead Gang, known for lightning-fast draws and deadly accuracy. Only becomes an enemy if the player opposes the Copperheads.",
+      "maxHealth": 160,
+      "actionPoints": 8,
+      "baseDamage": 24,
+      "armor": 8,
+      "accuracyMod": 25,
+      "evasion": 20,
+      "moveSpeed": 4,
+      "weaponId": "diamondback_revolvers",
+      "behavior": "Aggressive",
+      "preferredRange": 4,
+      "fleeThreshold": 0,
+      "canCallReinforcements": true,
+      "abilities": [
+        {
+          "name": "Quick Draw",
+          "description": "Interrupts enemy action, dealing damage and canceling their turn",
+          "cooldown": 2,
+          "apCost": 2,
+          "damageMultiplier": 1.0,
+          "tags": ["ranged", "interrupt", "fast"]
+        },
+        {
+          "name": "Viper's Kiss",
+          "description": "Applies potent poison that stacks and spreads to adjacent allies",
+          "cooldown": 3,
+          "apCost": 2,
+          "damageMultiplier": 0.8,
+          "tags": ["ranged", "poison", "spread"]
+        },
+        {
+          "name": "Serpent Strike",
+          "description": "Rapid multi-hit attack (3 strikes at reduced damage)",
+          "cooldown": 2,
+          "apCost": 4,
+          "damageMultiplier": 0.5,
+          "tags": ["ranged", "multi-hit"]
+        },
+        {
+          "name": "Gang Leader",
+          "description": "Passive: All Copperhead allies gain +15% damage and evasion",
+          "cooldown": 0,
+          "apCost": 0,
+          "damageMultiplier": 0,
+          "tags": ["passive", "buff", "leadership"]
+        },
+        {
+          "name": "Call the Gang",
+          "description": "Summons Copperhead reinforcements",
+          "cooldown": 5,
+          "apCost": 3,
+          "damageMultiplier": 0,
+          "tags": ["summon"]
+        }
+      ],
+      "xpReward": 400,
+      "goldReward": 200,
+      "lootTableId": "boss_diamondback",
+      "lootTable": {
+        "id": "boss_diamondback",
+        "name": "Diamondback Drops",
+        "entries": [
+          { "itemId": "diamondback_revolvers", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "bandits_pouch", "weight": 100, "minQuantity": 5, "maxQuantity": 8, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "copperhead_banner", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "snake_scale_vest", "weight": 60, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "health_potion_greater", "weight": 80, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "stimulant_tonic", "weight": 60, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "stolen_gold_bars", "weight": 40, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 5,
+        "emptyChance": 0
+      },
+      "spriteId": "diamondback",
+      "isBoss": true,
+      "phases": 3,
+      "summonIds": ["copperhead_viper", "copperhead_gunslinger"],
+      "tags": ["ranged", "legendary", "human", "boss", "copperhead", "fast", "poison", "interrupt", "conditional"],
+      "encounterContext": {
+        "location": "Copperhead Stronghold",
+        "minPlayerLevel": 7,
+        "music": "boss_diamondback",
+        "arena": "copperhead_canyon",
+        "isConditional": true,
+        "condition": "player_opposed_copperheads",
+        "phaseThresholds": [0.66, 0.33],
+        "phaseAbilities": [
+          ["Quick Draw", "Serpent Strike"],
+          ["Quick Draw", "Serpent Strike", "Viper's Kiss"],
+          ["Quick Draw", "Serpent Strike", "Viper's Kiss", "Call the Gang"]
+        ]
+      }
+    },
+    {
+      "id": "cornelius_thorne",
+      "displayName": "Cornelius Thorne",
+      "type": "Gunslinger",
+      "faction": "IVRCGuards",
+      "description": "Director of the Iron Valley Railroad Company. A ruthless businessman who will stop at nothing to maintain his grip on the frontier. Commands absolute loyalty from his guards.",
+      "maxHealth": 200,
+      "actionPoints": 7,
+      "baseDamage": 28,
+      "armor": 12,
+      "accuracyMod": 20,
+      "evasion": 15,
+      "moveSpeed": 3,
+      "weaponId": "executive_revolver",
+      "behavior": "Defensive",
+      "preferredRange": 5,
+      "fleeThreshold": 0,
+      "canCallReinforcements": true,
+      "abilities": [
+        {
+          "name": "Executive Order",
+          "description": "Buffs all IVRC guards, increasing damage by 30% and accuracy by 15%",
+          "cooldown": 4,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["buff", "leadership", "aoe"]
+        },
+        {
+          "name": "Iron Grip",
+          "description": "Stuns a target for 1 turn, preventing action",
+          "cooldown": 3,
+          "apCost": 2,
+          "damageMultiplier": 0.5,
+          "tags": ["ranged", "stun", "control"]
+        },
+        {
+          "name": "Corporate Might",
+          "description": "Devastating single-target attack with bonus damage against stunned targets",
+          "cooldown": 2,
+          "apCost": 3,
+          "damageMultiplier": 2.0,
+          "tags": ["ranged", "heavy", "execute"]
+        },
+        {
+          "name": "Call Security",
+          "description": "Summons IVRC elite guards to protect him",
+          "cooldown": 5,
+          "apCost": 3,
+          "damageMultiplier": 0,
+          "tags": ["summon"]
+        },
+        {
+          "name": "Contingency Protocol",
+          "description": "When below 25% HP, activates the Iron Golem defense system",
+          "cooldown": 0,
+          "apCost": 0,
+          "damageMultiplier": 0,
+          "tags": ["passive", "summon", "phase_trigger"]
+        }
+      ],
+      "xpReward": 400,
+      "goldReward": 300,
+      "lootTableId": "boss_thorne",
+      "lootTable": {
+        "id": "boss_thorne",
+        "name": "Cornelius Thorne Drops",
+        "entries": [
+          { "itemId": "executive_revolver", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "thorne_signet_ring", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "ivrc_master_key", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "gold_bars", "weight": 80, "minQuantity": 5, "maxQuantity": 10, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "executive_suit", "weight": 60, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "incriminating_documents", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "health_potion_greater", "weight": 80, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 6,
+        "emptyChance": 0
+      },
+      "spriteId": "cornelius_thorne",
+      "isBoss": true,
+      "phases": 3,
+      "summonIds": ["ivrc_elite_captain", "ivrc_guard", "iron_golem"],
+      "tags": ["ranged", "legendary", "human", "boss", "ivrc", "final_boss", "summons"],
+      "encounterContext": {
+        "location": "IVRC Headquarters",
+        "minPlayerLevel": 8,
+        "music": "boss_final_thorne",
+        "arena": "thorne_office",
+        "isFinalBoss": true,
+        "phaseThresholds": [0.66, 0.25],
+        "phaseAbilities": [
+          ["Executive Order", "Iron Grip", "Corporate Might"],
+          ["Executive Order", "Iron Grip", "Corporate Might", "Call Security"],
+          ["Executive Order", "Iron Grip", "Corporate Might", "Call Security", "Contingency Protocol"]
+        ],
+        "phaseEvents": [
+          null,
+          "Guards burst through the doors!",
+          "Thorne activates the Iron Golem prototype!"
+        ]
+      }
+    },
+    {
+      "id": "iron_tyrant",
+      "displayName": "The Iron Tyrant",
+      "type": "Automaton",
+      "faction": "Remnant",
+      "description": "The final boss. A massive war machine awakened from the depths. Multiple combat phases reveal its true horrifying form.",
+      "maxHealth": 250,
+      "actionPoints": 5,
+      "baseDamage": 35,
+      "armor": 15,
+      "accuracyMod": 10,
+      "evasion": 10,
+      "moveSpeed": 2,
+      "behavior": "Aggressive",
+      "preferredRange": 3,
+      "fleeThreshold": 0,
+      "canCallReinforcements": true,
+      "abilities": [
+        {
+          "name": "Devastator Cannon",
+          "description": "Massive artillery strike that damages a large area",
+          "cooldown": 3,
+          "apCost": 4,
+          "damageMultiplier": 2.5,
+          "tags": ["ranged", "aoe", "heavy", "artillery"]
+        },
+        {
+          "name": "Whirlwind Strike",
+          "description": "Spinning attack that hits all adjacent enemies",
+          "cooldown": 2,
+          "apCost": 3,
+          "damageMultiplier": 1.5,
+          "tags": ["melee", "aoe", "spin"]
+        },
+        {
+          "name": "Deploy Drones",
+          "description": "Releases small combat drones from internal bays",
+          "cooldown": 4,
+          "apCost": 2,
+          "damageMultiplier": 0,
+          "tags": ["summon", "drones"]
+        },
+        {
+          "name": "Overcharge",
+          "description": "Powers up for 1 turn, then unleashes devastating attacks",
+          "cooldown": 5,
+          "apCost": 1,
+          "damageMultiplier": 0,
+          "tags": ["charge", "buff"]
+        },
+        {
+          "name": "Adaptive Armor",
+          "description": "Passive: Becomes resistant to the last damage type received",
+          "cooldown": 0,
+          "apCost": 0,
+          "damageMultiplier": 0,
+          "tags": ["passive", "defensive", "adaptive"]
+        },
+        {
+          "name": "Self-Destruct Protocol",
+          "description": "When below 10% HP, begins countdown to massive explosion",
+          "cooldown": 0,
+          "apCost": 0,
+          "damageMultiplier": 5.0,
+          "tags": ["explosive", "aoe", "desperation"]
+        }
+      ],
+      "xpReward": 500,
+      "goldReward": 200,
+      "lootTableId": "boss_final",
+      "lootTable": {
+        "id": "boss_final",
+        "name": "Iron Tyrant Drops",
+        "entries": [
+          { "itemId": "automaton_core", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "automaton_plating", "weight": 100, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steam_valve", "weight": 80, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "mechanical_parts", "weight": 80, "minQuantity": 10, "maxQuantity": 20, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "health_potion_greater", "weight": 60, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steampunk_blade", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "steam_plated_armor", "weight": 40, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "gold_nugget", "weight": 60, "minQuantity": 3, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "tyrant_heart", "weight": 100, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+          { "itemId": "devastator_arm", "weight": 50, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+        ],
+        "rolls": 6,
+        "emptyChance": 0
+      },
+      "spriteId": "iron_tyrant",
+      "isBoss": true,
+      "phases": 4,
+      "summonIds": ["clockwork_drone", "remnant_sentry"],
+      "tags": ["melee", "legendary", "automaton", "boss", "final", "phases"],
+      "encounterContext": {
+        "location": "The Remnant Core",
+        "minPlayerLevel": 9,
+        "music": "boss_final_tyrant",
+        "arena": "remnant_throne",
+        "isFinalBoss": true,
+        "isAlternateFinal": true,
+        "phaseThresholds": [0.75, 0.5, 0.25],
+        "phaseAbilities": [
+          ["Devastator Cannon", "Whirlwind Strike"],
+          ["Devastator Cannon", "Whirlwind Strike", "Deploy Drones"],
+          ["Devastator Cannon", "Whirlwind Strike", "Deploy Drones", "Overcharge"],
+          ["Devastator Cannon", "Whirlwind Strike", "Deploy Drones", "Overcharge", "Self-Destruct Protocol"]
+        ],
+        "phaseEvents": [
+          null,
+          "The Iron Tyrant's armor plates shift and reform!",
+          "Internal systems activate - drones deployed!",
+          "WARNING: Self-destruct sequence initiated!"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "version": "1.0",
+  "prefabs": [
+    {
+      "id": "player",
+      "displayName": "Player Character",
+      "resourcePath": "Prefabs/Characters/PlayerPrefab",
+      "category": "Characters",
+      "preload": true,
+      "maxPoolSize": 0,
+      "tags": ["player", "character", "controllable"]
+    },
+    {
+      "id": "npc",
+      "displayName": "NPC Template",
+      "resourcePath": "Prefabs/Characters/NPCPrefab",
+      "category": "Characters",
+      "preload": false,
+      "maxPoolSize": 20,
+      "tags": ["npc", "character", "ai"]
+    },
+    {
+      "id": "enemy_basic",
+      "displayName": "Basic Enemy",
+      "resourcePath": "Prefabs/Characters/EnemyPrefab",
+      "category": "Characters",
+      "preload": false,
+      "maxPoolSize": 30,
+      "tags": ["enemy", "character", "ai", "combat"]
+    },
+    {
+      "id": "damage_popup",
+      "displayName": "Damage Popup",
+      "resourcePath": "Prefabs/UI/DamagePopup",
+      "category": "UI",
+      "preload": true,
+      "maxPoolSize": 50,
+      "tags": ["ui", "combat", "feedback", "pooled"]
+    },
+    {
+      "id": "interaction_prompt",
+      "displayName": "Interaction Prompt",
+      "resourcePath": "Prefabs/UI/InteractionPrompt",
+      "category": "UI",
+      "preload": true,
+      "maxPoolSize": 1,
+      "tags": ["ui", "interaction", "prompt"]
+    },
+    {
+      "id": "quest_marker",
+      "displayName": "Quest Objective Marker",
+      "resourcePath": "Prefabs/UI/QuestMarker",
+      "category": "UI",
+      "preload": false,
+      "maxPoolSize": 10,
+      "tags": ["ui", "quest", "marker", "pooled"]
+    },
+    {
+      "id": "dialogue_bubble",
+      "displayName": "Dialogue Bubble",
+      "resourcePath": "Prefabs/UI/DialogueBubble",
+      "category": "UI",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["ui", "dialogue", "npc"]
+    },
+    {
+      "id": "name_plate",
+      "displayName": "NPC Name Plate",
+      "resourcePath": "Prefabs/UI/NamePlate",
+      "category": "UI",
+      "preload": false,
+      "maxPoolSize": 20,
+      "tags": ["ui", "npc", "name"]
+    },
+    {
+      "id": "hit_effect",
+      "displayName": "Combat Hit Effect",
+      "resourcePath": "Prefabs/VFX/HitEffect",
+      "category": "VFX",
+      "preload": true,
+      "maxPoolSize": 30,
+      "tags": ["vfx", "combat", "particles", "pooled"]
+    },
+    {
+      "id": "level_up_effect",
+      "displayName": "Level Up Celebration",
+      "resourcePath": "Prefabs/VFX/LevelUpEffect",
+      "category": "VFX",
+      "preload": false,
+      "maxPoolSize": 2,
+      "tags": ["vfx", "celebration", "particles"]
+    },
+    {
+      "id": "dust_cloud",
+      "displayName": "Movement Dust Cloud",
+      "resourcePath": "Prefabs/VFX/DustCloud",
+      "category": "VFX",
+      "preload": true,
+      "maxPoolSize": 20,
+      "tags": ["vfx", "movement", "particles", "pooled"]
+    },
+    {
+      "id": "footstep_dust",
+      "displayName": "Footstep Dust",
+      "resourcePath": "Prefabs/VFX/FootstepDust",
+      "category": "VFX",
+      "preload": true,
+      "maxPoolSize": 30,
+      "tags": ["vfx", "movement", "particles", "pooled"]
+    },
+    {
+      "id": "heal_effect",
+      "displayName": "Healing Effect",
+      "resourcePath": "Prefabs/VFX/HealEffect",
+      "category": "VFX",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["vfx", "heal", "particles"]
+    },
+    {
+      "id": "buff_effect",
+      "displayName": "Buff Applied Effect",
+      "resourcePath": "Prefabs/VFX/BuffEffect",
+      "category": "VFX",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["vfx", "buff", "particles"]
+    },
+    {
+      "id": "debuff_effect",
+      "displayName": "Debuff Applied Effect",
+      "resourcePath": "Prefabs/VFX/DebuffEffect",
+      "category": "VFX",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["vfx", "debuff", "particles"]
+    },
+    {
+      "id": "loot_sparkle",
+      "displayName": "Loot Item Sparkle",
+      "resourcePath": "Prefabs/VFX/LootSparkle",
+      "category": "VFX",
+      "preload": false,
+      "maxPoolSize": 20,
+      "tags": ["vfx", "loot", "particles"]
+    },
+    {
+      "id": "item_pickup",
+      "displayName": "Item Pickup",
+      "resourcePath": "Prefabs/Props/ItemPickup",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 30,
+      "tags": ["prop", "item", "collectible", "pooled"]
+    },
+    {
+      "id": "chest",
+      "displayName": "Treasure Chest",
+      "resourcePath": "Prefabs/Props/Chest",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["prop", "container", "interactable"]
+    },
+    {
+      "id": "campfire",
+      "displayName": "Campfire",
+      "resourcePath": "Prefabs/Props/Campfire",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 3,
+      "tags": ["prop", "rest", "interactable"]
+    },
+    {
+      "id": "door",
+      "displayName": "Door",
+      "resourcePath": "Prefabs/Props/Door",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 10,
+      "tags": ["prop", "transition", "interactable"]
+    },
+    {
+      "id": "shop_stall",
+      "displayName": "Shop Stall",
+      "resourcePath": "Prefabs/Props/ShopStall",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 5,
+      "tags": ["prop", "shop", "interactable"]
+    },
+    {
+      "id": "wanted_poster",
+      "displayName": "Wanted Poster",
+      "resourcePath": "Prefabs/Props/WantedPoster",
+      "category": "Props",
+      "preload": false,
+      "maxPoolSize": 10,
+      "tags": ["prop", "quest", "interactable"]
+    },
+    {
+      "id": "cactus_small",
+      "displayName": "Small Cactus",
+      "resourcePath": "Prefabs/Environment/CactusSmall",
+      "category": "Environment",
+      "preload": false,
+      "maxPoolSize": 50,
+      "tags": ["environment", "vegetation", "decoration"]
+    },
+    {
+      "id": "cactus_large",
+      "displayName": "Large Cactus",
+      "resourcePath": "Prefabs/Environment/CactusLarge",
+      "category": "Environment",
+      "preload": false,
+      "maxPoolSize": 30,
+      "tags": ["environment", "vegetation", "decoration"]
+    },
+    {
+      "id": "rock_small",
+      "displayName": "Small Rock",
+      "resourcePath": "Prefabs/Environment/RockSmall",
+      "category": "Environment",
+      "preload": false,
+      "maxPoolSize": 100,
+      "tags": ["environment", "rock", "decoration"]
+    },
+    {
+      "id": "rock_large",
+      "displayName": "Large Rock",
+      "resourcePath": "Prefabs/Environment/RockLarge",
+      "category": "Environment",
+      "preload": false,
+      "maxPoolSize": 50,
+      "tags": ["environment", "rock", "decoration"]
+    },
+    {
+      "id": "tumbleweed",
+      "displayName": "Tumbleweed",
+      "resourcePath": "Prefabs/Environment/Tumbleweed",
+      "category": "Environment",
+      "preload": false,
+      "maxPoolSize": 10,
+      "tags": ["environment", "animated", "decoration"]
+    },
+    {
+      "id": "projectile_bullet",
+      "displayName": "Bullet Projectile",
+      "resourcePath": "Prefabs/Combat/BulletProjectile",
+      "category": "Combat",
+      "preload": true,
+      "maxPoolSize": 50,
+      "tags": ["combat", "projectile", "pooled"]
+    },
+    {
+      "id": "projectile_arrow",
+      "displayName": "Arrow Projectile",
+      "resourcePath": "Prefabs/Combat/ArrowProjectile",
+      "category": "Combat",
+      "preload": false,
+      "maxPoolSize": 30,
+      "tags": ["combat", "projectile", "pooled"]
+    },
+    {
+      "id": "muzzle_flash",
+      "displayName": "Muzzle Flash",
+      "resourcePath": "Prefabs/Combat/MuzzleFlash",
+      "category": "Combat",
+      "preload": true,
+      "maxPoolSize": 20,
+      "tags": ["combat", "vfx", "pooled"]
+    }
+  ]
+}

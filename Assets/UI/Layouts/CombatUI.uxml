@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Combat UI
+    Unity 6 UI Toolkit Layout
+
+    Turn-based combat interface with party/enemy displays, action menu, and combat log.
+    Uses styles from CombatUI.uss
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Root combat container -->
+    <ui:VisualElement name="combat-root" class="combat-panel">
+
+        <!-- ========== TOP SECTION: Turn Order & Combat Info ========== -->
+        <ui:VisualElement name="combat-header" class="combat-header">
+
+            <!-- Turn indicator -->
+            <ui:VisualElement name="turn-indicator" class="turn-indicator">
+                <ui:Label name="turn-label" text="Turn 3" class="turn-label" />
+                <ui:Label name="current-actor-label" text="Your Turn" class="current-actor-label" />
+            </ui:VisualElement>
+
+            <!-- Turn order display -->
+            <ui:VisualElement name="turn-order" class="turn-order">
+                <ui:Label text="Turn Order:" class="turn-order-label" />
+                <ui:VisualElement name="turn-order-portraits" class="turn-order-portraits">
+                    <!-- Turn order portraits populated dynamically -->
+                    <!-- Active combatant has highlight ring -->
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Combat timer (optional) -->
+            <ui:VisualElement name="combat-timer" class="combat-timer combat-timer--hidden">
+                <ui:Label name="timer-label" text="0:30" class="timer-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== MAIN COMBAT AREA ========== -->
+        <ui:VisualElement name="combat-main" class="combat-main">
+
+            <!-- Left side: Party panel -->
+            <ui:VisualElement name="party-section" class="party-section">
+
+                <ui:Label text="Party" class="section-label" />
+
+                <ui:VisualElement name="party-members" class="party-members">
+
+                    <!-- Party member template (repeated for each member) -->
+                    <ui:VisualElement name="party-member-1" class="player-panel">
+                        <ui:VisualElement name="member-1-portrait" class="combatant-portrait" />
+                        <ui:VisualElement name="member-1-info" class="combatant-info">
+                            <ui:Label name="member-1-name" text="Hero" class="combatant-name" />
+                            <ui:ProgressBar name="member-1-health" value="75" high-value="100" class="health-bar" />
+                            <ui:Label name="member-1-health-text" text="750 / 1000" class="health-label" />
+                            <ui:ProgressBar name="member-1-mana" value="50" high-value="100" class="mana-bar" />
+                            <ui:Label name="member-1-mana-text" text="50 / 100" class="mana-label" />
+                            <ui:VisualElement name="member-1-status" class="status-effects-container" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="party-member-2" class="player-panel">
+                        <ui:VisualElement name="member-2-portrait" class="combatant-portrait" />
+                        <ui:VisualElement name="member-2-info" class="combatant-info">
+                            <ui:Label name="member-2-name" text="Elena" class="combatant-name" />
+                            <ui:ProgressBar name="member-2-health" value="90" high-value="100" class="health-bar" />
+                            <ui:Label name="member-2-health-text" text="450 / 500" class="health-label" />
+                            <ui:ProgressBar name="member-2-mana" value="80" high-value="100" class="mana-bar" />
+                            <ui:Label name="member-2-mana-text" text="80 / 100" class="mana-label" />
+                            <ui:VisualElement name="member-2-status" class="status-effects-container" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="party-member-3" class="player-panel">
+                        <ui:VisualElement name="member-3-portrait" class="combatant-portrait" />
+                        <ui:VisualElement name="member-3-info" class="combatant-info">
+                            <ui:Label name="member-3-name" text="Gorim" class="combatant-name" />
+                            <ui:ProgressBar name="member-3-health" value="100" high-value="100" class="health-bar" />
+                            <ui:Label name="member-3-health-text" text="1500 / 1500" class="health-label" />
+                            <ui:ProgressBar name="member-3-mana" value="25" high-value="100" class="mana-bar" />
+                            <ui:Label name="member-3-mana-text" text="25 / 100" class="mana-label" />
+                            <ui:VisualElement name="member-3-status" class="status-effects-container" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Center: Battle arena (3D scene renders behind this) -->
+            <ui:VisualElement name="battle-arena" class="battle-arena" picking-mode="Ignore">
+                <!-- Damage numbers and effects appear here -->
+                <ui:VisualElement name="damage-numbers-container" class="damage-numbers-container" picking-mode="Ignore" />
+            </ui:VisualElement>
+
+            <!-- Right side: Enemy panel -->
+            <ui:VisualElement name="enemy-section" class="enemy-section">
+
+                <ui:Label text="Enemies" class="section-label" />
+
+                <ui:VisualElement name="enemy-list" class="enemy-panel">
+
+                    <!-- Enemy template (repeated for each enemy) -->
+                    <ui:VisualElement name="enemy-1" class="enemy-element" tabindex="10">
+                        <ui:Label name="enemy-1-name" text="Bandit Leader" class="combatant-name" />
+                        <ui:ProgressBar name="enemy-1-health" value="60" high-value="100" class="health-bar" />
+                        <ui:Label name="enemy-1-health-text" text="600 / 1000" class="health-label" />
+                        <ui:VisualElement name="enemy-1-status" class="status-effects-container">
+                            <ui:VisualElement class="status-effect-icon status-effect--poison" tooltip="Poisoned (3 turns)" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="enemy-2" class="enemy-element" tabindex="11">
+                        <ui:Label name="enemy-2-name" text="Bandit Archer" class="combatant-name" />
+                        <ui:ProgressBar name="enemy-2-health" value="40" high-value="100" class="health-bar" />
+                        <ui:Label name="enemy-2-health-text" text="200 / 500" class="health-label" />
+                        <ui:VisualElement name="enemy-2-status" class="status-effects-container" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement name="enemy-3" class="enemy-element enemy-element--defeated" tabindex="12">
+                        <ui:Label name="enemy-3-name" text="Bandit Thug" class="combatant-name" />
+                        <ui:ProgressBar name="enemy-3-health" value="0" high-value="100" class="health-bar" />
+                        <ui:Label name="enemy-3-health-text" text="Defeated" class="health-label" />
+                        <ui:VisualElement name="enemy-3-status" class="status-effects-container" />
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== ACTION PANEL ========== -->
+        <ui:VisualElement name="action-section" class="action-section">
+
+            <!-- Main action buttons -->
+            <ui:VisualElement name="action-panel" class="action-panel">
+
+                <ui:Button name="attack-button" text="Attack" class="action-button" tabindex="1">
+                    <ui:VisualElement name="attack-icon" class="action-icon action-icon--attack" />
+                </ui:Button>
+
+                <ui:Button name="skills-button" text="Skills" class="action-button" tabindex="2">
+                    <ui:VisualElement name="skills-icon" class="action-icon action-icon--skills" />
+                </ui:Button>
+
+                <ui:Button name="items-button" text="Items" class="action-button" tabindex="3">
+                    <ui:VisualElement name="items-icon" class="action-icon action-icon--items" />
+                </ui:Button>
+
+                <ui:Button name="defend-button" text="Defend" class="action-button" tabindex="4">
+                    <ui:VisualElement name="defend-icon" class="action-icon action-icon--defend" />
+                </ui:Button>
+
+                <ui:Button name="flee-button" text="Flee" class="action-button" tabindex="5">
+                    <ui:VisualElement name="flee-icon" class="action-icon action-icon--flee" />
+                </ui:Button>
+
+            </ui:VisualElement>
+
+            <!-- Sub-action panel (skills list, items list, etc.) -->
+            <ui:VisualElement name="sub-action-panel" class="sub-action-panel sub-action-panel--hidden">
+
+                <ui:Label name="sub-action-title" text="Skills" class="sub-action-title" />
+
+                <ui:ScrollView name="sub-action-scroll" class="sub-action-scroll" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="sub-action-list" class="sub-action-list">
+                        <!-- Skill/item buttons populated dynamically -->
+                        <!--
+                        <ui:Button class="sub-action-button">
+                            <ui:VisualElement class="sub-action-icon" />
+                            <ui:VisualElement class="sub-action-info">
+                                <ui:Label class="sub-action-name" text="Fireball" />
+                                <ui:Label class="sub-action-cost" text="25 MP" />
+                            </ui:VisualElement>
+                        </ui:Button>
+                        -->
+                    </ui:VisualElement>
+                </ui:ScrollView>
+
+                <ui:Button name="back-button" text="Back" class="cancel-button" tabindex="20" />
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== TARGET SELECTION OVERLAY ========== -->
+        <ui:VisualElement name="target-selection-panel" class="target-selection-panel target-selection-panel--hidden">
+
+            <ui:Label name="target-selection-header" text="Select Target" class="target-selection-header" />
+
+            <ui:VisualElement name="target-container" class="target-container">
+                <!-- Target buttons populated dynamically -->
+            </ui:VisualElement>
+
+            <ui:Button name="cancel-target-button" text="Cancel" class="cancel-button" tabindex="30" />
+
+        </ui:VisualElement>
+
+        <!-- ========== COMBAT LOG ========== -->
+        <ui:VisualElement name="log-panel" class="log-panel">
+
+            <ui:VisualElement name="log-header" class="log-header">
+                <ui:Label text="Combat Log" class="log-title" />
+                <ui:Button name="toggle-log-button" class="icon-button icon-button--collapse" />
+            </ui:VisualElement>
+
+            <ui:ScrollView name="log-scroll" class="log-scroll" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="log-content" class="log-content">
+                    <!-- Log entries populated dynamically -->
+                    <ui:Label class="log-entry" text="Combat started!" />
+                    <ui:Label class="log-entry" text="Hero attacks Bandit Leader for 150 damage!" />
+                    <ui:Label class="log-entry" text="Elena casts Heal on Hero, restoring 200 HP." />
+                    <ui:Label class="log-entry log-entry--critical" text="Gorim lands a CRITICAL HIT on Bandit Thug for 500 damage!" />
+                    <ui:Label class="log-entry log-entry--enemy" text="Bandit Archer attacks Elena for 75 damage." />
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+        </ui:VisualElement>
+
+        <!-- ========== RESULT PANEL (Victory/Defeat) ========== -->
+        <ui:VisualElement name="result-panel" class="result-panel result-panel--hidden">
+
+            <ui:Label name="result-label" text="Victory!" class="result-label result-label--victory" />
+
+            <ui:VisualElement name="rewards-section" class="rewards-section">
+                <ui:Label text="Rewards" class="rewards-title" />
+                <ui:VisualElement name="rewards-list" class="rewards-list">
+                    <ui:Label name="xp-reward" text="+500 XP" class="reward-item reward-item--xp" />
+                    <ui:Label name="gold-reward" text="+250 Gold" class="reward-item reward-item--gold" />
+                </ui:VisualElement>
+                <ui:VisualElement name="loot-section" class="loot-section">
+                    <ui:Label text="Loot" class="loot-title" />
+                    <ui:VisualElement name="loot-grid" class="loot-grid">
+                        <!-- Loot items populated dynamically -->
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:Button name="continue-button" text="Continue" class="continue-button" tabindex="50" />
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

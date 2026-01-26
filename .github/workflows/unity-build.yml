@@ -10,8 +10,29 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  PROJECT_PATH: iron-frontier
 
 jobs:
+  validate:
+    name: Validate Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ env.PROJECT_PATH }}
+          unityVersion: 6000.3.5f1
+          targetPlatform: StandaloneLinux64
+          buildMethod: IronFrontier.Editor.Build.ProjectValidator.RunAllValidations
+          allowDirtyBuild: true
+
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -27,7 +48,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: .
+          projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: 6000.3.5f1
           testMode: all
           artifactsPath: test-results
@@ -42,37 +63,54 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: test
+    needs: [validate, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
 
+      - name: Free Disk Space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq) || true
+          df -h
+
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          CI: true
+          BUILD_NUMBER: ${{ github.run_number }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_BRANCH: ${{ github.ref_name }}
         with:
-          projectPath: .
+          projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: 6000.3.5f1
           targetPlatform: Android
+          buildMethod: IronFrontier.Editor.Build.BuildScript.CI_BuildAndroid
           androidAppBundle: true
           androidKeystoreName: iron-frontier.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+          versioning: Custom
+          version: ${{ vars.GAME_VERSION || '0.1.0' }}
+          androidVersionCode: ${{ github.run_number }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: Android Build
           path: build/Android
+          retention-days: 14
 
   build-ios:
     name: Build iOS
-    needs: test
+    needs: [validate, test]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,39 +122,63 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          CI: true
+          BUILD_NUMBER: ${{ github.run_number }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_BRANCH: ${{ github.ref_name }}
         with:
-          projectPath: .
+          projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: 6000.3.5f1
           targetPlatform: iOS
+          buildMethod: IronFrontier.Editor.Build.BuildScript.CI_BuildIOS
+          versioning: Custom
+          version: ${{ vars.GAME_VERSION || '0.1.0' }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: iOS Build
           path: build/iOS
+          retention-days: 14
 
   build-webgl:
     name: Build WebGL
-    needs: test
+    needs: [validate, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
 
+      - name: Free Disk Space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq) || true
+          df -h
+
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          CI: true
+          BUILD_NUMBER: ${{ github.run_number }}
+          GIT_COMMIT: ${{ github.sha }}
+          GIT_BRANCH: ${{ github.ref_name }}
         with:
-          projectPath: .
+          projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: 6000.3.5f1
           targetPlatform: WebGL
+          buildMethod: IronFrontier.Editor.Build.BuildScript.CI_BuildWebGL
+          versioning: Custom
+          version: ${{ vars.GAME_VERSION || '0.1.0' }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: WebGL Build
           path: build/WebGL
+          retention-days: 14
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
@@ -124,3 +186,24 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/WebGL/WebGL
+          cname: ${{ vars.WEBGL_CNAME || '' }}
+
+  notify-success:
+    name: Notify Success
+    needs: [build-android, build-ios, build-webgl]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Build Summary
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Android  | :white_check_mark: Success |" >> $GITHUB_STEP_SUMMARY
+          echo "| iOS      | :white_check_mark: Success |" >> $GITHUB_STEP_SUMMARY
+          echo "| WebGL    | :white_check_mark: Success |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ vars.GAME_VERSION || '0.1.0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

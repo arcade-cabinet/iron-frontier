@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Inventory UI
+    Unity 6 UI Toolkit Layout
+
+    Grid-based inventory with equipment slots, item details, and management options.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Modal overlay background -->
+    <ui:VisualElement name="inventory-overlay" class="modal-overlay">
+
+        <!-- Main inventory panel -->
+        <ui:VisualElement name="inventory-panel" class="inventory-panel">
+
+            <!-- Header with title and close button -->
+            <ui:VisualElement name="inventory-header" class="panel-header">
+                <ui:Label text="Inventory" class="panel-title" />
+                <ui:VisualElement name="header-stats" class="header-stats">
+                    <ui:Label name="weight-label" text="Weight: 45.2 / 100.0" class="weight-label" />
+                    <ui:VisualElement name="currency-display" class="header-currency">
+                        <ui:VisualElement class="currency-icon currency-icon--gold" />
+                        <ui:Label name="gold-label" text="12,450" class="currency-amount" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Button name="close-button" class="close-button" tabindex="100">
+                    <ui:Label text="X" class="close-button-label" />
+                </ui:Button>
+            </ui:VisualElement>
+
+            <!-- Main content area -->
+            <ui:VisualElement name="inventory-content" class="inventory-content">
+
+                <!-- Left side: Equipment slots -->
+                <ui:VisualElement name="equipment-section" class="equipment-section">
+
+                    <ui:Label text="Equipment" class="section-title" />
+
+                    <ui:VisualElement name="character-paper-doll" class="paper-doll">
+
+                        <!-- Head slot -->
+                        <ui:VisualElement name="slot-head" class="equipment-slot equipment-slot--head" tooltip="Head">
+                            <ui:VisualElement name="slot-head-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Head" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Shoulders slot -->
+                        <ui:VisualElement name="slot-shoulders" class="equipment-slot equipment-slot--shoulders" tooltip="Shoulders">
+                            <ui:VisualElement name="slot-shoulders-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Shoulders" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Chest slot -->
+                        <ui:VisualElement name="slot-chest" class="equipment-slot equipment-slot--chest" tooltip="Chest">
+                            <ui:VisualElement name="slot-chest-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Chest" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Main hand slot -->
+                        <ui:VisualElement name="slot-main-hand" class="equipment-slot equipment-slot--main-hand" tooltip="Main Hand">
+                            <ui:VisualElement name="slot-main-hand-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Main" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Off hand slot -->
+                        <ui:VisualElement name="slot-off-hand" class="equipment-slot equipment-slot--off-hand" tooltip="Off Hand">
+                            <ui:VisualElement name="slot-off-hand-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Off" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Hands slot -->
+                        <ui:VisualElement name="slot-hands" class="equipment-slot equipment-slot--hands" tooltip="Hands">
+                            <ui:VisualElement name="slot-hands-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Hands" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Legs slot -->
+                        <ui:VisualElement name="slot-legs" class="equipment-slot equipment-slot--legs" tooltip="Legs">
+                            <ui:VisualElement name="slot-legs-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Legs" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Feet slot -->
+                        <ui:VisualElement name="slot-feet" class="equipment-slot equipment-slot--feet" tooltip="Feet">
+                            <ui:VisualElement name="slot-feet-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Feet" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <!-- Accessory slots -->
+                        <ui:VisualElement name="slot-ring-1" class="equipment-slot equipment-slot--ring" tooltip="Ring 1">
+                            <ui:VisualElement name="slot-ring-1-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Ring" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement name="slot-ring-2" class="equipment-slot equipment-slot--ring" tooltip="Ring 2">
+                            <ui:VisualElement name="slot-ring-2-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Ring" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement name="slot-amulet" class="equipment-slot equipment-slot--amulet" tooltip="Amulet">
+                            <ui:VisualElement name="slot-amulet-icon" class="equipment-slot-icon" />
+                            <ui:Label text="Amulet" class="equipment-slot-label" />
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                    <!-- Character stats summary -->
+                    <ui:VisualElement name="stats-summary" class="stats-summary">
+                        <ui:Label text="Stats" class="section-subtitle" />
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Attack" class="stat-name" />
+                            <ui:Label name="attack-value" text="125" class="stat-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Defense" class="stat-name" />
+                            <ui:Label name="defense-value" text="89" class="stat-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="stat-row">
+                            <ui:Label text="Speed" class="stat-name" />
+                            <ui:Label name="speed-value" text="42" class="stat-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+                <!-- Center: Item grid -->
+                <ui:VisualElement name="items-section" class="items-section">
+
+                    <!-- Filter and sort toolbar -->
+                    <ui:VisualElement name="toolbar" class="inventory-toolbar">
+
+                        <!-- Category filters -->
+                        <ui:VisualElement name="category-filters" class="category-filters">
+                            <ui:Button name="filter-all" text="All" class="filter-button filter-button--active" tabindex="1" />
+                            <ui:Button name="filter-weapons" text="Weapons" class="filter-button" tabindex="2" />
+                            <ui:Button name="filter-armor" text="Armor" class="filter-button" tabindex="3" />
+                            <ui:Button name="filter-consumables" text="Consumables" class="filter-button" tabindex="4" />
+                            <ui:Button name="filter-materials" text="Materials" class="filter-button" tabindex="5" />
+                            <ui:Button name="filter-quest" text="Quest" class="filter-button" tabindex="6" />
+                        </ui:VisualElement>
+
+                        <!-- Sort options -->
+                        <ui:VisualElement name="sort-options" class="sort-options">
+                            <ui:Label text="Sort:" class="sort-label" />
+                            <ui:DropdownField name="sort-dropdown" class="sort-dropdown" choices="Name,Rarity,Type,Value,Recent" index="0" />
+                        </ui:VisualElement>
+
+                        <!-- Search -->
+                        <ui:TextField name="search-field" placeholder-text="Search..." class="search-field" tabindex="7" />
+
+                    </ui:VisualElement>
+
+                    <!-- Item grid -->
+                    <ui:ScrollView name="item-grid-scroll" class="item-grid-scroll" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="item-grid" class="item-grid">
+                            <!-- Item slots are populated dynamically -->
+                            <!-- Template for reference: -->
+                            <!--
+                            <ui:VisualElement class="inventory-slot">
+                                <ui:VisualElement class="item-icon" />
+                                <ui:Label class="item-quantity" text="99" />
+                                <ui:VisualElement class="rarity-border rarity-border--epic" />
+                            </ui:VisualElement>
+                            -->
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+
+                    <!-- Pagination / bag tabs -->
+                    <ui:VisualElement name="bag-tabs" class="bag-tabs">
+                        <ui:Button name="bag-1" text="1" class="bag-tab bag-tab--active" />
+                        <ui:Button name="bag-2" text="2" class="bag-tab" />
+                        <ui:Button name="bag-3" text="3" class="bag-tab" />
+                        <ui:Button name="bag-4" text="4" class="bag-tab" />
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+                <!-- Right side: Item details -->
+                <ui:VisualElement name="details-section" class="details-section">
+
+                    <ui:Label text="Item Details" class="section-title" />
+
+                    <ui:VisualElement name="item-details-panel" class="item-details-panel">
+
+                        <!-- Placeholder when no item selected -->
+                        <ui:Label name="no-selection-label" text="Select an item to view details" class="no-selection-label" />
+
+                        <!-- Item details (hidden until item selected) -->
+                        <ui:VisualElement name="item-details" class="item-details item-details--hidden">
+
+                            <!-- Item header -->
+                            <ui:VisualElement name="item-header" class="item-detail-header">
+                                <ui:VisualElement name="item-large-icon" class="item-large-icon" />
+                                <ui:VisualElement name="item-title-section" class="item-title-section">
+                                    <ui:Label name="item-name" text="Thunderforged Blade" class="item-name item-name--epic" />
+                                    <ui:Label name="item-type" text="Two-Handed Sword" class="item-type" />
+                                    <ui:Label name="item-level" text="Item Level 45" class="item-level" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- Item stats -->
+                            <ui:VisualElement name="item-stats" class="item-stats">
+                                <ui:Label text="Stats" class="detail-section-title" />
+                                <ui:VisualElement name="item-stat-list" class="item-stat-list">
+                                    <!-- Stats populated dynamically -->
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- Item description -->
+                            <ui:VisualElement name="item-description-section" class="item-description-section">
+                                <ui:Label name="item-description" text="Forged in the heart of a thunderstorm, this blade crackles with elemental fury." class="item-description" />
+                            </ui:VisualElement>
+
+                            <!-- Item value -->
+                            <ui:VisualElement name="item-value-section" class="item-value-section">
+                                <ui:Label text="Sell Value:" class="value-label" />
+                                <ui:VisualElement class="currency-display">
+                                    <ui:VisualElement class="currency-icon currency-icon--gold" />
+                                    <ui:Label name="item-sell-value" text="2,500" class="currency-amount" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+
+                            <!-- Action buttons -->
+                            <ui:VisualElement name="item-actions" class="item-actions">
+                                <ui:Button name="use-button" text="Use" class="action-button action-button--primary" tabindex="90" />
+                                <ui:Button name="equip-button" text="Equip" class="action-button action-button--primary" tabindex="91" />
+                                <ui:Button name="drop-button" text="Drop" class="action-button action-button--danger" tabindex="92" />
+                                <ui:Button name="destroy-button" text="Destroy" class="action-button action-button--danger" tabindex="93" />
+                            </ui:VisualElement>
+
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

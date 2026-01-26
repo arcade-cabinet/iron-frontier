@@ -1,0 +1,594 @@
+/* Iron Frontier - Panel Stylesheet */
+/* Unity UI Toolkit Panel and Container Styles */
+
+/* ============================================================================
+   BASE PANEL STYLES
+   ============================================================================ */
+
+.panel {
+    background-color: rgba(20, 15, 10, 0.95);
+    border-width: 3px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 8px;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.panel-transparent {
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+/* ============================================================================
+   MAIN PANELS WITH ORNATE BORDERS
+   ============================================================================ */
+
+.panel-ornate {
+    background-color: rgba(25, 20, 15, 0.95);
+    border-width: 4px;
+    border-color: rgb(184, 115, 51);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.panel-ornate-gold {
+    background-color: rgba(30, 25, 18, 0.95);
+    border-width: 4px;
+    border-color: rgb(218, 165, 32);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+/* Double border ornate panel */
+.panel-double-border {
+    background-color: rgba(20, 15, 10, 0.95);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 10px;
+    padding: 6px;
+}
+
+.panel-double-border > .panel-inner {
+    background-color: rgba(35, 28, 20, 0.8);
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 6px;
+    padding: 16px;
+    flex-grow: 1;
+}
+
+/* ============================================================================
+   METAL PANELS
+   ============================================================================ */
+
+.panel-iron {
+    background-color: rgba(40, 45, 50, 0.95);
+    border-width: 3px;
+    border-color: rgb(112, 128, 144);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.panel-copper {
+    background-color: rgba(50, 35, 30, 0.95);
+    border-width: 3px;
+    border-color: rgb(176, 88, 64);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.panel-steel {
+    background-color: rgba(50, 55, 60, 0.95);
+    border-width: 3px;
+    border-color: rgb(130, 140, 150);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* ============================================================================
+   MODAL OVERLAYS
+   ============================================================================ */
+
+.modal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 8, 5, 0.85);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay--dark {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-overlay--light {
+    background-color: rgba(20, 15, 10, 0.7);
+}
+
+/* Modal container */
+.modal {
+    background-color: rgba(25, 20, 15, 0.98);
+    border-width: 4px;
+    border-color: rgb(184, 115, 51);
+    border-radius: 12px;
+    padding: 30px;
+    min-width: 400px;
+    max-width: 80%;
+    max-height: 80%;
+    flex-direction: column;
+}
+
+.modal-sm {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.modal-lg {
+    min-width: 600px;
+    max-width: 900px;
+}
+
+.modal-fullscreen {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    max-width: none;
+    max-height: none;
+}
+
+/* Modal header */
+.modal-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(100, 70, 40);
+}
+
+.modal-title {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    font-size: 24px;
+    color: rgb(180, 170, 150);
+}
+
+.modal-close:hover {
+    color: rgb(180, 60, 60);
+}
+
+/* Modal body */
+.modal-body {
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+/* Modal footer */
+.modal-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top-width: 2px;
+    border-top-color: rgb(100, 70, 40);
+}
+
+.modal-footer > .btn {
+    margin-left: 10px;
+}
+
+/* ============================================================================
+   TOOLTIP CONTAINERS
+   ============================================================================ */
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(15, 12, 8, 0.98);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 6px;
+    padding: 12px 16px;
+    max-width: 300px;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.tooltip-header {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+    margin-bottom: 6px;
+}
+
+.tooltip-content {
+    font-size: 13px;
+    color: rgb(220, 210, 190);
+    white-space: normal;
+}
+
+.tooltip-footer {
+    font-size: 11px;
+    color: rgb(150, 140, 120);
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top-width: 1px;
+    border-top-color: rgb(80, 70, 50);
+}
+
+/* Tooltip variants */
+.tooltip-info {
+    border-color: rgb(70, 130, 180);
+}
+
+.tooltip-warning {
+    border-color: rgb(220, 160, 40);
+}
+
+.tooltip-danger {
+    border-color: rgb(180, 60, 60);
+}
+
+.tooltip-success {
+    border-color: rgb(76, 153, 76);
+}
+
+/* ============================================================================
+   CARD CONTAINERS
+   ============================================================================ */
+
+.card {
+    background-color: rgba(35, 28, 20, 0.95);
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 8px;
+    padding: 16px;
+    flex-direction: column;
+    transition-property: border-color, background-color;
+    transition-duration: 0.15s;
+}
+
+.card:hover {
+    border-color: rgb(139, 90, 43);
+    background-color: rgba(45, 38, 28, 0.95);
+}
+
+.card-selected {
+    border-color: rgb(218, 165, 32);
+    border-width: 3px;
+}
+
+/* Card header */
+.card-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(80, 60, 40);
+}
+
+.card-title {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+}
+
+.card-subtitle {
+    font-size: 12px;
+    color: rgb(180, 170, 150);
+    margin-top: 4px;
+}
+
+/* Card body */
+.card-body {
+    flex-grow: 1;
+}
+
+/* Card footer */
+.card-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-top: 12px;
+    margin-top: 12px;
+    border-top-width: 1px;
+    border-top-color: rgb(80, 60, 40);
+}
+
+/* Card image */
+.card-image {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+/* ============================================================================
+   HEADER AND FOOTER SECTIONS
+   ============================================================================ */
+
+/* Panel header */
+.panel-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: rgba(40, 32, 24, 0.9);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(139, 90, 43);
+    border-radius: 8px 8px 0 0;
+}
+
+.panel-header-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+/* Panel footer */
+.panel-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: rgba(40, 32, 24, 0.9);
+    border-top-width: 3px;
+    border-top-color: rgb(139, 90, 43);
+    border-radius: 0 0 8px 8px;
+}
+
+/* ============================================================================
+   COLLAPSIBLE PANELS
+   ============================================================================ */
+
+.collapsible {
+    flex-direction: column;
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.collapsible-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(40, 32, 24, 0.9);
+    cursor: pointer;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.collapsible-header:hover {
+    background-color: rgba(60, 48, 36, 0.9);
+}
+
+.collapsible-header-title {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+}
+
+.collapsible-header-icon {
+    width: 16px;
+    height: 16px;
+    transition-property: rotate;
+    transition-duration: 0.2s;
+}
+
+.collapsible-header-icon.expanded {
+    rotate: 180deg;
+}
+
+.collapsible-content {
+    padding: 16px;
+    background-color: rgba(25, 20, 15, 0.9);
+}
+
+.collapsible-content.collapsed {
+    display: none;
+}
+
+/* ============================================================================
+   TAB PANELS
+   ============================================================================ */
+
+.tab-panel {
+    flex-direction: column;
+}
+
+.tab-header {
+    flex-direction: row;
+    background-color: rgba(30, 25, 18, 0.9);
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(100, 70, 40);
+}
+
+.tab-button {
+    padding: 12px 20px;
+    font-size: 14px;
+    color: rgb(180, 170, 150);
+    background-color: transparent;
+    border-width: 0;
+    border-bottom-width: 3px;
+    border-bottom-color: transparent;
+    margin-bottom: -2px;
+    transition-property: color, border-bottom-color, background-color;
+    transition-duration: 0.15s;
+}
+
+.tab-button:hover {
+    color: rgb(230, 220, 200);
+    background-color: rgba(60, 50, 40, 0.5);
+}
+
+.tab-button.active {
+    color: rgb(218, 165, 32);
+    border-bottom-color: rgb(218, 165, 32);
+}
+
+.tab-content {
+    padding: 20px;
+    background-color: rgba(25, 20, 15, 0.95);
+    flex-grow: 1;
+}
+
+/* ============================================================================
+   DIVIDERS
+   ============================================================================ */
+
+.divider {
+    height: 2px;
+    background-color: rgb(100, 70, 40);
+    margin: 16px 0;
+}
+
+.divider-brass {
+    background-color: rgb(139, 90, 43);
+}
+
+.divider-gold {
+    background-color: rgb(218, 165, 32);
+}
+
+.divider-vertical {
+    width: 2px;
+    height: auto;
+    margin: 0 16px;
+}
+
+/* Decorative divider with center element */
+.divider-ornate {
+    height: 4px;
+    background-color: transparent;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.divider-ornate::before,
+.divider-ornate::after {
+    flex-grow: 1;
+    height: 2px;
+    background-color: rgb(139, 90, 43);
+}
+
+.divider-ornate-center {
+    width: 12px;
+    height: 12px;
+    background-color: rgb(218, 165, 32);
+    border-radius: 50%;
+    margin: 0 12px;
+}
+
+/* ============================================================================
+   SCROLL PANELS
+   ============================================================================ */
+
+.scroll-panel {
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+.scroll-panel > .unity-scroll-view__content-container {
+    padding-right: 12px;
+}
+
+/* ============================================================================
+   PARCHMENT/PAPER PANELS
+   ============================================================================ */
+
+.panel-parchment {
+    background-color: rgb(215, 195, 165);
+    border-width: 3px;
+    border-color: rgb(139, 100, 60);
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.panel-parchment .text {
+    color: rgb(40, 35, 30);
+}
+
+.panel-aged-paper {
+    background-color: rgb(200, 180, 150);
+    border-width: 2px;
+    border-color: rgb(120, 90, 60);
+    border-radius: 2px;
+    padding: 16px;
+}
+
+.panel-aged-paper .text {
+    color: rgb(50, 40, 30);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes modal-enter {
+    from {
+        opacity: 0;
+        scale: 0.95;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@keyframes modal-exit {
+    from {
+        opacity: 1;
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        scale: 0.95;
+    }
+}
+
+@keyframes panel-slide-up {
+    from {
+        translate: 0 30px;
+        opacity: 0;
+    }
+    to {
+        translate: 0 0;
+        opacity: 1;
+    }
+}
+
+@keyframes panel-slide-down {
+    from {
+        translate: 0 -30px;
+        opacity: 0;
+    }
+    to {
+        translate: 0 0;
+        opacity: 1;
+    }
+}

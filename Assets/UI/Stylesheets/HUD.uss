@@ -1,0 +1,808 @@
+/* Iron Frontier - HUD Stylesheet */
+/* Unity UI Toolkit HUD and Overlay Styles */
+
+/* ============================================================================
+   HUD ROOT CONTAINER
+   ============================================================================ */
+
+.hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+}
+
+/* ============================================================================
+   HEALTH AND STAMINA BARS
+   ============================================================================ */
+
+.resource-bar-container {
+    flex-direction: column;
+    margin: 4px 0;
+}
+
+.resource-bar-label {
+    font-size: 11px;
+    color: rgb(180, 170, 150);
+    margin-bottom: 2px;
+}
+
+/* Base resource bar */
+.resource-bar {
+    height: 20px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 2px;
+    border-color: rgb(80, 60, 40);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.resource-bar-lg {
+    height: 28px;
+    border-radius: 6px;
+}
+
+.resource-bar-sm {
+    height: 14px;
+    border-radius: 3px;
+}
+
+/* Progress fill */
+.resource-bar > .unity-progress-bar__background {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.resource-bar > .unity-progress-bar__progress {
+    border-radius: 2px;
+}
+
+/* Health bar */
+.health-bar > .unity-progress-bar__progress {
+    background-color: rgb(180, 50, 50);
+}
+
+.health-bar-low > .unity-progress-bar__progress {
+    background-color: rgb(220, 40, 40);
+}
+
+.health-bar-critical > .unity-progress-bar__progress {
+    background-color: rgb(255, 60, 60);
+}
+
+/* Stamina bar */
+.stamina-bar > .unity-progress-bar__progress {
+    background-color: rgb(60, 160, 60);
+}
+
+.stamina-bar-low > .unity-progress-bar__progress {
+    background-color: rgb(160, 160, 40);
+}
+
+/* Energy/Mana bar */
+.energy-bar > .unity-progress-bar__progress {
+    background-color: rgb(60, 100, 180);
+}
+
+/* Experience bar */
+.exp-bar > .unity-progress-bar__progress {
+    background-color: rgb(160, 100, 200);
+}
+
+.exp-bar {
+    height: 12px;
+}
+
+/* Resource bar text overlay */
+.resource-bar-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+}
+
+/* ============================================================================
+   PLAYER STATUS PANEL
+   ============================================================================ */
+
+.player-status-panel {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 280px;
+    padding: 16px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 3px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 8px;
+}
+
+.player-portrait {
+    width: 64px;
+    height: 64px;
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 6px;
+    margin-right: 12px;
+}
+
+.player-info {
+    flex-grow: 1;
+}
+
+.player-name {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+    margin-bottom: 4px;
+}
+
+.player-level {
+    font-size: 12px;
+    color: rgb(180, 170, 150);
+    margin-bottom: 8px;
+}
+
+/* ============================================================================
+   MINIMAP
+   ============================================================================ */
+
+.minimap-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 180px;
+    height: 180px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 3px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.minimap-container-square {
+    border-radius: 8px;
+}
+
+.minimap {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.minimap-frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-width: 4px;
+    border-color: rgb(184, 115, 51);
+    border-radius: 50%;
+}
+
+.minimap-frame-square {
+    border-radius: 6px;
+}
+
+/* Player marker on minimap */
+.minimap-player-marker {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: rgb(100, 200, 255);
+    border-width: 2px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+}
+
+/* POI markers */
+.minimap-marker {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.minimap-marker-quest {
+    background-color: rgb(218, 165, 32);
+}
+
+.minimap-marker-enemy {
+    background-color: rgb(200, 60, 60);
+}
+
+.minimap-marker-npc {
+    background-color: rgb(100, 200, 100);
+}
+
+.minimap-marker-shop {
+    background-color: rgb(100, 150, 255);
+}
+
+/* Compass */
+.minimap-compass {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    translate: -50% 0;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+}
+
+/* ============================================================================
+   QUEST TRACKER
+   ============================================================================ */
+
+.quest-tracker {
+    position: absolute;
+    right: 20px;
+    top: 220px;
+    width: 280px;
+    max-height: 300px;
+    padding: 16px;
+    background-color: rgba(20, 15, 10, 0.85);
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 8px;
+}
+
+.quest-tracker-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(80, 60, 40);
+}
+
+.quest-tracker-title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+.quest-tracker-collapse {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    font-size: 14px;
+    color: rgb(180, 170, 150);
+}
+
+/* Quest entry */
+.quest-entry {
+    margin-bottom: 12px;
+}
+
+.quest-entry-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.quest-entry-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.quest-entry-name {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+}
+
+.quest-entry-name-main {
+    color: rgb(218, 165, 32);
+}
+
+/* Quest objective */
+.quest-objective {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-left: 24px;
+    margin-top: 4px;
+}
+
+.quest-objective-marker {
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    margin-top: 4px;
+    background-color: rgb(100, 70, 40);
+    border-radius: 2px;
+}
+
+.quest-objective-marker-complete {
+    background-color: rgb(100, 180, 100);
+}
+
+.quest-objective-text {
+    font-size: 12px;
+    color: rgb(200, 190, 170);
+    flex-grow: 1;
+    white-space: normal;
+}
+
+.quest-objective-text-complete {
+    color: rgb(140, 130, 110);
+    -unity-font-style: italic;
+}
+
+.quest-objective-progress {
+    font-size: 11px;
+    color: rgb(180, 170, 150);
+    margin-left: 8px;
+}
+
+/* ============================================================================
+   CURRENCY DISPLAY
+   ============================================================================ */
+
+.currency-display {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 6px;
+}
+
+.currency-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.currency-icon-sm {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}
+
+.currency-amount {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+}
+
+.currency-amount-sm {
+    font-size: 13px;
+}
+
+/* Multiple currencies */
+.currency-group {
+    flex-direction: row;
+}
+
+.currency-group > .currency-display {
+    margin-right: 8px;
+}
+
+/* Currency change animation class */
+.currency-increased {
+    color: rgb(100, 200, 100);
+}
+
+.currency-decreased {
+    color: rgb(200, 80, 80);
+}
+
+/* ============================================================================
+   NOTIFICATION TOASTS
+   ============================================================================ */
+
+.toast-container {
+    position: absolute;
+    right: 20px;
+    bottom: 100px;
+    width: 350px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.toast {
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    background-color: rgba(25, 20, 15, 0.95);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 8px;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 100%;
+    transition-property: opacity, translate;
+    transition-duration: 0.3s;
+}
+
+.toast-entering {
+    opacity: 0;
+    translate: 100px 0;
+}
+
+.toast-exiting {
+    opacity: 0;
+    translate: 100px 0;
+}
+
+/* Toast variants */
+.toast-success {
+    border-color: rgb(76, 153, 76);
+    border-left-width: 4px;
+    border-left-color: rgb(100, 200, 100);
+}
+
+.toast-warning {
+    border-color: rgb(200, 150, 50);
+    border-left-width: 4px;
+    border-left-color: rgb(220, 170, 60);
+}
+
+.toast-danger {
+    border-color: rgb(180, 60, 60);
+    border-left-width: 4px;
+    border-left-color: rgb(200, 80, 80);
+}
+
+.toast-info {
+    border-color: rgb(70, 130, 180);
+    border-left-width: 4px;
+    border-left-color: rgb(100, 160, 210);
+}
+
+.toast-quest {
+    border-color: rgb(218, 165, 32);
+    border-left-width: 4px;
+    border-left-color: rgb(255, 200, 50);
+}
+
+.toast-loot {
+    border-color: rgb(160, 100, 200);
+    border-left-width: 4px;
+    border-left-color: rgb(180, 130, 220);
+}
+
+/* Toast content */
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.toast-title {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(230, 220, 200);
+    margin-bottom: 4px;
+}
+
+.toast-message {
+    font-size: 13px;
+    color: rgb(200, 190, 170);
+    white-space: normal;
+}
+
+.toast-close {
+    width: 20px;
+    height: 20px;
+    margin-left: 12px;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    font-size: 16px;
+    color: rgb(150, 140, 120);
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: rgb(200, 190, 170);
+}
+
+/* ============================================================================
+   ACTION BAR
+   ============================================================================ */
+
+.action-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    translate: -50% 0;
+    flex-direction: row;
+    padding: 10px 16px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 3px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 10px;
+}
+
+.action-slot {
+    width: 56px;
+    height: 56px;
+    margin: 0 4px;
+    background-color: rgba(35, 28, 20, 0.9);
+    border-width: 2px;
+    border-color: rgb(80, 60, 40);
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    transition-property: border-color, background-color, scale;
+    transition-duration: 0.1s;
+}
+
+.action-slot:hover {
+    border-color: rgb(139, 90, 43);
+    scale: 1.05;
+}
+
+.action-slot-active {
+    border-color: rgb(218, 165, 32);
+    background-color: rgba(60, 50, 35, 0.95);
+}
+
+.action-slot-cooldown {
+    opacity: 0.6;
+}
+
+.action-slot-icon {
+    width: 40px;
+    height: 40px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.action-slot-keybind {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(180, 170, 150);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+.action-slot-cooldown-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-slot-cooldown-text {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+/* ============================================================================
+   INTERACTION PROMPT
+   ============================================================================ */
+
+.interaction-prompt {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    translate: -50% 0;
+    padding: 12px 24px;
+    background-color: rgba(20, 15, 10, 0.9);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 8px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.interaction-key {
+    width: 36px;
+    height: 36px;
+    margin-right: 12px;
+    background-color: rgb(50, 40, 30);
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 6px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+    -unity-text-align: middle-center;
+}
+
+.interaction-text {
+    font-size: 15px;
+    color: rgb(230, 220, 200);
+}
+
+/* ============================================================================
+   LOCATION INDICATOR
+   ============================================================================ */
+
+.location-indicator {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    translate: -50% 0;
+    padding: 10px 24px;
+    background-color: rgba(20, 15, 10, 0.85);
+    border-width: 2px;
+    border-color: rgb(139, 90, 43);
+    border-radius: 6px;
+}
+
+.location-name {
+    font-size: 18px;
+    -unity-font-style: bold;
+    color: rgb(218, 165, 32);
+    -unity-text-align: middle-center;
+}
+
+.location-subtitle {
+    font-size: 12px;
+    color: rgb(180, 170, 150);
+    -unity-text-align: middle-center;
+    margin-top: 4px;
+}
+
+/* ============================================================================
+   BUFF/DEBUFF ICONS
+   ============================================================================ */
+
+.buff-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.buff-icon {
+    width: 32px;
+    height: 32px;
+    margin: 2px;
+    background-color: rgba(35, 28, 20, 0.9);
+    border-width: 2px;
+    border-color: rgb(100, 70, 40);
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.buff-icon-positive {
+    border-color: rgb(80, 160, 80);
+}
+
+.buff-icon-negative {
+    border-color: rgb(180, 60, 60);
+}
+
+.buff-icon-image {
+    width: 24px;
+    height: 24px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.buff-timer {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    font-size: 9px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 1px 3px;
+    border-radius: 2px;
+}
+
+.buff-stacks {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    background-color: rgb(100, 70, 40);
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes health-low-pulse {
+    0% {
+        border-color: rgb(180, 50, 50);
+    }
+    50% {
+        border-color: rgb(255, 80, 80);
+    }
+    100% {
+        border-color: rgb(180, 50, 50);
+    }
+}
+
+@keyframes toast-enter {
+    from {
+        opacity: 0;
+        translate: 100px 0;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes toast-exit {
+    from {
+        opacity: 1;
+        translate: 0 0;
+    }
+    to {
+        opacity: 0;
+        translate: 100px 0;
+    }
+}
+
+@keyframes action-slot-activate {
+    0% {
+        scale: 1;
+        border-color: rgb(218, 165, 32);
+    }
+    50% {
+        scale: 1.1;
+        border-color: rgb(255, 200, 100);
+    }
+    100% {
+        scale: 1;
+        border-color: rgb(218, 165, 32);
+    }
+}
+
+@keyframes location-reveal {
+    from {
+        opacity: 0;
+        translate: -50% -20px;
+    }
+    to {
+        opacity: 1;
+        translate: -50% 0;
+    }
+}
+
+@keyframes buff-expire {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
+}

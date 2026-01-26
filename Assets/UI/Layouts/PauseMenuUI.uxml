@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Iron Frontier - Pause Menu UI
+    Unity 6 UI Toolkit Layout
+
+    Pause overlay with game state management options.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+
+    <!-- Full-screen overlay with blur effect -->
+    <ui:VisualElement name="pause-overlay" class="pause-overlay">
+
+        <!-- Background blur layer -->
+        <ui:VisualElement name="blur-background" class="blur-background" />
+
+        <!-- Center panel -->
+        <ui:VisualElement name="pause-panel" class="pause-panel">
+
+            <!-- Header -->
+            <ui:VisualElement name="pause-header" class="pause-header">
+                <ui:Label text="Game Paused" class="pause-title" />
+            </ui:VisualElement>
+
+            <!-- Current game info -->
+            <ui:VisualElement name="game-info" class="pause-game-info">
+                <ui:Label name="character-name" text="Hero - Level 12" class="info-text" />
+                <ui:Label name="location-name" text="Rustwood Valley" class="info-text info-text--location" />
+                <ui:Label name="playtime" text="Play Time: 12:34:56" class="info-text info-text--playtime" />
+            </ui:VisualElement>
+
+            <!-- Menu buttons -->
+            <ui:VisualElement name="pause-buttons" class="pause-buttons">
+
+                <ui:Button name="resume-button" text="Resume" class="pause-button pause-button--primary" tabindex="1">
+                    <ui:VisualElement class="button-icon button-icon--resume" />
+                </ui:Button>
+
+                <ui:Button name="save-button" text="Save Game" class="pause-button" tabindex="2">
+                    <ui:VisualElement class="button-icon button-icon--save" />
+                </ui:Button>
+
+                <ui:Button name="load-button" text="Load Game" class="pause-button" tabindex="3">
+                    <ui:VisualElement class="button-icon button-icon--load" />
+                </ui:Button>
+
+                <ui:Button name="settings-button" text="Settings" class="pause-button" tabindex="4">
+                    <ui:VisualElement class="button-icon button-icon--settings" />
+                </ui:Button>
+
+                <ui:Button name="help-button" text="Help" class="pause-button" tabindex="5">
+                    <ui:VisualElement class="button-icon button-icon--help" />
+                </ui:Button>
+
+                <ui:VisualElement name="divider" class="menu-divider" />
+
+                <ui:Button name="main-menu-button" text="Main Menu" class="pause-button pause-button--warning" tabindex="6">
+                    <ui:VisualElement class="button-icon button-icon--menu" />
+                </ui:Button>
+
+                <ui:Button name="quit-button" text="Quit to Desktop" class="pause-button pause-button--danger" tabindex="7">
+                    <ui:VisualElement class="button-icon button-icon--quit" />
+                </ui:Button>
+
+            </ui:VisualElement>
+
+            <!-- Keyboard hint -->
+            <ui:VisualElement name="keyboard-hint" class="keyboard-hint">
+                <ui:Label text="Press ESC to resume" class="hint-text" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Save/Load submenu (shown when Save/Load clicked) -->
+        <ui:VisualElement name="save-load-panel" class="save-load-panel save-load-panel--hidden">
+
+            <ui:VisualElement name="save-load-header" class="panel-header">
+                <ui:Button name="back-button" text="Back" class="back-button" tabindex="10" />
+                <ui:Label name="save-load-title" text="Save Game" class="panel-title" />
+                <ui:VisualElement class="header-spacer" />
+            </ui:VisualElement>
+
+            <!-- Save slots -->
+            <ui:ScrollView name="save-slots-scroll" class="save-slots-scroll" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="save-slots" class="save-slots">
+
+                    <!-- New save slot (only in save mode) -->
+                    <ui:VisualElement name="new-save-slot" class="save-slot save-slot--new">
+                        <ui:VisualElement class="save-slot-icon save-slot-icon--new" />
+                        <ui:VisualElement class="save-slot-info">
+                            <ui:Label text="Create New Save" class="save-slot-name" />
+                            <ui:Label text="Start a new save file" class="save-slot-details" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- Auto-save slot -->
+                    <ui:VisualElement name="auto-save-slot" class="save-slot save-slot--auto">
+                        <ui:VisualElement class="save-slot-icon" />
+                        <ui:VisualElement class="save-slot-info">
+                            <ui:Label text="Auto Save" class="save-slot-name" />
+                            <ui:Label text="Hero - Level 12 | Rustwood Valley" class="save-slot-details" />
+                            <ui:Label text="10 minutes ago" class="save-slot-date" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- Manual save slots -->
+                    <ui:VisualElement class="save-slot">
+                        <ui:VisualElement class="save-slot-icon" />
+                        <ui:VisualElement class="save-slot-info">
+                            <ui:Label text="Manual Save 1" class="save-slot-name" />
+                            <ui:Label text="Hero - Level 11 | Iron Mine" class="save-slot-details" />
+                            <ui:Label text="2 hours ago" class="save-slot-date" />
+                        </ui:VisualElement>
+                        <ui:Button name="delete-save-1" class="delete-save-button" tooltip="Delete Save">
+                            <ui:Label text="X" />
+                        </ui:Button>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="save-slot">
+                        <ui:VisualElement class="save-slot-icon" />
+                        <ui:VisualElement class="save-slot-info">
+                            <ui:Label text="Manual Save 2" class="save-slot-name" />
+                            <ui:Label text="Hero - Level 8 | Trading Post" class="save-slot-details" />
+                            <ui:Label text="Yesterday" class="save-slot-date" />
+                        </ui:VisualElement>
+                        <ui:Button name="delete-save-2" class="delete-save-button" tooltip="Delete Save">
+                            <ui:Label text="X" />
+                        </ui:Button>
+                    </ui:VisualElement>
+
+                    <!-- Empty slot -->
+                    <ui:VisualElement class="save-slot save-slot--empty">
+                        <ui:VisualElement class="save-slot-icon save-slot-icon--empty" />
+                        <ui:VisualElement class="save-slot-info">
+                            <ui:Label text="Empty Slot" class="save-slot-name save-slot-name--empty" />
+                            <ui:Label text="No save data" class="save-slot-details" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <!-- Action button -->
+            <ui:Button name="save-load-action-button" text="Save" class="action-button action-button--primary" tabindex="20" />
+
+        </ui:VisualElement>
+
+        <!-- Settings submenu -->
+        <ui:VisualElement name="settings-panel" class="settings-panel settings-panel--hidden">
+
+            <ui:VisualElement name="settings-header" class="panel-header">
+                <ui:Button name="settings-back-button" text="Back" class="back-button" tabindex="30" />
+                <ui:Label text="Settings" class="panel-title" />
+                <ui:VisualElement class="header-spacer" />
+            </ui:VisualElement>
+
+            <!-- Settings tabs -->
+            <ui:VisualElement name="settings-tabs" class="settings-tabs">
+                <ui:Button name="tab-gameplay" text="Gameplay" class="tab-button tab-button--active" tabindex="31" />
+                <ui:Button name="tab-graphics" text="Graphics" class="tab-button" tabindex="32" />
+                <ui:Button name="tab-audio" text="Audio" class="tab-button" tabindex="33" />
+                <ui:Button name="tab-controls" text="Controls" class="tab-button" tabindex="34" />
+                <ui:Button name="tab-accessibility" text="Accessibility" class="tab-button" tabindex="35" />
+            </ui:VisualElement>
+
+            <!-- Settings content -->
+            <ui:ScrollView name="settings-content-scroll" class="settings-content-scroll" horizontal-scroller-visibility="Hidden">
+                <ui:VisualElement name="settings-content" class="settings-content">
+
+                    <!-- Audio settings (example content) -->
+                    <ui:VisualElement name="audio-settings" class="settings-group">
+
+                        <ui:VisualElement class="setting-row">
+                            <ui:Label text="Master Volume" class="setting-label" />
+                            <ui:Slider name="master-volume" value="80" high-value="100" class="setting-slider" />
+                            <ui:Label name="master-volume-value" text="80%" class="setting-value" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement class="setting-row">
+                            <ui:Label text="Music Volume" class="setting-label" />
+                            <ui:Slider name="music-volume" value="70" high-value="100" class="setting-slider" />
+                            <ui:Label name="music-volume-value" text="70%" class="setting-value" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement class="setting-row">
+                            <ui:Label text="SFX Volume" class="setting-label" />
+                            <ui:Slider name="sfx-volume" value="90" high-value="100" class="setting-slider" />
+                            <ui:Label name="sfx-volume-value" text="90%" class="setting-value" />
+                        </ui:VisualElement>
+
+                        <ui:VisualElement class="setting-row">
+                            <ui:Label text="Voice Volume" class="setting-label" />
+                            <ui:Slider name="voice-volume" value="100" high-value="100" class="setting-slider" />
+                            <ui:Label name="voice-volume-value" text="100%" class="setting-value" />
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <!-- Settings actions -->
+            <ui:VisualElement name="settings-actions" class="settings-actions">
+                <ui:Button name="reset-defaults-button" text="Reset to Defaults" class="action-button" tabindex="40" />
+                <ui:Button name="apply-settings-button" text="Apply" class="action-button action-button--primary" tabindex="41" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- Confirmation dialog -->
+        <ui:VisualElement name="confirmation-dialog" class="confirmation-dialog confirmation-dialog--hidden">
+            <ui:VisualElement name="dialog-content" class="dialog-content">
+                <ui:Label name="dialog-title" text="Return to Main Menu?" class="dialog-title" />
+                <ui:Label name="dialog-message" text="Unsaved progress will be lost. Are you sure?" class="dialog-message" />
+                <ui:VisualElement name="dialog-buttons" class="dialog-buttons">
+                    <ui:Button name="dialog-confirm" text="Confirm" class="dialog-button dialog-button--danger" tabindex="80" />
+                    <ui:Button name="dialog-cancel" text="Cancel" class="dialog-button" tabindex="81" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

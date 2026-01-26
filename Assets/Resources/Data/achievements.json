@@ -1,0 +1,1167 @@
+{
+  "version": "1.0.0",
+  "categories": ["story", "combat", "exploration", "economic", "social", "secret"],
+  "rarities": ["common", "uncommon", "rare", "legendary"],
+  "achievements": [
+    {
+      "id": "ach_new_in_town",
+      "title": "New In Town",
+      "description": "Completed the tutorial and earned the Sheriff's trust. Every legend starts somewhere.",
+      "category": "story",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq1_stranger_arrives",
+        "count": null,
+        "description": "Complete \"A Stranger Arrives\" quest"
+      },
+      "rewards": [
+        { "type": "xp", "value": 50, "description": "+50 XP" },
+        { "type": "title", "value": "The Newcomer", "description": "Title: The Newcomer" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "badge_sheriff",
+      "tags": ["story", "tutorial", "act1"],
+      "points": 10,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_trail_of_gold",
+      "title": "Trail of Gold",
+      "description": "Discovered the fate of the missing prospector. Some trails lead to riches, others to ruin.",
+      "category": "story",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq2_missing_prospector",
+        "count": null,
+        "description": "Complete \"The Missing Prospector\" quest"
+      },
+      "rewards": [
+        { "type": "gold", "value": 50, "description": "+50 Gold" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "pickaxe_gold",
+      "tags": ["story", "investigation", "act1"],
+      "points": 15,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_deep_in_the_mine",
+      "title": "Deep in the Mine",
+      "description": "Uncovered the sabotage plot at Iron Gulch. The conspiracy runs deeper than the mine shafts.",
+      "category": "story",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq5_confrontation",
+        "count": null,
+        "description": "Complete Act 1 - \"Confrontation\""
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "title", "value": "Mine Detective", "description": "Title: Mine Detective" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "mine_entrance",
+      "tags": ["story", "act1", "milestone"],
+      "points": 25,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_honor_among_thieves",
+      "title": "Honor Among Thieves",
+      "description": "Navigated the dangerous world of outlaws at Mesa Point. Even criminals have their code.",
+      "category": "story",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq6a_honor_among_thieves",
+        "count": null,
+        "description": "Complete \"Honor Among Thieves\" quest"
+      },
+      "rewards": [
+        { "type": "gold", "value": 100, "description": "+100 Gold" },
+        { "type": "item", "value": "outlaw_bandana", "description": "Item: Outlaw Bandana" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "mask_outlaw",
+      "tags": ["story", "outlaws", "act2"],
+      "points": 20,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_home_on_the_range",
+      "title": "Home on the Range",
+      "description": "Helped the ranchers of Coldwater deal with rustlers. The frontier rewards those who protect it.",
+      "category": "story",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq6b_ranchers_plight",
+        "count": null,
+        "description": "Complete \"The Rancher's Plight\" quest"
+      },
+      "rewards": [
+        { "type": "gold", "value": 100, "description": "+100 Gold" },
+        { "type": "item", "value": "rancher_hat", "description": "Item: Rancher Hat" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "cattle_brand",
+      "tags": ["story", "ranching", "act2"],
+      "points": 20,
+      "sortOrder": 5
+    },
+    {
+      "id": "ach_pieces_puzzle",
+      "title": "Pieces of the Puzzle",
+      "description": "Connected the conspiracy threads from across the frontier. The truth awaits in Salvation.",
+      "category": "story",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq7_pieces_of_puzzle",
+        "count": null,
+        "description": "Complete Act 2 - \"Pieces of the Puzzle\""
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "title", "value": "Conspiracy Hunter", "description": "Title: Conspiracy Hunter" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "document_conspiracy",
+      "tags": ["story", "act2", "milestone"],
+      "points": 30,
+      "sortOrder": 6
+    },
+    {
+      "id": "ach_road_to_salvation",
+      "title": "Road to Salvation",
+      "description": "Survived the treacherous final trail and reached Salvation. The end is near.",
+      "category": "story",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq8_final_trail",
+        "count": null,
+        "description": "Complete \"The Final Trail\" quest"
+      },
+      "rewards": [
+        { "type": "xp", "value": 250, "description": "+250 XP" },
+        { "type": "gold", "value": 150, "description": "+150 Gold" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "church_steeple",
+      "tags": ["story", "act3", "endgame"],
+      "points": 35,
+      "sortOrder": 7
+    },
+    {
+      "id": "ach_truth_revealed",
+      "title": "The Truth Revealed",
+      "description": "Discovered the dark secret beneath Salvation's church. Some truths are better left buried.",
+      "category": "story",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq9_salvations_secret",
+        "count": null,
+        "description": "Complete \"Salvation's Secret\" quest"
+      },
+      "rewards": [
+        { "type": "xp", "value": 300, "description": "+300 XP" },
+        { "type": "item", "value": "solomon_key", "description": "Item: Solomon's Key" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "key_ornate",
+      "tags": ["story", "act3", "revelation"],
+      "points": 40,
+      "sortOrder": 8
+    },
+    {
+      "id": "ach_reckoning",
+      "title": "Reckoning",
+      "description": "Defeated the mastermind behind the conspiracy. The frontier is safe once more.",
+      "category": "story",
+      "rarity": "legendary",
+      "unlockCondition": {
+        "type": "quest_complete",
+        "target": "mq10_reckoning",
+        "count": null,
+        "description": "Complete \"Reckoning\" - the final quest"
+      },
+      "rewards": [
+        { "type": "xp", "value": 500, "description": "+500 XP" },
+        { "type": "gold", "value": 500, "description": "+500 Gold" },
+        { "type": "title", "value": "Frontier Legend", "description": "Title: Frontier Legend" },
+        { "type": "cosmetic", "value": "golden_revolver_skin", "description": "Cosmetic: Golden Revolver" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "star_gold",
+      "tags": ["story", "finale", "legendary", "ending"],
+      "points": 100,
+      "sortOrder": 9
+    },
+    {
+      "id": "ach_redemption",
+      "title": "Redemption",
+      "description": "Achieved the best possible ending. Through darkness, light prevails.",
+      "category": "story",
+      "rarity": "legendary",
+      "unlockCondition": {
+        "type": "special_action",
+        "target": "best_ending",
+        "count": null,
+        "description": "Complete the game with the best ending"
+      },
+      "rewards": [
+        { "type": "xp", "value": 250, "description": "+250 XP" },
+        { "type": "title", "value": "Redeemer", "description": "Title: Redeemer" },
+        { "type": "cosmetic", "value": "white_hat", "description": "Cosmetic: The White Hat" }
+      ],
+      "hidden": true,
+      "progress": null,
+      "icon": "halo",
+      "tags": ["story", "secret", "ending", "legendary"],
+      "points": 75,
+      "sortOrder": 10
+    },
+    {
+      "id": "ach_first_blood",
+      "title": "First Blood",
+      "description": "Claimed your first kill on the frontier. The first of many.",
+      "category": "combat",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "kill_count",
+        "target": null,
+        "count": 1,
+        "description": "Defeat your first enemy"
+      },
+      "rewards": [
+        { "type": "xp", "value": 25, "description": "+25 XP" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "blood_drop",
+      "tags": ["combat", "first"],
+      "points": 5,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_body_count",
+      "title": "Body Count",
+      "description": "Defeated 50 enemies. Your reputation as a dangerous gunslinger grows.",
+      "category": "combat",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "kill_count",
+        "target": null,
+        "count": 50,
+        "description": "Defeat 50 enemies"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Gunslinger", "description": "Title: Gunslinger" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 50,
+        "displayFormat": "{current}/50 enemies defeated"
+      },
+      "icon": "skull_pile",
+      "tags": ["combat", "grind"],
+      "points": 25,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_untouchable",
+      "title": "Untouchable",
+      "description": "Won a combat encounter without taking a single hit. Quick draw, quicker reflexes.",
+      "category": "combat",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "no_damage",
+        "target": null,
+        "count": null,
+        "description": "Win a combat encounter without taking damage"
+      },
+      "rewards": [
+        { "type": "xp", "value": 75, "description": "+75 XP" },
+        { "type": "gold", "value": 50, "description": "+50 Gold" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "shield_perfect",
+      "tags": ["combat", "skill"],
+      "points": 30,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_king_slayer",
+      "title": "King Slayer",
+      "description": "Defeated the Bandit King. His reign of terror ends with you.",
+      "category": "combat",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "kill_specific",
+        "target": "bandit_king",
+        "count": null,
+        "description": "Defeat the Bandit King boss"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "gold", "value": 200, "description": "+200 Gold" },
+        { "type": "item", "value": "bandit_king_crown", "description": "Item: Bandit King's Crown" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "crown_broken",
+      "tags": ["combat", "boss"],
+      "points": 35,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_justice_served",
+      "title": "Justice Served",
+      "description": "Brought the Saboteur to justice. The mines are safe once more.",
+      "category": "combat",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "kill_specific",
+        "target": "the_saboteur",
+        "count": null,
+        "description": "Defeat the Saboteur boss"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "gold", "value": 150, "description": "+150 Gold" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "gavel",
+      "tags": ["combat", "boss", "act1"],
+      "points": 35,
+      "sortOrder": 5
+    },
+    {
+      "id": "ach_steel_breaker",
+      "title": "Steel Breaker",
+      "description": "Destroyed the Iron Tyrant. Even machines fall before true grit.",
+      "category": "combat",
+      "rarity": "legendary",
+      "unlockCondition": {
+        "type": "kill_specific",
+        "target": "iron_tyrant",
+        "count": null,
+        "description": "Defeat the Iron Tyrant boss"
+      },
+      "rewards": [
+        { "type": "xp", "value": 300, "description": "+300 XP" },
+        { "type": "gold", "value": 300, "description": "+300 Gold" },
+        { "type": "item", "value": "tyrant_core", "description": "Item: Tyrant's Power Core" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "gear_shattered",
+      "tags": ["combat", "boss", "legendary"],
+      "points": 50,
+      "sortOrder": 6
+    },
+    {
+      "id": "ach_jack_of_all_trades",
+      "title": "Jack of All Trades",
+      "description": "Used every combat ability type. A true frontier survivor knows all the tricks.",
+      "category": "combat",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "ability_use",
+        "target": "all_types",
+        "count": null,
+        "description": "Use every ability type in combat"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Versatile Fighter", "description": "Title: Versatile Fighter" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "cards_ability",
+      "tags": ["combat", "variety"],
+      "points": 20,
+      "sortOrder": 7
+    },
+    {
+      "id": "ach_legendary_gunman",
+      "title": "Legendary Gunman",
+      "description": "Defeated 100 enemies. Songs will be sung of your deadly prowess.",
+      "category": "combat",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "kill_count",
+        "target": null,
+        "count": 100,
+        "description": "Defeat 100 enemies"
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "gold", "value": 200, "description": "+200 Gold" },
+        { "type": "cosmetic", "value": "legendary_holster", "description": "Cosmetic: Legendary Holster" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 100,
+        "displayFormat": "{current}/100 enemies defeated"
+      },
+      "icon": "revolver_smoking",
+      "tags": ["combat", "grind", "legendary"],
+      "points": 50,
+      "sortOrder": 8
+    },
+    {
+      "id": "ach_trailblazer",
+      "title": "Trailblazer",
+      "description": "Visited all six towns of the frontier. You've seen every corner of this wild land.",
+      "category": "exploration",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "visit_all",
+        "target": "towns",
+        "count": 6,
+        "description": "Visit all 6 towns"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "gold", "value": 100, "description": "+100 Gold" },
+        { "type": "title", "value": "Trailblazer", "description": "Title: Trailblazer" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 6,
+        "displayFormat": "{current}/6 towns discovered"
+      },
+      "icon": "map_complete",
+      "tags": ["exploration", "towns"],
+      "points": 40,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_well_traveled",
+      "title": "Well Traveled",
+      "description": "Walked every trail on the frontier. The roads know your boots.",
+      "category": "exploration",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "visit_all",
+        "target": "routes",
+        "count": 5,
+        "description": "Travel all 5 routes"
+      },
+      "rewards": [
+        { "type": "xp", "value": 125, "description": "+125 XP" },
+        { "type": "item", "value": "travelers_boots", "description": "Item: Traveler's Boots" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 5,
+        "displayFormat": "{current}/5 routes traveled"
+      },
+      "icon": "boots_dusty",
+      "tags": ["exploration", "routes"],
+      "points": 35,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_historian",
+      "title": "Frontier Historian",
+      "description": "Discovered all lore entries. The history of this land lives through you now.",
+      "category": "exploration",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "lore_discovered",
+        "target": null,
+        "count": 20,
+        "description": "Discover all 20 lore entries"
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "title", "value": "Historian", "description": "Title: Frontier Historian" },
+        { "type": "item", "value": "historians_journal", "description": "Item: Historian's Journal" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 20,
+        "displayFormat": "{current}/20 lore entries"
+      },
+      "icon": "book_old",
+      "tags": ["exploration", "lore", "collectible"],
+      "points": 45,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_secret_seeker",
+      "title": "Secret Seeker",
+      "description": "Found all hidden areas on the frontier. Nothing escapes your keen eye.",
+      "category": "exploration",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "hidden_area",
+        "target": null,
+        "count": 8,
+        "description": "Discover all 8 hidden areas"
+      },
+      "rewards": [
+        { "type": "xp", "value": 175, "description": "+175 XP" },
+        { "type": "gold", "value": 250, "description": "+250 Gold" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 8,
+        "displayFormat": "{current}/8 hidden areas"
+      },
+      "icon": "eye_searching",
+      "tags": ["exploration", "secret"],
+      "points": 40,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_long_rider",
+      "title": "Long Rider",
+      "description": "Traveled over 100 miles across the frontier. Your journey has been long and dusty.",
+      "category": "exploration",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "travel_distance",
+        "target": null,
+        "count": 100,
+        "description": "Travel 100 miles total"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Long Rider", "description": "Title: Long Rider" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 100,
+        "displayFormat": "{current}/100 miles traveled"
+      },
+      "icon": "horseshoe",
+      "tags": ["exploration", "travel"],
+      "points": 25,
+      "sortOrder": 5
+    },
+    {
+      "id": "ach_fresh_off_coach",
+      "title": "Fresh Off the Coach",
+      "description": "Arrived at Frontier's Edge. Your adventure begins here.",
+      "category": "exploration",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "visit_location",
+        "target": "frontiers_edge",
+        "count": null,
+        "description": "Visit Frontier's Edge"
+      },
+      "rewards": [
+        { "type": "xp", "value": 10, "description": "+10 XP" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "stagecoach",
+      "tags": ["exploration", "tutorial"],
+      "points": 5,
+      "sortOrder": 6
+    },
+    {
+      "id": "ach_cartographer",
+      "title": "Cartographer",
+      "description": "Discovered all route landmarks. You could draw a map of this land from memory.",
+      "category": "exploration",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "visit_all",
+        "target": "landmarks",
+        "count": 15,
+        "description": "Discover all 15 landmarks"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "item", "value": "detailed_map", "description": "Item: Detailed Map" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 15,
+        "displayFormat": "{current}/15 landmarks"
+      },
+      "icon": "compass",
+      "tags": ["exploration", "landmarks"],
+      "points": 30,
+      "sortOrder": 7
+    },
+    {
+      "id": "ach_journeys_end",
+      "title": "Journey's End",
+      "description": "Reached the mysterious town of Salvation. What awaits at the end of the road?",
+      "category": "exploration",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "visit_location",
+        "target": "salvation",
+        "count": null,
+        "description": "Visit Salvation"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "gold", "value": 100, "description": "+100 Gold" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "church_distant",
+      "tags": ["exploration", "endgame"],
+      "points": 35,
+      "sortOrder": 8
+    },
+    {
+      "id": "ach_striking_it_rich",
+      "title": "Striking It Rich",
+      "description": "Earned 1000 gold total. The frontier has been good to you.",
+      "category": "economic",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "gold_earned",
+        "target": null,
+        "count": 1000,
+        "description": "Earn 1000 gold total"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Prosperous", "description": "Title: Prosperous" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 1000,
+        "displayFormat": "{current}/1000 gold earned"
+      },
+      "icon": "gold_pile",
+      "tags": ["economic", "wealth"],
+      "points": 25,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_big_spender",
+      "title": "Big Spender",
+      "description": "Bought from every shop on the frontier. You're keeping the economy alive.",
+      "category": "economic",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "shop_count",
+        "target": null,
+        "count": 15,
+        "description": "Buy from all 15 shops"
+      },
+      "rewards": [
+        { "type": "xp", "value": 75, "description": "+75 XP" },
+        { "type": "gold", "value": 100, "description": "+100 Gold (Loyalty Reward)" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 15,
+        "displayFormat": "{current}/15 shops visited"
+      },
+      "icon": "coin_bag",
+      "tags": ["economic", "shops"],
+      "points": 25,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_wily_salesman",
+      "title": "Wily Salesman",
+      "description": "Sold 50 items to merchants. You've got a silver tongue and a keen eye for value.",
+      "category": "economic",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "sell_count",
+        "target": null,
+        "count": 50,
+        "description": "Sell 50 items"
+      },
+      "rewards": [
+        { "type": "xp", "value": 50, "description": "+50 XP" },
+        { "type": "gold", "value": 50, "description": "+50 Gold" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 50,
+        "displayFormat": "{current}/50 items sold"
+      },
+      "icon": "scales",
+      "tags": ["economic", "selling"],
+      "points": 15,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_bounty_hunter",
+      "title": "Bounty Hunter",
+      "description": "Completed all available bounties. Justice pays well on the frontier.",
+      "category": "economic",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "bounty_complete",
+        "target": null,
+        "count": 10,
+        "description": "Complete all 10 bounties"
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "gold", "value": 300, "description": "+300 Gold" },
+        { "type": "title", "value": "Bounty Hunter", "description": "Title: Bounty Hunter" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 10,
+        "displayFormat": "{current}/10 bounties completed"
+      },
+      "icon": "wanted_poster",
+      "tags": ["economic", "bounty"],
+      "points": 40,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_frontier_tycoon",
+      "title": "Frontier Tycoon",
+      "description": "Earned 5000 gold total. Your wealth rivals the railroad barons.",
+      "category": "economic",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "gold_earned",
+        "target": null,
+        "count": 5000,
+        "description": "Earn 5000 gold total"
+      },
+      "rewards": [
+        { "type": "xp", "value": 250, "description": "+250 XP" },
+        { "type": "title", "value": "Frontier Tycoon", "description": "Title: Frontier Tycoon" },
+        { "type": "cosmetic", "value": "golden_pocket_watch", "description": "Cosmetic: Golden Pocket Watch" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 5000,
+        "displayFormat": "{current}/5000 gold earned"
+      },
+      "icon": "gold_bars",
+      "tags": ["economic", "wealth", "legendary"],
+      "points": 50,
+      "sortOrder": 5
+    },
+    {
+      "id": "ach_first_purchase",
+      "title": "Open for Business",
+      "description": "Made your first purchase. The frontier economy welcomes you.",
+      "category": "economic",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "gold_spent",
+        "target": null,
+        "count": 1,
+        "description": "Make your first purchase"
+      },
+      "rewards": [
+        { "type": "xp", "value": 10, "description": "+10 XP" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "coin_single",
+      "tags": ["economic", "first"],
+      "points": 5,
+      "sortOrder": 6
+    },
+    {
+      "id": "ach_people_person",
+      "title": "People Person",
+      "description": "Spoke with all unique NPCs on the frontier. Everyone knows your name.",
+      "category": "social",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "talk_all",
+        "target": "npcs",
+        "count": 23,
+        "description": "Talk to all 23 unique NPCs"
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "title", "value": "Social Butterfly", "description": "Title: Social Butterfly" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 23,
+        "displayFormat": "{current}/23 NPCs met"
+      },
+      "icon": "speech_bubbles",
+      "tags": ["social", "npcs"],
+      "points": 40,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_law_abiding",
+      "title": "Law Abiding",
+      "description": "Reached maximum reputation with the Law faction. The badge shines bright on you.",
+      "category": "social",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "reputation_max",
+        "target": "law",
+        "count": null,
+        "description": "Reach max reputation with Law"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Lawman", "description": "Title: Honorary Lawman" },
+        { "type": "item", "value": "deputy_badge", "description": "Item: Deputy Badge" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "badge_star",
+      "tags": ["social", "faction", "law"],
+      "points": 30,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_outlaw",
+      "title": "Outlaw",
+      "description": "Reached maximum reputation with the Outlaws. You're one of them now.",
+      "category": "social",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "reputation_max",
+        "target": "outlaws",
+        "count": null,
+        "description": "Reach max reputation with Outlaws"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Desperado", "description": "Title: Desperado" },
+        { "type": "item", "value": "outlaw_mark", "description": "Item: Outlaw's Mark" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "bandana",
+      "tags": ["social", "faction", "outlaws"],
+      "points": 30,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_good_samaritan",
+      "title": "Good Samaritan",
+      "description": "Completed all side quests. You never pass by someone in need.",
+      "category": "social",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "side_quest_count",
+        "target": null,
+        "count": 9,
+        "description": "Complete all 9 side quests"
+      },
+      "rewards": [
+        { "type": "xp", "value": 300, "description": "+300 XP" },
+        { "type": "gold", "value": 200, "description": "+200 Gold" },
+        { "type": "title", "value": "Good Samaritan", "description": "Title: Good Samaritan" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 9,
+        "displayFormat": "{current}/9 side quests completed"
+      },
+      "icon": "heart_helping",
+      "tags": ["social", "quests"],
+      "points": 50,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_crossroads",
+      "title": "At a Crossroads",
+      "description": "Made your first major moral choice. The frontier tests your character.",
+      "category": "social",
+      "rarity": "common",
+      "unlockCondition": {
+        "type": "moral_choice",
+        "target": null,
+        "count": 1,
+        "description": "Make a moral choice in a quest"
+      },
+      "rewards": [
+        { "type": "xp", "value": 50, "description": "+50 XP" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "fork_road",
+      "tags": ["social", "choices"],
+      "points": 15,
+      "sortOrder": 5
+    },
+    {
+      "id": "ach_path_chosen",
+      "title": "Path Chosen",
+      "description": "Faced every moral dilemma on the frontier. Your choices define you.",
+      "category": "social",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "moral_choice",
+        "target": null,
+        "count": 5,
+        "description": "Make all 5 major moral choices"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "title", "value": "Decisive", "description": "Title: The Decisive" }
+      ],
+      "hidden": false,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 5,
+        "displayFormat": "{current}/5 moral choices made"
+      },
+      "icon": "scales_justice",
+      "tags": ["social", "choices"],
+      "points": 35,
+      "sortOrder": 6
+    },
+    {
+      "id": "ach_friend_of_miners",
+      "title": "Friend of the Miners",
+      "description": "Reached maximum reputation with the Miners. They share their pickaxe with you.",
+      "category": "social",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "reputation_max",
+        "target": "miners",
+        "count": null,
+        "description": "Reach max reputation with Miners"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Miner's Friend", "description": "Title: Miner's Friend" },
+        { "type": "item", "value": "lucky_pickaxe", "description": "Item: Lucky Pickaxe" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "pickaxe",
+      "tags": ["social", "faction", "miners"],
+      "points": 30,
+      "sortOrder": 7
+    },
+    {
+      "id": "ach_cattlehand",
+      "title": "Honorary Cattlehand",
+      "description": "Reached maximum reputation with the Ranchers. You're family now.",
+      "category": "social",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "reputation_max",
+        "target": "ranchers",
+        "count": null,
+        "description": "Reach max reputation with Ranchers"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Cattlehand", "description": "Title: Honorary Cattlehand" },
+        { "type": "item", "value": "branding_iron", "description": "Item: Branding Iron" }
+      ],
+      "hidden": false,
+      "progress": null,
+      "icon": "lasso",
+      "tags": ["social", "faction", "ranchers"],
+      "points": 30,
+      "sortOrder": 8
+    },
+    {
+      "id": "ach_rusting_dreams",
+      "title": "Rusting Dreams",
+      "description": "Discovered the hidden automaton graveyard. Where do machines go when they die?",
+      "category": "secret",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "hidden_area",
+        "target": "automaton_graveyard",
+        "count": null,
+        "description": "Find the hidden automaton graveyard"
+      },
+      "rewards": [
+        { "type": "xp", "value": 150, "description": "+150 XP" },
+        { "type": "gold", "value": 200, "description": "+200 Gold" },
+        { "type": "item", "value": "ancient_gear", "description": "Item: Ancient Gear" }
+      ],
+      "hidden": true,
+      "progress": null,
+      "icon": "gear_rusted",
+      "tags": ["secret", "exploration", "steampunk"],
+      "points": 40,
+      "sortOrder": 1
+    },
+    {
+      "id": "ach_best_friend",
+      "title": "Coyote's Best Friend",
+      "description": "Somehow befriended a wild coyote. It's a dog-eat-dog world, but not for you.",
+      "category": "secret",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "special_action",
+        "target": "pet_coyote",
+        "count": null,
+        "description": "Pet a coyote without fighting it"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "title", "value": "Animal Whisperer", "description": "Title: Animal Whisperer" },
+        { "type": "cosmetic", "value": "coyote_companion", "description": "Cosmetic: Coyote Companion" }
+      ],
+      "hidden": true,
+      "progress": null,
+      "icon": "coyote_happy",
+      "tags": ["secret", "easter_egg", "wholesome"],
+      "points": 35,
+      "sortOrder": 2
+    },
+    {
+      "id": "ach_collector_bounties",
+      "title": "Collector of Bounties",
+      "description": "Found every wanted poster in the frontier. You know every outlaw by face.",
+      "category": "secret",
+      "rarity": "uncommon",
+      "unlockCondition": {
+        "type": "collect_count",
+        "target": "wanted_poster",
+        "count": 12,
+        "description": "Collect all 12 wanted posters"
+      },
+      "rewards": [
+        { "type": "xp", "value": 100, "description": "+100 XP" },
+        { "type": "gold", "value": 150, "description": "+150 Gold" }
+      ],
+      "hidden": true,
+      "progress": {
+        "enabled": true,
+        "current": 0,
+        "max": 12,
+        "displayFormat": "{current}/12 wanted posters"
+      },
+      "icon": "poster_collection",
+      "tags": ["secret", "collectible"],
+      "points": 30,
+      "sortOrder": 3
+    },
+    {
+      "id": "ach_high_stakes",
+      "title": "High Stakes",
+      "description": "Played a game of cards with The Wanderer. They say they've never lost...",
+      "category": "secret",
+      "rarity": "rare",
+      "unlockCondition": {
+        "type": "special_action",
+        "target": "poker_wanderer",
+        "count": null,
+        "description": "Play poker with The Wanderer"
+      },
+      "rewards": [
+        { "type": "xp", "value": 75, "description": "+75 XP" },
+        { "type": "gold", "value": 100, "description": "+100 Gold" },
+        { "type": "item", "value": "lucky_card", "description": "Item: Lucky Card" }
+      ],
+      "hidden": true,
+      "progress": null,
+      "icon": "cards_poker",
+      "tags": ["secret", "easter_egg", "gambling"],
+      "points": 25,
+      "sortOrder": 4
+    },
+    {
+      "id": "ach_dancing_dead",
+      "title": "Dancing with the Dead",
+      "description": "Danced on a grave at midnight. The spirits are... amused?",
+      "category": "secret",
+      "rarity": "legendary",
+      "unlockCondition": {
+        "type": "special_action",
+        "target": "grave_dance_midnight",
+        "count": null,
+        "description": "Dance on a grave at exactly midnight"
+      },
+      "rewards": [
+        { "type": "xp", "value": 200, "description": "+200 XP" },
+        { "type": "title", "value": "Gravedigger", "description": "Title: The Gravedigger" },
+        { "type": "cosmetic", "value": "ghost_trail", "description": "Cosmetic: Ghost Trail Effect" }
+      ],
+      "hidden": true,
+      "progress": null,
+      "icon": "ghost",
+      "tags": ["secret", "easter_egg", "supernatural"],
+      "points": 50,
+      "sortOrder": 5
+    }
+  ],
+  "statistics": {
+    "total": 45,
+    "byCategory": {
+      "story": 10,
+      "combat": 8,
+      "exploration": 8,
+      "economic": 6,
+      "social": 8,
+      "secret": 5
+    },
+    "byRarity": {
+      "common": 8,
+      "uncommon": 16,
+      "rare": 17,
+      "legendary": 4
+    },
+    "totalPoints": 1340,
+    "hidden": 6,
+    "visible": 39
+  },
+  "rarityColors": {
+    "common": "#95A5A6",
+    "uncommon": "#27AE60",
+    "rare": "#9B59B6",
+    "legendary": "#FFD700"
+  }
+}

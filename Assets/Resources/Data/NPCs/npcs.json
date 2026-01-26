@@ -1,0 +1,1454 @@
+{
+  "npcs": [
+    {
+      "id": "sheriff_cole",
+      "displayName": "Marcus Cole",
+      "title": "Sheriff",
+      "role": "Sheriff",
+      "faction": "Neutral",
+      "description": "A weathered man in his forties with a star pinned to his dusty vest. His eyes carry the weight of too many hard decisions.",
+      "portraitId": "sheriff_cole",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 16, "r": 18 },
+      "personality": {
+        "aggression": 0.4,
+        "friendliness": 0.6,
+        "curiosity": 0.5,
+        "greed": 0.1,
+        "honesty": 0.9,
+        "lawfulness": 0.8
+      },
+      "dialogueTreeIds": ["sheriff_cole_main"],
+      "primaryDialogueId": "sheriff_cole_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["investigate_origins", "investigate_disappearances"],
+      "shopId": "",
+      "backstory": "A Union veteran who came west looking for peace. Found duty instead. Struggles between his sworn oath and his conscience as IVRC tightens its grip.",
+      "relationships": [
+        { "npcId": "mayor_holt", "type": "Rival", "notes": "Clashes over IVRC influence" },
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Mutual respect for integrity" },
+        { "npcId": "diamondback", "type": "Enemy", "notes": "Duty demands he oppose her" },
+        { "npcId": "deputy_jake", "type": "Ally", "notes": "Mentors the young deputy" },
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "Knows Thorne is corrupt but lacks proof" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 3.0,
+        "maxForce": 10.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 15.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 5.0,
+          "distance": 10.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["authority", "ally_potential", "main_quest"]
+    },
+    {
+      "id": "mayor_holt",
+      "displayName": "Josephine Holt",
+      "title": "Mayor",
+      "role": "Mayor",
+      "faction": "IVRC",
+      "description": "An elegant woman in her fifties, dressed in fine eastern clothes that seem out of place on the frontier. Her smile never quite reaches her eyes.",
+      "portraitId": "mayor_holt",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 28, "r": 24 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.7,
+        "curiosity": 0.4,
+        "greed": 0.5,
+        "honesty": 0.4,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["mayor_holt_main"],
+      "primaryDialogueId": "mayor_holt_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": [],
+      "shopId": "",
+      "backstory": "Born to wealth, married into power. Came west with her husband to build an empire. Now a widow, she maintains control by serving IVRC interests while protecting what little independence remains.",
+      "relationships": [
+        { "npcId": "sheriff_cole", "type": "Rival", "notes": "His morality frustrates her pragmatism" },
+        { "npcId": "cornelius_thorne", "type": "Ally", "notes": "She owes her position to him" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 8.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 12.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 4.0,
+          "distance": 8.0,
+          "jitter": 1.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["authority", "ivrc_connected", "morally_grey"]
+    },
+    {
+      "id": "doc_chen",
+      "displayName": "Chen Wei",
+      "title": "Doc",
+      "role": "Doctor",
+      "faction": "Neutral",
+      "description": "An older Chinese man with thoughtful eyes and steady hands. His small office is filled with both western medicine and traditional remedies.",
+      "portraitId": "doc_chen",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 26, "r": 18 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.7,
+        "curiosity": 0.8,
+        "greed": 0.1,
+        "honesty": 0.8,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["doc_chen_main"],
+      "primaryDialogueId": "doc_chen_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["underground_railroad"],
+      "shopId": "doc_chen_shop",
+      "backstory": "Came to America seeking opportunity, found discrimination. Built a practice serving those others ignored. Quietly runs an underground network helping workers escape IVRC debt bondage.",
+      "relationships": [
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Sheriff turns a blind eye to certain activities" },
+        { "npcId": "father_miguel", "type": "Ally", "notes": "Partners in the underground" },
+        { "npcId": "diamondback", "type": "Neutral", "notes": "Heals her people without judgment" },
+        { "npcId": "sister_maria", "type": "Ally", "notes": "Coordinates medical care for escapees" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 6.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["healer", "information", "underground", "ally_potential"]
+    },
+    {
+      "id": "father_miguel",
+      "displayName": "Miguel Santos",
+      "title": "Father",
+      "role": "Preacher",
+      "faction": "Neutral",
+      "description": "A gentle man in simple priest's robes, his hands calloused from work alongside his flock. His Spanish accent thickens when speaking of injustice.",
+      "portraitId": "father_miguel",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 10, "r": 26 },
+      "personality": {
+        "aggression": 0.0,
+        "friendliness": 0.9,
+        "curiosity": 0.6,
+        "greed": 0.0,
+        "honesty": 0.7,
+        "lawfulness": 0.4
+      },
+      "dialogueTreeIds": ["father_miguel_main"],
+      "primaryDialogueId": "father_miguel_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["sanctuary"],
+      "shopId": "",
+      "backstory": "A former missionary who lost his faith in the Church but not in God. Came to the frontier to serve the forgotten. Runs an underground railroad for escaped workers, hiding them in the church basement.",
+      "relationships": [
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Partners in saving lives" },
+        { "npcId": "samuel_ironpick", "type": "Ally", "notes": "Old friends from the resistance days" },
+        { "npcId": "sister_maria", "type": "Ally", "notes": "She handles the dangerous logistics" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 4.0,
+          "distance": 8.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["spiritual", "underground", "sanctuary", "ally_potential"]
+    },
+    {
+      "id": "diamondback",
+      "displayName": "Dolores Vega",
+      "title": "Diamondback",
+      "role": "GangLeader",
+      "faction": "Copperhead",
+      "description": "A striking woman with sun-darkened skin and cold, calculating eyes. A coiled rattlesnake tattoo winds up her neck. Her presence commands immediate attention.",
+      "portraitId": "diamondback",
+      "locationId": "rattlesnake_canyon",
+      "spawnCoord": { "q": 0, "r": 0 },
+      "personality": {
+        "aggression": 0.7,
+        "friendliness": 0.3,
+        "curiosity": 0.5,
+        "greed": 0.2,
+        "honesty": 0.6,
+        "lawfulness": 0.0
+      },
+      "dialogueTreeIds": ["diamondback_main"],
+      "primaryDialogueId": "diamondback_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["copperhead_alliance", "strike_ivrc"],
+      "shopId": "",
+      "backstory": "Former IVRC telegraph operator who saw too much. When she tried to expose the company's crimes, they tried to silence her permanently. She survived and vowed revenge.",
+      "relationships": [
+        { "npcId": "sheriff_cole", "type": "Enemy", "notes": "Respects him but cannot cooperate" },
+        { "npcId": "samuel_ironpick", "type": "Neutral", "notes": "Disagrees on methods but shares goals" },
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "Sworn enemy" },
+        { "npcId": "maggie_ironpick", "type": "Ally", "notes": "Secretly works with her, sees her potential" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Alert",
+        "maxSpeed": 4.0,
+        "maxForce": 15.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 25.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 6.0,
+          "distance": 12.0,
+          "jitter": 3.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 2.0
+        }
+      },
+      "tags": ["outlaw", "faction_leader", "ally_potential", "copperhead"]
+    },
+    {
+      "id": "samuel_ironpick",
+      "displayName": "Samuel Ironpick",
+      "title": "Old",
+      "role": "Miner",
+      "faction": "Freeminer",
+      "description": "A grizzled old miner with a silver beard and hands like leather. His eyes hold both wisdom and deep sorrow. He carries himself with quiet dignity despite his worn clothes.",
+      "portraitId": "samuel_ironpick",
+      "locationId": "freeminer_hollow",
+      "spawnCoord": { "q": 0, "r": 0 },
+      "personality": {
+        "aggression": 0.3,
+        "friendliness": 0.4,
+        "curiosity": 0.3,
+        "greed": 0.1,
+        "honesty": 0.9,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["samuel_ironpick_main"],
+      "primaryDialogueId": "samuel_ironpick_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["freeminer_trust", "find_documents"],
+      "shopId": "",
+      "backstory": "Lost his son to a preventable mine collapse. Became leader of the Freeminer resistance, advocating peaceful resistance. Holds the key to documents that could destroy IVRC - if he can be convinced to use them.",
+      "relationships": [
+        { "npcId": "diamondback", "type": "Neutral", "notes": "Disapproves of violence but understands her pain" },
+        { "npcId": "father_miguel", "type": "Ally", "notes": "Old friends from better days" },
+        { "npcId": "maggie_ironpick", "type": "Family", "notes": "His granddaughter" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 12.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 4.0,
+          "distance": 8.0,
+          "jitter": 1.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["faction_leader", "ally_potential", "freeminer", "documents"]
+    },
+    {
+      "id": "maggie_ironpick",
+      "displayName": "Margaret Ironpick",
+      "title": "",
+      "role": "Miner",
+      "faction": "Freeminer",
+      "description": "A young woman with fiery red hair and fierce green eyes. Her hands are calloused from mine work, but her restless energy suggests she yearns for more than the hollow can offer.",
+      "portraitId": "maggie_ironpick",
+      "locationId": "freeminer_hollow",
+      "spawnCoord": { "q": 5, "r": 3 },
+      "personality": {
+        "aggression": 0.7,
+        "friendliness": 0.4,
+        "curiosity": 0.6,
+        "greed": 0.2,
+        "honesty": 0.5,
+        "lawfulness": 0.2
+      },
+      "dialogueTreeIds": ["maggie_ironpick_main"],
+      "primaryDialogueId": "maggie_ironpick_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["maggies_secret"],
+      "shopId": "",
+      "backstory": "Samuel's granddaughter, orphaned when her father died in the mine collapse. She shares her grandfather's hatred of IVRC but not his patience. Secretly works with Diamondback and the Copperheads, believing direct action is the only answer. Her dual loyalties could tear the resistance apart.",
+      "relationships": [
+        { "npcId": "samuel_ironpick", "type": "Family", "notes": "Loves him but thinks he is too passive" },
+        { "npcId": "diamondback", "type": "Ally", "notes": "Secret ally, shares her methods" },
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "The face of everything she hates" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 3.5,
+        "maxForce": 12.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 15.0,
+        "fieldOfView": 150.0,
+        "wanderConfig": {
+          "radius": 5.0,
+          "distance": 10.0,
+          "jitter": 2.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 2.0
+        }
+      },
+      "tags": ["freeminer", "copperhead_connected", "conflicted", "ally_potential"]
+    },
+    {
+      "id": "cornelius_thorne",
+      "displayName": "Cornelius Thorne",
+      "title": "Director",
+      "role": "Mayor",
+      "faction": "IVRC",
+      "description": "A tall, gaunt man in an impeccable black suit. His pale eyes are cold as a winter grave, and his thin lips rarely curve into anything resembling warmth. Every gesture is calculated, every word a weapon.",
+      "portraitId": "cornelius_thorne",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 30, "r": 20 },
+      "personality": {
+        "aggression": 0.3,
+        "friendliness": 0.2,
+        "curiosity": 0.4,
+        "greed": 0.8,
+        "honesty": 0.2,
+        "lawfulness": 0.7
+      },
+      "dialogueTreeIds": ["cornelius_thorne_main"],
+      "primaryDialogueId": "cornelius_thorne_main",
+      "essential": true,
+      "questGiver": false,
+      "questIds": [],
+      "shopId": "",
+      "backstory": "The IVRC Regional Director and the main antagonist. Rose through the company ranks through ruthless efficiency and strategic elimination of rivals. Oversees all operations in the territory, including the cover-up of Project Remnant. Views people as resources to be exploited. The player will eventually have to confront him.",
+      "relationships": [
+        { "npcId": "mayor_holt", "type": "Ally", "notes": "She owes her position to him" },
+        { "npcId": "diamondback", "type": "Enemy", "notes": "She knows his secrets" },
+        { "npcId": "sheriff_cole", "type": "Rival", "notes": "Tolerates him only because killing a sheriff draws attention" },
+        { "npcId": "foreman_burke", "type": "Ally", "notes": "Useful tool, expendable" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 8.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 20.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 6.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["antagonist", "ivrc", "authority", "main_quest"]
+    },
+    {
+      "id": "whiskey_pete",
+      "displayName": "Peter Sullivan",
+      "title": "",
+      "role": "Bartender",
+      "faction": "Neutral",
+      "description": "A portly man with a ruddy complexion and twinkling eyes. His apron is perpetually stained, and he polishes the same glass endlessly while listening to every word spoken in his saloon.",
+      "portraitId": "whiskey_pete",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 23, "r": 26 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.7,
+        "curiosity": 0.8,
+        "greed": 0.5,
+        "honesty": 0.4,
+        "lawfulness": 0.3
+      },
+      "dialogueTreeIds": ["whiskey_pete_main"],
+      "primaryDialogueId": "whiskey_pete_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["saloon_secrets"],
+      "shopId": "whiskey_petes_saloon",
+      "backstory": "Owns the Golden Nugget Saloon in Iron Gulch. Came west after a scandal in Chicago - something about a dead man and a card game. Now he runs the most popular drinking establishment in town and hears every secret that passes through. He sells information to anyone who pays, staying carefully neutral in the conflict between IVRC and the resistance.",
+      "relationships": [
+        { "npcId": "bartender_molly", "type": "Rival", "notes": "Competing saloon owners" },
+        { "npcId": "lucky_lou", "type": "Neutral", "notes": "Regular customer and occasional headache" },
+        { "npcId": "foreman_burke", "type": "Neutral", "notes": "Good customer who talks too much when drunk" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 4.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["information", "neutral", "saloon", "rumors"]
+    },
+    {
+      "id": "black_belle",
+      "displayName": "Isabelle Crow",
+      "title": "Black Belle",
+      "role": "BountyHunter",
+      "faction": "Neutral",
+      "description": "A striking woman dressed entirely in black, from her wide-brimmed hat to her polished boots. A matched pair of revolvers hang at her hips, and her dark eyes miss nothing. Beautiful and deadly in equal measure.",
+      "portraitId": "black_belle",
+      "locationId": "mesa_point",
+      "spawnCoord": { "q": 16, "r": 14 },
+      "personality": {
+        "aggression": 0.7,
+        "friendliness": 0.3,
+        "curiosity": 0.4,
+        "greed": 0.6,
+        "honesty": 0.5,
+        "lawfulness": 0.1
+      },
+      "dialogueTreeIds": ["black_belle_main"],
+      "primaryDialogueId": "black_belle_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["belles_bounty", "hired_gun"],
+      "shopId": "",
+      "backstory": "Once a Pinkerton agent, Belle left when she discovered the agency was covering up crimes for IVRC. Now she works as a bounty hunter for hire, taking jobs from anyone who pays - outlaws, lawmen, even IVRC if the price is right. She has a code: no women, no children, no one who doesn't deserve it. The definition of 'deserve' is flexible.",
+      "relationships": [
+        { "npcId": "bounty_hunter_cole", "type": "Rival", "notes": "Professional competition, mutual respect" },
+        { "npcId": "diamondback", "type": "Neutral", "notes": "Has turned down bounties on her - for now" },
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "Knows what he did to her old partner" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 4.0,
+        "maxForce": 15.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 30.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 8.0,
+          "distance": 15.0,
+          "jitter": 3.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 2.0
+        }
+      },
+      "tags": ["bounty_hunter", "for_hire", "morally_grey", "dangerous"]
+    },
+    {
+      "id": "professor_cogsworth",
+      "displayName": "Emmett Cogsworth",
+      "title": "Professor",
+      "role": "Blacksmith",
+      "faction": "Neutral",
+      "description": "A wild-haired man with thick spectacles and burn marks on his fingers. His workshop coat is covered in grease stains and scorch marks. He speaks rapidly, often trailing off mid-sentence as a new idea strikes him.",
+      "portraitId": "professor_cogsworth",
+      "locationId": "coldwater",
+      "spawnCoord": { "q": 14, "r": 16 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.6,
+        "curiosity": 0.95,
+        "greed": 0.3,
+        "honesty": 0.7,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["professor_cogsworth_main"],
+      "primaryDialogueId": "professor_cogsworth_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["cogsworths_contraption", "the_prototype"],
+      "shopId": "cogsworth_gadgets",
+      "backstory": "A former IVRC researcher who was dismissed for 'dangerous and impractical' ideas. Now he tinkers in Coldwater, far from the company's reach. His inventions range from brilliant to bizarre - some work perfectly, others explode. He knows more about Project Remnant than he lets on, having worked on its early stages before being reassigned.",
+      "relationships": [
+        { "npcId": "engineer_clara", "type": "Ally", "notes": "Former colleagues, she sends him technical papers" },
+        { "npcId": "the_wanderer", "type": "Neutral", "notes": "Suspects what they are but says nothing" },
+        { "npcId": "vet_nell", "type": "Ally", "notes": "She patches up his burns, he fixes her equipment" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 8.0,
+        "fieldOfView": 90.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 5.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 6.0
+        }
+      },
+      "tags": ["inventor", "gadgets", "eccentric", "remnant_knowledge"]
+    },
+    {
+      "id": "sister_maria",
+      "displayName": "Maria Esperanza",
+      "title": "Sister",
+      "role": "Preacher",
+      "faction": "Neutral",
+      "description": "A young nun with kind brown eyes and a gentle smile. Her habit is worn but clean, and her hands are rough from hard work. Despite her serene demeanor, there is steel in her spine.",
+      "portraitId": "sister_maria",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 11, "r": 27 },
+      "personality": {
+        "aggression": 0.0,
+        "friendliness": 0.9,
+        "curiosity": 0.5,
+        "greed": 0.0,
+        "honesty": 0.6,
+        "lawfulness": 0.4
+      },
+      "dialogueTreeIds": ["sister_maria_main"],
+      "primaryDialogueId": "sister_maria_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["sanctuary_path", "the_lost_sheep"],
+      "shopId": "",
+      "backstory": "Came to the frontier from a convent in Mexico after hearing of Father Miguel's work. She helps run the underground railroad that smuggles escaped IVRC workers to freedom. More pragmatic than the Father, she handles the dangerous logistics - forging papers, bribing guards, and occasionally wielding a shotgun when prayers aren't enough.",
+      "relationships": [
+        { "npcId": "father_miguel", "type": "Ally", "notes": "Works closely with him on the underground" },
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Coordinates medical care for escapees" },
+        { "npcId": "sheriff_cole", "type": "Neutral", "notes": "Suspects he knows but trusts his silence" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 4.0,
+          "distance": 8.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["underground", "spiritual", "ally_potential", "sanctuary"]
+    },
+    {
+      "id": "deputy_jake",
+      "displayName": "Jacob Hawkins",
+      "title": "Deputy",
+      "role": "Deputy",
+      "faction": "Neutral",
+      "description": "A fresh-faced young man barely out of his teens, with earnest blue eyes and a badge he polishes every morning. His quick draw is impressive, but his idealism has yet to be tested by hard choices.",
+      "portraitId": "deputy_jake",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 17, "r": 17 },
+      "personality": {
+        "aggression": 0.4,
+        "friendliness": 0.7,
+        "curiosity": 0.6,
+        "greed": 0.1,
+        "honesty": 0.9,
+        "lawfulness": 0.9
+      },
+      "dialogueTreeIds": ["deputy_jake_main"],
+      "primaryDialogueId": "deputy_jake_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["jakes_dilemma"],
+      "shopId": "",
+      "backstory": "Sheriff Cole's newest deputy, hand-picked for his honesty and quick reflexes. Jake believes in the law absolutely - black and white, right and wrong. He hasn't yet learned that justice in the frontier is painted in shades of grey. His faith in the system will be tested when he discovers IVRC's influence over the courts.",
+      "relationships": [
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Mentor and hero, would follow him anywhere" },
+        { "npcId": "deputy_marshall", "type": "Ally", "notes": "Fellow deputy, friendly rivalry" },
+        { "npcId": "cornelius_thorne", "type": "Neutral", "notes": "Respects his authority, unaware of his crimes" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Patrol",
+        "maxSpeed": 3.5,
+        "maxForce": 12.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 20.0,
+        "fieldOfView": 150.0,
+        "wanderConfig": {
+          "radius": 5.0,
+          "distance": 10.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["law", "authority", "idealistic", "ally_potential"]
+    },
+    {
+      "id": "lucky_lou",
+      "displayName": "Louis Fontaine",
+      "title": "Lucky",
+      "role": "Gambler",
+      "faction": "Neutral",
+      "description": "A dapper man in a slightly worn but well-maintained suit, with nimble fingers and a winning smile. A deck of cards is never far from his hands, and his eyes constantly calculate odds.",
+      "portraitId": "lucky_lou",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 24, "r": 24 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.8,
+        "curiosity": 0.5,
+        "greed": 0.7,
+        "honesty": 0.3,
+        "lawfulness": 0.2
+      },
+      "dialogueTreeIds": ["lucky_lou_main"],
+      "primaryDialogueId": "lucky_lou_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["high_stakes", "the_big_game", "debt_collector"],
+      "shopId": "",
+      "backstory": "A professional gambler who drifted into Iron Gulch following the money. His 'luck' is mostly skill and a few tricks he learned in New Orleans. He runs high-stakes poker games for miners with too much pay and not enough sense. Despite his profession, he has a code - he only fleeces those who can afford it and occasionally helps those in genuine need.",
+      "relationships": [
+        { "npcId": "whiskey_pete", "type": "Ally", "notes": "Pete takes a cut of his games" },
+        { "npcId": "bartender_molly", "type": "Neutral", "notes": "She banned him from her saloon for cheating" },
+        { "npcId": "the_fence", "type": "Ally", "notes": "Helps move stolen goods for a percentage" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 12.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 6.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["gambler", "quest_giver", "information", "morally_grey"]
+    },
+    {
+      "id": "bartender_molly",
+      "displayName": "Molly O'Brien",
+      "title": "",
+      "role": "Bartender",
+      "faction": "Neutral",
+      "description": "A sharp-eyed Irish woman with fiery red hair pulled back in a practical bun. She runs a tight ship and doesn't tolerate trouble in her establishment.",
+      "portraitId": "bartender_molly",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 20, "r": 22 },
+      "personality": {
+        "aggression": 0.4,
+        "friendliness": 0.6,
+        "curiosity": 0.6,
+        "greed": 0.4,
+        "honesty": 0.7,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["bartender_molly_main"],
+      "primaryDialogueId": "bartender_molly_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["mollys_favor"],
+      "shopId": "mollys_saloon",
+      "backstory": "Immigrated from Ireland during the famine, made her way west running saloons. She's seen enough hardship to recognize it in others, and her saloon is a refuge for those down on their luck - as long as they behave.",
+      "relationships": [
+        { "npcId": "whiskey_pete", "type": "Rival", "notes": "Competing saloon owners" },
+        { "npcId": "lucky_lou", "type": "Neutral", "notes": "Banned him for cheating, respects his skill" },
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Keeps him informed of trouble" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 4.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["information", "saloon", "ally_potential"]
+    },
+    {
+      "id": "foreman_burke",
+      "displayName": "Thomas Burke",
+      "title": "Foreman",
+      "role": "Miner",
+      "faction": "IVRC",
+      "description": "A barrel-chested man with a permanent scowl and a voice like gravel. His hands are massive, scarred from years of mine work before he rose to foreman.",
+      "portraitId": "foreman_burke",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 28, "r": 30 },
+      "personality": {
+        "aggression": 0.6,
+        "friendliness": 0.2,
+        "curiosity": 0.2,
+        "greed": 0.6,
+        "honesty": 0.3,
+        "lawfulness": 0.7
+      },
+      "dialogueTreeIds": ["foreman_burke_main"],
+      "primaryDialogueId": "foreman_burke_main",
+      "essential": false,
+      "questGiver": false,
+      "questIds": [],
+      "shopId": "",
+      "backstory": "Rose from the mines through brutality and loyalty to IVRC. He keeps the workers in line through fear and occasional violence. Secretly terrified of losing his position and returning to the pit.",
+      "relationships": [
+        { "npcId": "cornelius_thorne", "type": "Ally", "notes": "His master, fears and serves him" },
+        { "npcId": "samuel_ironpick", "type": "Enemy", "notes": "Sees him as a threat to order" },
+        { "npcId": "whiskey_pete", "type": "Neutral", "notes": "Drinks at his saloon, talks too much" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Patrol",
+        "maxSpeed": 3.0,
+        "maxForce": 12.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 18.0,
+        "fieldOfView": 150.0,
+        "wanderConfig": {
+          "radius": 5.0,
+          "distance": 10.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 2.0
+        }
+      },
+      "tags": ["ivrc", "antagonist", "authority"]
+    },
+    {
+      "id": "engineer_clara",
+      "displayName": "Clara Beaumont",
+      "title": "Engineer",
+      "role": "Blacksmith",
+      "faction": "IVRC",
+      "description": "A young woman with ink-stained fingers and keen, intelligent eyes. She wears practical work clothes and her hair is always escaping its pins. Blueprints and technical drawings are never far from her hand.",
+      "portraitId": "engineer_clara",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 32, "r": 22 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.5,
+        "curiosity": 0.9,
+        "greed": 0.2,
+        "honesty": 0.6,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["engineer_clara_main"],
+      "primaryDialogueId": "engineer_clara_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["claras_conscience"],
+      "shopId": "",
+      "backstory": "A brilliant engineer working for IVRC, she's beginning to see the human cost of her designs. Secretly passes information to Professor Cogsworth. Torn between her career and her conscience.",
+      "relationships": [
+        { "npcId": "professor_cogsworth", "type": "Ally", "notes": "Former mentor, sends him papers secretly" },
+        { "npcId": "cornelius_thorne", "type": "Neutral", "notes": "Her employer, growing suspicious of him" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 8.0,
+        "fieldOfView": 100.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 5.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["ivrc", "ally_potential", "technical"]
+    },
+    {
+      "id": "the_wanderer",
+      "displayName": "The Wanderer",
+      "title": "",
+      "role": "Drifter",
+      "faction": "Remnant",
+      "description": "A figure of indeterminate age wrapped in a dusty cloak. Their movements are oddly precise, and their eyes hold an unnerving quality - as if they see more than a human should.",
+      "portraitId": "the_wanderer",
+      "locationId": "mesa_point",
+      "spawnCoord": { "q": 10, "r": 10 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.4,
+        "curiosity": 0.8,
+        "greed": 0.0,
+        "honesty": 0.9,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["the_wanderer_main"],
+      "primaryDialogueId": "the_wanderer_main",
+      "essential": true,
+      "questGiver": true,
+      "questIds": ["the_truth_revealed"],
+      "shopId": "",
+      "backstory": "A prototype from Project Remnant - an automaton with human-like consciousness. Escaped the facility years ago and has been wandering the frontier ever since, searching for others like itself. Knows the truth about IVRC's darkest secrets.",
+      "relationships": [
+        { "npcId": "professor_cogsworth", "type": "Neutral", "notes": "Knows Cogsworth suspects the truth" },
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "Evidence of Thorne's greatest crime" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 3.0,
+        "maxForce": 10.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 25.0,
+        "fieldOfView": 270.0,
+        "wanderConfig": {
+          "radius": 10.0,
+          "distance": 20.0,
+          "jitter": 4.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 10.0
+        }
+      },
+      "tags": ["remnant", "mysterious", "main_quest", "essential"]
+    },
+    {
+      "id": "vet_nell",
+      "displayName": "Eleanor 'Nell' Patterson",
+      "title": "Doc",
+      "role": "Doctor",
+      "faction": "Neutral",
+      "description": "A no-nonsense woman in her thirties with calloused hands and practical clothes. She treats both animals and people with equal skill and gruffness.",
+      "portraitId": "vet_nell",
+      "locationId": "coldwater",
+      "spawnCoord": { "q": 12, "r": 18 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.5,
+        "curiosity": 0.6,
+        "greed": 0.1,
+        "honesty": 0.8,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["vet_nell_main"],
+      "primaryDialogueId": "vet_nell_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["nells_patients"],
+      "shopId": "nell_supplies",
+      "backstory": "Started as a veterinarian but found herself treating miners and ranchers who couldn't afford Doc Chen's prices. She's practical, efficient, and doesn't ask questions about bullet wounds.",
+      "relationships": [
+        { "npcId": "professor_cogsworth", "type": "Ally", "notes": "Patches up his burns, he fixes her equipment" },
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Refers patients between them" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 6.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 6.0,
+          "jitter": 1.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["healer", "ally_potential"]
+    },
+    {
+      "id": "the_fence",
+      "displayName": "Ezekiel 'Zeke' Marsh",
+      "title": "",
+      "role": "Merchant",
+      "faction": "Neutral",
+      "description": "A wiry man with shifty eyes and quick hands. He always seems to know when someone's looking and has an uncanny ability to acquire items that fell off the back of a wagon.",
+      "portraitId": "the_fence",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 20, "r": 28 },
+      "personality": {
+        "aggression": 0.3,
+        "friendliness": 0.5,
+        "curiosity": 0.6,
+        "greed": 0.8,
+        "honesty": 0.2,
+        "lawfulness": 0.1
+      },
+      "dialogueTreeIds": ["the_fence_main"],
+      "primaryDialogueId": "the_fence_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["special_delivery"],
+      "shopId": "fence_shop",
+      "backstory": "Runs a 'general goods' store that serves as a front for moving stolen merchandise. Everyone knows what he does, but he's too useful to both sides of the law to shut down.",
+      "relationships": [
+        { "npcId": "lucky_lou", "type": "Ally", "notes": "Helps move stolen goods" },
+        { "npcId": "sheriff_cole", "type": "Neutral", "notes": "The sheriff knows but looks the other way" },
+        { "npcId": "diamondback", "type": "Ally", "notes": "Moves goods for the Copperheads" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 3.0,
+        "maxForce": 10.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 20.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 6.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["merchant", "underground", "morally_grey"]
+    },
+    {
+      "id": "bounty_hunter_cole",
+      "displayName": "Cole Younger",
+      "title": "",
+      "role": "BountyHunter",
+      "faction": "Neutral",
+      "description": "A grizzled man with a weathered face and cold, professional eyes. He wears functional clothing and carries himself like someone who's been in too many fights to count.",
+      "portraitId": "bounty_hunter_cole",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 18, "r": 20 },
+      "personality": {
+        "aggression": 0.6,
+        "friendliness": 0.3,
+        "curiosity": 0.3,
+        "greed": 0.7,
+        "honesty": 0.6,
+        "lawfulness": 0.4
+      },
+      "dialogueTreeIds": ["bounty_hunter_cole_main"],
+      "primaryDialogueId": "bounty_hunter_cole_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["bounty_board"],
+      "shopId": "",
+      "backstory": "A veteran bounty hunter who's been tracking outlaws longer than most folks have been alive. He works alone and keeps his word - if he takes a bounty, he brings them in, dead or alive.",
+      "relationships": [
+        { "npcId": "black_belle", "type": "Rival", "notes": "Professional competition, mutual respect" },
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Works with the law when it suits him" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 3.5,
+        "maxForce": 12.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 25.0,
+        "fieldOfView": 180.0,
+        "wanderConfig": {
+          "radius": 6.0,
+          "distance": 12.0,
+          "jitter": 3.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 2.0
+        }
+      },
+      "tags": ["bounty_hunter", "dangerous"]
+    },
+    {
+      "id": "deputy_marshall",
+      "displayName": "Jim Marshall",
+      "title": "Deputy",
+      "role": "Deputy",
+      "faction": "Neutral",
+      "description": "A solid, dependable man in his thirties with a thick mustache and patient demeanor. He's been a deputy for years and knows every inch of the territory.",
+      "portraitId": "deputy_marshall",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 15, "r": 19 },
+      "personality": {
+        "aggression": 0.3,
+        "friendliness": 0.6,
+        "curiosity": 0.4,
+        "greed": 0.2,
+        "honesty": 0.8,
+        "lawfulness": 0.8
+      },
+      "dialogueTreeIds": ["deputy_marshall_main"],
+      "primaryDialogueId": "deputy_marshall_main",
+      "essential": false,
+      "questGiver": false,
+      "questIds": [],
+      "shopId": "",
+      "backstory": "The senior deputy who keeps the sheriff's office running while Cole handles the big cases. He's seen enough to know the law isn't always just, but he does his best within the system.",
+      "relationships": [
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Long-serving partner" },
+        { "npcId": "deputy_jake", "type": "Ally", "notes": "Mentors the younger deputy" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Patrol",
+        "maxSpeed": 3.0,
+        "maxForce": 10.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 18.0,
+        "fieldOfView": 150.0,
+        "wanderConfig": {
+          "radius": 5.0,
+          "distance": 10.0,
+          "jitter": 2.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["law", "authority"]
+    },
+    {
+      "id": "undertaker_grimm",
+      "displayName": "Mordecai Grimm",
+      "title": "",
+      "role": "Undertaker",
+      "faction": "Neutral",
+      "description": "A tall, skeletal man in perpetually dusty black clothes. His voice is surprisingly gentle for someone who works with the dead, and his dark humor is legendary.",
+      "portraitId": "undertaker_grimm",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 8, "r": 28 },
+      "personality": {
+        "aggression": 0.0,
+        "friendliness": 0.4,
+        "curiosity": 0.5,
+        "greed": 0.3,
+        "honesty": 0.9,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["undertaker_grimm_main"],
+      "primaryDialogueId": "undertaker_grimm_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["unmarked_graves"],
+      "shopId": "",
+      "backstory": "Been burying folks in this territory for twenty years. He knows everyone's secrets - the dead tell no lies. Has noticed an increase in 'mining accidents' that look suspiciously like something else.",
+      "relationships": [
+        { "npcId": "father_miguel", "type": "Ally", "notes": "Works together on burials" },
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Sometimes the only ones who see the bodies" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 4.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 8.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 3.0,
+          "distance": 5.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 6.0
+        }
+      },
+      "tags": ["information", "death"]
+    },
+    {
+      "id": "banker_wells",
+      "displayName": "Horace Wells",
+      "title": "",
+      "role": "Banker",
+      "faction": "IVRC",
+      "description": "A rotund man with spectacles perched on his nose and ink-stained fingers. He speaks in numbers and percentages, and his smile never reaches his calculating eyes.",
+      "portraitId": "banker_wells",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 26, "r": 24 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.4,
+        "curiosity": 0.3,
+        "greed": 0.9,
+        "honesty": 0.4,
+        "lawfulness": 0.8
+      },
+      "dialogueTreeIds": ["banker_wells_main"],
+      "primaryDialogueId": "banker_wells_main",
+      "essential": false,
+      "questGiver": false,
+      "questIds": [],
+      "shopId": "wells_bank",
+      "backstory": "Manages the IVRC bank that holds mortgages on half the territory. He's the face of foreclosures and debt collection, though he claims he's just following company policy.",
+      "relationships": [
+        { "npcId": "cornelius_thorne", "type": "Ally", "notes": "Follows Thorne's financial directives" },
+        { "npcId": "mayor_holt", "type": "Ally", "notes": "Processes her investments" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 4.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 8.0,
+        "fieldOfView": 100.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 4.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["ivrc", "finance"]
+    },
+    {
+      "id": "general_store_owner",
+      "displayName": "Hank Cooper",
+      "title": "",
+      "role": "Merchant",
+      "faction": "Neutral",
+      "description": "A friendly, middle-aged man with a ready smile and an encyclopedic knowledge of everything in his overstocked store. He knows what everyone in town needs before they do.",
+      "portraitId": "general_store_owner",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 22, "r": 20 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.8,
+        "curiosity": 0.6,
+        "greed": 0.4,
+        "honesty": 0.7,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["general_store_owner_main"],
+      "primaryDialogueId": "general_store_owner_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["supply_run"],
+      "shopId": "cooper_general",
+      "backstory": "Third generation shopkeeper who inherited the business from his father. He tries to stay neutral in the town's conflicts, but his sympathies lean toward the common folk struggling under IVRC's thumb.",
+      "relationships": [
+        { "npcId": "bartender_molly", "type": "Ally", "notes": "Old friends, supply her saloon" },
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "Keeps him informed of stranger purchases" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 4.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["merchant", "ally_potential"]
+    },
+    {
+      "id": "blacksmith_jeb",
+      "displayName": "Jebediah Stone",
+      "title": "",
+      "role": "Blacksmith",
+      "faction": "Neutral",
+      "description": "A massive man with arms like tree trunks and a face permanently reddened by the forge. He speaks little but his work speaks volumes - some of the finest metalwork in the territory.",
+      "portraitId": "blacksmith_jeb",
+      "locationId": "dusty_springs",
+      "spawnCoord": { "q": 24, "r": 16 },
+      "personality": {
+        "aggression": 0.3,
+        "friendliness": 0.4,
+        "curiosity": 0.3,
+        "greed": 0.2,
+        "honesty": 0.9,
+        "lawfulness": 0.6
+      },
+      "dialogueTreeIds": ["blacksmith_jeb_main"],
+      "primaryDialogueId": "blacksmith_jeb_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["special_order"],
+      "shopId": "stone_forge",
+      "backstory": "Former slave who bought his freedom and came west to start anew. He forges weapons and tools for anyone who pays, but secretly supplies the underground railroad with equipment.",
+      "relationships": [
+        { "npcId": "doc_chen", "type": "Ally", "notes": "Shares the underground connection" },
+        { "npcId": "father_miguel", "type": "Ally", "notes": "The church helped him when he first arrived" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.5,
+        "maxForce": 8.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 10.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 4.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 5.0
+        }
+      },
+      "tags": ["blacksmith", "underground", "ally_potential"]
+    },
+    {
+      "id": "rancher_mcgraw",
+      "displayName": "Eleanor McGraw",
+      "title": "",
+      "role": "Rancher",
+      "faction": "Neutral",
+      "description": "A weathered woman in her fifties with sun-leathered skin and sharp blue eyes. She runs the largest independent ranch in the territory and refuses to sell to IVRC.",
+      "portraitId": "rancher_mcgraw",
+      "locationId": "mesa_point",
+      "spawnCoord": { "q": 20, "r": 12 },
+      "personality": {
+        "aggression": 0.4,
+        "friendliness": 0.5,
+        "curiosity": 0.4,
+        "greed": 0.3,
+        "honesty": 0.8,
+        "lawfulness": 0.5
+      },
+      "dialogueTreeIds": ["rancher_mcgraw_main"],
+      "primaryDialogueId": "rancher_mcgraw_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["cattle_rustlers", "the_land_grab"],
+      "shopId": "",
+      "backstory": "Took over the ranch after her husband died, raised four sons and buried two. She's seen IVRC swallow up every ranch around her and refuses to be next, no matter what pressure they apply.",
+      "relationships": [
+        { "npcId": "cornelius_thorne", "type": "Enemy", "notes": "He wants her land, she won't sell" },
+        { "npcId": "sheriff_cole", "type": "Ally", "notes": "He helps protect her from IVRC pressure" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 3.0,
+        "maxForce": 10.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 20.0,
+        "fieldOfView": 150.0,
+        "wanderConfig": {
+          "radius": 8.0,
+          "distance": 15.0,
+          "jitter": 3.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 3.0
+        }
+      },
+      "tags": ["rancher", "independent", "ally_potential"]
+    },
+    {
+      "id": "prospector_pete",
+      "displayName": "Pete 'Goldtooth' Williams",
+      "title": "",
+      "role": "Prospector",
+      "faction": "Neutral",
+      "description": "An old prospector with wild gray hair, a gold tooth that glints when he smiles, and clothes that haven't been washed in weeks. He's half-mad from decades in the hills but knows things.",
+      "portraitId": "prospector_pete",
+      "locationId": "coldwater",
+      "spawnCoord": { "q": 8, "r": 14 },
+      "personality": {
+        "aggression": 0.2,
+        "friendliness": 0.6,
+        "curiosity": 0.7,
+        "greed": 0.5,
+        "honesty": 0.6,
+        "lawfulness": 0.2
+      },
+      "dialogueTreeIds": ["prospector_pete_main"],
+      "primaryDialogueId": "prospector_pete_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["lost_mine", "petes_treasure"],
+      "shopId": "",
+      "backstory": "Been prospecting in these hills since before IVRC arrived. He's found and lost more fortunes than most men dream of. Knows every hidden trail and abandoned mine - including some IVRC would rather stayed forgotten.",
+      "relationships": [
+        { "npcId": "professor_cogsworth", "type": "Ally", "notes": "They trade stories and theories" },
+        { "npcId": "samuel_ironpick", "type": "Ally", "notes": "Old drinking buddies" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Wander",
+        "maxSpeed": 2.0,
+        "maxForce": 5.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 15.0,
+        "fieldOfView": 120.0,
+        "wanderConfig": {
+          "radius": 10.0,
+          "distance": 20.0,
+          "jitter": 5.0
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 8.0
+        }
+      },
+      "tags": ["prospector", "information", "eccentric"]
+    },
+    {
+      "id": "telegraph_operator",
+      "displayName": "Simon Finch",
+      "title": "",
+      "role": "Townsfolk",
+      "faction": "IVRC",
+      "description": "A nervous young man with thinning hair and ink-stained fingers. He taps out messages all day and reads more than he should. His eyes dart constantly, as if expecting trouble.",
+      "portraitId": "telegraph_operator",
+      "locationId": "iron_gulch",
+      "spawnCoord": { "q": 25, "r": 22 },
+      "personality": {
+        "aggression": 0.1,
+        "friendliness": 0.4,
+        "curiosity": 0.7,
+        "greed": 0.4,
+        "honesty": 0.5,
+        "lawfulness": 0.7
+      },
+      "dialogueTreeIds": ["telegraph_operator_main"],
+      "primaryDialogueId": "telegraph_operator_main",
+      "essential": false,
+      "questGiver": true,
+      "questIds": ["intercepted_message"],
+      "shopId": "",
+      "backstory": "Works for IVRC operating their telegraph line. He sees every message that passes through and knows more secrets than anyone in town. Living proof that knowledge can be a burden.",
+      "relationships": [
+        { "npcId": "cornelius_thorne", "type": "Neutral", "notes": "His employer, terrified of him" },
+        { "npcId": "diamondback", "type": "Enemy", "notes": "Remembers her from when she worked the lines" }
+      ],
+      "behaviorConfig": {
+        "defaultState": "Idle",
+        "maxSpeed": 2.0,
+        "maxForce": 4.0,
+        "arrivalTolerance": 0.5,
+        "detectionRange": 8.0,
+        "fieldOfView": 100.0,
+        "wanderConfig": {
+          "radius": 2.0,
+          "distance": 3.0,
+          "jitter": 0.5
+        },
+        "patrolConfig": {
+          "waypoints": [],
+          "loop": true,
+          "defaultWaitTime": 4.0
+        }
+      },
+      "tags": ["ivrc", "information", "nervous"]
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "totalNPCs": 28,
+    "generatedFrom": "TypeScript packages/shared/src/data/npcs/",
+    "factions": ["Neutral", "IVRC", "Copperhead", "Freeminer", "Remnant"],
+    "locations": ["dusty_springs", "iron_gulch", "rattlesnake_canyon", "freeminer_hollow", "mesa_point", "coldwater"],
+    "roles": ["Sheriff", "Deputy", "Mayor", "Merchant", "Bartender", "Banker", "Blacksmith", "Doctor", "Preacher", "Undertaker", "Rancher", "Miner", "Prospector", "Outlaw", "GangLeader", "BountyHunter", "Drifter", "Gambler", "Townsfolk"]
+  }
+}
