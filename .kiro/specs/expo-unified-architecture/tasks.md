@@ -209,11 +209,11 @@ This task list breaks down the migration from a pnpm workspace monorepo to a sin
 - [x] 4.3.8 Apply Steampunk styling to all panels
 
 ### 4.4 Setup Navigation
-- [ ] 4.4.1 Configure Expo Router tabs in `app/(tabs)/_layout.tsx`
-- [ ] 4.4.2 Create tab screens: index (game), inventory, settings
-- [ ] 4.4.3 Implement modal navigation for panels
-- [ ] 4.4.4 Add tab bar icons with Steampunk theme
-- [ ] 4.4.5 Test navigation on all platforms
+- [x] 4.4.1 Configure Expo Router tabs in `app/(tabs)/_layout.tsx`
+- [x] 4.4.2 Create tab screens: index (game), inventory, settings
+- [x] 4.4.3 Implement modal navigation for panels
+- [x] 4.4.4 Add tab bar icons with Steampunk theme
+- [x] 4.4.5 Test navigation on all platforms
 
 ### 4.5 Implement Responsive Design
 - [ ] 4.5.1 Test UI on Pixel 8A (portrait and landscape)
