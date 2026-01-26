@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "A steampunk western RPG",
   "type": "module",
+  "main": "expo-router/entry",
   "scripts": {
     "dev": "pnpm --filter @iron-frontier/web dev",
     "build": "pnpm --filter @iron-frontier/web build",
