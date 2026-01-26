@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
-  <rect width="192" height="192" fill="#1a1a1a"/>
-  <rect x="16" y="16" width="160" height="160" rx="16" fill="#92400e"/>
-  <text x="96" y="110" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#d97706" text-anchor="middle">IF</text>
-  <rect x="40" y="130" width="112" height="4" fill="#d97706"/>
-</svg>
