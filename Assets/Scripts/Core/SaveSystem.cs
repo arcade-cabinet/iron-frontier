@@ -63,8 +63,30 @@ namespace IronFrontier.Core
         /// <summary>WeatherSystem state.</summary>
         public WeatherSystemSaveData weatherSystem;
 
+        /// <summary>FatigueSystem state.</summary>
+        public FatigueSystemSaveData fatigueSystem;
+
+        /// <summary>ProvisionsSystem state.</summary>
+        public ProvisionsSystemSaveData provisionsSystem;
+
         /// <summary>Custom data from other systems.</summary>
         public Dictionary<string, string> customData;
+    }
+
+    /// <summary>
+    /// FatigueSystem save state.
+    /// </summary>
+    [Serializable]
+    public class FatigueSystemSaveData
+    {
+        /// <summary>Current fatigue value (0-100).</summary>
+        public float currentFatigue;
+
+        /// <summary>Last time fatigue was updated.</summary>
+        public float lastUpdateTime;
+
+        /// <summary>Whether a stumble event is pending.</summary>
+        public bool pendingStumble;
     }
 
     /// <summary>
@@ -353,6 +375,23 @@ namespace IronFrontier.Core
                                   temperature = 70f
                               };
 
+            var fatigueState = FatigueSystem.Instance?.GetSaveData() ??
+                               new FatigueSystemSaveData
+                               {
+                                   currentFatigue = 0f,
+                                   lastUpdateTime = 0f,
+                                   pendingStumble = false
+                               };
+
+            var provisionsState = ProvisionsSystem.Instance?.GetSaveData() ??
+                                  new ProvisionsSystemSaveData
+                                  {
+                                      food = 75,
+                                      water = 75,
+                                      hoursSinceFood = 0f,
+                                      hoursSinceWater = 0f
+                                  };
+
             var meta = new SaveSlotMeta
             {
                 slotId = slotId,
@@ -394,6 +433,8 @@ namespace IronFrontier.Core
                 gameManager = gameMgrData,
                 timeSystem = timeState,
                 weatherSystem = weatherState,
+                fatigueSystem = fatigueState,
+                provisionsSystem = provisionsState,
                 customData = customData
             };
         }
@@ -478,6 +519,18 @@ namespace IronFrontier.Core
             if (WeatherSystem.Instance != null && saveData.weatherSystem != null)
             {
                 WeatherSystem.Instance.LoadSaveData(saveData.weatherSystem);
+            }
+
+            // Apply to FatigueSystem
+            if (FatigueSystem.Instance != null && saveData.fatigueSystem != null)
+            {
+                FatigueSystem.Instance.LoadSaveData(saveData.fatigueSystem);
+            }
+
+            // Apply to ProvisionsSystem
+            if (ProvisionsSystem.Instance != null && saveData.provisionsSystem != null)
+            {
+                ProvisionsSystem.Instance.LoadSaveData(saveData.provisionsSystem);
             }
 
             // Apply custom data

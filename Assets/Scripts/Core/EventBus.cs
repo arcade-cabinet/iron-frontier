@@ -505,8 +505,15 @@ namespace IronFrontier.Core
         public const string WeatherChanged = "weather_changed";
         public const string SeverityChanged = "severity_changed";
 
+        // Camping Events
+        public const string CampSetup = "camp_setup";
+        public const string CampBreak = "camp_break";
+        public const string RestComplete = "rest_complete";
+        public const string CampEncounter = "camp_encounter";
+
         // Reputation Events
         public const string ReputationChanged = "reputation_changed";
+        public const string ReputationTierChanged = "reputation_tier_changed";
 
         // Notification Events
         public const string Notification = "notification";
@@ -514,6 +521,24 @@ namespace IronFrontier.Core
         public const string NotificationWarning = "notification_warning";
         public const string NotificationError = "notification_error";
         public const string NotificationSuccess = "notification_success";
+
+        // Fatigue Events
+        public const string FatigueChanged = "fatigue_changed";
+        public const string FatigueLevelChanged = "fatigue_level_changed";
+        public const string PlayerStumbled = "player_stumbled";
+        public const string PlayerCollapsed = "player_collapsed";
+
+        // Provisions Events
+        public const string ProvisionsChanged = "provisions_changed";
+        public const string FoodDepleted = "provisions_food_depleted";
+        public const string WaterDepleted = "provisions_water_depleted";
+        public const string ProvisionsStatusChanged = "provisions_status_changed";
+        public const string HuntCompleted = "provisions_hunt_completed";
+        public const string ForageCompleted = "provisions_forage_completed";
+
+        // Loot Events
+        public const string LootGenerated = "loot_generated";
+        public const string LootCollected = "loot_collected";
     }
 
     #endregion

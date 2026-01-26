@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using IronFrontier.Data;
 
 namespace IronFrontier.Combat
 {
@@ -139,11 +140,15 @@ namespace IronFrontier.Combat
         [SerializeField] private bool _canFlee = true;
         [SerializeField] private bool _isBoss;
 
+        [Header("Managers")]
+        [SerializeField] private SkillManager _skillManager;
+
         private List<Combatant> _combatants = new();
         private List<string> _turnOrder = new();
         private List<CombatResult> _combatLog = new();
         private CombatActionType? _selectedAction;
         private string _selectedTargetId;
+        private string _selectedSkillId;
         private long _startedAt;
 
         #endregion
@@ -183,6 +188,12 @@ namespace IronFrontier.Combat
         /// <summary>Currently selected target ID.</summary>
         public string SelectedTargetId => _selectedTargetId;
 
+        /// <summary>Currently selected skill ID.</summary>
+        public string SelectedSkillId => _selectedSkillId;
+
+        /// <summary>Reference to the skill manager.</summary>
+        public SkillManager SkillManager => _skillManager;
+
         /// <summary>Is combat currently active?</summary>
         public bool IsCombatActive => _phase != CombatPhase.Victory &&
                                        _phase != CombatPhase.Defeat &&
@@ -205,6 +216,16 @@ namespace IronFrontier.Combat
             OnTurnOrderChanged ??= new UnityEvent<List<string>>();
             OnCombatEnded ??= new UnityEvent<CombatPhase, CombatRewards>();
             OnLogUpdated ??= new UnityEvent<CombatResult>();
+
+            // Auto-find SkillManager if not assigned
+            if (_skillManager == null)
+            {
+                _skillManager = GetComponent<SkillManager>();
+                if (_skillManager == null)
+                {
+                    _skillManager = gameObject.AddComponent<SkillManager>();
+                }
+            }
         }
 
         #endregion
@@ -257,6 +278,16 @@ namespace IronFrontier.Combat
 
             // Calculate initial turn order
             CalculateTurnOrder();
+
+            // Initialize skills for all combatants
+            if (_skillManager != null)
+            {
+                _skillManager.ResetCombatState();
+                foreach (var combatant in _combatants)
+                {
+                    _skillManager.UnlockDefaultSkills(combatant.Id, 1);
+                }
+            }
 
             // Set initial phase based on first combatant
             var firstCombatant = GetCombatantById(_turnOrder[0]);
@@ -395,9 +426,16 @@ namespace IronFrontier.Combat
                     SetPhase(CombatPhase.EnemyTurn);
             }
 
+            // Process end-of-turn for skill manager
+            if (currentCombatant != null)
+            {
+                _skillManager?.ProcessTurnEnd(currentCombatant.Id);
+            }
+
             // Clear selections
             _selectedAction = null;
             _selectedTargetId = null;
+            _selectedSkillId = null;
         }
 
         /// <summary>
@@ -470,6 +508,49 @@ namespace IronFrontier.Combat
             }
 
             _selectedTargetId = targetId;
+        }
+
+        /// <summary>
+        /// Select a skill for the current action.
+        /// </summary>
+        public void SelectSkill(string skillId)
+        {
+            if (!IsPlayerTurn)
+            {
+                Debug.LogWarning("[CombatManager] Cannot select skill when not player turn");
+                return;
+            }
+
+            _selectedSkillId = skillId;
+            _selectedAction = CombatActionType.Skill;
+        }
+
+        /// <summary>
+        /// Get valid targets for a specific skill.
+        /// </summary>
+        public List<Combatant> GetValidSkillTargets(string skillId)
+        {
+            var actor = GetCurrentCombatant();
+            if (actor == null || _skillManager == null)
+                return new List<Combatant>();
+
+            var skill = _skillManager.GetSkill(skillId);
+            if (skill == null)
+                return new List<Combatant>();
+
+            return SkillTargeting.GetValidTargets(skill, actor, _combatants);
+        }
+
+        /// <summary>
+        /// Get all usable skills for the current combatant.
+        /// </summary>
+        public List<SkillData> GetUsableSkills()
+        {
+            var actor = GetCurrentCombatant();
+            if (actor == null || _skillManager == null)
+                return new List<SkillData>();
+
+            return _skillManager.GetUsableSkills(actor.Id);
         }
 
         /// <summary>
@@ -792,11 +873,69 @@ namespace IronFrontier.Combat
         }
 
         /// <summary>
-        /// Process a skill action (placeholder for future expansion).
+        /// Process a skill action using the SkillManager.
         /// </summary>
         private CombatResult ProcessSkill(CombatAction action, Combatant actor)
         {
-            return CombatResult.Failure(action, "Skills are not yet implemented");
+            if (_skillManager == null)
+            {
+                return CombatResult.Failure(action, "SkillManager not available");
+            }
+
+            // Use selected skill ID if not in action
+            if (string.IsNullOrEmpty(action.SkillId) && !string.IsNullOrEmpty(_selectedSkillId))
+            {
+                action.SkillId = _selectedSkillId;
+            }
+
+            if (string.IsNullOrEmpty(action.SkillId))
+            {
+                return CombatResult.Failure(action, "No skill specified");
+            }
+
+            // Process the skill through SkillManager
+            var skillResult = _skillManager.ProcessSkill(action, actor, _combatants);
+
+            // Convert SkillResult to CombatResult
+            var combatResult = new CombatResult
+            {
+                Action = action,
+                Success = skillResult.Success,
+                Damage = skillResult.TotalDamage,
+                HealAmount = skillResult.TotalHealing,
+                TargetKilled = skillResult.TargetsKilled > 0,
+                Message = skillResult.Message,
+                Timestamp = skillResult.Timestamp
+            };
+
+            // Apply status effects to targets (already done in SkillManager, but track in result)
+            if (skillResult.StatusEffectsApplied.Count > 0)
+            {
+                combatResult.StatusEffectApplied = skillResult.StatusEffectsApplied[0];
+            }
+
+            // Fire damage/defeat events for each affected target
+            foreach (var target in skillResult.Targets)
+            {
+                if (skillResult.DamagePerTarget.TryGetValue(target.Id, out var damage) && damage > 0)
+                {
+                    OnCombatantDamaged?.Invoke(target, damage);
+                }
+
+                if (!target.IsAlive)
+                {
+                    OnCombatantDefeated?.Invoke(target);
+                }
+            }
+
+            // Break stealth on attack skills
+            var skill = _skillManager.GetSkill(action.SkillId);
+            if (skill != null && skill.TargetsEnemies && skillResult.TotalDamage > 0)
+            {
+                _skillManager.BreakStealth(actor.Id);
+            }
+
+            return combatResult;
         }
 
         #endregion
@@ -863,6 +1002,9 @@ namespace IronFrontier.Combat
                 rewards = CalculateRewards();
             }
 
+            // Clean up skill manager state
+            _skillManager?.ResetCombatState();
+
             // Clean up combatants
             foreach (var combatant in _combatants)
             {
@@ -875,6 +1017,7 @@ namespace IronFrontier.Combat
             _combatants.Clear();
             _turnOrder.Clear();
             _combatLog.Clear();
+            _selectedSkillId = null;
             _phase = CombatPhase.Initializing;
 
             return rewards;

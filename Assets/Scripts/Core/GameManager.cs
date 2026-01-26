@@ -326,6 +326,7 @@ namespace IronFrontier.Core
             SaveSystem.Instance?.ClearAllData();
             TimeSystem.Instance?.ResetToDefault();
             WeatherSystem.Instance?.ResetToDefault();
+            FatigueSystem.Instance?.ResetToDefault();
 
             // Transition to overworld
             SetPhase(GamePhase.Overworld);

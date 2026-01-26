@@ -1,0 +1,201 @@
+{
+  "version": "1.0.0",
+  "description": "Iron Frontier - Loot Tables Database. Defines drop tables for enemies, chests, and other loot sources.",
+  "lootTables": [
+    {
+      "id": "wildlife_common",
+      "name": "Common Wildlife Drops",
+      "entries": [
+        { "itemId": "coyote_pelt", "weight": 40, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "dried_jerky", "weight": 20, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "feathers", "weight": 25, "minQuantity": 1, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "raw_meat", "weight": 15, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 1,
+      "emptyChance": 0.3
+    },
+    {
+      "id": "wildlife_venom",
+      "name": "Venomous Wildlife Drops",
+      "entries": [
+        { "itemId": "snake_venom", "weight": 50, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "antidote", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "snakeskin", "weight": 30, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "fang", "weight": 10, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 1,
+      "emptyChance": 0.2
+    },
+    {
+      "id": "bandit_common",
+      "name": "Common Bandit Drops",
+      "entries": [
+        { "itemId": "gold_pouch", "weight": 35, "minQuantity": 5, "maxQuantity": 15, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "revolver_ammo", "weight": 40, "minQuantity": 6, "maxQuantity": 12, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "whiskey", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "bandana", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.15
+    },
+    {
+      "id": "bandit_elite",
+      "name": "Elite Bandit Drops",
+      "entries": [
+        { "itemId": "gold_pouch", "weight": 30, "minQuantity": 15, "maxQuantity": 30, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "revolver_ammo", "weight": 25, "minQuantity": 12, "maxQuantity": 24, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "health_tonic", "weight": 20, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "iron_key", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 3, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_revolver", "weight": 5, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 5, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "dynamite", "weight": 10, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 3,
+      "emptyChance": 0.1
+    },
+    {
+      "id": "copperhead_common",
+      "name": "Copperhead Gang Drops",
+      "entries": [
+        { "itemId": "gold_pouch", "weight": 30, "minQuantity": 10, "maxQuantity": 25, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rifle_ammo", "weight": 35, "minQuantity": 5, "maxQuantity": 10, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "copperhead_badge", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "snake_oil", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "health_tonic", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.1
+    },
+    {
+      "id": "copperhead_leader",
+      "name": "Copperhead Leader Drops",
+      "entries": [
+        { "itemId": "copperhead_map", "weight": -1, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_pouch", "weight": 40, "minQuantity": 50, "maxQuantity": 100, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "unique_revolver", "weight": 20, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "health_elixir", "weight": 25, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_hat", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 3,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "ivrc_guard",
+      "name": "IVRC Guard Drops",
+      "entries": [
+        { "itemId": "ivrc_badge", "weight": 20, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rifle_ammo", "weight": 35, "minQuantity": 10, "maxQuantity": 20, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_pouch", "weight": 25, "minQuantity": 20, "maxQuantity": 40, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "iron_key", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "company_rifle", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 4, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.1
+    },
+    {
+      "id": "automaton_parts",
+      "name": "Automaton Salvage",
+      "entries": [
+        { "itemId": "cog_wheel", "weight": 35, "minQuantity": 1, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "brass_plating", "weight": 25, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "steam_valve", "weight": 20, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "power_cell", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 3, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "remnant_core", "weight": 5, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 5, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "scrap_metal", "weight": 5, "minQuantity": 2, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.05
+    },
+    {
+      "id": "treasure_chest_common",
+      "name": "Common Chest Contents",
+      "entries": [
+        { "itemId": "gold_pouch", "weight": 40, "minQuantity": 20, "maxQuantity": 50, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "health_tonic", "weight": 30, "minQuantity": 1, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "revolver_ammo", "weight": 20, "minQuantity": 12, "maxQuantity": 24, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "lockpick", "weight": 10, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "treasure_chest_rare",
+      "name": "Rare Chest Contents",
+      "entries": [
+        { "itemId": "gold_pouch", "weight": 30, "minQuantity": 50, "maxQuantity": 150, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "health_elixir", "weight": 25, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_weapon", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_armor", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "skill_book", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "ancient_artifact", "weight": 5, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 5, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 3,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "boss_diamondback",
+      "name": "Diamondback Boss Drops",
+      "entries": [
+        { "itemId": "diamondback_revolver", "weight": -1, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_pouch", "weight": 40, "minQuantity": 200, "maxQuantity": 500, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "copperhead_treasure_map", "weight": 30, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "legendary_bandana", "weight": 20, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "snake_charm", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 4,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "boss_iron_colossus",
+      "name": "Iron Colossus Boss Drops",
+      "entries": [
+        { "itemId": "iron_heart", "weight": -1, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "remnant_core", "weight": 35, "minQuantity": 2, "maxQuantity": 4, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "advanced_armor", "weight": 25, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "steam_rifle", "weight": 20, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_pouch", "weight": 20, "minQuantity": 300, "maxQuantity": 600, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 4,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "boss_cornelius_thorne",
+      "name": "Cornelius Thorne Boss Drops",
+      "entries": [
+        { "itemId": "thorne_cane_sword", "weight": -1, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "ivrc_master_key", "weight": -1, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_pouch", "weight": 30, "minQuantity": 500, "maxQuantity": 1000, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "executive_suit", "weight": 30, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_pocket_watch", "weight": 25, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "company_deed", "weight": 15, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 5,
+      "emptyChance": 0.0
+    },
+    {
+      "id": "mining_node",
+      "name": "Mining Node Yields",
+      "entries": [
+        { "itemId": "iron_ore", "weight": 45, "minQuantity": 2, "maxQuantity": 5, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "copper_ore", "weight": 30, "minQuantity": 1, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "silver_ore", "weight": 15, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 3, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gold_ore", "weight": 8, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 5, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "gemstone", "weight": 2, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 7, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 2,
+      "emptyChance": 0.1
+    },
+    {
+      "id": "foraging_desert",
+      "name": "Desert Foraging",
+      "entries": [
+        { "itemId": "cactus_fruit", "weight": 35, "minQuantity": 1, "maxQuantity": 3, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "desert_sage", "weight": 30, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "aloe_vera", "weight": 20, "minQuantity": 1, "maxQuantity": 2, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "prickly_pear", "weight": 10, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 0, "maxPlayerLevel": 0, "requiredQuestId": "" },
+        { "itemId": "rare_flower", "weight": 5, "minQuantity": 1, "maxQuantity": 1, "minPlayerLevel": 3, "maxPlayerLevel": 0, "requiredQuestId": "" }
+      ],
+      "rolls": 1,
+      "emptyChance": 0.2
+    }
+  ]
+}

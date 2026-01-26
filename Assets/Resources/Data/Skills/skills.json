@@ -1,0 +1,1599 @@
+{
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "player_basic_attack",
+      "name": "Basic Shot",
+      "description": "A standard pistol shot. Reliable and efficient.",
+      "targetType": "Enemy",
+      "apCost": 2,
+      "cooldown": 0,
+      "range": 6,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 15,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "ranged", "basic"],
+      "soundId": "sfx_pistol_shot"
+    },
+    {
+      "id": "player_power_shot",
+      "name": "Power Shot",
+      "description": "Take careful aim for a devastating shot that deals increased damage.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 2,
+      "range": 8,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 35,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "ranged", "power"],
+      "soundId": "sfx_rifle_shot"
+    },
+    {
+      "id": "player_quickdraw",
+      "name": "Quickdraw",
+      "description": "Lightning-fast shot from the hip. Low cost but reduced accuracy.",
+      "targetType": "Enemy",
+      "apCost": 1,
+      "cooldown": 0,
+      "range": 4,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 10,
+          "duration": 0,
+          "chance": 75,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "ranged", "quick"],
+      "soundId": "sfx_quickdraw"
+    },
+    {
+      "id": "player_aimed_shot",
+      "name": "Aimed Shot",
+      "description": "Spend extra time lining up a precise shot. High damage and guaranteed hit.",
+      "targetType": "Enemy",
+      "apCost": 5,
+      "cooldown": 3,
+      "range": 10,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 50,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.2
+        },
+        {
+          "type": "mark",
+          "value": 20,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_vulnerable",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["player", "ranged", "precision"],
+      "soundId": "sfx_sniper_shot"
+    },
+    {
+      "id": "player_take_cover",
+      "name": "Take Cover",
+      "description": "Duck behind the nearest cover, reducing incoming damage significantly.",
+      "targetType": "Self",
+      "apCost": 2,
+      "cooldown": 2,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 50,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_cover",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "defensive", "cover"],
+      "soundId": "sfx_take_cover"
+    },
+    {
+      "id": "player_dodge_roll",
+      "name": "Dodge Roll",
+      "description": "Roll to evade attacks and reposition. Grants brief invulnerability.",
+      "targetType": "Ground",
+      "apCost": 2,
+      "cooldown": 3,
+      "range": 2,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 100,
+          "duration": 1,
+          "chance": 100,
+          "statusId": "status_evasion",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "defensive", "mobility"],
+      "soundId": "sfx_dodge_roll"
+    },
+    {
+      "id": "player_iron_will",
+      "name": "Iron Will",
+      "description": "Steel your resolve. Become immune to stun and fear effects.",
+      "targetType": "Self",
+      "apCost": 3,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 0,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_iron_will",
+          "levelScaling": 0
+        },
+        {
+          "type": "heal",
+          "value": 10,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["player", "defensive", "mental"],
+      "soundId": "sfx_iron_will"
+    },
+    {
+      "id": "player_mark_target",
+      "name": "Mark Target",
+      "description": "Paint a target for your allies. Marked enemies take bonus damage from all sources.",
+      "targetType": "Enemy",
+      "apCost": 1,
+      "cooldown": 2,
+      "range": 8,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "mark",
+          "value": 25,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_marked",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "utility", "support"],
+      "soundId": "sfx_mark_target"
+    },
+    {
+      "id": "player_tactical_reload",
+      "name": "Tactical Reload",
+      "description": "Quick reload that also grants a damage buff for your next shot.",
+      "targetType": "Self",
+      "apCost": 1,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 30,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_loaded",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["player", "utility", "buff"],
+      "soundId": "sfx_reload"
+    },
+    {
+      "id": "player_smoke_bomb",
+      "name": "Smoke Bomb",
+      "description": "Throw a smoke bomb that obscures vision and grants stealth to allies in the area.",
+      "targetType": "Ground",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 5,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "stealth",
+          "value": 0,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_smoke",
+          "levelScaling": 0
+        },
+        {
+          "type": "debuff",
+          "value": 30,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_blinded",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["player", "utility", "area"],
+      "soundId": "sfx_smoke_bomb"
+    },
+    {
+      "id": "player_fan_the_hammer",
+      "name": "Fan the Hammer",
+      "description": "Rapidly fire all six shots at enemies in a cone. Devastating at close range.",
+      "targetType": "AreaEnemy",
+      "apCost": 6,
+      "cooldown": 4,
+      "range": 4,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 60,
+          "duration": 0,
+          "chance": 80,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 5,
+      "tags": ["player", "ranged", "aoe", "special"],
+      "soundId": "sfx_fan_hammer"
+    },
+    {
+      "id": "player_dead_eye",
+      "name": "Dead Eye",
+      "description": "Enter a trance-like state of perfect focus. Your next 3 attacks cannot miss.",
+      "targetType": "Self",
+      "apCost": 4,
+      "cooldown": 6,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 100,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_dead_eye",
+          "levelScaling": 0
+        },
+        {
+          "type": "buff",
+          "value": 20,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_crit_chance",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 6,
+      "tags": ["player", "buff", "special"],
+      "soundId": "sfx_dead_eye"
+    },
+    {
+      "id": "player_execute",
+      "name": "Execute",
+      "description": "Finish off a wounded foe. Deals massive damage to enemies below 30% health.",
+      "targetType": "Enemy",
+      "apCost": 5,
+      "cooldown": 5,
+      "range": 3,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "execute",
+          "value": 100,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.2
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 7,
+      "tags": ["player", "ranged", "finisher"],
+      "soundId": "sfx_execute"
+    },
+    {
+      "id": "player_intimidate",
+      "name": "Intimidate",
+      "description": "Your reputation precedes you. Frighten nearby enemies, reducing their accuracy.",
+      "targetType": "AreaEnemy",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 3,
+      "effects": [
+        {
+          "type": "debuff",
+          "value": 25,
+          "duration": 2,
+          "chance": 75,
+          "statusId": "status_frightened",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["player", "utility", "debuff"],
+      "soundId": "sfx_intimidate"
+    },
+    {
+      "id": "player_first_aid",
+      "name": "First Aid",
+      "description": "Patch up your wounds with bandages. Restores a moderate amount of health.",
+      "targetType": "Self",
+      "apCost": 3,
+      "cooldown": 3,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 30,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["player", "healing", "self"],
+      "soundId": "sfx_bandage"
+    },
+    {
+      "id": "player_rally",
+      "name": "Rally",
+      "description": "Inspire your companions with a rallying cry. All allies gain bonus damage.",
+      "targetType": "AllAllies",
+      "apCost": 4,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 20,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_inspired",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 5,
+      "tags": ["player", "support", "buff"],
+      "soundId": "sfx_rally"
+    },
+
+    {
+      "id": "hawkins_cover_fire",
+      "name": "Cover Fire",
+      "description": "Deputy Hawkins provides suppressing fire, reducing enemy movement and accuracy.",
+      "targetType": "AreaEnemy",
+      "apCost": 4,
+      "cooldown": 3,
+      "range": 7,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 15,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "debuff",
+          "value": 30,
+          "duration": 2,
+          "chance": 85,
+          "statusId": "status_suppressed",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "hawkins", "ranged", "support"],
+      "soundId": "sfx_cover_fire"
+    },
+    {
+      "id": "hawkins_arrest",
+      "name": "Arrest",
+      "description": "Attempt to subdue an enemy non-lethally. Stunned enemies can be questioned.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 2,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "non_lethal",
+          "value": 25,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "stun",
+          "value": 0,
+          "duration": 2,
+          "chance": 70,
+          "statusId": "status_arrested",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "hawkins", "melee", "non_lethal"],
+      "soundId": "sfx_arrest"
+    },
+    {
+      "id": "hawkins_shield_ally",
+      "name": "Shield Ally",
+      "description": "Step in front of an ally, intercepting attacks meant for them.",
+      "targetType": "Ally",
+      "apCost": 2,
+      "cooldown": 3,
+      "range": 2,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "taunt",
+          "value": 0,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_guarded",
+          "levelScaling": 0
+        },
+        {
+          "type": "buff",
+          "value": 25,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_protected",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["companion", "hawkins", "defensive", "support"],
+      "soundId": "sfx_shield_ally"
+    },
+    {
+      "id": "hawkins_lawmans_resolve",
+      "name": "Lawman's Resolve",
+      "description": "Hawkins draws on his oath to protect. Grants damage resistance and removes debuffs.",
+      "targetType": "Self",
+      "apCost": 3,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "shield",
+          "value": 40,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "buff",
+          "value": 0,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_cleansed",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["companion", "hawkins", "defensive", "ultimate"],
+      "soundId": "sfx_resolve"
+    },
+    {
+      "id": "hawkins_warning_shot",
+      "name": "Warning Shot",
+      "description": "Fire a shot in the air. May cause weaker enemies to flee.",
+      "targetType": "AreaEnemy",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 4,
+      "effects": [
+        {
+          "type": "debuff",
+          "value": 50,
+          "duration": 2,
+          "chance": 60,
+          "statusId": "status_frightened",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "hawkins", "utility", "crowd_control"],
+      "soundId": "sfx_warning_shot"
+    },
+
+    {
+      "id": "maggie_dynamite_throw",
+      "name": "Dynamite Throw",
+      "description": "Maggie hurls a stick of dynamite. Massive area damage after a short delay.",
+      "targetType": "Ground",
+      "apCost": 5,
+      "cooldown": 4,
+      "range": 6,
+      "areaRadius": 3,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 55,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "knockback",
+          "value": 2,
+          "duration": 0,
+          "chance": 80,
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "maggie", "explosive", "aoe"],
+      "soundId": "sfx_dynamite"
+    },
+    {
+      "id": "maggie_cave_in",
+      "name": "Cave In",
+      "description": "Collapse the terrain on enemies. Deals damage and creates difficult terrain.",
+      "targetType": "Ground",
+      "apCost": 6,
+      "cooldown": 5,
+      "range": 5,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 40,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "debuff",
+          "value": 50,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_slowed",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["companion", "maggie", "explosive", "terrain"],
+      "soundId": "sfx_cave_in"
+    },
+    {
+      "id": "maggie_miners_grit",
+      "name": "Miner's Grit",
+      "description": "Years in the mines have toughened Maggie. Reduces damage taken significantly.",
+      "targetType": "Self",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "shield",
+          "value": 35,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "buff",
+          "value": 15,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_fortified",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "maggie", "defensive", "self"],
+      "soundId": "sfx_grit"
+    },
+    {
+      "id": "maggie_pickaxe_strike",
+      "name": "Pickaxe Strike",
+      "description": "A brutal melee attack with her trusty pickaxe. Can pierce armor.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 2,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 30,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.12
+        },
+        {
+          "type": "debuff",
+          "value": 20,
+          "duration": 2,
+          "chance": 75,
+          "statusId": "status_armor_broken",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "maggie", "melee", "armor_pierce"],
+      "soundId": "sfx_pickaxe"
+    },
+    {
+      "id": "maggie_prospector_eye",
+      "name": "Prospector's Eye",
+      "description": "Maggie spots weaknesses in the enemy formation. Marks multiple targets.",
+      "targetType": "AreaEnemy",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 6,
+      "areaRadius": 3,
+      "effects": [
+        {
+          "type": "mark",
+          "value": 20,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_marked",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "maggie", "utility", "support"],
+      "soundId": "sfx_prospector_eye"
+    },
+
+    {
+      "id": "belle_backstab",
+      "name": "Backstab",
+      "description": "Black Belle strikes from the shadows. Massive damage if attacking from stealth.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 2,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 45,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.2
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "belle", "melee", "stealth"],
+      "soundId": "sfx_backstab"
+    },
+    {
+      "id": "belle_vanish",
+      "name": "Vanish",
+      "description": "Belle disappears into the shadows, becoming invisible and repositioning.",
+      "targetType": "Self",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "stealth",
+          "value": 0,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_invisible",
+          "levelScaling": 0
+        },
+        {
+          "type": "buff",
+          "value": 30,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_speed",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "belle", "stealth", "mobility"],
+      "soundId": "sfx_vanish"
+    },
+    {
+      "id": "belle_poison_blade",
+      "name": "Poison Blade",
+      "description": "Coat weapons in deadly toxin. Attacks apply poison damage over time.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 3,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 20,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "debuff",
+          "value": 12,
+          "duration": 4,
+          "chance": 90,
+          "statusId": "status_poisoned",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["companion", "belle", "melee", "poison"],
+      "soundId": "sfx_poison_blade"
+    },
+    {
+      "id": "belle_dual_pistols",
+      "name": "Dual Pistols",
+      "description": "Open fire with both guns. Hits a single target twice for massive damage.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 3,
+      "range": 5,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 25,
+          "duration": 0,
+          "chance": 90,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "damage",
+          "value": 25,
+          "duration": 0,
+          "chance": 85,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "belle", "ranged", "multi_hit"],
+      "soundId": "sfx_dual_pistols"
+    },
+    {
+      "id": "belle_shadow_dance",
+      "name": "Shadow Dance",
+      "description": "Belle becomes a whirlwind of blades, striking all adjacent enemies.",
+      "targetType": "AreaEnemy",
+      "apCost": 5,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 1,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 35,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "stealth",
+          "value": 0,
+          "duration": 1,
+          "chance": 100,
+          "statusId": "status_invisible",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 5,
+      "tags": ["companion", "belle", "melee", "aoe", "ultimate"],
+      "soundId": "sfx_shadow_dance"
+    },
+
+    {
+      "id": "maria_heal_wounds",
+      "name": "Heal Wounds",
+      "description": "Sister Maria calls upon divine grace to mend an ally's injuries.",
+      "targetType": "Ally",
+      "apCost": 3,
+      "cooldown": 2,
+      "range": 4,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 40,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.2
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "maria", "healing", "single"],
+      "soundId": "sfx_heal_wounds"
+    },
+    {
+      "id": "maria_purify",
+      "name": "Purify",
+      "description": "Cleanse an ally of all negative status effects and minor healing.",
+      "targetType": "Ally",
+      "apCost": 2,
+      "cooldown": 3,
+      "range": 5,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 0,
+          "duration": 0,
+          "chance": 100,
+          "statusId": "status_cleansed",
+          "levelScaling": 0
+        },
+        {
+          "type": "heal",
+          "value": 15,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "maria", "healing", "cleanse"],
+      "soundId": "sfx_purify"
+    },
+    {
+      "id": "maria_divine_shield",
+      "name": "Divine Shield",
+      "description": "Surround an ally with holy protection, absorbing incoming damage.",
+      "targetType": "Ally",
+      "apCost": 4,
+      "cooldown": 4,
+      "range": 5,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "shield",
+          "value": 50,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["companion", "maria", "defensive", "shield"],
+      "soundId": "sfx_divine_shield"
+    },
+    {
+      "id": "maria_holy_smite",
+      "name": "Holy Smite",
+      "description": "Call down divine wrath upon the wicked. Extra damage to undead and demons.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 3,
+      "range": 6,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 35,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "debuff",
+          "value": 15,
+          "duration": 2,
+          "chance": 80,
+          "statusId": "status_holy_burn",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "maria", "damage", "holy"],
+      "soundId": "sfx_holy_smite"
+    },
+    {
+      "id": "maria_mass_heal",
+      "name": "Mass Heal",
+      "description": "A powerful prayer that heals all allies in the area.",
+      "targetType": "AreaAlly",
+      "apCost": 6,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 4,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 30,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 5,
+      "tags": ["companion", "maria", "healing", "aoe", "ultimate"],
+      "soundId": "sfx_mass_heal"
+    },
+    {
+      "id": "maria_sanctuary",
+      "name": "Sanctuary",
+      "description": "Create a blessed zone. Allies inside gain regeneration and cannot be targeted.",
+      "targetType": "Ground",
+      "apCost": 5,
+      "cooldown": 6,
+      "range": 4,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 10,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "buff",
+          "value": 0,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_sanctuary",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 6,
+      "tags": ["companion", "maria", "defensive", "zone"],
+      "soundId": "sfx_sanctuary"
+    },
+
+    {
+      "id": "viper_venom_strike",
+      "name": "Venom Strike",
+      "description": "Viper strikes with poisoned fangs. Deals damage and applies deadly venom.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 2,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 22,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "debuff",
+          "value": 15,
+          "duration": 4,
+          "chance": 95,
+          "statusId": "status_venomous",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "viper", "melee", "poison"],
+      "soundId": "sfx_venom_strike"
+    },
+    {
+      "id": "viper_cobra_spit",
+      "name": "Cobra Spit",
+      "description": "Spit venom at range, blinding the target and dealing poison damage.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 3,
+      "range": 5,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 15,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "debuff",
+          "value": 40,
+          "duration": 2,
+          "chance": 85,
+          "statusId": "status_blinded",
+          "levelScaling": 0.05
+        },
+        {
+          "type": "debuff",
+          "value": 8,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_venomous",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "viper", "ranged", "poison", "debuff"],
+      "soundId": "sfx_cobra_spit"
+    },
+    {
+      "id": "viper_serpents_guile",
+      "name": "Serpent's Guile",
+      "description": "Move with serpentine grace. Increases evasion and allows passing through enemies.",
+      "targetType": "Self",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 40,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_evasion",
+          "levelScaling": 0.1
+        },
+        {
+          "type": "buff",
+          "value": 2,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_phase",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["companion", "viper", "defensive", "mobility"],
+      "soundId": "sfx_serpent_guile"
+    },
+    {
+      "id": "viper_betrayers_mark",
+      "name": "Betrayer's Mark",
+      "description": "Mark an enemy for death. All allies deal bonus damage and the mark spreads on kill.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 6,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "mark",
+          "value": 35,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_death_mark",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["companion", "viper", "utility", "mark"],
+      "soundId": "sfx_betrayers_mark"
+    },
+    {
+      "id": "viper_constrict",
+      "name": "Constrict",
+      "description": "Wrap around an enemy, stunning them and dealing damage over time.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 4,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "stun",
+          "value": 0,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_constricted",
+          "levelScaling": 0
+        },
+        {
+          "type": "damage",
+          "value": 15,
+          "duration": 2,
+          "chance": 100,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "viper", "melee", "control"],
+      "soundId": "sfx_constrict"
+    },
+
+    {
+      "id": "automaton_steam_punch",
+      "name": "Steam Punch",
+      "description": "The automaton delivers a powerful steam-powered punch.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 1,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 35,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "knockback",
+          "value": 1,
+          "duration": 0,
+          "chance": 70,
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "automaton", "melee", "power"],
+      "soundId": "sfx_steam_punch"
+    },
+    {
+      "id": "automaton_overclock",
+      "name": "Overclock",
+      "description": "Push the automaton's systems to the limit. Grants extra actions but causes heat buildup.",
+      "targetType": "Self",
+      "apCost": 2,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "buff",
+          "value": 3,
+          "duration": 2,
+          "chance": 100,
+          "statusId": "status_overclocked",
+          "levelScaling": 0
+        },
+        {
+          "type": "debuff",
+          "value": 10,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_overheating",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 2,
+      "tags": ["companion", "automaton", "buff", "self"],
+      "soundId": "sfx_overclock"
+    },
+    {
+      "id": "automaton_shield_mode",
+      "name": "Shield Mode",
+      "description": "Reconfigure into defensive mode. Taunts enemies and greatly increases armor.",
+      "targetType": "Self",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "taunt",
+          "value": 0,
+          "duration": 3,
+          "chance": 100,
+          "statusId": "status_taunting",
+          "levelScaling": 0
+        },
+        {
+          "type": "shield",
+          "value": 60,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.2
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "automaton", "defensive", "tank"],
+      "soundId": "sfx_shield_mode"
+    },
+    {
+      "id": "automaton_self_repair",
+      "name": "Self-Repair",
+      "description": "Initiate repair protocols. Restores health over time and removes debuffs.",
+      "targetType": "Self",
+      "apCost": 4,
+      "cooldown": 5,
+      "range": 0,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 20,
+          "duration": 3,
+          "chance": 100,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "buff",
+          "value": 0,
+          "duration": 0,
+          "chance": 100,
+          "statusId": "status_cleansed",
+          "levelScaling": 0
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["companion", "automaton", "healing", "self"],
+      "soundId": "sfx_self_repair"
+    },
+    {
+      "id": "automaton_steam_vent",
+      "name": "Steam Vent",
+      "description": "Release superheated steam in all directions, damaging and pushing back nearby enemies.",
+      "targetType": "AreaEnemy",
+      "apCost": 4,
+      "cooldown": 3,
+      "range": 0,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 25,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        },
+        {
+          "type": "knockback",
+          "value": 2,
+          "duration": 0,
+          "chance": 90,
+          "levelScaling": 0
+        },
+        {
+          "type": "debuff",
+          "value": 10,
+          "duration": 2,
+          "chance": 75,
+          "statusId": "status_burned",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 3,
+      "tags": ["companion", "automaton", "aoe", "knockback"],
+      "soundId": "sfx_steam_vent"
+    },
+    {
+      "id": "automaton_gatling_barrage",
+      "name": "Gatling Barrage",
+      "description": "Deploy the arm-mounted gatling gun and spray bullets across the battlefield.",
+      "targetType": "AreaEnemy",
+      "apCost": 6,
+      "cooldown": 5,
+      "range": 6,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 45,
+          "duration": 0,
+          "chance": 85,
+          "levelScaling": 0.15
+        },
+        {
+          "type": "debuff",
+          "value": 30,
+          "duration": 2,
+          "chance": 70,
+          "statusId": "status_suppressed",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 5,
+      "tags": ["companion", "automaton", "ranged", "aoe", "ultimate"],
+      "soundId": "sfx_gatling_barrage"
+    },
+    {
+      "id": "automaton_magnetic_pull",
+      "name": "Magnetic Pull",
+      "description": "Activate magnetic coils to pull all nearby enemies closer.",
+      "targetType": "AreaEnemy",
+      "apCost": 3,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 3,
+      "effects": [
+        {
+          "type": "pull",
+          "value": 2,
+          "duration": 0,
+          "chance": 85,
+          "levelScaling": 0
+        },
+        {
+          "type": "debuff",
+          "value": 20,
+          "duration": 1,
+          "chance": 100,
+          "statusId": "status_slowed",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": false,
+      "levelRequired": 4,
+      "tags": ["companion", "automaton", "utility", "control"],
+      "soundId": "sfx_magnetic_pull"
+    },
+
+    {
+      "id": "enemy_bandit_shot",
+      "name": "Bandit Shot",
+      "description": "A quick and dirty shot from a rusty pistol.",
+      "targetType": "Enemy",
+      "apCost": 2,
+      "cooldown": 0,
+      "range": 5,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 12,
+          "duration": 0,
+          "chance": 75,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "bandit", "ranged", "basic"],
+      "soundId": "sfx_pistol_shot"
+    },
+    {
+      "id": "enemy_rifle_shot",
+      "name": "Rifle Shot",
+      "description": "A precise shot from a long rifle.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 1,
+      "range": 8,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 25,
+          "duration": 0,
+          "chance": 85,
+          "levelScaling": 0.12
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "rifleman", "ranged", "precision"],
+      "soundId": "sfx_rifle_shot"
+    },
+    {
+      "id": "enemy_brawler_punch",
+      "name": "Brawler Punch",
+      "description": "A heavy-handed punch from a frontier tough.",
+      "targetType": "Enemy",
+      "apCost": 2,
+      "cooldown": 0,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 18,
+          "duration": 0,
+          "chance": 90,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "brawler", "melee", "basic"],
+      "soundId": "sfx_punch"
+    },
+    {
+      "id": "enemy_dynamite_toss",
+      "name": "Dynamite Toss",
+      "description": "Throws a stick of dynamite at a target area.",
+      "targetType": "Ground",
+      "apCost": 4,
+      "cooldown": 3,
+      "range": 5,
+      "areaRadius": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 40,
+          "duration": 0,
+          "chance": 100,
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "demolisher", "explosive", "aoe"],
+      "soundId": "sfx_dynamite"
+    },
+    {
+      "id": "enemy_shotgun_blast",
+      "name": "Shotgun Blast",
+      "description": "Devastating close-range blast from a double-barrel shotgun.",
+      "targetType": "AreaEnemy",
+      "apCost": 3,
+      "cooldown": 2,
+      "range": 3,
+      "areaRadius": 1,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 30,
+          "duration": 0,
+          "chance": 95,
+          "levelScaling": 0.12
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "shotgunner", "ranged", "close_range"],
+      "soundId": "sfx_shotgun"
+    },
+    {
+      "id": "enemy_boss_intimidate",
+      "name": "Boss Intimidation",
+      "description": "The gang leader barks orders, frightening nearby targets.",
+      "targetType": "AreaEnemy",
+      "apCost": 2,
+      "cooldown": 4,
+      "range": 0,
+      "areaRadius": 4,
+      "effects": [
+        {
+          "type": "debuff",
+          "value": 20,
+          "duration": 2,
+          "chance": 70,
+          "statusId": "status_frightened",
+          "levelScaling": 0.1
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "boss", "utility", "debuff"],
+      "soundId": "sfx_boss_shout"
+    },
+    {
+      "id": "enemy_automaton_claw",
+      "name": "Automaton Claw",
+      "description": "Razor-sharp mechanical claws tear into the target.",
+      "targetType": "Enemy",
+      "apCost": 3,
+      "cooldown": 1,
+      "range": 1,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 28,
+          "duration": 0,
+          "chance": 90,
+          "levelScaling": 0.12
+        },
+        {
+          "type": "debuff",
+          "value": 8,
+          "duration": 3,
+          "chance": 60,
+          "statusId": "status_bleeding",
+          "levelScaling": 0.05
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "automaton", "melee", "bleed"],
+      "soundId": "sfx_metal_claw"
+    },
+    {
+      "id": "enemy_sniper_shot",
+      "name": "Sniper Shot",
+      "description": "A deadly precise shot from a concealed position.",
+      "targetType": "Enemy",
+      "apCost": 4,
+      "cooldown": 2,
+      "range": 10,
+      "areaRadius": 0,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 45,
+          "duration": 0,
+          "chance": 90,
+          "levelScaling": 0.15
+        }
+      ],
+      "unlockedByDefault": true,
+      "levelRequired": 1,
+      "tags": ["enemy", "sniper", "ranged", "precision"],
+      "soundId": "sfx_sniper"
+    }
+  ]
+}
