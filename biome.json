@@ -72,7 +72,7 @@
   },
   "overrides": [
     {
-      "include": ["apps/web/src/components/next/index.d.ts"],
+      "include": ["src/components/next/index.d.ts"],
       "linter": {
         "rules": {
           "suspicious": {
