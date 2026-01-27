@@ -9,9 +9,7 @@
 export {
   createGameStore,
   type DataAccess,
-  type DatabaseManager,
-  type GameStore,
-  type GameStoreConfig,
+  type CreateGameStoreOptions,
 } from './createGameStore';
 // Default values
 export {

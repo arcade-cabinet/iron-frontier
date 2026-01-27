@@ -469,8 +469,8 @@ export function findPath(
 
       // Better path reconstruction
       const finalPath: HexCoord[] = [];
-      const _trace: string | null = goalKey;
-      const _allNodes = new Map<string, Node>();
+      // const _trace: string | null = goalKey;
+      // const _allNodes = new Map<string, Node>();
 
       // We need to store all processed nodes
       // For simplicity, reconstruct by walking back

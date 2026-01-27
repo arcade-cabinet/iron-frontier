@@ -689,7 +689,7 @@ export class HexSceneManager {
       const boundingInfo = player.getHierarchyBoundingVectors();
       const modelHeight = boundingInfo.max.y - boundingInfo.min.y;
       const modelMinY = boundingInfo.min.y; // Bottom of model in model space
-      const _modelMaxY = boundingInfo.max.y; // Top of model in model space
+      // const _modelMaxY = boundingInfo.max.y; // Top of model in model space
 
       console.log(
         `[HexSceneManager] Model bounds: min=(${boundingInfo.min.x.toFixed(2)}, ${boundingInfo.min.y.toFixed(2)}, ${boundingInfo.min.z.toFixed(2)}), max=(${boundingInfo.max.x.toFixed(2)}, ${boundingInfo.max.y.toFixed(2)}, ${boundingInfo.max.z.toFixed(2)})`

@@ -65,7 +65,6 @@ function convertPersonality(generated: GeneratedNPC['personality']): NPCPersonal
  */
 function generateDefaultAppearance(rng: SeededRandom, npc: GeneratedNPC): CharacterAppearance {
   const isMale = npc.gender === 'male';
-  const _isFemale = npc.gender === 'female';
 
   return {
     bodyType: rng.pick(['slim', 'average', 'stocky']),

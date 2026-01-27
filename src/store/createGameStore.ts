@@ -511,7 +511,7 @@ export function createGameStore({
         updateObjective: (questId: string, _objectiveId: string, _progress: number) => {
           set((state) => ({
             activeQuests: state.activeQuests.map((q) => {
-              if (q.id !== questId) return q;
+              if (q.questId !== questId) return q;
               // Deep update objective
               // Implementation skipped for brevity, assumes immutable update structure
               return q;
@@ -525,13 +525,13 @@ export function createGameStore({
 
         completeQuest: (questId: string) => {
           const state = get();
-          const quest = state.activeQuests.find((q) => q.id === questId);
+          const quest = state.activeQuests.find((q) => q.questId === questId);
           if (!quest) return;
 
           const def = dataAccess.getQuestById(questId);
 
           set((s) => ({
-            activeQuests: s.activeQuests.filter((q) => q.id !== questId),
+            activeQuests: s.activeQuests.filter((q) => q.questId !== questId),
             completedQuests: [...s.completedQuests, def],
             completedQuestIds: [...s.completedQuestIds, questId],
           }));
@@ -546,7 +546,7 @@ export function createGameStore({
         failQuest: (_questId: string) => {},
         abandonQuest: (_questId: string) => {},
 
-        getActiveQuest: (questId: string) => get().activeQuests.find((q) => q.id === questId),
+        getActiveQuest: (questId: string) => get().activeQuests.find((q) => q.questId === questId),
         getQuestDefinition: (questId: string) => dataAccess.getQuestById(questId),
 
         // NPC Actions
@@ -588,7 +588,7 @@ export function createGameStore({
 
           // Check conditions for root nodes?
           // For now assume entry point 0
-          const _entry = tree.entryPoints[0];
+          // const _entry = tree.entryPoints[0];
           const node = dataAccess.getDialogueEntryNode(tree, (c) =>
             get().checkDialogueCondition(c)
           );
@@ -874,7 +874,7 @@ export function createGameStore({
             if (!def) return;
 
             const stage = def.stages[quest.currentStageIndex];
-            stage.objectives.forEach((obj) => {
+            stage.objectives.forEach((obj: { type: string; target?: string; id: string }) => {
               if (obj.type === 'visit' && obj.target === destinationId) {
                 get().updateObjective(quest.questId, obj.id, 1);
               }
@@ -932,7 +932,7 @@ export function createGameStore({
           const { combatState } = state;
           if (!combatState || !combatState.selectedAction) return;
 
-          const _actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity?
+          // const _actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity?
           // Actually combatant.definitionId might not be unique if multiple same enemies.
           // Combatant interface doesn't have a unique instance ID in the schema I saw?
           // Let's assume index is the source of truth for now.

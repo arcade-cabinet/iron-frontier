@@ -65,7 +65,7 @@ function SettingSlider({
       </div>
       <Slider
         value={[value]}
-        onValueChange={([v]) => onChange(v)}
+        onValueChange={([v]: number[]) => onChange(v)}
         min={min}
         max={max}
         step={step}
@@ -415,7 +415,7 @@ export function MenuPanel() {
                     <div className="py-2">
                       <Label className="text-amber-100 text-sm mb-2 block">Movement</Label>
                       <div className="flex gap-2">
-                        <button type="button" type="button"
+                        <button type="button"
                           onClick={() => updateSettings({ controlMode: 'tap' })}
                           className={cn(
                             'flex-1 py-1.5 px-2 rounded text-xs font-medium transition-colors',
@@ -426,7 +426,7 @@ export function MenuPanel() {
                         >
                           Tap to Move
                         </button>
-                        <button type="button" type="button"
+                        <button type="button"
                           onClick={() => updateSettings({ controlMode: 'joystick' })}
                           className={cn(
                             'flex-1 py-1.5 px-2 rounded text-xs font-medium transition-colors',

@@ -195,7 +195,7 @@ function ActionButton({
   };
 
   return (
-    <button type="button" type="button"
+    <button type="button"
       onClick={onClick}
       disabled={isDisabled}
       className={cn(
@@ -241,7 +241,7 @@ function EnemyCard({
   const healthPercent = (combatant.health / combatant.maxHealth) * 100;
 
   return (
-    <button type="button" type="button"
+    <button type="button"
       onClick={onSelect}
       disabled={!isTargetable}
       className={cn(
@@ -420,7 +420,7 @@ function OutcomeScreen({
         <div className="flex justify-center mb-3 sm:mb-4">{icon}</div>
         <h2 className="text-xl sm:text-2xl font-bold text-amber-100 mb-1.5 sm:mb-2">{title}</h2>
         <p className="text-stone-400 text-xs sm:text-sm mb-4 sm:mb-6">{subtitle}</p>
-        <button type="button" type="button"
+        <button type="button"
           onClick={onContinue}
           className={cn(
             'px-5 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium text-white transition-colors min-h-[44px]',

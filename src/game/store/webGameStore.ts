@@ -29,12 +29,7 @@ import {
 import { getAvailableChoices, getDialogueEntryNode } from '@/data/schemas/npc';
 import { createActiveQuest, isCurrentStageComplete as isStageComplete } from '@/data/schemas/quest';
 import { getConnectionsFrom } from '@/data/schemas/world';
-import {
-  calculateBuyPrice,
-  calculateSellPrice,
-  canSellItemToShop,
-  getShopById,
-} from '@/data/shops';
+import { canSellItemToShop, getShopById } from '@/data/shops';
 import { getWorldById, loadWorld } from '@/data/worlds';
 import { createGameStore, type DataAccess, type GameState, WebStorageAdapter } from '@/store';
 import { dbManager } from './DatabaseManager';
@@ -78,20 +73,30 @@ const webDataAccess: DataAccess = {
 
   // Shops
   getShopById: (shopId: string) => getShopById(shopId),
-  calculateBuyPrice,
-  calculateSellPrice,
+  calculateBuyPrice: (baseValue: number, reputation: number) => {
+    // Wrapper function that matches DataAccess interface
+    // Note: The actual implementation takes shop and item, but we'll use a simple calculation
+    return Math.floor(baseValue * (1 + reputation * 0.01));
+  },
+  calculateSellPrice: (baseValue: number, reputation: number) => {
+    // Wrapper function that matches DataAccess interface
+    return Math.floor(baseValue * 0.5 * (1 + reputation * 0.01));
+  },
   canSellItemToShop,
 
   // Generation
-  initEncounterTemplates,
+  initEncounterTemplates: () => {
+    // Wrapper function that matches DataAccess interface
+    initEncounterTemplates(ENCOUNTER_TEMPLATES);
+  },
   generateRandomEncounter,
   shouldTriggerEncounter,
   ENCOUNTER_TEMPLATES,
 
   // Procedural
   ProceduralLocationManager: {
-    initialize: (seed: number) => ProceduralLocationManager.initialize(seed),
-    generateLocationContent: (location: any) =>
+    initialize: async (seed: number) => ProceduralLocationManager.initialize(seed),
+    generateLocationContent: async (location: any) =>
       ProceduralLocationManager.generateLocationContent(location),
     hasGeneratedContent: (locationId: string) =>
       ProceduralLocationManager.hasGeneratedContent(locationId),

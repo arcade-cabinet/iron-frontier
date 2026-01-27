@@ -419,7 +419,7 @@ export class HexMapGenerator {
    * Phase 2: Generate rivers flowing through the map
    */
   private generateRivers(tiles: Map<string, HexTileData>): void {
-    const { riverCount, width, height } = this.config;
+    const { riverCount } = this.config;
     const riverPaths: HexCoord[][] = [];
 
     for (let i = 0; i < riverCount; i++) {

@@ -23,7 +23,7 @@ import type { GridPos, NPC, Sector } from '../lib/types';
 
 // Tile size in world units
 const TILE_SIZE = 1;
-const _PLAYER_HEIGHT = 0.8;
+// const _PLAYER_HEIGHT = 0.8;
 
 // Steampunk color palette
 const COLORS = {

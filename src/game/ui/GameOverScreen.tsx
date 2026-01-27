@@ -197,14 +197,14 @@ export function GameOverScreen() {
               transition={{ delay: 0.8 }}
               className="space-y-2 sm:space-y-3"
             >
-              <button type="button" type="button"
+              <button type="button"
                 onClick={handleLoadLastSave}
                 className="w-full flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-amber-700 hover:bg-amber-600 text-amber-100 font-medium transition-colors min-h-[48px] sm:min-h-0 text-sm sm:text-base"
               >
                 <RiseIcon className="w-5 h-5" />
                 Rise Again
               </button>
-              <button type="button" type="button"
+              <button type="button"
                 onClick={handleReturnToTitle}
                 className="w-full flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-amber-900/50 hover:bg-amber-800/50 text-amber-300 border border-amber-700/50 font-medium transition-colors min-h-[48px] sm:min-h-0 text-sm sm:text-base"
               >

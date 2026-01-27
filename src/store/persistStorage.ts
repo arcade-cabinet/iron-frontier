@@ -11,6 +11,15 @@ import type { StorageAdapter } from './StorageAdapter';
 /**
  * Create a Zustand-compatible StateStorage from our StorageAdapter
  *
+ * This is the main function to use for storage integration.
+ */
+export function persistStorage(adapter: StorageAdapter): StateStorage {
+  return createStateStorage(adapter);
+}
+
+/**
+ * Create a Zustand-compatible StateStorage from our StorageAdapter
+ *
  * Note: Zustand's persist middleware expects synchronous getItem for initial hydration,
  * but our StorageAdapter is async. This wrapper handles that by:
  * 1. Using a synchronous cache for immediate reads

@@ -129,12 +129,18 @@ importers:
       '@types/react-native':
         specifier: ^0.73.0
         version: 0.73.0(@babel/core@7.28.6)(@types/react@19.1.17)(react@19.1.0)
+      lucide-react:
+        specifier: ^0.563.0
+        version: 0.563.0(react@19.1.0)
       react-test-renderer:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       typescript:
         specifier: ~5.9.2
         version: 5.9.3
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@25.0.10)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@27.4.0)(lightningcss@1.31.1)(terser@5.46.0)(yaml@2.8.2)
 
   apps/docs:
     dependencies:
@@ -13915,6 +13921,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-react@0.563.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   lucide-react@0.563.0(react@19.2.4):
     dependencies:

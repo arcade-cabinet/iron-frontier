@@ -173,7 +173,7 @@ export class TerrainChunk {
    * Determine the dominant biome in this chunk based on average weights
    */
   private getDominantBiome(): BiomeType {
-    const _resolution = HEIGHTMAP_RESOLUTION;
+    // const _resolution = HEIGHTMAP_RESOLUTION;
     const totals: Record<BiomeType, number> = {
       desert: 0,
       grassland: 0,

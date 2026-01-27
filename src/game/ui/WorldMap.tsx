@@ -70,15 +70,15 @@ const BIOME_COLORS: Record<string, string> = {
 };
 
 // Biome fill patterns (for visual distinction)
-const _BIOME_PATTERNS: Record<string, string> = {
-  desert: 'url(#pattern-desert)',
-  badlands: 'url(#pattern-badlands)',
-  grassland: 'url(#pattern-grassland)',
-  scrubland: 'url(#pattern-scrubland)',
-  mountain: 'url(#pattern-mountain)',
-  riverside: 'url(#pattern-riverside)',
-  salt_flat: 'url(#pattern-salt)',
-};
+// const _BIOME_PATTERNS: Record<string, string> = {
+//   desert: 'url(#pattern-desert)',
+//   badlands: 'url(#pattern-badlands)',
+//   grassland: 'url(#pattern-grassland)',
+//   scrubland: 'url(#pattern-scrubland)',
+//   mountain: 'url(#pattern-mountain)',
+//   riverside: 'url(#pattern-riverside)',
+//   salt_flat: 'url(#pattern-salt)',
+// };
 
 // Danger level colors
 const DANGER_COLORS: Record<DangerLevel, string> = {
