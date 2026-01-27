@@ -61,14 +61,21 @@ jobs:
           expo-version: 0.22.7
           
       - name: Build Android APK
-        run: pnpm build:android
+        id: eas-build
+        run: |
+          BUILD_URL=$(eas build --platform android --profile preview --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "build_url=$BUILD_URL" >> $GITHUB_OUTPUT
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          
+      - name: Download APK
+        run: |
+          curl -L -o android-build.apk "${{ steps.eas-build.outputs.build_url }}"
           
       - name: Upload APK artifact
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: android-debug-${{ github.sha }}
           path: |
-            **/*.apk
+            android-build.apk
           retention-days: 30
