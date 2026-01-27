@@ -53,23 +53,6 @@
 
 ### Current State
 
-```
-iron-frontier/
-├── app/              ✅ Expo Router pages
-├── src/              ✅ All game code (flattened)
-├── assets/           ✅ Static resources
-├── components/       ✅ React Native components
-├── constants/        ✅ App constants
-├── docs/             ✅ Kept as-is
-├── memory-bank/      ✅ Kept as-is
-├── app.json          ✅ Expo config
-├── eas.json          ✅ Build config
-├── tsconfig.json     ✅ TypeScript config
-├── tailwind.config.js ✅ NativeWind config
-├── global.css        ✅ Styles
-├── package.json      ✅ Single app config
-└── biome.json        ✅ Updated paths
-```
 
 ### TypeScript Status
 
