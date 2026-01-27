@@ -384,14 +384,14 @@ export function TravelPanel() {
                 </p>
 
                 <div className="flex gap-2 sm:gap-3">
-                  <button
+                  <button type="button" type="button"
                     onClick={handleFight}
                     className="flex-1 flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg bg-red-800 hover:bg-red-700 text-red-100 font-medium transition-colors min-h-[44px] text-sm sm:text-base"
                   >
                     <SwordIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                     Fight
                   </button>
-                  <button
+                  <button type="button" type="button"
                     onClick={handleFlee}
                     className="flex-1 flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg bg-amber-900/50 hover:bg-amber-800/50 text-amber-200 border border-amber-700/50 font-medium transition-colors min-h-[44px] text-sm sm:text-base"
                   >

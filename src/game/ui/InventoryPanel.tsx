@@ -238,7 +238,7 @@ export function InventoryPanel() {
         {/* Filter Tabs */}
         <div className="flex gap-1 px-2 sm:px-3 py-1.5 sm:py-2 bg-amber-900/10 border-b border-amber-800/30 overflow-x-auto scrollbar-hide">
           {FILTER_CATEGORIES.map((cat) => (
-            <button
+            <button type="button" type="button"
               key={cat.id}
               onClick={() => setActiveFilter(cat.id)}
               className={cn(

@@ -123,7 +123,7 @@ export const PipePuzzle = () => {
         >
           {activePuzzle.grid.map((row, y) =>
             row.map((cell, x) => (
-              <button
+              <button type="button" type="button"
                 key={`${x}-${y}`}
                 className={cn(
                   'w-16 h-16 bg-zinc-900 rounded border border-zinc-800 hover:border-amber-500/50 transition-colors relative',
