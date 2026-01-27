@@ -12,7 +12,6 @@ import {
   getWorldItemsForLocation,
 } from '@/data/items/worldItems';
 import { getNPCsByLocation } from '@/data/npcs';
-import { ProceduralLocationManager } from '@/data/generation/ProceduralLocationManager';
 // World/location data
 import { getLocationData } from '@/data/worlds';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -210,15 +209,23 @@ function GameCanvas() {
 
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
           // Check for Random Encounter
-          if (loadedLocation) {
-              const locData = getLocationData(loadedLocation);
+          if (currentLocationId) {
+              const resolvedLocation = loadedWorld?.getLocation(currentLocationId);
+              const locData = resolvedLocation ? getLocationData(resolvedLocation) : null;
               // Safe zones - no encounters in towns/cities
-              const isSafe = locData.type === 'town' || locData.type === 'city' || locData.type === 'village';
+              const isSafe = locData?.type === 'town' || locData?.type === 'city' || locData?.type === 'village';
               
               if (!isSafe) {
                   const rng = new SeededRandom(Date.now()); // Dynamic seed for encounters
                   // 10% chance per move in wild areas
-                  if (shouldTriggerEncounter(rng, { contextTags: [] }, 0.1)) {
+                  if (shouldTriggerEncounter(rng, { 
+                    worldSeed,
+                    playerLevel: 1,
+                    gameHour: 12,
+                    factionTensions: {},
+                    activeEvents: [],
+                    contextTags: [] 
+                  }, 0.1)) {
                       console.log('[GameCanvas] Random Encounter Triggered!');
                       
                       // Generate a random encounter
