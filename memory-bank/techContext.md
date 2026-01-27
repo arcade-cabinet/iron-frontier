@@ -2,57 +2,29 @@
 
 ## Technology Stack
 
-### Web App (`apps/web/`)
+### Unified App (Root)
 
 | Layer | Technology |
 |-------|------------|
-| **Framework** | React 19 |
-| **Build Tool** | Vite 7 |
-| **Language** | TypeScript (strict-ready) |
-| **3D Engine** | Babylon.js 8 (WebGPU) |
-| **State** | Zustand |
-| **Persistence** | sql.js + IndexedDB |
-| **Styling** | Tailwind CSS v4, shadcn/ui |
-| **Animation** | Framer Motion |
-| **Testing** | Vitest, Playwright |
-| **Linting** | Biome |
-
-### Mobile App (`apps/mobile/`)
-
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Expo SDK 54, React Native 0.81 |
+| **Framework** | Ionic Angular (Angular 20) |
+| **Runtime** | Capacitor 8 (Web, Android, iOS) |
+| **Desktop** | Electron via `@capacitor-community/electron` |
 | **Language** | TypeScript |
-| **3D Engine** | React Native Filament |
-| **State** | Zustand |
-| **Persistence** | expo-sqlite |
-| **Styling** | NativeWind |
-| **Testing** | Maestro |
-| **Build** | EAS Build |
-
-### Shared Package (`packages/shared/`)
-
-| Layer | Technology |
-|-------|------------|
-| **Schemas** | Zod v4 |
-| **Types** | TypeScript |
-| **Build** | tsup |
-
-### Documentation (`apps/docs/`)
-
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Astro 5 |
-| **Theme** | Starlight |
-| **API Docs** | TypeDoc |
+| **3D Engine** | Babylon.js 8 (WebGPU/WebGL) |
+| **Physics** | Rapier |
+| **Animation** | Anime.js |
+| **State** | Zustand (migration target) |
+| **Persistence** | SQLite/IndexedDB via Capacitor |
+| **Styling** | Ionic theming + custom SCSS |
+| **Testing** | Karma (Angular default) |
 
 ## Development Environment
 
 | Tool | Version |
 |------|---------|
-| **Node.js** | 22.11.0 |
+| **Node.js** | 22+ (LTS recommended) |
 | **Package Manager** | pnpm 10.20.0 |
-| **Dev Port** | 8080 (web), 8081 (mobile) |
+| **Dev Port** | 8100 (Ionic default) |
 
 ## CI/CD
 
@@ -60,8 +32,7 @@
 |----------|---------|
 | **GitHub Actions** | CI/CD pipelines |
 | **Render.com** | Web app hosting |
-| **GitHub Pages** | Documentation hosting |
-| **EAS** | Mobile app builds |
+| **Electron** | Desktop packaging |
 
 ## Key Constraints
 
@@ -75,9 +46,9 @@
 
 ## Build Outputs
 
-| App | Output |
-|-----|--------|
-| **Web** | Single HTML file (7.7 MB) |
-| **Mobile Android** | Debug APK |
-| **Mobile iOS** | IPA via EAS |
-| **Docs** | Static site |
+| Target | Output |
+|--------|--------|
+| **Web** | `www/` (Ionic build) |
+| **Android** | Gradle project in `android/` |
+| **iOS** | Xcode project in `ios/` |
+| **Electron** | Desktop project in `electron/` |

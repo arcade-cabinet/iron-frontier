@@ -1,0 +1,7 @@
+{
+  "name": "iron-frontier",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

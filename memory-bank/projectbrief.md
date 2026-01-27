@@ -19,8 +19,6 @@ Iron Frontier is a **cross-platform isometric RPG** set in a Steampunk American 
 
 ## Current Status: v0.1 Release Candidate
 
-- **203 tests passing** (Vitest unit + Playwright E2E)
-- **Monorepo architecture** with pnpm workspaces
-- **Web**: Babylon.js 8 (WebGPU) via Reactylon pattern
-- **Mobile**: React Native Filament (native 3D)
-- **Shared**: Zod v4 schemas, 15,000+ lines of Daggerfall-style procedural generation
+- **Migration in progress** to a single Ionic Angular + Capacitor app (web/android/ios/electron)
+- **Babylon.js 8** used directly in Angular (no Reactylon)
+- **Shared**: Zod v4 schemas and procedural generation preserved for port

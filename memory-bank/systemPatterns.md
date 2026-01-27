@@ -1,76 +1,48 @@
 # System Patterns
 
-## Architecture: Monorepo with DRY Shared Package
+## Architecture: Single Ionic Angular App
 
-The project uses a pnpm monorepo with platform-specific apps sharing common code:
+The project is migrating to a single Ionic Angular app at repo root with Capacitor targets for web, Android, iOS, and Electron:
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/          # Platform-specific: Babylon.js, sql.js
-│   ├── mobile/       # Platform-specific: Filament, expo-sqlite
-│   └── docs/         # Documentation site
-└── packages/
-    └── shared/       # DRY: Schemas, data, types, generation
+├── src/              # Ionic Angular app
+├── android/          # Capacitor Android project
+├── ios/              # Capacitor iOS project
+├── electron/         # Capacitor Electron project
+├── packages/         # Shared assets/data (migration target)
+└── memory-bank/      # AI context files
 ```
 
 ### Key Principle: Shared Everything Possible
 
-- **Schemas**: All Zod schemas in `packages/shared/`
-- **Data**: Items, NPCs, quests, dialogues in `packages/shared/`
-- **Types**: All TypeScript types exported from `packages/shared/`
-- **Generation**: Procedural generators in `packages/shared/`
-- **Platform-specific**: Only rendering and persistence differ
+- **Schemas/Data/Types**: keep consolidated and reusable across platforms.
+- **Rendering**: Babylon.js for web and Electron, aligned with Capacitor web runtime.
+- **Persistence**: unified via Capacitor storage/SQLite where possible.
 
 ## 3D Rendering
 
-### Web: Reactylon Pattern
+### Babylon.js (Direct Engine)
 
-React + Babylon.js integration using declarative components:
+Angular manages a Babylon.js engine instance directly (no Reactylon).
 
-```tsx
-// CORRECT - use options prop
-<box name="myBox" options={{ width: 1, height: 2 }} position={pos}>
-  <standardMaterial name="mat" diffuseColor={color} />
-</box>
-```
-
-### Mobile: React Native Filament
-
-Native 3D rendering via Google Filament wrapper:
-
-```tsx
-<FilamentRenderer modelPath="assets/models/character.glb" />
+```ts
+const engine = new Engine(canvas, true);
+const scene = new Scene(engine);
+engine.runRenderLoop(() => scene.render());
 ```
 
 ## State Management
 
-### Zustand as Single Source of Truth
+### Zustand (Migration Target)
 
-- Runtime state in Zustand store
-- Platform-specific store extensions
-- Shared types for cross-platform compatibility
+- Preserve existing store types and logic while porting to Angular.
+- Wrap store access in Angular services for DI-friendly usage.
 
-```typescript
-// Shared types
-interface BaseGameState {
-  phase: GamePhase;
-  playerStats: PlayerStats;
-  inventory: InventoryItem[];
-  activeQuests: ActiveQuest[];
-}
+### Persistence
 
-// Web extends with platform-specific
-interface WebGameState extends BaseGameState {
-  sceneManager: HexSceneManager | null;
-}
-```
-
-### SQLite Persistence
-
-- **Web**: sql.js (WASM) + IndexedDB for binary storage
-- **Mobile**: expo-sqlite (native)
-- Both use same schema structure
+- **Web/Electron**: IndexedDB/Capacitor storage.
+- **Mobile**: Capacitor SQLite plugins (native).
 
 ## Procedural Generation
 
@@ -114,20 +86,7 @@ lg: 1024px+    /* Desktop */
 
 ### Panel System
 
-Single active panel at a time:
-
-```typescript
-type PanelType =
-  | 'character'
-  | 'inventory'
-  | 'quests'
-  | 'menu'
-  | 'shop'
-  | null;
-
-// Only one panel open
-activePanel: PanelType;
-```
+Single active panel at a time, implemented as Ionic overlays or in-game HUD panels.
 
 ## Data Patterns
 

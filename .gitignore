@@ -145,3 +145,17 @@ test-results/
 
 .gemini/
 gha-creds-*.json
+
+# Angular / Ionic
+.angular/
+www/
+
+# Capacitor native build artifacts
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+ios/App/Pods/
+ios/App/build/
+ios/App/Podfile.lock
+electron/app/

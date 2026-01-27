@@ -2,11 +2,11 @@
 
 ## A Cross-Platform Steampunk Frontier RPG
 
-Single Expo App: Web + Android
+Single Ionic Angular App: Web + Android + iOS + Electron
 
 ![Status: Alpha v0.1](https://img.shields.io/badge/status-alpha%20v0.1-orange)
-![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20android-blue)
-![Framework: Expo SDK 54](https://img.shields.io/badge/expo-SDK%2054-blue)
+![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20android%20%2B%20ios%20%2B%20electron-blue)
+![Framework: Ionic%20Angular](https://img.shields.io/badge/framework-ionic%20angular-blue)
 
 ---
 
@@ -19,15 +19,16 @@ pnpm install
 # Start development server
 pnpm start
 
-# Web development
-pnpm web
+# Build web (outputs to www/)
+pnpm build
 
-# Android development
-pnpm android
+# Sync Capacitor platforms
+pnpm cap:sync
 
-# Build for production
-pnpm build:web
-pnpm build:android
+# Open native projects
+pnpm cap:open:android
+pnpm cap:open:ios
+pnpm cap:open:electron
 ```
 
 ---

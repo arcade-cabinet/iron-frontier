@@ -4,6 +4,53 @@
 
 **v0.1 Release Candidate** - Monorepo restructuring complete. PR #1 feedback addressed with critical memory leaks fixed and accessibility improved. Ready for merge and deployment.
 
+## Upcoming Migration Plan (Ionic Angular + Capacitor + Electron)
+
+Goal: single unified app (no `apps/` split), fully ported from React/Expo to Angular + Ionic + Capacitor, with Electron support from day one. App id stays `com.arcade-cabinet.iron-frontier`.
+
+### Phase 0: Planning & Audit
+
+- Inventory current Expo/React app surface area (routes, UI panels, HUD, store, game flow).
+- Identify shared logic that must remain in `packages/shared/` (schemas, data, generators, store types).
+- Decide keep/remove any legacy mono-repo docs (likely remove `apps/`).
+
+### Phase 1: Scaffold & Platform Wiring
+
+- Initialize Ionic Angular app at repo root (single app).
+- Enable Angular zoneless change detection configuration.
+- Add Capacitor (web, ios, android) and configure `appId`/`appName`.
+- Add Electron platform (`@capacitor-community/electron`) at the start.
+- Update scripts for `ionic serve`, `ionic cap sync`, `ionic cap add`, Electron run/build.
+
+### Phase 2: Babylon.js Integration
+
+- Create Babylon.js canvas and engine bootstrap in Angular (interop-friendly).
+- Replace Reactylon pattern with direct Babylon scene management.
+- Verify WebGPU/WebGL fallback and lifecycle disposal.
+
+### Phase 3: State, UI, and HUD Port
+
+- Port Zustand store (or evaluate Angular-friendly wrapper while keeping core types).
+- Rebuild HUD and panels using Ionic components with existing steampunk styling.
+- Port navigation/menus to Angular router + Ionic navigation patterns.
+
+### Phase 4: Game Systems & Data
+
+- Connect shared data, schemas, generators from `packages/shared/`.
+- Port combat, dialogue, travel screens and their UI logic.
+- Ensure persistence layer works in web + native (SQLite/IndexedDB or Capacitor storage).
+
+### Phase 5: Cleanup & CI
+
+- Remove Expo/React-specific files and configs.
+- Remove unused dependencies and update build/test pipelines.
+- Add Ionic/Capacitor build steps for web/android/ios/electron.
+
+### Phase 6: Verification
+
+- Validate web, Android, iOS, Electron builds.
+- Ensure performance targets and touch targets remain compliant.
+
 ## Recent History
 
 ### Session 2026-01-27: PR Feedback Fixes

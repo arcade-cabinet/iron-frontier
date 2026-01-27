@@ -1,134 +1,45 @@
-# Iron Frontier - Monorepo to Expo Migration
+# Iron Frontier - Expo to Ionic Angular Migration
 
 **Date:** January 27, 2026
-**Migration Type:** Monorepo → Single Expo Application
-**Target:** Expo SDK 54 with pnpm
+**Migration Type:** Expo/React → Ionic Angular + Capacitor + Electron
+**Target:** Single root app with web, Android, iOS, and desktop builds
 
 ## Summary
 
-Successfully migrated Iron Frontier from a pnpm workspace monorepo to a unified Expo application that supports both web and Android platforms with Babylon.js React Native for cross-platform 3D rendering.
+The project is moving from a single Expo/React app to a single Ionic Angular app powered by Capacitor. Electron is included as a first-class platform target. Babylon.js now runs directly in Angular (no Reactylon), with a minimal Babylon scene wired to validate the pipeline.
 
 ## Changes Made
 
 ### 1. **New Structure Created**
-- Created `app/` directory with Expo Router structure
-- Created `src/` directory containing all game code (previously split across apps/web and packages/shared)
-- Created `assets/` directory for all static resources
-- Added `components/` and `constants/` for Expo-specific code
+- Root Ionic Angular app scaffolded in `src/`
+- Capacitor platforms added: `android/`, `ios/`, `electron/`
+- Electron configured via `@capacitor-community/electron`
+- Legacy Expo artifacts moved to `legacy/expo-root/`
+- Legacy React game source moved to `legacy/react-src/`
 
-### 2. **Configuration Files**
-- **app.json**: Expo application configuration
-- **eas.json**: EAS Build profiles for Android/iOS
-- **tsconfig.json**: Unified TypeScript configuration with path aliases (@/ and ~/)
-- **tailwind.config.js**: NativeWind configuration
-- **global.css**: Tailwind CSS styles with dark mode support
-- **package.json**: Replaced workspace config with single-app dependencies
+### 2. **Configuration Updates**
+- Added `angular.json`, `ionic.config.json`, and Angular tsconfigs
+- Added `capacitor.config.ts` for unified platform config
+- Updated `.gitignore` for Ionic/Capacitor outputs
+- Updated `README.md` quick start for Ionic workflows
 
-### 3. **Dependency Updates**
-- Added `@babylonjs/react-native` for cross-platform 3D
-- Added `expo-router` for navigation
-- Added `nativewind` for styling
-- Added `miniplex` for ECS
-- Removed workspace-specific dependencies
-- Kept `packageManager: "pnpm@10.20.0"`
+### 3. **Dependencies**
+- Added Angular 20, Ionic 8, Capacitor 8
+- Added Babylon.js, Rapier, Anime.js
+- Added `@capacitor-community/electron`
+- Removed Expo/React Native dependencies from root
 
-### 4. **Import Path Updates**
-- Changed `@iron-frontier/shared/*` → `@/*` (aliased to src/)
-- Changed `@iron-frontier/assets/*` → `~/*` (aliased to root)
-- Removed Next.js specific components (src/components/next/)
-- Removed shadcn/ui components (web-only, require radix-ui)
+### 4. **Babylon.js Integration**
+- A basic Babylon engine/scene is created in `src/app/game/game.page.ts`
+- Uses Angular `NgZone` to keep render loop outside change detection
 
-### 5. **Removed**
-- `apps/` directory (web, mobile, docs)
-- `packages/` directory (shared)
-- `pnpm-workspace.yaml`
-- Monorepo-specific scripts
+## Notes
 
-### 6. **Documentation Updates**
-- Updated README.md with new structure and commands
-- Updated project structure diagrams
-- Updated tech stack table
-- Updated development commands
-
-## File Structure
-
-```
-iron-frontier/
-├── app/                    # Expo Router
-│   ├── (tabs)/
-│   │   ├── index.tsx      # Game entry → <Game />
-│   │   └── _layout.tsx
-│   ├── index.tsx
-│   └── _layout.tsx
-├── src/                   # All game code (flattened)
-│   ├── data/              # From packages/shared/src/data
-│   ├── game/              # From apps/web/src/game
-│   ├── engine/            # From apps/web/src/engine
-│   ├── generation/        # From packages/shared/src/generation
-│   └── ...
-├── assets/                # All assets (merged)
-├── components/            # Expo template components
-├── constants/             # App constants
-├── docs/                  # Development docs (kept)
-├── memory-bank/           # AI context (kept)
-├── app.json
-├── eas.json
-├── tsconfig.json
-├── tailwind.config.js
-├── global.css
-└── package.json
-```
-
-## New Commands
-
-```bash
-# Development
-pnpm start              # Expo dev server
-pnpm web                # Web platform
-pnpm android            # Android platform
-pnpm ios                # iOS platform
-
-# Build
-pnpm build:web          # Export web build
-pnpm build:android      # Build Android APK (EAS)
-
-# Quality
-pnpm typecheck          # TypeScript checking
-pnpm lint               # Biome linting
-pnpm lint:fix           # Auto-fix issues
-```
-
-## Known Issues
-
-1. **TypeScript Warnings**: ~180 warnings for unused variables (existing code, not migration-related)
-2. **Peer Dependencies**: 
-   - @expo/metro-runtime version mismatch (non-blocking)
-   - tailwindcss v4 vs v3 peer dependency warning (non-blocking)
-3. **Tests**: Test suite needs adaptation for new structure (not migrated yet)
-
-## Benefits
-
-1. **Simplified Structure**: No monorepo complexity, single app
-2. **Unified Dependencies**: Single package.json and lock file
-3. **Cross-Platform 3D**: Babylon.js React Native works on web and native
-4. **Easier Deployment**: Single build target
-5. **Better DX**: Expo's tooling and fast refresh
+- The requested app id `com.arcade-cabinet.iron-frontier` is invalid for Android/iOS bundle identifiers (dashes are not allowed). The config currently uses `com.arcade_cabinet.iron_frontier` to keep mobile builds functional.
 
 ## Next Steps
 
-1. Test web build: `pnpm build:web`
-2. Test Android build: `pnpm build:android`
-3. Adapt test suite for new structure
-4. Update CI/CD workflows for new structure
-5. Verify game functionality on both platforms
-
-## Migration Success Criteria
-
-- [x] Structure migrated
-- [x] Dependencies installed (1463 packages)
-- [x] TypeScript compiles (with warnings)
-- [x] Configuration files created
-- [x] Documentation updated
-- [ ] Tests passing (needs adaptation)
-- [ ] Web build successful
-- [ ] Android build successful
+- Port the full game HUD, panels, and gameplay flow into Angular/Ionic components
+- Migrate Zustand store access into Angular services
+- Replace placeholder Babylon scene with the full scene graph and asset pipeline
+- Update CI workflows for Ionic/Capacitor build targets

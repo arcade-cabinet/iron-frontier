@@ -83,9 +83,12 @@
 - [ ] **PR #1 Merge** - All review comments resolved
 - [ ] **Render.com Deployment** - Blueprint configured
 - [ ] **Audio System** - Western ambient music and SFX
+- [ ] **Ionic Angular Migration Plan** - Single-app Capacitor + Electron roadmap documented
 
 ## Planned / Backlog
 
+- [ ] **Ionic Angular + Capacitor Replatform** - Replace Expo/React with Ionic Angular in a single root app
+- [ ] **Electron Target** - Add `@capacitor-community/electron` from day one
 - [ ] **PWA Manifest** - Offline support
 - [ ] **Virtual Joystick** - Alternative touch control
 - [ ] **Mining Mechanics** - Resource extraction
