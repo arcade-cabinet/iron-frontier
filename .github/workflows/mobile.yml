@@ -2,18 +2,24 @@ name: Mobile Build
 
 on:
   push:
-    branches: [main, 'release/*']
+    branches: [main, 'release/*', 'feature/*']
     paths:
-      - 'apps/mobile/**'
-      - 'packages/**'
+      - 'src/**'
+      - 'app/**'
+      - 'assets/**'
       - '.maestro/**'
+      - 'app.json'
+      - 'package.json'
       - '.github/workflows/mobile.yml'
   pull_request:
     branches: [main]
     paths:
-      - 'apps/mobile/**'
-      - 'packages/**'
+      - 'src/**'
+      - 'app/**'
+      - 'assets/**'
       - '.maestro/**'
+      - 'app.json'
+      - 'package.json'
   workflow_dispatch:
     inputs:
       platform:
@@ -71,14 +77,13 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build Android APK
-        working-directory: apps/mobile
         run: eas build --platform android --profile debug --local --output ./iron-frontier-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: android-debug-apk
-          path: apps/mobile/iron-frontier-debug.apk
+          path: iron-frontier-debug.apk
           retention-days: 14
 
   # Maestro E2E tests (when APK is built)

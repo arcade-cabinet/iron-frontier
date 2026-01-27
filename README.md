@@ -16,14 +16,17 @@ Web: React + Babylon.js | Mobile: Expo + React Native Filament
 # Install dependencies
 pnpm install
 
-# Start web dev server
-pnpm dev
+# Start Expo dev server
+pnpm expo:start
+
+# Start web
+pnpm expo:web
 
 # Run tests
 pnpm test
 
-# Build for production
-pnpm build
+# Type check
+pnpm typecheck
 ```
 
 ---
@@ -34,9 +37,9 @@ Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 18
 
 ### Core Features
 
-- **Isometric 3D** - Babylon.js (web) / Filament (mobile) with FF7-era atmosphere
+- **Isometric 3D** - React Three Fiber (web) / expo-gl (mobile) with FF7-era atmosphere
 - **Procedural Generation** - Daggerfall-style deterministic content
-- **Cross-Platform** - Web and mobile from shared codebase
+- **Cross-Platform** - Unified Expo app with platform-specific rendering
 - **Persistent Progress** - SQLite-backed save system
 
 ### Theme & Setting
@@ -48,18 +51,22 @@ Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 18
 
 ---
 
-## Monorepo Structure
+## Unified Expo Structure
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/          # Vite + React + Babylon.js
-│   ├── mobile/       # Expo + React Native + Filament
-│   └── docs/         # Astro + Starlight documentation
-├── packages/
-│   └── shared/       # Schemas, data, types (Zod)
-├── .github/workflows/  # CI/CD pipelines
+├── app/              # Expo Router pages
+│   ├── (tabs)/       # Tab navigation
+│   └── _layout.tsx   # Root layout
+├── src/              # All source code
+│   ├── components/   # React components
+│   ├── game/         # Game systems
+│   ├── store/        # Zustand state
+│   └── lib/          # Utilities
+├── assets/           # 3D models, textures (Git LFS)
+├── __tests__/        # Jest tests
 ├── .maestro/         # Mobile E2E tests
+├── docs/             # Documentation
 └── memory-bank/      # AI agent context
 ```
 
@@ -67,14 +74,16 @@ iron-frontier/
 
 ## Tech Stack
 
-| Layer | Web | Mobile |
-|-------|-----|--------|
-| **Framework** | React 19 + Vite | Expo SDK 54 |
-| **3D Engine** | Babylon.js (WebGPU) | React Native Filament |
-| **State** | Zustand | Zustand |
-| **Persistence** | sql.js + IndexedDB | expo-sqlite |
-| **Styling** | Tailwind CSS v4 | NativeWind |
-| **Testing** | Vitest + Playwright | Maestro |
+| Layer | Technology |
+|-------|------------|
+| **Framework** | Expo SDK 54 + React Native 0.81 |
+| **Web** | React 19 + React Native Web |
+| **3D Rendering** | React Three Fiber (web) + expo-gl (native) |
+| **State** | Zustand |
+| **Persistence** | sql.js (web) + expo-sqlite (native) |
+| **Styling** | NativeWind (Tailwind CSS v4) |
+| **Routing** | Expo Router |
+| **Testing** | Jest + Maestro |
 
 ---
 
@@ -94,50 +103,46 @@ iron-frontier/
 ## Development Commands
 
 ```bash
-# Web
-pnpm dev              # Dev server (port 8080)
-pnpm build            # Production build
-pnpm test             # Run 203 tests
-pnpm test:e2e         # Playwright E2E
+# Expo
+pnpm expo:start       # Start Expo dev server
+pnpm expo:web         # Start web
+pnpm expo:ios         # Start iOS simulator
+pnpm expo:android     # Start Android emulator
 
-# Mobile
-pnpm dev:mobile       # Expo dev server
-pnpm build:android    # Build Android APK
-pnpm build:ios        # Build iOS app
-
-# Documentation
-pnpm docs:dev         # Docs dev server
-pnpm docs:build       # Build docs
-
-# Quality
+# Testing
+pnpm test             # Run 378 Jest tests
 pnpm typecheck        # TypeScript check
 pnpm lint             # Biome linting
+
+# Quality
+pnpm test:coverage    # Test coverage report
 ```
 
 ---
 
-## Current Status (v0.1-candidate)
+## Current Status (v0.1-expo-unified)
 
 ### Completed
 
-- [x] Monorepo architecture (pnpm workspaces)
-- [x] Shared package with Zod schemas
-- [x] Web app with Babylon.js rendering
-- [x] Mobile app with Expo + Filament
+- [x] Unified Expo architecture (single app)
+- [x] Platform-specific rendering (R3F web, expo-gl native)
+- [x] Game systems and controllers
 - [x] Procedural generation system (15,000+ lines)
 - [x] Turn-based combat system
 - [x] Shop and equipment systems
 - [x] Responsive UI (mobile-first)
 - [x] SQLite persistence layer
 - [x] CI/CD with GitHub Actions
-- [x] 203 tests passing
-- [x] Documentation site (Astro)
+- [x] 378 tests passing (100%)
+- [x] TypeScript compilation clean (0 errors)
+- [x] Adaptive HUD with responsive breakpoints
+- [x] All game UI panels implemented
 
 ### In Progress
 
-- [ ] PR #1 review and merge
-- [ ] Render.com deployment
-- [ ] Audio system
+- [ ] Platform testing (iOS/Android)
+- [ ] Final documentation review
+- [ ] Merge to main
 
 ---
 
