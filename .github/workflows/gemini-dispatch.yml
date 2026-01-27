@@ -18,10 +18,13 @@ on:
     types:
       - 'created'
 
+concurrency:
+  group: '${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number }}'
+  cancel-in-progress: false
+
 defaults:
   run:
     shell: 'bash'
-
 jobs:
   debugger:
     if: |-
