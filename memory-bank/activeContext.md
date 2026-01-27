@@ -2,9 +2,29 @@
 
 ## Current Focus
 
-**v0.1 Release Candidate** - Monorepo restructuring complete. PR #1 open with all AI review comments (100+) resolved. Ready for merge and deployment.
+**v0.1 Release Candidate** - Monorepo restructuring complete. PR #1 feedback addressed with critical memory leaks fixed and accessibility improved. Ready for merge and deployment.
 
-## Recent History (Session 2026-01-24)
+## Recent History
+
+### Session 2026-01-27: PR Feedback Fixes
+
+Fixed critical issues from CodeRabbit PR #1 review:
+
+1. **Memory Leak Fixes**
+   - `SceneManager.ts`: Store and remove resize event listener in dispose()
+   - `BabylonEngine.ts`: Store and remove resize listener, dispose shadow generator
+   - `TerrainChunk.ts`: Force dispose textures with material.dispose(true)
+   - `InputController.ts`: Store and remove all DOM event listeners (touch, mouse, keyboard)
+
+2. **Pathfinding Improvements**
+   - `pathfinding.ts`: Validate start tile is walkable before running A* algorithm
+
+3. **Accessibility Enhancements**
+   - Added aria-hidden="true" to 41 decorative SVG icons across 7 UI components
+   - Prevents screen readers from announcing redundant icon information
+   - Affected files: ActionBar, DialogueBox, GameHUD, InventoryPanel, MenuPanel, NotificationFeed, QuestLog
+
+### Session 2026-01-24: Monorepo Restructuring
 
 ### Monorepo Restructuring Complete
 
