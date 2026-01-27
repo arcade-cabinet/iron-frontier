@@ -1,12 +1,11 @@
-
-export type PipeType = 
-  | 'straight' 
-  | 'corner' 
-  | 'tee' 
-  | 'cross' 
-  | 'cap' 
-  | 'empty' 
-  | 'source' 
+export type PipeType =
+  | 'straight'
+  | 'corner'
+  | 'tee'
+  | 'cross'
+  | 'cap'
+  | 'empty'
+  | 'source'
   | 'sink';
 
 export type Direction = 0 | 1 | 2 | 3; // 0: N, 1: E, 2: S, 3: W

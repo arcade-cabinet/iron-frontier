@@ -5,11 +5,7 @@
  * Designed to evoke an aged paper map from the Old West era.
  */
 
-import type {
-  LocationType,
-  RegionBiome,
-  TravelMethod,
-} from '@/data/schemas/world';
+import type { LocationType, RegionBiome, TravelMethod } from '@/data/schemas/world';
 
 // ============================================================================
 // COLOR TOKENS

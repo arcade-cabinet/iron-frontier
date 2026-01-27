@@ -12,6 +12,8 @@
  * - Compatible with existing data structures (NPCDefinition, WorldItemSpawn, etc.)
  */
 
+// Integration
+import { ITEM_LIBRARY } from '../items';
 import type { WorldItemSpawn } from '../items/worldItems';
 import type { GenerationContext } from '../schemas/generation';
 import type { DialogueChoice, DialogueNode, DialogueTree, NPCDefinition } from '../schemas/npc';
@@ -23,7 +25,11 @@ import {
   generateSimpleDialogueTree,
   initDialogueData,
 } from './generators/dialogueGenerator';
-import { generateShopInventory, type ShopInventoryItem } from './generators/itemGenerator';
+import {
+  generateShopInventory,
+  initItemGeneration,
+  type ShopInventoryItem,
+} from './generators/itemGenerator';
 import { initNamePools } from './generators/nameGenerator';
 import {
   type GeneratedNPC,
@@ -35,12 +41,8 @@ import {
   generateRandomQuest,
   initQuestTemplates,
 } from './generators/questGenerator';
-import { DIALOGUE_SNIPPETS } from './pools/dialogueSnippets';
-
-// Integration
-import { ITEM_LIBRARY } from '../items';
 import { convertItemsToTemplates } from './integration/itemIntegration';
-import { initItemGeneration } from './generators/itemGenerator';
+import { DIALOGUE_SNIPPETS } from './pools/dialogueSnippets';
 
 // Import templates and pools
 import { NAME_POOLS, PLACE_NAME_POOLS } from './pools/index';
@@ -146,7 +148,7 @@ class ProceduralLocationManagerClass {
     initNPCTemplates(NPC_TEMPLATES);
     initQuestTemplates(QUEST_TEMPLATES);
     initDialogueData(DIALOGUE_SNIPPETS, Object.values(DIALOGUE_TREE_TEMPLATES));
-    
+
     // Register items
     const itemTemplates = convertItemsToTemplates(Object.values(ITEM_LIBRARY));
     initItemGeneration(itemTemplates);
@@ -255,7 +257,7 @@ class ProceduralLocationManagerClass {
 
     // Generate structure states
     const structureStates = new Map<string, 'functional' | 'broken' | 'locked'>();
-    // We don't know exact building locations here without running HexMapGenerator, 
+    // We don't know exact building locations here without running HexMapGenerator,
     // so we'll lazily generate them when requested or generate a "broken map" based on noise.
     // For now, empty map, populated on demand.
 
@@ -324,7 +326,7 @@ class ProceduralLocationManagerClass {
 
   /**
    * Get procedural shop inventory for an NPC.
-   * 
+   *
    * @param npcId - The ID of the merchant NPC.
    * @param locationId - The ID of the location where the shop is located.
    * @returns The shop inventory or null if not found.
@@ -339,7 +341,7 @@ class ProceduralLocationManagerClass {
 
   /**
    * Get procedural dialogue tree for an NPC.
-   * 
+   *
    * @param npcId - The ID of the NPC.
    * @param locationId - The ID of the location.
    * @returns The dialogue tree or null if not found.
@@ -354,34 +356,37 @@ class ProceduralLocationManagerClass {
 
   /**
    * Get structure state at a coordinate (generates if needed).
-   * 
+   *
    * @param locationId - The ID of the location.
    * @param hexKey - The key of the hex coordinate ("q,r").
    * @returns The status of the structure ('functional', 'broken', or 'locked').
    */
-  getOrGenerateStructureState(locationId: string, hexKey: string): 'functional' | 'broken' | 'locked' {
+  getOrGenerateStructureState(
+    locationId: string,
+    hexKey: string
+  ): 'functional' | 'broken' | 'locked' {
     // Ensure content exists
-    let content = this.cache.get(locationId);
+    const content = this.cache.get(locationId);
     if (!content) {
-        // We can't generate full content without a resolved location object usually,
-        // but for structure state we just need the seed.
-        // If we are here, something is out of order or we need to support lazy init without full resolve.
-        // For now, return functional if not init.
-        return 'functional';
+      // We can't generate full content without a resolved location object usually,
+      // but for structure state we just need the seed.
+      // If we are here, something is out of order or we need to support lazy init without full resolve.
+      // For now, return functional if not init.
+      return 'functional';
     }
 
     if (content.structureStates.has(hexKey)) {
-        return content.structureStates.get(hexKey)!;
+      return content.structureStates.get(hexKey)!;
     }
 
     // Deterministically decide state
     const stateSeed = combineSeeds(content.seed, hashString(hexKey));
     const rng = new SeededRandom(stateSeed);
-    
+
     // 20% chance of being broken/locked
     let state: 'functional' | 'broken' | 'locked' = 'functional';
     if (rng.float(0, 1) < 0.2) {
-        state = rng.bool() ? 'broken' : 'locked';
+      state = rng.bool() ? 'broken' : 'locked';
     }
 
     content.structureStates.set(hexKey, state);

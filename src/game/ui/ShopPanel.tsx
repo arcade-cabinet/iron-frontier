@@ -2,6 +2,7 @@
  * ShopPanel - Western-themed buy/sell interface
  */
 
+import { useState } from 'react';
 import { getItem } from '@/data/items';
 import { getRarityColor } from '@/data/schemas/item';
 import {
@@ -13,7 +14,6 @@ import {
   type ShopDefinition,
   type ShopItem,
 } from '@/data/shops';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
 

@@ -8,13 +8,13 @@
  * - Victory/defeat/fled outcome screens
  */
 
+import { useEffect, useRef } from 'react';
 import type { Combatant } from '@/data/schemas/combat';
 import { AP_COSTS } from '@/data/schemas/combat';
-import type { CombatActionType } from '@/store';
 import { cn } from '@/lib/utils';
-import { useGameStore } from '../store/webGameStore';
-import { useEffect, useRef } from 'react';
+import type { CombatActionType } from '@/store';
 import { audioService } from '../services/AudioService';
+import { useGameStore } from '../store/webGameStore';
 
 // ============================================================================
 // ICONS
@@ -459,23 +459,23 @@ export function CombatPanel() {
   const prevLogLength = useRef(0);
 
   useEffect(() => {
-      if (!combatState) return;
-      
-      if (combatState.log.length > prevLogLength.current) {
-          const lastEntry = combatState.log[combatState.log.length - 1];
-          const action = lastEntry.action.type;
+    if (!combatState) return;
 
-          if (action === 'attack' || action === 'aimed_shot') {
-              audioService.playCombatSound('attack');
-              // Slight delay for impact sound
-              setTimeout(() => {
-                  audioService.playCombatSound(lastEntry.success ? 'hit' : 'miss');
-              }, 200);
-          } else if (action === 'reload') {
-              audioService.playCombatSound('reload');
-          }
+    if (combatState.log.length > prevLogLength.current) {
+      const lastEntry = combatState.log[combatState.log.length - 1];
+      const action = lastEntry.action.type;
+
+      if (action === 'attack' || action === 'aimed_shot') {
+        audioService.playCombatSound('attack');
+        // Slight delay for impact sound
+        setTimeout(() => {
+          audioService.playCombatSound(lastEntry.success ? 'hit' : 'miss');
+        }, 200);
+      } else if (action === 'reload') {
+        audioService.playCombatSound('reload');
       }
-      prevLogLength.current = combatState.log.length;
+    }
+    prevLogLength.current = combatState.log.length;
   }, [combatState?.log.length]);
 
   if (!combatState) return null;

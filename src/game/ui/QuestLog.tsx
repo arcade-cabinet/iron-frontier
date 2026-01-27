@@ -1,19 +1,14 @@
 // Quest Log - Journal of active and completed quests
 // Updated to support the stage-based quest system
 
-import { getQuestById } from '@/data/quests';
-import type {
-  ActiveQuest,
-  Objective,
-  Quest,
-  QuestStage,
-} from '@/data/schemas/quest';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getQuestById } from '@/data/quests';
+import type { ActiveQuest, Objective, Quest, QuestStage } from '@/data/schemas/quest';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
 
@@ -51,7 +46,12 @@ function CircleIcon({ className }: { className?: string }) {
 
 function StarIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-4 h-4', className)} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      className={cn('w-4 h-4', className)}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
     </svg>
   );
@@ -59,7 +59,13 @@ function StarIcon({ className }: { className?: string }) {
 
 function MapPinIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-3 h-3', className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      className={cn('w-3 h-3', className)}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

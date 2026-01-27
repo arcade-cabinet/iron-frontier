@@ -1,13 +1,13 @@
 // Inventory Panel - Improved bottom sheet with categories and better mobile UX
 
-import { getItem } from '@/data/items';
-import { getItemTypeName } from '@/data/schemas/item';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { getItem } from '@/data/items';
+import { getItemTypeName } from '@/data/schemas/item';
 import { cn } from '@/lib/utils';
 import { type InventoryItem, useGameStore } from '../store/webGameStore';
 
@@ -248,7 +248,12 @@ export function InventoryPanel() {
                   : 'text-amber-400/70 hover:text-amber-300 hover:bg-amber-800/30'
               )}
             >
-              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg
+                className="w-3 h-3 sm:w-3.5 sm:h-3.5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path d={cat.icon} />
               </svg>
               <span className="hidden xs:inline sm:inline">{cat.label}</span>

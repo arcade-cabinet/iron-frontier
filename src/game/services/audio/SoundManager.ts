@@ -4,7 +4,7 @@ export class SoundManager {
   private uiClick: Tone.MembraneSynth;
   private uiSuccess: Tone.PolySynth;
   private uiError: Tone.MetalSynth;
-  
+
   // Combat Instruments
   private gunSynth: Tone.NoiseSynth;
   private reloadSynth: Tone.MetalSynth;
@@ -16,7 +16,7 @@ export class SoundManager {
     this.uiClick = new Tone.MembraneSynth({
       pitchDecay: 0.008,
       octaves: 2,
-      envelope: { attack: 0.001, decay: 0.1, sustain: 0, release: 0.1 }
+      envelope: { attack: 0.001, decay: 0.1, sustain: 0, release: 0.1 },
     }).toDestination();
     this.uiClick.volume.value = -10;
 
@@ -27,35 +27,35 @@ export class SoundManager {
       harmonicity: 5.1,
       modulationIndex: 32,
       resonance: 4000,
-      envelope: { attack: 0.001, decay: 0.1, release: 0.01 }
+      envelope: { attack: 0.001, decay: 0.1, release: 0.01 },
     }).toDestination();
     this.uiError.volume.value = -15;
 
     // Combat Sounds
     this.gunSynth = new Tone.NoiseSynth({
-        noise: { type: 'white' },
-        envelope: { attack: 0.001, decay: 0.2, sustain: 0 }
+      noise: { type: 'white' },
+      envelope: { attack: 0.001, decay: 0.2, sustain: 0 },
     }).toDestination();
     this.gunSynth.volume.value = -5;
 
     this.reloadSynth = new Tone.MetalSynth({
-        harmonicity: 12,
-        resonance: 800,
-        modulationIndex: 20,
-        envelope: { attack: 0.001, decay: 0.1, release: 0.01 },
-        volume: -15
+      harmonicity: 12,
+      resonance: 800,
+      modulationIndex: 20,
+      envelope: { attack: 0.001, decay: 0.1, release: 0.01 },
+      volume: -15,
     }).toDestination();
 
     this.hitSynth = new Tone.MembraneSynth({
-        pitchDecay: 0.05,
-        octaves: 4,
-        envelope: { attack: 0.001, decay: 0.2, sustain: 0 }
+      pitchDecay: 0.05,
+      octaves: 4,
+      envelope: { attack: 0.001, decay: 0.2, sustain: 0 },
     }).toDestination();
     this.hitSynth.volume.value = -8;
 
     this.missSynth = new Tone.NoiseSynth({
-        noise: { type: 'pink' },
-        envelope: { attack: 0.01, decay: 0.1, sustain: 0 }
+      noise: { type: 'pink' },
+      envelope: { attack: 0.01, decay: 0.1, sustain: 0 },
     }).toDestination();
     this.missSynth.volume.value = -15;
   }
@@ -71,32 +71,32 @@ export class SoundManager {
   public playError() {
     this.uiError.triggerAttackRelease('G2', '32n');
   }
-  
+
   public playFootstep() {
-      // Simple noise burst for now, could be improved
-      const noise = new Tone.NoiseSynth({
-          envelope: { attack: 0.01, decay: 0.1, sustain: 0 }
-      }).toDestination();
-      noise.volume.value = -20;
-      noise.triggerAttackRelease('32n');
+    // Simple noise burst for now, could be improved
+    const noise = new Tone.NoiseSynth({
+      envelope: { attack: 0.01, decay: 0.1, sustain: 0 },
+    }).toDestination();
+    noise.volume.value = -20;
+    noise.triggerAttackRelease('32n');
   }
 
   public playGunshot() {
-      this.gunSynth.triggerAttackRelease('16n');
+    this.gunSynth.triggerAttackRelease('16n');
   }
 
   public playReload() {
-      // Two clicks
-      const now = Tone.now();
-      this.reloadSynth.triggerAttackRelease('32n', now);
-      this.reloadSynth.triggerAttackRelease('32n', now + 0.15);
+    // Two clicks
+    const now = Tone.now();
+    this.reloadSynth.triggerAttackRelease('32n', now);
+    this.reloadSynth.triggerAttackRelease('32n', now + 0.15);
   }
 
   public playHit() {
-      this.hitSynth.triggerAttackRelease('C1', '16n');
+    this.hitSynth.triggerAttackRelease('C1', '16n');
   }
 
   public playMiss() {
-      this.missSynth.triggerAttackRelease('32n');
+    this.missSynth.triggerAttackRelease('32n');
   }
 }

@@ -12,20 +12,12 @@ import {
   shouldTriggerEncounter,
 } from '@/data/generation/generators/encounterGenerator';
 import { ProceduralLocationManager } from '@/data/generation/ProceduralLocationManager';
-import {
-  combineSeeds,
-  hashString,
-  SeededRandom,
-} from '@/data/generation/seededRandom';
+import { combineSeeds, hashString, SeededRandom } from '@/data/generation/seededRandom';
 import { ENCOUNTER_TEMPLATES } from '@/data/generation/templates/encounterTemplates';
 // Import data access functions from the shared data layer
 import { type BaseItem, getItem, STARTER_INVENTORY } from '@/data/items';
 import { getWorldItemsForLocation } from '@/data/items/worldItems';
-import {
-  getDialogueTreeById,
-  getNPCById,
-  getPrimaryDialogueTree,
-} from '@/data/npcs';
+import { getDialogueTreeById, getNPCById, getPrimaryDialogueTree } from '@/data/npcs';
 import { getQuestById } from '@/data/quests';
 import {
   AP_COSTS,
@@ -34,15 +26,8 @@ import {
   rollCritical,
   rollHit,
 } from '@/data/schemas/combat';
-import {
-  type DialogueNode,
-  getAvailableChoices,
-  getDialogueEntryNode,
-} from '@/data/schemas/npc';
-import {
-  createActiveQuest,
-  isCurrentStageComplete as isStageComplete,
-} from '@/data/schemas/quest';
+import { type DialogueNode, getAvailableChoices, getDialogueEntryNode } from '@/data/schemas/npc';
+import { createActiveQuest, isCurrentStageComplete as isStageComplete } from '@/data/schemas/quest';
 import { getConnectionsFrom } from '@/data/schemas/world';
 import {
   calculateBuyPrice,
@@ -51,12 +36,7 @@ import {
   getShopById,
 } from '@/data/shops';
 import { getWorldById, loadWorld } from '@/data/worlds';
-import {
-  createGameStore,
-  type DataAccess,
-  type GameState,
-  WebStorageAdapter,
-} from '@/store';
+import { createGameStore, type DataAccess, type GameState, WebStorageAdapter } from '@/store';
 import { dbManager } from './DatabaseManager';
 
 /**

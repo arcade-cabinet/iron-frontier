@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { PipeLogic, PuzzleGenerator } from '../puzzles/pipe-fitter';
 import {
   DEFAULT_AUDIO_STATE,
   DEFAULT_CAMERA_STATE,
@@ -12,7 +13,6 @@ import {
   SAVE_VERSION,
 } from './defaults';
 import { persistStorage } from './persistStorage';
-import { PuzzleGenerator, PipeLogic } from '../puzzles/pipe-fitter';
 import type { StorageAdapter } from './StorageAdapter';
 import type {
   CombatActionType,
@@ -23,8 +23,8 @@ import type {
   GameSettings,
   GameState,
   InventoryItem,
-  NPC,
   Notification,
+  NPC,
   PanelType,
   PlayerStats,
   WorldPosition,
@@ -85,7 +85,9 @@ export interface DataAccess {
   };
 
   // Seeded random
-  SeededRandom: new (seed: number) => any;
+  SeededRandom: new (
+    seed: number
+  ) => any;
   hashString: (str: string) => number;
   combineSeeds: (...seeds: number[]) => number;
 }
@@ -307,10 +309,7 @@ export function createGameStore({
           set((state) => ({
             playerStats: {
               ...state.playerStats,
-              health: Math.min(
-                state.playerStats.maxHealth,
-                state.playerStats.health + amount
-              ),
+              health: Math.min(state.playerStats.maxHealth, state.playerStats.health + amount),
             },
           }));
         },
@@ -338,9 +337,7 @@ export function createGameStore({
             if (existingItem) {
               return {
                 inventory: state.inventory.map((i) =>
-                  i.id === existingItem.id
-                    ? { ...i, quantity: i.quantity + item.quantity }
-                    : i
+                  i.id === existingItem.id ? { ...i, quantity: i.quantity + item.quantity } : i
                 ),
               };
             }
@@ -608,9 +605,7 @@ export function createGameStore({
               currentNodeId: node.id,
               text: node.text,
               speaker: node.speaker || npc.name,
-              choices: dataAccess.getAvailableChoices(node, (c) =>
-                get().checkDialogueCondition(c)
-              ),
+              choices: dataAccess.getAvailableChoices(node, (c) => get().checkDialogueCondition(c)),
               autoAdvanceNodeId: node.nextNodeId || null,
               history: [],
               conversationFlags: {},
@@ -875,16 +870,16 @@ export function createGameStore({
           get().discoverLocation(destinationId);
 
           // Update Quest Objectives (Visit)
-          activeQuests.forEach(quest => {
-              const def = dataAccess.getQuestById(quest.questId);
-              if (!def) return;
-              
-              const stage = def.stages[quest.currentStageIndex];
-              stage.objectives.forEach(obj => {
-                  if (obj.type === 'visit' && obj.target === destinationId) {
-                      get().updateObjective(quest.questId, obj.id, 1);
-                  }
-              });
+          activeQuests.forEach((quest) => {
+            const def = dataAccess.getQuestById(quest.questId);
+            if (!def) return;
+
+            const stage = def.stages[quest.currentStageIndex];
+            stage.objectives.forEach((obj) => {
+              if (obj.type === 'visit' && obj.target === destinationId) {
+                get().updateObjective(quest.questId, obj.id, 1);
+              }
+            });
           });
         },
 
@@ -938,16 +933,16 @@ export function createGameStore({
           const { combatState } = state;
           if (!combatState || !combatState.selectedAction) return;
 
-          const actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity? 
-          // Actually combatant.definitionId might not be unique if multiple same enemies. 
+          const actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity?
+          // Actually combatant.definitionId might not be unique if multiple same enemies.
           // Combatant interface doesn't have a unique instance ID in the schema I saw?
           // Let's assume index is the source of truth for now.
           const actorIndex = combatState.currentTurnIndex;
           const actor = combatState.combatants[actorIndex];
-          
+
           // Determine target
           const targetId = combatState.selectedTargetId;
-          const targetIndex = combatState.combatants.findIndex(c => c.definitionId === targetId);
+          const targetIndex = combatState.combatants.findIndex((c) => c.definitionId === targetId);
           const target = combatState.combatants[targetIndex];
 
           const actionType = combatState.selectedAction;
@@ -955,13 +950,17 @@ export function createGameStore({
 
           // Check AP
           if (actor.actionPoints < apCost) {
-             state.addNotification('warning', 'Not enough Action Points!');
-             return;
+            state.addNotification('warning', 'Not enough Action Points!');
+            return;
           }
 
           // Deduct AP
           const newCombatants = [...combatState.combatants];
-          newCombatants[actorIndex] = { ...actor, actionPoints: actor.actionPoints - apCost, hasActed: true };
+          newCombatants[actorIndex] = {
+            ...actor,
+            actionPoints: actor.actionPoints - apCost,
+            hasActed: true,
+          };
 
           let resultMessage = '';
           let success = true;
@@ -970,75 +969,81 @@ export function createGameStore({
 
           // Process Action
           if (actionType === 'attack' || actionType === 'aimed_shot') {
-             if (!target) return;
+            if (!target) return;
 
-             const hitChance = dataAccess.calculateHitChance(actor, target, { type: actionType });
-             const hit = dataAccess.rollHit(hitChance);
+            const hitChance = dataAccess.calculateHitChance(actor, target, { type: actionType });
+            const hit = dataAccess.rollHit(hitChance);
 
-             if (hit) {
-                 isCritical = dataAccess.rollCritical(actor);
-                 damage = dataAccess.calculateDamage(actor, target, { type: actionType }, isCritical);
-                 
-                 // Apply Damage
-                 const newHealth = Math.max(0, target.health - damage);
-                 newCombatants[targetIndex] = { 
-                     ...target, 
-                     health: newHealth,
-                     isDead: newHealth === 0
-                 };
+            if (hit) {
+              isCritical = dataAccess.rollCritical(actor);
+              damage = dataAccess.calculateDamage(actor, target, { type: actionType }, isCritical);
 
-                 resultMessage = `${actor.name} hit ${target.name} for ${damage} damage!${isCritical ? ' (Critical!)' : ''}`;
-                 
-                 // Check Death
-                 if (newHealth === 0) {
-                     resultMessage += ` ${target.name} was defeated!`;
-                     if (target.isPlayer) {
-                         // Player died
-                         setTimeout(() => get().setPhase('game_over'), 1500);
-                     }
-                 }
-             } else {
-                 success = false;
-                 resultMessage = `${actor.name} missed ${target.name}!`;
-             }
+              // Apply Damage
+              const newHealth = Math.max(0, target.health - damage);
+              newCombatants[targetIndex] = {
+                ...target,
+                health: newHealth,
+                isDead: newHealth === 0,
+              };
+
+              resultMessage = `${actor.name} hit ${target.name} for ${damage} damage!${isCritical ? ' (Critical!)' : ''}`;
+
+              // Check Death
+              if (newHealth === 0) {
+                resultMessage += ` ${target.name} was defeated!`;
+                if (target.isPlayer) {
+                  // Player died
+                  setTimeout(() => get().setPhase('game_over'), 1500);
+                }
+              }
+            } else {
+              success = false;
+              resultMessage = `${actor.name} missed ${target.name}!`;
+            }
           } else if (actionType === 'defend') {
-              // Add buff? For now just message
-              resultMessage = `${actor.name} takes a defensive stance.`;
+            // Add buff? For now just message
+            resultMessage = `${actor.name} takes a defensive stance.`;
           } else if (actionType === 'use_item') {
-              // Placeholder
-              resultMessage = `${actor.name} used an item.`;
+            // Placeholder
+            resultMessage = `${actor.name} used an item.`;
           }
 
           // Update State
           const result: any = {
-              action: { type: actionType, actorId: actor.definitionId, targetId, apCost, timestamp: Date.now() },
-              success,
-              damage: damage > 0 ? damage : undefined,
-              isCritical,
-              message: resultMessage
+            action: {
+              type: actionType,
+              actorId: actor.definitionId,
+              targetId,
+              apCost,
+              timestamp: Date.now(),
+            },
+            success,
+            damage: damage > 0 ? damage : undefined,
+            isCritical,
+            message: resultMessage,
           };
 
           set({
-              combatState: {
-                  ...combatState,
-                  combatants: newCombatants,
-                  log: [...combatState.log, result],
-                  selectedAction: undefined,
-                  selectedTargetId: undefined
-              }
+            combatState: {
+              ...combatState,
+              combatants: newCombatants,
+              log: [...combatState.log, result],
+              selectedAction: undefined,
+              selectedTargetId: undefined,
+            },
           });
 
           // If AI turn, continue acting if possible
           if (!actor.isPlayer && !newCombatants[actorIndex].isDead) {
-              // Delay next action for pacing
-              setTimeout(() => {
-                  const currentState = get().combatState;
-                  // If turn hasn't changed (e.g. combat didn't end), continue AI
-                  if (currentState && currentState.currentTurnIndex === actorIndex) {
-                      get().endCombatTurn(); // Simple AI: One action per turn or just end for now
-                      // TODO: Improved AI loop to use all AP
-                  }
-              }, 1000);
+            // Delay next action for pacing
+            setTimeout(() => {
+              const currentState = get().combatState;
+              // If turn hasn't changed (e.g. combat didn't end), continue AI
+              if (currentState && currentState.currentTurnIndex === actorIndex) {
+                get().endCombatTurn(); // Simple AI: One action per turn or just end for now
+                // TODO: Improved AI loop to use all AP
+              }
+            }, 1000);
           }
         },
 
@@ -1048,83 +1053,90 @@ export function createGameStore({
           if (!combatState) return;
 
           // Check Victory/Defeat conditions
-          const playerAlive = combatState.combatants.some(c => c.isPlayer && !c.isDead);
-          const enemiesAlive = combatState.combatants.some(c => !c.isPlayer && !c.isDead);
+          const playerAlive = combatState.combatants.some((c) => c.isPlayer && !c.isDead);
+          const enemiesAlive = combatState.combatants.some((c) => !c.isPlayer && !c.isDead);
 
           if (!playerAlive) {
-              set({ combatState: { ...combatState, phase: 'defeat' } });
-              return;
+            set({ combatState: { ...combatState, phase: 'defeat' } });
+            return;
           }
           if (!enemiesAlive) {
-              set({ combatState: { ...combatState, phase: 'victory' } });
-              // Grant Rewards
-              const encounter = dataAccess.getEncounterById(combatState.encounterId);
-              if (encounter && encounter.rewards) {
-                  if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
-                  if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
-              }
-              return;
+            set({ combatState: { ...combatState, phase: 'victory' } });
+            // Grant Rewards
+            const encounter = dataAccess.getEncounterById(combatState.encounterId);
+            if (encounter && encounter.rewards) {
+              if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
+              if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
+            }
+            return;
           }
 
           // Cycle Turn
           let nextIndex = (combatState.currentTurnIndex + 1) % combatState.combatants.length;
           let round = combatState.round;
-          
+
           if (nextIndex === 0) round++;
 
           // Skip dead combatants
           let loopCount = 0;
-          while (combatState.combatants[nextIndex].isDead && loopCount < combatState.combatants.length) {
-              nextIndex = (nextIndex + 1) % combatState.combatants.length;
-              if (nextIndex === 0) round++;
-              loopCount++;
+          while (
+            combatState.combatants[nextIndex].isDead &&
+            loopCount < combatState.combatants.length
+          ) {
+            nextIndex = (nextIndex + 1) % combatState.combatants.length;
+            if (nextIndex === 0) round++;
+            loopCount++;
           }
 
           // Reset AP for the new active combatant
           const newCombatants = [...combatState.combatants];
           const nextCombatant = newCombatants[nextIndex];
-          newCombatants[nextIndex] = { ...nextCombatant, actionPoints: nextCombatant.maxActionPoints, hasActed: false };
+          newCombatants[nextIndex] = {
+            ...nextCombatant,
+            actionPoints: nextCombatant.maxActionPoints,
+            hasActed: false,
+          };
 
           const nextPhase = nextCombatant.isPlayer ? 'player_turn' : 'enemy_turn';
 
           set({
-              combatState: {
-                  ...combatState,
-                  currentTurnIndex: nextIndex,
-                  round,
-                  phase: nextPhase as any,
-                  combatants: newCombatants
-              }
+            combatState: {
+              ...combatState,
+              currentTurnIndex: nextIndex,
+              round,
+              phase: nextPhase as any,
+              combatants: newCombatants,
+            },
           });
 
           // Trigger AI if Enemy Turn
           if (!nextCombatant.isPlayer) {
-              setTimeout(() => {
-                  // AI Logic: Attack Player
-                  const playerDef = newCombatants.find(c => c.isPlayer);
-                  if (playerDef && !playerDef.isDead) {
-                      set(s => ({
-                          combatState: {
-                              ...s.combatState!,
-                              selectedAction: 'attack',
-                              selectedTargetId: playerDef.definitionId
-                          }
-                      }));
-                      get().executeCombatAction();
-                  } else {
-                      get().endCombatTurn();
-                  }
-              }, 1000);
+            setTimeout(() => {
+              // AI Logic: Attack Player
+              const playerDef = newCombatants.find((c) => c.isPlayer);
+              if (playerDef && !playerDef.isDead) {
+                set((s) => ({
+                  combatState: {
+                    ...s.combatState!,
+                    selectedAction: 'attack',
+                    selectedTargetId: playerDef.definitionId,
+                  },
+                }));
+                get().executeCombatAction();
+              } else {
+                get().endCombatTurn();
+              }
+            }, 1000);
           }
         },
 
         attemptFlee: () => {
           // 50% chance
           if (Math.random() > 0.5) {
-              set(s => ({ combatState: { ...s.combatState!, phase: 'fled' } }));
+            set((s) => ({ combatState: { ...s.combatState!, phase: 'fled' } }));
           } else {
-              get().addNotification('warning', 'Failed to escape!');
-              get().endCombatTurn();
+            get().addNotification('warning', 'Failed to escape!');
+            get().endCombatTurn();
           }
         },
 
@@ -1155,7 +1167,7 @@ export function createGameStore({
 
           // Check for solution
           const { solved, newGrid: checkedGrid } = PipeLogic.checkFlow(newState);
-          
+
           set({
             activePuzzle: {
               ...newState,
@@ -1186,9 +1198,9 @@ export function createGameStore({
           // In a real implementation, we'd load the shop's specific inventory from a persistent source
           // For now, we generate/load it via the ProceduralLocationManager if possible, or just open the UI
           // The UI (ShopPanel) will likely handle fetching the actual items via a selector or hook
-          
+
           // But we need to track *who* we are trading with for reputation/price modifiers
-          set({ shopState: { shopId, ownerId: 'unknown' } }); 
+          set({ shopState: { shopId, ownerId: 'unknown' } });
         },
 
         closeShop: () => set({ shopState: null }),
@@ -1207,18 +1219,18 @@ export function createGameStore({
           const price = dataAccess.calculateBuyPrice(itemDef.value, playerStats.reputation);
 
           if (playerStats.gold < price) {
-              state.addNotification('warning', "Can't afford that.");
-              return;
+            state.addNotification('warning', "Can't afford that.");
+            return;
           }
 
           // Transaction
-          set(s => ({
-              playerStats: { ...s.playerStats, gold: s.playerStats.gold - price }
+          set((s) => ({
+            playerStats: { ...s.playerStats, gold: s.playerStats.gold - price },
           }));
-          
+
           state.addItemById(itemId, 1);
           state.addNotification('item', `Bought ${itemDef.name} for ${price}g`);
-          
+
           // Audio
           // state.playSfx('ui_buy'); // If we had this in actions
         },
@@ -1228,7 +1240,7 @@ export function createGameStore({
           const { shopState, playerStats, inventory } = state;
           if (!shopState) return;
 
-          const item = inventory.find(i => i.id === inventoryId);
+          const item = inventory.find((i) => i.id === inventoryId);
           if (!item) return;
 
           const itemDef = dataAccess.getItem(item.itemId);
@@ -1236,9 +1248,9 @@ export function createGameStore({
 
           // Transaction
           state.removeItem(item.itemId, 1); // Remove 1 quantity
-          
-          set(s => ({
-              playerStats: { ...s.playerStats, gold: s.playerStats.gold + price }
+
+          set((s) => ({
+            playerStats: { ...s.playerStats, gold: s.playerStats.gold + price },
           }));
 
           state.addNotification('item', `Sold ${item.name} for ${price}g`);

@@ -1,25 +1,22 @@
 // Iron Frontier - Hex-Tile Based Western RPG
 // Fallout 2-style isometric view with Kenney Hexagon Kit tiles
 
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   generateRandomEncounter,
   shouldTriggerEncounter,
 } from '@/data/generation/generators/encounterGenerator';
 import { ProceduralLocationManager } from '@/data/generation/ProceduralLocationManager';
 import { SeededRandom } from '@/data/generation/seededRandom';
-import {
-  getWorldItemName,
-  getWorldItemsForLocation,
-} from '@/data/items/worldItems';
+import { getWorldItemName, getWorldItemsForLocation } from '@/data/items/worldItems';
 import { getNPCsByLocation } from '@/data/npcs';
 // World/location data
 import { getLocationData } from '@/data/worlds';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { HexSceneManager, type HexWorldPosition } from '../engine/hex';
 import { HexBuildingType, hexKey } from '../engine/hex/HexTypes';
 import { TitleScreen } from './screens/TitleScreen';
+import { audioService } from './services/AudioService';
 import { useGameStore } from './store/webGameStore';
-
 // Import decoupled UI components
 import { ActionBar } from './ui/ActionBar';
 import { CharacterPanel } from './ui/CharacterPanel';
@@ -30,13 +27,12 @@ import { GameOverScreen } from './ui/GameOverScreen';
 import { InventoryPanel } from './ui/InventoryPanel';
 import { MenuPanel } from './ui/MenuPanel';
 import { NotificationFeed } from './ui/NotificationFeed';
+import { PipePuzzle } from './ui/PipePuzzle';
 import { QuestLog } from './ui/QuestLog';
 // SettingsPanel merged into MenuPanel
 import { ShopPanel } from './ui/ShopPanel';
 import { TravelPanel } from './ui/TravelPanel';
 import { WorldMap } from './ui/WorldMap';
-import { PipePuzzle } from './ui/PipePuzzle';
-import { audioService } from './services/AudioService';
 
 // ============================================================================
 // GAME CANVAS - Babylon.js 3D Scene with Hex Tiles
@@ -69,20 +65,20 @@ function GameCanvas() {
 
   // Time Cycle
   useEffect(() => {
-      if (phase !== 'playing') return;
-      
-      const timer = setInterval(() => {
-          updateTime(0.1); // Advance 0.1 hours every second -> 1 hour every 10 seconds
-      }, 1000);
-      
-      return () => clearInterval(timer);
+    if (phase !== 'playing') return;
+
+    const timer = setInterval(() => {
+      updateTime(0.1); // Advance 0.1 hours every second -> 1 hour every 10 seconds
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, [phase, updateTime]);
 
   // Update Environment Visuals
   useEffect(() => {
-      if (sceneManagerRef.current) {
-          sceneManagerRef.current.updateEnvironment(time, weather);
-      }
+    if (sceneManagerRef.current) {
+      sceneManagerRef.current.updateEnvironment(time, weather);
+    }
   }, [time, weather]);
 
   // Initialize world on first play
@@ -157,19 +153,22 @@ function GameCanvas() {
         manager.setHexClickHandler((hexCoord, tile) => {
           // Check for buildings first (Puzzle Trigger)
           if (tile && tile.building && tile.building !== HexBuildingType.None) {
-             const key = hexKey(hexCoord);
-             const status = ProceduralLocationManager.getOrGenerateStructureState(currentLocationId, key);
-             
-             console.log(`[GameCanvas] Clicked building: ${tile.building} (Status: ${status})`);
+            const key = hexKey(hexCoord);
+            const status = ProceduralLocationManager.getOrGenerateStructureState(
+              currentLocationId,
+              key
+            );
 
-             if (status === 'broken' || status === 'locked') {
-                 addNotification('info', `This ${tile.building} is ${status}. Starting bypass...`);
-                 startPuzzle(5, 5); // 5x5 grid
-                 return;
-             } else {
-                 addNotification('info', `This ${tile.building} is functioning normally.`);
-                 // Proceed to move there (or maybe enter?)
-             }
+            console.log(`[GameCanvas] Clicked building: ${tile.building} (Status: ${status})`);
+
+            if (status === 'broken' || status === 'locked') {
+              addNotification('info', `This ${tile.building} is ${status}. Starting bypass...`);
+              startPuzzle(5, 5); // 5x5 grid
+              return;
+            } else {
+              addNotification('info', `This ${tile.building} is functioning normally.`);
+              // Proceed to move there (or maybe enter?)
+            }
           }
 
           // Check if there's an NPC at this hex in the current location
@@ -210,43 +209,54 @@ function GameCanvas() {
         manager.setGroundClickHandler((pos: HexWorldPosition) => {
           // Check for Random Encounter
           if (currentLocationId) {
-              const resolvedLocation = loadedWorld?.getLocation(currentLocationId);
-              const locData = resolvedLocation ? getLocationData(resolvedLocation) : null;
-              // Safe zones - no encounters in towns/cities
-              const isSafe = locData?.type === 'town' || locData?.type === 'city' || locData?.type === 'village';
-              
-              if (!isSafe) {
-                  const rng = new SeededRandom(Date.now()); // Dynamic seed for encounters
-                  // 10% chance per move in wild areas
-                  if (shouldTriggerEncounter(rng, { 
+            const resolvedLocation = loadedWorld?.getLocation(currentLocationId);
+            const locData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+            // Safe zones - no encounters in towns/cities
+            const isSafe =
+              locData?.type === 'town' || locData?.type === 'city' || locData?.type === 'village';
+
+            if (!isSafe) {
+              const rng = new SeededRandom(Date.now()); // Dynamic seed for encounters
+              // 10% chance per move in wild areas
+              if (
+                shouldTriggerEncounter(
+                  rng,
+                  {
                     worldSeed,
                     playerLevel: 1,
                     gameHour: 12,
                     factionTensions: {},
                     activeEvents: [],
-                    contextTags: [] 
-                  }, 0.1)) {
-                      console.log('[GameCanvas] Random Encounter Triggered!');
-                      
-                      // Generate a random encounter
-                      const encounter = generateRandomEncounter(rng, {
-                          playerLevel: 1, // Get from store ideally
-                          locationId: currentLocationId,
-                          contextTags: ['wild'],
-                          worldSeed: worldSeed,
-                          regionId: 'unknown',
-                          gameHour: 12,
-                          factionTensions: {},
-                          activeEvents: []
-                      }, {});
+                    contextTags: [],
+                  },
+                  0.1
+                )
+              ) {
+                console.log('[GameCanvas] Random Encounter Triggered!');
 
-                      if (encounter) {
-                          addNotification('warning', 'Ambush! Prepare for combat!');
-                          startCombat(encounter.id);
-                          return; // Stop movement
-                      }
-                  }
+                // Generate a random encounter
+                const encounter = generateRandomEncounter(
+                  rng,
+                  {
+                    playerLevel: 1, // Get from store ideally
+                    locationId: currentLocationId,
+                    contextTags: ['wild'],
+                    worldSeed: worldSeed,
+                    regionId: 'unknown',
+                    gameHour: 12,
+                    factionTensions: {},
+                    activeEvents: [],
+                  },
+                  {}
+                );
+
+                if (encounter) {
+                  addNotification('warning', 'Ambush! Prepare for combat!');
+                  startCombat(encounter.id);
+                  return; // Stop movement
+                }
               }
+            }
           }
 
           const height = manager.getHeightAt(pos.x, pos.z);

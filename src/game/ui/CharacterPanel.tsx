@@ -3,9 +3,9 @@
  * Western-themed "Outlaw" character sheet
  */
 
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { getItem } from '@/data/items';
 import { getRarityColor } from '@/data/schemas/item';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { type EquipmentSlot, useGameStore } from '../store/webGameStore';
 

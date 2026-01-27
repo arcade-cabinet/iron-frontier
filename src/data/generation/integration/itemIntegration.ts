@@ -1,4 +1,4 @@
-import type { BaseItem, WeaponItem, ArmorItem, ConsumableItem } from '../../schemas/item';
+import type { ArmorItem, BaseItem, ConsumableItem, WeaponItem } from '../../schemas/item';
 import type { ItemTemplate } from '../generators/itemGenerator';
 
 /**
@@ -23,7 +23,7 @@ export function convertItemToTemplate(item: BaseItem): ItemTemplate {
     tags: item.tags || [],
     levelRange: [1, 20], // Available at all levels
     allowedMaterials: [], // Not used for static
-    allowedStyles: [],    // Not used for static
+    allowedStyles: [], // Not used for static
   };
 
   // Type specific mappings
@@ -40,14 +40,26 @@ export function convertItemToTemplate(item: BaseItem): ItemTemplate {
     const armor = item as ArmorItem;
     template.armorSlot = armor.armorStats.slot;
     template.defenseRange = [armor.armorStats.defense, armor.armorStats.defense];
-    template.movementPenaltyRange = [armor.armorStats.movementPenalty, armor.armorStats.movementPenalty];
+    template.movementPenaltyRange = [
+      armor.armorStats.movementPenalty,
+      armor.armorStats.movementPenalty,
+    ];
   } else if (item.type === 'consumable') {
     const cons = item as ConsumableItem;
     template.healRange = [cons.consumableStats.healAmount, cons.consumableStats.healAmount];
-    template.staminaRange = [cons.consumableStats.staminaAmount, cons.consumableStats.staminaAmount];
+    template.staminaRange = [
+      cons.consumableStats.staminaAmount,
+      cons.consumableStats.staminaAmount,
+    ];
     template.buffType = cons.consumableStats.buffType;
-    template.buffDurationRange = [cons.consumableStats.buffDuration, cons.consumableStats.buffDuration];
-    template.buffStrengthRange = [cons.consumableStats.buffStrength, cons.consumableStats.buffStrength];
+    template.buffDurationRange = [
+      cons.consumableStats.buffDuration,
+      cons.consumableStats.buffDuration,
+    ];
+    template.buffStrengthRange = [
+      cons.consumableStats.buffStrength,
+      cons.consumableStats.buffStrength,
+    ];
   }
 
   return template;

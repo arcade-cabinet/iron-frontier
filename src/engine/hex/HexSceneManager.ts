@@ -26,8 +26,8 @@ import {
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 
-import { WesternAssets } from '~/assets';
 import type { Location } from '@/data/schemas/spatial';
+import { WesternAssets } from '~/assets';
 import {
   hexToWorld as coordHexToWorld,
   worldToHex as coordWorldToHex,
@@ -246,7 +246,7 @@ export class HexSceneManager {
     // Create scene
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.4, 0.6, 0.9, 1); // Sky blue fallback
-    
+
     // Enable fog
     this.scene.fogMode = Scene.FOGMODE_EXP;
     this.scene.fogDensity = 0.01;
@@ -268,72 +268,72 @@ export class HexSceneManager {
   /**
    * Update environment (Time/Weather)
    */
-  updateEnvironment(time: { hour: number }, weather: { type: string, intensity: number }): void {
-      if (!this.sunLight || !this.ambientLight || !this.skyDome) return;
+  updateEnvironment(time: { hour: number }, weather: { type: string; intensity: number }): void {
+    if (!this.sunLight || !this.ambientLight || !this.skyDome) return;
 
-      // Time Cycle (0-24)
-      const hour = time.hour;
-      const isDay = hour >= 6 && hour < 20;
-      const isDawn = hour >= 5 && hour < 7;
-      const isDusk = hour >= 19 && hour < 21;
+    // Time Cycle (0-24)
+    const hour = time.hour;
+    const isDay = hour >= 6 && hour < 20;
+    const isDawn = hour >= 5 && hour < 7;
+    const isDusk = hour >= 19 && hour < 21;
 
-      // Sun Position & Intensity
-      // Simple rotation: Noon (12) is overhead, Midnight (0) is below
-      // Angle: 0 at 6am, PI at 6pm?
-      // Let's map 0-24 to 0-2PI, offset so 12 is top
-      const timeAngle = ((hour - 6) / 24) * Math.PI * 2; 
-      const sunDir = new Vector3(Math.sin(timeAngle), -Math.cos(timeAngle), 0.2).normalize();
-      this.sunLight.direction = sunDir;
+    // Sun Position & Intensity
+    // Simple rotation: Noon (12) is overhead, Midnight (0) is below
+    // Angle: 0 at 6am, PI at 6pm?
+    // Let's map 0-24 to 0-2PI, offset so 12 is top
+    const timeAngle = ((hour - 6) / 24) * Math.PI * 2;
+    const sunDir = new Vector3(Math.sin(timeAngle), -Math.cos(timeAngle), 0.2).normalize();
+    this.sunLight.direction = sunDir;
 
-      let intensity = 0;
-      let ambientColor = new Color3(0.1, 0.1, 0.2); // Night
-      let skyColor = new Color3(0.05, 0.05, 0.1); // Night Sky
-      let fogColor = new Color3(0.05, 0.05, 0.1);
+    let intensity = 0;
+    let ambientColor = new Color3(0.1, 0.1, 0.2); // Night
+    let skyColor = new Color3(0.05, 0.05, 0.1); // Night Sky
+    let fogColor = new Color3(0.05, 0.05, 0.1);
 
-      if (isDay) {
-          intensity = 1.0;
-          ambientColor = new Color3(0.8, 0.8, 0.75); // Warm Day
-          skyColor = new Color3(0.4, 0.7, 0.95); // Blue Sky
-          fogColor = new Color3(0.6, 0.8, 0.9);
-          
-          if (isDawn || isDusk) {
-              intensity = 0.5;
-              ambientColor = new Color3(0.8, 0.5, 0.4); // Orange tint
-              skyColor = new Color3(0.8, 0.4, 0.2);
-              fogColor = new Color3(0.8, 0.5, 0.4);
-          }
-      } else {
-          intensity = 0.1; // Moonlight
-          // Night settings
+    if (isDay) {
+      intensity = 1.0;
+      ambientColor = new Color3(0.8, 0.8, 0.75); // Warm Day
+      skyColor = new Color3(0.4, 0.7, 0.95); // Blue Sky
+      fogColor = new Color3(0.6, 0.8, 0.9);
+
+      if (isDawn || isDusk) {
+        intensity = 0.5;
+        ambientColor = new Color3(0.8, 0.5, 0.4); // Orange tint
+        skyColor = new Color3(0.8, 0.4, 0.2);
+        fogColor = new Color3(0.8, 0.5, 0.4);
       }
+    } else {
+      intensity = 0.1; // Moonlight
+      // Night settings
+    }
 
-      // Weather Overrides
-      if (weather.type === 'stormy') {
-          intensity *= 0.3;
-          ambientColor.scaleInPlace(0.5);
-          skyColor = new Color3(0.2, 0.2, 0.25);
-          fogColor = new Color3(0.25, 0.25, 0.3);
-          this.scene.fogDensity = 0.05; // Thick fog
-      } else if (weather.type === 'dusty') {
-          skyColor = new Color3(0.7, 0.6, 0.4);
-          fogColor = new Color3(0.7, 0.6, 0.4);
-          ambientColor = new Color3(0.6, 0.5, 0.4);
-          this.scene.fogDensity = 0.04;
-      } else {
-          this.scene.fogDensity = 0.005; // Light distance fog
-      }
+    // Weather Overrides
+    if (weather.type === 'stormy') {
+      intensity *= 0.3;
+      ambientColor.scaleInPlace(0.5);
+      skyColor = new Color3(0.2, 0.2, 0.25);
+      fogColor = new Color3(0.25, 0.25, 0.3);
+      this.scene.fogDensity = 0.05; // Thick fog
+    } else if (weather.type === 'dusty') {
+      skyColor = new Color3(0.7, 0.6, 0.4);
+      fogColor = new Color3(0.7, 0.6, 0.4);
+      ambientColor = new Color3(0.6, 0.5, 0.4);
+      this.scene.fogDensity = 0.04;
+    } else {
+      this.scene.fogDensity = 0.005; // Light distance fog
+    }
 
-      // Apply
-      this.sunLight.intensity = intensity;
-      this.ambientLight.groundColor = ambientColor.scale(0.5);
-      this.ambientLight.diffuse = ambientColor;
-      
-      this.scene.clearColor = new Color4(skyColor.r, skyColor.g, skyColor.b, 1);
-      this.scene.fogColor = fogColor;
+    // Apply
+    this.sunLight.intensity = intensity;
+    this.ambientLight.groundColor = ambientColor.scale(0.5);
+    this.ambientLight.diffuse = ambientColor;
 
-      if (this.skyDome.material instanceof StandardMaterial) {
-          this.skyDome.material.emissiveColor = skyColor;
-      }
+    this.scene.clearColor = new Color4(skyColor.r, skyColor.g, skyColor.b, 1);
+    this.scene.fogColor = fogColor;
+
+    if (this.skyDome.material instanceof StandardMaterial) {
+      this.skyDome.material.emissiveColor = skyColor;
+    }
   }
 
   /**
@@ -635,7 +635,11 @@ export class HexSceneManager {
     this.ambientLight.diffuse = new Color3(1, 0.95, 0.85);
 
     // Directional sun light
-    this.sunLight = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3).normalize(), this.scene);
+    this.sunLight = new DirectionalLight(
+      'sun',
+      new Vector3(-0.5, -1, -0.3).normalize(),
+      this.scene
+    );
     this.sunLight.intensity = 1.0;
     this.sunLight.diffuse = new Color3(1, 0.95, 0.8);
 

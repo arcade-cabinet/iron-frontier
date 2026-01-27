@@ -1,3 +1,3 @@
-export * from './types';
-export * from './logic';
 export * from './generator';
+export * from './logic';
+export * from './types';

@@ -1,7 +1,7 @@
 import * as Tone from 'tone';
 import { useGameStore } from '../store/webGameStore';
-import { MusicManager } from './audio/MusicManager';
 import { AmbienceManager } from './audio/AmbienceManager';
+import { MusicManager } from './audio/MusicManager';
 import { SoundManager } from './audio/SoundManager';
 
 class AudioService {
@@ -25,27 +25,27 @@ class AudioService {
       // Track changes -> Map track IDs to "States" or just ensure playing
       if (state.audio.currentTrack !== prevState.audio.currentTrack) {
         if (state.audio.currentTrack) {
-           // For now, any track ID triggers the generative loop
-           // In future, map 'combat_theme' to musicManager.setState('combat')
-           this.musicManager.start(); 
-           this.ambienceManager.start();
+          // For now, any track ID triggers the generative loop
+          // In future, map 'combat_theme' to musicManager.setState('combat')
+          this.musicManager.start();
+          this.ambienceManager.start();
         } else {
-           this.musicManager.stop();
-           this.ambienceManager.stop();
+          this.musicManager.stop();
+          this.ambienceManager.stop();
         }
       }
 
       // Play/Pause state
       if (state.audio.isPlaying !== prevState.audio.isPlaying) {
         if (state.audio.isPlaying) {
-             if (Tone.context.state === 'suspended') Tone.start();
-             Tone.Transport.start();
-             this.musicManager.start();
-             this.ambienceManager.start();
+          if (Tone.context.state === 'suspended') Tone.start();
+          Tone.Transport.start();
+          this.musicManager.start();
+          this.ambienceManager.start();
         } else {
-             Tone.Transport.pause();
-             this.musicManager.stop();
-             this.ambienceManager.stop();
+          Tone.Transport.pause();
+          this.musicManager.stop();
+          this.ambienceManager.stop();
         }
       }
     });
@@ -53,14 +53,14 @@ class AudioService {
 
   public async initialize() {
     if (this.initialized) return;
-    
+
     // Tone.js requires a user interaction to start the context.
     // This method should be called from a UI event handler (e.g. "Enter Game" button).
     await Tone.start();
-    
+
     const settings = useGameStore.getState().settings;
     Tone.Destination.volume.value = Tone.gainToDb(settings.musicVolume); // utilizing music volume as master for now
-    
+
     this.initialized = true;
     console.log('[AudioService] Initialized (Tone.js)');
   }
@@ -80,37 +80,37 @@ class AudioService {
   public playSfx(sfxId: string) {
     // Map legacy IDs to procedural sounds
     switch (sfxId) {
-        case 'ui_click':
-            this.soundManager.playClick();
-            break;
-        case 'footstep_dirt':
-            this.soundManager.playFootstep();
-            break;
-        case 'gunshot':
-            this.soundManager.playGunshot(); 
-            break;
-        default:
-            // Fallback for unmapped sounds
-            this.soundManager.playClick(); 
-            break;
+      case 'ui_click':
+        this.soundManager.playClick();
+        break;
+      case 'footstep_dirt':
+        this.soundManager.playFootstep();
+        break;
+      case 'gunshot':
+        this.soundManager.playGunshot();
+        break;
+      default:
+        // Fallback for unmapped sounds
+        this.soundManager.playClick();
+        break;
     }
   }
 
   public playCombatSound(type: 'attack' | 'reload' | 'hit' | 'miss') {
-      switch (type) {
-          case 'attack':
-              this.soundManager.playGunshot();
-              break;
-          case 'reload':
-              this.soundManager.playReload();
-              break;
-          case 'hit':
-              this.soundManager.playHit();
-              break;
-          case 'miss':
-              this.soundManager.playMiss();
-              break;
-      }
+    switch (type) {
+      case 'attack':
+        this.soundManager.playGunshot();
+        break;
+      case 'reload':
+        this.soundManager.playReload();
+        break;
+      case 'hit':
+        this.soundManager.playHit();
+        break;
+      case 'miss':
+        this.soundManager.playMiss();
+        break;
+    }
   }
 }
 

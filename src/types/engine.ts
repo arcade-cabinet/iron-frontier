@@ -1,7 +1,7 @@
 // Core Engine Types - Shared
 // Platform-agnostic definitions for game entities and world data
 
-import { StructureAssets, MechanicalAssets, HexTileAssets } from '~/assets';
+import { HexTileAssets, MechanicalAssets, StructureAssets } from '~/assets';
 
 // Simple vector/color types to avoid engine dependencies
 export interface Vector3Simple {
@@ -21,9 +21,9 @@ export interface Color3Simple {
 // ============================================================================
 
 export interface WorldPosition {
-  x: number;  // East-West (meters)
-  z: number;  // North-South (meters) 
-  y: number;  // Elevation (computed from heightmap)
+  x: number; // East-West (meters)
+  z: number; // North-South (meters)
+  y: number; // Elevation (computed from heightmap)
 }
 
 export interface ChunkCoord {
@@ -31,7 +31,7 @@ export interface ChunkCoord {
   cz: number;
 }
 
-export const CHUNK_SIZE = 64;  // 64x64 meters per chunk
+export const CHUNK_SIZE = 64; // 64x64 meters per chunk
 export const VIEW_DISTANCE = 3; // Load chunks within this radius
 
 export function worldToChunk(pos: WorldPosition): ChunkCoord {
@@ -58,13 +58,13 @@ export function chunkKey(coord: ChunkCoord): string {
 // ============================================================================
 
 export type BiomeType =
-  | 'desert'      // Sandy, cacti, mesas
-  | 'grassland'   // Prairie grass, wildflowers
-  | 'badlands'    // Rocky, canyons, red earth
-  | 'riverside'   // Near water, greener
-  | 'town'        // Developed area, buildings
-  | 'railyard'    // Industrial, tracks, coal
-  | 'mine';       // Rocky, cave entrances, ore veins
+  | 'desert' // Sandy, cacti, mesas
+  | 'grassland' // Prairie grass, wildflowers
+  | 'badlands' // Rocky, canyons, red earth
+  | 'riverside' // Near water, greener
+  | 'town' // Developed area, buildings
+  | 'railyard' // Industrial, tracks, coal
+  | 'mine'; // Rocky, cave entrances, ore veins
 
 export interface BiomeConfig {
   type: BiomeType;
@@ -121,22 +121,166 @@ export interface StructureTemplate {
 }
 
 export const STRUCTURE_TEMPLATES: Record<StructureType, StructureTemplate> = {
-  saloon: { type: 'saloon', name: 'Saloon', width: 12, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: HexTileAssets.BUILDING_MARKET }, // Placeholder mapping
-  sheriff_office: { type: 'sheriff_office', name: 'Sheriff Office', width: 8, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: HexTileAssets.BUILDING_TOWER },
-  general_store: { type: 'general_store', name: 'General Store', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: HexTileAssets.BUILDING_HOUSE },
-  bank: { type: 'bank', name: 'Bank', width: 10, depth: 10, height: 6, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: HexTileAssets.BUILDING_CASTLE },
-  hotel: { type: 'hotel', name: 'Hotel', width: 12, depth: 10, height: 8, hasInterior: true, entranceOffset: { x: 0, z: 5 }, modelPath: HexTileAssets.UNIT_MANSION },
-  stable: { type: 'stable', name: 'Stable', width: 14, depth: 8, height: 5, hasInterior: false, entranceOffset: { x: 0, z: 4 }, modelPath: HexTileAssets.BUILDING_FARM },
-  water_tower: { type: 'water_tower', name: 'Water Tower', width: 4, depth: 4, height: 12, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: StructureAssets.WATER_TOWER },
-  windmill: { type: 'windmill', name: 'Windmill', width: 3, depth: 3, height: 10, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: HexTileAssets.BUILDING_MILL },
-  mine_entrance: { type: 'mine_entrance', name: 'Mine Entrance', width: 6, depth: 4, height: 4, hasInterior: false, entranceOffset: { x: 0, z: 2 }, modelPath: HexTileAssets.BUILDING_MINE },
-  train_station: { type: 'train_station', name: 'Train Station', width: 16, depth: 6, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 3 }, modelPath: MechanicalAssets.HOUSE_SMALL }, // Using mechanical house as station
-  house_small: { type: 'house_small', name: 'Small House', width: 6, depth: 6, height: 4, hasInterior: true, entranceOffset: { x: 0, z: 3 }, modelPath: HexTileAssets.BUILDING_CABIN },
-  house_large: { type: 'house_large', name: 'Large House', width: 10, depth: 8, height: 5, hasInterior: true, entranceOffset: { x: 0, z: 4 }, modelPath: HexTileAssets.UNIT_HOUSE },
-  outhouse: { type: 'outhouse', name: 'Outhouse', width: 1.5, depth: 1.5, height: 2.5, hasInterior: false, entranceOffset: { x: 0, z: 0.75 }, modelPath: null }, // No specific model yet
-  well: { type: 'well', name: 'Well', width: 2, depth: 2, height: 2, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: StructureAssets.WELL },
-  fence: { type: 'fence', name: 'Fence', width: 4, depth: 0.2, height: 1.2, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: StructureAssets.FENCE },
-  hitching_post: { type: 'hitching_post', name: 'Hitching Post', width: 2, depth: 0.5, height: 1, hasInterior: false, entranceOffset: { x: 0, z: 0 }, modelPath: StructureAssets.RAIL },
+  saloon: {
+    type: 'saloon',
+    name: 'Saloon',
+    width: 12,
+    depth: 10,
+    height: 6,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 5 },
+    modelPath: HexTileAssets.BUILDING_MARKET,
+  }, // Placeholder mapping
+  sheriff_office: {
+    type: 'sheriff_office',
+    name: 'Sheriff Office',
+    width: 8,
+    depth: 8,
+    height: 5,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 4 },
+    modelPath: HexTileAssets.BUILDING_TOWER,
+  },
+  general_store: {
+    type: 'general_store',
+    name: 'General Store',
+    width: 10,
+    depth: 8,
+    height: 5,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 4 },
+    modelPath: HexTileAssets.BUILDING_HOUSE,
+  },
+  bank: {
+    type: 'bank',
+    name: 'Bank',
+    width: 10,
+    depth: 10,
+    height: 6,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 5 },
+    modelPath: HexTileAssets.BUILDING_CASTLE,
+  },
+  hotel: {
+    type: 'hotel',
+    name: 'Hotel',
+    width: 12,
+    depth: 10,
+    height: 8,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 5 },
+    modelPath: HexTileAssets.UNIT_MANSION,
+  },
+  stable: {
+    type: 'stable',
+    name: 'Stable',
+    width: 14,
+    depth: 8,
+    height: 5,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 4 },
+    modelPath: HexTileAssets.BUILDING_FARM,
+  },
+  water_tower: {
+    type: 'water_tower',
+    name: 'Water Tower',
+    width: 4,
+    depth: 4,
+    height: 12,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0 },
+    modelPath: StructureAssets.WATER_TOWER,
+  },
+  windmill: {
+    type: 'windmill',
+    name: 'Windmill',
+    width: 3,
+    depth: 3,
+    height: 10,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0 },
+    modelPath: HexTileAssets.BUILDING_MILL,
+  },
+  mine_entrance: {
+    type: 'mine_entrance',
+    name: 'Mine Entrance',
+    width: 6,
+    depth: 4,
+    height: 4,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 2 },
+    modelPath: HexTileAssets.BUILDING_MINE,
+  },
+  train_station: {
+    type: 'train_station',
+    name: 'Train Station',
+    width: 16,
+    depth: 6,
+    height: 5,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 3 },
+    modelPath: MechanicalAssets.HOUSE_SMALL,
+  }, // Using mechanical house as station
+  house_small: {
+    type: 'house_small',
+    name: 'Small House',
+    width: 6,
+    depth: 6,
+    height: 4,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 3 },
+    modelPath: HexTileAssets.BUILDING_CABIN,
+  },
+  house_large: {
+    type: 'house_large',
+    name: 'Large House',
+    width: 10,
+    depth: 8,
+    height: 5,
+    hasInterior: true,
+    entranceOffset: { x: 0, z: 4 },
+    modelPath: HexTileAssets.UNIT_HOUSE,
+  },
+  outhouse: {
+    type: 'outhouse',
+    name: 'Outhouse',
+    width: 1.5,
+    depth: 1.5,
+    height: 2.5,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0.75 },
+    modelPath: null,
+  }, // No specific model yet
+  well: {
+    type: 'well',
+    name: 'Well',
+    width: 2,
+    depth: 2,
+    height: 2,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0 },
+    modelPath: StructureAssets.WELL,
+  },
+  fence: {
+    type: 'fence',
+    name: 'Fence',
+    width: 4,
+    depth: 0.2,
+    height: 1.2,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0 },
+    modelPath: StructureAssets.FENCE,
+  },
+  hitching_post: {
+    type: 'hitching_post',
+    name: 'Hitching Post',
+    width: 2,
+    depth: 0.5,
+    height: 1,
+    hasInterior: false,
+    entranceOffset: { x: 0, z: 0 },
+    modelPath: StructureAssets.RAIL,
+  },
 };
 
 // ============================================================================
@@ -235,7 +379,7 @@ export interface NPC {
   rotation: number;
 
   homeStructureId?: string;
-  disposition: number;  // -100 to 100, relationship with player
+  disposition: number; // -100 to 100, relationship with player
   isAlive: boolean;
 
   questGiver: boolean;
@@ -289,7 +433,7 @@ export interface WeatherState {
 }
 
 export interface TimeState {
-  hour: number;      // 0-24
+  hour: number; // 0-24
   dayOfYear: number; // 1-365
   year: number;
 }

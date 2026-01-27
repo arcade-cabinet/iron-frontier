@@ -11,29 +11,32 @@ export class MusicManager {
 
   // E Minor Pentatonic
   private scale = ['E3', 'G3', 'A3', 'B3', 'D4', 'E4', 'G4'];
-  
+
   constructor() {
-    this.guitar = new Tone.PolySynth(Tone.PluckSynth as any, {
-      attackNoise: 1,
-      dampening: 4000,
-      resonance: 0.98
-    } as any).toDestination();
+    this.guitar = new Tone.PolySynth(
+      Tone.PluckSynth as any,
+      {
+        attackNoise: 1,
+        dampening: 4000,
+        resonance: 0.98,
+      } as any
+    ).toDestination();
     this.guitar.volume.value = -12;
 
     this.ambience = new Tone.PolySynth(Tone.AMSynth).toDestination();
     this.ambience.volume.value = -20;
     this.ambience.set({
       oscillator: { type: 'sine' },
-      envelope: { attack: 1, decay: 2, sustain: 0.5, release: 3 }
+      envelope: { attack: 1, decay: 2, sustain: 0.5, release: 3 },
     });
   }
 
   public async start() {
     if (this.isPlaying) return;
-    
+
     await Tone.start();
     Tone.Transport.start();
-    
+
     this.isPlaying = true;
     this.startGenerativeLoop();
   }
@@ -64,10 +67,10 @@ export class MusicManager {
         const length = Math.random() > 0.5 ? '8n' : '4n';
         this.guitar.triggerAttackRelease(note, length, time);
       }
-      
+
       // Occasional atmospheric chord
       if (Math.random() > 0.95) {
-         this.ambience.triggerAttackRelease(['E2', 'B2'], '1m', time);
+        this.ambience.triggerAttackRelease(['E2', 'B2'], '1m', time);
       }
     }, '8n').start(0);
   }
