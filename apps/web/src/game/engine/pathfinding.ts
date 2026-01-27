@@ -53,6 +53,11 @@ export function findPath(
   width: number,
   height: number
 ): GridPos[] {
+  // Validate start tile is walkable
+  if (!grid[start.y]?.[start.x]?.walkable) {
+    return [];
+  }
+
   // Check if goal is valid
   if (!grid[goal.y]?.[goal.x]?.walkable) {
     return [];

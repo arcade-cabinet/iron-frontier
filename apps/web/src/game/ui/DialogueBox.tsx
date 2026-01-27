@@ -176,9 +176,9 @@ export function DialogueBox() {
                 >
                   {dialogueState.npcPortraitId ? (
                     // Future: actual portrait image
-                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" aria-hidden="true" />
                   ) : (
-                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" aria-hidden="true" />
                   )}
                 </div>
                 <div className="flex flex-col min-w-0">
@@ -210,7 +210,7 @@ export function DialogueBox() {
                 )}
                 {activeNPC?.questGiver && (
                   <Badge className="bg-yellow-600 text-yellow-100 text-xs">
-                    <MessageSquare className="w-3 h-3 mr-1" />
+                    <MessageSquare className="w-3 h-3 mr-1" aria-hidden="true" />
                     Quest
                   </Badge>
                 )}
@@ -254,6 +254,7 @@ export function DialogueBox() {
                         className={`w-4 h-4 flex-shrink-0 ${
                           selectedChoiceIndex === index ? 'text-amber-400' : 'text-amber-600'
                         }`}
+                        aria-hidden="true"
                       />
                       <span className="text-xs sm:text-sm">{choice.text}</span>
                     </div>
@@ -295,7 +296,7 @@ export function DialogueBox() {
                   className="w-full min-h-[44px] bg-amber-700/50 hover:bg-amber-600/50 text-amber-100 border border-amber-600"
                 >
                   Continue
-                  <ChevronRight className="w-4 h-4 ml-1" />
+                  <ChevronRight className="w-4 h-4 ml-1" aria-hidden="true" />
                 </Button>
               </motion.div>
             )}

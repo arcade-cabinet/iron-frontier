@@ -178,6 +178,7 @@ export function InventoryPanel() {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -211,6 +212,7 @@ export function InventoryPanel() {
               className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500"
               fill="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <circle cx="12" cy="12" r="10" />
             </svg>
@@ -222,6 +224,7 @@ export function InventoryPanel() {
                 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400"
                 fill="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <rect x="4" y="4" width="16" height="16" rx="2" />
               </svg>
@@ -245,7 +248,7 @@ export function InventoryPanel() {
                   : 'text-amber-400/70 hover:text-amber-300 hover:bg-amber-800/30'
               )}
             >
-              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d={cat.icon} />
               </svg>
               <span className="hidden xs:inline sm:inline">{cat.label}</span>
@@ -274,6 +277,7 @@ export function InventoryPanel() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -318,6 +322,7 @@ export function InventoryPanel() {
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden="true"
                             >
                               <path
                                 strokeLinecap="round"
@@ -337,6 +342,7 @@ export function InventoryPanel() {
                             )}
                             fill="currentColor"
                             viewBox="0 0 24 24"
+                            aria-hidden="true"
                           >
                             <path d={TYPE_ICONS[item.type] || TYPE_ICONS.junk} />
                           </svg>
@@ -537,6 +543,7 @@ export function InventoryPanel() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"

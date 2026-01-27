@@ -12,7 +12,7 @@ import { useGameStore } from '../store/webGameStore';
 
 function HeartIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-3.5 h-3.5', className)} fill="currentColor" viewBox="0 0 24 24">
+    <svg className={cn('w-3.5 h-3.5', className)} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
     </svg>
   );
@@ -20,7 +20,7 @@ function HeartIcon({ className }: { className?: string }) {
 
 function CoinIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-3.5 h-3.5', className)} fill="currentColor" viewBox="0 0 24 24">
+    <svg className={cn('w-3.5 h-3.5', className)} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
     </svg>
   );
@@ -28,7 +28,7 @@ function CoinIcon({ className }: { className?: string }) {
 
 function StarIcon({ className }: { className?: string }) {
   return (
-    <svg className={cn('w-3 h-3', className)} fill="currentColor" viewBox="0 0 24 24">
+    <svg className={cn('w-3 h-3', className)} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
     </svg>
   );
@@ -41,6 +41,7 @@ function CompassIcon({ className }: { className?: string }) {
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
+      aria-hidden="true"
     >
       <circle cx="12" cy="12" r="10" strokeWidth={2} />
       <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
@@ -90,6 +91,7 @@ export function GameHUD() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
