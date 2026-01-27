@@ -1014,11 +1014,11 @@ export function getDialogueTreesByTag(tag: string): DialogueTreeTemplate[] {
 /**
  * Context for building a dialogue tree
  */
-interface BuildContext {
-  npc: NPCDefinition;
-  generationContext: GenerationContext;
-  variables: Record<string, string>;
-}
+// interface BuildContext {
+//   npc: NPCDefinition;
+//   generationContext: GenerationContext;
+//   variables: Record<string, string>;
+// }
 
 /**
  * Build a complete DialogueTree from a template, NPC, and snippets
@@ -1057,11 +1057,11 @@ export function buildDialogueTree(
     region: context.regionId || 'unknown',
   };
 
-  const _buildContext: BuildContext = {
-    npc,
-    generationContext: context,
-    variables,
-  };
+  // const _buildContext: BuildContext = {
+  //   npc,
+  //   generationContext: context,
+  //   variables,
+  // };
 
   // Filter snippets by NPC compatibility
   const compatibleSnippets = filterSnippetsByNPC(snippets, npc, context);

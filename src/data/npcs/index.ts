@@ -351,7 +351,7 @@ export function getDialogueTreeById(id: string): DialogueTree | undefined {
   // Check procedural dialogue trees
   if (id.startsWith('proc_dialogue_') && ProceduralLocationManager.isInitialized()) {
     // Extract NPC ID from dialogue tree ID: proc_dialogue_npcId
-    const _npcId = id.replace('proc_dialogue_', '');
+    // const _npcId = id.replace('proc_dialogue_', '');
     // We need to find which location this NPC is in
     // For now, search all cached locations - this is O(n) but acceptable for small datasets
     return undefined; // Caller should use getProceduralDialogueTree for known locations

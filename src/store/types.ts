@@ -8,6 +8,9 @@
 import type { ActiveQuest, DialogueCondition, DialogueEffect, NPCDefinition, Quest } from '../data';
 import type { PipePuzzleState } from '../puzzles/pipe-fitter';
 
+// Re-export dialogue types for use by consumers
+export type { DialogueCondition, DialogueEffect };
+
 // ============================================================================
 // COMMON TYPES
 // ============================================================================

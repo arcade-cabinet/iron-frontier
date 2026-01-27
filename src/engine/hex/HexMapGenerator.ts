@@ -262,6 +262,7 @@ export class HexMapGenerator {
   private biomeNoise: NoiseFunction2D;
   private moistureNoise: NoiseFunction2D;
   private elevationNoise: NoiseFunction2D;
+  // private _variationNoise: NoiseFunction2D; // TODO: May be used in future for variation
   private prng: () => number;
 
   constructor(config: Partial<HexMapConfig> = {}) {
@@ -272,7 +273,7 @@ export class HexMapGenerator {
     this.biomeNoise = createNoise2D(Alea(this.config.seed));
     this.moistureNoise = createNoise2D(Alea(this.config.seed + 1));
     this.elevationNoise = createNoise2D(Alea(this.config.seed + 2));
-    this.variationNoise = createNoise2D(Alea(this.config.seed + 3));
+    // Note: variation noise generation removed - not currently used
   }
 
   /**
@@ -419,7 +420,7 @@ export class HexMapGenerator {
    * Phase 2: Generate rivers flowing through the map
    */
   private generateRivers(tiles: Map<string, HexTileData>): void {
-    const { riverCount, width, height } = this.config;
+    const { riverCount } = this.config;
     const riverPaths: HexCoord[][] = [];
 
     for (let i = 0; i < riverCount; i++) {
@@ -1050,7 +1051,7 @@ export class HexMapGenerator {
     this.biomeNoise = createNoise2D(Alea(seed));
     this.moistureNoise = createNoise2D(Alea(seed + 1));
     this.elevationNoise = createNoise2D(Alea(seed + 2));
-    this.variationNoise = createNoise2D(Alea(seed + 3));
+    // Note: variation noise generation removed - not currently used
   }
 }
 
