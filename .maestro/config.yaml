@@ -1,0 +1,32 @@
+# Maestro Configuration for Iron Frontier
+# https://maestro.mobile.dev/reference/configuration
+
+# App configuration
+appId: com.ironfrontier.mobile
+
+# Default flow configuration
+flows:
+  - app-launch.yaml
+  - main-menu.yaml
+  - new-game.yaml
+  - character-creation.yaml
+  - basic-gameplay.yaml
+
+# Global environment variables
+env:
+  APP_NAME: "Iron Frontier"
+  TEST_PLAYER_NAME: "TestOutlaw"
+
+# Execution configuration
+executionOrder:
+  continueOnFailure: false
+
+# Screenshot configuration
+screenshots:
+  enabled: true
+  format: png
+
+# Default wait timeout (ms)
+# WebGPU/3D rendering can take time to initialize
+initFlow:
+  appId: com.ironfrontier.mobile

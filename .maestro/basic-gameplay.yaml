@@ -1,0 +1,52 @@
+# Basic Gameplay Test - Iron Frontier (Mobile Beta)
+# Tests basic game interactions on the mobile HUD
+
+appId: com.ironfrontier.mobile
+name: "Mobile HUD & Stats"
+tags:
+  - gameplay
+  - ui
+  - critical
+
+---
+
+# Launch app
+- launchApp:
+    clearState: true
+
+# Wait for Filament and Game Store to initialize
+# The HUD appears when isReady is true
+- extendedWaitUntil:
+    visible: "HP"
+    timeout: 30000
+
+# Verify Stats exist
+- assertVisible:
+    text: "100/100" # Default Max HP
+- assertVisible:
+    text: "$" # Gold Indicator
+
+# Verify Buttons exist
+- assertVisible:
+    text: "Inventory"
+- assertVisible:
+    text: "Character"
+- assertVisible:
+    text: "Menu"
+
+# Take screenshot of HUD
+- takeScreenshot: screenshots/mobile_hud_initial
+
+# Test Interaction (Clicking buttons shouldn't crash)
+- tapOn:
+    text: "Inventory"
+
+- tapOn:
+    text: "Character"
+
+# Since Panels aren't fully ported to Native UI yet, we just verify the HUD stays active
+- assertVisible:
+    text: "HP"
+
+# Take final screenshot
+- takeScreenshot: screenshots/mobile_hud_interacted

@@ -1,0 +1,44 @@
+{
+  "name": "@iron-frontier/assets",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Shared 3D models, textures, and audio assets for Iron Frontier",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "react-native": "./src/native.ts",
+  "exports": {
+    ".": {
+      "react-native": "./src/native.ts",
+      "default": "./src/index.ts"
+    },
+    "./manifest": "./src/manifest.json",
+    "./models/*": "./models/*",
+    "./textures/*": "./textures/*",
+    "./audio/*": "./audio/*",
+    "./native": "./src/native.ts",
+    "./web": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "models",
+    "textures",
+    "audio"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "generate-manifest": "node --loader ts-node/esm src/generate-manifest.ts",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "expo-asset": ">=11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "expo-asset": {
+      "optional": true
+    }
+  }
+}

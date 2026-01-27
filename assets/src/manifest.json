@@ -1,0 +1,390 @@
+{
+  "version": "0.1.0",
+  "lastUpdated": "2026-01-24",
+  "models": [
+    {
+      "id": "engineer",
+      "name": "Engineer",
+      "category": "characters",
+      "path": "models/characters/engineer.glb",
+      "format": "glb",
+      "description": "Animated engineer character with Mixamo rig",
+      "animated": true,
+      "animations": ["Idle", "Walk"]
+    },
+    {
+      "id": "gunslinger",
+      "name": "Gunslinger",
+      "category": "characters",
+      "path": "models/characters/gunslinger.glb",
+      "format": "glb",
+      "description": "Animated gunslinger character (1.76m tall)",
+      "dimensions": [0.5, 1.76, 0.9],
+      "animated": true,
+      "animations": ["Walking", "WalkingWithGun"]
+    },
+    {
+      "id": "man_adventurer",
+      "name": "Man Adventurer",
+      "category": "characters",
+      "path": "models/characters/man_adventurer.gltf",
+      "format": "gltf"
+    },
+    {
+      "id": "man_farmer",
+      "name": "Man Farmer",
+      "category": "characters",
+      "path": "models/characters/man_farmer.gltf",
+      "format": "gltf"
+    },
+    {
+      "id": "woman_casual",
+      "name": "Woman Casual",
+      "category": "characters",
+      "path": "models/characters/woman_casual.gltf",
+      "format": "gltf"
+    },
+    {
+      "id": "woman_worker",
+      "name": "Woman Worker",
+      "category": "characters",
+      "path": "models/characters/woman_worker.gltf",
+      "format": "gltf"
+    },
+    {
+      "id": "revolver_fixed",
+      "name": "Revolver (Fixed)",
+      "category": "weapons",
+      "path": "models/weapons/revolver-fixed.glb",
+      "format": "glb",
+      "description": "Pre-oriented revolver for hand attachment",
+      "dimensions": [0.16, 0.09, 0.3]
+    },
+    {
+      "id": "revolver_animated",
+      "name": "Revolver (Animated)",
+      "category": "weapons",
+      "path": "models/weapons/revolver-animated.glb",
+      "format": "glb",
+      "animated": true
+    },
+    {
+      "id": "barrier",
+      "name": "Barrier",
+      "category": "structures",
+      "path": "models/structures/barrier.glb",
+      "format": "glb",
+      "dimensions": [2.12, 0.95, 0.21]
+    },
+    {
+      "id": "fence",
+      "name": "Fence",
+      "category": "structures",
+      "path": "models/structures/fence.glb",
+      "format": "glb",
+      "dimensions": [2.09, 0.93, 0.1]
+    },
+    {
+      "id": "postsign",
+      "name": "Post Sign",
+      "category": "structures",
+      "path": "models/structures/postsign.glb",
+      "format": "glb",
+      "dimensions": [0.29, 2.67, 1.54]
+    },
+    {
+      "id": "rail",
+      "name": "Rail",
+      "category": "structures",
+      "path": "models/structures/rail.glb",
+      "format": "glb"
+    },
+    {
+      "id": "watertower",
+      "name": "Water Tower",
+      "category": "structures",
+      "path": "models/structures/watertower.glb",
+      "format": "glb",
+      "dimensions": [3.18, 7.69, 3.75]
+    },
+    {
+      "id": "well",
+      "name": "Well",
+      "category": "structures",
+      "path": "models/structures/well.glb",
+      "format": "glb",
+      "description": "Deep well with bucket (34.58m deep)"
+    },
+    {
+      "id": "train_locomotive",
+      "name": "Train Locomotive",
+      "category": "mechanical",
+      "path": "models/mechanical/train-locomotive-a.glb",
+      "format": "glb"
+    },
+    {
+      "id": "track",
+      "name": "Railroad Track",
+      "category": "mechanical",
+      "path": "models/mechanical/track.glb",
+      "format": "glb"
+    },
+    {
+      "id": "house_small",
+      "name": "Small House",
+      "category": "mechanical",
+      "path": "models/mechanical/house_small.glb",
+      "format": "glb"
+    },
+    {
+      "id": "bushes",
+      "name": "Bushes",
+      "category": "nature",
+      "path": "models/nature/bushes.glb",
+      "format": "glb"
+    },
+    {
+      "id": "cactus1",
+      "name": "Cactus 1",
+      "category": "nature",
+      "path": "models/nature/cactus1.glb",
+      "format": "glb"
+    },
+    {
+      "id": "cactus2",
+      "name": "Cactus 2",
+      "category": "nature",
+      "path": "models/nature/cactus2.glb",
+      "format": "glb"
+    },
+    {
+      "id": "cactus_short",
+      "name": "Cactus Short",
+      "category": "nature",
+      "path": "models/nature/cactus_short.glb",
+      "format": "glb"
+    },
+    {
+      "id": "cactus_tall",
+      "name": "Cactus Tall",
+      "category": "nature",
+      "path": "models/nature/cactus_tall.glb",
+      "format": "glb"
+    },
+    {
+      "id": "deadtree",
+      "name": "Dead Tree",
+      "category": "nature",
+      "path": "models/nature/deadtree.glb",
+      "format": "glb"
+    },
+    {
+      "id": "log",
+      "name": "Log",
+      "category": "nature",
+      "path": "models/nature/log.glb",
+      "format": "glb"
+    },
+    {
+      "id": "rock_large",
+      "name": "Large Rock",
+      "category": "nature",
+      "path": "models/nature/rock_largeA.glb",
+      "format": "glb"
+    },
+    {
+      "id": "stump",
+      "name": "Tree Stump",
+      "category": "nature",
+      "path": "models/nature/stump.glb",
+      "format": "glb"
+    },
+    {
+      "id": "tree_detailed_fall",
+      "name": "Detailed Fall Tree",
+      "category": "nature",
+      "path": "models/nature/tree_detailed_fall.glb",
+      "format": "glb"
+    }
+  ],
+  "textures": [
+    {
+      "id": "desert_color",
+      "name": "Desert Color",
+      "category": "pbr",
+      "path": "textures/Ground037_1K-JPG_Color.jpg",
+      "format": "jpg",
+      "type": "color",
+      "tags": ["terrain", "desert"]
+    },
+    {
+      "id": "desert_normal",
+      "name": "Desert Normal",
+      "category": "pbr",
+      "path": "textures/Ground037_1K-JPG_NormalGL.jpg",
+      "format": "jpg",
+      "type": "normal",
+      "tags": ["terrain", "desert"]
+    },
+    {
+      "id": "desert_roughness",
+      "name": "Desert Roughness",
+      "category": "pbr",
+      "path": "textures/Ground037_1K-JPG_Roughness.jpg",
+      "format": "jpg",
+      "type": "roughness",
+      "tags": ["terrain", "desert"]
+    },
+    {
+      "id": "grass_color",
+      "name": "Grass Color",
+      "category": "pbr",
+      "path": "textures/Grass004_1K-JPG_Color.jpg",
+      "format": "jpg",
+      "type": "color",
+      "tags": ["terrain", "grass"]
+    },
+    {
+      "id": "grass_normal",
+      "name": "Grass Normal",
+      "category": "pbr",
+      "path": "textures/Grass004_1K-JPG_NormalGL.jpg",
+      "format": "jpg",
+      "type": "normal",
+      "tags": ["terrain", "grass"]
+    },
+    {
+      "id": "grass_roughness",
+      "name": "Grass Roughness",
+      "category": "pbr",
+      "path": "textures/Grass004_1K-JPG_Roughness.jpg",
+      "format": "jpg",
+      "type": "roughness",
+      "tags": ["terrain", "grass"]
+    },
+    {
+      "id": "rock_color",
+      "name": "Rock Color",
+      "category": "pbr",
+      "path": "textures/Rock020_1K-JPG_Color.jpg",
+      "format": "jpg",
+      "type": "color",
+      "tags": ["terrain", "rock"]
+    },
+    {
+      "id": "rock_normal",
+      "name": "Rock Normal",
+      "category": "pbr",
+      "path": "textures/Rock020_1K-JPG_NormalGL.jpg",
+      "format": "jpg",
+      "type": "normal",
+      "tags": ["terrain", "rock"]
+    },
+    {
+      "id": "rock_roughness",
+      "name": "Rock Roughness",
+      "category": "pbr",
+      "path": "textures/Rock020_1K-JPG_Roughness.jpg",
+      "format": "jpg",
+      "type": "roughness",
+      "tags": ["terrain", "rock"]
+    },
+    {
+      "id": "western_wood",
+      "name": "Western Wood",
+      "category": "western",
+      "path": "textures/western/Wood-Texture.png",
+      "format": "png",
+      "tags": ["western", "wood"]
+    },
+    {
+      "id": "western_metal",
+      "name": "Western Metal",
+      "category": "western",
+      "path": "textures/western/Metal-Texture.png",
+      "format": "png",
+      "tags": ["western", "metal"]
+    },
+    {
+      "id": "western_vegetation",
+      "name": "Western Vegetation",
+      "category": "western",
+      "path": "textures/western/Vegetation-Texture.png",
+      "format": "png",
+      "tags": ["western", "vegetation"]
+    },
+    {
+      "id": "western_fabric",
+      "name": "Western Fabric",
+      "category": "western",
+      "path": "textures/western/Fabric_Texture.png",
+      "format": "png",
+      "tags": ["western", "fabric"]
+    },
+    {
+      "id": "western_signs",
+      "name": "Western Signs",
+      "category": "western",
+      "path": "textures/western/Signs.png",
+      "format": "png",
+      "tags": ["western", "signs"]
+    },
+    {
+      "id": "western_concrete",
+      "name": "Western Concrete",
+      "category": "western",
+      "path": "textures/western/Concrete_Texture.png",
+      "format": "png",
+      "tags": ["western", "concrete"]
+    },
+    {
+      "id": "western_misc",
+      "name": "Western Misc",
+      "category": "western",
+      "path": "textures/western/Misc.png",
+      "format": "png",
+      "tags": ["western", "misc"]
+    },
+    {
+      "id": "terrain_sand_color",
+      "name": "Sand Color",
+      "category": "terrain",
+      "path": "textures/terrain/sand_color.jpg",
+      "format": "jpg",
+      "type": "color"
+    },
+    {
+      "id": "terrain_sand_normal",
+      "name": "Sand Normal",
+      "category": "terrain",
+      "path": "textures/terrain/sand_normal.jpg",
+      "format": "jpg",
+      "type": "normal"
+    },
+    {
+      "id": "terrain_rock_color",
+      "name": "Rock Color (Simple)",
+      "category": "terrain",
+      "path": "textures/terrain/rock_color.jpg",
+      "format": "jpg",
+      "type": "color"
+    },
+    {
+      "id": "terrain_rock_normal",
+      "name": "Rock Normal (Simple)",
+      "category": "terrain",
+      "path": "textures/terrain/rock_normal.jpg",
+      "format": "jpg",
+      "type": "normal"
+    },
+    {
+      "id": "terrain_wood_color",
+      "name": "Wood Color",
+      "category": "terrain",
+      "path": "textures/terrain/wood_color.jpg",
+      "format": "jpg",
+      "type": "color"
+    }
+  ],
+  "audio": []
+}

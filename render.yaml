@@ -1,0 +1,80 @@
+# Render Blueprint Specification
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    runtime: static
+    name: iron-frontier
+    repo: https://github.com/arcade-cabinet/iron-frontier
+    branch: main
+    rootDir: .
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    staticPublishPath: apps/web/dist
+    pullRequestPreviewsEnabled: true
+
+    # Build environment
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: PNPM_VERSION
+        value: "10"
+
+    # Custom headers for static assets
+    headers:
+      # Long-term caching for immutable assets (hashed filenames from Vite)
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Cache GLB 3D model files for 1 year
+      - path: /*.glb
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/**/*.glb
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Cache texture files
+      - path: /*.png
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*.jpg
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*.webp
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/**/*.png
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/**/*.jpg
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/**/*.webp
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Cache fonts
+      - path: /*.woff2
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*.woff
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # Default cache for other static files
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=3600
+      # Security headers
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+
+    # SPA routing - serve index.html for client-side routes
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
