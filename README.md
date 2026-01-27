@@ -1,6 +1,6 @@
 # Iron Frontier
 
-**A Cross-Platform Steampunk Frontier RPG**
+## A Cross-Platform Steampunk Frontier RPG
 
 Single Expo App: Web + Android
 
