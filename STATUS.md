@@ -108,7 +108,7 @@ iron-frontier/
    - Run `pnpm test` (currently not configured)
 
 5. ~~**Update CI/CD**~~ ✅ (Done in this PR)
-   - Updated .github/workflows for new structure
+   - Updated GitHub Actions workflows for new structure
    - Removed monorepo-specific steps
 
 ### Known Limitations
