@@ -149,10 +149,10 @@ pnpm lint:fix         # Auto-fix lint issues
 
 ### Completed
 
-- [x] Monorepo architecture (pnpm workspaces)
-- [x] Shared package with Zod schemas
+- [x] Unified Expo app (migrated from monorepo)
+- [x] Zod schemas for game data
 - [x] Web app with Babylon.js rendering
-- [x] Mobile app with Expo + Filament
+- [x] Mobile app with Expo + Babylon.js React Native
 - [x] Procedural generation system (15,000+ lines)
 - [x] Turn-based combat system
 - [x] Shop and equipment systems
