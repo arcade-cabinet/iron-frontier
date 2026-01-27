@@ -50,7 +50,7 @@ Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 18
 
 ## Monorepo Structure
 
-```
+```plaintext
 iron-frontier/
 ├── apps/
 │   ├── web/          # Vite + React + Babylon.js

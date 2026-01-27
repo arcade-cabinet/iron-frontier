@@ -13,11 +13,15 @@ function dynamic<P extends object>(
 
   const LazyComponent = React.lazy(importFunc);
 
-  return (props: P) => (
+  const DynamicComponent = (props: P) => (
     <Suspense fallback={<LoadingComponent />}>
       <LazyComponent {...props} />
     </Suspense>
   );
+
+  DynamicComponent.displayName = 'DynamicComponent';
+
+  return DynamicComponent;
 }
 
 export default dynamic;

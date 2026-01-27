@@ -98,6 +98,13 @@ function NotificationItem({ notification }: { notification: Notification }) {
     warning: 'bg-red-900/90 border-red-600/50',
   }[notification.type];
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      removeNotification(notification.id);
+    }
+  };
+
   return (
     <motion.div
       layout
@@ -111,10 +118,14 @@ function NotificationItem({ notification }: { notification: Notification }) {
         damping: 30,
       }}
       className={cn(
-        'flex items-center gap-2 px-3 py-2 rounded-lg border backdrop-blur-sm shadow-lg',
+        'flex items-center gap-2 px-3 py-2 rounded-lg border backdrop-blur-sm shadow-lg cursor-pointer',
         bgColor
       )}
       onClick={() => removeNotification(notification.id)}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`Dismiss notification: ${notification.message}`}
     >
       <NotificationIcon type={notification.type} />
       <span className="text-white text-sm font-medium">{notification.message}</span>

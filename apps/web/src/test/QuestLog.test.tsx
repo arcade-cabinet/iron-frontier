@@ -152,7 +152,7 @@ describe('QuestLog', () => {
           activeQuests: [],
           completedQuests: [],
           completedQuestIds: [],
-        } as any,
+        },
       });
       expect(screen.getByText('Journal')).toBeInTheDocument();
     });
@@ -183,7 +183,7 @@ describe('QuestLog', () => {
           ],
           completedQuests: [],
           completedQuestIds: ['completed_quest_1'],
-        } as any,
+        },
       });
 
       expect(screen.getByText(/Active \(2\)/i)).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe('QuestLog', () => {
           activeQuests: [],
           completedQuests: [],
           completedQuestIds: [],
-        } as any,
+        },
       });
 
       expect(screen.getByText('No active quests')).toBeInTheDocument();
@@ -228,7 +228,7 @@ describe('QuestLog', () => {
     };
 
     it('should display quest info correctly', () => {
-      customRender(<QuestLog />, { initialState: questInitialState as any });
+      customRender(<QuestLog />, { initialState: questInitialState });
       expect(screen.getByText('Find the Golden Gear')).toBeInTheDocument();
       expect(
         screen.getByText('Search the old workshop for a rare golden gear.')

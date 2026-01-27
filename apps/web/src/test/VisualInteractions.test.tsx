@@ -60,7 +60,7 @@ describe('Interaction Flows', () => {
         initialState: {
           phase: 'playing',
           initialized: true,
-        } as any,
+        },
       });
 
       // Open Menu
@@ -85,7 +85,7 @@ describe('Interaction Flows', () => {
         initialState: {
           phase: 'playing',
           initialized: true,
-        } as any,
+        },
       });
 
       const itemsButton = screen.getByText('Saddlebag').closest('button')!;
@@ -120,7 +120,7 @@ describe('Interaction Flows', () => {
               droppable: true,
             },
           ],
-        } as any,
+        },
       });
 
       // Select item first (new UI requires selecting)
@@ -152,7 +152,7 @@ describe('Interaction Flows', () => {
               droppable: true,
             },
           ],
-        } as any,
+        },
       });
 
       // Select item first (new UI requires selecting)
@@ -175,7 +175,7 @@ describe('Interaction Flows', () => {
           maxHealth: 100,
           health: 100,
         },
-      } as any);
+      });
 
       // Gain enough XP to level up
       act(() => {
@@ -191,6 +191,10 @@ describe('Interaction Flows', () => {
 });
 
 describe('State Consistency Checks', () => {
+  beforeEach(() => {
+    resetGameStore();
+  });
+
   it('ERROR_CHECK: player health should never exceed maxHealth', () => {
     act(() => {
       useGameStore.getState().heal(1000);

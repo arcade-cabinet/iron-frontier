@@ -5,10 +5,11 @@ import * as React from 'react';
  * Works in browser environments with matchMedia support
  *
  * @param query - CSS media query string (e.g., "(max-width: 768px)")
+ * @param initialValue - Initial value to use during SSR or before hydration (defaults to false)
  * @returns boolean indicating if the query matches
  */
-export function useMediaQuery(query: string): boolean {
-  const [value, setValue] = React.useState(false);
+export function useMediaQuery(query: string, initialValue = false): boolean {
+  const [value, setValue] = React.useState(initialValue);
 
   React.useEffect(() => {
     // Guard for SSR/non-browser environments

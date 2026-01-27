@@ -231,6 +231,10 @@ export class TerrainChunk {
   }
 
   getHeightAt(localX: number, localZ: number): number {
+    // Clamp to chunk bounds
+    localX = Math.max(0, Math.min(localX, CHUNK_SIZE));
+    localZ = Math.max(0, Math.min(localZ, CHUNK_SIZE));
+
     // localX, localZ are 0 to CHUNK_SIZE
     const resolution = HEIGHTMAP_RESOLUTION;
     const cellSize = CHUNK_SIZE / (resolution - 1);

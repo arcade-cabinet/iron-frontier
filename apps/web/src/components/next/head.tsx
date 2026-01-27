@@ -1,11 +1,11 @@
-import type React from 'react';
+import React, { Fragment, type FC, type ReactNode } from 'react';
 
 interface HeadProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
-const Head: React.FC<HeadProps> = ({ children }) => {
-  return <div>{children}</div>;
+const Head: FC<HeadProps> = ({ children }) => {
+  return <Fragment>{children}</Fragment>;
 };
 
 export default Head;

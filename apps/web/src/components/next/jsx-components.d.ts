@@ -1,55 +1,73 @@
 // Type declarations for JSX components to suppress errors
+import type React from 'react';
+
 declare module './document.jsx' {
-  import React from 'react';
-  const Document: React.FC<any>;
+  const Document: React.FC<Record<string, unknown>>;
   export default Document;
-  export const Html: React.FC<any>;
-  export const Head: React.FC<any>;
-  export const Main: React.FC<any>;
-  export const NextScript: React.FC<any>;
+  export const Html: React.FC<Record<string, unknown>>;
+  export const Head: React.FC<Record<string, unknown>>;
+  export const Main: React.FC<Record<string, unknown>>;
+  export const NextScript: React.FC<Record<string, unknown>>;
 }
 
 declare module './dynamic.jsx' {
-  const dynamic: (importFunc: any, options?: any) => React.ComponentType<any>;
+  const dynamic: <P = Record<string, unknown>>(
+    importFunc: () => Promise<{ default: React.ComponentType<P> }>,
+    options?: { ssr?: boolean; loading?: React.ComponentType }
+  ) => React.ComponentType<P>;
   export default dynamic;
 }
 
 declare module './font.jsx' {
-  export const Roboto: (options?: any) => any;
+  export const Roboto: (options?: Record<string, unknown>) => {
+    className: string;
+    style: Record<string, unknown>;
+  };
 }
 
 declare module './head.jsx' {
-  import React from 'react';
-  const Head: React.FC<any>;
+  const Head: React.FC<{ children?: React.ReactNode }>;
   export default Head;
 }
 
 declare module './image.jsx' {
-  import React from 'react';
-  const Image: React.FC<any>;
+  const Image: React.FC<{
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+  } & Record<string, unknown>>;
   export default Image;
 }
 
 declare module './link.jsx' {
-  import React from 'react';
-  const Link: React.FC<any>;
+  const Link: React.FC<{
+    href: string;
+    children?: React.ReactNode;
+  } & Record<string, unknown>>;
   export default Link;
 }
 
 declare module './navigation.jsx' {
-  export function useSearchParams(): any;
-  export function useParams(): any;
+  export function useSearchParams(): URLSearchParams;
+  export function useParams(): Record<string, string>;
 }
 
 declare module './router.jsx' {
-  import React from 'react';
-  export function useRouter(): any;
-  export function usePathname(): any;
-  export const RouterProvider: React.FC<any>;
+  export function useRouter(): {
+    push: (path: string) => void;
+    replace: (path: string) => void;
+    back: () => void;
+    pathname: string;
+  };
+  export function usePathname(): string;
+  export const RouterProvider: React.FC<{ children?: React.ReactNode }>;
 }
 
 declare module './script.jsx' {
-  import React from 'react';
-  const Script: React.FC<any>;
+  const Script: React.FC<{
+    src: string;
+    strategy?: 'beforeInteractive' | 'afterInteractive' | 'lazyOnload';
+  } & Record<string, unknown>>;
   export default Script;
 }

@@ -5,7 +5,7 @@
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import type React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Game } from '@/game/Game';
 import { customRender, getStoreState, resetGameStore } from './test-utils';
 
@@ -77,7 +77,13 @@ vi.mock('framer-motion', () => ({
 
 describe('Game Flow', () => {
   beforeEach(() => {
+    vi.useFakeTimers();
     resetGameStore();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   // Use longer timeout for integration tests
@@ -85,11 +91,12 @@ describe('Game Flow', () => {
     it('should show title screen then transition to name input', async () => {
       customRender(<Game />);
 
-      // Wait for splash to finish (2500ms)
+      // Advance timers to skip splash delay (2500ms)
+      await vi.advanceTimersByTimeAsync(2500);
+
       const btn = await screen.findByRole(
         'button',
-        { name: /Begin Adventure/i },
-        { timeout: 5000 }
+        { name: /Begin Adventure/i }
       );
       fireEvent.click(btn);
 
@@ -99,10 +106,12 @@ describe('Game Flow', () => {
     it('should transition to game after entering name', async () => {
       customRender(<Game />);
 
+      // Advance timers to skip splash delay (2500ms)
+      await vi.advanceTimersByTimeAsync(2500);
+
       const beginBtn = await screen.findByRole(
         'button',
-        { name: /Begin Adventure/i },
-        { timeout: 5000 }
+        { name: /Begin Adventure/i }
       );
       fireEvent.click(beginBtn);
 
@@ -126,7 +135,7 @@ describe('Game Flow', () => {
           initialized: true,
           playerName: 'Tester',
           playerStats: { health: 90, maxHealth: 100, level: 3, gold: 50 },
-        } as any,
+        },
       });
 
       expect(screen.getByText('Tester')).toBeInTheDocument();

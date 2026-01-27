@@ -1,7 +1,7 @@
 // Quest definitions for Cogsworth Station
 
 import { ITEMS } from './items';
-import type { Item, Quest } from './types';
+import type { Quest } from './types';
 
 export const QUESTS: Record<string, Quest> = {
   // Main storyline quests

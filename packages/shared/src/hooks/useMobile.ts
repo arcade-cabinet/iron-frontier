@@ -9,7 +9,11 @@ const MOBILE_BREAKPOINT = 768;
  * @returns boolean indicating if the current viewport is mobile-sized
  */
 export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
+  const [isMobile, setIsMobile] = React.useState<boolean>(() => {
+    // Guard for SSR - return false during server-side rendering
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < MOBILE_BREAKPOINT;
+  });
 
   React.useEffect(() => {
     // Guard for SSR/non-browser environments
@@ -26,7 +30,7 @@ export function useIsMobile(): boolean {
     return () => mql.removeEventListener('change', onChange);
   }, []);
 
-  return !!isMobile;
+  return isMobile;
 }
 
 /**
