@@ -12,7 +12,6 @@ tags:
 
 # Launch app
 - launchApp:
-    appId: com.ironfrontier.mobile
     clearState: true
 
 # Wait for Filament and Game Store to initialize
