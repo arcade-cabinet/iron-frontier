@@ -26,7 +26,7 @@ import {
 import '@babylonjs/loaders/glTF';
 
 import type { Location } from '@/data/schemas/spatial';
-import { WesternAssets } from '~/assets';
+import { WesternAssets } from '@assets';
 import { hexDistance, hexNeighbors } from './HexCoord';
 import {
   createEmptyGrid,

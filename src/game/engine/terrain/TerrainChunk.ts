@@ -1,6 +1,6 @@
 // Terrain Chunk - Babylon.js mesh for a single terrain chunk
 import { Color3, Mesh, type Scene, StandardMaterial, Texture, VertexData } from '@babylonjs/core';
-import { TerrainTextures } from '~/assets';
+import { TerrainTextures } from '@assets';
 import { BIOME_CONFIGS, type BiomeType, CHUNK_SIZE, type ChunkCoord, chunkKey } from '../types';
 import type { HeightmapGenerator, HeightmapResult } from './HeightmapGenerator';
 

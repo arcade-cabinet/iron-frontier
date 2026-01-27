@@ -18,7 +18,7 @@ import {
   Vector3,
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
-import { WesternAssets } from '~/assets';
+import { WesternAssets } from '@assets';
 import { getHeightmapGenerator, type HeightmapGenerator } from '../terrain/HeightmapGenerator';
 import { TerrainChunk } from '../terrain/TerrainChunk';
 import {

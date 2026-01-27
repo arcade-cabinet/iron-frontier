@@ -712,7 +712,7 @@ export function generateWeapon(
 
   // Build name
   const weaponType = template.weaponType ?? 'revolver';
-  const prefixes = WEAPON_PREFIXES[weaponType] ?? WEAPON_PREFIXES.revolver;
+  const prefixes = WEAPON_PREFIXES[weaponType] ?? WEAPON_PREFIXES['revolver'];
   const prefix = itemRng.pick(prefixes);
   const suffix = itemRng.pick(WEAPON_SUFFIXES);
 
@@ -830,7 +830,7 @@ export function generateArmor(
 
   // Build name
   const slot = template.armorSlot ?? options.slot ?? 'body';
-  const prefixes = ARMOR_PREFIXES[slot] ?? ARMOR_PREFIXES.body;
+  const prefixes = ARMOR_PREFIXES[slot] ?? ARMOR_PREFIXES['body'];
   const prefix = itemRng.pick(prefixes);
   const suffix = itemRng.pick(ARMOR_SUFFIXES);
 
@@ -953,7 +953,7 @@ export function generateConsumable(
           : 'buff');
 
   // Build name
-  const prefixes = CONSUMABLE_PREFIXES[consumableType] ?? CONSUMABLE_PREFIXES.healing;
+  const prefixes = CONSUMABLE_PREFIXES[consumableType] ?? CONSUMABLE_PREFIXES['healing'];
   const prefix = itemRng.pick(prefixes);
   const suffix =
     consumableType === 'food' || consumableType === 'drink'

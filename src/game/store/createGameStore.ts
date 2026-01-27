@@ -113,6 +113,15 @@ export function createGameStore({
   // Initialize data
   dataAccess.initEncounterTemplates();
 
+  let travelTimer: ReturnType<typeof setInterval> | null = null;
+
+  const clearTravelTimer = () => {
+    if (travelTimer) {
+      clearInterval(travelTimer);
+      travelTimer = null;
+    }
+  };
+
   return create<GameState>()(
     persist(
       (set, get) => ({
@@ -831,37 +840,75 @@ export function createGameStore({
         // Travel Actions
         initWorld: (worldId: string) => {
           const world = dataAccess.getWorldById(worldId);
+          const loadedWorld = world ? dataAccess.loadWorld(world) : null;
           set({
             currentWorldId: worldId,
-            loadedWorld: world,
+            loadedWorld,
           });
         },
 
         travelTo: (locationId: string) => {
+          const { currentLocationId, loadedWorld } = get();
+          if (!currentLocationId || !loadedWorld) return;
+
+          const connection = dataAccess
+            .getConnectionsFrom(loadedWorld.world ?? loadedWorld, currentLocationId)
+            .find(
+              (conn) =>
+                conn.to === locationId || (conn.bidirectional && conn.from === locationId)
+            );
+
+          const travelTime = connection?.travelTime ?? 8;
+          const dangerLevel = connection?.danger ?? 'moderate';
+          const method = connection?.method ?? 'trail';
+          const startedAt = Date.now();
+
+          clearTravelTimer();
+
           // Start travel sequence
           set({
             travelState: {
-              fromLocationId: get().currentLocationId!,
+              fromLocationId: currentLocationId,
               toLocationId: locationId,
-              method: 'walk',
-              travelTime: 10,
+              method,
+              travelTime,
               progress: 0,
-              dangerLevel: 'low',
-              startedAt: Date.now(),
+              dangerLevel,
+              startedAt,
               encounterId: null,
             },
-            phase: 'loading', // Or travel UI
+            phase: 'travel',
           });
 
-          // Simulate travel
-          setTimeout(() => {
-            get().completeTravel();
-          }, 2000);
+          const totalMs = Math.max(2000, travelTime * 1000);
+          travelTimer = setInterval(() => {
+            const state = get();
+            if (!state.travelState) {
+              clearTravelTimer();
+              return;
+            }
+
+            const elapsed = Date.now() - startedAt;
+            const progress = Math.min(100, Math.round((elapsed / totalMs) * 100));
+
+            set({
+              travelState: {
+                ...state.travelState,
+                progress,
+              },
+            });
+
+            if (progress >= 100) {
+              clearTravelTimer();
+              get().completeTravel();
+            }
+          }, 250);
         },
 
         completeTravel: () => {
           const { travelState, activeQuests } = get();
           if (!travelState) return;
+          clearTravelTimer();
 
           const destinationId = travelState.toLocationId;
 
@@ -886,7 +933,10 @@ export function createGameStore({
           });
         },
 
-        cancelTravel: () => set({ travelState: null, phase: 'playing' }),
+        cancelTravel: () => {
+          clearTravelTimer();
+          set({ travelState: null, phase: 'playing' });
+        },
 
         discoverLocation: (locationId: string) => {
           const { discoveredLocationIds } = get();
@@ -901,7 +951,8 @@ export function createGameStore({
         getConnectedLocations: () => {
           const { loadedWorld, currentLocationId } = get();
           if (!loadedWorld || !currentLocationId) return [];
-          return dataAccess.getConnectionsFrom(loadedWorld, currentLocationId).map((c) => c.to);
+          const worldRef = (loadedWorld as any).world ?? loadedWorld;
+          return dataAccess.getConnectionsFrom(worldRef, currentLocationId).map((c) => c.to);
         },
 
         // Combat Actions (Placeholder)

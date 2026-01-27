@@ -1,6 +1,16 @@
-import initSqlJs from 'sql.js';
-
 let SQL: any = null;
+
+async function loadSqlJs(): Promise<any> {
+  if (SQL) return SQL;
+  const mod = await import(
+    /* webpackIgnore: true */ 'https://sql.js.org/dist/sql-wasm.js'
+  );
+  const initSqlJs = (mod as any).default ?? mod;
+  SQL = await initSqlJs({
+    locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
+  });
+  return SQL;
+}
 
 // ============================================================================
 // SCHEMA CONSTANTS
@@ -94,11 +104,7 @@ export class DatabaseManager {
     // Close existing connection if any
     this.dispose();
 
-    if (!SQL) {
-      SQL = await initSqlJs({
-        locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
-      });
-    }
+    await loadSqlJs();
 
     if (binaryData) {
       this.db = new SQL.Database(binaryData);

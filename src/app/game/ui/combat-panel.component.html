@@ -1,0 +1,37 @@
+<div *ngIf="combatState" class="absolute inset-x-0 top-0 z-30 p-3">
+  <div class="bg-amber-950/95 border border-amber-800/60 rounded-lg p-3">
+    <div class="flex items-center justify-between">
+      <div class="text-amber-100 font-semibold">Combat</div>
+      <button class="text-amber-400 text-xs" (click)="endCombat()">End</button>
+    </div>
+
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div *ngFor="let combatant of combatState.combatants; let i = index" class="border border-amber-800/40 rounded-lg p-2"
+        [ngClass]="isActiveCombatant(combatant, i) ? 'ring-2 ring-amber-500/60' : ''"
+        (click)="selectTarget(combatant)"
+      >
+        <div class="flex items-center justify-between text-xs text-amber-200">
+          <span>{{ combatant.name }}</span>
+          <span>{{ combatant.health }}/{{ combatant.maxHealth }}</span>
+        </div>
+        <div class="h-2 bg-amber-900/50 rounded overflow-hidden border border-amber-700/30">
+          <div class="h-full" [style.width.%]="(combatant.health / combatant.maxHealth) * 100" [ngClass]="combatant.isPlayer ? 'bg-green-500' : 'bg-red-500'"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <button
+        *ngFor="let action of actions"
+        class="px-3 py-2 rounded border border-amber-700/50 text-amber-200 text-xs hover:bg-amber-800/40"
+        (click)="selectAction(action.type)"
+      >
+        {{ action.label }}
+      </button>
+    </div>
+
+    <button class="mt-3 w-full px-3 py-2 rounded bg-amber-700 text-amber-100 text-xs" (click)="execute()">
+      Execute Action
+    </button>
+  </div>
+</div>

@@ -592,7 +592,7 @@ class ProceduralLocationManagerClass {
         ],
       };
 
-    const pool = itemPools[locationType] || itemPools.town;
+    const pool = itemPools[locationType] || itemPools['town'];
     const totalWeight = pool.reduce((sum, item) => sum + item.weight, 0);
 
     for (let i = 0; i < count; i++) {

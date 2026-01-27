@@ -1,0 +1,126 @@
+<div class="fixed inset-0" *ngIf="showSplash">
+  <div class="absolute inset-0 bg-stone-950 flex flex-col items-center justify-center">
+    <div class="relative">
+      <div class="gear gear--lg text-amber-600">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <path
+            fill="currentColor"
+            d="M50 10c-2.5 0-4.5 2-4.5 4.5v5c-3.5.5-6.8 1.5-9.8 3l-3.5-3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l3.5 3.5c-1.5 3-2.5 6.3-3 9.8h-5c-2.5 0-4.5 2-4.5 4.5v9c0 2.5 2 4.5 4.5 4.5h5c.5 3.5 1.5 6.8 3 9.8l-3.5 3.5c-1.8 1.8-1.8 4.7 0 6.4l6.4 6.4c1.8 1.8 4.7 1.8 6.4 0l3.5-3.5c3 1.5 6.3 2.5 9.8 3v5c0 2.5 2 4.5 4.5 4.5h9c2.5 0 4.5-2 4.5-4.5v-5c3.5-.5 6.8-1.5 9.8-3l3.5 3.5c1.8 1.8 4.7 1.8 6.4 0l6.4-6.4c1.8-1.8 1.8-4.7 0-6.4l-3.5-3.5c1.5-3 2.5-6.3 3-9.8h5c2.5 0 4.5-2 4.5-4.5v-9c0-2.5-2-4.5-4.5-4.5h-5c-.5-3.5-1.5-6.8-3-9.8l3.5-3.5c1.8-1.8 1.8-4.7 0-6.4l-6.4-6.4c-1.8-1.8-4.7-1.8-6.4 0l-3.5 3.5c-3-1.5-6.3-2.5-9.8-3v-5c0-2.5-2-4.5-4.5-4.5h-9zM50 35c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z"
+          />
+        </svg>
+      </div>
+      <div class="gear gear--sm text-amber-700">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <path
+            fill="currentColor"
+            d="M50 10c-2.5 0-4.5 2-4.5 4.5v5c-3.5.5-6.8 1.5-9.8 3l-3.5-3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l3.5 3.5c-1.5 3-2.5 6.3-3 9.8h-5c-2.5 0-4.5 2-4.5 4.5v9c0 2.5 2 4.5 4.5 4.5h5c.5 3.5 1.5 6.8 3 9.8l-3.5 3.5c-1.8 1.8-1.8 4.7 0 6.4l6.4 6.4c1.8 1.8 4.7 1.8 6.4 0l3.5-3.5c3 1.5 6.3 2.5 9.8 3v5c0 2.5 2 4.5 4.5 4.5h9c2.5 0 4.5-2 4.5-4.5v-5c3.5-.5 6.8-1.5 9.8-3l3.5 3.5c1.8 1.8 4.7 1.8 6.4 0l6.4-6.4c1.8-1.8 1.8-4.7 0-6.4l-3.5-3.5c1.5-3 2.5 6.3-3 9.8h5c2.5 0 4.5-2 4.5-4.5v-9c0-2.5-2-4.5-4.5-4.5h-5c-.5-3.5-1.5-6.8-3-9.8l3.5-3.5c1.8-1.8 1.8-4.7 0-6.4l-6.4-6.4c-1.8-1.8-4.7-1.8-6.4 0l-3.5 3.5c-3-1.5-6.3-2.5-9.8-3v-5c0-2.5-2-4.5-4.5-4.5h-9zM50 35c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="mt-8 text-3xl font-bold text-amber-500 tracking-wider">IRON FRONTIER</h1>
+    <p class="mt-2 text-amber-700 text-sm tracking-widest uppercase">Loading Steam...</p>
+  </div>
+</div>
+
+<div class="fixed inset-0" *ngIf="!showSplash">
+  <div class="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-850 to-stone-950 flex flex-col items-center justify-center p-6 overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-amber-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-orange-600/10 blur-[80px]"></div>
+      <div class="absolute top-10 right-10 w-24 h-24 text-amber-600/20 animate-slow-spin">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <path
+            fill="currentColor"
+            d="M50 10c-2.5 0-4.5 2-4.5 4.5v5c-3.5.5-6.8 1.5-9.8 3l-3.5-3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l3.5 3.5c-1.5 3-2.5 6.3-3 9.8h-5c-2.5 0-4.5 2-4.5 4.5v9c0 2.5 2 4.5 4.5 4.5h5c.5 3.5 1.5 6.8 3 9.8l-3.5 3.5c-1.8 1.8-1.8 4.7 0 6.4l6.4 6.4c1.8 1.8 4.7 1.8 6.4 0l3.5-3.5c3 1.5 6.3 2.5 9.8 3v5c0 2.5 2 4.5 4.5 4.5h9c2.5 0 4.5-2 4.5-4.5v-5c3.5-.5 6.8-1.5 9.8-3l3.5 3.5c1.8 1.8 4.7 1.8 6.4 0l6.4-6.4c1.8-1.8 1.8-4.7 0-6.4l-3.5-3.5c1.5-3 2.5-6.3 3-9.8h5c2.5 0 4.5-2 4.5-4.5v-9c0-2.5-2-4.5-4.5-4.5h-5c-.5-3.5-1.5-6.8-3-9.8l3.5-3.5c1.8-1.8 1.8-4.7 0-6.4l-6.4-6.4c-1.8-1.8-4.7-1.8-6.4 0l-3.5 3.5c-3-1.5-6.3-2.5-9.8-3v-5c0-2.5-2-4.5-4.5-4.5h-9zM50 35c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z"
+          />
+        </svg>
+      </div>
+      <div class="absolute bottom-20 left-10 w-16 h-16 text-amber-700/15 animate-reverse-spin">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <path
+            fill="currentColor"
+            d="M50 10c-2.5 0-4.5 2-4.5 4.5v5c-3.5.5-6.8 1.5-9.8 3l-3.5-3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l3.5 3.5c-1.5 3-2.5 6.3-3 9.8h-5c-2.5 0-4.5 2-4.5 4.5v9c0 2.5 2 4.5 4.5 4.5h5c.5 3.5 1.5 6.8 3 9.8l-3.5 3.5c-1.8 1.8-1.8 4.7 0 6.4l6.4 6.4c1.8 1.8 4.7 1.8 6.4 0l3.5-3.5c3 1.5 6.3 2.5 9.8 3v5c0 2.5 2 4.5 4.5 4.5h9c2.5 0 4.5-2 4.5-4.5v-5c3.5-.5 6.8-1.5 9.8-3l3.5 3.5c1.8 1.8 4.7 1.8 6.4 0l6.4-6.4c1.8-1.8 1.8-4.7 0-6.4l-3.5-3.5c1.5-3 2.5-6.3 3-9.8h5c2.5 0 4.5-2 4.5-4.5v-9c0-2.5-2-4.5-4.5-4.5h-5c-.5-3.5-1.5-6.8-3-9.8l3.5-3.5c1.8-1.8 1.8-4.7 0-6.4l-6.4-6.4c-1.8-1.8-4.7-1.8-6.4 0l-3.5 3.5c-3-1.5-6.3-2.5-9.8-3v-5c0-2.5-2-4.5-4.5-4.5h-9zM50 35c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z"
+          />
+        </svg>
+      </div>
+      <div class="absolute top-1/2 right-1/4 w-20 h-20 text-amber-800/10 animate-slow-spin">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <path
+            fill="currentColor"
+            d="M50 10c-2.5 0-4.5 2-4.5 4.5v5c-3.5.5-6.8 1.5-9.8 3l-3.5-3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l3.5 3.5c-1.5 3-2.5 6.3-3 9.8h-5c-2.5 0-4.5 2-4.5 4.5v9c0 2.5 2 4.5 4.5 4.5h5c.5 3.5 1.5 6.8 3 9.8l-3.5 3.5c-1.8-1.8-4.7-1.8-6.4 0l-6.4 6.4c-1.8 1.8-1.8 4.7 0 6.4l6.4 6.4c1.8 1.8 4.7 1.8 6.4 0l3.5-3.5c3 1.5 6.3 2.5 9.8 3v5c0 2.5 2 4.5 4.5 4.5h9c2.5 0 4.5-2 4.5-4.5v-5c3.5-.5 6.8-1.5 9.8-3l3.5 3.5c1.8 1.8 4.7 1.8 6.4 0l6.4-6.4c1.8-1.8 1.8-4.7 0-6.4l-3.5-3.5c1.5-3 2.5-6.3 3-9.8h5c2.5 0 4.5-2 4.5-4.5v-9c0-2.5-2-4.5-4.5-4.5h-5c-.5-3.5-1.5-6.8-3-9.8l3.5-3.5c1.8-1.8 1.8-4.7 0-6.4l-6.4-6.4c-1.8-1.8-4.7-1.8-6.4 0l-3.5 3.5c-3-1.5-6.3-2.5-9.8-3v-5c0-2.5-2-4.5-4.5-4.5h-9zM50 35c8.3 0 15 6.7 15 15s-6.7 15-15 15-15-6.7-15-15 6.7-15 15-15z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="text-center mb-8 relative z-10">
+      <h1 class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 font-serif tracking-wide">
+        IRON FRONTIER
+      </h1>
+      <p class="text-amber-600/80 text-sm md:text-base mt-2 tracking-widest uppercase">
+        Tales of the Steam Frontier
+      </p>
+    </div>
+
+    <p class="text-stone-400 text-center max-w-sm mb-12 text-sm relative z-10">
+      The year is 1887. Steam and brass have conquered the frontier. Fortune awaits those brave
+      enough to claim it.
+    </p>
+
+    <div class="flex flex-col gap-3 w-full max-w-xs relative z-10">
+      <div *ngIf="showNameInput" class="space-y-3">
+        <input
+          type="text"
+          placeholder="Enter your name, stranger..."
+          [(ngModel)]="inputName"
+          (keydown)="handleKeydown($event)"
+          maxlength="20"
+          class="w-full px-4 py-3 rounded-lg text-center bg-stone-800 border-2 border-amber-700/50 text-amber-100 placeholder:text-stone-500 focus:outline-none focus:border-amber-500 font-serif text-lg"
+        />
+        <div class="flex gap-2">
+          <button
+            class="flex-1 px-4 py-3 rounded-lg bg-amber-700 text-amber-100 hover:bg-amber-600 transition"
+            (click)="handleNewGame()"
+          >
+            Begin Adventure
+          </button>
+          <button
+            class="px-4 py-3 rounded-lg border border-amber-700/50 text-amber-300 hover:border-amber-500 transition"
+            (click)="showNameInput = false"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!showNameInput">
+        <button
+          class="w-full px-4 py-3 rounded-lg bg-amber-700 text-amber-100 hover:bg-amber-600 transition"
+          (click)="handleNewGame()"
+        >
+          {{ hasSaveData ? 'New Game' : 'Begin Adventure' }}
+        </button>
+        <button
+          *ngIf="hasSaveData"
+          class="w-full px-4 py-3 rounded-lg border border-amber-700/50 text-amber-300 hover:border-amber-500 transition"
+          (click)="handleContinue()"
+        >
+          Continue as {{ savedPlayerName || 'Stranger' }}
+        </button>
+        <button
+          class="w-full px-4 py-3 rounded-lg border border-amber-700/50 text-amber-300 hover:border-amber-500 transition"
+          (click)="showAbout = !showAbout"
+        >
+          About
+        </button>
+      </ng-container>
+
+      <div *ngIf="showAbout" class="mt-4 text-xs text-amber-300/70 leading-relaxed">
+        Iron Frontier is a steampunk frontier RPG built for the long haul. Your choices shape the
+        frontier, your allies, and the legends you leave behind.
+      </div>
+    </div>
+  </div>
+</div>

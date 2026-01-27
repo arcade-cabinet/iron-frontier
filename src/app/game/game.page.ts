@@ -1,64 +1,247 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { ArcRotateCamera, Color4, Engine, HemisphericLight, MeshBuilder, Scene, Vector3 } from '@babylonjs/core';
+import { interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import type { LoadedWorld } from '@/data/worlds/WorldLoader';
+
+import { getNPCsByLocation } from '@/data/npcs';
+import { getLocationData } from '@/data/worlds';
+import { getWorldItemsForLocation, getWorldItemName } from '@/data/items/worldItems';
+import { ProceduralLocationManager } from '@/data/generation/ProceduralLocationManager';
+import { SeededRandom } from '@/data/generation/seededRandom';
+import { generateRandomEncounter, shouldTriggerEncounter } from '@/data/generation/generators/encounterGenerator';
+import { HexSceneManager, type HexWorldPosition } from '@/engine/hex';
+import { HexBuildingType, hexKey } from '@/engine/hex/HexTypes';
+
+import { TitleScreenComponent } from './screens/title-screen.component';
+import { ActionBarComponent } from './ui/action-bar.component';
+import { GameHudComponent } from './ui/game-hud.component';
+import { NotificationFeedComponent } from './ui/notification-feed.component';
+import { InventoryPanelComponent } from './ui/inventory-panel.component';
+import { CharacterPanelComponent } from './ui/character-panel.component';
+import { QuestLogComponent } from './ui/quest-log.component';
+import { MenuPanelComponent } from './ui/menu-panel.component';
+import { DialogueBoxComponent } from './ui/dialogue-box.component';
+import { CombatPanelComponent } from './ui/combat-panel.component';
+import { ShopPanelComponent } from './ui/shop-panel.component';
+import { TravelPanelComponent } from './ui/travel-panel.component';
+import { WorldMapComponent } from './ui/world-map.component';
+import { PipePuzzleComponent } from './ui/pipe-puzzle.component';
+import { GameOverScreenComponent } from './ui/game-over-screen.component';
+import { GameStoreService } from './services/game-store.service';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonicModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    TitleScreenComponent,
+    GameHudComponent,
+    ActionBarComponent,
+    NotificationFeedComponent,
+    InventoryPanelComponent,
+    CharacterPanelComponent,
+    QuestLogComponent,
+    MenuPanelComponent,
+    DialogueBoxComponent,
+    CombatPanelComponent,
+    ShopPanelComponent,
+    TravelPanelComponent,
+    WorldMapComponent,
+    PipePuzzleComponent,
+    GameOverScreenComponent,
+  ],
 })
-export class GamePage implements AfterViewInit, OnDestroy {
+export class GamePage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderCanvas', { static: true })
   private readonly canvasRef?: ElementRef<HTMLCanvasElement>;
 
-  private engine?: Engine;
-  private scene?: Scene;
-  private readonly handleResize = () => this.engine?.resize();
+  private sceneManager: HexSceneManager | null = null;
+  private readonly destroy$ = new Subject<void>();
+  isLoading = true;
+  loadError: string | null = null;
+  worldMapOpen = false;
 
-  constructor(private readonly zone: NgZone) {}
+  constructor(private readonly zone: NgZone, readonly gameStore: GameStoreService) {}
+
+  ngOnInit(): void {
+    this.gameStore.select((state) => state.phase).pipe(takeUntil(this.destroy$)).subscribe((phase) => {
+      if (phase === 'playing') {
+        interval(1000)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(() => this.gameStore.actions().updateTime(0.1));
+      }
+    });
+
+    this.gameStore.state$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+      if (!this.sceneManager && state.phase !== 'title' && state.loadedWorld && state.currentLocationId) {
+        void this.initScene(state.loadedWorld, state.currentLocationId, state.worldSeed);
+      }
+
+      if (state.phase === 'playing' && !state.loadedWorld) {
+        this.gameStore.actions().initWorld('frontier_territory');
+      }
+    });
+
+    this.gameStore
+      .select((state) => state.weather)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((weather) => {
+        const time = this.gameStore.getState().time;
+        this.sceneManager?.updateEnvironment(time, weather);
+      });
+  }
 
   ngAfterViewInit(): void {
-    const canvas = this.canvasRef?.nativeElement;
-    if (!canvas) {
-      return;
-    }
-
-    this.zone.runOutsideAngular(() => {
-      const engine = new Engine(canvas, true, {
-        preserveDrawingBuffer: true,
-        stencil: true,
-      });
-      const scene = new Scene(engine);
-      scene.clearColor = new Color4(0.05, 0.05, 0.07, 1);
-
-      const camera = new ArcRotateCamera(
-        'camera',
-        Math.PI / 2,
-        Math.PI / 3,
-        8,
-        Vector3.Zero(),
-        scene,
-      );
-      camera.attachControl(canvas, true);
-      camera.lowerRadiusLimit = 3;
-      camera.upperRadiusLimit = 25;
-
-      new HemisphericLight('light', new Vector3(0, 1, 0), scene);
-      MeshBuilder.CreateGround('ground', { width: 10, height: 10 }, scene);
-
-      engine.runRenderLoop(() => scene.render());
-      window.addEventListener('resize', this.handleResize);
-
-      this.engine = engine;
-      this.scene = scene;
-    });
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.handleResize);
-    this.scene?.dispose();
-    this.engine?.dispose();
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.sceneManager?.dispose();
+  }
+
+  private async initScene(loadedWorld: LoadedWorld, currentLocationId: string, worldSeed: number) {
+    const canvas = this.canvasRef?.nativeElement;
+    if (!canvas || this.sceneManager) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.loadError = null;
+
+    try {
+      const manager = new HexSceneManager(canvas, {
+        seed: worldSeed,
+        mapWidth: 32,
+        mapHeight: 32,
+        hexSize: 1,
+      });
+
+      const resolvedLocation = loadedWorld.getLocation(currentLocationId);
+      const locationData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+
+      if (locationData) {
+        await manager.init(locationData);
+      } else {
+        await manager.init();
+      }
+
+      manager.start();
+
+      this.sceneManager = manager;
+
+      manager.setHexClickHandler((hexCoord, tile) => {
+        const state = this.gameStore.getState();
+
+        if (tile?.building && tile.building !== HexBuildingType.None && state.currentLocationId) {
+          const key = hexKey(hexCoord);
+          const status = ProceduralLocationManager.getOrGenerateStructureState(
+            state.currentLocationId,
+            key,
+          );
+
+          if (status === 'broken' || status === 'locked') {
+            this.gameStore.actions().addNotification('info', `This ${tile.building} is ${status}. Starting bypass...`);
+            this.gameStore.actions().startPuzzle(5, 5);
+            return;
+          }
+
+          this.gameStore.actions().addNotification('info', `This ${tile.building} is functioning normally.`);
+        }
+
+        if (state.currentLocationId) {
+          const npcsInLocation = getNPCsByLocation(state.currentLocationId);
+          const npcAtHex = npcsInLocation.find(
+            (npc) => npc.spawnCoord && npc.spawnCoord.q === hexCoord.q && npc.spawnCoord.r === hexCoord.r,
+          );
+
+          if (npcAtHex) {
+            this.gameStore.actions().talkToNPC(npcAtHex.id);
+            return;
+          }
+
+          const worldItems = getWorldItemsForLocation(state.currentLocationId);
+          const itemAtHex = worldItems.find(
+            (item) =>
+              item.coord.q === hexCoord.q &&
+              item.coord.r === hexCoord.r &&
+              !state.collectedItemIds.includes(item.id),
+          );
+
+          if (itemAtHex) {
+            this.gameStore.actions().collectWorldItem(itemAtHex.id);
+            manager.removeItemMarker(itemAtHex.id);
+            this.gameStore.actions().addNotification('item', `Collected ${getWorldItemName(itemAtHex.itemId)}!`);
+            return;
+          }
+        }
+
+        manager.movePlayerTo(hexCoord);
+      });
+
+      manager.setGroundClickHandler((pos: HexWorldPosition) => {
+        const state = this.gameStore.getState();
+
+        if (state.currentLocationId && state.loadedWorld) {
+          const resolvedLocation = state.loadedWorld.getLocation(state.currentLocationId);
+          const locData = resolvedLocation ? getLocationData(resolvedLocation) : null;
+          const isSafe = locData?.type === 'town' || locData?.type === 'city' || locData?.type === 'village';
+
+          if (!isSafe) {
+            const rng = new SeededRandom(Date.now());
+            if (
+              shouldTriggerEncounter(
+                rng,
+                {
+                  worldSeed: state.worldSeed,
+                  playerLevel: state.playerStats.level,
+                  gameHour: state.time.hour,
+                  factionTensions: {},
+                  activeEvents: [],
+                  contextTags: [],
+                },
+                0.1,
+              )
+            ) {
+              const encounter = generateRandomEncounter(
+                rng,
+                {
+                  playerLevel: state.playerStats.level,
+                  locationId: state.currentLocationId,
+                  contextTags: ['wild'],
+                  worldSeed: state.worldSeed,
+                  regionId: 'unknown',
+                  gameHour: state.time.hour,
+                  factionTensions: {},
+                  activeEvents: [],
+                },
+                {},
+              );
+
+              if (encounter) {
+                this.gameStore.actions().addNotification('warning', 'Ambush! Prepare for combat!');
+                this.gameStore.actions().startCombat(encounter.id);
+                return;
+              }
+            }
+          }
+        }
+
+        const height = manager.getHeightAt(pos.x, pos.z);
+        this.gameStore.actions().setPlayerPosition({ x: pos.x, y: height, z: pos.z });
+      });
+
+      const playerPos = this.gameStore.getState().playerPosition as HexWorldPosition;
+      manager.setPlayerPosition(playerPos);
+
+      this.isLoading = false;
+    } catch (error) {
+      this.loadError = error instanceof Error ? error.message : 'Failed to initialize scene';
+    }
   }
 }

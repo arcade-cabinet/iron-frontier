@@ -19,11 +19,16 @@
     "target": "es2022",
     "module": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
     "skipLibCheck": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "@/*": ["src/game/*"],
+      "@assets/*": ["assets/*", "assets/src/*"],
+      "@assets": ["assets/src/index.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

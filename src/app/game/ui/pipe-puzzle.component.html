@@ -1,0 +1,100 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+  *ngIf="phase === 'puzzle' && activePuzzle"
+>
+  <div class="w-full max-w-2xl rounded-lg border border-amber-900/50 bg-zinc-900 p-6 shadow-2xl">
+    <div class="mb-6 flex items-center justify-between border-b border-zinc-800 pb-4">
+      <div>
+        <h2 class="font-serif text-2xl font-bold tracking-wide text-amber-500">
+          Steamfitter's Challenge
+        </h2>
+        <p class="text-sm text-zinc-400">Connect the Source (Circle) to the Sink (Square)</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-green-400" *ngIf="activePuzzle?.solved">FLOW ESTABLISHED</span>
+        <button
+          type="button"
+          class="rounded-md border border-amber-900/50 px-3 py-2 text-sm text-amber-100 transition hover:bg-amber-900/20"
+          (click)="closePuzzle()"
+        >
+          {{ activePuzzle?.solved ? 'Complete' : 'Cancel' }}
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="mx-auto grid gap-1 rounded-md border border-zinc-800 bg-zinc-950 p-4"
+      [style.gridTemplateColumns]="'repeat(' + activePuzzle?.width + ', minmax(0, 1fr))'"
+      style="width: fit-content;"
+    >
+      <ng-container *ngFor="let row of activePuzzle?.grid; trackBy: trackByIndex">
+        <button
+          *ngFor="let cell of row; trackBy: trackByIndex"
+          type="button"
+          class="relative h-16 w-16 rounded border border-zinc-800 bg-zinc-900 transition-colors hover:border-amber-500/50"
+          [class.cursor-not-allowed]="cell.fixed"
+          [class.opacity-80]="cell.fixed"
+          [class.cursor-default]="activePuzzle?.solved"
+          (click)="handleCellClick(cell)"
+          [disabled]="cell.fixed || activePuzzle?.solved"
+        >
+          <div class="pointer-events-none absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" viewBox="0 0 10 10">
+              <path
+                d="M0 0 L10 0 M0 10 L10 10 M0 0 L0 10 M10 0 L10 10"
+                stroke="currentColor"
+                stroke-width="0.5"
+                fill="none"
+              />
+            </svg>
+          </div>
+
+          <svg
+            viewBox="0 0 100 100"
+            class="h-full w-full transition-transform duration-300 ease-in-out"
+            [style.transform]="'rotate(' + (cell.rotation * 90) + 'deg)'"
+          >
+            <g
+              [attr.stroke]="cell.active ? '#3b82f6' : '#71717a'"
+              stroke-width="12"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <ng-container [ngSwitch]="cell.type">
+                <path *ngSwitchCase="'straight'" d="M50,0 L50,100" />
+                <path *ngSwitchCase="'corner'" d="M50,0 L50,50 L100,50" />
+                <path *ngSwitchCase="'tee'" d="M50,0 L50,100 M50,50 L100,50" />
+                <path *ngSwitchCase="'cross'" d="M50,0 L50,100 M0,50 L100,50" />
+                <path *ngSwitchCase="'cap'" d="M50,0 L50,50" />
+                <ng-container *ngSwitchCase="'source'">
+                  <path d="M50,0 L50,50" />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="15"
+                    [attr.fill]="cell.active ? '#60a5fa' : '#a1a1aa'"
+                  />
+                </ng-container>
+                <ng-container *ngSwitchCase="'sink'">
+                  <path d="M50,0 L50,50" />
+                  <rect
+                    x="35"
+                    y="35"
+                    width="30"
+                    height="30"
+                    [attr.fill]="cell.active ? '#60a5fa' : '#a1a1aa'"
+                  />
+                </ng-container>
+              </ng-container>
+            </g>
+          </svg>
+        </button>
+      </ng-container>
+    </div>
+
+    <div class="mt-4 text-center text-xs text-zinc-500">
+      Click pipes to rotate. Fixed pipes cannot be moved.
+    </div>
+  </div>
+</div>

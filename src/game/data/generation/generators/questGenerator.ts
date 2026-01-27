@@ -204,7 +204,7 @@ function generateObjective(
       targetId = target.id;
       targetName = target.name;
       usedTargets.add(target.id);
-      variables.target = target.name;
+      variables['target'] = target.name;
     }
   }
 
@@ -264,8 +264,8 @@ export function generateQuest(
   // Select a primary target for title/description
   const primaryTarget = selectTarget(questRng, 'any', [], context, usedTargets);
   if (primaryTarget) {
-    variables.target = primaryTarget.name;
-    variables.targetId = primaryTarget.id;
+    variables['target'] = primaryTarget.name;
+    variables['targetId'] = primaryTarget.id;
     usedTargets.add(primaryTarget.id);
     allTargetIds.push(primaryTarget.id);
     allTargetNames[primaryTarget.id] = primaryTarget.name;
@@ -274,8 +274,8 @@ export function generateQuest(
   // Select a secondary location if available
   const secondaryLocation = selectTarget(questRng, 'location', [], context, usedTargets);
   if (secondaryLocation) {
-    variables.destination = secondaryLocation.name;
-    variables.destinationId = secondaryLocation.id;
+    variables['destination'] = secondaryLocation.name;
+    variables['destinationId'] = secondaryLocation.id;
     usedTargets.add(secondaryLocation.id);
     allLocationIds.push(secondaryLocation.id);
   }

@@ -2,7 +2,7 @@
 // Modern diorama-based world with layered terrain
 
 import { Color3, Vector3 } from '@babylonjs/core/Maths/math';
-import { WesternAssets } from '~/assets';
+import { WesternAssets } from '@assets';
 
 // Re-export shared types
 // This ensures that the engine uses the same data structures as the procedural generation

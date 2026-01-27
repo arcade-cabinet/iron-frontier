@@ -131,28 +131,4 @@ export {
   isWebGPUAvailable,
 } from './adapters';
 
-// ============================================================================
-// React Hooks
-// ============================================================================
-
-export {
-  // Context
-  SceneManagerContext,
-  type SceneManagerContextValue,
-  useEntityMeshMapping,
-  useEntitySync,
-  // Mesh hooks
-  useMesh,
-  useMeshTransformSync,
-  // Utility hooks
-  usePreloadModels,
-  useRenderLoop,
-  useScene,
-  // Core hooks
-  useSceneManager,
-  useSceneManagerError,
-  useSceneManagerReady,
-  useSceneManagerSafe,
-  useScenePicking,
-  useSceneSafe,
-} from './hooks';
+// React hooks removed during Angular migration.

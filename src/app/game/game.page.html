@@ -1,9 +1,32 @@
 <ion-content [fullscreen]="true">
-  <div class="game-root">
-    <canvas #renderCanvas class="game-canvas"></canvas>
-    <div class="game-hud">
-      <div class="game-hud__title">Iron Frontier</div>
-      <div class="game-hud__subtitle">Babylon.js + Ionic + Capacitor</div>
+  <ng-container *ngIf="(gameStore.state$ | async) as state">
+    <app-title-screen *ngIf="state.phase === 'title'"></app-title-screen>
+
+    <div class="game-root" *ngIf="state.phase !== 'title'">
+      <canvas #renderCanvas class="game-canvas"></canvas>
+
+      <app-game-hud></app-game-hud>
+      <app-notification-feed></app-notification-feed>
+      <app-action-bar (openMap)="worldMapOpen = true"></app-action-bar>
+
+      <app-inventory-panel></app-inventory-panel>
+      <app-character-panel></app-character-panel>
+      <app-quest-log></app-quest-log>
+      <app-menu-panel></app-menu-panel>
+      <app-dialogue-box></app-dialogue-box>
+      <app-combat-panel></app-combat-panel>
+      <app-shop-panel></app-shop-panel>
+      <app-travel-panel></app-travel-panel>
+      <app-world-map [isOpen]="worldMapOpen" (close)="worldMapOpen = false"></app-world-map>
+      <app-pipe-puzzle></app-pipe-puzzle>
+      <app-game-over-screen></app-game-over-screen>
+
+      <div class="game-hud" *ngIf="isLoading || loadError">
+        <div class="game-hud__title">Iron Frontier</div>
+        <div class="game-hud__subtitle">
+          {{ loadError ? loadError : 'Loading world...' }}
+        </div>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </ion-content>

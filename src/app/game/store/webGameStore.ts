@@ -111,7 +111,7 @@ const webDataAccess: DataAccess = {
 /**
  * Create the web game store with localStorage persistence
  */
-export const useGameStore = createGameStore({
+export const gameStore = createGameStore({
   storageAdapter: new WebStorageAdapter(),
   storageKey: 'iron-frontier-save',
   databaseManager: dbManager,

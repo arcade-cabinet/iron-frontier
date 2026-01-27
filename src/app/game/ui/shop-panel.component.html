@@ -1,0 +1,275 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 sm:p-4"
+  *ngIf="shopState && shop"
+>
+  <div
+    class="flex h-full w-full flex-col rounded-xl border-2 border-amber-700/60 bg-amber-950 shadow-2xl sm:h-auto sm:max-h-[80vh] sm:max-w-2xl"
+  >
+    <div class="flex flex-col gap-2 border-b border-amber-800/50 p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-amber-700/50 bg-amber-800/50 sm:h-12 sm:w-12"
+        >
+          <svg class="h-5 w-5 text-amber-400 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <h2 class="truncate text-base font-bold text-amber-200 sm:text-lg">
+            {{ shop?.name }}
+          </h2>
+          <p class="truncate text-[10px] text-amber-500/70 sm:text-xs" *ngIf="shop?.description">
+            {{ shop?.description }}
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between gap-3 sm:justify-end sm:gap-4">
+        <div class="text-left sm:text-right">
+          <div class="text-[9px] uppercase tracking-wide text-amber-500/60 sm:text-[10px]">
+            Your Gold
+          </div>
+          <div class="flex items-center gap-1 text-base font-bold text-yellow-400 sm:text-lg">
+            <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            <span>${{ playerStats.gold }}</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg bg-amber-900/50 text-amber-400 transition-colors hover:bg-amber-800/50"
+          (click)="closeShop()"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex border-b border-amber-800/50">
+      <button
+        type="button"
+        class="flex-1 px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-2.5 sm:text-sm"
+        [ngClass]="
+          activeTab === 'buy'
+            ? 'border-b-2 border-amber-500 bg-amber-900/30 text-amber-200'
+            : 'text-amber-500/60 hover:text-amber-400'
+        "
+        (click)="activeTab = 'buy'"
+      >
+        <span class="flex items-center justify-center gap-1.5 sm:gap-2">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+          Buy
+          <span class="rounded bg-amber-800/50 px-1 py-0.5 text-[9px] sm:px-1.5 sm:text-[10px]">
+            {{ availableItems.length }}
+          </span>
+        </span>
+      </button>
+      <button
+        type="button"
+        [disabled]="!shop?.canSell"
+        class="flex-1 px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-2.5 sm:text-sm"
+        [ngClass]="
+          !shop?.canSell
+            ? 'cursor-not-allowed opacity-50'
+            : activeTab === 'sell'
+              ? 'border-b-2 border-amber-500 bg-amber-900/30 text-amber-200'
+              : 'text-amber-500/60 hover:text-amber-400'
+        "
+        (click)="activeTab = 'sell'"
+      >
+        <span class="flex items-center justify-center gap-1.5 sm:gap-2">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+          Sell
+          <span class="rounded bg-amber-800/50 px-1 py-0.5 text-[9px] sm:px-1.5 sm:text-[10px]">
+            {{ inventory.length }}
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-2 sm:p-3">
+      <div class="space-y-1.5 sm:space-y-2" *ngIf="activeTab === 'buy'">
+        <div *ngIf="availableItems.length === 0" class="py-8 text-center text-amber-600/50 sm:py-12">
+          <svg class="mx-auto mb-2 h-8 w-8 text-amber-700/30 sm:h-10 sm:w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+          <p class="text-xs sm:text-sm">No items available</p>
+          <p class="mt-1 text-[10px] text-amber-700/40 sm:text-xs">Check back later</p>
+        </div>
+        <div
+          *ngFor="let shopItem of availableItems; let idx = index"
+          class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
+          [class.opacity-50]="(shopItem.stock ?? -1) === 0"
+        >
+          <div
+            class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border border-amber-700/30 bg-amber-800/40 sm:h-10 sm:w-10"
+          >
+            <svg class="h-4 w-4 text-amber-500 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              />
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-1 sm:gap-2">
+              <span
+                class="truncate text-xs font-medium sm:text-sm"
+                [style.color]="getRarityColor(shopItem.itemId)"
+              >
+                {{ getItemDef(shopItem.itemId)?.name || shopItem.itemId }}
+              </span>
+              <span
+                class="rounded border px-1.5 py-0.5 text-[9px] font-medium uppercase"
+                [ngClass]="rarityBadgeClass(getItemDef(shopItem.itemId)?.rarity || 'common')"
+              >
+                {{ getItemDef(shopItem.itemId)?.rarity || 'common' }}
+              </span>
+            </div>
+            <div class="mt-0.5 hidden truncate text-[9px] text-amber-500/60 sm:block">
+              {{ getItemDef(shopItem.itemId)?.description || '' }}
+            </div>
+          </div>
+          <div class="hidden items-center gap-1 text-xs text-amber-400/60 sm:flex">
+            <span *ngIf="(shopItem.stock ?? -1) < 0">∞</span>
+            <span *ngIf="(shopItem.stock ?? -1) === 0" class="text-red-400">Sold Out</span>
+            <span *ngIf="(shopItem.stock ?? -1) > 0">x{{ shopItem.stock }}</span>
+          </div>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <div
+              class="flex items-center gap-0.5 font-mono text-xs font-medium sm:gap-1 sm:text-sm"
+              [ngClass]="canAfford(shopItem) ? 'text-amber-400' : 'text-red-400'"
+            >
+              <svg class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+              <span>{{ calculateBuyPrice(shopItem) }}</span>
+            </div>
+            <button
+              type="button"
+              class="min-h-[36px] rounded-md px-2.5 py-1.5 text-[10px] font-medium transition-colors sm:min-h-0 sm:px-3 sm:text-xs"
+              [disabled]="!canAfford(shopItem) || (shopItem.stock ?? -1) === 0"
+              [ngClass]="
+                canAfford(shopItem) && (shopItem.stock ?? -1) !== 0
+                  ? 'bg-green-700 text-white hover:bg-green-600'
+                  : 'cursor-not-allowed bg-amber-900/30 text-amber-700'
+              "
+              (click)="buyItem(shopItem.itemId)"
+            >
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-1.5 sm:space-y-2" *ngIf="activeTab === 'sell'">
+        <div *ngIf="inventory.length === 0" class="py-8 text-center text-amber-600/50 sm:py-12">
+          <svg class="mx-auto mb-2 h-8 w-8 text-amber-700/30 sm:h-10 sm:w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+          <p class="text-xs sm:text-sm">Nothing to sell</p>
+          <p class="mt-1 text-[10px] text-amber-700/40 sm:text-xs">Find some loot first</p>
+        </div>
+        <div *ngIf="inventory.length > 0 && !shop?.canSell" class="py-8 text-center text-amber-600/50 sm:py-12">
+          <p class="text-xs sm:text-sm">This merchant doesn't buy items</p>
+        </div>
+        <div
+          *ngFor="let item of inventory"
+          class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
+          [class.opacity-50]="!canSellItem(item)"
+          *ngIf="shop?.canSell"
+        >
+          <div
+            class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border border-amber-700/30 bg-amber-800/40 sm:h-10 sm:w-10"
+          >
+            <svg class="h-4 w-4 text-amber-500 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              />
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-1 sm:gap-2">
+              <span
+                class="truncate text-xs font-medium sm:text-sm"
+                [style.color]="getRarityColor(item.itemId)"
+              >
+                {{ item.name }}
+              </span>
+              <span
+                class="rounded border px-1.5 py-0.5 text-[9px] font-medium uppercase"
+                [ngClass]="rarityBadgeClass(getItemDef(item.itemId)?.rarity || 'common')"
+              >
+                {{ getItemDef(item.itemId)?.rarity || 'common' }}
+              </span>
+            </div>
+            <div class="mt-0.5 text-[9px] text-amber-500/60">x{{ item.quantity }}</div>
+          </div>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <ng-container *ngIf="canSellItem(item); else notAccepted">
+              <div class="flex items-center gap-0.5 font-mono text-xs font-medium text-amber-400 sm:gap-1 sm:text-sm">
+                <svg class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                <span>{{ calculateSellPrice(item) }}</span>
+              </div>
+              <button
+                type="button"
+                class="min-h-[36px] rounded-md bg-amber-700 px-2.5 py-1.5 text-[10px] font-medium text-white transition-colors hover:bg-amber-600 sm:min-h-0 sm:px-3 sm:text-xs"
+                (click)="sellItem(item.id)"
+              >
+                Sell
+              </button>
+            </ng-container>
+            <ng-template #notAccepted>
+              <span class="text-[9px] text-amber-600/50 italic sm:text-[10px]">Not accepted</span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-amber-800/50 bg-amber-900/20 p-2 text-[9px] text-amber-500/50 sm:p-3 sm:text-[10px]">
+      <div class="flex flex-col items-center justify-between gap-1 sm:flex-row">
+        <span>Sell rate: {{ (shop?.buyModifier ?? 0.5) * 100 | number: '1.0-0' }}%</span>
+        <span class="hidden sm:inline">Press ESC to leave</span>
+      </div>
+    </div>
+  </div>
+</div>

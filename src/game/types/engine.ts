@@ -1,7 +1,7 @@
 // Core Engine Types - Shared
 // Platform-agnostic definitions for game entities and world data
 
-import { HexTileAssets, MechanicalAssets, StructureAssets } from '~/assets';
+import { HexTileAssets, MechanicalAssets, StructureAssets } from '@assets';
 
 // Simple vector/color types to avoid engine dependencies
 export interface Vector3Simple {
