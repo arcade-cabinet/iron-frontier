@@ -1,4 +1,4 @@
-name: Release Please
+name: Release Please - Android Debug Builds
 
 on:
   push:
@@ -13,6 +13,9 @@ jobs:
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     
     steps:
       - name: Run release-please
@@ -21,64 +24,74 @@ jobs:
         with:
           release-type: node
           package-name: iron-frontier
-          
-      - name: Checkout code (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+
+  build-debug-android:
+    name: Build Debug Android APK
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    
+    steps:
+      - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         
-      - name: Setup Node.js (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Setup Node.js
         uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: '22'
           
-      - name: Install pnpm (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Install pnpm
         uses: pnpm/action-setup@c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c # v4
         with:
           version: 10.20.0
           
-      - name: Get pnpm store directory (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
           
-      - name: Setup pnpm cache (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Setup pnpm cache
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+            
+      - name: Setup Java
+        uses: actions/setup-java@b36c23c0d998641eff861008f374ee103c25ac73 # v4.4.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
            
-      - name: Install dependencies (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
         
-      - name: Build web (if release created)
-        if: ${{ steps.release.outputs.release_created }}
-        run: pnpm build:web
-        
-      - name: Setup EAS (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Setup EAS
         uses: expo/expo-github-action@c7b66a9c327a43a8fa7c0158e7f30d6040d2481e # v8
         with:
           token: ${{ secrets.EXPO_TOKEN }}
           eas-version: 16.28.0
           expo-version: 6.3.12
           
-      - name: Build Android APK (if release created)
-        if: ${{ steps.release.outputs.release_created }}
-        run: pnpm build:android
+      - name: Build Debug Android APK
+        id: eas-build
+        run: |
+          BUILD_URL=$(eas build --platform android --profile preview --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "build_url=$BUILD_URL" >> $GITHUB_OUTPUT
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           
-      - name: Upload APK to release (if release created)
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Download Debug APK
+        run: |
+          curl -L -o android-debug.apk "${{ steps.eas-build.outputs.build_url }}"
+          
+      - name: Upload Debug APK to Release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           files: |
-            **/*.apk
-          tag_name: ${{ steps.release.outputs.tag_name }}
+            android-debug.apk
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
