@@ -38,6 +38,21 @@ jobs:
         with:
           version: 10.20.0
           
+      - name: Get pnpm store directory (if release created)
+        if: ${{ steps.release.outputs.release_created }}
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          
+      - name: Setup pnpm cache (if release created)
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+           
       - name: Install dependencies (if release created)
         if: ${{ steps.release.outputs.release_created }}
         run: pnpm install --frozen-lockfile
