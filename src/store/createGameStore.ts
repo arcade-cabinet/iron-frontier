@@ -1278,7 +1278,7 @@ export function createGameStore({
           lastSaved: state.lastSaved,
           playTime: state.playTime,
           // Don't persist large derived data or UI state
-        }) as GameState,
+        }) as any,
       }
     )
   );
