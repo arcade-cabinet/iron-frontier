@@ -43,6 +43,18 @@ export class InputController {
   // Haptic feedback
   private hapticsEnabled: boolean = true;
 
+  // Event handler references for cleanup
+  private boundHandlers: {
+    touchStart?: (e: TouchEvent) => void;
+    touchMove?: (e: TouchEvent) => void;
+    touchEnd?: (e: TouchEvent) => void;
+    touchCancel?: (e: TouchEvent) => void;
+    mouseDown?: (e: MouseEvent) => void;
+    mouseMove?: (e: MouseEvent) => void;
+    mouseUp?: (e: MouseEvent) => void;
+    keyDown?: (e: KeyboardEvent) => void;
+  } = {};
+
   // Constants
   private readonly LONG_PRESS_DURATION = 500; // ms
   private readonly TAP_THRESHOLD = 10; // pixels
@@ -56,23 +68,33 @@ export class InputController {
   }
 
   private setupEventListeners(): void {
+    // Create bound handlers
+    this.boundHandlers.touchStart = this.handleTouchStart.bind(this);
+    this.boundHandlers.touchMove = this.handleTouchMove.bind(this);
+    this.boundHandlers.touchEnd = this.handleTouchEnd.bind(this);
+    this.boundHandlers.touchCancel = this.handleTouchCancel.bind(this);
+    this.boundHandlers.mouseDown = this.handleMouseDown.bind(this);
+    this.boundHandlers.mouseMove = this.handleMouseMove.bind(this);
+    this.boundHandlers.mouseUp = this.handleMouseUp.bind(this);
+    this.boundHandlers.keyDown = this.handleKeyDown.bind(this);
+
     // Touch events
-    this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), {
+    this.canvas.addEventListener('touchstart', this.boundHandlers.touchStart, {
       passive: false,
     });
-    this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-    this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-    this.canvas.addEventListener('touchcancel', this.handleTouchCancel.bind(this), {
+    this.canvas.addEventListener('touchmove', this.boundHandlers.touchMove, { passive: false });
+    this.canvas.addEventListener('touchend', this.boundHandlers.touchEnd, { passive: false });
+    this.canvas.addEventListener('touchcancel', this.boundHandlers.touchCancel, {
       passive: false,
     });
 
     // Mouse events (for desktop testing)
-    this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
-    this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    this.canvas.addEventListener('mousedown', this.boundHandlers.mouseDown);
+    this.canvas.addEventListener('mousemove', this.boundHandlers.mouseMove);
+    this.canvas.addEventListener('mouseup', this.boundHandlers.mouseUp);
 
     // Keyboard events
-    window.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.addEventListener('keydown', this.boundHandlers.keyDown);
   }
 
   private handleTouchStart(e: TouchEvent): void {
@@ -356,9 +378,36 @@ export class InputController {
   }
 
   public dispose(): void {
+    // Clean up timers
     this.stopJoystickMovement();
     if (this.longPressTimeout) {
       clearTimeout(this.longPressTimeout);
+    }
+
+    // Remove all event listeners
+    if (this.boundHandlers.touchStart) {
+      this.canvas.removeEventListener('touchstart', this.boundHandlers.touchStart);
+    }
+    if (this.boundHandlers.touchMove) {
+      this.canvas.removeEventListener('touchmove', this.boundHandlers.touchMove);
+    }
+    if (this.boundHandlers.touchEnd) {
+      this.canvas.removeEventListener('touchend', this.boundHandlers.touchEnd);
+    }
+    if (this.boundHandlers.touchCancel) {
+      this.canvas.removeEventListener('touchcancel', this.boundHandlers.touchCancel);
+    }
+    if (this.boundHandlers.mouseDown) {
+      this.canvas.removeEventListener('mousedown', this.boundHandlers.mouseDown);
+    }
+    if (this.boundHandlers.mouseMove) {
+      this.canvas.removeEventListener('mousemove', this.boundHandlers.mouseMove);
+    }
+    if (this.boundHandlers.mouseUp) {
+      this.canvas.removeEventListener('mouseup', this.boundHandlers.mouseUp);
+    }
+    if (this.boundHandlers.keyDown) {
+      window.removeEventListener('keydown', this.boundHandlers.keyDown);
     }
   }
 }

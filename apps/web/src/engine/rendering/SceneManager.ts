@@ -64,6 +64,7 @@ export class SceneManager {
 
   // Callbacks
   private onGroundClick?: (position: WorldPosition) => void;
+  private resizeHandler?: () => void;
 
   constructor(canvas: HTMLCanvasElement, seed: number = 12345) {
     this.canvas = canvas;
@@ -414,12 +415,18 @@ export class SceneManager {
       this.scene.render();
     });
 
-    window.addEventListener('resize', () => {
+    this.resizeHandler = () => {
       this.engine.resize();
-    });
+    };
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   dispose(): void {
+    // Remove resize listener
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+    }
+
     // Dispose all chunks
     for (const chunk of this.loadedChunks.values()) {
       chunk.dispose();

@@ -263,7 +263,8 @@ export class TerrainChunk {
     if (this.disposed) return;
     this.disposed = true;
 
-    this.material.dispose();
+    // Dispose material with textures (forceDisposeTextures=true)
+    this.material.dispose(true);
     this.mesh.dispose();
   }
 }

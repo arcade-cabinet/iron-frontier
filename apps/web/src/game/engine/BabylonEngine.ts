@@ -61,6 +61,7 @@ export class BabylonEngine {
   private currentSector: Sector | null = null;
   private shadowGenerator: ShadowGenerator | null = null;
   private isLowPower: boolean = false;
+  private resizeHandler?: () => void;
 
   // Animation state
   private playerTargetPosition: Vector3 | null = null;
@@ -556,15 +557,24 @@ export class BabylonEngine {
     });
 
     // Handle resize
-    window.addEventListener('resize', () => {
+    this.resizeHandler = () => {
       this.engine.resize();
-    });
+    };
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   public dispose(): void {
+    // Remove resize listener
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+    }
+
     this.clearSector();
     if (this.playerMesh) {
       this.playerMesh.dispose();
+    }
+    if (this.shadowGenerator) {
+      this.shadowGenerator.dispose();
     }
     this.scene.dispose();
     this.engine.dispose();

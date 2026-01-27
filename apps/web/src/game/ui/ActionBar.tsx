@@ -9,7 +9,7 @@ import { useGameStore } from '../store/webGameStore';
 // Icons - Western-themed with responsive sizing
 function MenuIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -22,7 +22,7 @@ function MenuIcon({ className }: { className?: string }) {
 
 function SaddlebagIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -35,7 +35,7 @@ function SaddlebagIcon({ className }: { className?: string }) {
 
 function JournalIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -48,7 +48,7 @@ function JournalIcon({ className }: { className?: string }) {
 
 function MapIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -61,7 +61,7 @@ function MapIcon({ className }: { className?: string }) {
 
 function WantedPosterIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
