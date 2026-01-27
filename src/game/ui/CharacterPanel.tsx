@@ -227,7 +227,8 @@ function EquipmentSlotDisplay({
               </div>
             )}
           </div>
-          <button type="button"
+          <button
+            type="button"
             onClick={() => unequipItem(slot)}
             className="p-1 rounded hover:bg-red-900/40 text-red-400/60 hover:text-red-400 transition-colors"
             title="Unequip"

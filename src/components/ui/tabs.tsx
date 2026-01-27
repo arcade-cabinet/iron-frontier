@@ -1,8 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface TabsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
   onValueChange?: (value: string) => void;
 }
@@ -16,25 +15,21 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 );
 Tabs.displayName = 'Tabs';
 
-export interface TabsListProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        'inline-flex h-10 items-center justify-center rounded-lg bg-slate-100 p-1 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-        className
-      )}
-      {...props}
-    />
-  )
-);
+const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      'inline-flex h-10 items-center justify-center rounded-lg bg-slate-100 p-1 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+      className
+    )}
+    {...props}
+  />
+));
 TabsList.displayName = 'TabsList';
 
-export interface TabsTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
   ({ className, ...props }, ref) => (
@@ -50,8 +45,7 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
 );
 TabsTrigger.displayName = 'TabsTrigger';
 
-export interface TabsContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
 }
 

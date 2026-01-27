@@ -535,7 +535,8 @@ function GameCanvas() {
           <div className="text-center max-w-md p-4">
             <div className="text-red-500 text-xl mb-2">Failed to load game</div>
             <div className="text-stone-400 text-sm mb-4">{loadError}</div>
-            <button type="button"
+            <button
+              type="button"
               className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded"
               onClick={() => window.location.reload()}
             >

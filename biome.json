@@ -8,7 +8,11 @@
   "files": {
     "ignoreUnknown": true,
     "includes": [
-      "**",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.json",
       "!**/node_modules",
       "!**/dist",
       "!**/build",
@@ -73,6 +77,12 @@
   "json": {
     "formatter": {
       "trailingCommas": "none"
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
     }
   }
 }

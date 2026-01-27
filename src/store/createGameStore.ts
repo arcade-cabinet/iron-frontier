@@ -1262,23 +1262,24 @@ export function createGameStore({
       {
         name: storageKey,
         storage: persistStorage(storageAdapter) as any,
-        partialize: (state) => ({
-          // Select fields to persist
-          initialized: state.initialized,
-          worldSeed: state.worldSeed,
-          playerName: state.playerName,
-          playerStats: state.playerStats,
-          inventory: state.inventory,
-          equipment: state.equipment,
-          activeQuests: state.activeQuests,
-          completedQuests: state.completedQuests,
-          collectedItemIds: state.collectedItemIds,
-          settings: state.settings,
-          saveVersion: state.saveVersion,
-          lastSaved: state.lastSaved,
-          playTime: state.playTime,
-          // Don't persist large derived data or UI state
-        }) as any,
+        partialize: (state) =>
+          ({
+            // Select fields to persist
+            initialized: state.initialized,
+            worldSeed: state.worldSeed,
+            playerName: state.playerName,
+            playerStats: state.playerStats,
+            inventory: state.inventory,
+            equipment: state.equipment,
+            activeQuests: state.activeQuests,
+            completedQuests: state.completedQuests,
+            collectedItemIds: state.collectedItemIds,
+            settings: state.settings,
+            saveVersion: state.saveVersion,
+            lastSaved: state.lastSaved,
+            playTime: state.playTime,
+            // Don't persist large derived data or UI state
+          }) as any,
       }
     )
   );

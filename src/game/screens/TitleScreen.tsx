@@ -197,7 +197,8 @@ function MainMenu() {
                 }}
               />
               <div className="flex gap-2">
-                <button type="button"
+                <button
+                  type="button"
                   onClick={() => setShowNameInput(false)}
                   className={cn(
                     'flex-1 py-3 px-4 rounded-lg font-medium',
@@ -207,7 +208,8 @@ function MainMenu() {
                 >
                   Back
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   onClick={handleNewGame}
                   disabled={!inputName.trim()}
                   className={cn(
@@ -232,7 +234,8 @@ function MainMenu() {
               className="space-y-3"
             >
               {hasSaveData && (
-                <button type="button"
+                <button
+                  type="button"
                   onClick={handleContinue}
                   className={cn(
                     'w-full py-4 px-6 rounded-lg font-medium text-lg',
@@ -249,7 +252,8 @@ function MainMenu() {
                 </button>
               )}
 
-              <button type="button"
+              <button
+                type="button"
                 onClick={handleNewGame}
                 className={cn(
                   'w-full py-4 px-6 rounded-lg font-medium text-lg',
@@ -281,7 +285,8 @@ function MainMenu() {
         transition={{ delay: 0.8, duration: 0.6 }}
         className="absolute bottom-6 flex items-center gap-4"
       >
-        <button type="button"
+        <button
+          type="button"
           onClick={() => setShowAbout(true)}
           className="text-stone-500 hover:text-stone-400 transition-colors flex items-center gap-1 text-sm"
         >
@@ -317,7 +322,8 @@ function MainMenu() {
                 Built with React, Babylon.js, and Reactylon. Procedural generation ensures every
                 playthrough is unique.
               </p>
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => setShowAbout(false)}
                 className="w-full py-2 bg-stone-700 hover:bg-stone-600 rounded-lg text-stone-300 transition-colors"
               >
