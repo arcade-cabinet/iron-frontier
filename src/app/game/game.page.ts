@@ -1,10 +1,13 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import { ArcRotateCamera, Color4, Engine, HemisphericLight, MeshBuilder, Scene, Vector3 } from '@babylonjs/core';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
+  standalone: true,
+  imports: [IonicModule],
 })
 export class GamePage implements AfterViewInit, OnDestroy {
   @ViewChild('renderCanvas', { static: true })

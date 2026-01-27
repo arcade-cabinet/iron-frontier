@@ -84,6 +84,7 @@
 - [ ] **Render.com Deployment** - Blueprint configured
 - [ ] **Audio System** - Western ambient music and SFX
 - [ ] **Ionic Angular Migration Plan** - Single-app Capacitor + Electron roadmap documented
+- [ ] **Testing Alignment** - Playwright web E2E + Maestro mobile E2E baselines added
 
 ## Planned / Backlog
 

@@ -16,7 +16,7 @@
 | **State** | Zustand (migration target) |
 | **Persistence** | SQLite/IndexedDB via Capacitor |
 | **Styling** | Ionic theming + custom SCSS |
-| **Testing** | Karma (Angular default) |
+| **Testing** | Karma (unit), Playwright (web E2E), Maestro (mobile E2E) |
 
 ## Development Environment
 

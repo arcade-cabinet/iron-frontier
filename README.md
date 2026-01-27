@@ -31,6 +31,16 @@ pnpm cap:open:ios
 pnpm cap:open:electron
 ```
 
+## Testing
+
+```bash
+# Web E2E (Playwright)
+pnpm test:e2e
+
+# Mobile E2E (Maestro)
+pnpm test:maestro
+```
+
 ---
 
 ## What is Iron Frontier?
