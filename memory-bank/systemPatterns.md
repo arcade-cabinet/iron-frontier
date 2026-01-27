@@ -20,6 +20,11 @@ iron-frontier/
 - **Rendering**: Babylon.js for web and Electron, aligned with Capacitor web runtime.
 - **Persistence**: unified via Capacitor storage/SQLite where possible.
 
+### Non-Negotiables
+
+- No WET `apps/` split; root `src/` is the only app source.
+- Electron uses `@capacitor-community/electron` (remove any legacy wrapper).
+
 ## 3D Rendering
 
 ### Babylon.js (Direct Engine)

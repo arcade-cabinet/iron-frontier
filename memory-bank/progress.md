@@ -2,7 +2,7 @@
 
 ## High-Level Status
 
-**v0.1 Release Candidate** - Complete monorepo with DRY architecture. PR #1 open with all AI review comments resolved. 203 tests passing.
+**Replatform In Progress** - Single root Ionic Angular app with Capacitor + Electron is the target. Full parity-or-better port required. Detailed plan documented in `memory-bank/migration-plan.md`.
 
 ## Completed Features
 
@@ -80,11 +80,10 @@
 
 ## In Progress
 
-- [ ] **PR #1 Merge** - All review comments resolved
-- [ ] **Render.com Deployment** - Blueprint configured
-- [ ] **Audio System** - Western ambient music and SFX
-- [ ] **Ionic Angular Migration Plan** - Single-app Capacitor + Electron roadmap documented
-- [ ] **Testing Alignment** - Playwright web E2E + Maestro mobile E2E baselines added
+- [ ] **Full Replatform** - Single root Ionic Angular app, Capacitor + Electron, no WET `apps/` split
+- [ ] **Parity Port** - All UI panels, HUD, gameplay systems, assets, and styling
+- [ ] **Gap Resolution** - Identify and remove placeholders/stubs
+- [ ] **Testing Alignment** - Unit/integration + Playwright (web) + Maestro (mobile)
 
 ## Planned / Backlog
 
