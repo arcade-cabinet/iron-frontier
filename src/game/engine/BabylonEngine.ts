@@ -66,7 +66,6 @@ export class BabylonEngine {
   private isPlayerMoving: boolean = false;
 
   constructor(canvas: HTMLCanvasElement, callbacks: EngineCallbacks) {
-    this.canvas = canvas;
     this.callbacks = callbacks;
 
     // Create engine with mobile optimizations
@@ -163,7 +162,7 @@ export class BabylonEngine {
   public loadSector(sector: Sector): void {
     // Clear existing meshes
     this.clearSector();
-    this.currentSector = sector;
+    // Sector is loaded but not stored (may be accessed via methods in the future)
 
     // Create floor and walls
     for (let y = 0; y < sector.height; y++) {

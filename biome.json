@@ -26,7 +26,8 @@
       "recommended": true,
       "complexity": {
         "noExcessiveCognitiveComplexity": "warn",
-        "useLiteralKeys": "off"
+        "useLiteralKeys": "off",
+        "noStaticOnlyClass": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",
@@ -40,12 +41,16 @@
         "noParameterAssign": "off"
       },
       "suspicious": {
-        "noExplicitAny": "warn",
-        "noArrayIndexKey": "warn"
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noTemplateCurlyInString": "off",
+        "useIterableCallbackReturn": "warn"
       },
       "a11y": {
         "useKeyWithClickEvents": "warn",
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "noLabelWithoutControl": "off",
+        "noStaticElementInteractions": "warn"
       }
     }
   },

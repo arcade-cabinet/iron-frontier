@@ -265,7 +265,8 @@ export class SceneManager {
       console.log(`[SceneManager] Engineer ready, scale: 1.7x`);
 
       this.playerMesh = player;
-      this.playerSkeleton = result.skeletons[0] ?? null;
+      // skeleton is loaded but not currently used
+      // const _skeleton = result.skeletons[0] ?? null;
       this.playerAnimations = result.animationGroups;
 
       // Start Idle animation if available

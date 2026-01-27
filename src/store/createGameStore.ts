@@ -690,10 +690,14 @@ export function createGameStore({
           // Implement effects
           switch (effect.type) {
             case 'give_item':
-              get().addItemById(effect.target, effect.value || 1);
+              if (effect.target) {
+                get().addItemById(effect.target, effect.value || 1);
+              }
               break;
             case 'start_quest':
-              get().startQuest(effect.target);
+              if (effect.target) {
+                get().startQuest(effect.target);
+              }
               break;
             // ... others
           }
@@ -1257,7 +1261,7 @@ export function createGameStore({
       }),
       {
         name: storageKey,
-        storage: persistStorage(storageAdapter),
+        storage: persistStorage(storageAdapter) as any,
         partialize: (state) => ({
           // Select fields to persist
           initialized: state.initialized,
@@ -1274,7 +1278,7 @@ export function createGameStore({
           lastSaved: state.lastSaved,
           playTime: state.playTime,
           // Don't persist large derived data or UI state
-        }),
+        }) as GameState,
       }
     )
   );

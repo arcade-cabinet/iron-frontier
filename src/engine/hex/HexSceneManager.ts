@@ -725,7 +725,8 @@ export class HexSceneManager {
       this.playerFacingAngle = this.DEFAULT_PLAYER_FACING;
 
       this.playerMesh = player;
-      this.playerSkeleton = result.skeletons[0] ?? null;
+      // skeleton is loaded but not currently used
+      // const _skeleton = result.skeletons[0] ?? null;
       this.playerAnimations = result.animationGroups;
 
       // Play idle animation if available
