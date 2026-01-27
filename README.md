@@ -2,11 +2,11 @@
 
 **A Cross-Platform Steampunk Frontier RPG**
 
-Web: React + Babylon.js | Mobile: Expo + React Native Filament
+Single Expo App: Web + Android
 
 ![Status: Alpha v0.1](https://img.shields.io/badge/status-alpha%20v0.1-orange)
-![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20mobile-blue)
-![Tests: 203 passing](https://img.shields.io/badge/tests-203%20passing-green)
+![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20android-blue)
+![Framework: Expo SDK 54](https://img.shields.io/badge/expo-SDK%2054-blue)
 
 ---
 
@@ -16,14 +16,18 @@ Web: React + Babylon.js | Mobile: Expo + React Native Filament
 # Install dependencies
 pnpm install
 
-# Start web dev server
-pnpm dev
+# Start development server
+pnpm start
 
-# Run tests
-pnpm test
+# Web development
+pnpm web
+
+# Android development
+pnpm android
 
 # Build for production
-pnpm build
+pnpm build:web
+pnpm build:android
 ```
 
 ---
@@ -34,9 +38,9 @@ Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 18
 
 ### Core Features
 
-- **Isometric 3D** - Babylon.js (web) / Filament (mobile) with FF7-era atmosphere
+- **Isometric 3D** - Babylon.js React Native for cross-platform 3D
 - **Procedural Generation** - Daggerfall-style deterministic content
-- **Cross-Platform** - Web and mobile from shared codebase
+- **Cross-Platform** - Web and Android from single Expo app
 - **Persistent Progress** - SQLite-backed save system
 
 ### Theme & Setting
@@ -48,33 +52,62 @@ Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 18
 
 ---
 
-## Monorepo Structure
+## Project Structure
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/          # Vite + React + Babylon.js
-│   ├── mobile/       # Expo + React Native + Filament
-│   └── docs/         # Astro + Starlight documentation
-├── packages/
-│   └── shared/       # Schemas, data, types (Zod)
-├── .github/workflows/  # CI/CD pipelines
-├── .maestro/         # Mobile E2E tests
-└── memory-bank/      # AI agent context
+├── app/                     # Expo Router pages
+│   ├── (tabs)/             # Tab navigation
+│   │   ├── index.tsx       # Game entry point
+│   │   └── _layout.tsx     # Tab layout
+│   ├── index.tsx           # Root index
+│   └── _layout.tsx         # Root layout
+├── src/                    # Game source code
+│   ├── data/               # Game data & schemas (Zod)
+│   │   ├── schemas/        # Type definitions
+│   │   ├── items/          # Item definitions
+│   │   ├── npcs/           # NPC definitions
+│   │   ├── quests/         # Quest definitions
+│   │   └── generation/     # Procedural generators
+│   ├── game/               # Game logic
+│   │   ├── components/     # Game components
+│   │   ├── screens/        # Game screens
+│   │   ├── ui/             # UI panels
+│   │   └── store/          # Zustand state management
+│   ├── engine/             # 3D rendering engine
+│   │   ├── hex/            # Hex grid system
+│   │   ├── rendering/      # Scene management
+│   │   └── terrain/        # Terrain generation
+│   ├── hooks/              # React hooks
+│   ├── lib/                # Utilities
+│   └── types/              # TypeScript types
+├── assets/                 # Static assets
+│   ├── models/             # 3D models (GLTF/GLB)
+│   ├── textures/           # Textures
+│   ├── images/             # UI images
+│   └── fonts/              # Fonts
+├── components/             # Shared React Native components
+├── constants/              # App constants
+├── docs/                   # Documentation
+├── memory-bank/            # AI context files
+└── .github/workflows/      # CI/CD pipelines
 ```
 
 ---
 
 ## Tech Stack
 
-| Layer | Web | Mobile |
-|-------|-----|--------|
-| **Framework** | React 19 + Vite | Expo SDK 54 |
-| **3D Engine** | Babylon.js (WebGPU) | React Native Filament |
-| **State** | Zustand | Zustand |
-| **Persistence** | sql.js + IndexedDB | expo-sqlite |
-| **Styling** | Tailwind CSS v4 | NativeWind |
-| **Testing** | Vitest + Playwright | Maestro |
+| Component | Technology | Version |
+|-----------|------------|---------|
+| **Framework** | Expo | SDK 54 |
+| **Runtime** | React Native | 0.81.5 |
+| **3D Engine** | Babylon.js React Native | 1.9.0 |
+| **State** | Zustand | 5.0.10 |
+| **Persistence** | expo-sqlite / sql.js | 16.0.10 / 1.13.0 |
+| **Styling** | Tailwind CSS v4 + NativeWind | 4.1.18 / 4.2.1 |
+| **Schemas** | Zod | 4.3.6 |
+| **Routing** | Expo Router | 6.0.22 |
+| **Package Manager** | pnpm | 10.20.0 |
 
 ---
 
@@ -94,24 +127,20 @@ iron-frontier/
 ## Development Commands
 
 ```bash
-# Web
-pnpm dev              # Dev server (port 8080)
-pnpm build            # Production build
-pnpm test             # Run 203 tests
-pnpm test:e2e         # Playwright E2E
+# Development
+pnpm start            # Start Expo dev server
+pnpm web              # Start web
+pnpm android          # Start Android
+pnpm ios              # Start iOS
 
-# Mobile
-pnpm dev:mobile       # Expo dev server
+# Build
+pnpm build:web        # Export web build
 pnpm build:android    # Build Android APK
-pnpm build:ios        # Build iOS app
-
-# Documentation
-pnpm docs:dev         # Docs dev server
-pnpm docs:build       # Build docs
 
 # Quality
 pnpm typecheck        # TypeScript check
 pnpm lint             # Biome linting
+pnpm lint:fix         # Auto-fix lint issues
 ```
 
 ---

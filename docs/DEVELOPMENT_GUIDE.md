@@ -47,7 +47,7 @@ pnpm --filter @iron-frontier/docs build
 
 ## Project Structure
 
-```
+```plaintext
 iron-frontier/
 ├── apps/
 │   ├── web/                     # Vite + React + Babylon.js (WebGPU)
@@ -386,7 +386,8 @@ pnpm vitest run --coverage
 ```
 
 ### Test Structure
-```
+
+```plaintext
 apps/web/src/test/
 ├── setup.ts                     # Test setup and global mocks
 ├── test-utils.tsx               # Custom render, store helpers
@@ -550,7 +551,8 @@ useEffect(() => {
 - `refactor/store-cleanup`
 
 ### Commit Messages
-```
+
+```plaintext
 feat: add virtual joystick control option
 fix: inventory panel not closing on item use
 refactor: extract dialogue generation to separate module
