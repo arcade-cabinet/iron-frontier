@@ -15,14 +15,14 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ironfrontier.game"
+      "bundleIdentifier": "com.ironfrontier.mobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#1c1917"
       },
-      "package": "com.ironfrontier.game"
+      "package": "com.ironfrontier.mobile"
     },
     "web": {
       "bundler": "metro",
