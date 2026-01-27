@@ -57,8 +57,8 @@ jobs:
         uses: expo/expo-github-action@2c2346dcc7c5c0e80c2475b1a47ef766a77b3e38 # v8.3.1
         with:
           token: ${{ secrets.EXPO_TOKEN }}
-          eas-version: latest
-          expo-version: latest
+          eas-version: 16.28.0
+          expo-version: 0.22.7
           
       - name: Build Android APK
         run: pnpm build:android
