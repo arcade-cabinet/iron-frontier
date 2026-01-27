@@ -23,7 +23,7 @@ import type { GridPos, NPC, Sector } from '../lib/types';
 
 // Tile size in world units
 const TILE_SIZE = 1;
-const PLAYER_HEIGHT = 0.8;
+const _PLAYER_HEIGHT = 0.8;
 
 // Steampunk color palette
 const COLORS = {
@@ -48,7 +48,6 @@ export interface EngineCallbacks {
 }
 
 export class BabylonEngine {
-  private canvas: HTMLCanvasElement;
   private engine: Engine;
   private scene: Scene;
   private camera: ArcRotateCamera;
@@ -58,7 +57,6 @@ export class BabylonEngine {
   private tileMeshes: Mesh[] = [];
   private highlightLayer: HighlightLayer;
   private callbacks: EngineCallbacks;
-  private currentSector: Sector | null = null;
   private shadowGenerator: ShadowGenerator | null = null;
   private isLowPower: boolean = false;
   private resizeHandler?: () => void;

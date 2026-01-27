@@ -1,4 +1,3 @@
-import { PipeLogic } from './logic';
 import type { Direction, PipeCell, PipePuzzleState, PipeType } from './types';
 
 export class PuzzleGenerator {
@@ -57,7 +56,7 @@ export class PuzzleGenerator {
     // 3. Fill empty spots with random pieces.
 
     // 1. Random Path (Random Walk)
-    const path: { x: number; y: number }[] = [curr];
+    const _path: { x: number; y: number }[] = [curr];
     // Simple constrained random walk: try to move towards end
     // This is a naive generator, robust one would use A* or recursive backtracking
 

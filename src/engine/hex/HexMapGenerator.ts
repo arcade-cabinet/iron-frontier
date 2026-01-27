@@ -262,7 +262,6 @@ export class HexMapGenerator {
   private biomeNoise: NoiseFunction2D;
   private moistureNoise: NoiseFunction2D;
   private elevationNoise: NoiseFunction2D;
-  private variationNoise: NoiseFunction2D;
   private prng: () => number;
 
   constructor(config: Partial<HexMapConfig> = {}) {
@@ -437,7 +436,7 @@ export class HexMapGenerator {
    */
   private generateRiverPath(
     tiles: Map<string, HexTileData>,
-    existingRivers: HexCoord[][]
+    _existingRivers: HexCoord[][]
   ): HexCoord[] {
     const { width, height } = this.config;
     const path: HexCoord[] = [];
@@ -633,7 +632,7 @@ export class HexMapGenerator {
     const potentialMines: HexCoord[] = [];
     const potentialFarms: HexCoord[] = [];
 
-    tiles.forEach((tile, key) => {
+    tiles.forEach((tile, _key) => {
       // Towns: near rivers, flat terrain, not too rocky
       if (tile.biome === 'riverside' && tile.elevation < 0.5 && !tile.riverTile) {
         potentialTowns.push(tile.coord);
@@ -995,7 +994,7 @@ export class HexMapGenerator {
   /**
    * Count existing path connections to a tile
    */
-  private countPathConnections(coord: HexCoord, tile: HexTileData): number {
+  private countPathConnections(_coord: HexCoord, tile: HexTileData): number {
     // For now, return 0 as we're building paths sequentially
     // In a more complex system, we'd check neighboring tiles
     return tile.pathTile ? 1 : 0;

@@ -11,12 +11,7 @@ import {
   substituteTemplate,
 } from '../../schemas/generation';
 import { SeededRandom } from '../seededRandom';
-import {
-  type GeneratedName,
-  generateName,
-  generateNameWeighted,
-  type NameGender,
-} from './nameGenerator';
+import { type GeneratedName, generateNameWeighted, type NameGender } from './nameGenerator';
 
 // Template registry (populated at init)
 let NPC_TEMPLATES: NPCTemplate[] = [];
@@ -298,7 +293,7 @@ export function generateNPCsForLocation(
  */
 export function generateNPCsForBuilding(
   rng: SeededRandom,
-  buildingType: string,
+  _buildingType: string,
   npcSlots: Array<{ role: string; required: boolean; count: number }>,
   context: GenerationContext
 ): GeneratedNPC[] {

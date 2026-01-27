@@ -5,7 +5,7 @@
  * Platform-specific adapters (Babylon, Filament) extend this class.
  */
 
-import type { IMeshHandle, IScene, ISceneManager } from './interfaces';
+import type { IScene, ISceneManager } from './interfaces';
 import type { MeshConfig, SceneConfig, Transform } from './types';
 
 /**

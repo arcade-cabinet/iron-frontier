@@ -70,7 +70,6 @@ function NotificationIcon({ type }: { type: Notification['type'] }) {
           />
         </svg>
       );
-    case 'info':
     default:
       return (
         <svg

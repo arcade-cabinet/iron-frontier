@@ -70,7 +70,7 @@ const BIOME_COLORS: Record<string, string> = {
 };
 
 // Biome fill patterns (for visual distinction)
-const BIOME_PATTERNS: Record<string, string> = {
+const _BIOME_PATTERNS: Record<string, string> = {
   desert: 'url(#pattern-desert)',
   badlands: 'url(#pattern-badlands)',
   grassland: 'url(#pattern-grassland)',

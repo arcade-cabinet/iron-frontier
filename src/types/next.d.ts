@@ -15,7 +15,7 @@ export type NextHeadProps = Record<string, any>;
 
 export type NextScriptProps = React.ScriptHTMLAttributes<HTMLScriptElement> & Record<string, any>;
 
-export interface DynamicOptions<P = any> {
+export interface DynamicOptions<_P = any> {
   [key: string]: any;
 }
 

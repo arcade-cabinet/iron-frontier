@@ -15,7 +15,7 @@ import { ProceduralLocationManager } from '@/data/generation/ProceduralLocationM
 import { combineSeeds, hashString, SeededRandom } from '@/data/generation/seededRandom';
 import { ENCOUNTER_TEMPLATES } from '@/data/generation/templates/encounterTemplates';
 // Import data access functions from the shared data layer
-import { type BaseItem, getItem, STARTER_INVENTORY } from '@/data/items';
+import { getItem, STARTER_INVENTORY } from '@/data/items';
 import { getWorldItemsForLocation } from '@/data/items/worldItems';
 import { getDialogueTreeById, getNPCById, getPrimaryDialogueTree } from '@/data/npcs';
 import { getQuestById } from '@/data/quests';
@@ -26,7 +26,7 @@ import {
   rollCritical,
   rollHit,
 } from '@/data/schemas/combat';
-import { type DialogueNode, getAvailableChoices, getDialogueEntryNode } from '@/data/schemas/npc';
+import { getAvailableChoices, getDialogueEntryNode } from '@/data/schemas/npc';
 import { createActiveQuest, isCurrentStageComplete as isStageComplete } from '@/data/schemas/quest';
 import { getConnectionsFrom } from '@/data/schemas/world';
 import {

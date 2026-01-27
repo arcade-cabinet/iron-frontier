@@ -220,7 +220,7 @@ export function getShopsByTag(tag: string): ShopDefinition[] {
 /**
  * Calculate buy price (what player pays)
  */
-export function calculateBuyPrice(shop: ShopDefinition, item: ShopItem): number {
+export function calculateBuyPrice(_shop: ShopDefinition, item: ShopItem): number {
   const baseDef = getItem(item.itemId);
   if (!baseDef) return 0;
 

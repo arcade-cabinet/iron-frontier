@@ -296,7 +296,7 @@ class ProceduralLocationManagerClass {
     }
 
     // If we have resolved location info, generate full content
-    if (resolved && resolved.isProcedural) {
+    if (resolved?.isProcedural) {
       const content = this.generateLocationContent(resolved);
       return content.npcs;
     }
@@ -316,7 +316,7 @@ class ProceduralLocationManagerClass {
     }
 
     // If we have resolved location info, generate full content
-    if (resolved && resolved.isProcedural) {
+    if (resolved?.isProcedural) {
       const content = this.generateLocationContent(resolved);
       return content.worldItems;
     }
@@ -472,7 +472,7 @@ class ProceduralLocationManagerClass {
   private convertToProceduralNPCs(
     generated: GeneratedNPC[],
     locationId: string,
-    rng: SeededRandom
+    _rng: SeededRandom
   ): ProceduralNPC[] {
     return generated.map((npc, index) => {
       // Simple spiral placement for NPCs
@@ -705,7 +705,7 @@ class ProceduralLocationManagerClass {
   private generateShopForNPC(
     rng: SeededRandom,
     npc: ProceduralNPC,
-    locationType: string
+    _locationType: string
   ): ShopInventory {
     // Determine shop type based on NPC role
     const shopTypeByRole: Record<string, string> = {

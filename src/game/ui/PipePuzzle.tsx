@@ -1,5 +1,4 @@
 import type React from 'react';
-import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { type PipeCell, PipeLogic } from '@/puzzles/pipe-fitter';

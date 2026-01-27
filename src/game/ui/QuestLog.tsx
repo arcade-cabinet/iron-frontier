@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getQuestById } from '@/data/quests';
-import type { ActiveQuest, Objective, Quest, QuestStage } from '@/data/schemas/quest';
+import type { ActiveQuest, Objective, Quest } from '@/data/schemas/quest';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
 

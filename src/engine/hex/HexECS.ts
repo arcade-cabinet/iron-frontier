@@ -318,7 +318,7 @@ export function getPassableNeighbors(
     const neighborCoord = hexNeighbor(coord, direction);
     const neighbor = findEntityByCoord(world, neighborCoord);
 
-    if (neighbor && neighbor.movement.passable) {
+    if (neighbor?.movement.passable) {
       results.push(neighbor);
     }
   }

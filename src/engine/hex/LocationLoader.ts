@@ -6,17 +6,9 @@
  */
 
 import { ASSEMBLAGES_BY_ID } from '@/data/assemblages/library';
-import {
-  type AssemblageRef,
-  type Location,
-  type SlotInstance,
-  HexCoord as SpatialHexCoord,
-  TerrainTypeSchema,
-  type TileDef,
-} from '@/data/schemas/spatial';
+import type { AssemblageRef, Location, SlotInstance, TileDef } from '@/data/schemas/spatial';
 import { createEmptyGrid, type HexGrid } from './HexGridRenderer';
 import {
-  createEmptyTile,
   DEFAULT_HEX_LAYOUT,
   HexBuildingType,
   type HexCoord,

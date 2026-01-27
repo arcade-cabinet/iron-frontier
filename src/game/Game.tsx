@@ -152,7 +152,7 @@ function GameCanvas() {
         // Handle hex clicks - check for NPCs and items first, then movement
         manager.setHexClickHandler((hexCoord, tile) => {
           // Check for buildings first (Puzzle Trigger)
-          if (tile && tile.building && tile.building !== HexBuildingType.None) {
+          if (tile?.building && tile.building !== HexBuildingType.None) {
             const key = hexKey(hexCoord);
             const status = ProceduralLocationManager.getOrGenerateStructureState(
               currentLocationId,
@@ -327,7 +327,19 @@ function GameCanvas() {
       // In StrictMode, this cleanup runs but sceneManagerRef might be null
       // The next effect run will see sceneManagerRef.current and skip
     };
-  }, [worldSeed, phase, loadedWorld, currentLocationId]);
+  }, [
+    worldSeed,
+    phase,
+    loadedWorld,
+    currentLocationId,
+    addNotification,
+    collectWorldItem,
+    collectedItemIds.includes,
+    setPlayerPosition,
+    startCombat,
+    startPuzzle,
+    talkToNPC,
+  ]);
 
   // Separate cleanup effect for actual unmount
   useEffect(() => {
@@ -393,7 +405,7 @@ function GameCanvas() {
         sceneManagerRef.current = manager;
 
         // Handle hex clicks - check for NPCs and items first, then movement
-        manager.setHexClickHandler((hexCoord, tile) => {
+        manager.setHexClickHandler((hexCoord, _tile) => {
           if (currentLocationId) {
             const npcsInLocation = getNPCsByLocation(currentLocationId);
             const npcAtHex = npcsInLocation.find(
@@ -481,7 +493,15 @@ function GameCanvas() {
     };
 
     reloadLocation();
-  }, [currentLocationId, loadedWorld, worldSeed, setPlayerPosition, collectedItemIds]);
+  }, [
+    currentLocationId,
+    loadedWorld,
+    worldSeed,
+    setPlayerPosition,
+    collectedItemIds,
+    collectWorldItem,
+    talkToNPC,
+  ]);
 
   // Update player position when it changes externally
   useEffect(() => {

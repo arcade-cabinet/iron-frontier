@@ -20,7 +20,7 @@
  *   {{event}}       - Past event reference
  */
 
-import type { NameOrigin, NPCTemplate } from '../../schemas/generation';
+import type { NPCTemplate } from '../../schemas/generation';
 
 // ============================================================================
 // TOWN OFFICIALS

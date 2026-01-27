@@ -3,7 +3,7 @@
 
 import type { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { Color3, Color4, Vector3 } from '@babylonjs/core/Maths/math';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Scene, useScene } from 'reactylon';
 import { Engine } from 'reactylon/web';
 import {
@@ -293,7 +293,7 @@ function CameraController() {
   useEffect(() => {
     if (!scene) return;
     const camera = scene.activeCamera as ArcRotateCamera;
-    if (camera && camera.target) {
+    if (camera?.target) {
       camera.target = new Vector3(player.position.x, 0, player.position.y);
     }
   }, [player.position.x, player.position.y, scene]);

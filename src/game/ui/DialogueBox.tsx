@@ -48,7 +48,7 @@ export function DialogueBox() {
   } = useGameStore();
 
   const dialogueOpen = phase === 'dialogue' && !!dialogueState;
-  const activeNPC = useMemo(() => getActiveNPC(), [dialogueState?.npcId]);
+  const activeNPC = useMemo(() => getActiveNPC(), [getActiveNPC]);
 
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -68,7 +68,7 @@ export function DialogueBox() {
     setIsTyping(true);
     setShowChoices(false);
     setSelectedChoiceIndex(null);
-  }, [dialogueOpen, dialogueState?.currentNodeId]);
+  }, [dialogueOpen, dialogueState?.currentNodeId, dialogueState]);
 
   // Typewriter effect
   useEffect(() => {

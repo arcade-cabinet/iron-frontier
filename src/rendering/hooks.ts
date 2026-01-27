@@ -7,7 +7,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { IMeshHandle, IScene, ISceneManager } from './interfaces';
-import type { MeshConfig, SceneConfig, Transform } from './types';
+import type { MeshConfig, Transform } from './types';
 
 // ============================================================================
 // CONTEXT
@@ -153,7 +153,7 @@ export function useMesh(id: string, config: MeshConfig | null): IMeshHandle | nu
       }
       setMesh(null);
     };
-  }, [scene, id, config?.modelPath]); // Only recreate if scene, id, or model path changes
+  }, [scene, id, config?.modelPath, config]); // Only recreate if scene, id, or model path changes
 
   // Update transform when config changes (but don't recreate mesh)
   useEffect(() => {
@@ -161,7 +161,7 @@ export function useMesh(id: string, config: MeshConfig | null): IMeshHandle | nu
       mesh.setTransform(config.transform);
       mesh.setVisible(config.visible ?? true);
     }
-  }, [mesh, config?.transform, config?.visible]);
+  }, [mesh, config?.transform, config?.visible, config]);
 
   return mesh;
 }
@@ -244,7 +244,7 @@ export function usePreloadModels(modelPaths: string[]): {
         setLoading(false);
         setError(err instanceof Error ? err : new Error(String(err)));
       });
-  }, [manager, JSON.stringify(modelPaths)]);
+  }, [manager, modelPaths]);
 
   return { loading, progress, error };
 }

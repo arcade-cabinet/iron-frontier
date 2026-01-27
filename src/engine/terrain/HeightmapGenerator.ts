@@ -3,7 +3,6 @@
 import Alea from 'alea';
 import { createNoise2D, type NoiseFunction2D } from 'simplex-noise';
 import {
-  BIOME_CONFIGS,
   type BiomeType,
   CHUNK_SIZE,
   type ChunkCoord,

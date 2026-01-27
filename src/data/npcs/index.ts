@@ -8,10 +8,7 @@
  * the ProceduralLocationManager.
  */
 
-import {
-  ProceduralLocationManager,
-  type ProceduralNPC,
-} from '../generation/ProceduralLocationManager';
+import { ProceduralLocationManager } from '../generation/ProceduralLocationManager';
 import type { DialogueTree, NPCDefinition } from '../schemas/npc';
 
 export type { ProceduralNPC } from '../generation/ProceduralLocationManager';
@@ -354,7 +351,7 @@ export function getDialogueTreeById(id: string): DialogueTree | undefined {
   // Check procedural dialogue trees
   if (id.startsWith('proc_dialogue_') && ProceduralLocationManager.isInitialized()) {
     // Extract NPC ID from dialogue tree ID: proc_dialogue_npcId
-    const npcId = id.replace('proc_dialogue_', '');
+    const _npcId = id.replace('proc_dialogue_', '');
     // We need to find which location this NPC is in
     // For now, search all cached locations - this is O(n) but acceptable for small datasets
     return undefined; // Caller should use getProceduralDialogueTree for known locations
@@ -395,7 +392,7 @@ export function getPrimaryDialogueTree(
 ): DialogueTree | undefined {
   // First check hand-crafted NPCs
   const npc = NPCS_BY_ID[npcId];
-  if (npc && npc.primaryDialogueId) {
+  if (npc?.primaryDialogueId) {
     return DIALOGUE_TREES_BY_ID[npc.primaryDialogueId];
   }
 

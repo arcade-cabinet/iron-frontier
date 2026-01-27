@@ -15,7 +15,6 @@ import {
 import { persistStorage } from './persistStorage';
 import type { StorageAdapter } from './StorageAdapter';
 import type {
-  CombatActionType,
   DialogueCondition,
   DialogueEffect,
   EquipmentSlot,
@@ -509,7 +508,7 @@ export function createGameStore({
           get().addNotification('quest', `Started: ${def.title}`);
         },
 
-        updateObjective: (questId: string, objectiveId: string, progress: number) => {
+        updateObjective: (questId: string, _objectiveId: string, _progress: number) => {
           set((state) => ({
             activeQuests: state.activeQuests.map((q) => {
               if (q.id !== questId) return q;
@@ -520,7 +519,7 @@ export function createGameStore({
           }));
         },
 
-        advanceQuestStage: (questId: string) => {
+        advanceQuestStage: (_questId: string) => {
           // Logic to move to next stage
         },
 
@@ -544,8 +543,8 @@ export function createGameStore({
           state.addNotification('quest', `Completed: ${def.title}`);
         },
 
-        failQuest: (questId: string) => {},
-        abandonQuest: (questId: string) => {},
+        failQuest: (_questId: string) => {},
+        abandonQuest: (_questId: string) => {},
 
         getActiveQuest: (questId: string) => get().activeQuests.find((q) => q.id === questId),
         getQuestDefinition: (questId: string) => dataAccess.getQuestById(questId),
@@ -589,7 +588,7 @@ export function createGameStore({
 
           // Check conditions for root nodes?
           // For now assume entry point 0
-          const entry = tree.entryPoints[0];
+          const _entry = tree.entryPoints[0];
           const node = dataAccess.getDialogueEntryNode(tree, (c) =>
             get().checkDialogueCondition(c)
           );
@@ -656,7 +655,7 @@ export function createGameStore({
 
         advanceDialogue: () => {
           const { dialogueState } = get();
-          if (dialogueState && dialogueState.autoAdvanceNodeId) {
+          if (dialogueState?.autoAdvanceNodeId) {
             // Similar logic to selectChoice but automatic
           } else {
             get().endDialogue();
@@ -682,7 +681,7 @@ export function createGameStore({
           }
         },
 
-        checkDialogueCondition: (condition: DialogueCondition) => {
+        checkDialogueCondition: (_condition: DialogueCondition) => {
           // Implement condition checking against game state
           return true;
         },
@@ -933,7 +932,7 @@ export function createGameStore({
           const { combatState } = state;
           if (!combatState || !combatState.selectedAction) return;
 
-          const actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity?
+          const _actorId = combatState.combatants[combatState.currentTurnIndex].definitionId; // combatants array holds state, but definitionId is unique ID for entity?
           // Actually combatant.definitionId might not be unique if multiple same enemies.
           // Combatant interface doesn't have a unique instance ID in the schema I saw?
           // Let's assume index is the source of truth for now.
@@ -1064,7 +1063,7 @@ export function createGameStore({
             set({ combatState: { ...combatState, phase: 'victory' } });
             // Grant Rewards
             const encounter = dataAccess.getEncounterById(combatState.encounterId);
-            if (encounter && encounter.rewards) {
+            if (encounter?.rewards) {
               if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
               if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
             }

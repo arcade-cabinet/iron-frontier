@@ -9,7 +9,6 @@
 import {
   Color3,
   Mesh,
-  MeshBuilder,
   PBRMaterial,
   type Scene,
   Texture,
@@ -310,7 +309,7 @@ export class TexturedHexTileFactory {
         if (config.tintColor) {
           material.albedoColor = config.tintColor;
         }
-      } catch (e) {
+      } catch (_e) {
         // Fall back to simple color
         console.warn(`[TexturedHexTile] Failed to load textures for ${terrainId}, using fallback`);
         material.albedoColor = TERRAIN_FALLBACK_COLORS[terrainId] || new Color3(0.5, 0.5, 0.5);

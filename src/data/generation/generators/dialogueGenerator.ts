@@ -217,7 +217,7 @@ function generateNode(
   rng: SeededRandom,
   nodePattern: DialogueTreeTemplate['nodePatterns'][0],
   npc: GeneratedNPC,
-  context: GenerationContext,
+  _context: GenerationContext,
   variables: Record<string, string>,
   nodeIndex: number
 ): GeneratedDialogueNode | null {

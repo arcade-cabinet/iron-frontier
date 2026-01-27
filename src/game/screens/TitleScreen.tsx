@@ -1,7 +1,7 @@
 // Title Screen - Iron Frontier
 
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useGameStore } from '../store/webGameStore';
 
@@ -183,7 +183,6 @@ function MainMenu() {
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
                 maxLength={20}
-                autoFocus
                 className={cn(
                   'w-full px-4 py-3 rounded-lg text-center',
                   'bg-stone-800 border-2 border-amber-700/50',

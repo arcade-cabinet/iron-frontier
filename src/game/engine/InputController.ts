@@ -2,7 +2,7 @@
 // Supports tap-to-move, virtual joystick, and gesture controls
 
 import type { GridPos, SectorTile } from '../lib/types';
-import { findNearestWalkable, findPath } from './pathfinding';
+import { findPath } from './pathfinding';
 
 export type ControlMode = 'tap' | 'joystick';
 
@@ -159,7 +159,7 @@ export class InputController {
     }
   }
 
-  private handleTouchEnd(e: TouchEvent): void {
+  private handleTouchEnd(_e: TouchEvent): void {
     if (this.longPressTimeout) {
       clearTimeout(this.longPressTimeout);
       this.longPressTimeout = null;

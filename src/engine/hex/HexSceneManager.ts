@@ -19,7 +19,6 @@ import {
   Scene,
   SceneLoader,
   ShadowGenerator,
-  type Skeleton,
   StandardMaterial,
   TransformNode,
   Vector3,
@@ -28,29 +27,16 @@ import '@babylonjs/loaders/glTF';
 
 import type { Location } from '@/data/schemas/spatial';
 import { WesternAssets } from '~/assets';
-import {
-  hexToWorld as coordHexToWorld,
-  worldToHex as coordWorldToHex,
-  hex,
-  hexDistance,
-  hexNeighbors,
-} from './HexCoord';
+import { hexDistance, hexNeighbors } from './HexCoord';
 import {
   createEmptyGrid,
-  HEX_SIZE,
   type HexGrid,
   HexGridRenderer,
   hexToWorld,
   worldToHex,
 } from './HexGridRenderer';
+import { type HexTileData as GeneratorTileData, HexMapGenerator } from './HexMapGenerator';
 import {
-  type HexTileData as GeneratorTileData,
-  generateHexMap,
-  HexMapGenerator,
-} from './HexMapGenerator';
-import { getHexTileLoader, type HexTileLoader } from './HexTileLoader';
-import {
-  createEmptyTile,
   DEFAULT_HEX_LAYOUT,
   HexBuildingType,
   type HexCoord,
@@ -103,7 +89,6 @@ export class HexSceneManager {
 
   // Hex system
   private gridRenderer: HexGridRenderer | null = null;
-  private tileLoader: HexTileLoader | null = null;
   private mapGenerator: HexMapGenerator;
   private hexGrid: HexGrid | null = null;
   private loadedLocation: LoadedLocation | null = null;
@@ -113,7 +98,6 @@ export class HexSceneManager {
 
   // Player
   private playerMesh: AbstractMesh | null = null;
-  private playerSkeleton: Skeleton | null = null;
   private playerAnimations: AnimationGroup[] = [];
   private playerHex: HexCoord = { q: 0, r: 0 };
   private playerWorldPos: Vector3 = Vector3.Zero();
@@ -210,11 +194,6 @@ export class HexSceneManager {
     // Camp/misc
     [HexFeatureType.Camp]: { path: 'assets/models/nature/', file: 'log.glb', scale: 1.2 },
   };
-
-  // Camera azimuth for calculating player facing direction
-  // Player should face TOWARD the camera by default (Fallout 2 style)
-  // Camera is at azimuth 135° (top-right looking down at player)
-  private readonly CAMERA_AZIMUTH = Math.PI * 0.75; // 135 degrees
   private readonly DEFAULT_PLAYER_FACING = -Math.PI * 0.25; // -45 degrees - face toward camera
   // Model rotation offset: the model's "forward" is offset from standard atan2
   // To face direction θ, set rotation.y = θ + MODEL_ROTATION_OFFSET
@@ -431,7 +410,7 @@ export class HexSceneManager {
   private findPassableSpawnPoint(center: HexCoord): HexCoord {
     // Check center first
     const centerTile = this.hexGrid?.tiles.get(hexKey(center));
-    if (centerTile && centerTile.isPassable && !centerTile.isWater) {
+    if (centerTile?.isPassable && !centerTile.isWater) {
       return center;
     }
 
@@ -443,7 +422,7 @@ export class HexSceneManager {
       // Check tiles at this radius in a ring pattern
       for (const neighbor of neighbors) {
         const tile = this.hexGrid?.tiles.get(hexKey(neighbor));
-        if (tile && tile.isPassable && !tile.isWater) {
+        if (tile?.isPassable && !tile.isWater) {
           console.log(`[HexSceneManager] Found passable spawn at (${neighbor.q}, ${neighbor.r})`);
           return neighbor;
         }
@@ -463,7 +442,7 @@ export class HexSceneManager {
 
       for (const coord of checkCoords) {
         const tile = this.hexGrid?.tiles.get(hexKey(coord));
-        if (tile && tile.isPassable && !tile.isWater) {
+        if (tile?.isPassable && !tile.isWater) {
           console.log(`[HexSceneManager] Found passable spawn at (${coord.q}, ${coord.r})`);
           return coord;
         }
@@ -545,7 +524,7 @@ export class HexSceneManager {
   /**
    * Map base tile name to HexTerrainType
    */
-  private mapTerrainType(baseTile: string, biome: string): HexTerrainType {
+  private mapTerrainType(baseTile: string, _biome: string): HexTerrainType {
     // Direct mapping from Kenney tile names to terrain types
     const mapping: Record<string, HexTerrainType> = {
       grass: HexTerrainType.Grass,
@@ -656,7 +635,7 @@ export class HexSceneManager {
    * Setup pointer/click input
    */
   private setupInput(): void {
-    this.scene.onPointerDown = (evt, pickResult) => {
+    this.scene.onPointerDown = (_evt, pickResult) => {
       if (pickResult?.hit && pickResult.pickedPoint) {
         const worldPos = pickResult.pickedPoint;
 
@@ -710,7 +689,7 @@ export class HexSceneManager {
       const boundingInfo = player.getHierarchyBoundingVectors();
       const modelHeight = boundingInfo.max.y - boundingInfo.min.y;
       const modelMinY = boundingInfo.min.y; // Bottom of model in model space
-      const modelMaxY = boundingInfo.max.y; // Top of model in model space
+      const _modelMaxY = boundingInfo.max.y; // Top of model in model space
 
       console.log(
         `[HexSceneManager] Model bounds: min=(${boundingInfo.min.x.toFixed(2)}, ${boundingInfo.min.y.toFixed(2)}, ${boundingInfo.min.z.toFixed(2)}), max=(${boundingInfo.max.x.toFixed(2)}, ${boundingInfo.max.y.toFixed(2)}, ${boundingInfo.max.z.toFixed(2)})`
@@ -1136,7 +1115,7 @@ export class HexSceneManager {
    * Check if a picked mesh is an NPC marker and return the NPC ID
    */
   getNPCFromPickedMesh(mesh: AbstractMesh): string | null {
-    if (mesh.metadata && mesh.metadata.npcId) {
+    if (mesh.metadata?.npcId) {
       return mesh.metadata.npcId;
     }
     return null;
@@ -1233,7 +1212,7 @@ export class HexSceneManager {
    * Check if a picked mesh is a world item marker and return the item ID
    */
   getItemFromPickedMesh(mesh: AbstractMesh): string | null {
-    if (mesh.metadata && mesh.metadata.isWorldItem && mesh.metadata.itemId) {
+    if (mesh.metadata?.isWorldItem && mesh.metadata.itemId) {
       return mesh.metadata.itemId;
     }
     return null;

@@ -5,7 +5,6 @@
  * for use in procedural hex-based terrain generation.
  */
 import {
-  AbstractMesh,
   type AssetContainer,
   type InstancedMesh,
   Mesh,
@@ -375,7 +374,7 @@ export class HexTileLoader {
   dispose(): void {
     console.log('[HexTileLoader] Disposing all cached tiles...');
 
-    for (const [type, cached] of this.cache) {
+    for (const [_type, cached] of this.cache) {
       cached.container.dispose();
     }
 

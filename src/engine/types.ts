@@ -8,25 +8,7 @@ import { WesternAssets } from '~/assets';
 // This ensures that the engine uses the same data structures as the procedural generation
 export * from '@/types/engine';
 
-import type {
-  BiomeType,
-  CharacterAppearance,
-  ChunkCoord,
-  ItemCategory,
-  ItemDefinition,
-  ItemEffect,
-  ItemRarity,
-  NPC,
-  NPCPersonality,
-  NPCRole,
-  PropType,
-  StructureType,
-  TimeState,
-  WeatherState,
-  WeatherType,
-  WorldItem,
-  WorldPosition,
-} from '@/types/engine';
+import type { BiomeType, ChunkCoord, NPC, StructureType, WorldItem } from '@/types/engine';
 
 // ============================================================================
 // EXTENDED TYPES (Web/Babylon Specific)

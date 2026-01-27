@@ -1057,7 +1057,7 @@ export function buildDialogueTree(
     region: context.regionId || 'unknown',
   };
 
-  const buildContext: BuildContext = {
+  const _buildContext: BuildContext = {
     npc,
     generationContext: context,
     variables,
@@ -1077,7 +1077,7 @@ export function buildDialogueTree(
   });
 
   // Second pass: build actual nodes
-  template.nodePatterns.forEach((pattern, index) => {
+  template.nodePatterns.forEach((pattern, _index) => {
     const nodeId = nodeIdMap.get(pattern.role)!;
 
     // Find matching snippet for this node's categories

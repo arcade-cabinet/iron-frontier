@@ -14,9 +14,7 @@ import {
   Scene,
   SceneLoader,
   ShadowGenerator,
-  type Skeleton,
   StandardMaterial,
-  Texture,
   Vector3,
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
@@ -24,10 +22,8 @@ import { WesternAssets } from '~/assets';
 import { getHeightmapGenerator, type HeightmapGenerator } from '../terrain/HeightmapGenerator';
 import { TerrainChunk } from '../terrain/TerrainChunk';
 import {
-  type CameraState,
   type ChunkCoord,
   chunkKey,
-  DEFAULT_CAMERA_STATE,
   VIEW_DISTANCE,
   type WorldPosition,
   worldToChunk,
@@ -54,13 +50,9 @@ export class SceneManager {
 
   // Player
   private playerMesh: AbstractMesh | null = null;
-  private playerSkeleton: Skeleton | null = null;
   private playerAnimations: AnimationGroup[] = [];
   private playerPosition: WorldPosition = { x: 0, y: 0, z: 0 };
   private playerYOffset: number = 0; // Compensate for models not centered at origin
-
-  // Camera state
-  private cameraState: CameraState = { ...DEFAULT_CAMERA_STATE };
 
   // Callbacks
   private onGroundClick?: (position: WorldPosition) => void;
@@ -236,7 +228,7 @@ export class SceneManager {
 
   private setupInput(): void {
     // Ground click detection
-    this.scene.onPointerDown = (evt, pickResult) => {
+    this.scene.onPointerDown = (_evt, pickResult) => {
       if (pickResult?.hit && pickResult.pickedPoint && this.onGroundClick) {
         const pos: WorldPosition = {
           x: pickResult.pickedPoint.x,

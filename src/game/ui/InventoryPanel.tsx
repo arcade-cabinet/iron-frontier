@@ -294,7 +294,7 @@ export function InventoryPanel() {
                 <p className="text-xs sm:text-sm">
                   {activeFilter === 'all'
                     ? 'Your saddlebag is empty'
-                    : `No ${activeFilter === 'key_item' ? 'key items' : activeFilter + 's'}`}
+                    : `No ${activeFilter === 'key_item' ? 'key items' : `${activeFilter}s`}`}
                 </p>
                 {activeFilter === 'all' && (
                   <p className="text-[10px] sm:text-xs mt-1 text-amber-500/40">

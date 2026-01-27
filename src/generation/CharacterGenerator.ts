@@ -373,7 +373,7 @@ export class CharacterGenerator {
   }
 
   // Generate player character
-  generatePlayerCharacter(name: string): {
+  generatePlayerCharacter(_name: string): {
     appearance: CharacterAppearance;
     personality: NPCPersonality;
   } {

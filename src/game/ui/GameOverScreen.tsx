@@ -112,7 +112,7 @@ export function GameOverScreen() {
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 bg-amber-500/50 rounded-full"
-                initial={{ x: Math.random() * 100 + '%', y: '100%' }}
+                initial={{ x: `${Math.random() * 100}%`, y: '100%' }}
                 animate={{
                   y: [100, -20],
                   opacity: [0, 0.5, 0],

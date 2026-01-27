@@ -535,7 +535,7 @@ export class SectorGenerator {
     return { x: (SECTOR_SIZE * CELL_SIZE) / 2, y: (SECTOR_SIZE * CELL_SIZE) / 2 };
   }
 
-  private generateExits(grid: GridCell[][]): SectorExit[] {
+  private generateExits(_grid: GridCell[][]): SectorExit[] {
     const exits: SectorExit[] = [];
     const dirs: ('north' | 'south' | 'east' | 'west')[] = ['north', 'south', 'east', 'west'];
 

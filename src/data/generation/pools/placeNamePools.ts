@@ -17,7 +17,7 @@ import type { SeededRandom } from '../seededRandom';
 /**
  * Common frontier adjectives usable across location types
  */
-const COMMON_ADJECTIVES = [
+const _COMMON_ADJECTIVES = [
   // Colors
   'Red',
   'Black',
@@ -81,7 +81,7 @@ const COMMON_ADJECTIVES = [
 /**
  * Common geographic nouns
  */
-const COMMON_NOUNS = [
+const _COMMON_NOUNS = [
   // Water features
   'Creek',
   'River',

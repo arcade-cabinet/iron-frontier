@@ -17,7 +17,6 @@ import type {
 import type { GenerationContext } from '../../schemas/generation';
 import type {
   DialogueChoice,
-  DialogueCondition,
   DialogueEffect,
   DialogueNode,
   DialogueTree,
@@ -41,12 +40,7 @@ import {
   type QuestGenerationContext,
   shouldTriggerEncounter,
 } from '../generators';
-import {
-  type GeneratedLocation,
-  type GeneratedWorld,
-  type WorldGenerationOptions,
-  WorldGenerator,
-} from '../generators/worldGenerator';
+import { type GeneratedLocation, WorldGenerator } from '../generators/worldGenerator';
 import { combineSeeds, hashString, SeededRandom } from '../seededRandom';
 
 // ============================================================================
@@ -71,7 +65,7 @@ function convertPersonality(generated: GeneratedNPC['personality']): NPCPersonal
  */
 function generateDefaultAppearance(rng: SeededRandom, npc: GeneratedNPC): CharacterAppearance {
   const isMale = npc.gender === 'male';
-  const isFemale = npc.gender === 'female';
+  const _isFemale = npc.gender === 'female';
 
   return {
     bodyType: rng.pick(['slim', 'average', 'stocky']),
@@ -356,7 +350,7 @@ export function generateLocationNPCs(
   locationId: string,
   npcs: GeneratedNPC[],
   centerPosition: WorldPosition = { x: 128, y: 0, z: 128 },
-  existingNPCs: Record<string, NPC> = {}
+  _existingNPCs: Record<string, NPC> = {}
 ): Record<string, NPC> {
   const rng = new SeededRandom(hashString(locationId));
   const newNPCs: Record<string, NPC> = {};
@@ -392,9 +386,9 @@ export function generateLocationItems(
     position?: WorldPosition;
   }>,
   centerPosition: WorldPosition = { x: 128, y: 0, z: 128 },
-  existingItems: Record<string, WorldItem> = {}
+  _existingItems: Record<string, WorldItem> = {}
 ): Record<string, WorldItem> {
-  const rng = new SeededRandom(hashString(locationId + '_items'));
+  const rng = new SeededRandom(hashString(`${locationId}_items`));
   const newItems: Record<string, WorldItem> = {};
 
   for (let i = 0; i < items.length; i++) {
@@ -694,7 +688,7 @@ export function generateNPCDialogue(
     includeShop?: boolean;
   } = {}
 ): DialogueTree {
-  const rng = new SeededRandom(hashString(npc.id + '_dialogue'));
+  const rng = new SeededRandom(hashString(`${npc.id}_dialogue`));
 
   const generatedTree = generateSimpleDialogueTree(rng, npc, context, {
     includeRumors: options.includeRumors ?? true,

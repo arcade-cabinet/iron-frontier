@@ -476,7 +476,7 @@ export function CombatPanel() {
       }
     }
     prevLogLength.current = combatState.log.length;
-  }, [combatState?.log.length]);
+  }, [combatState?.log.length, combatState]);
 
   if (!combatState) return null;
 

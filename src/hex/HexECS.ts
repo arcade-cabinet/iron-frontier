@@ -318,7 +318,7 @@ export function getPassableNeighbors(
     const neighborCoord = hexNeighbor(coord, direction);
     const neighbor = findEntityByCoord(world, neighborCoord);
 
-    if (neighbor && neighbor.movement.passable) {
+    if (neighbor?.movement.passable) {
       results.push(neighbor);
     }
   }
@@ -469,8 +469,8 @@ export function findPath(
 
       // Better path reconstruction
       const finalPath: HexCoord[] = [];
-      const trace: string | null = goalKey;
-      const allNodes = new Map<string, Node>();
+      const _trace: string | null = goalKey;
+      const _allNodes = new Map<string, Node>();
 
       // We need to store all processed nodes
       // For simplicity, reconstruct by walking back

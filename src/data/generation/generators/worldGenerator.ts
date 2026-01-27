@@ -10,16 +10,10 @@ import {
   type GenerationManifest,
 } from '../../schemas/generation';
 import { combineSeeds, hashString, SeededRandom } from '../seededRandom';
-import { type GeneratedPlaceName, generatePlaceName, initNamePools } from './nameGenerator';
-import {
-  type GeneratedNPC,
-  generateNPC,
-  generateNPCsForLocation,
-  initNPCTemplates,
-} from './npcGenerator';
+import { generatePlaceName, initNamePools } from './nameGenerator';
+import { type GeneratedNPC, generateNPCsForLocation, initNPCTemplates } from './npcGenerator';
 import {
   type GeneratedQuest,
-  generateQuest,
   generateRandomQuest,
   initQuestTemplates,
   type QuestGenerationContext,

@@ -9,13 +9,11 @@
 import { z } from 'zod';
 import { type GenerationContext, substituteTemplate } from '../../schemas/generation';
 import {
-  type AmmoType,
   AmmoTypeSchema,
   type ArmorItem,
   type BaseItem,
   type ConsumableItem,
   type ItemRarity,
-  ItemRaritySchema,
   type WeaponItem,
   type WeaponType,
   WeaponTypeSchema,
@@ -536,7 +534,7 @@ export function initItemGeneration(
  */
 function getMaterialForItem(
   rng: SeededRandom,
-  itemType: string,
+  _itemType: string,
   rarity: ItemRarity,
   tags: string[]
 ): MaterialPool {
@@ -679,7 +677,7 @@ export interface GeneratedItem {
 export function generateWeapon(
   rng: SeededRandom,
   level: number,
-  tags: string[] = [],
+  _tags: string[] = [],
   options: {
     weaponType?: WeaponType;
     templateId?: string;
@@ -720,7 +718,7 @@ export function generateWeapon(
 
   const qualityAdj = quality.adjective ? `${quality.adjective} ` : '';
   const materialName = material.id !== 'iron' && material.id !== 'steel' ? `${material.name} ` : '';
-  const name = `${qualityAdj}${materialName}${prefix}${suffix ? ' ' + suffix : ''}`.trim();
+  const name = `${qualityAdj}${materialName}${prefix}${suffix ? ` ${suffix}` : ''}`.trim();
 
   // Calculate stats with scaling
   const statMult = material.statMultiplier * quality.statMultiplier;
@@ -799,7 +797,7 @@ export function generateWeapon(
 export function generateArmor(
   rng: SeededRandom,
   level: number,
-  tags: string[] = [],
+  _tags: string[] = [],
   options: {
     slot?: 'head' | 'body' | 'legs' | 'accessory';
     templateId?: string;
@@ -839,7 +837,7 @@ export function generateArmor(
   const qualityAdj = quality.adjective ? `${quality.adjective} ` : '';
   const materialName =
     material.id !== 'leather' && material.id !== 'cloth' ? `${material.name} ` : '';
-  const name = `${qualityAdj}${materialName}${prefix}${suffix ? ' ' + suffix : ''}`.trim();
+  const name = `${qualityAdj}${materialName}${prefix}${suffix ? ` ${suffix}` : ''}`.trim();
 
   // Calculate stats
   const statMult = material.statMultiplier * quality.statMultiplier;
@@ -905,7 +903,7 @@ export function generateArmor(
  */
 export function generateConsumable(
   rng: SeededRandom,
-  tags: string[] = [],
+  _tags: string[] = [],
   options: {
     templateId?: string;
     forceRarity?: ItemRarity;
@@ -963,7 +961,7 @@ export function generateConsumable(
       : itemRng.pick(CONSUMABLE_SUFFIXES);
 
   const qualityAdj = quality.adjective && rarity !== 'common' ? `${quality.adjective} ` : '';
-  const name = `${qualityAdj}${prefix}${suffix ? ' ' + suffix : ''}`.trim();
+  const name = `${qualityAdj}${prefix}${suffix ? ` ${suffix}` : ''}`.trim();
 
   // Calculate stats
   const statMult = quality.statMultiplier;
@@ -1045,7 +1043,7 @@ export function generateLoot(
   rng: SeededRandom,
   lootTableId: string,
   level: number,
-  context?: GenerationContext
+  _context?: GenerationContext
 ): GeneratedItem[] {
   const table = LOOT_TABLES.find((t) => t.id === lootTableId);
   if (!table) {
@@ -1128,7 +1126,7 @@ export function generateShopInventory(
   rng: SeededRandom,
   shopType: string,
   level: number,
-  context?: GenerationContext
+  _context?: GenerationContext
 ): ShopInventoryItem[] {
   const shopTemplate = getShopTemplate(shopType);
   if (!shopTemplate) {
