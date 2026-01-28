@@ -509,8 +509,33 @@ export function createGameStore({
           const item = state.inventory.find((i) => i.id === inventoryItemId);
           if (!item) return;
 
-          // Determine slot from item type if not provided
-          const targetSlot = slot || (item.type === 'weapon' ? 'weapon' : 'body'); // Simplified logic
+          const def = dataAccess.getItem(item.itemId);
+          let targetSlot: EquipmentSlot | undefined = slot;
+          if (!targetSlot) {
+            if (def?.weaponStats || item.type === 'weapon') {
+              targetSlot = 'weapon';
+            } else if (def?.armorStats) {
+              switch (def.armorStats.slot) {
+                case 'head':
+                  targetSlot = 'head';
+                  break;
+                case 'accessory':
+                  targetSlot = 'accessory';
+                  break;
+                case 'legs':
+                  targetSlot = 'body';
+                  break;
+                case 'body':
+                default:
+                  targetSlot = 'body';
+                  break;
+              }
+            } else {
+              targetSlot = 'accessory';
+            }
+          }
+
+          if (!targetSlot) return;
 
           // Unequip current item in slot
           const currentEquippedId = state.equipment[targetSlot];
