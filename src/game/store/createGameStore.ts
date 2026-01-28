@@ -14,6 +14,8 @@ import {
 } from './defaults';
 import { persistStorage } from './persistStorage';
 import type { StorageAdapter } from './StorageAdapter';
+import { createSurvivalSlice } from '../systems/survivalStore';
+import type { DangerLevel, TravelMethod } from '../data/schemas/world';
 import type {
   DialogueCondition,
   DialogueEffect,
@@ -124,7 +126,7 @@ export function createGameStore({
 
   return create<GameState>()(
     persist(
-      (set, get) => ({
+      (set, get, api) => ({
         // Core State
         phase: 'title',
         initialized: false,
@@ -214,7 +216,7 @@ export function createGameStore({
             rarity: def.rarity,
             quantity: 1,
             condition: 100,
-            weight: 0.1,
+            weight: def.weight ?? 0.1,
             type: def.category,
             droppable: true,
           }));
@@ -244,6 +246,8 @@ export function createGameStore({
           });
 
           get().initWorld('frontier_territory');
+          get().resetSurvival();
+          get().startClock();
         },
 
         setPhase: (phase: GamePhase) => set({ phase }),
@@ -257,6 +261,7 @@ export function createGameStore({
             notifications: [],
             // ... reset other critical state
           });
+          get().resetSurvival();
         },
 
         // Player Actions
@@ -334,13 +339,15 @@ export function createGameStore({
 
         // Inventory Actions
         addItem: (item: InventoryItem) => {
+          const currentWeight = get().getTotalWeight();
+          const projectedWeight = currentWeight + item.weight * item.quantity;
+          const maxWeight = get().maxCarryWeight;
+
           set((state) => {
             // Check stackability
             const existingItem = state.inventory.find(
               (i) => i.itemId === item.itemId && i.condition === item.condition
             );
-
-            // TODO: Check weight limit
 
             if (existingItem) {
               return {
@@ -355,6 +362,9 @@ export function createGameStore({
             };
           });
           get().addNotification('item', `Added ${item.quantity}x ${item.name}`);
+          if (projectedWeight > maxWeight) {
+            get().addNotification('warning', 'Over-encumbered: movement slowed.');
+          }
         },
 
         addItemById: (itemId: string, quantity = 1) => {
@@ -370,7 +380,7 @@ export function createGameStore({
             description: def.description,
             usable: def.usable,
             condition: 100,
-            weight: 0.1, // Placeholder
+            weight: def.weight ?? 0.1,
             type: def.category,
             droppable: true,
           };
@@ -518,18 +528,88 @@ export function createGameStore({
         },
 
         updateObjective: (questId: string, _objectiveId: string, _progress: number) => {
+          const state = get();
+          const questDef = dataAccess.getQuestById(questId);
+          const activeQuest = state.activeQuests.find((q) => q.questId === questId);
+          if (!questDef || !activeQuest) return;
+
+          const currentStage = questDef.stages[activeQuest.currentStageIndex];
+          if (!currentStage) return;
+
+          const objective = currentStage.objectives.find(
+            (obj: { id: string; count: number }) => obj.id === _objectiveId
+          );
+          if (!objective) return;
+
+          const wasComplete = dataAccess.isCurrentStageComplete(questDef, activeQuest);
+          const nextProgress = Math.min(objective.count, Math.max(0, _progress));
+          const updatedQuest = {
+            ...activeQuest,
+            objectiveProgress: {
+              ...activeQuest.objectiveProgress,
+              [_objectiveId]: nextProgress,
+            },
+          };
+
           set((state) => ({
-            activeQuests: state.activeQuests.map((q) => {
-              if (q.questId !== questId) return q;
-              // Deep update objective
-              // Implementation skipped for brevity, assumes immutable update structure
-              return q;
-            }),
+            activeQuests: state.activeQuests.map((q) =>
+              q.questId === questId ? updatedQuest : q
+            ),
           }));
+
+          const isComplete = dataAccess.isCurrentStageComplete(questDef, updatedQuest);
+          if (!wasComplete && isComplete) {
+            get().advanceQuestStage(questId);
+          }
         },
 
         advanceQuestStage: (_questId: string) => {
-          // Logic to move to next stage
+          const state = get();
+          const questDef = dataAccess.getQuestById(_questId);
+          const activeQuest = state.activeQuests.find((q) => q.questId === _questId);
+          if (!questDef || !activeQuest) return;
+
+          const currentStage = questDef.stages[activeQuest.currentStageIndex];
+          if (!currentStage) return;
+
+          // Stage rewards
+          if (currentStage.stageRewards.xp) state.gainXP(currentStage.stageRewards.xp);
+          if (currentStage.stageRewards.gold) state.addGold(currentStage.stageRewards.gold);
+          if (currentStage.stageRewards.items?.length) {
+            currentStage.stageRewards.items.forEach((item: { itemId: string; quantity: number }) =>
+              state.addItemById(item.itemId, item.quantity)
+            );
+          }
+          if (currentStage.onCompleteText) {
+            state.addNotification('quest', currentStage.onCompleteText);
+          } else {
+            state.addNotification('quest', `Stage complete: ${currentStage.title}`);
+          }
+
+          const isLastStage = activeQuest.currentStageIndex >= questDef.stages.length - 1;
+          if (isLastStage) {
+            get().completeQuest(_questId);
+            return;
+          }
+
+          const nextStageIndex = activeQuest.currentStageIndex + 1;
+          const nextStage = questDef.stages[nextStageIndex];
+
+          set((state) => ({
+            activeQuests: state.activeQuests.map((q) =>
+              q.questId === _questId
+                ? {
+                    ...q,
+                    currentStageIndex: nextStageIndex,
+                    objectiveProgress: {},
+                  }
+                : q
+            ),
+          }));
+
+          if (nextStage?.onStartText) {
+            state.addNotification('quest', nextStage.onStartText);
+          }
         },
 
         completeQuest: (questId: string) => {
@@ -548,6 +628,11 @@ export function createGameStore({
           // Give rewards
           if (def.rewards.xp) state.gainXP(def.rewards.xp);
           if (def.rewards.gold) state.addGold(def.rewards.gold);
+          if (def.rewards.items?.length) {
+            def.rewards.items.forEach((item: { itemId: string; quantity: number }) =>
+              state.addItemById(item.itemId, item.quantity)
+            );
+          }
 
           state.addNotification('quest', `Completed: ${def.title}`);
         },
@@ -737,8 +822,14 @@ export function createGameStore({
         },
 
         updateTime: (hours: number) => {
+          get().advanceTime(hours);
+          const { clockState } = get();
           set((s) => ({
-            time: { ...s.time, hour: (s.time.hour + hours) % 24 },
+            time: {
+              ...s.time,
+              hour: clockState.hour,
+              dayOfYear: clockState.day,
+            },
           }));
         },
 
@@ -859,8 +950,8 @@ export function createGameStore({
             );
 
           const travelTime = connection?.travelTime ?? 8;
-          const dangerLevel = connection?.danger ?? 'moderate';
-          const method = connection?.method ?? 'trail';
+          const dangerLevel: DangerLevel = connection?.danger ?? 'moderate';
+          const method: TravelMethod = connection?.method ?? 'trail';
           const startedAt = Date.now();
 
           clearTravelTimer();
@@ -911,6 +1002,7 @@ export function createGameStore({
           clearTravelTimer();
 
           const destinationId = travelState.toLocationId;
+          const travelHours = travelState.travelTime;
 
           set({
             currentLocationId: destinationId,
@@ -918,6 +1010,15 @@ export function createGameStore({
             phase: 'playing',
           });
           get().discoverLocation(destinationId);
+          get().advanceTime(travelHours);
+          get().applyTravelFatigue(travelHours);
+          const consumption = get().consumeProvisions(travelHours);
+          if (consumption.ranOutOfFood) {
+            get().addNotification('warning', 'You ran out of food during the journey.');
+          }
+          if (consumption.ranOutOfWater) {
+            get().addNotification('warning', 'You ran out of water during the journey.');
+          }
 
           // Update Quest Objectives (Visit)
           activeQuests.forEach((quest) => {
@@ -1199,6 +1300,7 @@ export function createGameStore({
             phase: 'playing',
             combatState: null,
           });
+          get().applyCombatFatigue(1);
         },
 
         // Puzzle Actions
@@ -1309,6 +1411,8 @@ export function createGameStore({
 
           state.addNotification('item', `Sold ${item.name} for ${price}g`);
         },
+
+        ...createSurvivalSlice(set, get, api),
       }),
       {
         name: storageKey,
@@ -1329,6 +1433,12 @@ export function createGameStore({
             saveVersion: state.saveVersion,
             lastSaved: state.lastSaved,
             playTime: state.playTime,
+            clockState: state.clockState,
+            isClockRunning: state.isClockRunning,
+            fatigueState: state.fatigueState,
+            provisionsState: state.provisionsState,
+            campingState: state.campingState,
+            currentTerrain: state.currentTerrain,
             // Don't persist large derived data or UI state
           }) as any,
       }
