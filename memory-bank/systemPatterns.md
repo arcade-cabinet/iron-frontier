@@ -89,6 +89,13 @@ lg: 1024px+    /* Desktop */
 - Mobile: 56px touch targets, icon-only
 - Tablet+: 44px targets, labels visible
 
+### Mobile-First Priority
+
+- Mobile experience is the premium target; web/desktop adapt from mobile, not vice versa.
+- Responsive layouts must remain playable on small phones (portrait + landscape), tablets, and foldables.
+- Foldable transitions must not break layout or interaction flow.
+- Haptics and gyro input are first-class where available.
+
 ### Panel System
 
 Single active panel at a time, implemented as Ionic overlays or in-game HUD panels.

@@ -8,6 +8,10 @@
 
 - Detailed plan and deliverables live in `memory-bank/migration-plan.md`.
 
+## Mobile-First Priority
+
+- Mobile is the premium experience (phone + tablet + foldable). Web/desktop adapt from that baseline.
+
 ## Migration Plan (Authoritative Next Steps)
 
 Goal: single unified app (no `apps/` split), fully ported from React/Expo to Angular + Ionic + Capacitor, with Electron support from day one. App id stays `com.arcade-cabinet.iron-frontier`.
