@@ -126,8 +126,12 @@
         </div>
         <div
           *ngFor="let shopItem of availableItems; let idx = index"
-          class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
-          [class.opacity-50]="(shopItem.stock ?? -1) === 0"
+          class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all sm:gap-3 sm:p-2.5"
+          [ngClass]="{
+            'opacity-50': (shopItem.stock ?? -1) === 0,
+            'hover:border-amber-700/50 hover:bg-amber-900/40':
+              canAfford(shopItem) && (shopItem.stock ?? -1) !== 0
+          }"
         >
           <div
             class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border border-amber-700/30 bg-amber-800/40 sm:h-10 sm:w-10"
@@ -211,8 +215,11 @@
         <ng-container *ngIf="shop?.canSell">
           <div
             *ngFor="let item of inventory"
-            class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
-            [class.opacity-50]="!canSellItem(item)"
+            class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all sm:gap-3 sm:p-2.5"
+            [ngClass]="{
+              'opacity-50': !canSellItem(item),
+              'hover:border-amber-700/50 hover:bg-amber-900/40': canSellItem(item)
+            }"
           >
           <div
             class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border border-amber-700/30 bg-amber-800/40 sm:h-10 sm:w-10"

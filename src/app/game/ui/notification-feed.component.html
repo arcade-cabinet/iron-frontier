@@ -9,6 +9,7 @@
     (keydown.enter)="remove(notification.id)"
     (keydown.space)="remove(notification.id)"
     [attr.aria-label]="'Dismiss notification: ' + notification.message"
+    @toast
   >
     <ng-container [ngSwitch]="notification.type">
       <svg *ngSwitchCase="'item'" class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
