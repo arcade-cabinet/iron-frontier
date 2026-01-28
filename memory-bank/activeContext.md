@@ -11,6 +11,8 @@
 ## Mobile-First Priority
 
 - Mobile is the premium experience (phone + tablet + foldable). Web/desktop adapt from that baseline.
+- Portrait and landscape phone modes must be fully playable; foldable transitions must not break UX.
+- Plan for haptics and gyro input as first-class features with fallback behavior.
 
 ## Migration Plan (Authoritative Next Steps)
 
@@ -66,6 +68,14 @@ Goal: single unified app (no `apps/` split), fully ported from React/Expo to Ang
 - Ensure performance targets and touch targets remain compliant.
 - Port and align tests: unit/integration, Playwright (web), Maestro (mobile).
 - Manual gameplay QA pass across platforms.
+
+## Immediate Next Actions (Plan Baseline)
+
+1) Complete parity matrix + gap list (all screens/panels/systems).
+2) Establish single-app Ionic Angular root with Capacitor + Electron.
+3) Port engine bootstrapping and core HUD with mobile-safe-area handling.
+4) Port remaining UI panels and gameplay systems; remove placeholders.
+5) Port tests: unit/integration + Playwright + Maestro; validate target devices.
 
 ## Recent History
 

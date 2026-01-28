@@ -116,6 +116,13 @@ export class WorldMapComponent {
     return conn.to === this.currentLocationId && conn.bidirectional ? conn.from : conn.to;
   }
 
+  quickTravel(targetId: string): void {
+    if (!targetId || targetId === this.currentLocationId) return;
+    if (!this.isReachable(targetId)) return;
+    this.gameStore.actions().travelTo(targetId);
+    this.close.emit();
+  }
+
   isReachable(locationId: string): boolean {
     if (!this.currentLocationId) return false;
     return this.currentConnections.some((conn) => this.connectionTarget(conn) === locationId);

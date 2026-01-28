@@ -15,6 +15,13 @@ Deliver a single, unified app at repo root with parity-or-better gameplay, UI, a
 
 ## Workstreams & Deliverables
 
+### 0) Mobile-First Experience (Premium Baseline)
+- Treat mobile (phone, tablet, foldable) as the primary UX baseline; web/desktop adapt from mobile.
+- Ensure portrait + landscape phone modes are fully playable; not just viewable.
+- Foldable transitions must not break layout, input, or render flow.
+- Plan for haptics + gyro controls where available (with graceful fallback).
+- Touch targets: 44px minimum, 56px preferred on phones.
+
 ### 1) Audit & Gap Analysis
 - Inventory all React/Expo screens, panels, HUD modules, flows, and services.
 - Inventory game systems: combat, dialogue, travel, shops, quests, world map, save/load, audio.
@@ -49,10 +56,12 @@ Deliver a single, unified app at repo root with parity-or-better gameplay, UI, a
 - Port all panels and HUD modules to Ionic Angular.
 - Rebuild typography, icons, animation, and color system to match branding.
 - Ensure responsive breakpoints and touch target rules.
+- Mobile-safe-area handling for top/bottom/side insets across devices.
 
 ### 7) Gameplay Systems (Parity+)
 - Combat, travel, dialogue, quests, shops, inventory, equipment, world map.
 - Remove legacy TODOs/stubs; implement missing logic and UI.
+- Validate gameplay loop for short sessions (30s to 5m) and touch-first controls.
 
 ### 8) Testing Alignment
 - Unit/integration tests aligned to new Angular architecture.
@@ -73,3 +82,39 @@ Deliver a single, unified app at repo root with parity-or-better gameplay, UI, a
 - Babylon.js lifecycle and resource disposal consistency.
 - Full test migration (unit + Playwright + Maestro).
 
+## Detailed Next Steps (Authoritative)
+
+### A) Environment & Platform Setup
+1) Run Capacitor environment setup for Android and iOS.
+2) Create a single Ionic Angular app at repo root (`src/`).
+3) Configure Capacitor with `appId` `com.arcade-cabinet.iron-frontier` and correct app name.
+4) Add `android`, `ios`, `electron` with `@capacitor-community/electron`.
+5) Wire scripts for dev/build/sync/run per platform.
+
+### B) Parity Inventory & Mapping
+1) Generate a parity matrix mapping every React screen/panel/system to Angular equivalents.
+2) List all TODOs/stubs/placeholder UX and define concrete fixes.
+3) Define “parity or better” acceptance criteria per module.
+
+### C) Core Engine & Input
+1) Implement Babylon engine bootstrap in Angular with clean disposal.
+2) Implement touch-first camera controls and input mapping.
+3) Integrate Rapier physics and Anime.js animation system.
+
+### D) UI/HUD Port (Mobile-First)
+1) Port HUD, panels, and overlays using Ionic components.
+2) Ensure safe-area handling for top/bottom/side insets.
+3) Validate responsive behavior for phone portrait/landscape, tablet, foldables.
+4) Add haptics/gyro hooks where available; fall back gracefully.
+
+### E) Systems & Data
+1) Preserve `packages/shared/` as single source for schemas/data/generators.
+2) Port store to Angular services wrapping Zustand.
+3) Implement persistence and save/load across web + native.
+4) Close gameplay gaps and remove placeholders.
+
+### F) Testing & Validation
+1) Port unit tests for store, UI, and flow.
+2) Build Playwright E2E flows for the full game loop.
+3) Build Maestro E2E flows mirroring Playwright for mobile.
+4) Validate on target device classes (phone, tablet, foldable, desktop).

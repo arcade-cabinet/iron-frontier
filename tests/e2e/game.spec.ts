@@ -12,7 +12,7 @@ async function startNewGame(page: any) {
 test('loads game shell', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Iron Frontier/i);
-  await expect(page.getByText('Iron Frontier')).toBeVisible();
+  await expect(page.getByText(/iron frontier/i)).toBeVisible();
 });
 
 test('opens inventory panel', async ({ page }) => {
@@ -24,8 +24,8 @@ test('opens inventory panel', async ({ page }) => {
 test('opens world map and starts travel', async ({ page }) => {
   await startNewGame(page);
   await page.getByRole('button', { name: 'World Map' }).click();
-  await expect(page.locator('[data-testid="world-map"]')).toBeVisible();
-  await page.getByText('Sunset Ranch', { exact: false }).first().click();
-  await page.getByRole('button', { name: /travel here/i }).click();
+  const worldMap = page.locator('[data-testid="world-map"]');
+  await expect(worldMap).toBeVisible();
+  await worldMap.getByRole('button', { name: 'Sunset Ranch' }).first().click();
   await expect(page.locator('[data-testid="travel-panel"]')).toBeVisible();
 });
