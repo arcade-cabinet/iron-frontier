@@ -12,7 +12,7 @@ tags:
 
 # Launch app with clean state
 - launchApp:
-    appId: com.ironfrontier.mobile
+    appId: com.arcade_cabinet.iron_frontier
     clearState: true
 
 # Wait for main menu

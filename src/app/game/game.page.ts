@@ -30,6 +30,20 @@ import { WorldMapComponent } from './ui/world-map.component';
 import { PipePuzzleComponent } from './ui/pipe-puzzle.component';
 import { GameOverScreenComponent } from './ui/game-over-screen.component';
 import { GameStoreService } from './services/game-store.service';
+import { environment } from '../../environments/environment';
+import type { GamePhase } from '@/store';
+
+declare global {
+  interface Window {
+    __IRON_FRONTIER_TEST__?: {
+      startCombat: (encounterId?: string) => void;
+      startDialogue: (npcId?: string) => void;
+      openShop: (shopId?: string) => void;
+      startPuzzle: (width?: number, height?: number) => void;
+      setPhase: (phase: GamePhase) => void;
+    };
+  }
+}
 
 @Component({
   selector: 'app-game',
@@ -97,12 +111,32 @@ export class GamePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.registerTestHarness();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.sceneManager?.dispose();
+    if (typeof window !== 'undefined' && window.__IRON_FRONTIER_TEST__) {
+      delete window.__IRON_FRONTIER_TEST__;
+    }
+  }
+
+  private registerTestHarness(): void {
+    if (environment.production) return;
+    if (typeof window === 'undefined') return;
+    if (!window.location.search.includes('e2e=1')) return;
+
+    window.__IRON_FRONTIER_TEST__ = {
+      startCombat: (encounterId = 'test_encounter') =>
+        this.gameStore.actions().startCombat(encounterId),
+      startDialogue: (npcId = 'doc_chen') => this.gameStore.actions().startDialogue(npcId),
+      openShop: (shopId = 'general_store') => this.gameStore.actions().openShop(shopId),
+      startPuzzle: (width = 5, height = 5) =>
+        this.gameStore.actions().startPuzzle(width, height),
+      setPhase: (phase: GamePhase) => this.gameStore.actions().setPhase(phase),
+    };
   }
 
   private async initScene(loadedWorld: LoadedWorld, currentLocationId: string, worldSeed: number) {

@@ -19,6 +19,7 @@ Iron Frontier is a steampunk western RPG with the following key screens:
 | `new-game.yaml` | Tests complete new game flow | gameplay, new-game, critical |
 | `character-creation.yaml` | Tests character name input validation | character, input-validation |
 | `basic-gameplay.yaml` | Tests basic game interactions | gameplay, interactions, critical |
+| `panel-smoke.yaml` | Opens core HUD panels in gameplay | gameplay, ui, panels |
 
 ## Prerequisites
 
@@ -123,7 +124,7 @@ maestro test .maestro/
 The `config.yaml` file contains global configuration:
 
 ```yaml
-appId: com.ironfrontier.mobile
+appId: com.arcade_cabinet.iron_frontier
 env:
   APP_NAME: "Iron Frontier"
   TEST_PLAYER_NAME: "TestOutlaw"
@@ -134,7 +135,7 @@ env:
 ### Flow Structure
 
 ```yaml
-appId: com.ironfrontier.mobile
+appId: com.arcade_cabinet.iron_frontier
 name: "Test Name"
 tags:
   - tag1
@@ -143,7 +144,7 @@ tags:
 ---
 
 - launchApp:
-    appId: com.ironfrontier.mobile
+    appId: com.arcade_cabinet.iron_frontier
     clearState: true
 
 # Test steps here...
@@ -193,7 +194,7 @@ Screenshots are saved to help debug failures:
 
 1. Verify APK is installed: `adb shell pm list packages | grep ironfrontier`
 2. Check emulator is running: `adb devices`
-3. Try clearing app data: `adb shell pm clear com.ironfrontier.mobile`
+3. Try clearing app data: `adb shell pm clear com.arcade_cabinet.iron_frontier`
 
 ### Timeouts
 
@@ -218,7 +219,7 @@ mkdir -p .maestro/screenshots
 
 ## App Bundle ID
 
-The mobile app uses the bundle ID: `com.ironfrontier.mobile`
+The mobile app uses the bundle ID: `com.arcade_cabinet.iron_frontier`
 
 This should match what's configured in `apps/mobile/app.json` (when that file exists).
 
