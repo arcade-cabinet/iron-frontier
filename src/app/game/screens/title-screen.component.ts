@@ -42,13 +42,20 @@ export class TitleScreenComponent implements OnInit, OnDestroy {
   }
 
   handleNewGame(): void {
-    if (this.showNameInput) {
-      if (this.inputName.trim()) {
-        this.gameStore.actions().initGame(this.inputName.trim());
-      }
-    } else {
+    if (this.showNameInput) return;
+    if (!this.showNameInput) {
       this.showNameInput = true;
     }
+  }
+
+  handleStart(): void {
+    if (this.inputName.trim()) {
+      this.gameStore.actions().initGame(this.inputName.trim());
+    }
+  }
+
+  handleBack(): void {
+    this.showNameInput = false;
   }
 
   handleContinue(): void {
@@ -59,5 +66,9 @@ export class TitleScreenComponent implements OnInit, OnDestroy {
     if (event.key === 'Enter' && this.inputName.trim()) {
       this.gameStore.actions().initGame(this.inputName.trim());
     }
+  }
+
+  toggleAbout(next: boolean): void {
+    this.showAbout = next;
   }
 }

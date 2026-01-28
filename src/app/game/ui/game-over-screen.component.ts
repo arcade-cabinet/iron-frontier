@@ -11,6 +11,12 @@ import { GameStoreService } from '../services/game-store.service';
   styleUrls: ['./game-over-screen.component.scss'],
 })
 export class GameOverScreenComponent {
+  readonly dustParticles = Array.from({ length: 20 }, () => ({
+    left: Math.random() * 100,
+    delay: Math.random() * 2,
+    duration: 4 + Math.random() * 3,
+  }));
+
   constructor(readonly gameStore: GameStoreService) {}
 
   get phase() {

@@ -7,11 +7,11 @@ import type { EquipmentSlot } from '@/store';
 import { GameStoreService } from '../services/game-store.service';
 
 const EQUIPMENT_SLOTS: { slot: EquipmentSlot; label: string; icon: string }[] = [
-  { slot: 'head', label: 'Hat', icon: 'M12 2l4 4h-8l4-4zm-6 6h12v2H6z' },
-  { slot: 'body', label: 'Vest', icon: 'M6 2h12l-2 8v12H8V10L6 2z' },
-  { slot: 'weapon', label: 'Weapon', icon: 'M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6' },
-  { slot: 'offhand', label: 'Offhand', icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z' },
-  { slot: 'accessory', label: 'Trinket', icon: 'M12 8a6 6 0 100 12 6 6 0 000-12z' },
+  { slot: 'weapon', label: 'Main Weapon', icon: 'gun' },
+  { slot: 'offhand', label: 'Sidearm', icon: 'sword' },
+  { slot: 'head', label: 'Hat', icon: 'hat' },
+  { slot: 'body', label: 'Vest', icon: 'vest' },
+  { slot: 'accessory', label: 'Accessory', icon: 'ring' },
 ];
 
 @Component({
@@ -34,7 +34,7 @@ export class CharacterPanelComponent {
     this.gameStore.actions().togglePanel('character');
   }
 
-  get itemBonuses() {
+  get bonuses() {
     return this.gameStore.actions().getEquipmentBonuses();
   }
 
@@ -46,12 +46,26 @@ export class CharacterPanelComponent {
     this.gameStore.actions().unequipItem(slot);
   }
 
-  getItemName(itemId?: string | null): string {
-    if (!itemId) return 'Empty';
-    return getItem(itemId)?.name ?? 'Unknown';
+  getItemDef(itemId?: string | null) {
+    if (!itemId) return null;
+    return getItem(itemId) ?? null;
   }
 
   getRarityColor(rarity?: string): string {
     return getRarityColor(rarity ?? 'common');
+  }
+
+  getReputationStatus(rep: number): { label: string; color: string; bg: string } {
+    if (rep >= 50) return { label: 'Respected', color: 'text-green-400', bg: 'bg-green-900/30' };
+    if (rep >= 20) return { label: 'Known', color: 'text-lime-400', bg: 'bg-lime-900/30' };
+    if (rep >= 0) return { label: 'Neutral', color: 'text-amber-400', bg: 'bg-amber-900/30' };
+    if (rep >= -20) return { label: 'Suspicious', color: 'text-orange-400', bg: 'bg-orange-900/30' };
+    return { label: 'Notorious', color: 'text-red-400', bg: 'bg-red-900/30' };
+  }
+
+  getXpPercent(state: any): number {
+    return state.playerStats.xpToNext > 0
+      ? (state.playerStats.xp / state.playerStats.xpToNext) * 100
+      : 0;
   }
 }

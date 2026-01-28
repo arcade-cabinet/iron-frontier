@@ -32,7 +32,7 @@ tags:
 - inputText: "Maestro"
 
 - tapOn:
-    text: "Begin Adventure"
+    text: "Start"
 
 - extendedWaitUntil:
     visible: "Maestro"

@@ -1,8 +1,8 @@
-# World Map Travel Flow - Iron Frontier
-# Mirrors Playwright map + travel test
+# World Map Flow - Iron Frontier
+# Mirrors Playwright map open test
 
 appId: com.arcade_cabinet.iron_frontier
-name: "World Map Travel"
+name: "World Map"
 tags:
   - gameplay
   - travel
@@ -31,7 +31,7 @@ tags:
 - inputText: "Ada"
 
 - tapOn:
-    text: "Begin Adventure"
+    text: "Start"
 
 - extendedWaitUntil:
     visible: "Lv."
@@ -42,17 +42,7 @@ tags:
     text: "Territory"
 
 - extendedWaitUntil:
-    visible: "Travel Here"
+    visible: "Current Location"
     timeout: 10000
 
-- tapOn:
-    text: "Sunset Ranch"
-
-- tapOn:
-    text: "Travel Here"
-
-- extendedWaitUntil:
-    visible: "Traveling"
-    timeout: 10000
-
-- takeScreenshot: screenshots/20_world_map_travel
+- takeScreenshot: screenshots/20_world_map_open

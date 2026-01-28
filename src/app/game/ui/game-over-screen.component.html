@@ -1,11 +1,20 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95" *ngIf="phase === 'game_over'" data-testid="game-over-screen">
-  <div class="absolute inset-0 pointer-events-none">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
     <div
       class="absolute inset-0"
       style="
         background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
       "
     ></div>
+    <div class="absolute inset-0 opacity-20">
+      <span
+        *ngFor="let particle of dustParticles"
+        class="dust-particle absolute h-1 w-1 rounded-full bg-amber-500/50"
+        [style.left.%]="particle.left"
+        [style.animationDuration.s]="particle.duration"
+        [style.animationDelay.s]="particle.delay"
+      ></span>
+    </div>
   </div>
 
   <div class="relative mx-4 w-full max-w-md overflow-hidden rounded-xl border-2 border-red-900/60 bg-amber-950 shadow-2xl">
@@ -49,7 +58,7 @@
       <div class="space-y-2 sm:space-y-3">
         <button
           type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-3 text-xs font-semibold text-white transition hover:bg-emerald-600 sm:text-sm"
+          class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-lg bg-amber-700 px-4 py-3 text-sm font-medium text-amber-100 transition hover:bg-amber-600 sm:min-h-0 sm:text-base"
           (click)="loadLastSave()"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -59,7 +68,7 @@
         </button>
         <button
           type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-lg border border-amber-700/60 bg-amber-900/50 px-4 py-3 text-xs font-semibold text-amber-100 transition hover:bg-amber-800/60 sm:text-sm"
+          class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-lg border border-amber-700/50 bg-amber-900/50 px-4 py-3 text-sm font-medium text-amber-300 transition hover:bg-amber-800/50 sm:min-h-0 sm:text-base"
           (click)="returnToTitle()"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -72,6 +81,12 @@
           Return to Title
         </button>
       </div>
+
+      <div class="mt-4 border-t border-amber-800/30 pt-3 text-[10px] italic text-amber-600/40 sm:mt-8 sm:pt-4 sm:text-xs">
+        "Every man dies. Not every man really lives."
+      </div>
     </div>
+
+    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-700/50 to-transparent"></div>
   </div>
 </div>

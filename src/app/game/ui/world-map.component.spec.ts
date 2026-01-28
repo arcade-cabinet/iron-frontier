@@ -8,9 +8,10 @@ class MockGameStoreService {
   state: any = {
     loadedWorld: loadWorld(FrontierTerritory),
     currentLocationId: 'dusty_springs',
-    discoveredLocationIds: ['dusty_springs', 'sunset_ranch'],
+    discoveredLocationIds: ['dusty_springs', 'junction_city'],
+    settings: { haptics: false },
   };
-  actionsSpy = jasmine.createSpyObj('actions', ['travelTo']);
+  actionsSpy = jasmine.createSpyObj('actions', ['travelTo', 'addNotification']);
 
   getState() {
     return this.state;
@@ -38,13 +39,10 @@ describe('WorldMapComponent', () => {
     fixture.detectChanges();
 
     const component = fixture.componentInstance;
-    const target = component.world.locations.find((loc) => loc.id === 'sunset_ranch');
+    const target = component.world.locations.find((loc) => loc.id === 'junction_city');
     expect(target).toBeDefined();
 
-    component.selectLocation(target!);
-    expect(component.selectedLocationId).toBe('sunset_ranch');
-
-    component.handleTravel();
-    expect(mockStore.actionsSpy.travelTo).toHaveBeenCalledWith('sunset_ranch');
+    component.handleLocationClick(target!);
+    expect(mockStore.actionsSpy.travelTo).toHaveBeenCalledWith('junction_city');
   });
 });

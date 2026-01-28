@@ -45,7 +45,7 @@ tags:
 
 # Tap Start button to begin game
 - tapOn:
-    text: "Begin Adventure"
+    text: "Start"
 
 # Wait for game to initialize (WebGPU, world generation, etc.)
 # This can take significant time on first load
@@ -75,9 +75,9 @@ tags:
 # Take screenshot of full gameplay screen
 - takeScreenshot: screenshots/11_gameplay_screen
 
-# Verify we're in the starting location (Dusty Springs)
+# Verify we're in the starting location (Frontier's Edge)
 - assertVisible:
-    text: ".*Dusty Springs|.*Location.*"
+    text: ".*Frontier's Edge|.*Location.*"
     regex: true
     optional: true
 

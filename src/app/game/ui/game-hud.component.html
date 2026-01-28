@@ -41,28 +41,80 @@
             <div class="flex-1 h-1 bg-amber-900/60 rounded overflow-hidden">
               <div class="h-full bg-amber-500" [style.width.%]="getXpPercent(state)"></div>
             </div>
-          </div>
-
-          <div class="hidden md:flex items-center gap-1.5 text-[10px] text-amber-300">
-            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" stroke-width="2" />
-              <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
-            </svg>
-            <span>{{ getCurrentLocationName(state) }}</span>
+            <span class="text-amber-400/80 text-[10px] font-mono w-8 text-right">
+              {{ state.playerStats.xp }}
+            </span>
           </div>
         </div>
 
-        <div class="hidden sm:flex items-center gap-2 pl-2 sm:pl-3 border-l border-amber-700/40">
-          <div class="flex items-center gap-1 text-amber-400/80 text-[10px]">
-            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-            <span>{{ state.playerStats.gold }}</span>
+        <div class="flex items-center gap-1 sm:gap-1.5 pl-2 sm:pl-3 border-l border-amber-700/40">
+          <svg class="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+          <span class="text-yellow-400 font-bold text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] text-right">
+            {{ state.playerStats.gold }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-start justify-between mt-1 sm:mt-1.5 gap-2">
+    <div class="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
+      <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke-width="2" />
+        <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
+      </svg>
+      <span class="text-amber-200 text-[9px] sm:text-[10px] font-medium truncate max-w-[100px] sm:max-w-[150px]">
+        {{ getCurrentLocationName(state) }}
+      </span>
+    </div>
+
+    <div class="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-2">
+      <div class="flex items-center gap-1 px-1.5 py-0.5 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
+        <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke-width="2" />
+          <path d="M12 6v6l4 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="text-[9px] sm:text-[10px] text-amber-200 font-medium">{{ getTimeLabel(state) }}</span>
+      </div>
+
+      <div class="flex items-center gap-1 px-1.5 py-0.5 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
+        <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 21h10c1 0 2-1 2-2v-4c0-1-1-2-2-2h-1l-1-8c0-1-1-2-2-2H11c-1 0-2 1-2 2l-1 8H7c-1 0-2 1-2 2v4c0 1 1 2 2 2z" />
+        </svg>
+        <div class="flex items-center gap-1">
+          <div class="h-1.5 w-10 rounded bg-amber-900/60">
+            <div class="h-full bg-amber-500" [style.width.%]="getFatiguePercent(state)"></div>
           </div>
-          <div class="hidden md:block text-[10px] text-amber-600">
-            {{ getActiveQuestTitle(state) || 'No active quest' }}
+          <span class="text-[9px] text-amber-300">{{ getFatigueLabel(state) }}</span>
+        </div>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40">
+        <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M5 7h14M5 17h14" />
+        </svg>
+        <div class="flex items-center gap-1">
+          <div class="h-1.5 w-8 rounded bg-amber-900/60">
+            <div class="h-full bg-amber-500" [style.width.%]="getFoodPercent(state)"></div>
+          </div>
+          <div class="h-1.5 w-8 rounded bg-amber-900/60">
+            <div class="h-full bg-blue-400" [style.width.%]="getWaterPercent(state)"></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="hidden sm:block max-w-[150px] md:max-w-[200px] px-2 py-1 bg-amber-950/70 backdrop-blur-sm rounded border border-amber-800/40" *ngIf="getActiveQuestSummary(state) as quest">
+      <div class="flex items-center gap-1.5">
+        <div class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
+        <span class="text-amber-300 text-[10px] font-medium truncate">
+          {{ quest.title }}
+        </span>
+      </div>
+      <div class="text-amber-400/70 text-[9px] truncate mt-0.5">
+        {{ quest.objective }}
       </div>
     </div>
   </div>

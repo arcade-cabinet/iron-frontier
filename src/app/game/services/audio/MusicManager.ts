@@ -13,22 +13,17 @@ export class MusicManager {
   private scale = ['E3', 'G3', 'A3', 'B3', 'D4', 'E4', 'G4'];
 
   constructor() {
-    this.guitar = new Tone.PolySynth(
-      Tone.PluckSynth as any,
-      {
-        attackNoise: 1,
-        dampening: 4000,
-        resonance: 0.98,
-      } as any
-    ).toDestination();
+    this.guitar = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: 'triangle' },
+      envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.8 },
+    }).toDestination();
     this.guitar.volume.value = -12;
 
-    this.ambience = new Tone.PolySynth(Tone.AMSynth).toDestination();
-    this.ambience.volume.value = -20;
-    this.ambience.set({
+    this.ambience = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: 'sine' },
       envelope: { attack: 1, decay: 2, sustain: 0.5, release: 3 },
-    });
+    }).toDestination();
+    this.ambience.volume.value = -20;
   }
 
   public async start() {

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { BehaviorSubject } from 'rxjs';
 import { TravelPanelComponent } from './travel-panel.component';
 import { GameStoreService } from '../services/game-store.service';
 
@@ -16,6 +17,7 @@ class MockGameStoreService {
     },
     loadedWorld: null,
   };
+  state$ = new BehaviorSubject(this.state);
   actionsSpy = jasmine.createSpyObj('actions', ['cancelTravel', 'completeTravel']);
 
   getState() {

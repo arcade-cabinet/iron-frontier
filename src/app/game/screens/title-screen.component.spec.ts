@@ -46,7 +46,7 @@ describe('TitleScreenComponent', () => {
     expect(component.showNameInput).toBeTrue();
 
     component.inputName = 'Ada';
-    component.handleNewGame();
+    component.handleStart();
 
     expect(mockStore.actionsSpy.initGame).toHaveBeenCalledWith('Ada');
   });

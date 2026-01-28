@@ -19,6 +19,18 @@ export class MenuPanelComponent {
     return Math.round(value * 100);
   }
 
+  getHealthPercent(state: any): number {
+    return state.playerStats.maxHealth > 0
+      ? (state.playerStats.health / state.playerStats.maxHealth) * 100
+      : 0;
+  }
+
+  getXpPercent(state: any): number {
+    return state.playerStats.xpToNext > 0
+      ? (state.playerStats.xp / state.playerStats.xpToNext) * 100
+      : 0;
+  }
+
   get isOpen(): boolean {
     return this.gameStore.getState().activePanel === 'menu';
   }
@@ -31,15 +43,26 @@ export class MenuPanelComponent {
     this.gameStore.actions().updateSettings({ [key]: value });
   }
 
-  saveGame(): void {
+  handleSave(): void {
+    const state = this.gameStore.getState();
     this.gameStore.actions().saveGame();
+    if (state.settings.haptics && navigator.vibrate) {
+      navigator.vibrate([30, 20, 30]);
+    }
   }
 
-  resetGame(): void {
-    this.gameStore.actions().resetGame();
+  handleNewGame(): void {
+    if (confirm('Start a new journey? Current progress will be saved but you will start fresh.')) {
+      this.gameStore.actions().saveGame();
+      this.gameStore.actions().resetGame();
+    }
   }
 
-  setPhase(phase: any): void {
-    this.gameStore.actions().setPhase(phase);
+  handleMainMenu(): void {
+    if (confirm('Return to main menu? Your progress has been auto-saved.')) {
+      this.gameStore.actions().saveGame();
+      this.gameStore.actions().setPhase('title');
+      this.gameStore.actions().togglePanel('menu');
+    }
   }
 }

@@ -103,43 +103,43 @@ export const FrontierTerritory: World = validateWorld({
   locations: [
     // ========== TIER 1 - CORE LOCATIONS (7) ==========
 
-    // DUSTY SPRINGS - Starting town, Central Plains, Lvl 1
+    // FRONTIER'S EDGE - Starting town, Central Plains, Lvl 1
     {
       id: 'dusty_springs',
       type: 'town',
-      name: 'Dusty Springs',
+      name: "Frontier's Edge",
       coord: { wx: 11, wy: 9 },
       locationDataId: 'dusty_springs',
       size: 'medium',
       discovered: true,
       accessible: true,
-      tags: ['starting', 'hub', 'services', 'railroad', 'level_1'],
+      tags: ['starting', 'tutorial', 'hub', 'services', 'frontiers_edge', 'level_1'],
     },
 
-    // SUNSET RANCH - Ranch, Central Plains, Lvl 1-2
+    // COLDWATER - Ranch town, Central Plains, Lvl 1-2
     {
       id: 'sunset_ranch',
-      type: 'ranch',
-      name: 'Sunset Ranch',
+      type: 'town',
+      name: 'Coldwater',
       coord: { wx: 9, wy: 8 },
       locationDataId: 'sunset_ranch',
       size: 'large',
       discovered: true,
       accessible: true,
-      tags: ['cattle', 'wealthy', 'blackwood', 'level_1', 'level_2'],
+      tags: ['ranch', 'pastoral', 'coldwater', 'act_2', 'level_1', 'level_2'],
     },
 
-    // JUNCTION CITY - Town, Central Plains, Lvl 2
+    // IRON GULCH - Mining town, Central Plains, Lvl 2
     {
       id: 'junction_city',
       type: 'town',
-      name: 'Junction City',
+      name: 'Iron Gulch',
       coord: { wx: 14, wy: 10 },
       locationDataId: 'junction_city',
       size: 'medium',
       discovered: true,
       accessible: true,
-      tags: ['railroad_hub', 'ivrc_hq', 'commerce', 'level_2'],
+      tags: ['mining', 'industrial', 'hub', 'iron_gulch', 'act_1', 'level_2'],
     },
 
     // COYOTE SPRINGS - Waystation, Western Desert, Lvl 2
@@ -168,34 +168,34 @@ export const FrontierTerritory: World = validateWorld({
       tags: ['company_town', 'mining', 'ivrc_controlled', 'oppressive', 'level_3'],
     },
 
-    // RATTLESNAKE CANYON - Hideout, Devil's Backbone, Lvl 3-4
+    // MESA POINT - Outlaw town, Devil's Backbone, Lvl 3-4
     {
       id: 'rattlesnake_canyon',
-      type: 'hideout',
-      name: 'Rattlesnake Canyon',
+      type: 'town',
+      name: 'Mesa Point',
       coord: { wx: 8, wy: 2 },
       locationDataId: 'rattlesnake_canyon',
       size: 'medium',
       discovered: false,
       accessible: true,
-      tags: ['copperhead_base', 'dangerous', 'diamondback', 'level_3', 'level_4'],
+      tags: ['outlaw', 'mesa_point', 'act_2', 'dangerous', 'level_3', 'level_4'],
     },
 
-    // OLD WORKS - Dungeon, Iron Mountains, Lvl 4-5
+    // SALVATION - Endgame town, Iron Mountains, Lvl 4-5
     {
       id: 'old_works',
-      type: 'ruins',
-      name: 'The Old Works',
+      type: 'town',
+      name: 'Salvation',
       coord: { wx: 18, wy: 1 },
       locationDataId: 'old_works',
       size: 'large',
       discovered: false,
       accessible: true,
       tags: [
-        'automaton_factory',
-        'civil_war',
-        'final_dungeon',
-        'the_remnant',
+        'endgame',
+        'salvation',
+        'act_3',
+        'finale',
         'level_4',
         'level_5',
       ],
@@ -216,7 +216,7 @@ export const FrontierTerritory: World = validateWorld({
       tags: ['railroad', 'southern_entry', 'rest', 'level_1'],
     },
 
-    // PROSPECT - Town, Dry Creek, Lvl 1-2
+    // PROSPECT - Additional town slot, Dry Creek, Lvl 1-2
     {
       id: 'prospect',
       type: 'town',
@@ -226,7 +226,7 @@ export const FrontierTerritory: World = validateWorld({
       size: 'small',
       discovered: true,
       accessible: true,
-      tags: ['farming', 'failed_mining', 'hopeful', 'level_1', 'level_2'],
+      tags: ['additional_town', 'farming', 'hopeful', 'level_1', 'level_2'],
     },
 
     // FREEMINER HOLLOW - Camp, Iron Mountains, Lvl 3
@@ -342,11 +342,11 @@ export const FrontierTerritory: World = validateWorld({
     {
       from: 'dusty_springs',
       to: 'junction_city',
-      method: 'railroad',
-      travelTime: 1,
-      danger: 'safe',
+      method: 'road',
+      travelTime: 15,
+      danger: 'low',
       bidirectional: true,
-      tags: ['main_line', 'fast_travel'],
+      tags: ['dusty_trail', 'route_1', 'main_route'],
     },
     {
       from: 'junction_city',
@@ -360,15 +360,57 @@ export const FrontierTerritory: World = validateWorld({
 
     // ========== MAIN ROADS FROM DUSTY SPRINGS ==========
 
-    // Dusty Springs -> Sunset Ranch (main road)
+    // Iron Gulch -> Coldwater (Mountain Road)
     {
-      from: 'dusty_springs',
+      from: 'junction_city',
       to: 'sunset_ranch',
       method: 'road',
-      travelTime: 2,
-      danger: 'safe',
+      travelTime: 25,
+      danger: 'moderate',
       bidirectional: true,
-      tags: ['main_road', 'patrolled'],
+      tags: ['mountain_road', 'route_3', 'main_route'],
+    },
+
+    // Iron Gulch -> Mesa Point (Desert Pass)
+    {
+      from: 'junction_city',
+      to: 'rattlesnake_canyon',
+      method: 'trail',
+      travelTime: 20,
+      danger: 'high',
+      bidirectional: true,
+      tags: ['desert_pass', 'route_2', 'main_route'],
+    },
+
+    // Mesa Point -> Coldwater (Badlands Trail)
+    {
+      from: 'rattlesnake_canyon',
+      to: 'sunset_ranch',
+      method: 'trail',
+      travelTime: 20,
+      danger: 'high',
+      bidirectional: true,
+      tags: ['badlands_trail', 'route_4', 'main_route'],
+    },
+
+    // Final Trail (to Salvation)
+    {
+      from: 'rattlesnake_canyon',
+      to: 'old_works',
+      method: 'wilderness',
+      travelTime: 30,
+      danger: 'extreme',
+      bidirectional: true,
+      tags: ['final_trail', 'route_5', 'main_route'],
+    },
+    {
+      from: 'sunset_ranch',
+      to: 'old_works',
+      method: 'wilderness',
+      travelTime: 30,
+      danger: 'high',
+      bidirectional: true,
+      tags: ['final_trail', 'route_5', 'main_route'],
     },
 
     // Dusty Springs -> Coyote Springs (main road west)

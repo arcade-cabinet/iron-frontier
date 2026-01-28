@@ -22,7 +22,7 @@ tags:
 
 # Navigate to character creation
 - tapOn:
-    text: "Begin Adventure"
+    text: "Start"
     regex: true
 
 # Wait for name input
@@ -55,7 +55,7 @@ tags:
 
 # Verify Start button should now be enabled
 - assertVisible:
-    text: "Begin Adventure"
+    text: "Start"
 
 # Go back to try another name
 - tapOn:
@@ -63,7 +63,7 @@ tags:
 
 # Return to name input
 - tapOn:
-    text: "Begin Adventure"
+    text: "Start"
     regex: true
 
 # Wait for name input

@@ -118,28 +118,51 @@ export class MemoryStorageAdapter implements StorageAdapter {
 }
 
 /**
- * Native storage adapter placeholder for React Native / Expo
- * Will use expo-sqlite or AsyncStorage depending on requirements
- *
- * Implementation will be provided by @iron-frontier/mobile package
+ * Capacitor storage adapter using Preferences.
+ * Works on web and native, with native storage on iOS/Android.
  */
 export class NativeStorageAdapter implements StorageAdapter {
-  async getItem(_key: string): Promise<string | null> {
-    throw new Error(
-      '[NativeStorageAdapter] Not implemented. Use @iron-frontier/mobile for native storage.'
-    );
+  private preferences: Promise<typeof import('@capacitor/preferences').Preferences>;
+
+  constructor() {
+    this.preferences = import('@capacitor/preferences').then((m) => m.Preferences);
   }
 
-  async setItem(_key: string, _value: string): Promise<void> {
-    throw new Error(
-      '[NativeStorageAdapter] Not implemented. Use @iron-frontier/mobile for native storage.'
-    );
+  async getItem(key: string): Promise<string | null> {
+    try {
+      const Preferences = await this.preferences;
+      const { value } = await Preferences.get({ key });
+      return value ?? null;
+    } catch (error) {
+      if (typeof console !== 'undefined') {
+        console.error('[NativeStorageAdapter] Failed to get item:', key, error);
+      }
+      return null;
+    }
   }
 
-  async removeItem(_key: string): Promise<void> {
-    throw new Error(
-      '[NativeStorageAdapter] Not implemented. Use @iron-frontier/mobile for native storage.'
-    );
+  async setItem(key: string, value: string): Promise<void> {
+    try {
+      const Preferences = await this.preferences;
+      await Preferences.set({ key, value });
+    } catch (error) {
+      if (typeof console !== 'undefined') {
+        console.error('[NativeStorageAdapter] Failed to set item:', key, error);
+      }
+      throw error;
+    }
+  }
+
+  async removeItem(key: string): Promise<void> {
+    try {
+      const Preferences = await this.preferences;
+      await Preferences.remove({ key });
+    } catch (error) {
+      if (typeof console !== 'undefined') {
+        console.error('[NativeStorageAdapter] Failed to remove item:', key, error);
+      }
+      throw error;
+    }
   }
 }
 

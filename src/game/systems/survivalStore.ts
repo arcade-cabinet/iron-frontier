@@ -493,7 +493,20 @@ export const createSurvivalSlice: StateCreator<
       // This is called externally (e.g., in a useEffect)
       // The clock handles its own timing internally
       syncSystems();
-      set({ clockState: clock.getState() });
+      const nextClock = clock.getState();
+      set((state) => {
+        const timeState = (state as { time?: { hour: number; dayOfYear: number } }).time;
+        return {
+          clockState: nextClock,
+          ...(timeState && {
+            time: {
+              ...timeState,
+              hour: nextClock.hour,
+              dayOfYear: nextClock.day,
+            },
+          }),
+        } as Partial<SurvivalSlice>;
+      });
     },
 
     // --------------------------------------------------------------------------

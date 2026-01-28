@@ -29,7 +29,7 @@ tags:
 
 # Wait for About modal to appear
 - extendedWaitUntil:
-    visible: "Iron Frontier is a steampunk frontier RPG"
+    visible: "A mobile-first isometric RPG set in a steampunk American frontier"
     timeout: 3000
 
 # Take screenshot of About modal
