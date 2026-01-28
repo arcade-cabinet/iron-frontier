@@ -395,7 +395,7 @@ export function createGameStore({
             condition: 100,
             weight: def.weight ?? 0.1,
             type: def.category,
-            droppable: true,
+            droppable: def.droppable ?? true,
           });
 
           if (!stackable) {
