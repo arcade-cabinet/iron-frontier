@@ -7,11 +7,11 @@
   - Optimized western town assets via Blender scripts and AmbientCG materials.
   - Placeholder hero uses `man_adventurer.gltf` until content‑gen is corrected.
 
-- **Meshy Content‑Gen (Paused)**
-  - Imported and simplified Meshy pipeline into `packages/content-gen`.
-  - Added CLI `generate` + `resume` flow with adjustable stream timeout.
-  - Created hero manifest and generated concept/model/rigged/animation assets.
-  - Artifacts stored in `assets/content/characters/iron-frontier-hero/`.
+- **Meshy Content‑Gen (Migrated)**
+  - Switched to `@agentic-dev-library/meshy-content-generator` and added local task defs under `assets/content/tasks/definitions`.
+  - Added per‑asset pipeline definition `assets/content/characters/iron-frontier-hero/iron-frontier-hero.pipeline.json`.
+  - Updated hero manifest to new schema with style variants and current animation list.
+  - Root scripts now run the new content‑gen CLI against per‑asset pipelines.
 
 - **Playwright Parity Tests**
   - Stabilized quest playthrough test selectors in `tests/e2e/playthrough.spec.ts`.

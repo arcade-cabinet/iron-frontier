@@ -23,8 +23,9 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:maestro": "maestro test .maestro/",
-    "content:gen": "pnpm --dir packages/content-gen generate",
-    "content:gen:hero": "pnpm --dir packages/content-gen generate assets/content/characters/iron-frontier-hero"
+    "content:gen": "content-gen run iron-frontier-hero assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
+    "content:gen:hero": "content-gen run iron-frontier-hero assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
+    "content:validate:hero": "content-gen validate assets/content/characters/iron-frontier-hero --pipeline iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions"
   },
   "dependencies": {
     "@angular/animations": "^20.0.0",
@@ -66,6 +67,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@agentic-dev-library/meshy-content-generator": "file:../agentic-dev-library/meshy-content-generator",
     "@angular-devkit/build-angular": "^20.0.0",
     "@angular-eslint/builder": "^20.0.0",
     "@angular-eslint/eslint-plugin": "^20.0.0",

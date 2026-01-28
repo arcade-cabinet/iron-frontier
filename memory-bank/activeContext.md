@@ -31,19 +31,15 @@ A dedicated Babylon look‑dev route exists to evaluate visual identity and envi
 - `scripts/blender/optimize_western_town.py` — splits/optimizes western town and retextures with AmbientCG
 - `scripts/generate_western_parts_manifest.mjs` — part manifest generator (if needed)
 
-## Content‑Gen (Meshy) — Work Completed, Now Paused
+## Content‑Gen (Meshy) — Migrated to Agentic Library
 
-Imported Meshy pipeline from Neo‑Tokyo and adapted:
-- New package: `packages/content-gen` (renamed to @iron-frontier/content-gen)
-- CLI supports `generate` and `resume` (for timeout recovery), with `MESHY_STREAM_TIMEOUT_MS`
-- Pipelines now download artifacts (concept images, model, rigged model)
-- Character manifest created: `assets/content/characters/iron-frontier-hero/manifest.json`
-- Meshy tasks completed for hero (concept/model/rigging/animations) and artifacts downloaded:
-  - `concept_0.png`, `concept_1.png`, `concept_2.png`
-  - `model.glb`, `rigged.glb`
-  - `animations/*.glb`
+Meshy generation now uses `@agentic-dev-library/meshy-content-generator`:
+- Shared task definitions in `assets/content/tasks/definitions`
+- Per‑asset pipeline definition stored alongside the asset (e.g. `assets/content/characters/iron-frontier-hero/iron-frontier-hero.pipeline.json`)
+- Hero manifest updated to new schema, including style variants for retexturing
+- Root scripts now call `content-gen run` with local pipelines/tasks
 
-**Status:** paused until content‑gen is corrected (main character is required for look‑dev).
+**Status:** ready to resume generating the hero once API keys are configured.
 
 ## Golden Path (Next)
 

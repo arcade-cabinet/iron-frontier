@@ -1,0 +1,57 @@
+{
+  "id": "iron-frontier-hero",
+  "name": "Iron Frontier Hero",
+  "type": "character",
+  "description": "Playable protagonist for Iron Frontier. Old west steampunk gunslinger with rugged frontier gear.",
+  "seed": 1598883206,
+  "textToImageTask": {
+    "prompt": "Full-body old west steampunk gunslinger, leather duster coat, brass goggles, rugged frontier boots, bandolier, revolver holster, steam canister pack, neutral A-pose, clean background, high detail, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aspectRatio": "1:1",
+    "aiModel": "nano-banana-pro"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 45000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": true,
+    "poseMode": "a-pose",
+    "texturePrompt": "weathered leather coat, brass buckles, oxidized copper tubing, dusty cloth, worn boots, steampunk patina, realistic materials"
+  },
+  "styleVariants": [
+    "brass-patina",
+    "dusty-canvas",
+    "midnight-coat",
+    "copper-oxide",
+    "railroad-union",
+    "frontier-merc",
+    "steam-sheriff",
+    "desert-ranger"
+  ],
+  "styleTexturePrompts": {
+    "brass-patina": "warm brass hardware with patina, oil-stained leather, soot-dusted cloth, sun-faded bandolier",
+    "dusty-canvas": "dusty canvas coat, sunbleached fabric, minimal brass accents, utilitarian frontier gear",
+    "midnight-coat": "deep charcoal duster coat, matte black leather, subtle brass trim, understated steampunk details",
+    "copper-oxide": "oxidized copper tubing, teal patina accents, rough leather, industrial steam canister pack",
+    "railroad-union": "railroad engineer palette, burgundy vest, brass buckles, weathered denim, workman gloves",
+    "frontier-merc": "battle-worn leather armor, reinforced shoulder pads, dust-caked boots, pragmatic mercenary vibe",
+    "steam-sheriff": "lawman blue coat, brass badge, crisp leather holster, polished boots, steam-era authority",
+    "desert-ranger": "sandstone palette, sun-scorched leather, canvas wraps, desert dust, rugged ranger feel"
+  },
+  "riggingTask": {
+    "heightMeters": 1.78
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.Idle.Idle_03",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back",
+      "Fighting.AttackingwithWeapon.Walk_Forward_While_Shooting_inplace",
+      "Fighting.Transitioning.Slow_Walk_Reload_inplace"
+    ]
+  }
+}
