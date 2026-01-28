@@ -342,13 +342,18 @@ export function createGameStore({
           const currentWeight = get().getTotalWeight();
           const projectedWeight = currentWeight + item.weight * item.quantity;
           const maxWeight = get().maxCarryWeight;
+          const state = get();
+          const existingItem = state.inventory.find(
+            (i) => i.itemId === item.itemId && i.condition === item.condition
+          );
+
+          if (!existingItem && state.inventory.length >= state.maxInventorySlots) {
+            get().addNotification('warning', 'Inventory full.');
+            return;
+          }
 
           set((state) => {
             // Check stackability
-            const existingItem = state.inventory.find(
-              (i) => i.itemId === item.itemId && i.condition === item.condition
-            );
-
             if (existingItem) {
               return {
                 inventory: state.inventory.map((i) =>
