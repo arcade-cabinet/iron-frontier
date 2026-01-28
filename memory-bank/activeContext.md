@@ -64,6 +64,7 @@ Imported Meshy pipeline from Neo‑Tokyo and adapted:
 - Integrated Yuka agents and Rapier physics scaffolding into the hex scene manager.
 - Expanded Playwright E2E coverage (inventory/shop/combat) and stabilized selectors.
 - Playwright now runs single‑worker for reliability across all viewport projects.
+- Cleaned Angular template warnings and allowed audio CommonJS deps in build.
 
 ### Session 2026‑01‑27 (PR Feedback Fixes)
 - Fixed Babylon resize/event listener leaks, pathfinding validation, and ARIA attributes across UI.

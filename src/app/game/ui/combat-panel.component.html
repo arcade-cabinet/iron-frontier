@@ -106,7 +106,7 @@
           "
         >
           <div
-            *ngIf="combatState?.selectedTargetId === enemy.definitionId"
+            *ngIf="combatState.selectedTargetId === enemy.definitionId"
             class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-red-600 rounded-full flex items-center justify-center"
           >
             <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,7 +351,7 @@
     </div>
 
     <div
-      *ngIf="!isPlayerTurn && combatState?.phase === 'enemy_turn'"
+      *ngIf="!isPlayerTurn && combatState.phase === 'enemy_turn'"
       class="bg-red-950/90 border-t border-red-800/50 p-2 sm:p-4 backdrop-blur-sm"
     >
       <div class="text-center text-red-300 text-xs sm:text-sm">

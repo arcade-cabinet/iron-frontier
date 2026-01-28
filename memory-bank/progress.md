@@ -26,6 +26,10 @@
   - Added stable test hooks (`data-testid`) for combat targets, shop buy rows/buttons, and inventory item cards.
   - Playwright config now runs single-worker for stability; suite passing across all viewports (72 tests).
 
+- **Build Hygiene**
+  - Removed optional-chain template warnings in UI panels.
+  - Allowed audio CommonJS deps in Angular build config.
+
 ## 2026-01-27
 
 - Fixed Babylon resize/memory leaks and pathfinding validation.

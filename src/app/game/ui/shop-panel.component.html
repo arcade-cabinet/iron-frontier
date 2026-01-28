@@ -211,10 +211,10 @@
           <p class="text-xs sm:text-sm">Nothing to sell</p>
           <p class="mt-1 text-[10px] text-amber-700/40 sm:text-xs">Find some loot first</p>
         </div>
-        <div *ngIf="inventory.length > 0 && !shop?.canSell" class="py-8 text-center text-amber-600/50 sm:py-12">
+        <div *ngIf="inventory.length > 0 && !shop.canSell" class="py-8 text-center text-amber-600/50 sm:py-12">
           <p class="text-xs sm:text-sm">This merchant doesn't buy items</p>
         </div>
-        <ng-container *ngIf="shop?.canSell">
+        <ng-container *ngIf="shop.canSell">
           <div
             *ngFor="let item of inventory"
             class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all sm:gap-3 sm:p-2.5"
