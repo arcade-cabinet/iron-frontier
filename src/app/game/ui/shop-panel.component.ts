@@ -33,7 +33,7 @@ export class ShopPanelComponent {
 
   get shop(): ShopDefinition | null {
     const shopId = this.shopState?.shopId;
-    return shopId ? getShopById(shopId) : null;
+    return shopId ? getShopById(shopId) ?? null : null;
   }
 
   get availableItems(): ShopItem[] {

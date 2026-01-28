@@ -1,6 +1,7 @@
 <div
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 sm:p-4"
   *ngIf="shopState && shop"
+  data-testid="shop-panel"
 >
   <div
     class="flex h-full w-full flex-col rounded-xl border-2 border-amber-700/60 bg-amber-950 shadow-2xl sm:h-auto sm:max-h-[80vh] sm:max-w-2xl"
@@ -206,12 +207,12 @@
         <div *ngIf="inventory.length > 0 && !shop?.canSell" class="py-8 text-center text-amber-600/50 sm:py-12">
           <p class="text-xs sm:text-sm">This merchant doesn't buy items</p>
         </div>
-        <div
-          *ngFor="let item of inventory"
-          class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
-          [class.opacity-50]="!canSellItem(item)"
-          *ngIf="shop?.canSell"
-        >
+        <ng-container *ngIf="shop?.canSell">
+          <div
+            *ngFor="let item of inventory"
+            class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all hover:border-amber-700/50 hover:bg-amber-900/40 sm:gap-3 sm:p-2.5"
+            [class.opacity-50]="!canSellItem(item)"
+          >
           <div
             class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border border-amber-700/30 bg-amber-800/40 sm:h-10 sm:w-10"
           >
@@ -261,7 +262,8 @@
               <span class="text-[9px] text-amber-600/50 italic sm:text-[10px]">Not accepted</span>
             </ng-template>
           </div>
-        </div>
+          </div>
+        </ng-container>
       </div>
     </div>
 

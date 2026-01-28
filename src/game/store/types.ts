@@ -295,6 +295,7 @@ export type GamePhase =
   | 'paused'
   | 'dialogue'
   | 'inventory'
+  | 'travel'
   | 'combat'
   | 'game_over'
   | 'puzzle';

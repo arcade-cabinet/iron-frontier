@@ -79,12 +79,36 @@ export class WorldMapComponent {
     return getConnectionsFrom(this.world, this.currentLocationId);
   }
 
+  get currentLocationName(): string {
+    const loc = this.currentLocationId ? this.getLocationById(this.currentLocationId) : null;
+    return loc?.name ?? 'Unknown';
+  }
+
+  get currentLocationType(): string {
+    const loc = this.currentLocationId ? this.getLocationById(this.currentLocationId) : null;
+    return loc?.type ?? 'unknown';
+  }
+
   scaleX(wx: number): number {
     return this.padding + (wx / this.world.dimensions.width) * (this.mapWidth - 2 * this.padding);
   }
 
   scaleY(wy: number): number {
     return this.padding + (wy / this.world.dimensions.height) * (this.mapHeight - 2 * this.padding);
+  }
+
+  getLocationById(id: string): LocationRef | undefined {
+    return this.world.locations.find((loc) => loc.id === id);
+  }
+
+  getLocationX(id: string): number {
+    const loc = this.getLocationById(id);
+    return loc ? this.scaleX(loc.coord.wx) : 0;
+  }
+
+  getLocationY(id: string): number {
+    const loc = this.getLocationById(id);
+    return loc ? this.scaleY(loc.coord.wy) : 0;
   }
 
   connectionTarget(conn: Connection): string {

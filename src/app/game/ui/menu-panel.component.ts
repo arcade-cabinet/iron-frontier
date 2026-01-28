@@ -15,6 +15,10 @@ export class MenuPanelComponent {
 
   constructor(readonly gameStore: GameStoreService) {}
 
+  roundPercent(value: number): number {
+    return Math.round(value * 100);
+  }
+
   get isOpen(): boolean {
     return this.gameStore.getState().activePanel === 'menu';
   }

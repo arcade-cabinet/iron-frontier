@@ -29,7 +29,7 @@ export class QuestLogComponent {
     return this.gameStore.getState().activeQuests;
   }
 
-  get completedQuests(): ActiveQuest[] {
+  get completedQuests(): Quest[] {
     return this.gameStore.getState().completedQuests;
   }
 
@@ -38,11 +38,12 @@ export class QuestLogComponent {
   }
 
   getObjectives(quest: Quest, active: ActiveQuest): Objective[] {
-    const stage = quest.stages.find((s) => s.id === active.currentStageId);
+    const stage = quest.stages[active.currentStageIndex];
     return stage?.objectives ?? [];
   }
 
   isObjectiveComplete(objective: Objective, active: ActiveQuest): boolean {
-    return active.completedObjectiveIds.includes(objective.id);
+    const progress = active.objectiveProgress[objective.id] ?? objective.current ?? 0;
+    return progress >= objective.count;
   }
 }

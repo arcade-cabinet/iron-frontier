@@ -1,4 +1,4 @@
-<div class="fixed inset-0 z-40" *ngIf="isOpen">
+<div class="fixed inset-0 z-40" *ngIf="isOpen" data-testid="world-map">
   <div class="absolute inset-0 bg-black/70" (click)="closeMap()"></div>
   <div
     class="absolute inset-2 sm:inset-6 flex flex-col rounded-xl border border-amber-800/70 bg-amber-950 shadow-2xl"
@@ -49,10 +49,10 @@
           <g class="connections">
             <ng-container *ngFor="let conn of world.connections">
               <line
-                [attr.x1]="scaleX(world.locations.find(l => l.id === conn.from)?.coord.wx || 0)"
-                [attr.y1]="scaleY(world.locations.find(l => l.id === conn.from)?.coord.wy || 0)"
-                [attr.x2]="scaleX(world.locations.find(l => l.id === conn.to)?.coord.wx || 0)"
-                [attr.y2]="scaleY(world.locations.find(l => l.id === conn.to)?.coord.wy || 0)"
+                [attr.x1]="getLocationX(conn.from)"
+                [attr.y1]="getLocationY(conn.from)"
+                [attr.x2]="getLocationX(conn.to)"
+                [attr.y2]="getLocationY(conn.to)"
                 stroke="#6b4f2a"
                 [attr.stroke-dasharray]="conn.method === 'trail' ? '4 4' : conn.method === 'railroad' ? '2 6' : '0'"
                 stroke-width="2"
@@ -113,10 +113,10 @@
         <div class="rounded-lg border border-amber-700/50 bg-amber-900/40 p-3">
           <div class="text-[10px] uppercase tracking-widest text-amber-500">Current Location</div>
           <div class="text-sm font-semibold text-amber-100">
-            {{ world.locations.find(l => l.id === currentLocationId)?.name || 'Unknown' }}
+            {{ currentLocationName }}
           </div>
           <div class="text-xs text-amber-400">
-            {{ world.locations.find(l => l.id === currentLocationId)?.type || 'unknown' }}
+            {{ currentLocationType }}
           </div>
         </div>
 
@@ -157,12 +157,12 @@
     [style.left.px]="(tooltip?.x || 0) + 10"
     [style.top.px]="(tooltip?.y || 0) - 80"
   >
-    <div class="text-sm font-medium text-amber-100">{{ tooltip?.location.name }}</div>
-    <div class="text-xs text-amber-400 capitalize">{{ tooltip?.location.type }}</div>
+    <div class="text-sm font-medium text-amber-100">{{ tooltip?.location?.name }}</div>
+    <div class="text-xs text-amber-400 capitalize">{{ tooltip?.location?.type }}</div>
     <div class="mt-2 text-xs text-amber-300" *ngIf="tooltip?.travelInfo">
-      {{ tooltip?.travelInfo.travelTime }}h via {{ tooltip?.travelInfo.method }}
-      <span class="ml-2 font-semibold" [style.color]="dangerColors[tooltip?.travelInfo.danger || 'moderate']">
-        {{ tooltip?.travelInfo.danger }}
+      {{ tooltip?.travelInfo?.travelTime }}h via {{ tooltip?.travelInfo?.method }}
+      <span class="ml-2 font-semibold" [style.color]="dangerColors[tooltip?.travelInfo?.danger || 'moderate']">
+        {{ tooltip?.travelInfo?.danger }}
       </span>
     </div>
   </div>

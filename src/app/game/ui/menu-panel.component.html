@@ -48,7 +48,7 @@
           <div>
             <div class="flex items-center justify-between text-xs text-amber-300">
               <span>Music Volume</span>
-              <span class="font-mono">{{ Math.round(state.settings.musicVolume * 100) }}%</span>
+              <span class="font-mono">{{ roundPercent(state.settings.musicVolume) }}%</span>
             </div>
             <input
               type="range"
@@ -64,7 +64,7 @@
           <div>
             <div class="flex items-center justify-between text-xs text-amber-300">
               <span>SFX Volume</span>
-              <span class="font-mono">{{ Math.round(state.settings.sfxVolume * 100) }}%</span>
+              <span class="font-mono">{{ roundPercent(state.settings.sfxVolume) }}%</span>
             </div>
             <input
               type="range"

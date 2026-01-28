@@ -70,7 +70,7 @@ export class TravelPanelComponent implements OnDestroy {
     if (!locationId) return 'Unknown';
     const world = this.gameStore.getState().loadedWorld as LoadedWorld | null;
     const location = world?.getLocation ? world.getLocation(locationId) : null;
-    if (location?.name) return location.name;
+    if (location?.ref?.name) return location.ref.name;
     return locationId;
   }
 }

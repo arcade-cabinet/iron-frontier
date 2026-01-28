@@ -52,10 +52,10 @@
         <div *ngIf="completedQuests.length === 0" class="text-amber-400/70 text-sm">No completed quests yet.</div>
         <div *ngFor="let completed of completedQuests" class="mb-3 bg-amber-950/60 border border-amber-800/40 rounded-lg p-3">
           <div class="text-amber-100 font-semibold">
-            {{ getQuest(completed.questId)?.title || 'Unknown Quest' }}
+            {{ completed.title }}
           </div>
           <div class="text-xs text-amber-400/80">
-            {{ getQuest(completed.questId)?.description }}
+            {{ completed.description }}
           </div>
         </div>
       </ng-container>
