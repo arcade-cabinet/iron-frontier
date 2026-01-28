@@ -126,7 +126,21 @@ export function createGameStore({
 
   return create<GameState>()(
     persist(
-      (set, get, api) => ({
+      (set, get, api) => {
+        const grantEncounterRewards = (encounter: any) => {
+          if (!encounter?.rewards) return;
+          const rewards = encounter.rewards;
+          if (rewards.xp) get().gainXP(rewards.xp);
+          if (rewards.gold) get().addGold(rewards.gold);
+          rewards.items?.forEach((item: { itemId: string; quantity: number; chance: number }) => {
+            const roll = Math.random();
+            if (roll <= (item.chance ?? 1)) {
+              get().addItemById(item.itemId, item.quantity ?? 1);
+            }
+          });
+        };
+
+        return ({
         // Core State
         phase: 'title',
         initialized: false,
@@ -1370,10 +1384,7 @@ export function createGameStore({
 
           if (nextPhase === 'victory') {
             const encounter = dataAccess.getEncounterById(combatState.encounterId);
-            if (encounter?.rewards) {
-              if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
-              if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
-            }
+            grantEncounterRewards(encounter);
             return;
           }
 
@@ -1430,10 +1441,7 @@ export function createGameStore({
             set({ combatState: { ...combatState, phase: 'victory' } });
             // Grant Rewards
             const encounter = dataAccess.getEncounterById(combatState.encounterId);
-            if (encounter?.rewards) {
-              if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
-              if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
-            }
+            grantEncounterRewards(encounter);
             return;
           }
 
