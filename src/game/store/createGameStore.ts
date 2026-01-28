@@ -343,9 +343,13 @@ export function createGameStore({
           const projectedWeight = currentWeight + item.weight * item.quantity;
           const maxWeight = get().maxCarryWeight;
           const state = get();
-          const existingItem = state.inventory.find(
-            (i) => i.itemId === item.itemId && i.condition === item.condition
-          );
+          const itemDef = dataAccess.getItem(item.itemId);
+          const canStack = itemDef?.stackable ?? true;
+          const existingItem = canStack
+            ? state.inventory.find(
+                (i) => i.itemId === item.itemId && i.condition === item.condition
+              )
+            : undefined;
 
           if (!existingItem && state.inventory.length >= state.maxInventorySlots) {
             get().addNotification('warning', 'Inventory full.');
@@ -376,21 +380,35 @@ export function createGameStore({
           const def = dataAccess.getItem(itemId);
           if (!def) return;
 
-          const item: InventoryItem = {
+          const maxStack = def.maxStack ?? 99;
+          const stackable = def.stackable ?? true;
+          const makeItem = (stackQty: number) => ({
             id: `item_${itemId}_${Date.now()}_${Math.random()}`,
             itemId: def.id,
             name: def.name,
             rarity: def.rarity,
-            quantity,
+            quantity: stackQty,
             description: def.description,
             usable: def.usable,
             condition: 100,
             weight: def.weight ?? 0.1,
             type: def.category,
             droppable: true,
-          };
+          });
 
-          get().addItem(item);
+          if (!stackable) {
+            for (let i = 0; i < quantity; i += 1) {
+              get().addItem(makeItem(1));
+            }
+            return;
+          }
+
+          let remaining = quantity;
+          while (remaining > 0) {
+            const stackQty = Math.min(remaining, maxStack);
+            get().addItem(makeItem(stackQty));
+            remaining -= stackQty;
+          }
         },
 
         removeItem: (itemId: string, quantity = 1) => {
