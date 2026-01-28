@@ -14,34 +14,43 @@
       ]
     },
     {
-      "id": "model",
-      "task": "multi-image-to-3d",
+      "id": "preview",
+      "task": "text-to-3d-preview",
       "dependsOn": ["concept"],
       "inputs": [
-        { "name": "image_urls", "source": "step", "step": "concept", "path": "images" }
+        { "name": "prompt", "source": "manifest", "path": "textTo3DPreviewTask.prompt" }
+      ]
+    },
+    {
+      "id": "refine",
+      "task": "text-to-3d-refine",
+      "dependsOn": ["preview"],
+      "inputs": [
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
+        { "name": "texture_prompt", "source": "manifest", "path": "textTo3DRefineTask.texturePrompt" }
       ]
     },
     {
       "id": "variants",
-      "task": "multi-image-to-3d-variant",
-      "dependsOn": ["concept"],
+      "task": "text-to-3d-refine-variant",
+      "dependsOn": ["preview"],
       "forEach": {
         "source": "manifest",
         "path": "styleVariants",
         "as": "styleId"
       },
       "inputs": [
-        { "name": "image_urls", "source": "step", "step": "concept", "path": "images" },
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
         { "name": "texture_prompt", "source": "manifest", "path": "styleTexturePrompts.{{styleId}}" }
       ]
     },
     {
       "id": "rigging",
       "task": "rigging",
-      "dependsOn": ["model"],
+      "dependsOn": ["refine"],
       "inputs": [
-        { "name": "input_task_id", "source": "step", "step": "model", "path": "taskId" },
-        { "name": "texture_image_url", "source": "step", "step": "model", "path": "textureUrl" }
+        { "name": "input_task_id", "source": "step", "step": "refine", "path": "taskId" },
+        { "name": "texture_image_url", "source": "step", "step": "refine", "path": "textures.0.base_color" }
       ]
     },
     {

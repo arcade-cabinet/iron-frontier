@@ -26,12 +26,6 @@
       "source": "manifest",
       "path": "textToImageTask.poseMode",
       "default": ""
-    },
-    {
-      "name": "aspect_ratio",
-      "source": "manifest",
-      "path": "textToImageTask.aspectRatio",
-      "default": "1:1"
     }
   ],
   "outputs": [

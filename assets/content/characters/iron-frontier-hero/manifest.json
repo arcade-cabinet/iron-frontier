@@ -2,24 +2,79 @@
   "id": "iron-frontier-hero",
   "name": "Iron Frontier Hero",
   "type": "character",
-  "description": "Playable protagonist for Iron Frontier. Old west steampunk gunslinger with rugged frontier gear.",
   "seed": 1598883206,
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c055e-ca0f-7d9e-a3b8-806dd07161cf",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c055e-ca0f-7d9e-a3b8-806dd07161cf"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c055f-2f59-7da5-a5c9-9e821b6f4f61",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c055f-2f59-7da5-a5c9-9e821b6f4f61"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c0560-de17-7f3d-8977-e1668e28ae67",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0560-de17-7f3d-8977-e1668e28ae67"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c056e-922f-7216-8439-a5d9aaa3e7db",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c056e-922f-7216-8439-a5d9aaa3e7db"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019c0570-1630-7e21-9f71-07b591f735a9",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0570-1630-7e21-9f71-07b591f735a9"
+      },
+      "artifacts": {}
+    },
+    "animation": {
+      "taskId": "019c0574-9357-74f5-9a93-7817a48562da",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0574-9357-74f5-9a93-7817a48562da"
+      },
+      "artifacts": {}
+    }
+  },
+  "description": "Playable protagonist for Iron Frontier. Old west steampunk gunslinger with rugged frontier gear.",
   "textToImageTask": {
     "prompt": "Full-body old west steampunk gunslinger, leather duster coat, brass goggles, rugged frontier boots, bandolier, revolver holster, steam canister pack, neutral A-pose, clean background, high detail, multi-view sheet",
     "generateMultiView": true,
     "poseMode": "a-pose",
-    "aspectRatio": "1:1",
     "aiModel": "nano-banana-pro"
   },
-  "multiImageTo3DTask": {
+  "textTo3DPreviewTask": {
+    "prompt": "Old west steampunk gunslinger character, full body, neutral A-pose, clean silhouette, wearable gear, no weapons drawn",
+    "artStyle": "realistic",
+    "aiModel": "latest",
     "topology": "quad",
     "targetPolycount": 45000,
-    "symmetryMode": "auto",
     "shouldRemesh": true,
-    "shouldTexture": true,
-    "enablePbr": true,
+    "symmetryMode": "auto",
     "poseMode": "a-pose",
-    "texturePrompt": "weathered leather coat, brass buckles, oxidized copper tubing, dusty cloth, worn boots, steampunk patina, realistic materials"
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "weathered leather coat, brass buckles, oxidized copper tubing, dusty cloth, worn boots, steampunk patina, realistic materials",
+    "enablePbr": true,
+    "moderation": false
   },
   "styleVariants": [
     "brass-patina",

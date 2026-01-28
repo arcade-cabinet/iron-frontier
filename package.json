@@ -23,8 +23,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:maestro": "maestro test .maestro/",
-    "content:gen": "content-gen run iron-frontier-hero assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
-    "content:gen:hero": "content-gen run iron-frontier-hero assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
+    "content:gen": "pnpm exec tsx scripts/content-gen-run.ts --pipeline iron-frontier-hero --asset assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
+    "content:gen:hero": "pnpm exec tsx scripts/content-gen-run.ts --pipeline iron-frontier-hero --asset assets/content/characters/iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions",
     "content:validate:hero": "content-gen validate assets/content/characters/iron-frontier-hero --pipeline iron-frontier-hero --pipelines assets/content/characters/iron-frontier-hero --tasks assets/content/tasks/definitions"
   },
   "dependencies": {
@@ -67,7 +67,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
-    "@agentic-dev-library/meshy-content-generator": "file:../agentic-dev-library/meshy-content-generator",
+    "@agentic-dev-library/meshy-content-generator": "file:../../agentic-dev-library/meshy-content-generator",
     "@angular-devkit/build-angular": "^20.0.0",
     "@angular-eslint/builder": "^20.0.0",
     "@angular-eslint/eslint-plugin": "^20.0.0",
@@ -100,6 +100,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.0"
   },
   "packageManager": "pnpm@10.20.0"
