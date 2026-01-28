@@ -1147,13 +1147,95 @@ export function createGameStore({
 
         // Combat Actions (Placeholder)
         startCombat: (encounterId: string) => {
+          const state = get();
+          const encounter = dataAccess.getEncounterById(encounterId);
+          if (!encounter) {
+            state.addNotification('warning', 'Encounter not found.');
+            return;
+          }
+
+          const equippedWeaponId = state.equipment.weapon
+            ? state.inventory.find((item) => item.id === state.equipment.weapon)?.itemId ?? null
+            : null;
+          const weaponDef = equippedWeaponId ? dataAccess.getItem(equippedWeaponId) : null;
+          const playerAccuracy = weaponDef?.weaponStats?.accuracy ?? 75;
+          const playerBaseDamage = weaponDef?.weaponStats?.damage ?? 10;
+          const playerArmor = Object.values(state.equipment)
+            .map((equippedId) =>
+              equippedId ? state.inventory.find((item) => item.id === equippedId) : null
+            )
+            .filter(Boolean)
+            .reduce((total, item) => {
+              const def = item ? dataAccess.getItem(item.itemId) : null;
+              return total + (def?.armorStats?.defense ?? 0);
+            }, 0);
+          const playerAp = Math.max(4, Math.min(10, Math.round(state.playerStats.stamina / 25)));
+          const playerAmmo = weaponDef?.weaponStats?.clipSize ?? 0;
+
+          const combatants: Combatant[] = [
+            {
+              definitionId: `player_${Date.now()}`,
+              name: state.playerName || 'Stranger',
+              isPlayer: true,
+              health: state.playerStats.health,
+              maxHealth: state.playerStats.maxHealth,
+              actionPoints: playerAp,
+              maxActionPoints: playerAp,
+              position: { q: 0, r: 0 },
+              statusEffects: [],
+              weaponId: equippedWeaponId ?? '',
+              ammoInClip: playerAmmo,
+              baseDamage: playerBaseDamage,
+              armor: playerArmor,
+              accuracy: playerAccuracy,
+              evasion: 10,
+              level: state.playerStats.level ?? 1,
+              isActive: true,
+              hasActed: false,
+              isDead: state.playerStats.health <= 0,
+            },
+          ];
+
+          encounter.enemies.forEach((enemyGroup) => {
+            const enemyDef = dataAccess.getEnemyById(enemyGroup.enemyId);
+            if (!enemyDef) return;
+            const enemyWeapon = enemyDef.weaponId ? dataAccess.getItem(enemyDef.weaponId) : null;
+            const enemyAmmo = enemyWeapon?.weaponStats?.clipSize ?? 0;
+            const enemyAccuracy = Math.min(95, Math.max(5, 70 + (enemyDef.accuracyMod ?? 0)));
+
+            for (let i = 0; i < enemyGroup.count; i += 1) {
+              const instanceId = `${enemyGroup.enemyId}_${i + 1}_${Date.now()}`;
+              combatants.push({
+                definitionId: instanceId,
+                name: enemyGroup.count > 1 ? `${enemyDef.name} ${i + 1}` : enemyDef.name,
+                isPlayer: false,
+                health: enemyDef.maxHealth,
+                maxHealth: enemyDef.maxHealth,
+                actionPoints: enemyDef.actionPoints,
+                maxActionPoints: enemyDef.actionPoints,
+                position: { q: i + 1, r: 1 },
+                statusEffects: [],
+                weaponId: enemyDef.weaponId ?? '',
+                ammoInClip: enemyAmmo,
+                baseDamage: enemyDef.baseDamage,
+                armor: enemyDef.armor,
+                accuracy: enemyAccuracy,
+                evasion: enemyDef.evasion ?? 10,
+                level: Math.max(1, encounter.minLevel ?? 1),
+                isActive: false,
+                hasActed: false,
+                isDead: false,
+              });
+            }
+          });
+
           set({
             phase: 'combat',
             combatState: {
               encounterId,
               phase: 'player_turn',
-              combatants: [],
-              turnOrder: [],
+              combatants,
+              turnOrder: combatants.map((c) => c.definitionId),
               currentTurnIndex: 0,
               round: 1,
               log: [],
@@ -1266,6 +1348,14 @@ export function createGameStore({
             isCritical,
             message: resultMessage,
           };
+          const playerAlive = newCombatants.some((c) => c.isPlayer && !c.isDead);
+          const enemiesAlive = newCombatants.some((c) => !c.isPlayer && !c.isDead);
+
+          const nextPhase = !playerAlive
+            ? 'defeat'
+            : !enemiesAlive
+              ? 'victory'
+              : combatState.phase;
 
           set({
             combatState: {
@@ -1274,20 +1364,52 @@ export function createGameStore({
               log: [...combatState.log, result],
               selectedAction: undefined,
               selectedTargetId: undefined,
+              phase: nextPhase as any,
             },
           });
+
+          if (nextPhase === 'victory') {
+            const encounter = dataAccess.getEncounterById(combatState.encounterId);
+            if (encounter?.rewards) {
+              if (encounter.rewards.xp) state.gainXP(encounter.rewards.xp);
+              if (encounter.rewards.gold) state.addGold(encounter.rewards.gold);
+            }
+            return;
+          }
+
+          if (nextPhase === 'defeat') {
+            setTimeout(() => get().setPhase('game_over'), 1500);
+            return;
+          }
 
           // If AI turn, continue acting if possible
           if (!actor.isPlayer && !newCombatants[actorIndex].isDead) {
             // Delay next action for pacing
             setTimeout(() => {
               const currentState = get().combatState;
-              // If turn hasn't changed (e.g. combat didn't end), continue AI
-              if (currentState && currentState.currentTurnIndex === actorIndex) {
-                get().endCombatTurn(); // Simple AI: One action per turn or just end for now
-                // TODO: Improved AI loop to use all AP
+              if (!currentState) return;
+              if (currentState.currentTurnIndex !== actorIndex) return;
+              if (currentState.phase !== 'enemy_turn') return;
+
+              const currentActor = currentState.combatants[actorIndex];
+              const apNeeded = dataAccess.AP_COSTS.attack ?? 2;
+              const playerTarget = currentState.combatants.find(
+                (c) => c.isPlayer && !c.isDead
+              );
+
+              if (currentActor.actionPoints >= apNeeded && playerTarget) {
+                set((s) => ({
+                  combatState: {
+                    ...s.combatState!,
+                    selectedAction: 'attack',
+                    selectedTargetId: playerTarget.definitionId,
+                  },
+                }));
+                get().executeCombatAction();
+              } else {
+                get().endCombatTurn();
               }
-            }, 1000);
+            }, 800);
           }
         },
 
@@ -1375,6 +1497,15 @@ export function createGameStore({
         },
 
         attemptFlee: () => {
+          const state = get();
+          const encounter = state.combatState
+            ? dataAccess.getEncounterById(state.combatState.encounterId)
+            : null;
+          if (encounter && !encounter.canFlee) {
+            state.addNotification('warning', "You can't escape this fight!");
+            return;
+          }
+
           // 50% chance
           if (Math.random() > 0.5) {
             set((s) => ({ combatState: { ...s.combatState!, phase: 'fled' } }));

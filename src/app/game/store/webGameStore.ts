@@ -31,7 +31,14 @@ import { createActiveQuest, isCurrentStageComplete as isStageComplete } from '@/
 import { getConnectionsFrom } from '@/data/schemas/world';
 import { canSellItemToShop, getShopById } from '@/data/shops';
 import { getWorldById, loadWorld } from '@/data/worlds';
-import { createGameStore, type DataAccess, type GameState, WebStorageAdapter } from '@/store';
+import { Capacitor } from '@capacitor/core';
+import {
+  createGameStore,
+  type DataAccess,
+  type GameState,
+  NativeStorageAdapter,
+  WebStorageAdapter,
+} from '@/store';
 import { dbManager } from './DatabaseManager';
 
 /**
@@ -65,10 +72,21 @@ const webDataAccess: DataAccess = {
   // Combat
   getEnemyById: (enemyId: string) => getEnemyById(enemyId),
   getEncounterById: (encounterId: string) => getEncounterById(encounterId),
-  calculateHitChance,
-  calculateDamage,
-  rollHit,
-  rollCritical,
+  calculateHitChance: (attacker: any, target: any, action: any) => {
+    const accuracy = attacker?.accuracy ?? 75;
+    const evasion = target?.evasion ?? 10;
+    const range = 1;
+    const isAimedShot = action?.type === 'aimed_shot';
+    return calculateHitChance(accuracy, evasion, range, isAimedShot);
+  },
+  calculateDamage: (attacker: any, target: any, _action: any, isCrit: boolean) => {
+    const baseDamage = attacker?.baseDamage ?? 10;
+    const attackerLevel = attacker?.level ?? 1;
+    const defenderArmor = target?.armor ?? 0;
+    return calculateDamage(baseDamage, attackerLevel, defenderArmor, isCrit);
+  },
+  rollHit: (chance: number) => rollHit(chance),
+  rollCritical: (_attacker: any) => rollCritical(),
   AP_COSTS,
 
   // Shops
@@ -112,7 +130,9 @@ const webDataAccess: DataAccess = {
  * Create the web game store with localStorage persistence
  */
 export const gameStore = createGameStore({
-  storageAdapter: new WebStorageAdapter(),
+  storageAdapter: Capacitor.isNativePlatform()
+    ? new NativeStorageAdapter()
+    : new WebStorageAdapter(),
   storageKey: 'iron-frontier-save',
   databaseManager: dbManager,
   dataAccess: webDataAccess,

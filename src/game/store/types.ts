@@ -6,7 +6,9 @@
  */
 
 import type { ActiveQuest, DialogueCondition, DialogueEffect, NPCDefinition, Quest } from '../data';
+import type { DangerLevel, TravelMethod } from '../data/schemas/world';
 import type { PipePuzzleState } from '../puzzles/pipe-fitter';
+import type { SurvivalSlice } from '../systems/survivalStore';
 
 // Re-export dialogue types for use by consumers
 export type { DialogueCondition, DialogueEffect };
@@ -363,6 +365,11 @@ export interface Combatant {
   statusEffects: any[];
   weaponId: string;
   ammoInClip: number;
+  baseDamage?: number;
+  armor?: number;
+  accuracy?: number;
+  evasion?: number;
+  level?: number;
   isActive: boolean;
   hasActed: boolean;
   isDead: boolean;
@@ -409,10 +416,10 @@ export interface CombatState {
 export interface TravelState {
   fromLocationId: string;
   toLocationId: string;
-  method: string;
+  method: TravelMethod;
   travelTime: number;
   progress: number;
-  dangerLevel: string;
+  dangerLevel: DangerLevel;
   startedAt: number;
   encounterId: string | null;
 }
@@ -631,7 +638,7 @@ export interface GameStateActions {
 /**
  * Complete game state with data and actions
  */
-export type GameState = GameStateData & GameStateActions;
+export type GameState = GameStateData & GameStateActions & SurvivalSlice;
 
 /**
  * Persisted state subset (what gets saved to storage)
