@@ -32,12 +32,18 @@ importers:
       '@angular/router':
         specifier: ^20.0.0
         version: 20.3.16(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.16(@angular/animations@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
+      '@babylonjs/addons':
+        specifier: ^8.47.0
+        version: 8.47.0(@babylonjs/core@8.47.0)
       '@babylonjs/core':
         specifier: ^8.47.0
         version: 8.47.0
       '@babylonjs/loaders':
         specifier: ^8.47.0
         version: 8.47.0(@babylonjs/core@8.47.0)(babylonjs-gltf2interface@8.47.0)
+      '@babylonjs/materials':
+        specifier: ^8.47.0
+        version: 8.47.0(@babylonjs/core@8.47.0)
       '@capacitor-community/electron':
         specifier: 5.0.1
         version: 5.0.1
@@ -51,6 +57,9 @@ importers:
         specifier: 8.0.0
         version: 8.0.0(@capacitor/core@8.0.2)
       '@capacitor/keyboard':
+        specifier: 8.0.0
+        version: 8.0.0(@capacitor/core@8.0.2)
+      '@capacitor/preferences':
         specifier: 8.0.0
         version: 8.0.0(@capacitor/core@8.0.2)
       '@capacitor/status-bar':
@@ -68,6 +77,9 @@ importers:
       animejs:
         specifier: ^4.1.0
         version: 4.3.5
+      bp-cloner:
+        specifier: ^0.0.2
+        version: 0.0.2(@babylonjs/core@8.47.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -95,6 +107,9 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
+      yuka:
+        specifier: ^0.7.8
+        version: 0.7.8
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -1713,6 +1728,11 @@ packages:
     resolution: {integrity: sha512-0ZrskXVEHSWIqZM/sQZ4EV3jZJXRkio/WCxaqKZP1g//CEWEPSfeZFcms4XeKBCHU0ZKnIkdJeU/kF+eRp5lBg==}
     engines: {node: '>=6.9.0'}
 
+  '@babylonjs/addons@8.47.0':
+    resolution: {integrity: sha512-QoDWo9vNQ94IKFfXhFMz0Euygv8IFdnxRZyybETp6BX1Xq1NbSPYVH+Zjb7q1y8wBBJWuutE3VQ+OcsOk9wPIA==}
+    peerDependencies:
+      '@babylonjs/core': ^8.0.0
+
   '@babylonjs/core@8.47.0':
     resolution: {integrity: sha512-Z8sHiTopdgAnkBw3KEE7JJUK5aD0BoiLgVMm2EwTWupDzIB0TxbPmFCgf0w6NojxKHQjs3EzQZGQvgdfbVAX3A==}
 
@@ -1777,6 +1797,11 @@ packages:
 
   '@capacitor/keyboard@8.0.0':
     resolution: {integrity: sha512-ycPW6iQyFwzDK95jihesj5EGiyyGSfbBqNek11iNp9tBOB7zDeYkUA2S/vPpOETt3dhP6pWr7a9gNVGuEfj11g==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
+  '@capacitor/preferences@8.0.0':
+    resolution: {integrity: sha512-NsE7Srk9Zr0SxiVelHGiAJR7M238eyCD6dI/sDhu3ckKwFrXn8/GRyGr+SZcnGLlQKy948li8Pfcfr0dqxNf1g==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -5687,6 +5712,11 @@ packages:
   boxen@8.0.1:
     resolution: {integrity: sha512-F3PH5k5juxom4xktynS7MoFY+NUWH5LC4CnH11YB8NPew+HLpmBLCybSAEyb2F+4pRXhuhWqFesoQd6DAyc2hw==}
     engines: {node: '>=18'}
+
+  bp-cloner@0.0.2:
+    resolution: {integrity: sha512-4sazI8KIeyKHwCV2vj2Ldw7f5AMj/esOHeLuGdl4PEGy0+KcHxkffoTBb2cIoNXgDWP2cDR7m1Ia65S2tUNkDQ==}
+    peerDependencies:
+      '@babylonjs/core': ^8.3.1
 
   bplist-creator@0.1.0:
     resolution: {integrity: sha512-sXaHZicyEEmY86WyueLTQesbeoH/mquvarJaQNbjuOQO+7gbFcDEWqKmcWA4cOTLzFlfgvkiVxolk1k5bBIpmg==}
@@ -11828,6 +11858,9 @@ packages:
     resolution: {integrity: sha512-CzhO+pFNo8ajLM2d2IW/R93ipy99LWjtwblvC1RsoSUMZgyLbYFr221TnSNT7GjGdYui6P459mw9JH/g/zW2ug==}
     engines: {node: '>=18'}
 
+  yuka@0.7.8:
+    resolution: {integrity: sha512-G/pFcMZh2Azz7Yy500NSV1jQ0Ru7h9hTNyEW+HjRXcdzjJIyp/3mCGspnx7VJVP06zxORqK6mkl5TywLqVUnVg==}
+
   zod-to-json-schema@3.25.1:
     resolution: {integrity: sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==}
     peerDependencies:
@@ -13678,6 +13711,10 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
+  '@babylonjs/addons@8.47.0(@babylonjs/core@8.47.0)':
+    dependencies:
+      '@babylonjs/core': 8.47.0
+
   '@babylonjs/core@8.47.0': {}
 
   '@babylonjs/gui@8.47.0(@babylonjs/core@8.47.0)':
@@ -13763,6 +13800,10 @@ snapshots:
       '@capacitor/core': 8.0.2
 
   '@capacitor/keyboard@8.0.0(@capacitor/core@8.0.2)':
+    dependencies:
+      '@capacitor/core': 8.0.2
+
+  '@capacitor/preferences@8.0.0(@capacitor/core@8.0.2)':
     dependencies:
       '@capacitor/core': 8.0.2
 
@@ -18834,6 +18875,10 @@ snapshots:
       type-fest: 4.41.0
       widest-line: 5.0.0
       wrap-ansi: 9.0.2
+
+  bp-cloner@0.0.2(@babylonjs/core@8.47.0):
+    dependencies:
+      '@babylonjs/core': 8.47.0
 
   bplist-creator@0.1.0:
     dependencies:
@@ -26730,6 +26775,8 @@ snapshots:
   yoctocolors-cjs@2.1.3: {}
 
   yoctocolors@2.1.2: {}
+
+  yuka@0.7.8: {}
 
   zod-to-json-schema@3.25.1(zod@3.25.76):
     dependencies:

@@ -126,6 +126,7 @@
         </div>
         <div
           *ngFor="let shopItem of availableItems; let idx = index"
+          data-testid="shop-buy-item"
           class="flex items-center gap-2 rounded-lg border border-amber-800/30 bg-amber-900/20 p-2 transition-all sm:gap-3 sm:p-2.5"
           [ngClass]="{
             'opacity-50': (shopItem.stock ?? -1) === 0,
@@ -181,6 +182,7 @@
             </div>
             <button
               type="button"
+              data-testid="shop-buy-button"
               class="min-h-[36px] rounded-md px-2.5 py-1.5 text-[10px] font-medium transition-colors sm:min-h-0 sm:px-3 sm:text-xs"
               [disabled]="!canAfford(shopItem) || (shopItem.stock ?? -1) === 0"
               [ngClass]="

@@ -17,6 +17,15 @@
   - Stabilized quest playthrough test selectors in `tests/e2e/playthrough.spec.ts`.
   - Full Playwright suite passing across all configured viewports (54 tests).
 
+- **AI + Physics Integration**
+  - Added Yuka agent manager and Rapier physics world for the hex scene.
+  - Player movement now supports Yuka path following with Rapier collision scaffolding.
+
+- **E2E Coverage Expansion**
+  - Added inventory, shop, and combat Playwright system tests.
+  - Added stable test hooks (`data-testid`) for combat targets, shop buy rows/buttons, and inventory item cards.
+  - Playwright config now runs single-worker for stability; suite passing across all viewports (72 tests).
+
 ## 2026-01-27
 
 - Fixed Babylon resize/memory leaks and pathfinding validation.

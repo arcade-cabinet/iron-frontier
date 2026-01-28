@@ -46,9 +46,10 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-2 p-2 sm:p-3 h-[calc(90vh-150px)]">
       <div class="md:col-span-2 overflow-y-auto pr-1">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" data-testid="inventory-items">
           <button
             *ngFor="let item of filteredItems"
+            data-testid="inventory-item"
             class="text-left p-2 rounded border bg-amber-950/60"
             [ngClass]="[getRarityBorder(item.rarity), selectedItem?.id === item.id ? 'ring-2 ring-amber-500/60' : '']"
             (click)="selectItem(item)"
@@ -72,40 +73,108 @@
         </div>
       </div>
 
-      <div class="md:col-span-1 bg-amber-950/60 border border-amber-800/40 rounded-lg p-2 sm:p-3">
+      <div
+        class="md:col-span-1 bg-amber-950/60 border border-amber-800/40 rounded-lg p-2 sm:p-3 flex flex-col"
+        [ngClass]="!selectedItem ? 'hidden sm:flex' : ''"
+      >
         <ng-container *ngIf="selectedItem; else emptyDetails">
-          <div class="text-amber-100 font-semibold text-sm">
-            {{ getItemDetails(selectedItem.itemId)?.name || selectedItem.name }}
+          <div class="mb-2">
+            <div class="text-amber-100 font-bold text-sm mb-1 leading-tight">
+              {{ getItemDetails(selectedItem.itemId)?.name || selectedItem.name }}
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[10px] px-1.5 py-0.5 rounded" [ngClass]="getRarityColor(selectedItem.rarity)">
+                {{ selectedItem.rarity }}
+              </span>
+              <span
+                *ngIf="isItemEquipped(selectedItem.id)"
+                class="text-[10px] px-1.5 py-0.5 rounded bg-blue-600 text-blue-100"
+              >
+                Equipped
+              </span>
+            </div>
           </div>
-          <div class="text-[10px] text-amber-400/80 mb-2">{{ getItemTypeName(selectedItem.type) }}</div>
-          <div class="text-xs text-amber-200/80 leading-relaxed">
-            {{ getItemDetails(selectedItem.itemId)?.description || selectedItem.description || 'No description.' }}
+
+          <div class="text-[11px] text-amber-400/70 mb-2 leading-relaxed flex-1 overflow-y-auto">
+            {{ getItemDetails(selectedItem.itemId)?.description || selectedItem.description || 'No description available.' }}
           </div>
-          <div class="mt-3 flex flex-col gap-2">
+
+          <div class="flex flex-wrap sm:flex-col gap-x-3 gap-y-1 text-[10px] text-amber-300/60 mb-2 pt-2 border-t border-amber-700/30">
+            <div class="flex justify-between gap-1">
+              <span>Type:</span>
+              <span class="text-amber-200">{{ getItemTypeName(selectedItem.type) }}</span>
+            </div>
+            <div class="flex justify-between gap-1">
+              <span>Weight:</span>
+              <span class="text-amber-200">{{ selectedItem.weight }} lbs</span>
+            </div>
+            <ng-container *ngIf="selectedItem.type === 'weapon'">
+              <div class="flex justify-between gap-1">
+                <span>Condition:</span>
+                <span
+                  [ngClass]="selectedItem.condition > 50 ? 'text-green-400' : selectedItem.condition > 25 ? 'text-yellow-400' : 'text-red-400'"
+                >
+                  {{ selectedItem.condition }}%
+                </span>
+              </div>
+              <ng-container *ngIf="getItemDetails(selectedItem.itemId)?.weaponStats as weaponStats">
+                <div class="flex justify-between gap-1">
+                  <span>Damage:</span>
+                  <span class="text-red-400">{{ weaponStats.damage }}</span>
+                </div>
+                <div class="flex justify-between gap-1">
+                  <span>Range:</span>
+                  <span class="text-amber-200">{{ weaponStats.range }}m</span>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="selectedItem.type === 'consumable'">
+              <ng-container *ngIf="getItemDetails(selectedItem.itemId)?.consumableStats as consumableStats">
+                <div class="flex justify-between gap-1" *ngIf="consumableStats.healAmount > 0">
+                  <span>Heals:</span>
+                  <span class="text-green-400">+{{ consumableStats.healAmount }} HP</span>
+                </div>
+                <div class="flex justify-between gap-1" *ngIf="consumableStats.staminaAmount > 0">
+                  <span>Stamina:</span>
+                  <span class="text-blue-400">+{{ consumableStats.staminaAmount }}</span>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div class="flex gap-1 flex-wrap">
             <button
-              class="px-3 py-2 rounded bg-amber-700 text-amber-100 text-xs"
               *ngIf="selectedItem.usable"
+              class="flex-1 h-8 text-[10px] bg-green-900/30 border border-green-700/50 text-green-300 hover:bg-green-800/50 min-h-[36px] rounded"
               (click)="handleUseItem(selectedItem.id)"
             >
               Use
             </button>
             <button
-              class="px-3 py-2 rounded border border-amber-700/50 text-amber-300 text-xs"
+              *ngIf="selectedItem.type === 'weapon' || selectedItem.type === 'armor'"
+              class="flex-1 h-8 text-[10px] min-h-[36px] rounded border"
+              [ngClass]="isItemEquipped(selectedItem.id) ? 'bg-blue-900/20 border-blue-700/30 text-blue-400/50 cursor-not-allowed' : 'bg-blue-900/30 border-blue-700/50 text-blue-300 hover:bg-blue-800/50'"
+              (click)="handleEquipItem(selectedItem.id)"
+              [disabled]="isItemEquipped(selectedItem.id)"
+            >
+              {{ isItemEquipped(selectedItem.id) ? 'Equipped' : 'Equip' }}
+            </button>
+            <button
+              *ngIf="selectedItem.droppable"
+              class="flex-1 h-8 text-[10px] bg-red-900/20 border border-red-700/30 text-red-400 hover:bg-red-800/30 min-h-[36px] rounded"
               (click)="handleDropItem(selectedItem.id)"
             >
               Drop
             </button>
-            <button
-              class="px-3 py-2 rounded border border-amber-700/50 text-amber-300 text-xs"
-              *ngIf="selectedItem.type === 'weapon' || selectedItem.type === 'armor'"
-              (click)="handleEquipItem(selectedItem.id)"
-            >
-              {{ isItemEquipped(selectedItem.id) ? 'Unequip' : 'Equip' }}
-            </button>
           </div>
         </ng-container>
         <ng-template #emptyDetails>
-          <div class="text-amber-400/60 text-xs">Select an item to view details.</div>
+          <div class="flex-1 flex flex-col items-center justify-center text-amber-500/40 text-[10px] text-center">
+            <svg class="w-8 h-8 mb-2 text-amber-700/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+            </svg>
+            <span>Select an item</span>
+          </div>
         </ng-template>
       </div>
     </div>

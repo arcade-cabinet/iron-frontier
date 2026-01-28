@@ -15,8 +15,13 @@ import {
 import { persistStorage } from './persistStorage';
 import type { StorageAdapter } from './StorageAdapter';
 import { createSurvivalSlice } from '../systems/survivalStore';
+import type { CombatEncounter } from '../data/schemas/combat';
+import type { ItemEffect } from '../data/schemas/item';
+import type { PipeCell } from '../puzzles/pipe-fitter/types';
 import type { DangerLevel, TravelMethod } from '../data/schemas/world';
 import type {
+  CombatActionType,
+  Combatant,
   DialogueCondition,
   DialogueEffect,
   EquipmentSlot,
@@ -59,12 +64,12 @@ export interface DataAccess {
 
   // Combat
   getEnemyById: (enemyId: string) => any;
-  getEncounterById: (encounterId: string) => any;
+  getEncounterById: (encounterId: string) => CombatEncounter | undefined;
   calculateHitChance: (attacker: any, target: any, action: any) => number;
   calculateDamage: (attacker: any, target: any, action: any, isCrit: boolean) => number;
   rollHit: (chance: number) => boolean;
   rollCritical: (attacker: any) => boolean;
-  AP_COSTS: Record<string, number>;
+  AP_COSTS: Record<CombatActionType, number>;
 
   // Shops
   getShopById: (shopId: string) => any;
@@ -140,10 +145,10 @@ export function createGameStore({
           });
         };
 
-        return ({
-        // Core State
-        phase: 'title',
-        initialized: false,
+        return {
+          // Core State
+          phase: 'title',
+          initialized: false,
 
         // World State
         worldSeed: Date.now(),
@@ -454,7 +459,7 @@ export function createGameStore({
           if (!def || !def.effects || def.effects.length === 0) return;
 
           // Apply effects
-          def.effects.forEach((effect) => {
+          def.effects.forEach((effect: ItemEffect) => {
             switch (effect.type) {
               case 'heal':
                 state.heal(effect.value);
@@ -1241,7 +1246,7 @@ export function createGameStore({
             },
           ];
 
-          encounter.enemies.forEach((enemyGroup) => {
+          encounter.enemies.forEach((enemyGroup: CombatEncounter['enemies'][number]) => {
             const enemyDef = dataAccess.getEnemyById(enemyGroup.enemyId);
             if (!enemyDef) return;
             const enemyWeapon = enemyDef.weaponId ? dataAccess.getItem(enemyDef.weaponId) : null;
@@ -1289,12 +1294,12 @@ export function createGameStore({
           });
         },
 
-        selectCombatAction: (action) => {
+        selectCombatAction: (action: CombatActionType) => {
           const cs = get().combatState;
           if (cs) set({ combatState: { ...cs, selectedAction: action } });
         },
 
-        selectCombatTarget: (targetId) => {
+        selectCombatTarget: (targetId: string) => {
           const cs = get().combatState;
           if (cs) set({ combatState: { ...cs, selectedTargetId: targetId } });
         },
@@ -1434,7 +1439,7 @@ export function createGameStore({
               if (currentState.phase !== 'enemy_turn') return;
 
               const currentActor = currentState.combatants[actorIndex];
-              const apNeeded = dataAccess.AP_COSTS.attack ?? 2;
+              const apNeeded = dataAccess.AP_COSTS['attack'] ?? 2;
               const playerTarget = currentState.combatants.find(
                 (c) => c.isPlayer && !c.isDead
               );
@@ -1592,7 +1597,7 @@ export function createGameStore({
           });
         },
 
-        updatePuzzle: (newGrid) => {
+        updatePuzzle: (newGrid: PipeCell[][]) => {
           const state = get();
           if (!state.activePuzzle) return;
 
@@ -1724,12 +1729,13 @@ export function createGameStore({
           state.addNotification('item', `Sold ${item.name} for ${price}g`);
         },
 
-        ...createSurvivalSlice(set, get, api),
-      }),
+          ...createSurvivalSlice(set, get, api),
+        };
+      },
       {
         name: storageKey,
         storage: persistStorage(storageAdapter) as any,
-        partialize: (state) =>
+        partialize: (state: GameState) =>
           ({
             // Select fields to persist
             initialized: state.initialized,

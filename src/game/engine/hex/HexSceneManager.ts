@@ -27,6 +27,8 @@ import '@babylonjs/loaders/glTF';
 
 import type { Location } from '@/data/schemas/spatial';
 import { WesternAssets } from '@assets';
+import { YukaAgentManager } from '@/engine/ai/YukaAgentManager';
+import { RapierWorld } from '@/engine/physics/RapierWorld';
 import { hexDistance, hexNeighbors } from './HexCoord';
 import {
   createEmptyGrid,
@@ -103,6 +105,10 @@ export class HexSceneManager {
   private playerWorldPos: Vector3 = Vector3.Zero();
   private playerFacingAngle: number = 0; // Y rotation in radians
   private playerModelYOffset: number = 0; // Compensate for models not centered at origin
+  private yukaManager: YukaAgentManager | null = null;
+  private rapierWorld: RapierWorld | null = null;
+  private readonly playerAgentId = 'player';
+  private playerMoveTarget: HexCoord | null = null;
 
   // NPC markers
   private npcMarkers: Map<string, AbstractMesh> = new Map();
@@ -341,6 +347,7 @@ export class HexSceneManager {
     } else {
       await this.generateMap();
     }
+    await this.setupPhysicsWorld();
 
     // Calculate map center for fallback spawn
     const centerQ = Math.floor(this.hexGrid?.bounds.maxQ ?? this.config.mapWidth) / 2;
@@ -484,6 +491,19 @@ export class HexSceneManager {
     }
 
     console.log(`[HexSceneManager] Generated ${this.hexGrid.tiles.size} hex tiles`);
+  }
+
+  private async setupPhysicsWorld(): Promise<void> {
+    if (!this.hexGrid) {
+      return;
+    }
+
+    if (this.rapierWorld) {
+      this.rapierWorld.dispose();
+    }
+
+    this.rapierWorld = new RapierWorld();
+    await this.rapierWorld.init(this.hexGrid);
   }
 
   /**
@@ -729,6 +749,40 @@ export class HexSceneManager {
       // const _skeleton = result.skeletons[0] ?? null;
       this.playerAnimations = result.animationGroups;
 
+      if (!this.yukaManager) {
+        this.yukaManager = new YukaAgentManager();
+      }
+
+      const syncPlayer = (entity: { position: { x: number; y: number; z: number }; velocity: { x: number; z: number } }, renderComponent: AbstractMesh) => {
+        this.playerWorldPos.set(entity.position.x, entity.position.y, entity.position.z);
+        renderComponent.position.set(
+          entity.position.x,
+          entity.position.y - this.playerModelYOffset,
+          entity.position.z,
+        );
+
+        const speedSq = entity.velocity.x * entity.velocity.x + entity.velocity.z * entity.velocity.z;
+        if (speedSq > 0.0001) {
+          const moveDirection = Math.atan2(entity.velocity.x, entity.velocity.z);
+          this.playerFacingAngle = moveDirection + this.MODEL_ROTATION_OFFSET;
+          renderComponent.rotation.y = this.playerFacingAngle;
+        }
+
+        if (this.gridRenderer) {
+          this.gridRenderer.updateCameraTarget(this.playerWorldPos);
+        }
+
+        this.rapierWorld?.setPlayerPosition(this.playerWorldPos);
+      };
+
+      this.yukaManager.createAgent({
+        id: this.playerAgentId,
+        position: { x: this.playerWorldPos.x, y: this.playerWorldPos.y, z: this.playerWorldPos.z },
+        maxSpeed: 2.5,
+        renderComponent: player,
+        onSync: syncPlayer,
+      });
+
       // Play idle animation if available
       const idleAnim = this.playerAnimations.find((a) => a.name.toLowerCase().includes('idle'));
       if (idleAnim) {
@@ -806,6 +860,17 @@ export class HexSceneManager {
       );
     }
 
+    this.yukaManager?.setAgentPosition(this.playerAgentId, {
+      x: this.playerWorldPos.x,
+      y: this.playerWorldPos.y,
+      z: this.playerWorldPos.z,
+    });
+
+    if (this.rapierWorld) {
+      this.rapierWorld.createPlayerBody(this.playerWorldPos);
+      this.rapierWorld.setPlayerPosition(this.playerWorldPos);
+    }
+
     // Update camera target
     if (this.gridRenderer) {
       this.gridRenderer.updateCameraTarget(this.playerWorldPos);
@@ -850,22 +915,59 @@ export class HexSceneManager {
       DEFAULT_HEX_LAYOUT
     );
     this.setPlayerHex(hexCoord, true); // Rotate toward movement direction
+
+    this.yukaManager?.setAgentPosition(this.playerAgentId, {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    });
+
+    if (this.rapierWorld) {
+      this.rapierWorld.createPlayerBody(this.playerWorldPos);
+      this.rapierWorld.setPlayerPosition(this.playerWorldPos);
+    }
   }
 
   /**
    * Move player to target hex (with animation in future)
    */
   movePlayerTo(targetHex: HexCoord): void {
-    // Rotate toward target and move (instant for now)
-    this.setPlayerHex(targetHex, true);
+    const tile = this.hexGrid?.tiles.get(hexKey(targetHex));
+    if (!tile?.isPassable) {
+      return;
+    }
 
-    // After arriving, turn back to face the camera (Fallout 2 style)
-    // Use a small delay so the turn toward movement direction is visible
+    const elevation = tile.elevation * 0.5;
+    const targetWorldPos = hexToWorld(targetHex, elevation + 0.1, DEFAULT_HEX_LAYOUT);
+
+    if (this.yukaManager) {
+      this.playerMoveTarget = targetHex;
+      this.yukaManager.setPath(
+        this.playerAgentId,
+        [
+          { x: this.playerWorldPos.x, y: this.playerWorldPos.y, z: this.playerWorldPos.z },
+          { x: targetWorldPos.x, y: targetWorldPos.y, z: targetWorldPos.z },
+        ],
+        {
+          waypointTolerance: 0.35,
+          arrivalDistance: 0.2,
+          onArrive: () => {
+            if (this.playerMoveTarget) {
+              this.setPlayerHex(this.playerMoveTarget, false);
+            }
+            this.resetPlayerRotation();
+            this.playerMoveTarget = null;
+          },
+        }
+      );
+      return;
+    }
+
+    // Fallback: instant movement if AI system not ready.
+    this.setPlayerHex(targetHex, true);
     setTimeout(() => {
       this.resetPlayerRotation();
     }, 150);
-
-    // TODO: Implement animated movement along path
   }
 
   /**
@@ -926,6 +1028,10 @@ export class HexSceneManager {
         this.gridRenderer.updateVisibility(this.playerWorldPos);
       }
 
+      const deltaSeconds = this.engine.getDeltaTime() / 1000;
+      this.yukaManager?.update(deltaSeconds);
+      this.rapierWorld?.step();
+
       this.scene.render();
     });
 
@@ -958,6 +1064,7 @@ export class HexSceneManager {
     }
 
     // Dispose scene and engine
+    this.rapierWorld?.dispose();
     this.scene.dispose();
     this.engine.dispose();
 
