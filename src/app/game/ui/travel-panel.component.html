@@ -1,31 +1,103 @@
 <div
-  class="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/85"
   *ngIf="travel"
   data-testid="travel-panel"
+  @overlay
 >
   <div
-    class="w-full max-w-3xl rounded-xl border border-amber-800/60 bg-amber-950/95 shadow-2xl"
+    class="mx-4 w-full max-w-md overflow-hidden rounded-xl border-2 border-amber-700/60 bg-amber-950 shadow-2xl"
+    @panel
   >
-    <div class="flex flex-col gap-2 border-b border-amber-800/50 p-4">
+    <div class="border-b border-amber-800/50 bg-amber-900/40 p-4">
+      <div class="flex items-center gap-3">
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-lg border border-amber-700/50 bg-amber-800/50"
+        >
+          <ng-container *ngIf="showEncounter; else methodIcon">
+            <svg class="h-7 w-7 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="10" r="7" />
+              <path d="M8 10a1 1 0 1 0 2 0 1 1 0 1 0-2 0" />
+              <path d="M14 10a1 1 0 1 0 2 0 1 1 0 1 0-2 0" />
+              <path d="M9 17v4h2v-2h2v2h2v-4" />
+              <path d="M12 14v1" />
+            </svg>
+          </ng-container>
+          <ng-template #methodIcon>
+            <ng-container [ngSwitch]="methodInfo.icon">
+              <svg *ngSwitchCase="'train'" class="h-7 w-7 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="3" width="16" height="14" rx="2" />
+                <path d="M4 11h16" />
+                <path d="M12 3v8" />
+                <circle cx="8" cy="19" r="2" />
+                <circle cx="16" cy="19" r="2" />
+                <path d="M8 17h8" />
+              </svg>
+              <svg *ngSwitchCase="'boot'" class="h-7 w-7 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 21h10c1 0 2-1 2-2v-4c0-1-1-2-2-2h-1l-1-8c0-1-1-2-2-2H11c-1 0-2 1-2 2l-1 8H7c-1 0-2 1-2 2v4c0 1 1 2 2 2z" />
+              </svg>
+              <svg *ngSwitchDefault class="h-7 w-7 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10c-1-3-4-6-7-6-2 0-4 2-5 4-2-1-4-1-6 1-1 1-2 3-2 5 0 3 2 6 5 6h4l1 2h4l1-2h2c2 0 3-1 4-3 0-2-1-5-1-7z" />
+                <path d="M5 11c0 1 1 2 2 2" />
+              </svg>
+            </ng-container>
+          </ng-template>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h2 class="text-lg font-bold" [ngClass]="showEncounter ? 'text-red-400' : 'text-amber-200'">
+            {{ showEncounter ? 'Ambush!' : 'Traveling...' }}
+          </h2>
+          <p class="truncate text-sm text-amber-400/80">
+            {{ fromName }} <span class="text-amber-500">→</span> {{ toName }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4 p-4">
       <div class="flex items-center justify-between">
-        <div>
-          <div class="text-xs uppercase tracking-widest text-amber-500">Traveling</div>
-          <div class="text-lg font-semibold text-amber-100">
-            {{ fromName }} → {{ toName }}
+        <div class="flex items-center gap-2">
+          <div
+            class="flex items-center gap-1.5 rounded-md border border-amber-700/50 bg-amber-900/50 px-2.5 py-1"
+          >
+            <ng-container [ngSwitch]="methodInfo.icon">
+              <svg *ngSwitchCase="'train'" class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="3" width="16" height="14" rx="2" />
+                <path d="M4 11h16" />
+                <path d="M12 3v8" />
+                <circle cx="8" cy="19" r="2" />
+                <circle cx="16" cy="19" r="2" />
+                <path d="M8 17h8" />
+              </svg>
+              <svg *ngSwitchCase="'boot'" class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 21h10c1 0 2-1 2-2v-4c0-1-1-2-2-2h-1l-1-8c0-1-1-2-2-2H11c-1 0-2 1-2 2l-1 8H7c-1 0-2 1-2 2v4c0 1 1 2 2 2z" />
+              </svg>
+              <svg *ngSwitchDefault class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10c-1-3-4-6-7-6-2 0-4 2-5 4-2-1-4-1-6 1-1 1-2 3-2 5 0 3 2 6 5 6h4l1 2h4l1-2h2c2 0 3-1 4-3 0-2-1-5-1-7z" />
+                <path d="M5 11c0 1 1 2 2 2" />
+              </svg>
+            </ng-container>
+            <span class="text-xs font-medium text-amber-200">{{ methodInfo.label }}</span>
+          </div>
+          <div
+            class="flex items-center gap-1.5 rounded-md border border-amber-700/50 bg-amber-900/50 px-2.5 py-1"
+          >
+            <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
+            </svg>
+            <span class="text-xs text-amber-300">{{ travel?.travelTime }}h</span>
           </div>
         </div>
-        <button
-          type="button"
-          class="min-h-[44px] rounded-md border border-amber-700/60 px-3 py-1.5 text-xs font-semibold text-amber-200 transition hover:bg-amber-900/40"
-          (click)="cancelTravel()"
+        <div
+          class="flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium capitalize"
+          [ngClass]="dangerStyle.badge"
         >
-          Cancel Travel
-        </button>
+          {{ travel?.dangerLevel }} danger
+        </div>
       </div>
 
       <div class="space-y-2">
-        <div class="text-[10px] uppercase tracking-widest text-amber-500/80">Progress</div>
-        <div class="relative h-4 overflow-hidden rounded-full border border-amber-700/50 bg-amber-900/40">
+        <div class="relative h-4 overflow-hidden rounded-full border border-amber-700/50 bg-amber-900/50">
           <div
             class="absolute inset-0 opacity-20"
             style="
@@ -38,76 +110,27 @@
             [style.width.%]="progressPercent"
           ></div>
           <div
-            class="absolute -top-1 h-6 w-1 rounded-full bg-amber-200"
-            [style.left.%]="progressPercent"
+            class="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-amber-700 bg-amber-300 shadow-lg"
+            [style.left.%]="progressMarkerLeft"
           ></div>
         </div>
-        <div class="flex items-center justify-between text-[10px] text-amber-500/80">
-          <span>{{ progressPercent | number: '1.0-0' }}% complete</span>
-          <span>{{ travel?.travelTime }}h via {{ travel?.method }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid gap-3 p-4 sm:grid-cols-3">
-      <div class="rounded-lg border border-amber-800/40 bg-amber-900/30 p-3">
-        <div class="flex items-center gap-2">
-          <div
-            class="flex h-9 w-9 items-center justify-center rounded-md border border-amber-700/40 bg-amber-900/60"
-          >
-            <svg
-              class="h-5 w-5 text-amber-300"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M22 10c-1-3-4-6-7-6-2 0-4 2-5 4-2-1-4-1-6 1-1 1-2 3-2 5 0 3 2 6 5 6h4l1 2h4l1-2h2c2 0 3-1 4-3 0-2-1-5-1-7z" />
-              <path d="M5 11c0 1 1 2 2 2" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-[10px] uppercase tracking-widest text-amber-500">Method</div>
-            <div class="text-sm font-semibold text-amber-100 capitalize">{{ travel?.method }}</div>
-          </div>
+        <div class="flex justify-between text-xs text-amber-500">
+          <span class="max-w-[40%] truncate">{{ fromName }}</span>
+          <span class="font-mono text-amber-400">{{ progressPercent | number: '1.0-0' }}%</span>
+          <span class="max-w-[40%] truncate text-right">{{ toName }}</span>
         </div>
       </div>
 
-      <div class="rounded-lg border border-amber-800/40 bg-amber-900/30 p-3">
-        <div class="flex items-center gap-2">
+      <div
+        class="rounded-lg border border-red-800/50 bg-red-950/40 p-4"
+        *ngIf="showEncounter && travel?.encounterId"
+        @encounter
+      >
+        <div class="mb-3 flex items-center gap-3">
           <div
-            class="flex h-9 w-9 items-center justify-center rounded-md border border-amber-700/40 bg-amber-900/60"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-red-700/50 bg-red-900/50"
           >
-            <svg
-              class="h-5 w-5 text-amber-300"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
-            </svg>
-          </div>
-          <div>
-            <div class="text-[10px] uppercase tracking-widest text-amber-500">Duration</div>
-            <div class="text-sm font-semibold text-amber-100">{{ travel?.travelTime }} hours</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-lg border border-amber-800/40 bg-amber-900/30 p-3">
-        <div class="flex items-center gap-2">
-          <div
-            class="flex h-9 w-9 items-center justify-center rounded-md border border-amber-700/40 bg-amber-900/60"
-          >
-            <svg
-              class="h-5 w-5 text-amber-300"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg class="h-6 w-6 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="10" r="7" />
               <path d="M8 10a1 1 0 1 0 2 0 1 1 0 1 0-2 0" />
               <path d="M14 10a1 1 0 1 0 2 0 1 1 0 1 0-2 0" />
@@ -116,37 +139,77 @@
             </svg>
           </div>
           <div>
-            <div class="text-[10px] uppercase tracking-widest text-amber-500">Danger</div>
-            <div class="text-sm font-semibold capitalize" [ngClass]="dangerClass">
-              {{ travel?.dangerLevel }}
-            </div>
+            <h3 class="font-bold text-red-200">Road Ambush!</h3>
+            <p class="text-sm text-red-400/80">
+              Hostiles have blocked the {{ travel?.method }}!
+            </p>
           </div>
         </div>
+        <p class="mb-4 text-sm text-amber-200/70">
+          You've been waylaid by enemies. You can fight your way through or attempt to flee
+          back the way you came.
+        </p>
+        <div class="flex gap-2 sm:gap-3">
+          <button
+            type="button"
+            class="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg bg-red-800 px-3 py-2.5 text-sm font-medium text-red-100 transition-colors hover:bg-red-700 sm:px-4 sm:text-base"
+            (click)="fightEncounter()"
+          >
+            <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
+              <path d="M13 19l6-6" />
+              <path d="M16 16l4 4" />
+              <path d="M19 21l2-2" />
+            </svg>
+            Fight
+          </button>
+          <button
+            type="button"
+            class="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-lg border border-amber-700/50 bg-amber-900/50 px-3 py-2.5 text-sm font-medium text-amber-200 transition-colors hover:bg-amber-800/50 sm:px-4 sm:text-base"
+            (click)="cancelTravel()"
+          >
+            <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 4v4l3 3" />
+              <circle cx="13" cy="4" r="2" />
+              <path d="M7 21l3-9 4 2" />
+              <path d="M4 15l6 2" />
+              <path d="M18 12l2 4" />
+            </svg>
+            Flee
+          </button>
+        </div>
+      </div>
+
+      <div class="py-6 text-center" *ngIf="!showEncounter && !travel?.encounterId">
+        <div class="inline-block travel-bob">
+          <ng-container [ngSwitch]="methodInfo.icon">
+            <svg *ngSwitchCase="'train'" class="mx-auto h-16 w-16 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="3" width="16" height="14" rx="2" />
+              <path d="M4 11h16" />
+              <path d="M12 3v8" />
+              <circle cx="8" cy="19" r="2" />
+              <circle cx="16" cy="19" r="2" />
+              <path d="M8 17h8" />
+            </svg>
+            <svg *ngSwitchCase="'boot'" class="mx-auto h-16 w-16 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 21h10c1 0 2-1 2-2v-4c0-1-1-2-2-2h-1l-1-8c0-1-1-2-2-2H11c-1 0-2 1-2 2l-1 8H7c-1 0-2 1-2 2v4c0 1 1 2 2 2z" />
+            </svg>
+            <svg *ngSwitchDefault class="mx-auto h-16 w-16 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 10c-1-3-4-6-7-6-2 0-4 2-5 4-2-1-4-1-6 1-1 1-2 3-2 5 0 3 2 6 5 6h4l1 2h4l1-2h2c2 0 3-1 4-3 0-2-1-5-1-7z" />
+              <path d="M5 11c0 1 1 2 2 2" />
+            </svg>
+          </ng-container>
+        </div>
+        <p class="mt-3 text-sm text-amber-400/70">
+          Traveling via {{ methodInfo.label.toLowerCase() }}...
+        </p>
+        <p class="mt-1 text-xs text-amber-500/50">{{ methodInfo.speed }} travel speed</p>
       </div>
     </div>
 
-    <div class="border-t border-amber-800/40 p-4">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="text-xs text-amber-400/80">
-          Stay alert. Encounters may interrupt travel.
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <button
-            type="button"
-            class="min-h-[44px] rounded-md border border-amber-700/50 px-4 py-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-900/40"
-            (click)="cancelTravel()"
-          >
-            Return
-          </button>
-          <button
-            type="button"
-            class="min-h-[44px] rounded-md bg-amber-600 px-4 py-2 text-xs font-semibold text-amber-950 transition hover:bg-amber-500"
-            (click)="completeTravel()"
-            *ngIf="progressPercent >= 100"
-          >
-            Arrive
-          </button>
-        </div>
+    <div class="border-t border-amber-800/50 bg-amber-900/20 p-3">
+      <div class="text-center text-[10px] text-amber-500/50">
+        {{ showEncounter ? 'Choose your course of action' : 'The frontier stretches before you...' }}
       </div>
     </div>
   </div>

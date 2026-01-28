@@ -1,22 +1,159 @@
-<div *ngIf="dialogue" class="absolute bottom-24 left-0 right-0 px-3 sm:px-4 z-30" data-testid="dialogue-box">
-  <div class="bg-amber-950/95 border border-amber-800/60 rounded-lg shadow-lg p-3">
-    <div class="flex items-center justify-between">
-      <div class="text-amber-100 font-semibold text-sm">
-        {{ dialogue?.speaker || dialogue?.npcName }}
+<div
+  *ngIf="dialogueOpen && dialogue"
+  class="absolute inset-x-2 bottom-16 sm:inset-x-3 sm:bottom-20 z-50"
+  data-testid="dialogue-box"
+  @dialogueBox
+>
+  <div
+    class="bg-amber-950/95 border-2 shadow-lg backdrop-blur-sm rounded-lg"
+    [ngClass]="expressionBorder"
+  >
+    <div class="p-2 sm:p-3 pb-1">
+      <div class="text-amber-400 text-sm sm:text-base flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+          <div
+            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-900/50 border-2 flex items-center justify-center overflow-hidden flex-shrink-0"
+            [ngClass]="expressionBorder"
+          >
+            <svg
+              class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="font-semibold truncate">
+              <span *ngIf="dialogue.npcTitle" class="text-amber-500 text-xs sm:text-sm mr-1">
+                {{ dialogue.npcTitle }}
+              </span>
+              {{ dialogue.npcName }}
+            </span>
+            <span
+              *ngIf="dialogue.speaker && dialogue.speaker !== dialogue.npcName"
+              class="text-amber-500 text-[10px] sm:text-xs truncate"
+            >
+              Speaking: {{ dialogue.speaker }}
+            </span>
+          </div>
+        </div>
+
+        <div class="hidden sm:flex gap-2 flex-shrink-0">
+          <span
+            *ngIf="dialogue.npcExpression"
+            class="text-xs border rounded px-2 py-0.5"
+            [ngClass]="expressionTextClass + ' ' + expressionBorder"
+          >
+            {{ dialogue.npcExpression }}
+          </span>
+          <span
+            *ngIf="activeNpc?.questGiver"
+            class="bg-yellow-600 text-yellow-100 text-xs rounded px-2 py-0.5 inline-flex items-center gap-1"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M5 8a7 7 0 0114 0v5a3 3 0 01-3 3H8a3 3 0 01-3-3V8z"
+              />
+            </svg>
+            Quest
+          </span>
+        </div>
       </div>
-      <button class="text-amber-400 hover:text-amber-200 text-xs" (click)="close()">Close</button>
     </div>
-    <div class="mt-2 text-amber-200 text-sm leading-relaxed">
-      {{ dialogue?.text }}
-    </div>
-    <div class="mt-3 space-y-2">
-      <button
-        *ngFor="let choice of dialogue?.choices; let i = index"
-        class="w-full text-left px-3 py-2 rounded border border-amber-700/50 text-amber-200 hover:bg-amber-800/40"
-        (click)="selectChoice(i)"
+
+    <div class="p-2 sm:p-3 pt-1 sm:pt-2">
+      <div
+        class="text-amber-100 text-xs sm:text-sm whitespace-pre-line min-h-[50px] sm:min-h-[60px] leading-relaxed cursor-pointer"
+        (click)="isTyping ? skipTyping() : null"
       >
-        {{ choice.text }}
-      </button>
+        {{ displayText }}
+        <span *ngIf="isTyping" class="animate-pulse text-amber-400 ml-0.5">|</span>
+      </div>
+
+      <div *ngIf="showChoiceButtons" class="mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
+        <button
+          *ngFor="let choice of dialogue.choices; let i = index"
+          (click)="handleChoiceSelect(i)"
+          [disabled]="selectedChoiceIndex !== null"
+          class="w-full text-left p-2 sm:p-2.5 rounded-lg border transition-all min-h-[44px]"
+          [ngClass]="
+            selectedChoiceIndex === i
+              ? 'bg-amber-700/50 border-amber-500 text-amber-100'
+              : 'bg-amber-900/30 border-amber-700/50 text-amber-200 hover:bg-amber-800/40 hover:border-amber-600'
+          "
+          @choiceItem
+        >
+          <div class="flex items-center gap-2">
+            <svg
+              class="w-4 h-4 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              [ngClass]="selectedChoiceIndex === i ? 'text-amber-400' : 'text-amber-600'"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="text-xs sm:text-sm">{{ choice.text }}</span>
+          </div>
+          <p *ngIf="choice.hint" class="text-amber-500 text-[10px] sm:text-xs mt-1 ml-6">
+            {{ choice.hint }}
+          </p>
+          <div *ngIf="choice.tags?.length" class="flex flex-wrap gap-1 mt-1 ml-6">
+            <span *ngIf="choice.tags.includes('aggressive')" class="text-red-400 text-[10px] sm:text-xs">
+              [Aggressive]
+            </span>
+            <span *ngIf="choice.tags.includes('kind')" class="text-green-400 text-[10px] sm:text-xs">
+              [Kind]
+            </span>
+            <span *ngIf="choice.tags.includes('main_quest')" class="text-yellow-400 text-[10px] sm:text-xs">
+              [Main Quest]
+            </span>
+          </div>
+        </button>
+      </div>
+
+      <div *ngIf="showContinuePrompt" class="mt-2 sm:mt-3">
+        <button
+          (click)="handleAdvance()"
+          class="w-full min-h-[44px] bg-amber-700/50 hover:bg-amber-600/50 text-amber-100 border border-amber-600 rounded-lg"
+        >
+          Continue
+          <svg class="w-4 h-4 ml-1 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <div *ngIf="showClosePrompt" class="mt-2 sm:mt-3">
+        <button
+          (click)="close()"
+          class="w-full min-h-[44px] border border-amber-600 text-amber-400 hover:bg-amber-900/30 rounded-lg"
+        >
+          End Conversation
+        </button>
+      </div>
+
+      <div class="text-amber-500 text-[10px] sm:text-xs mt-1.5 sm:mt-2 text-right">
+        {{ isTyping ? 'Tap to skip...' : '' }}
+      </div>
     </div>
   </div>
 </div>
