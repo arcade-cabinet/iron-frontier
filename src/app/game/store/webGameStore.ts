@@ -29,7 +29,12 @@ import {
 import { getAvailableChoices, getDialogueEntryNode } from '@/data/schemas/npc';
 import { createActiveQuest, isCurrentStageComplete as isStageComplete } from '@/data/schemas/quest';
 import { getConnectionsFrom } from '@/data/schemas/world';
-import { canSellItemToShop, getShopById } from '@/data/shops';
+import {
+  calculateBuyPrice,
+  calculateSellPrice,
+  canSellItemToShop,
+  getShopById,
+} from '@/data/shops';
 import { getWorldById, loadWorld } from '@/data/worlds';
 import { Capacitor } from '@capacitor/core';
 import {
@@ -91,15 +96,8 @@ const webDataAccess: DataAccess = {
 
   // Shops
   getShopById: (shopId: string) => getShopById(shopId),
-  calculateBuyPrice: (baseValue: number, reputation: number) => {
-    // Wrapper function that matches DataAccess interface
-    // Note: The actual implementation takes shop and item, but we'll use a simple calculation
-    return Math.floor(baseValue * (1 + reputation * 0.01));
-  },
-  calculateSellPrice: (baseValue: number, reputation: number) => {
-    // Wrapper function that matches DataAccess interface
-    return Math.floor(baseValue * 0.5 * (1 + reputation * 0.01));
-  },
+  calculateBuyPrice: (shop: any, item: any) => calculateBuyPrice(shop, item),
+  calculateSellPrice: (shop: any, itemDef: any) => calculateSellPrice(shop, itemDef),
   canSellItemToShop,
 
   // Generation

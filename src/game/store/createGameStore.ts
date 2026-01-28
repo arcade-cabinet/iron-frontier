@@ -68,9 +68,9 @@ export interface DataAccess {
 
   // Shops
   getShopById: (shopId: string) => any;
-  calculateBuyPrice: (baseValue: number, reputation: number) => number;
-  calculateSellPrice: (baseValue: number, reputation: number) => number;
-  canSellItemToShop: (item: any, shopType: string) => boolean;
+  calculateBuyPrice: (shop: any, item: any) => number;
+  calculateSellPrice: (shop: any, itemDef: any) => number;
+  canSellItemToShop: (shop: any, itemType: string) => boolean;
 
   // Generation
   initEncounterTemplates: () => void;
@@ -1642,13 +1642,29 @@ export function createGameStore({
           const { shopState, playerStats } = state;
           if (!shopState) return;
 
-          // Resolve price
+          const shop = dataAccess.getShopById(shopState.shopId);
+          if (!shop) return;
+
+          const shopItem = shop.inventory.find((item: any) => item.itemId === itemId);
+          if (!shopItem) {
+            state.addNotification('warning', "That item isn't available here.");
+            return;
+          }
+
+          if ((shopItem.minReputation ?? -100) > playerStats.reputation) {
+            state.addNotification('warning', 'Your reputation is too low.');
+            return;
+          }
+
+          if (shopItem.stock === 0) {
+            state.addNotification('warning', 'That item is sold out.');
+            return;
+          }
+
           const itemDef = dataAccess.getItem(itemId);
           if (!itemDef) return;
 
-          // Calculate price (base * modifier)
-          // For now, simple logic using DataAccess
-          const price = dataAccess.calculateBuyPrice(itemDef.value, playerStats.reputation);
+          const price = dataAccess.calculateBuyPrice(shop, shopItem);
 
           if (playerStats.gold < price) {
             state.addNotification('warning', "Can't afford that.");
@@ -1672,11 +1688,26 @@ export function createGameStore({
           const { shopState, playerStats, inventory } = state;
           if (!shopState) return;
 
+          const shop = dataAccess.getShopById(shopState.shopId);
+          if (!shop) return;
+
           const item = inventory.find((i) => i.id === inventoryId);
           if (!item) return;
 
           const itemDef = dataAccess.getItem(item.itemId);
-          const price = dataAccess.calculateSellPrice(itemDef.value, playerStats.reputation);
+          if (!itemDef) return;
+
+          if (!dataAccess.canSellItemToShop(shop, item.type)) {
+            state.addNotification('warning', 'This merchant will not buy that.');
+            return;
+          }
+
+          if (!itemDef.sellable) {
+            state.addNotification('warning', "You can't sell that.");
+            return;
+          }
+
+          const price = dataAccess.calculateSellPrice(shop, itemDef);
 
           // Transaction
           state.removeItem(item.itemId, 1); // Remove 1 quantity
