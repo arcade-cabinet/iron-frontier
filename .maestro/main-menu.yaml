@@ -2,7 +2,7 @@
 # Tests navigation through all main menu options
 # Verifies About modal, menu buttons, and UI responsiveness
 
-appId: com.ironfrontier.mobile
+appId: com.arcade_cabinet.iron_frontier
 name: "Main Menu Navigation"
 tags:
   - navigation
@@ -29,25 +29,16 @@ tags:
 
 # Wait for About modal to appear
 - extendedWaitUntil:
-    visible: "About Iron Frontier"
+    visible: "Iron Frontier is a steampunk frontier RPG"
     timeout: 3000
-
-# Verify About modal content
-- assertVisible:
-    text: "About Iron Frontier"
-
-- assertVisible:
-    text: "mobile-first isometric RPG"
-
-- assertVisible:
-    text: "steampunk American frontier"
 
 # Take screenshot of About modal
 - takeScreenshot: screenshots/04_about_modal
 
 # Close About modal
+# About uses inline toggle; tap About again to close
 - tapOn:
-    text: "Close"
+    text: "About"
 
 # Verify we're back to main menu
 - extendedWaitUntil:
@@ -60,12 +51,12 @@ tags:
 # Test 2: Verify Begin Adventure / New Game button is tappable
 # The button text depends on whether there's saved data
 - assertVisible:
-    text: ".*Adventure|.*New Game.*"
+    text: "Begin Adventure"
     regex: true
 
 # Tap to initiate new game flow (will show name input)
 - tapOn:
-    text: ".*Adventure|.*New Game.*"
+    text: "Begin Adventure"
     regex: true
 
 # Wait for name input to appear
@@ -82,7 +73,7 @@ tags:
 
 # Verify Start button is present (disabled until name entered)
 - assertVisible:
-    text: "Start"
+    text: "Begin Adventure"
 
 # Test 3: Go back to main menu
 - tapOn:

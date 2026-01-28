@@ -17,12 +17,12 @@ tags:
 
 # Wait for app to initialize
 - extendedWaitUntil:
-    visible: "Iron Frontier"
+    visible: "IRON FRONTIER"
     timeout: 15000
 
 # Verify the title is visible
 - assertVisible:
-    text: "Iron Frontier"
+    text: "IRON FRONTIER"
 
 # Test passes if we reach here
 - runScript:

@@ -1,0 +1,58 @@
+# World Map Travel Flow - Iron Frontier
+# Mirrors Playwright map + travel test
+
+appId: com.arcade_cabinet.iron_frontier
+name: "World Map Travel"
+tags:
+  - gameplay
+  - travel
+  - map
+
+---
+
+- launchApp:
+    appId: com.arcade_cabinet.iron_frontier
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Tales of the Steam Frontier"
+    timeout: 15000
+
+- tapOn:
+    text: "Begin Adventure"
+
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "Ada"
+
+- tapOn:
+    text: "Begin Adventure"
+
+- extendedWaitUntil:
+    visible: "Lv."
+    timeout: 30000
+
+# Open World Map (label visible on tablet/landscape)
+- tapOn:
+    text: "Territory"
+
+- extendedWaitUntil:
+    visible: "Travel Here"
+    timeout: 10000
+
+- tapOn:
+    text: "Sunset Ranch"
+
+- tapOn:
+    text: "Travel Here"
+
+- extendedWaitUntil:
+    visible: "Traveling"
+    timeout: 10000
+
+- takeScreenshot: screenshots/20_world_map_travel

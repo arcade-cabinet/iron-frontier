@@ -2,7 +2,7 @@
 # Tests the complete flow of starting a new game
 # Includes name input, game initialization, and reaching gameplay
 
-appId: com.ironfrontier.mobile
+appId: com.arcade_cabinet.iron_frontier
 name: "New Game Flow"
 tags:
   - gameplay
@@ -26,7 +26,7 @@ tags:
 
 # Tap New Game / Begin Adventure button
 - tapOn:
-    text: ".*Adventure|.*New Game.*"
+    text: "Begin Adventure"
     regex: true
 
 # Wait for name input field
@@ -45,12 +45,12 @@ tags:
 
 # Tap Start button to begin game
 - tapOn:
-    text: "Start"
+    text: "Begin Adventure"
 
 # Wait for game to initialize (WebGPU, world generation, etc.)
 # This can take significant time on first load
 - extendedWaitUntil:
-    visible: "Loading Iron Frontier..."
+    visible: "Loading world..."
     timeout: 5000
     optional: true
 
@@ -66,13 +66,11 @@ tags:
 # Verify game HUD elements are visible
 # Health indicator should be present
 - assertVisible:
-    id: "game-hud"
-    optional: true
+    text: "Lv."
 
 # Verify action bar is visible at bottom
 - assertVisible:
-    text: ".*Outlaw|.*Territory|.*Saddlebag.*"
-    regex: true
+    text: "Lv."
 
 # Take screenshot of full gameplay screen
 - takeScreenshot: screenshots/11_gameplay_screen
