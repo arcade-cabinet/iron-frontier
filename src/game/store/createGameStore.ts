@@ -1636,7 +1636,8 @@ export function createGameStore({
           // The UI (ShopPanel) will likely handle fetching the actual items via a selector or hook
 
           // But we need to track *who* we are trading with for reputation/price modifiers
-          set({ shopState: { shopId, ownerId: 'unknown' } });
+          const shop = dataAccess.getShopById(shopId);
+          set({ shopState: { shopId, ownerId: shop?.ownerId ?? 'unknown' } });
         },
 
         closeShop: () => set({ shopState: null }),
