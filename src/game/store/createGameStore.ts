@@ -505,6 +505,10 @@ export function createGameStore({
           const state = get();
           const item = state.inventory.find((i) => i.id === id);
           if (!item) return;
+          if (!item.droppable) {
+            state.addNotification('warning', "You can't drop that.");
+            return;
+          }
 
           // Remove from inventory
           set((s) => ({
