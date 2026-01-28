@@ -437,18 +437,38 @@ export function createGameStore({
           if (!item || !item.usable) return;
 
           const def = dataAccess.getItem(item.itemId);
-          if (!def || !def.effect) return;
+          if (!def || !def.effects || def.effects.length === 0) return;
 
-          // Apply effect
-          const { effect } = def;
-          switch (effect.type) {
-            case 'heal':
-              state.heal(effect.value);
-              break;
-            case 'buff':
-              // Not implemented
-              break;
-          }
+          // Apply effects
+          def.effects.forEach((effect) => {
+            switch (effect.type) {
+              case 'heal':
+                state.heal(effect.value);
+                break;
+              case 'stamina':
+                state.updatePlayerStats({
+                  stamina: Math.min(
+                    state.playerStats.maxStamina,
+                    state.playerStats.stamina + effect.value
+                  ),
+                });
+                break;
+              case 'damage':
+                state.takeDamage(effect.value);
+                break;
+              case 'buff':
+                state.addNotification(
+                  'info',
+                  `Buff applied: ${effect.buffType ?? 'unknown'}`
+                );
+                break;
+              case 'unlock':
+              case 'cure':
+              case 'none':
+              default:
+                break;
+            }
+          });
 
           // Consume item
           set((s) => {
