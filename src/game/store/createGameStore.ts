@@ -215,6 +215,8 @@ export function createGameStore({
             name: def.name,
             rarity: def.rarity,
             quantity: 1,
+            description: def.description,
+            usable: def.usable,
             condition: 100,
             weight: def.weight ?? 0.1,
             type: def.category,
