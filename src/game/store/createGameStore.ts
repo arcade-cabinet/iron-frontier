@@ -1059,6 +1059,29 @@ export function createGameStore({
 
           clearTravelTimer();
 
+          const encounterPools: Record<DangerLevel, string[]> = {
+            safe: [],
+            low: ['wolf_pack'],
+            moderate: ['roadside_bandits', 'wolf_pack'],
+            high: ['copperhead_patrol', 'ivrc_checkpoint'],
+            extreme: ['remnant_awakening'],
+          };
+          const encounterChances: Record<DangerLevel, number> = {
+            safe: 0,
+            low: 0.15,
+            moderate: 0.25,
+            high: 0.4,
+            extreme: 0.6,
+          };
+          const pool = encounterPools[dangerLevel] ?? [];
+          const encounterRoll = Math.random();
+          const encounterId =
+            pool.length > 0 && encounterRoll <= (encounterChances[dangerLevel] ?? 0)
+              ? pool[Math.floor(Math.random() * pool.length)]
+              : null;
+          const resolvedEncounterId =
+            encounterId && dataAccess.getEncounterById(encounterId) ? encounterId : null;
+
           // Start travel sequence
           set({
             travelState: {
@@ -1069,10 +1092,14 @@ export function createGameStore({
               progress: 0,
               dangerLevel,
               startedAt,
-              encounterId: null,
+              encounterId: resolvedEncounterId,
             },
             phase: 'travel',
           });
+
+          if (resolvedEncounterId) {
+            return;
+          }
 
           const totalMs = Math.max(2000, travelTime * 1000);
           travelTimer = setInterval(() => {
@@ -1524,6 +1551,27 @@ export function createGameStore({
         },
 
         endCombat: () => {
+          const state = get();
+          const combatState = state.combatState;
+          const travelState = state.travelState;
+
+          if (
+            combatState &&
+            travelState?.encounterId &&
+            travelState.encounterId === combatState.encounterId
+          ) {
+            if (combatState.phase === 'victory') {
+              set({ combatState: null });
+              get().completeTravel();
+              return;
+            }
+            if (combatState.phase === 'fled') {
+              set({ combatState: null });
+              get().cancelTravel();
+              return;
+            }
+          }
+
           set({
             phase: 'playing',
             combatState: null,
