@@ -22,10 +22,10 @@
         </div>
         <div class="min-w-0">
           <h2 class="truncate text-base font-bold text-amber-200 sm:text-lg">
-            {{ shop?.name }}
+            {{ shop.name }}
           </h2>
-          <p class="truncate text-[10px] text-amber-500/70 sm:text-xs" *ngIf="shop?.description">
-            {{ shop?.description }}
+          <p class="truncate text-[10px] text-amber-500/70 sm:text-xs" *ngIf="shop.description">
+            {{ shop.description }}
           </p>
         </div>
       </div>
@@ -82,10 +82,10 @@
       </button>
       <button
         type="button"
-        [disabled]="!shop?.canSell"
+        [disabled]="!shop.canSell"
         class="flex-1 px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-2.5 sm:text-sm"
         [ngClass]="
-          !shop?.canSell
+          !shop.canSell
             ? 'cursor-not-allowed opacity-50'
             : activeTab === 'sell'
               ? 'border-b-2 border-amber-500 bg-amber-900/30 text-amber-200'
@@ -279,7 +279,7 @@
 
     <div class="border-t border-amber-800/50 bg-amber-900/20 p-2 text-[9px] text-amber-500/50 sm:p-3 sm:text-[10px]">
       <div class="flex flex-col items-center justify-between gap-1 sm:flex-row">
-        <span>Sell rate: {{ (shop?.buyModifier ?? 0.5) * 100 | number: '1.0-0' }}%</span>
+        <span>Sell rate: {{ (shop.buyModifier ?? 0.5) * 100 | number: '1.0-0' }}%</span>
         <span class="hidden sm:inline">Press ESC to leave</span>
       </div>
     </div>

@@ -40,7 +40,9 @@
             "scripts": []
             ,
             "allowedCommonJsDependencies": [
-              "alea"
+              "alea",
+              "standardized-audio-context",
+              "automation-events"
             ]
           },
           "configurations": {

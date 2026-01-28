@@ -85,14 +85,14 @@
               <circle cx="12" cy="12" r="10" />
               <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" fill="currentColor" />
             </svg>
-            <span class="text-xs text-amber-300">{{ travel?.travelTime }}h</span>
+            <span class="text-xs text-amber-300">{{ travel.travelTime }}h</span>
           </div>
         </div>
         <div
           class="flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium capitalize"
           [ngClass]="dangerStyle.badge"
         >
-          {{ travel?.dangerLevel }} danger
+          {{ travel.dangerLevel }} danger
         </div>
       </div>
 
@@ -123,7 +123,7 @@
 
       <div
         class="rounded-lg border border-red-800/50 bg-red-950/40 p-4"
-        *ngIf="showEncounter && travel?.encounterId"
+        *ngIf="showEncounter && travel.encounterId"
         @encounter
       >
         <div class="mb-3 flex items-center gap-3">
@@ -141,7 +141,7 @@
           <div>
             <h3 class="font-bold text-red-200">Road Ambush!</h3>
             <p class="text-sm text-red-400/80">
-              Hostiles have blocked the {{ travel?.method }}!
+              Hostiles have blocked the {{ travel.method }}!
             </p>
           </div>
         </div>
@@ -180,7 +180,7 @@
         </div>
       </div>
 
-      <div class="py-6 text-center" *ngIf="!showEncounter && !travel?.encounterId">
+      <div class="py-6 text-center" *ngIf="!showEncounter && !travel.encounterId">
         <div class="inline-block travel-bob">
           <ng-container [ngSwitch]="methodInfo.icon">
             <svg *ngSwitchCase="'train'" class="mx-auto h-16 w-16 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

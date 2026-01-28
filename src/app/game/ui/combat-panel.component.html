@@ -74,7 +74,7 @@
       <div class="flex justify-between items-center">
         <div>
           <h2 class="text-base sm:text-lg font-bold text-amber-400">Showdown</h2>
-          <div class="text-[10px] sm:text-xs text-amber-500/60">Round {{ combatState?.round }}</div>
+          <div class="text-[10px] sm:text-xs text-amber-500/60">Round {{ combatState.round }}</div>
         </div>
         <div
           class="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium"
@@ -94,13 +94,13 @@
         <button
           *ngFor="let enemy of enemies"
           (click)="handleTargetSelect(enemy.definitionId)"
-          [disabled]="!(isPlayerTurn && combatState?.selectedAction)"
+          [disabled]="!(isPlayerTurn && combatState.selectedAction)"
           data-testid="combat-enemy"
           class="relative p-2 sm:p-3 rounded-lg border-2 transition-all min-w-[100px] sm:min-w-[140px] bg-stone-900/90 backdrop-blur-sm"
           [ngClass]="
-            combatState?.selectedTargetId === enemy.definitionId
+            combatState.selectedTargetId === enemy.definitionId
               ? 'border-red-500 ring-2 ring-red-500/30 shadow-lg shadow-red-500/20'
-              : isPlayerTurn && combatState?.selectedAction
+              : isPlayerTurn && combatState.selectedAction
                 ? 'border-stone-600 hover:border-amber-600 cursor-crosshair'
                 : 'border-stone-700 opacity-60 cursor-not-allowed'
           "
@@ -343,7 +343,7 @@
         </button>
       </div>
       <div
-        *ngIf="combatState?.selectedAction && !combatState?.selectedTargetId"
+      *ngIf="combatState.selectedAction && !combatState.selectedTargetId"
         class="text-center mt-1.5 sm:mt-2 text-amber-400 text-[10px] sm:text-xs animate-pulse"
       >
         Select a target...
