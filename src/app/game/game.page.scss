@@ -35,6 +35,22 @@ ion-content {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
+@media (max-width: 480px) {
+  .game-hud {
+    top: 8px;
+    left: 8px;
+    padding: 10px 12px;
+  }
+
+  .game-hud__title {
+    font-size: 12px;
+  }
+
+  .game-hud__subtitle {
+    font-size: 10px;
+  }
+}
+
 .game-hud__title {
   font-size: 14px;
   font-weight: 700;
