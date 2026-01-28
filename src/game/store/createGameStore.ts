@@ -512,7 +512,26 @@ export function createGameStore({
         },
 
         getEquipmentBonuses: () => {
-          return { damage: 0, defense: 0, accuracy: 0 }; // Placeholder
+          const state = get();
+          const bonuses = { damage: 0, defense: 0, accuracy: 0 };
+
+          Object.values(state.equipment).forEach((equippedId) => {
+            if (!equippedId) return;
+            const item = state.inventory.find((inv) => inv.id === equippedId);
+            if (!item) return;
+            const def = dataAccess.getItem(item.itemId);
+            if (!def) return;
+
+            if (def.weaponStats) {
+              bonuses.damage += def.weaponStats.damage;
+              bonuses.accuracy += def.weaponStats.accuracy;
+            }
+            if (def.armorStats) {
+              bonuses.defense += def.armorStats.defense;
+            }
+          });
+
+          return bonuses;
         },
 
         // Quest Actions
