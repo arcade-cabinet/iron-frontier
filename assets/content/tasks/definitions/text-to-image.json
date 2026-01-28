@@ -31,7 +31,8 @@
   "outputs": [
     {
       "name": "images",
-      "responsePath": "result.image_urls"
+      "responsePath": "image_urls",
+      "artifact": "concept_{{index}}.png"
     }
   ]
 }

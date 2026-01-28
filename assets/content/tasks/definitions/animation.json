@@ -22,7 +22,7 @@
     },
     {
       "name": "animation",
-      "responsePath": "result.animation_glb_url",
+      "responsePath": "animation_glb_url",
       "artifact": "animations/{{animationName}}.glb"
     }
   ]

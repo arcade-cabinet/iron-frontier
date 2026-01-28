@@ -26,7 +26,7 @@
     },
     {
       "name": "riggedModel",
-      "responsePath": "result.rigged_character_glb_url",
+      "responsePath": "rigged_character_glb_url",
       "artifact": "rigged.glb"
     }
   ]

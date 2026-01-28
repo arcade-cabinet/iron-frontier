@@ -70,7 +70,7 @@
     },
     {
       "name": "model",
-      "responsePath": "result.model_urls.glb",
+      "responsePath": "model_urls.glb",
       "artifact": "preview.glb"
     }
   ]

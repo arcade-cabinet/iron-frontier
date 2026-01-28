@@ -38,12 +38,12 @@
     },
     {
       "name": "model",
-      "responsePath": "result.model_urls.glb",
+      "responsePath": "model_urls.glb",
       "artifact": "variants/{{styleId}}.glb"
     },
     {
       "name": "textures",
-      "responsePath": "result.texture_urls"
+      "responsePath": "texture_urls"
     }
   ]
 }
