@@ -198,9 +198,9 @@ export class DatabaseManager {
   saveInventory(items: any[]): void {
     if (!this.db) return;
 
-    this.run('BEGIN TRANSACTION');
+    const transaction = this.db.exec('BEGIN TRANSACTION');
     try {
-      this.run('DELETE FROM inventory');
+      this.db.run('DELETE FROM inventory');
 
       if (items.length > 0) {
         const stmt = this.db.prepare(`
@@ -225,7 +225,7 @@ export class DatabaseManager {
         }
       }
 
-      this.run('COMMIT');
+      this.db.exec('COMMIT');
     } catch (error) {
       try {
         this.run('ROLLBACK');
