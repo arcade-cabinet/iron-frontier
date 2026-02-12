@@ -371,7 +371,7 @@ export function createGameStore({
             usable: def.usable,
             condition: 100,
             weight: def.weight ?? 0.1,
-            type: def.type,
+            type: def.type || 'junk',
             droppable: true,
           };
 
