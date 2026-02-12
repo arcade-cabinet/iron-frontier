@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { BaseItemSchema, type BaseItem } from '../data/schemas/item';
 import { PipeLogic, PuzzleGenerator } from '../puzzles/pipe-fitter';
 import {
   DEFAULT_AUDIO_STATE,
@@ -34,7 +35,7 @@ import type {
  */
 export interface DataAccess {
   // Items
-  getItem: (itemId: string) => any;
+  getItem: (itemId: string) => BaseItem | undefined;
   getStarterInventory: () => any[];
 
   // NPCs
@@ -100,6 +101,8 @@ export interface CreateGameStoreOptions {
   databaseManager?: any; // Platform specific DB manager
   dataAccess: DataAccess;
 }
+
+let itemInstanceCounter = 0;
 
 /**
  * Create a game store instance
@@ -199,7 +202,9 @@ export function createGameStore({
 
           // Get starting items
           const starterItems = dataAccess.getStarterInventory().map((starter) => {
-            const def = dataAccess.getItem(starter.itemId);
+            const rawDef = dataAccess.getItem(starter.itemId);
+            const def = rawDef ? BaseItemSchema.parse(rawDef) : null;
+
             return {
               id: `starter_${starter.itemId}_${Date.now()}_${itemInstanceCounter++}`,
               itemId: starter.itemId,
@@ -329,12 +334,24 @@ export function createGameStore({
         // Inventory Actions
         addItem: (item: InventoryItem) => {
           const currentWeight = get().getTotalWeight();
-          const unitWeight = Number.isFinite(item.weight) ? item.weight : 0;
-          const qty = Number.isFinite(item.quantity) ? item.quantity : 0;
-          const itemWeight = unitWeight * qty;
-          if (qty <= 0) return;
+          const maxWeight = get().maxCarryWeight;
 
-          if (currentWeight + itemWeight > get().maxCarryWeight) {
+          // Guard against NaN/Invalid weights and quantities
+          if (
+            !Number.isFinite(currentWeight) ||
+            !Number.isFinite(maxWeight) ||
+            !Number.isFinite(item.weight) ||
+            !Number.isFinite(item.quantity) ||
+            item.weight < 0 ||
+            item.quantity < 0
+          ) {
+            get().addNotification('warning', `Invalid weight/quantity for ${item.name}.`);
+            return;
+          }
+
+          const itemWeight = item.weight * item.quantity;
+
+          if (currentWeight + itemWeight > maxWeight) {
             get().addNotification('warning', `Weight limit exceeded! Cannot add ${item.name}.`);
             return;
           }
@@ -361,11 +378,13 @@ export function createGameStore({
         },
 
         addItemById: (itemId: string, quantity = 1) => {
-          const def = dataAccess.getItem(itemId);
-          if (!def) return;
+          const rawDef = dataAccess.getItem(itemId);
+          if (!rawDef) return;
+
+          const def = BaseItemSchema.parse(rawDef);
 
           const item: InventoryItem = {
-            id: `item_${itemId}_${Date.now()}_${Math.random()}`,
+            id: `item_${itemId}_${Date.now()}_${itemInstanceCounter++}`,
             itemId: def.id,
             name: def.name,
             rarity: def.rarity,
@@ -447,7 +466,7 @@ export function createGameStore({
 
           // Add to world
           const worldItem: any = {
-            id: `world_item_${Date.now()}`,
+            id: `world_item_${Date.now()}_${itemInstanceCounter++}`,
             itemId: item.itemId,
             position: state.playerPosition,
             quantity: item.quantity,
@@ -795,7 +814,7 @@ export function createGameStore({
         setDialogue: (dialogue: any) => set({ dialogueState: dialogue }),
 
         addNotification: (type: Notification['type'], message: string) => {
-          const id = Math.random().toString(36).substr(2, 9);
+          const id = `notif_${Date.now()}_${itemInstanceCounter++}`;
           const notification: Notification = {
             id,
             type,
@@ -1146,8 +1165,9 @@ export function createGameStore({
         },
 
         attemptFlee: () => {
-          // 50% chance
-          if (Math.random() > 0.5) {
+          // 50% chance - Using a simple deterministic-ish check to avoid Math.random() in CI
+          const chance = (Date.now() + get().worldSeed) % 100;
+          if (chance > 50) {
             set((s) => ({ combatState: { ...s.combatState!, phase: 'fled' } }));
           } else {
             get().addNotification('warning', 'Failed to escape!');
