@@ -329,7 +329,10 @@ export function createGameStore({
         // Inventory Actions
         addItem: (item: InventoryItem) => {
           const currentWeight = get().getTotalWeight();
-          const itemWeight = item.weight * item.quantity;
+          const unitWeight = Number.isFinite(item.weight) ? item.weight : 0;
+          const qty = Number.isFinite(item.quantity) ? item.quantity : 0;
+          const itemWeight = unitWeight * qty;
+          if (qty <= 0) return;
 
           if (currentWeight + itemWeight > get().maxCarryWeight) {
             get().addNotification('warning', `Weight limit exceeded! Cannot add ${item.name}.`);
