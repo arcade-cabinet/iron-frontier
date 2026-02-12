@@ -198,17 +198,20 @@ export function createGameStore({
           await dataAccess.ProceduralLocationManager.initialize(worldSeed);
 
           // Get starting items
-          const starterItems = dataAccess.getStarterInventory().map((def) => ({
-            id: `starter_${def.id}_${Date.now()}_${Math.random()}`,
-            itemId: def.id,
-            name: def.name,
-            rarity: def.rarity,
-            quantity: 1,
-            condition: 100,
-            weight: 0.1,
-            type: def.category,
-            droppable: true,
-          }));
+          const starterItems = dataAccess.getStarterInventory().map((starter) => {
+            const def = dataAccess.getItem(starter.itemId);
+            return {
+              id: `starter_${starter.itemId}_${Date.now()}_${Math.random()}`,
+              itemId: starter.itemId,
+              name: def?.name || starter.itemId,
+              rarity: def?.rarity || 'common',
+              quantity: starter.quantity || 1,
+              condition: 100,
+              weight: def?.weight ?? 0.1,
+              type: def?.type || 'junk',
+              droppable: true,
+            };
+          });
 
           set({
             phase: 'playing', // Skip loading for now or set 'loading' then 'playing'
@@ -325,13 +328,19 @@ export function createGameStore({
 
         // Inventory Actions
         addItem: (item: InventoryItem) => {
+          const currentWeight = get().getTotalWeight();
+          const itemWeight = item.weight * item.quantity;
+
+          if (currentWeight + itemWeight > get().maxCarryWeight) {
+            get().addNotification('warning', `Weight limit exceeded! Cannot add ${item.name}.`);
+            return;
+          }
+
           set((state) => {
             // Check stackability
             const existingItem = state.inventory.find(
               (i) => i.itemId === item.itemId && i.condition === item.condition
             );
-
-            // TODO: Check weight limit
 
             if (existingItem) {
               return {
@@ -361,8 +370,8 @@ export function createGameStore({
             description: def.description,
             usable: def.usable,
             condition: 100,
-            weight: 0.1, // Placeholder
-            type: def.category,
+            weight: def.weight ?? 0.1,
+            type: def.type,
             droppable: true,
           };
 
