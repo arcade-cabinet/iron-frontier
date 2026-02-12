@@ -21,10 +21,4 @@ async function benchmark() {
   console.log(`Baseline saveInventory took ${(end - start).toFixed(2)}ms`);
 }
 
-// We don't call it here if it's imported as a test,
-// but we can export it or run it if this file is executed.
-if (require.main === module) {
-  benchmark().catch(console.error);
-}
-
 export { benchmark };
