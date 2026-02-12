@@ -1,4 +1,5 @@
 import initSqlJs from 'sql.js';
+import type { InventoryItem } from '@/store';
 
 let SQL: any = null;
 
@@ -195,10 +196,10 @@ export class DatabaseManager {
   /**
    * Helper to transactionally update inventory
    */
-  saveInventory(items: any[]): void {
+  async saveInventory(items: InventoryItem[]): Promise<void> {
     if (!this.db) return;
 
-    const transaction = this.db.exec('BEGIN TRANSACTION');
+    this.db.run('BEGIN TRANSACTION');
     try {
       this.db.run('DELETE FROM inventory');
 
@@ -225,14 +226,13 @@ export class DatabaseManager {
         }
       }
 
-      this.db.exec('COMMIT');
+      this.db.run('COMMIT');
     } catch (error) {
       try {
-        this.run('ROLLBACK');
+        this.db.run('ROLLBACK');
       } catch (rollbackError) {
-        // Silently ignore rollback errors if the transaction was already closed
+        // Silently ignore if rollback is not possible
       }
-      console.error('DatabaseManager.saveInventory failed:', error);
       throw error;
     }
   }
