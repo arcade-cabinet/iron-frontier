@@ -201,7 +201,7 @@ export function createGameStore({
           const starterItems = dataAccess.getStarterInventory().map((starter) => {
             const def = dataAccess.getItem(starter.itemId);
             return {
-              id: `starter_${starter.itemId}_${Date.now()}_${Math.random()}`,
+              id: `starter_${starter.itemId}_${Date.now()}_${itemInstanceCounter++}`,
               itemId: starter.itemId,
               name: def?.name || starter.itemId,
               rarity: def?.rarity || 'common',
