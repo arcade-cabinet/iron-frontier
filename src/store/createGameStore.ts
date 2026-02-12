@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { BaseItemSchema, type BaseItem } from '../data/schemas/item';
+import { type BaseItem, BaseItemSchema } from '../data/schemas/item';
 import { PipeLogic, PuzzleGenerator } from '../puzzles/pipe-fitter';
 import {
   DEFAULT_AUDIO_STATE,
@@ -424,10 +424,10 @@ export function createGameStore({
           if (!item || !item.usable) return;
 
           const def = dataAccess.getItem(item.itemId);
-          if (!def || !def.effect) return;
+          if (!def || !def.effects || def.effects.length === 0) return;
 
           // Apply effect
-          const { effect } = def;
+          const effect = def.effects[0];
           switch (effect.type) {
             case 'heal':
               state.heal(effect.value);
@@ -653,32 +653,34 @@ export function createGameStore({
 
           // Apply effects
           if (choice.effects) {
-            choice.effects.forEach((e) => get().applyDialogueEffect(e));
+            for (const e of choice.effects) {
+              get().applyDialogueEffect(e);
+            }
           }
 
           // Move to next node
-          if (choice.nextNodeId) {
-            // Find next node in current tree
-            // Need tree definition
-            const tree = dataAccess.getDialogueTreeById(dialogueState.treeId);
-            const nextNode = tree.nodes.find((n: any) => n.id === choice.nextNodeId);
+          if (!choice.nextNodeId) {
+            get().endDialogue();
+            return;
+          }
 
-            if (nextNode) {
-              set({
-                dialogueState: {
-                  ...dialogueState,
-                  currentNodeId: nextNode.id,
-                  text: nextNode.text,
-                  speaker: nextNode.speaker || dialogueState.npcName,
-                  choices: dataAccess.getAvailableChoices(nextNode, (c) =>
-                    get().checkDialogueCondition(c)
-                  ),
-                  history: [...dialogueState.history, choice.text],
-                },
-              });
-            } else {
-              get().endDialogue();
-            }
+          // Find next node in current tree
+          const tree = dataAccess.getDialogueTreeById(dialogueState.treeId);
+          const nextNode = tree?.nodes.find((n: any) => n.id === choice.nextNodeId);
+
+          if (nextNode) {
+            set({
+              dialogueState: {
+                ...dialogueState,
+                currentNodeId: nextNode.id,
+                text: nextNode.text,
+                speaker: nextNode.speaker || dialogueState.npcName,
+                choices: dataAccess.getAvailableChoices(nextNode, (c) =>
+                  get().checkDialogueCondition(c)
+                ),
+                history: [...dialogueState.history, choice.text],
+              },
+            });
           } else {
             get().endDialogue();
           }
@@ -1279,6 +1281,7 @@ export function createGameStore({
           if (!item) return;
 
           const itemDef = dataAccess.getItem(item.itemId);
+          if (!itemDef) return;
           const price = dataAccess.calculateSellPrice(itemDef.value, playerStats.reputation);
 
           // Transaction
