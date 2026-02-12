@@ -19,6 +19,8 @@ async function benchmark() {
   dbManager.saveInventory(items);
   const end = performance.now();
   console.log(`Baseline saveInventory took ${(end - start).toFixed(2)}ms`);
+  
+  dbManager.dispose();
 }
 
 export { benchmark };
