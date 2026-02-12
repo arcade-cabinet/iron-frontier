@@ -1,4 +1,5 @@
 import initSqlJs from 'sql.js';
+import type { InventoryItem } from '@/store';
 
 let SQL: any = null;
 
@@ -195,25 +196,45 @@ export class DatabaseManager {
   /**
    * Helper to transactionally update inventory
    */
-  saveInventory(items: any[]): void {
-    this.run('DELETE FROM inventory');
-    items.forEach((item) => {
-      this.run(
-        `
-        INSERT INTO inventory (id, item_id, name, rarity, quantity, usable, description)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
-        [
-          item.id,
-          item.itemId,
-          item.name,
-          item.rarity,
-          item.quantity,
-          item.usable ? 1 : 0,
-          item.description || '',
-        ]
-      );
-    });
+  async saveInventory(items: InventoryItem[]): Promise<void> {
+    if (!this.db) return;
+
+    this.db.run('BEGIN TRANSACTION');
+    try {
+      this.db.run('DELETE FROM inventory');
+
+      if (items.length > 0) {
+        const stmt = this.db.prepare(`
+          INSERT INTO inventory (id, item_id, name, rarity, quantity, usable, description)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `);
+
+        try {
+          for (const item of items) {
+            stmt.run([
+              item.id,
+              item.itemId,
+              item.name,
+              item.rarity,
+              item.quantity,
+              item.usable ? 1 : 0,
+              item.description || '',
+            ]);
+          }
+        } finally {
+          stmt.free();
+        }
+      }
+
+      this.db.run('COMMIT');
+    } catch (error) {
+      try {
+        this.db.run('ROLLBACK');
+      } catch (rollbackError) {
+        // Silently ignore if rollback is not possible
+      }
+      throw error;
+    }
   }
 
   /**
