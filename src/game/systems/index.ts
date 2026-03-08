@@ -290,6 +290,15 @@ export {
   type NPCMovementContext,
 } from './NPCMovementSystem';
 
+// Door System (building entry/exit animation)
+export {
+  DoorSystem,
+  getDoorSystem,
+  resetDoorSystem,
+  type DoorState,
+  type DoorChangeCallback,
+} from '../engine/interiors/DoorSystem';
+
 // Town Boundary System
 export {
   TownBoundarySystem,

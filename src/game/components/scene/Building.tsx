@@ -4,6 +4,9 @@
 //
 // Registers the building group as a box collider with PhysicsProvider
 // so the player cannot walk through walls.
+//
+// Also registers door trigger zones via the DoorSystem and adds interior
+// lighting via the InteriorGenerator.
 
 import { useEffect, useMemo, useRef } from 'react';
 import type { ThreeElements } from '@react-three/fiber';
@@ -11,6 +14,7 @@ import * as THREE from 'three';
 
 import { ARCHETYPE_REGISTRY } from '../../engine/archetypes';
 import type { BuildingSlots } from '../../engine/archetypes';
+import { addInteriorLighting } from '../../engine/interiors/InteriorGenerator';
 import { usePhysics } from '@/components/scene/PhysicsProvider';
 
 // ---------------------------------------------------------------------------
@@ -22,6 +26,10 @@ export interface BuildingProps extends Omit<ThreeElements['group'], 'children'> 
   type: string;
   /** Optional slot overrides passed to the archetype's construct(). */
   slots?: BuildingSlots;
+  /** Unique building instance ID (for door registration). */
+  buildingId?: string;
+  /** Human-readable name for interaction prompts. */
+  buildingName?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -38,10 +46,12 @@ export interface BuildingProps extends Omit<ThreeElements['group'], 'children'> 
  *   slots={{ signText: 'THE LUCKY STAR' }}
  *   position={[10, 0, -5]}
  *   rotation={[0, Math.PI / 4, 0]}
+ *   buildingId="saloon-001"
+ *   buildingName="The Lucky Star"
  * />
  * ```
  */
-export function Building({ type, slots, ...groupProps }: BuildingProps) {
+export function Building({ type, slots, buildingId, buildingName, ...groupProps }: BuildingProps) {
   const { registerBuilding, unregister } = usePhysics();
   const groupRef = useRef<THREE.Group>(null);
   const colliderIdsRef = useRef<string[]>([]);
@@ -59,7 +69,12 @@ export function Building({ type, slots, ...groupProps }: BuildingProps) {
       console.warn(`[Building] Unknown archetype "${type}". Registered: ${[...ARCHETYPE_REGISTRY.keys()].join(', ')}`);
       return null;
     }
-    return archetype.construct(slots ?? {});
+    const buildingGroup = archetype.construct(slots ?? {});
+
+    // Add interior lighting for archetypes that have interiors
+    addInteriorLighting(buildingGroup, type);
+
+    return buildingGroup;
   }, [type, slotsKey]);
 
   // Register colliders when the building group is created / changes

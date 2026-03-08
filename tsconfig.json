@@ -5,9 +5,28 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": [
+        "*"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"],
-  "exclude": ["legacy/**", "packages/**", "scripts/**", "**/__tests__/**", "src/game/engine/ai/**", "src/game/engine/hex/**", "src/game/engine/rendering/**", "src/game/engine/terrain/**", "src/game/engine/types.ts", "src/game/engine/physics/RapierWorld.ts", "src/game/rendering/**", "node_modules"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "legacy/**",
+    "packages/**",
+    "scripts/**",
+    "**/__tests__/**",
+    "src/game/engine/ai/**",
+    "src/game/engine/hex/**",
+    "src/game/engine/rendering/**",
+    "src/game/engine/terrain/**",
+    "src/game/engine/types.ts",
+    "src/game/engine/physics/RapierWorld.ts",
+    "src/game/rendering/**",
+    "node_modules"
+  ]
 }

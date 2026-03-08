@@ -53,6 +53,7 @@ import {
   type InteractionTarget,
 } from '@/src/game/systems/InteractionSystem';
 import { getInteriorManager } from '@/src/game/systems/InteriorManager';
+import { getDoorSystem } from '@/src/game/engine/interiors/DoorSystem';
 import { InputManager } from '@/src/game/input/InputManager';
 import { initializeInput, hasTouchCapability } from '@/src/game/input/InputInitializer';
 
@@ -156,6 +157,9 @@ function useInteractionDispatch() {
         }
         case 'enter': {
           if (action.buildingId && action.archetypeId) {
+            // Open the door with animation before entering
+            const doorSys = getDoorSystem();
+            doorSys.openDoor(action.buildingId);
             interiorManager.enterBuilding(action.buildingId, action.archetypeId);
             addNotification('info', `Entered ${action.archetypeId.replace(/_/g, ' ')}`);
           }

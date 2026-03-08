@@ -156,6 +156,7 @@ export function OpenWorld({
   // Town boundary system integration
   const townBoundary = useMemo(() => getTownBoundarySystem(), []);
   const encounterSystem = useMemo(() => getEncounterSystem(), []);
+  const doorSystem = useMemo(() => getDoorSystem(), []);
 
   // Track town visibility factors for smooth fading
   const [townOpacities, setTownOpacities] = useState<Map<string, number>>(
@@ -163,9 +164,12 @@ export function OpenWorld({
   );
 
   // Per-frame update
-  useFrame(() => {
+  useFrame((_state, dt) => {
     const px = camera.position.x;
     const pz = camera.position.z;
+
+    // Animate doors (smooth 0.3s open/close rotation)
+    doorSystem.update(dt);
 
     // Update chunk manager when player crosses a chunk boundary
     const cx = Math.floor(px / CHUNK_SIZE);
@@ -318,7 +322,9 @@ interface TownBuildingProps {
   importance: number;
 }
 
-/** Renders a single building using the archetype registry or a fallback box. */
+/** Renders a single building using the archetype registry or a fallback box.
+ *  Adds interior lighting and registers doors with the DoorSystem for
+ *  archetypes that have walkable interiors. */
 function TownBuilding({
   id,
   position,
@@ -329,17 +335,61 @@ function TownBuilding({
 }: TownBuildingProps) {
   const groupRef = useRef<THREE.Group>(null);
 
+  const archetypeKey = useMemo(
+    () => STRUCTURE_TO_ARCHETYPE[structureType] ?? structureType,
+    [structureType],
+  );
+
   const buildingGroup = useMemo(() => {
-    const archetypeKey = STRUCTURE_TO_ARCHETYPE[structureType] ?? structureType;
     const archetype = ARCHETYPE_REGISTRY.get(archetypeKey);
 
     if (archetype) {
-      return archetype.construct({ signText: name });
+      const group = archetype.construct({ signText: name });
+
+      // Add interior lighting (warm point lights, idempotent)
+      addInteriorLighting(group, archetypeKey);
+
+      return group;
     }
 
     // Fallback: procedural colored box based on structure type
     return buildFallbackBuilding(structureType, importance);
-  }, [structureType, name, importance]);
+  }, [archetypeKey, structureType, name, importance]);
+
+  // Register door trigger zone with the DoorSystem when mounted
+  useEffect(() => {
+    if (!hasInterior(archetypeKey)) return;
+
+    const doorPos = getDoorWorldPosition(
+      archetypeKey,
+      position[0],
+      position[2],
+      rotation,
+    );
+    if (!doorPos) return;
+
+    const doorSystem = getDoorSystem();
+
+    // Find the door mesh inside the building group for animation
+    let doorMesh: THREE.Object3D | undefined;
+    buildingGroup.traverse((child) => {
+      if (child.name === 'door' || child.name === 'door-panel') {
+        doorMesh = child;
+      }
+    });
+
+    doorSystem.registerDoor(
+      id,
+      archetypeKey,
+      name,
+      new THREE.Vector3(doorPos.x, doorPos.y, doorPos.z),
+      doorMesh,
+    );
+
+    return () => {
+      doorSystem.unregisterDoor(id);
+    };
+  }, [id, archetypeKey, name, position, rotation, buildingGroup]);
 
   return (
     <group
@@ -347,6 +397,7 @@ function TownBuilding({
       position={position}
       rotation={[0, rotation, 0]}
       name={`building-${id}`}
+      userData={{ name, archetypeKey }}
     >
       <primitive object={buildingGroup} />
     </group>

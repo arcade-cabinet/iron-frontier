@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import * as THREE from 'three';
 
 import { npcs as npcQuery, dialogueTargets } from '@/src/game/ecs/world';
+import { getDoorSystem } from '@/src/game/engine/interiors/DoorSystem';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -63,7 +64,7 @@ export function InteractionDetector({
   npcRange = DEFAULT_NPC_RANGE,
   doorRange = DEFAULT_DOOR_RANGE,
 }: InteractionDetectorProps) {
-  const { camera, scene } = useThree();
+  const { camera } = useThree();
   const prevTargetRef = useRef<string | null>(null);
 
   useFrame(() => {
@@ -102,33 +103,32 @@ export function InteractionDetector({
       }
     }
 
-    // --- Check building doors via scene traversal ---
-    // Buildings are named "building-*" in OpenWorld. We look for door markers.
-    scene.traverse((obj) => {
-      if (!obj.name.startsWith('building-')) return;
-
-      _targetPos.setFromMatrixPosition(obj.matrixWorld);
-      // Doors are at the front of the building, approximate as building center
+    // --- Check building doors via DoorSystem trigger zones ---
+    // The DoorSystem holds registered door positions for all buildings
+    // with walkable interiors. We check distance to each door trigger.
+    const doorSystem = getDoorSystem();
+    for (const door of doorSystem.getAllDoors()) {
+      _targetPos.copy(door.triggerPosition);
       const dist = _playerPos.distanceTo(_targetPos);
 
-      if (dist > doorRange) return;
+      if (dist > doorRange) continue;
 
+      // Check if the door is roughly in front of the player
       const toTarget = _targetPos.clone().sub(_playerPos).normalize();
       const dot = _forward.dot(toTarget);
-      if (dot < 0.3) return;
+      if (dot < 0.3) continue;
 
       if (dist < bestDist) {
         bestDist = dist;
-        const buildingId = obj.name.replace('building-', '');
         bestTarget = {
           type: 'door',
-          name: obj.userData?.name ?? 'Building',
-          entityId: buildingId,
+          name: door.buildingName,
+          entityId: door.buildingId,
           distance: dist,
           position: _targetPos.clone(),
         };
       }
-    });
+    }
 
     // Only fire the callback when the target changes
     const targetKey = bestTarget
