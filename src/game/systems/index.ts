@@ -137,6 +137,18 @@ export {
   type EncounterTrigger,
 } from './EncounterSystem';
 
+// Travel Manager
+export {
+  TravelManager,
+  getTravelManager,
+  dangerDescription,
+  methodDescription,
+  type TravelRoute,
+  type EncounterCheckpoint,
+  type TravelTickResult,
+  type TravelManagerState,
+} from './TravelManager';
+
 // Save System
 export {
   SaveSystem,
@@ -195,3 +207,59 @@ export {
   type MovementCollisionResult,
   type TriggerCallback,
 } from './CollisionSystem';
+
+// Quest Event System
+export {
+  QuestEventEmitter,
+  questEvents,
+  type QuestEventMap,
+  type QuestEventName,
+  type QuestEventHandler,
+} from './QuestEvents';
+
+// Quest Wiring (connects events to store)
+export {
+  initQuestSystem,
+  teardownQuestSystem,
+  type QuestSystemHandle,
+} from './QuestWiring';
+
+// Dialogue ↔ Quest Bridge
+export {
+  evaluateCondition,
+  areChoiceConditionsMet,
+  filterAvailableChoices,
+  applyDialogueEffect,
+  applyChoiceEffects,
+  canStartQuest,
+  getAvailableNpcQuests,
+  onDialogueEnd,
+  type BridgeStoreReader,
+  type BridgeStoreActions,
+  type BridgeStore,
+} from './DialogueQuestBridge';
+
+// Interaction System
+export {
+  processInteraction,
+  createNPCInteractable,
+  createBuildingInteractable,
+  createItemInteractable,
+  DEFAULT_RANGES,
+  type InteractionType,
+  type Vec3,
+  type InteractableEntity,
+  type InteractionTarget,
+  type InteractionAction,
+  type InteractionResult,
+} from './InteractionSystem';
+
+// Interior Manager
+export {
+  InteriorManager,
+  getInteriorManager,
+  resetInteriorManager,
+  type InteriorState,
+  type InteriorNPCSlot,
+  type InteriorChangeCallback,
+} from './InteriorManager';

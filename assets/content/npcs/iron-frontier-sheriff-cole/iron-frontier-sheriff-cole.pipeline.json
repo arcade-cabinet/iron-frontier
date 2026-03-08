@@ -1,0 +1,70 @@
+{
+  "name": "iron-frontier-sheriff-cole",
+  "description": "NPC pipeline with style variants, rigging, and baseline animations",
+  "version": "1.0.0",
+  "steps": [
+    {
+      "id": "concept",
+      "task": "text-to-image",
+      "inputs": [
+        { "name": "prompt", "source": "manifest", "path": "textToImageTask.prompt" },
+        { "name": "ai_model", "source": "literal", "value": "nano-banana-pro" },
+        { "name": "generate_multi_view", "source": "manifest", "path": "textToImageTask.generateMultiView", "default": true },
+        { "name": "pose_mode", "source": "manifest", "path": "textToImageTask.poseMode", "default": "a-pose" }
+      ]
+    },
+    {
+      "id": "preview",
+      "task": "text-to-3d-preview",
+      "dependsOn": ["concept"],
+      "inputs": [
+        { "name": "prompt", "source": "manifest", "path": "textTo3DPreviewTask.prompt" }
+      ]
+    },
+    {
+      "id": "refine",
+      "task": "text-to-3d-refine",
+      "dependsOn": ["preview"],
+      "inputs": [
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
+        { "name": "texture_prompt", "source": "manifest", "path": "textTo3DRefineTask.texturePrompt" }
+      ]
+    },
+    {
+      "id": "variants",
+      "task": "text-to-3d-refine-variant",
+      "dependsOn": ["preview"],
+      "forEach": {
+        "source": "manifest",
+        "path": "styleVariants",
+        "as": "styleId"
+      },
+      "inputs": [
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
+        { "name": "texture_prompt", "source": "manifest", "path": "styleTexturePrompts.{{styleId}}" }
+      ]
+    },
+    {
+      "id": "rigging",
+      "task": "rigging",
+      "dependsOn": ["refine"],
+      "inputs": [
+        { "name": "input_task_id", "source": "step", "step": "refine", "path": "taskId" },
+        { "name": "texture_image_url", "source": "step", "step": "refine", "path": "textures.0.base_color" }
+      ]
+    },
+    {
+      "id": "animations",
+      "task": "animation",
+      "dependsOn": ["rigging"],
+      "forEach": {
+        "source": "manifest",
+        "path": "animationTask.animations",
+        "as": "animationName"
+      },
+      "inputs": [
+        { "name": "rig_task_id", "source": "step", "step": "rigging", "path": "taskId" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+[
+  {
+    "id": "main_the_inheritance",
+    "title": "The Inheritance",
+    "description": "A mysterious letter summoned you to Dusty Springs to claim what's rightfully yours at an address that doesn't seem to exist. The letter is signed only with a gear symbol.",
+    "type": "main",
+    "giverNpcId": null,
+    "startLocationId": "dusty_springs",
+    "recommendedLevel": 1,
+    "tags": ["main", "mystery", "ivrc", "freeminers"],
+    "repeatable": false,
+    "timeLimitHours": null,
+    "prerequisites": {
+      "completedQuests": [],
+      "factionReputation": {},
+      "requiredItems": []
+    },
+    "stages": [
+      {
+        "id": "stage_1_arrival",
+        "title": "Arrive in Dusty Springs",
+        "description": "You've arrived on the last train into Dusty Springs. Find the address mentioned in the mysterious letter.",
+        "onStartText": "The train hisses to a stop. Dusty Springs. The letter said to find '14 Copper Street.' Time to get your bearings.",
+        "onCompleteText": "The address leads to a burned-out lot. Whatever was here is gone, but the fire looks recent.",
+        "objectives": [
+          { "id": "obj_explore_town", "description": "Explore Dusty Springs and get your bearings", "type": "visit", "target": "dusty_springs", "count": 1 },
+          { "id": "obj_find_address", "description": "Find 14 Copper Street", "type": "visit", "target": "marker_burned_building", "count": 1, "hint": "Ask the locals about Copper Street." }
+        ],
+        "rewards": { "xp": 25, "gold": 0, "items": [] }
+      },
+      {
+        "id": "stage_2_investigation",
+        "title": "Investigate the Burned Building",
+        "description": "The address from the letter is now a burned ruin. Someone didn't want you finding what was here.",
+        "onStartText": "The building burned down within the last week. Charred timbers and ash. But fires leave traces...",
+        "onCompleteText": "You found evidence this was a Freeminer safehouse. And something else - a partial manifest mentioning 'The Old Works.'",
+        "objectives": [
+          { "id": "obj_search_ruins", "description": "Search the burned building for clues", "type": "interact", "target": "ruins_search", "count": 1 },
+          { "id": "obj_find_manifest", "description": "Find the hidden manifest", "type": "collect", "target": "item_partial_manifest", "count": 1, "hidden": true }
+        ],
+        "rewards": { "xp": 50, "gold": 10, "items": [{ "itemId": "item_partial_manifest", "quantity": 1 }] }
+      },
+      {
+        "id": "stage_3_sheriff",
+        "title": "Talk to Sheriff Cole",
+        "description": "Sheriff Marcus Cole might know something about the fire.",
+        "onStartText": "The Sheriff's office is on Main Street. Cole has a reputation for being one of the few straight shooters left.",
+        "onCompleteText": "Cole confirmed your suspicions. IVRC inspectors came through asking about a Freeminer named Samuel Ironpick.",
+        "objectives": [
+          { "id": "obj_find_sheriff", "description": "Find Sheriff Cole at the Sheriff's Office", "type": "visit", "target": "dusty_springs_sheriff_office", "count": 1 },
+          { "id": "obj_talk_sheriff", "description": "Ask Sheriff Cole about the fire", "type": "talk", "target": "npc_sheriff_cole", "count": 1 }
+        ],
+        "rewards": { "xp": 50, "gold": 0, "items": [], "reputation": { "law": 10 } }
+      },
+      {
+        "id": "stage_4_freeminers",
+        "title": "Travel to Freeminer's Hollow",
+        "description": "Sheriff Cole pointed you toward Freeminer's Hollow in the Iron Mountains.",
+        "onStartText": "The road to Freeminer's Hollow is long and passes through rough country. Watch yourself.",
+        "onCompleteText": "You've reached Freeminer's Hollow. Old Samuel Ironpick recognizes the gear symbol. 'Your parent sent that letter,' he says. 'Before IVRC killed them.'",
+        "objectives": [
+          { "id": "obj_travel_hollow", "description": "Travel to Freeminer's Hollow", "type": "visit", "target": "freeminer_hollow", "count": 1 },
+          { "id": "obj_find_samuel", "description": "Find Old Samuel Ironpick", "type": "talk", "target": "npc_samuel_ironpick", "count": 1 }
+        ],
+        "rewards": { "xp": 100, "gold": 25, "items": [], "reputation": { "freeminers": 25 } }
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "gold": 100,
+      "items": [],
+      "reputation": { "freeminers": 50 },
+      "unlocksQuests": ["main_the_reclamation"]
+    }
+  },
+  {
+    "id": "side_missing_cattle",
+    "title": "Missing Cattle",
+    "description": "Silas Blackwood of Sunset Ranch reports that his cattle have been disappearing. He suspects rustlers but needs proof.",
+    "type": "side",
+    "giverNpcId": "npc_silas_blackwood",
+    "startLocationId": "sunset_ranch",
+    "recommendedLevel": 2,
+    "tags": ["side", "investigation", "copperhead", "ranch"],
+    "repeatable": false,
+    "timeLimitHours": null,
+    "prerequisites": {
+      "completedQuests": [],
+      "factionReputation": {},
+      "requiredItems": []
+    },
+    "stages": [
+      {
+        "id": "stage_cattle_investigate",
+        "title": "Investigate the Rustling",
+        "description": "Check the pastures for signs of how the cattle are being taken.",
+        "objectives": [
+          { "id": "obj_talk_rosa", "description": "Speak with Rosa Martinez, the foreman", "type": "talk", "target": "npc_rosa_martinez", "count": 1 },
+          { "id": "obj_find_tracks", "description": "Find cattle tracks in the west pasture", "type": "visit", "target": "marker_west_pasture", "count": 1 },
+          { "id": "obj_follow_tracks", "description": "Follow the tracks to their source", "type": "visit", "target": "marker_canyon_entrance", "count": 1 }
+        ],
+        "rewards": { "xp": 30, "gold": 0, "items": [] }
+      },
+      {
+        "id": "stage_cattle_confront",
+        "title": "Confront the Rustlers",
+        "description": "The trail leads to a Copperhead operation. Deal with the rustlers.",
+        "objectives": [
+          { "id": "obj_defeat_rustlers", "description": "Defeat the rustlers", "type": "kill", "target": "enemy_rustler", "count": 3 },
+          { "id": "obj_get_ledger", "description": "Retrieve the rustling ledger", "type": "collect", "target": "item_rustling_ledger", "count": 1 }
+        ],
+        "rewards": { "xp": 50, "gold": 20, "items": [] }
+      },
+      {
+        "id": "stage_cattle_resolve",
+        "title": "Report to Blackwood",
+        "description": "Return to Silas Blackwood with the evidence.",
+        "objectives": [
+          { "id": "obj_return_blackwood", "description": "Return to Silas Blackwood with the ledger", "type": "talk", "target": "npc_silas_blackwood", "count": 1 }
+        ],
+        "rewards": { "xp": 25, "gold": 0, "items": [] }
+      }
+    ],
+    "rewards": {
+      "xp": 75,
+      "gold": 75,
+      "items": [{ "itemId": "item_blackwood_rifle", "quantity": 1 }],
+      "reputation": { "ranch": 20, "copperhead": -15 },
+      "unlocksQuests": []
+    }
+  },
+  {
+    "id": "side_docs_dilemma",
+    "title": "Doc's Dilemma",
+    "description": "Doc Chen Wei is running low on critical medical supplies. The nearest source is either Junction City (expensive) or Coppertown (dangerous).",
+    "type": "side",
+    "giverNpcId": "npc_doc_chen_wei",
+    "startLocationId": "dusty_springs",
+    "recommendedLevel": 2,
+    "tags": ["side", "delivery", "choice", "medical"],
+    "repeatable": false,
+    "timeLimitHours": null,
+    "prerequisites": {
+      "completedQuests": [],
+      "factionReputation": {},
+      "requiredItems": []
+    },
+    "stages": [
+      {
+        "id": "stage_doc_list",
+        "title": "Get the Supply List",
+        "description": "Doc Chen Wei will give you a list of what's needed.",
+        "objectives": [
+          { "id": "obj_talk_doc", "description": "Speak with Doc Chen Wei about supplies", "type": "talk", "target": "npc_doc_chen_wei", "count": 1 },
+          { "id": "obj_get_list", "description": "Receive the supply list", "type": "collect", "target": "item_supply_list", "count": 1 }
+        ],
+        "rewards": { "xp": 15, "gold": 0, "items": [{ "itemId": "item_supply_list", "quantity": 1 }] }
+      },
+      {
+        "id": "stage_doc_acquire",
+        "title": "Acquire Medical Supplies",
+        "description": "Get the medical supplies from either Junction City or Coppertown.",
+        "objectives": [
+          { "id": "obj_junction_supplies", "description": "Purchase supplies in Junction City", "type": "interact", "target": "junction_pharmacy", "count": 1, "optional": true, "hint": "Costs 50 gold but no trouble." },
+          { "id": "obj_coppertown_supplies", "description": "Acquire supplies in Coppertown", "type": "interact", "target": "coppertown_store", "count": 1, "optional": true, "hint": "Costs 20 gold but you might attract attention." }
+        ],
+        "rewards": { "xp": 40, "gold": 0, "items": [{ "itemId": "item_medical_supplies", "quantity": 1 }] }
+      },
+      {
+        "id": "stage_doc_deliver",
+        "title": "Deliver to Doc",
+        "description": "Bring the medical supplies back to Doc Chen Wei.",
+        "objectives": [
+          { "id": "obj_deliver_supplies", "description": "Deliver supplies to Doc Chen Wei", "type": "deliver", "target": "item_medical_supplies", "deliverTo": "npc_doc_chen_wei", "count": 1 }
+        ],
+        "rewards": { "xp": 25, "gold": 0, "items": [], "reputation": { "townfolk": 15 } }
+      }
+    ],
+    "rewards": {
+      "xp": 60,
+      "gold": 40,
+      "items": [{ "itemId": "item_healing_tonic", "quantity": 3 }],
+      "reputation": { "townfolk": 10 },
+      "unlocksQuests": []
+    }
+  }
+]

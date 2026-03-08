@@ -118,21 +118,40 @@ export class MemoryStorageAdapter implements StorageAdapter {
 }
 
 /**
- * Capacitor storage adapter using Preferences.
- * Works on web and native, with native storage on iOS/Android.
+ * Native storage adapter using expo-sqlite.
+ * Works on iOS/Android via expo-sqlite's synchronous key-value storage.
  */
 export class NativeStorageAdapter implements StorageAdapter {
-  private preferences: Promise<typeof import('@capacitor/preferences').Preferences>;
+  private db: import('expo-sqlite').SQLiteDatabase | null = null;
+  private dbReady: Promise<void>;
 
   constructor() {
-    this.preferences = import('@capacitor/preferences').then((m) => m.Preferences);
+    this.dbReady = this.initDb();
+  }
+
+  private async initDb(): Promise<void> {
+    try {
+      const { openDatabaseSync } = await import('expo-sqlite');
+      this.db = openDatabaseSync('iron-frontier-kv.db');
+      this.db.execSync(
+        'CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT)'
+      );
+    } catch (error) {
+      if (typeof console !== 'undefined') {
+        console.error('[NativeStorageAdapter] Failed to init database:', error);
+      }
+    }
   }
 
   async getItem(key: string): Promise<string | null> {
     try {
-      const Preferences = await this.preferences;
-      const { value } = await Preferences.get({ key });
-      return value ?? null;
+      await this.dbReady;
+      if (!this.db) return null;
+      const row = this.db.getFirstSync<{ value: string }>(
+        'SELECT value FROM kv WHERE key = ?',
+        [key]
+      );
+      return row?.value ?? null;
     } catch (error) {
       if (typeof console !== 'undefined') {
         console.error('[NativeStorageAdapter] Failed to get item:', key, error);
@@ -143,8 +162,12 @@ export class NativeStorageAdapter implements StorageAdapter {
 
   async setItem(key: string, value: string): Promise<void> {
     try {
-      const Preferences = await this.preferences;
-      await Preferences.set({ key, value });
+      await this.dbReady;
+      if (!this.db) return;
+      this.db.runSync(
+        'INSERT OR REPLACE INTO kv (key, value) VALUES (?, ?)',
+        [key, value]
+      );
     } catch (error) {
       if (typeof console !== 'undefined') {
         console.error('[NativeStorageAdapter] Failed to set item:', key, error);
@@ -155,8 +178,9 @@ export class NativeStorageAdapter implements StorageAdapter {
 
   async removeItem(key: string): Promise<void> {
     try {
-      const Preferences = await this.preferences;
-      await Preferences.remove({ key });
+      await this.dbReady;
+      if (!this.db) return;
+      this.db.runSync('DELETE FROM kv WHERE key = ?', [key]);
     } catch (error) {
       if (typeof console !== 'undefined') {
         console.error('[NativeStorageAdapter] Failed to remove item:', key, error);

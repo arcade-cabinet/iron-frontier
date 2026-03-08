@@ -37,6 +37,28 @@ export {
   type StorageAdapter,
   WebStorageAdapter,
 } from './StorageAdapter';
+// Instantiated game store
+export { gameStore } from './webGameStore';
+// Game store re-export (backwards compatibility)
+export * from './gameStore';
+// Database manager
+export { DatabaseManager, dbManager } from './DatabaseManager';
+// Save manager
+export {
+  type SaveSlot,
+  autosave,
+  deleteSave,
+  downloadSaveFile,
+  formatPlayTime,
+  formatTimestamp,
+  getSaveSlots,
+  loadAutosave,
+  loadGame,
+  loadSettings,
+  saveGame,
+  saveGameBinary,
+  saveSettings,
+} from './saveManager';
 // Store types
 export type {
   BiomeType,

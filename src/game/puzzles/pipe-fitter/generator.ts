@@ -19,6 +19,7 @@ export class PuzzleGenerator {
           rotation: 0,
           fixed: false,
           active: false,
+          locked: false,
         });
       }
       grid.push(row);

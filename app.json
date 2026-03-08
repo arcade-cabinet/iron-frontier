@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Iron Frontier",
+    "slug": "iron-frontier",
+    "version": "0.1.0",
+    "orientation": "landscape",
+    "icon": "./assets/icon.png",
+    "scheme": "iron-frontier",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#1a0f0a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arcade-cabinet.iron-frontier"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1a0f0a"
+      },
+      "package": "com.arcade_cabinet.iron_frontier"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "platforms": ["web", "android", "ios"],
+    "experiments": {
+      "baseUrl": "/iron-frontier"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}

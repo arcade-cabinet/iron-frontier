@@ -1,0 +1,105 @@
+{
+  "id": "iron-frontier-sheriff-cole",
+  "name": "Sheriff Cole",
+  "type": "npc",
+  "seed": 1287719031,
+  "description": "Town sheriff with worn lawman gear, brass badge, and rugged frontier attire.",
+  "textToImageTask": {
+    "prompt": "Full-body frontier sheriff, weathered blue duster coat, brass sheriff badge, leather gun belt, holstered revolver, rugged boots, calm stance, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Frontier sheriff character, full body, neutral A-pose, lawman attire with badge and holster, realistic silhouette",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 45000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "poseMode": "a-pose",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "weathered blue wool coat, sun-faded fabric, brass badge, worn leather belt, dusty boots, realistic materials",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "dusty-lawman",
+    "night-watch",
+    "formal-parade"
+  ],
+  "styleTexturePrompts": {
+    "dusty-lawman": "dust-coated coat, faded brass, sun-bleached leather, frontier wear",
+    "night-watch": "dark navy coat, matte leather, subtle brass trim, low-light patrol look",
+    "formal-parade": "polished brass badge, clean pressed coat, ceremonial lawman attire"
+  },
+  "riggingTask": {
+    "heightMeters": 1.82
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back"
+    ]
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c05ca-d60d-7462-bc91-e8ac58d90730",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05ca-d60d-7462-bc91-e8ac58d90730"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c05cb-2acd-708c-a27d-78064fcd6326",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05cb-2acd-708c-a27d-78064fcd6326"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c05cc-690d-7608-9891-b066fb8279ce",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05cc-690d-7608-9891-b066fb8279ce"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05d0-e060-75d4-ab42-08bee63bc81b",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05d0-e060-75d4-ab42-08bee63bc81b"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019c05d2-656c-7168-bca1-f827424aa342",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05d2-656c-7168-bca1-f827424aa342",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05d2-656c-7168-bca1-f827424aa342/output/Character_output.glb?Expires=1769883426&Signature=npLHO43z5Fo1BbI6OhPXhWcP0TF8CAE0heqouValotlONd63D9KFhRwtKS1yEj1YvY7uNFAmvvQi~FtLKV8KBlEdI~gcNP52G4P3j-40S74bU1ky2xxL8VE3qQ-38zcByJaHIDKPvpKkBSvspvKP3bgWO~nDLJFXUNIhyZmG2q5~5Wr822l2kDsa-HGook44ApNpPzK0kQ8O1Wyg0jgm1EtrIRrsJWF5meEAxLGhIaXbHQDy7jqAXHaEU6CRYz5gA6hZlnXOVPllex9LpAbDKvUjP3PU2PlZ14pa7od7FnczhMFTjDPksO1klFK-oc1JrKHEITtph5juSdQjGB96AA__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "riggedModel": "rigged.glb"
+      }
+    },
+    "animation": {
+      "taskId": "019c05d7-71fa-7898-9e91-d332a5226120",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05d7-71fa-7898-9e91-d332a5226120",
+        "animation": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05d7-71fa-7898-9e91-d332a5226120/output/Animation_Walking_Scan_with_Sudden_Look_Back_withSkin.glb?Expires=1769883762&Signature=VilfxVfx6pY6tmXlCxk1IDERywKkvoQJDHTzaYa6yIxIZhP~lDUp4O-BeJJudVGJzjcIr7L0pzS4wkfLtRdyCxOX54ZGJV~nNiolbUApVQqC2f0bLEef34Jcf5HsCn7yKv3U2Lz~5EPAbOxc3D1VlmG7E9FgaEcagukB~Njox~qHjM23MMFwtDT5hhKXw3MgvWSxsZmFdJ3LE9c2K2cx0p3M8wDrKgZ-7oPrDcwzmCZ2Nz1YvbJml1JHiPzfUbRSEAOHUkUaZaDkVgengmemh7SGVLqoS23G3K~bZ4~F8oIRJ5MreFfQiLKJ~IGkol35lsj6n8xh5ccSn~Xnj7xE4w__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "animation": "animations/DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back.glb"
+      }
+    }
+  }
+}

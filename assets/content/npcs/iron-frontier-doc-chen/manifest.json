@@ -1,0 +1,105 @@
+{
+  "id": "iron-frontier-doc-chen",
+  "name": "Doc Chen",
+  "type": "npc",
+  "seed": 877419052,
+  "description": "Frontier doctor with medical satchel, practical coat, and gentle demeanor.",
+  "textToImageTask": {
+    "prompt": "Full-body frontier doctor, practical coat, medical satchel, spectacles, rolled sleeves, calm stance, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Frontier doctor character, full body, neutral A-pose, medical satchel, spectacles, practical coat",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 42000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "poseMode": "a-pose",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "linen coat, leather satchel, brass medical tools, worn fabric, clean but lived-in frontier textures",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "field-medic",
+    "town-clinic",
+    "railway-surgeon"
+  ],
+  "styleTexturePrompts": {
+    "field-medic": "dusty coat, utility straps, travel-worn leather, pragmatic field medic look",
+    "town-clinic": "cleaner coat, neat fabric, polished brass accents, town doctor attire",
+    "railway-surgeon": "dark vest, oil-smudged sleeves, rugged travel gear, railway medical kit"
+  },
+  "riggingTask": {
+    "heightMeters": 1.7
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back"
+    ]
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c05d8-2a19-7427-89e5-eb3728802e92",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05d8-2a19-7427-89e5-eb3728802e92"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c05d8-7b94-746c-a150-2d89d77918d2",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05d8-7b94-746c-a150-2d89d77918d2"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c05da-2b67-7995-9b6e-19354c7774d9",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05da-2b67-7995-9b6e-19354c7774d9"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05de-a108-741d-9397-11ab1bd5ed58",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05de-a108-741d-9397-11ab1bd5ed58"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019c05e0-4515-7ba2-9d19-4ffdcb5caeae",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e0-4515-7ba2-9d19-4ffdcb5caeae",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05e0-4515-7ba2-9d19-4ffdcb5caeae/output/Character_output.glb?Expires=1769884336&Signature=bfjsy7StoJGr3LZ9CroyISQKU8M1r4B22AzO4sMEW~UIkujUwB5mecH5sTgT6IYs1c57T8rVLJdnyzlPl5axgUBsGP~bjgXthfWx5sZYHEtvhKcOBbprFEn2dezBW9iXwvH~AK1jRuCh9aoB6Y-ZqchSL5YiKxiTJAInj0y00rd-vswvheOb9NeKhDfuF8WN2os9iE1g2EHu~IjoUwTbkRcAfY4Dmj4fWtZGs2wHq3NLxe4i57yqE4lSEXqijeOc-FN0lZUsk9-UEJGxsOmMogQ0dXksaZWaEnAFjrO~RtjFGVvikkfghtAsBzPQ5sCtDhkLOHixJOaw99Ky-7tZ-w__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "riggedModel": "rigged.glb"
+      }
+    },
+    "animation": {
+      "taskId": "019c05e2-ed12-7984-82ed-8d40981a9389",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e2-ed12-7984-82ed-8d40981a9389",
+        "animation": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05e2-ed12-7984-82ed-8d40981a9389/output/Animation_Walking_Scan_with_Sudden_Look_Back_withSkin.glb?Expires=1769884510&Signature=R~St5bczb7o4XuWb4a~eTZMyjeXOwuHqWVXq~JfoBx1S~yjpF-aZXPUGiPbWcR5Iyrh7yiVSzc-QFaGnsKsWHWyH4P~nRdjwRuwqgDta-6mpgXHkSg-~qUx0oNWbx8sD~-~A6gB40PokzevStcbsNRpV9FIYaWNAKKxtZfwk7djoEPMf3JKyCKwwQ09hcezRk1u-tcLcHt3l8pB457Mhk2wVA9P13tGz7cqRwojqf~WRzvP1dxZqyEkb5zbE-8EKLkIO6ju60tEwfZ~xXN5BnCDtTUyqRg4~hWkA5PLdZcKpvXZvpRPdVCX7fQc-OaA9LRE4LOemMropSQ7Rc-0t7w__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "animation": "animations/DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back.glb"
+      }
+    }
+  }
+}

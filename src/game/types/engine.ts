@@ -1,7 +1,30 @@
 // Core Engine Types - Shared
 // Platform-agnostic definitions for game entities and world data
 
-import { HexTileAssets, MechanicalAssets, StructureAssets } from '@assets';
+// Asset path constants (previously from @assets Babylon.js module)
+const HexTileAssets = {
+  BUILDING_MARKET: 'assets/models/hex/building-market.glb',
+  BUILDING_TOWER: 'assets/models/hex/building-tower.glb',
+  BUILDING_HOUSE: 'assets/models/hex/building-house.glb',
+  BUILDING_CASTLE: 'assets/models/hex/building-castle.glb',
+  UNIT_MANSION: 'assets/models/hex/unit-mansion.glb',
+  BUILDING_FARM: 'assets/models/hex/building-farm.glb',
+  BUILDING_MILL: 'assets/models/hex/building-mill.glb',
+  BUILDING_MINE: 'assets/models/hex/building-mine.glb',
+  BUILDING_CABIN: 'assets/models/hex/building-cabin.glb',
+  UNIT_HOUSE: 'assets/models/hex/unit-house.glb',
+} as const;
+
+const MechanicalAssets = {
+  HOUSE_SMALL: 'assets/models/mechanical/house-small.glb',
+} as const;
+
+const StructureAssets = {
+  WATER_TOWER: 'assets/models/structures/watertower.glb',
+  WELL: 'assets/models/structures/well.glb',
+  FENCE: 'assets/models/structures/fence.glb',
+  RAIL: 'assets/models/structures/rail.glb',
+} as const;
 
 // Simple vector/color types to avoid engine dependencies
 export interface Vector3Simple {

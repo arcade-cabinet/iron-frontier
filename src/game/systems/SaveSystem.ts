@@ -8,7 +8,17 @@
  * - Save file versioning and migration
  */
 
-import type { GameSaveData } from '@/store/gameStateSlice';
+/**
+ * Data structure for persisted game saves.
+ * This is a self-contained type to avoid circular dependencies with the store.
+ * The shape mirrors the store's PersistedGameState plus runtime fields needed for save metadata.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface GameSaveData extends Record<string, unknown> {
+  playerName: string;
+  playTime: number;
+  currentLocationId?: string | null;
+}
 
 /**
  * Save slot metadata
@@ -18,6 +28,7 @@ export interface SaveSlotMeta {
   timestamp: number;
   playTime: number;
   playerName: string;
+  playerLevel: number;
   currentDay: number;
   location: string;
   version: number;
@@ -157,9 +168,10 @@ export class SaveSystem {
     const meta: SaveSlotMeta = {
       slotId,
       timestamp: Date.now(),
-      playTime: data.totalPlayTime,
-      playerName: data.party[0]?.name ?? 'Unknown',
-      currentDay: data.currentDay,
+      playTime: data.playTime ?? 0,
+      playerName: data.playerName ?? 'Unknown',
+      playerLevel: ((data.playerStats as Record<string, unknown>)?.level as number) ?? 1,
+      currentDay: ((data.clockState as Record<string, unknown>)?.day as number) ?? 1,
       location: locationName,
       version: this.SAVE_VERSION,
       isQuickSave: slotId === this.QUICK_SAVE_SLOT,

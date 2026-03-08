@@ -1,0 +1,260 @@
+{
+  "greetings": {
+    "lawman": {
+      "neutral": [
+        "State your business, stranger.",
+        "Keep your hands where I can see them.",
+        "Welcome to town. Behave yourself.",
+        "I don't recognize you. New in town?",
+        "This is a law-abiding town. Aim to keep it that way."
+      ],
+      "friendly": [
+        "Good to see you, partner.",
+        "Always glad to see a law-abiding citizen.",
+        "You've done this town a lot of good. Thank you.",
+        "If you hear anything useful, you know where to find me.",
+        "The badge means more knowing folks like you are around."
+      ],
+      "hostile": [
+        "You've got some nerve showing your face here.",
+        "I'd arrest you right now if I had the proof.",
+        "Turn around and ride out. Now.",
+        "One more step and I draw. Your choice.",
+        "You're not welcome in my jurisdiction."
+      ]
+    },
+    "merchant": {
+      "neutral": [
+        "Welcome! Have a look around.",
+        "Best prices in town, I guarantee it.",
+        "What can I get for you today?",
+        "Everything's quality goods, I assure you.",
+        "Need something? I've got it, or I can get it."
+      ],
+      "friendly": [
+        "My favorite customer! I set aside something special.",
+        "I'll give you the good price, friend.",
+        "Come in, come in! Always good to see you.",
+        "I heard you were in town. Saved the best stock for you.",
+        "Anything you need, consider it done."
+      ],
+      "hostile": [
+        "We don't serve your kind here.",
+        "I've got nothing for you. Get out.",
+        "Shop's closed. For you, permanently.",
+        "Your money's no good here.",
+        "I'd sooner burn my stock than sell to you."
+      ]
+    },
+    "bartender": {
+      "neutral": [
+        "What'll it be?",
+        "Belly up to the bar, stranger.",
+        "We got whiskey, beer, and water. Choose wisely.",
+        "Pull up a stool. You look like you need a drink.",
+        "First time here? The house rules are simple: no fighting."
+      ],
+      "friendly": [
+        "The usual? Coming right up.",
+        "There's a rumor going around you might want to hear.",
+        "First one's on the house, friend.",
+        "Glad you're here. I've been saving a bottle for you.",
+        "The good stuff's in the back. You've earned it."
+      ],
+      "hostile": [
+        "You're not welcome here. Door's that way.",
+        "I've got a shotgun under this bar. Test me.",
+        "Drink somewhere else.",
+        "Last time you were here, you caused trouble. Don't bother sitting.",
+        "Your tab's been cancelled. Permanently."
+      ]
+    },
+    "doctor": {
+      "neutral": [
+        "What ails you?",
+        "Sit down. Let me take a look.",
+        "I hope you're here for supplies, not stitches.",
+        "Everyone's got something wrong with them out here.",
+        "Preventive medicine is cheaper than the alternative."
+      ],
+      "friendly": [
+        "You look well! A rare sight around here.",
+        "I have fresh medicine in stock. Your timing is good.",
+        "How can I help my favorite patient?",
+        "Your help getting those supplies saved lives. Thank you.",
+        "You're one of the few people I'm always happy to see."
+      ],
+      "hostile": [
+        "I took an oath to do no harm. Don't test it.",
+        "I'll treat your wounds. But then you leave.",
+        "Even outlaws need a doctor. Sit down.",
+        "My medicines aren't for people like you.",
+        "I patch up the people you hurt. Think about that."
+      ]
+    },
+    "blacksmith": {
+      "neutral": [
+        "Need something fixed? Or something new?",
+        "Steel and iron, that's my trade.",
+        "Come on in. Mind the sparks.",
+        "I can fix anything made of metal.",
+        "Quality work takes time. Don't rush me."
+      ],
+      "friendly": [
+        "I sharpened something special for you.",
+        "Best work I've done in years. Take a look.",
+        "Got a custom order ready. You'll like it.",
+        "Anything for my best customer.",
+        "I've been experimenting with a new alloy. Want to see?"
+      ],
+      "hostile": [
+        "I don't shoe horses for your kind.",
+        "No service for troublemakers. Move along.",
+        "My hammer works on more than iron. Remember that.",
+        "The forge is closed to you.",
+        "Find another smithy. This one's off limits."
+      ]
+    },
+    "rancher": {
+      "neutral": [
+        "Howdy, stranger. Just passing through?",
+        "Watch where you step. That's cattle country.",
+        "Name's on the gate. What do you want?",
+        "This land's been in my family for generations.",
+        "If you're looking for work, talk to the foreman."
+      ],
+      "friendly": [
+        "Good to see you, neighbor.",
+        "Stay for supper? The missus is cooking.",
+        "Need a hand with anything? You've earned it.",
+        "You're welcome on this ranch any time.",
+        "The hands speak well of you. That means something."
+      ],
+      "hostile": [
+        "Get off my land before I put lead in you.",
+        "I know what you did. Stay away from my cattle.",
+        "Rustler! I'll string you up myself!",
+        "You've got ten seconds to clear the fence line.",
+        "My boys are watching. Don't try anything."
+      ]
+    },
+    "miner": {
+      "neutral": [
+        "Can't talk long. Break's almost over.",
+        "You here about work? Talk to the foreman.",
+        "Watch your head down there.",
+        "The mountain gives and the mountain takes.",
+        "Gold fever gets everyone sooner or later."
+      ],
+      "friendly": [
+        "Hey, it's you! Grab a pick and join us.",
+        "Found a vein today. Drinks are on me!",
+        "Union meeting tonight. You should come.",
+        "You're solid, friend. We need more like you.",
+        "I'll show you where the good deposits are."
+      ],
+      "hostile": [
+        "Company stooge. Get lost.",
+        "Claim jumper! Boys, we got trouble!",
+        "You ain't welcome in this mine.",
+        "Every man here knows what you are.",
+        "The tunnels can be dangerous for your type."
+      ]
+    },
+    "preacher": {
+      "neutral": [
+        "Welcome, my child. All are equal in God's house.",
+        "The Lord watches over even these wild lands.",
+        "Seeking redemption? You've come to the right place.",
+        "Sit down. Rest your weary soul.",
+        "There is hope yet for this frontier."
+      ],
+      "friendly": [
+        "Bless you for your good works.",
+        "The town speaks well of you. As do I.",
+        "Your deeds bring light to this dark corner of the world.",
+        "You're doing God's work out there, whether you know it.",
+        "The congregation prays for your safety."
+      ],
+      "hostile": [
+        "Even I have limits of forgiveness.",
+        "I'll pray for your soul. You'll need it.",
+        "Repent your sins, or answer to a higher power.",
+        "The Lord sees what you've done.",
+        "This church offers sanctuary. But not to you."
+      ]
+    },
+    "banker": {
+      "neutral": [
+        "Deposits or withdrawals?",
+        "Interest rates are posted on the board.",
+        "We handle gold, silver, and company scrip.",
+        "Banking hours are clearly posted, sir.",
+        "All transactions are recorded. For your protection."
+      ],
+      "friendly": [
+        "Your account is doing well. Shall we discuss investments?",
+        "I have a private proposition for someone of your standing.",
+        "Always a pleasure doing business with you.",
+        "Preferred clients get preferred rates.",
+        "I may have some information that could benefit you."
+      ],
+      "hostile": [
+        "Your credit is no good here.",
+        "I've frozen your accounts pending investigation.",
+        "Security! Remove this person at once.",
+        "The bank does not do business with criminals.",
+        "Any assets in your name have been seized."
+      ]
+    }
+  },
+  "barks": {
+    "combat": {
+      "player_hit": ["Got him!", "That's a hit!", "Eat lead!"],
+      "player_miss": ["Damn, missed!", "Slippery devil!", "Hold still!"],
+      "player_hurt": ["I'm hit!", "That stings!", "Need to find cover!"],
+      "player_critical": ["Right between the eyes!", "Dead center!", "Now that's shooting!"],
+      "enemy_flee": ["They're running!", "Yellow belly!", "Come back here!"],
+      "low_health": ["I'm in bad shape...", "Need medicine...", "Can't take much more..."],
+      "low_ammo": ["Running low on ammo!", "Almost out!", "Make every shot count!"],
+      "reload": ["Reloading!", "Cover me!", "Hold on..."]
+    },
+    "exploration": {
+      "discover_location": ["Well, would you look at that.", "Haven't seen this before.", "Interesting..."],
+      "danger_nearby": ["Something doesn't feel right.", "Stay alert.", "I've got a bad feeling."],
+      "treasure_found": ["Jackpot!", "Now that's a find.", "Well worth the trip."],
+      "weather_hot": ["Sun's beating down hard today.", "Could fry an egg on these rocks.", "Need to find shade soon."],
+      "weather_storm": ["Storm's rolling in.", "Better find shelter.", "Sky looks mean."],
+      "night_fall": ["Sun's going down.", "Need to make camp soon.", "The frontier isn't safe after dark."]
+    },
+    "town": {
+      "entering": ["Civilization at last.", "Let's see what this town has to offer.", "Time to resupply."],
+      "leaving": ["Back to the wild.", "Open road ahead.", "Let's ride."]
+    }
+  },
+  "combatFormulas": {
+    "apCosts": {
+      "attack": 2,
+      "aimed_shot": 4,
+      "move": 1,
+      "reload": 2,
+      "use_item": 2,
+      "defend": 2,
+      "flee": 3,
+      "end_turn": 0
+    },
+    "hitChance": {
+      "aimedShotBonus": 25,
+      "rangePenaltyPerHex": 5,
+      "optimalRange": 3,
+      "minHitChance": 5,
+      "maxHitChance": 95
+    },
+    "damage": {
+      "levelScalingDivisor": 2,
+      "criticalMultiplier": 2,
+      "minDamageAfterArmor": 1,
+      "baseCriticalChance": 0.1
+    }
+  }
+}

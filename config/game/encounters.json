@@ -1,0 +1,329 @@
+{
+  "combatEncounters": [
+    {
+      "id": "roadside_bandits",
+      "name": "Roadside Ambush",
+      "description": "Bandits have set up an ambush on the trail.",
+      "enemies": [
+        { "enemyId": "bandit_thug", "count": 2 },
+        { "enemyId": "bandit_gunman", "count": 1 }
+      ],
+      "minLevel": 1,
+      "isBoss": false,
+      "canFlee": true,
+      "rewards": {
+        "xp": 50,
+        "gold": 20,
+        "items": [
+          { "itemId": "bandages", "quantity": 1, "chance": 0.5 },
+          { "itemId": "revolver_ammo", "quantity": 6, "chance": 0.7 }
+        ]
+      },
+      "tags": ["random", "roadside"]
+    },
+    {
+      "id": "wolf_pack",
+      "name": "Wolf Pack",
+      "description": "A pack of hungry desert wolves.",
+      "enemies": [{ "enemyId": "desert_wolf", "count": 3 }],
+      "minLevel": 1,
+      "isBoss": false,
+      "canFlee": true,
+      "rewards": {
+        "xp": 35,
+        "gold": 0,
+        "items": [{ "itemId": "wolf_pelt", "quantity": 1, "chance": 0.3 }]
+      },
+      "tags": ["random", "wildlife"]
+    },
+    {
+      "id": "copperhead_patrol",
+      "name": "Copperhead Patrol",
+      "description": "A gang patrol checking the territory.",
+      "enemies": [
+        { "enemyId": "copperhead_gunslinger", "count": 2 },
+        { "enemyId": "copperhead_enforcer", "count": 1 }
+      ],
+      "minLevel": 3,
+      "isBoss": false,
+      "canFlee": true,
+      "rewards": {
+        "xp": 100,
+        "gold": 45,
+        "items": [
+          { "itemId": "whiskey", "quantity": 1, "chance": 0.4 },
+          { "itemId": "revolver_ammo", "quantity": 12, "chance": 0.8 }
+        ]
+      },
+      "tags": ["copperhead", "patrol"]
+    },
+    {
+      "id": "ivrc_checkpoint",
+      "name": "IVRC Checkpoint",
+      "description": "Company guards blocking the way.",
+      "enemies": [{ "enemyId": "ivrc_guard", "count": 3 }],
+      "minLevel": 2,
+      "isBoss": false,
+      "canFlee": true,
+      "rewards": {
+        "xp": 80,
+        "gold": 30,
+        "items": [{ "itemId": "ivrc_scrip", "quantity": 15, "chance": 0.6 }]
+      },
+      "tags": ["ivrc", "checkpoint"]
+    },
+    {
+      "id": "remnant_awakening",
+      "name": "Awakened Machines",
+      "description": "Ancient automatons have detected intruders.",
+      "enemies": [
+        { "enemyId": "remnant_sentry", "count": 2 },
+        { "enemyId": "remnant_scout", "count": 1 }
+      ],
+      "minLevel": 4,
+      "isBoss": false,
+      "canFlee": true,
+      "rewards": {
+        "xp": 120,
+        "gold": 15,
+        "items": [
+          { "itemId": "scrap_metal", "quantity": 3, "chance": 0.8 },
+          { "itemId": "oil_can", "quantity": 1, "chance": 0.5 }
+        ]
+      },
+      "tags": ["remnant", "old_works"]
+    },
+    {
+      "id": "juggernaut_boss",
+      "name": "The Guardian",
+      "description": "A massive war machine guards the inner sanctum.",
+      "enemies": [
+        { "enemyId": "remnant_juggernaut", "count": 1 },
+        { "enemyId": "remnant_sentry", "count": 2 }
+      ],
+      "minLevel": 6,
+      "isBoss": true,
+      "canFlee": false,
+      "rewards": {
+        "xp": 250,
+        "gold": 50,
+        "items": [
+          { "itemId": "automaton_core", "quantity": 1, "chance": 1.0 },
+          { "itemId": "scrap_metal", "quantity": 5, "chance": 1.0 }
+        ]
+      },
+      "tags": ["boss", "remnant", "old_works"]
+    }
+  ],
+  "encounterTemplates": [
+    {
+      "id": "lone_bandit",
+      "name": "Lone Bandit",
+      "descriptionTemplate": "A desperate outlaw blocks the trail. They demand your valuables or your life.",
+      "enemies": [{ "enemyIdOrTag": "bandit_gunman", "countRange": [1, 1], "levelScale": 0.8 }],
+      "difficultyRange": [1, 2],
+      "validBiomes": ["desert", "badlands", "grassland", "scrubland", "mountain"],
+      "validLocationTypes": ["wilderness", "trail", "road"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["raiders"],
+      "xpRange": [15, 25],
+      "goldRange": [5, 15],
+      "tags": ["bandit", "easy", "common", "roadside"]
+    },
+    {
+      "id": "bandit_ambush",
+      "name": "Bandit Ambush",
+      "descriptionTemplate": "Bandits spring from cover! Drop your guns and nobody gets hurt!",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [1, 2], "levelScale": 0.9 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands", "scrubland", "mountain"],
+      "validLocationTypes": ["wilderness", "trail", "road", "waystation"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "xpRange": [40, 70],
+      "goldRange": [15, 35],
+      "tags": ["bandit", "medium", "common", "ambush"]
+    },
+    {
+      "id": "gang_raid",
+      "name": "Gang Raid",
+      "descriptionTemplate": "A well-armed gang surrounds you. Their leader signals the attack.",
+      "enemies": [
+        { "enemyIdOrTag": "bandit_thug", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_gunman", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "bandit_sharpshooter", "countRange": [1, 1], "levelScale": 1.2 }
+      ],
+      "difficultyRange": [5, 7],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "hideout", "camp", "ruins"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["raiders"],
+      "xpRange": [100, 150],
+      "goldRange": [40, 80],
+      "tags": ["bandit", "hard", "uncommon", "gang"]
+    },
+    {
+      "id": "coyote_pack",
+      "name": "Coyote Pack",
+      "descriptionTemplate": "A pack of hungry coyotes circles you, drawn by the scent of your provisions.",
+      "enemies": [{ "enemyIdOrTag": "desert_wolf", "countRange": [2, 4], "levelScale": 0.9 }],
+      "difficultyRange": [1, 3],
+      "validBiomes": ["desert", "badlands", "scrubland", "grassland"],
+      "validLocationTypes": ["wilderness", "trail", "camp"],
+      "validTimeOfDay": ["evening", "night"],
+      "factionTags": ["wildlife"],
+      "xpRange": [25, 45],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "easy", "common", "animal"]
+    },
+    {
+      "id": "rattlesnake_nest",
+      "name": "Rattlesnake Nest",
+      "descriptionTemplate": "The warning rattle comes too late. Serpents emerge from beneath your feet!",
+      "enemies": [{ "enemyIdOrTag": "rattlesnake", "countRange": [3, 6], "levelScale": 0.8 }],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "ruins", "cave"],
+      "validTimeOfDay": ["morning", "afternoon"],
+      "factionTags": ["wildlife"],
+      "xpRange": [30, 50],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "medium", "common", "poison", "surprise"]
+    },
+    {
+      "id": "scorpion_swarm",
+      "name": "Scorpion Swarm",
+      "descriptionTemplate": "Disturbed from their hiding places, a swarm of scorpions scuttles toward you.",
+      "enemies": [{ "enemyIdOrTag": "rattlesnake", "countRange": [4, 8], "levelScale": 0.6 }],
+      "difficultyRange": [2, 4],
+      "validBiomes": ["desert", "badlands"],
+      "validLocationTypes": ["wilderness", "ruins", "cave", "mine"],
+      "validTimeOfDay": ["night"],
+      "factionTags": ["wildlife"],
+      "xpRange": [35, 55],
+      "goldRange": [0, 0],
+      "tags": ["wildlife", "medium", "common", "poison", "swarm"]
+    },
+    {
+      "id": "railroad_thugs",
+      "name": "Railroad Enforcers",
+      "descriptionTemplate": "IVRC company men step from the shadows. This here's company property.",
+      "enemies": [
+        { "enemyIdOrTag": "ivrc_guard", "countRange": [2, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "ivrc_marksman", "countRange": [0, 1], "levelScale": 1.1 }
+      ],
+      "difficultyRange": [3, 5],
+      "validBiomes": ["grassland", "scrubland", "desert"],
+      "validLocationTypes": ["train_station", "outpost", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["ivrc_guards"],
+      "xpRange": [70, 110],
+      "goldRange": [20, 45],
+      "tags": ["faction", "ivrc", "medium", "hostile"]
+    },
+    {
+      "id": "copperhead_patrol_template",
+      "name": "Copperhead Patrol",
+      "descriptionTemplate": "Gang members wearing the copper snake insignia block the trail.",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_enforcer", "countRange": [1, 2], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["desert", "badlands", "scrubland"],
+      "validLocationTypes": ["wilderness", "trail", "hideout"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "xpRange": [90, 140],
+      "goldRange": [40, 75],
+      "tags": ["faction", "copperhead", "medium", "patrol"]
+    },
+    {
+      "id": "copperhead_raid",
+      "name": "Copperhead Raid",
+      "descriptionTemplate": "The Copperhead Gang descends in force. Gunfire and dynamite fill the air!",
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [3, 4], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_enforcer", "countRange": [2, 3], "levelScale": 1.0 },
+        { "enemyIdOrTag": "copperhead_dynamiter", "countRange": [1, 2], "levelScale": 1.1 }
+      ],
+      "difficultyRange": [6, 9],
+      "validBiomes": ["desert", "badlands", "scrubland", "grassland"],
+      "validLocationTypes": ["town", "village", "outpost", "trading_post"],
+      "validTimeOfDay": ["morning", "afternoon", "evening"],
+      "factionTags": ["copperhead"],
+      "xpRange": [160, 240],
+      "goldRange": [80, 150],
+      "tags": ["faction", "copperhead", "hard", "event", "siege"]
+    },
+    {
+      "id": "automaton_malfunction",
+      "name": "Rogue Automaton",
+      "descriptionTemplate": "An automaton sparks and whirs erratically. Its targeting lens locks onto you.",
+      "enemies": [
+        { "enemyIdOrTag": "remnant_sentry", "countRange": [1, 2], "levelScale": 1.0 },
+        { "enemyIdOrTag": "remnant_scout", "countRange": [0, 1], "levelScale": 1.0 }
+      ],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["badlands", "desert", "mountain"],
+      "validLocationTypes": ["ruins", "mine", "wilderness"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["remnant"],
+      "xpRange": [80, 130],
+      "goldRange": [10, 30],
+      "tags": ["special", "automaton", "medium", "tech"]
+    },
+    {
+      "id": "juggernaut_encounter",
+      "name": "The Juggernaut",
+      "descriptionTemplate": "The ground trembles. A massive war machine emerges, bristling with weapons.",
+      "enemies": [
+        { "enemyIdOrTag": "remnant_juggernaut", "countRange": [1, 1], "levelScale": 1.0 },
+        { "enemyIdOrTag": "remnant_sentry", "countRange": [1, 2], "levelScale": 0.9 }
+      ],
+      "difficultyRange": [8, 10],
+      "validBiomes": ["badlands", "mountain"],
+      "validLocationTypes": ["ruins", "cave"],
+      "validTimeOfDay": ["morning", "afternoon", "evening", "night"],
+      "factionTags": ["remnant"],
+      "xpRange": [200, 300],
+      "goldRange": [40, 80],
+      "tags": ["faction", "remnant", "boss", "tech", "mini_boss"]
+    },
+    {
+      "id": "duel_challenge",
+      "name": "Duel at High Noon",
+      "descriptionTemplate": "A stranger steps into the street. You and me. Right here. Right now.",
+      "enemies": [{ "enemyIdOrTag": "copperhead_gunslinger", "countRange": [1, 1], "levelScale": 1.3 }],
+      "difficultyRange": [4, 6],
+      "validBiomes": ["desert", "grassland", "scrubland", "badlands"],
+      "validLocationTypes": ["town", "village", "hamlet", "outpost"],
+      "validTimeOfDay": ["afternoon"],
+      "factionTags": ["copperhead", "raiders"],
+      "xpRange": [70, 110],
+      "goldRange": [30, 60],
+      "tags": ["special", "duel", "medium", "honorable", "one_on_one"]
+    }
+  ],
+  "encounterRates": {
+    "wilderness": {
+      "baseChancePerHour": 0.15,
+      "minTimeBetweenHours": 2
+    },
+    "trail": {
+      "baseChancePerHour": 0.10,
+      "minTimeBetweenHours": 3
+    },
+    "road": {
+      "baseChancePerHour": 0.08,
+      "minTimeBetweenHours": 4
+    },
+    "town": {
+      "baseChancePerHour": 0.02,
+      "minTimeBetweenHours": 8
+    }
+  }
+}

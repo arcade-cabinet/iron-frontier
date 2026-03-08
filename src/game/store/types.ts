@@ -605,6 +605,10 @@ export interface GameStateActions {
   // Save
   saveGame: () => void;
   saveGameBinary: (saveId: string) => Promise<void>;
+  saveToSlot: (slotId: string) => Promise<void>;
+  loadFromSlot: (slotId: string) => Promise<boolean>;
+  getSaveSlots: () => Promise<import('../systems/SaveSystem').SaveSlotMeta[]>;
+  hydrateFromSave: (data: Record<string, unknown>) => void;
 
   // Travel
   initWorld: (worldId: string) => void;

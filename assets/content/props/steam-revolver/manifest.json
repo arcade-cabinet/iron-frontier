@@ -1,0 +1,71 @@
+{
+  "id": "steam-revolver",
+  "name": "Steam Revolver",
+  "type": "prop",
+  "seed": 1883401270,
+  "description": "Steampunk revolver with brass fittings and steam vent details.",
+  "textToImageTask": {
+    "prompt": "Steampunk revolver, brass fittings, engraved steel, small steam vents, hero prop on clean background, multi-view sheet",
+    "generateMultiView": true,
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Steampunk revolver prop, brass and steel, detailed cylinder, compact grip",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 15000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "polished brass, worn steel, engraved metal, subtle soot, realistic metal wear",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "brass-patina",
+    "black-iron",
+    "collector-polish"
+  ],
+  "styleTexturePrompts": {
+    "brass-patina": "aged brass with patina, matte steel, workshop wear",
+    "black-iron": "darkened iron finish, minimal brass, gunmetal sheen",
+    "collector-polish": "highly polished brass, clean steel, showroom shine"
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c05f9-945f-798e-a4a1-c91f7de35563",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f9-945f-798e-a4a1-c91f7de35563"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c05f9-f910-799b-9420-df7b8a25d741",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f9-f910-799b-9420-df7b8a25d741"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c05fb-152e-7d7e-804f-a425e1f783a0",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05fb-152e-7d7e-804f-a425e1f783a0"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05ff-7a2a-7496-ba48-d86fb67eaa63",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05ff-7a2a-7496-ba48-d86fb67eaa63"
+      },
+      "artifacts": {}
+    }
+  }
+}

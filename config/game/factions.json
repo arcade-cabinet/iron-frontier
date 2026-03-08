@@ -1,0 +1,297 @@
+{
+  "reputationTiers": {
+    "hated": { "min": -100, "max": -60, "name": "Hated" },
+    "despised": { "min": -59, "max": -30, "name": "Despised" },
+    "disliked": { "min": -29, "max": -10, "name": "Disliked" },
+    "neutral": { "min": -9, "max": 9, "name": "Neutral" },
+    "liked": { "min": 10, "max": 29, "name": "Liked" },
+    "respected": { "min": 30, "max": 59, "name": "Respected" },
+    "honored": { "min": 60, "max": 100, "name": "Honored" }
+  },
+  "factions": [
+    {
+      "id": "law_enforcement",
+      "name": "Law Enforcement",
+      "description": "Sheriffs, marshals, and deputies who uphold frontier justice.",
+      "tags": ["authority", "law", "order"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Wanted Criminal", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -59, "maxRep": -30, "tierName": "Known Troublemaker", "priceModifier": 1.3, "questAvailability": 0.1, "hostile": false },
+        { "minRep": -29, "maxRep": -10, "tierName": "Person of Interest", "priceModifier": 1.15, "questAvailability": 0.3, "hostile": false },
+        { "minRep": -9, "maxRep": 9, "tierName": "Stranger", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 10, "maxRep": 29, "tierName": "Upstanding Citizen", "priceModifier": 0.95, "questAvailability": 0.7, "hostile": false },
+        { "minRep": 30, "maxRep": 59, "tierName": "Trusted Ally", "priceModifier": 0.85, "questAvailability": 0.9, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Honorary Deputy", "priceModifier": 0.75, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "town_council": 0.7,
+        "railroad_company": 0.3,
+        "mining_consortium": 0.2,
+        "cattle_barons": 0.4,
+        "merchants_guild": 0.5,
+        "desperados": -0.8,
+        "gang_red_canyon": -0.9,
+        "gang_iron_riders": -0.85,
+        "prospectors_union": 0.1,
+        "native_tribes": -0.2,
+        "drifters": -0.1,
+        "automaton_collective": 0.0
+      }
+    },
+    {
+      "id": "town_council",
+      "name": "Town Council",
+      "description": "Civic leaders and politicians managing frontier settlements.",
+      "tags": ["authority", "politics", "civic"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Persona Non Grata", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -59, "maxRep": -30, "tierName": "Undesirable Element", "priceModifier": 1.3, "questAvailability": 0.1, "hostile": false },
+        { "minRep": -29, "maxRep": -10, "tierName": "Troublesome Vagrant", "priceModifier": 1.15, "questAvailability": 0.25, "hostile": false },
+        { "minRep": -9, "maxRep": 9, "tierName": "Common Folk", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 10, "maxRep": 29, "tierName": "Concerned Citizen", "priceModifier": 0.95, "questAvailability": 0.65, "hostile": false },
+        { "minRep": 30, "maxRep": 59, "tierName": "Valued Contributor", "priceModifier": 0.85, "questAvailability": 0.85, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Pillar of the Community", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": 0.7,
+        "railroad_company": 0.5,
+        "mining_consortium": 0.4,
+        "cattle_barons": 0.6,
+        "merchants_guild": 0.8,
+        "desperados": -0.7,
+        "gang_red_canyon": -0.8,
+        "gang_iron_riders": -0.75,
+        "prospectors_union": 0.0,
+        "native_tribes": -0.3,
+        "drifters": -0.2,
+        "automaton_collective": 0.1
+      }
+    },
+    {
+      "id": "railroad_company",
+      "name": "Iron Valley Railroad Company",
+      "description": "The powerful IVRC corporation extending its iron grip across the frontier.",
+      "tags": ["business", "corporate", "industry"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Corporate Enemy", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -59, "maxRep": -30, "tierName": "Saboteur Suspect", "priceModifier": 1.35, "questAvailability": 0.1, "hostile": false },
+        { "minRep": -29, "maxRep": -10, "tierName": "Unreliable Element", "priceModifier": 1.2, "questAvailability": 0.3, "hostile": false },
+        { "minRep": -9, "maxRep": 9, "tierName": "Potential Customer", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 10, "maxRep": 29, "tierName": "Valued Customer", "priceModifier": 0.9, "questAvailability": 0.7, "hostile": false },
+        { "minRep": 30, "maxRep": 59, "tierName": "Company Associate", "priceModifier": 0.8, "questAvailability": 0.9, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Corporate Ally", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": 0.3,
+        "town_council": 0.5,
+        "mining_consortium": 0.6,
+        "cattle_barons": 0.4,
+        "merchants_guild": 0.5,
+        "desperados": -0.6,
+        "gang_red_canyon": -0.7,
+        "gang_iron_riders": -0.9,
+        "prospectors_union": -0.5,
+        "native_tribes": -0.6,
+        "drifters": -0.1,
+        "automaton_collective": 0.4
+      }
+    },
+    {
+      "id": "mining_consortium",
+      "name": "Mining Consortium",
+      "description": "The organized mining companies exploiting the frontier's mineral wealth.",
+      "tags": ["business", "mining", "industry"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Strike Agitator", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Drifter", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Company Man", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": 0.2,
+        "railroad_company": 0.6,
+        "prospectors_union": -0.8,
+        "native_tribes": -0.5,
+        "automaton_collective": 0.5
+      }
+    },
+    {
+      "id": "cattle_barons",
+      "name": "Cattle Barons",
+      "description": "Wealthy ranchers who control vast stretches of grazing land.",
+      "tags": ["business", "ranching", "land"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Cattle Rustler", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Passing Stranger", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Cattle Baron's Kin", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": 0.4,
+        "town_council": 0.6,
+        "railroad_company": 0.4,
+        "merchants_guild": 0.6,
+        "desperados": -0.6,
+        "gang_red_canyon": -0.7,
+        "native_tribes": -0.4
+      }
+    },
+    {
+      "id": "merchants_guild",
+      "name": "Merchants Guild",
+      "description": "The organized traders and shopkeepers of the frontier towns.",
+      "tags": ["business", "trade", "commerce"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Notorious Thief", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Customer", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Guild Partner", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": 0.5,
+        "town_council": 0.8,
+        "desperados": -0.7,
+        "gang_red_canyon": -0.8,
+        "prospectors_union": 0.3
+      }
+    },
+    {
+      "id": "desperados",
+      "name": "Desperados",
+      "description": "Loose-knit outlaws and renegades who live outside the law.",
+      "tags": ["outlaw", "criminal", "renegade"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Marked for Death", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Unknown Quantity", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Legendary Desperado", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": -0.8,
+        "town_council": -0.7,
+        "railroad_company": -0.6,
+        "gang_red_canyon": 0.5,
+        "gang_iron_riders": 0.4,
+        "prospectors_union": 0.2,
+        "drifters": 0.4
+      }
+    },
+    {
+      "id": "gang_red_canyon",
+      "name": "Red Canyon Gang",
+      "description": "A violent outlaw gang operating from hidden canyons in the badlands.",
+      "tags": ["outlaw", "gang", "violent"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Blood Enemy", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Stranger", "priceModifier": 1.0, "questAvailability": 0.4, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Red Canyon Lieutenant", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": -0.9,
+        "town_council": -0.8,
+        "railroad_company": -0.7,
+        "desperados": 0.5,
+        "gang_iron_riders": -0.3
+      }
+    },
+    {
+      "id": "gang_iron_riders",
+      "name": "Iron Riders",
+      "description": "A tech-savvy outlaw gang that uses stolen machinery and automatons.",
+      "tags": ["outlaw", "gang", "steampunk", "tech"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Prey", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Soft Skin", "priceModifier": 1.0, "questAvailability": 0.4, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Iron Captain", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": -0.85,
+        "railroad_company": -0.9,
+        "desperados": 0.4,
+        "gang_red_canyon": -0.3,
+        "automaton_collective": 0.3
+      }
+    },
+    {
+      "id": "prospectors_union",
+      "name": "Prospectors Union",
+      "description": "Independent miners and prospectors organized against corporate exploitation.",
+      "tags": ["labor", "mining", "union", "independent"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Claim Jumper", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Wanderer", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Strike Leader", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "railroad_company": -0.5,
+        "mining_consortium": -0.8,
+        "native_tribes": 0.3,
+        "drifters": 0.4
+      }
+    },
+    {
+      "id": "native_tribes",
+      "name": "Native Tribes",
+      "description": "Indigenous peoples whose sacred lands are under threat from expansion.",
+      "tags": ["native", "spiritual", "territorial"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Enemy of the People", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Outsider", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Spirit Walker", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "law_enforcement": -0.2,
+        "railroad_company": -0.6,
+        "mining_consortium": -0.5,
+        "cattle_barons": -0.4,
+        "prospectors_union": 0.3,
+        "drifters": 0.2
+      }
+    },
+    {
+      "id": "drifters",
+      "name": "Drifters",
+      "description": "Nomads, vagrants, and wanderers who belong to no one but the road.",
+      "tags": ["vagrant", "nomad", "neutral"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Pariah", "priceModifier": 1.4, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Fellow Wanderer", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "King of the Road", "priceModifier": 0.75, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "desperados": 0.4,
+        "gang_red_canyon": 0.3,
+        "prospectors_union": 0.4,
+        "native_tribes": 0.2
+      }
+    },
+    {
+      "id": "automaton_collective",
+      "name": "Automaton Collective",
+      "description": "Self-aware machines from the Old Works, neither friend nor foe by default.",
+      "tags": ["mechanical", "artificial", "steampunk"],
+      "defaultReputation": 0,
+      "reputationTiers": [
+        { "minRep": -100, "maxRep": -60, "tierName": "Destroyer", "priceModifier": 1.5, "questAvailability": 0, "hostile": true },
+        { "minRep": -9, "maxRep": 9, "tierName": "Organic Unit", "priceModifier": 1.0, "questAvailability": 0.5, "hostile": false },
+        { "minRep": 60, "maxRep": 100, "tierName": "Honorary Construct", "priceModifier": 0.7, "questAvailability": 1.0, "hostile": false }
+      ],
+      "relations": {
+        "railroad_company": 0.4,
+        "mining_consortium": 0.5,
+        "gang_iron_riders": 0.3,
+        "gang_red_canyon": -0.2,
+        "native_tribes": -0.1
+      }
+    }
+  ],
+  "rippleMultiplier": 0.5
+}

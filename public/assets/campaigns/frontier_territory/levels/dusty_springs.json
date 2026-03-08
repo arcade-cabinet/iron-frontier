@@ -1,0 +1,146 @@
+{
+  "id": "dusty_springs",
+  "name": "Dusty Springs",
+  "description": "A small frontier town at the edge of civilization. The perfect place to start your journey.",
+  "chapter": 1,
+  "actName": "A Stranger Arrives",
+  "environmentMode": "town",
+  "spawnPoints": {
+    "player": [0, 0, 5],
+    "playerRotation": 0,
+    "npcs": [
+      {
+        "npcId": "sheriff_hawkins",
+        "position": [10, 0, 8],
+        "rotation": 3.14
+      },
+      {
+        "npcId": "bartender_sal",
+        "position": [-5, 0, -3],
+        "rotation": 1.57
+      },
+      {
+        "npcId": "merchant_chen",
+        "position": [8, 0, -10],
+        "rotation": 0
+      }
+    ],
+    "items": [
+      {
+        "itemId": "health_potion",
+        "position": [-2, 0.5, 4],
+        "quantity": 1
+      }
+    ]
+  },
+  "objectives": [
+    {
+      "id": "talk_sheriff",
+      "type": "interact",
+      "description": "Speak with Sheriff Hawkins",
+      "target": "sheriff_hawkins"
+    },
+    {
+      "id": "explore_town",
+      "type": "reach",
+      "description": "Explore the town",
+      "target": "town_square",
+      "optional": true,
+      "rewards": {
+        "xp": 25
+      }
+    }
+  ],
+  "lighting": {
+    "mode": "town",
+    "timeOfDay": "noon",
+    "ambientIntensity": 0.8,
+    "sunColor": "#FFE4B5",
+    "fogDensity": 0.005,
+    "fogColor": "#D2B48C"
+  },
+  "postProcessing": {
+    "mode": "town",
+    "bloom": 0.3,
+    "vignette": 0.2
+  },
+  "weather": {
+    "type": "clear",
+    "intensity": 0.1,
+    "windDirection": 45,
+    "windSpeed": 5,
+    "particles": {
+      "type": "dust",
+      "density": 0.2
+    }
+  },
+  "audio": {
+    "musicTrack": "western_town_day",
+    "ambientSounds": [
+      {
+        "soundId": "wind_light",
+        "volume": 0.3,
+        "loop": true
+      },
+      {
+        "soundId": "town_ambience",
+        "volume": 0.5,
+        "loop": true
+      }
+    ],
+    "reverbPreset": "outdoor"
+  },
+  "terrain": {
+    "biome": "desert",
+    "dimensions": {
+      "width": 24,
+      "height": 24
+    },
+    "elevation": {
+      "min": 0,
+      "max": 2
+    },
+    "features": {
+      "trees": 0.1,
+      "rocks": 0.2,
+      "water": 0.05,
+      "structures": 0.3
+    }
+  },
+  "structures": [
+    {
+      "type": "saloon",
+      "position": [-5, 0, 0],
+      "rotation": 0,
+      "scale": 1,
+      "ownerId": "bartender_sal",
+      "interiorId": "saloon_interior"
+    },
+    {
+      "type": "sheriff_office",
+      "position": [10, 0, 5],
+      "rotation": 180,
+      "scale": 1,
+      "ownerId": "sheriff_hawkins"
+    },
+    {
+      "type": "general_store",
+      "position": [8, 0, -8],
+      "rotation": 90,
+      "scale": 1,
+      "ownerId": "merchant_chen"
+    },
+    {
+      "type": "water_tower",
+      "position": [0, 0, -15],
+      "rotation": 0,
+      "scale": 1.2
+    }
+  ],
+  "nextLevelId": "silver_creek_mine",
+  "previousLevelId": null,
+  "metadata": {
+    "difficulty": "easy",
+    "estimatedTime": "20min"
+  }
+}

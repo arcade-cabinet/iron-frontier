@@ -1,0 +1,71 @@
+{
+  "id": "steam-canister-pack",
+  "name": "Steam Canister Pack",
+  "type": "prop",
+  "seed": 1459082766,
+  "description": "Back-mounted steam canister pack with tubing and brass fittings.",
+  "textToImageTask": {
+    "prompt": "Steampunk steam canister backpack, brass fittings, leather straps, tubing, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Steam canister backpack prop, brass fittings, leather straps, tubing, compact silhouette",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 20000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "oxidized brass, worn leather straps, steel canisters, soot marks, realistic materials",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "copper-oxide",
+    "industrial-steel",
+    "leather-gear"
+  ],
+  "styleTexturePrompts": {
+    "copper-oxide": "copper with green patina, aged fittings, worn leather",
+    "industrial-steel": "dark steel canisters, minimal brass, rugged industrial look",
+    "leather-gear": "heavy leather straps, warm brass, workshop handcrafted feel"
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c0608-5487-7641-bf99-6b56574a8afb",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0608-5487-7641-bf99-6b56574a8afb"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c0608-ac12-765f-8930-5a1bec2273bc",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0608-ac12-765f-8930-5a1bec2273bc"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c0611-3e1a-7067-80be-40c313ae1f15",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0611-3e1a-7067-80be-40c313ae1f15"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c0616-bbb2-7125-8dde-6ae010f0665a",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0616-bbb2-7125-8dde-6ae010f0665a"
+      },
+      "artifacts": {}
+    }
+  }
+}

@@ -9,8 +9,6 @@
  * - Repel items
  */
 
-import type { MovementVector } from '../input/types';
-
 /**
  * Encounter zone configuration
  */

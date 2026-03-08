@@ -1,0 +1,105 @@
+{
+  "id": "iron-frontier-bartender-sally",
+  "name": "Bartender Sally",
+  "type": "npc",
+  "seed": 2119046674,
+  "description": "Saloon bartender with apron, vest, and confident stance.",
+  "textToImageTask": {
+    "prompt": "Full-body saloon bartender, vest and apron, rolled sleeves, sturdy boots, confident stance, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Saloon bartender character, full body, neutral A-pose, vest and apron, frontier saloon attire",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 42000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "poseMode": "a-pose",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "linen apron, worn leather belt, cotton shirt, brass buttons, saloon-ready fabrics",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "saloon-night",
+    "day-shift",
+    "riverboat-host"
+  ],
+  "styleTexturePrompts": {
+    "saloon-night": "darker vest, polished brass buttons, evening saloon attire",
+    "day-shift": "lighter fabrics, sun-faded apron, practical daytime look",
+    "riverboat-host": "refined vest, subtle patterns, upscale riverboat host style"
+  },
+  "riggingTask": {
+    "heightMeters": 1.68
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back"
+    ]
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c05e3-78e1-7568-bbf7-dccd5ea11137",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e3-78e1-7568-bbf7-dccd5ea11137"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c05e3-d00b-76a8-971c-25a1cc5e9d77",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e3-d00b-76a8-971c-25a1cc5e9d77"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c05e5-85f8-75b9-9043-3e49401020ef",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e5-85f8-75b9-9043-3e49401020ef"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05e9-f236-77d5-acfd-21863e12a510",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05e9-f236-77d5-acfd-21863e12a510"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019c05eb-8798-7a88-9acd-db8cbab2d82c",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05eb-8798-7a88-9acd-db8cbab2d82c",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05eb-8798-7a88-9acd-db8cbab2d82c/output/Character_output.glb?Expires=1769885085&Signature=kyUKULx4OCwmTs7A8pRWTAxCOPnW1NFSQVq5yfM7opoC4rfnoxn7q8cSyJ8j5Nn8C~XZSMRg-m-Cnz4-vOrXiUGxxu~WQuo3Z7y4IJxD9L0GhADAZEkekUigNcpnaxS3Cngg3-T87QKTGdyRC-gvAHe3OYnlSAishmrESNV3q4rxfhRre2AZ~E4bULlCt93Kk2-1GALJFXdGtgoocpqVVd5USNHcFcaKz0csQFkQsleQyaNyWWzIfxg78MEl9ghTFxT3DvAz7ukXPO0sNgpimlyMnslL~z-hAG2jH3y2thXEegQZNIRg82mYczzgX6gDAFlxiyNaAD92y3BeTwUrLQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "riggedModel": "rigged.glb"
+      }
+    },
+    "animation": {
+      "taskId": "019c05ed-616c-7ff8-9849-60a998036425",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05ed-616c-7ff8-9849-60a998036425",
+        "animation": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05ed-616c-7ff8-9849-60a998036425/output/Animation_Walking_Scan_with_Sudden_Look_Back_withSkin.glb?Expires=1769885232&Signature=b~fwbibZHRkv~Z4DJ~KJL9tnS2IVasA345H0s-2DeU1MIA2viY3W-JVknIKP98xX7IjRbzN1SQBLHbWmI5H-l5B4JzPkwtuRZgh5lwWc88cB5h14dZK5H61sWrboCjp7nAxcpDt~LaaHhzmfvJ902RNm2TFMUWULQp3VHLRBN~k48OVi4JXdFYPDaLySIlYcp21CtUlGLjLCBs9OUAmguNUY8ZBtJ-fL-uZ0Potm4vFv~LK~CE6IdkPgY7casNP1q9Y500GyQGIwdOlyfJXuxagLRkOZFG~PiiNuAOaHY8EJlSsVO2yVYk4vaJHRHh0u6dxYn-9SzPgRBK9kiyYB4w__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "animation": "animations/DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back.glb"
+      }
+    }
+  }
+}

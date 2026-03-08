@@ -17,6 +17,7 @@ export interface PipeCell {
   rotation: Direction;
   fixed: boolean; // If true, cannot be rotated
   active: boolean; // Is flow reaching this cell?
+  locked: boolean; // If true, cell is locked and cannot be interacted with
 }
 
 export interface PipePuzzleState {

@@ -2,6 +2,12 @@
 
 ## 2026-01-28
 
+- **Meshy Content‑Gen (Real-World Run)**
+  - Swapped to `@agentic-dev-library/meshy-content-generator` with per-asset pipelines/tasks and a local runner script.
+  - Patched the runner to poll final task data, persist array outputs, ignore blank URLs, and keep artifacts in place.
+  - Validated + ran the hero pipeline, downloading `preview.glb`, `refined.glb`, and eight style variants under `assets/content/characters/iron-frontier-hero/variants/`.
+  - Documented the workflow in `memory-bank/activeContext.md` and preserved command references in `scripts/content-gen-run.ts`.
+
 - **Look‑Dev Lab Scene (Paused)**
   - Added `/lookdev` Babylon scene with Dynamic Terrain, Atmosphere, HDRI, PBR terrain, western town assembly, and prop scatter.
   - Optimized western town assets via Blender scripts and AmbientCG materials.

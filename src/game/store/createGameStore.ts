@@ -15,6 +15,14 @@ import {
 import { persistStorage } from './persistStorage';
 import type { StorageAdapter } from './StorageAdapter';
 import { createSurvivalSlice } from '../systems/survivalStore';
+import {
+  evaluateCondition,
+  applyDialogueEffect as applyDialogueEffectBridge,
+  onDialogueEnd as onDialogueEndBridge,
+} from '../systems/DialogueQuestBridge';
+import { questEvents } from '../systems/QuestEvents';
+import { getSaveSystem } from '../systems/SaveSystem';
+import { getTravelManager } from '../systems/TravelManager';
 import type { CombatEncounter } from '../data/schemas/combat';
 import type { ItemEffect } from '../data/schemas/item';
 import type { PipeCell } from '../puzzles/pipe-fitter/types';
@@ -35,6 +43,9 @@ import type {
   PlayerStats,
   WorldPosition,
 } from './types';
+
+// Re-export GameState so consumers can import from createGameStore
+export type { GameState };
 
 /**
  * Data Access Interface - Platform specific data fetching
@@ -747,6 +758,14 @@ export function createGameStore({
           }
 
           state.addNotification('quest', `Completed: ${def.title}`);
+
+          // Emit quest completed event for other systems
+          questEvents.emit('questCompleted', { questId });
+
+          // Auto-save after quest completion
+          get().saveToSlot('autosave').catch(() => {
+            // Silently handle save failures during quest completion
+          });
         },
 
         failQuest: (_questId: string) => {},
@@ -869,6 +888,10 @@ export function createGameStore({
         },
 
         endDialogue: () => {
+          const ds = get().dialogueState;
+          if (ds) {
+            onDialogueEndBridge(ds.npcId, get());
+          }
           set({
             phase: 'playing',
             dialogueState: null,
@@ -887,26 +910,14 @@ export function createGameStore({
           }
         },
 
-        checkDialogueCondition: (_condition: DialogueCondition) => {
-          // Implement condition checking against game state
-          return true;
+        checkDialogueCondition: (condition: DialogueCondition) => {
+          return evaluateCondition(condition, get());
         },
 
         applyDialogueEffect: (effect: DialogueEffect) => {
-          // Implement effects
-          switch (effect.type) {
-            case 'give_item':
-              if (effect.target) {
-                get().addItemById(effect.target, effect.value || 1);
-              }
-              break;
-            case 'start_quest':
-              if (effect.target) {
-                get().startQuest(effect.target);
-              }
-              break;
-            // ... others
-          }
+          const state = get();
+          const npcId = state.dialogueState?.npcId ?? '';
+          applyDialogueEffectBridge(effect, state, npcId);
         },
 
         getActiveNPC: () => {
@@ -922,6 +933,12 @@ export function createGameStore({
           if (!item) return;
 
           get().addItemById(item.itemId, item.quantity);
+
+          // Emit quest event for item pickup
+          questEvents.emit('itemPickedUp', {
+            itemId: item.itemId,
+            quantity: item.quantity,
+          });
 
           // Remove from world
           const newItems = { ...state.worldItems };
@@ -1040,6 +1057,91 @@ export function createGameStore({
           }
         },
 
+        saveToSlot: async (slotId: string) => {
+          const state = get();
+          const saveSystem = getSaveSystem();
+
+          // Derive location name from current location
+          const currentLocation = state.currentLocationId
+            ? (state.loadedWorld as any)?.locations?.get?.(state.currentLocationId)
+            : null;
+          const locationName = currentLocation?.ref?.name ?? state.currentLocationId ?? 'Unknown';
+
+          const saveData = {
+            playerName: state.playerName,
+            playTime: state.playTime,
+            playerStats: state.playerStats,
+            clockState: state.clockState,
+            currentLocationId: state.currentLocationId,
+            initialized: state.initialized,
+            worldSeed: state.worldSeed,
+            inventory: state.inventory,
+            equipment: state.equipment,
+            activeQuests: state.activeQuests,
+            completedQuests: state.completedQuests,
+            completedQuestIds: state.completedQuestIds,
+            collectedItemIds: state.collectedItemIds,
+            settings: state.settings,
+            saveVersion: state.saveVersion,
+            lastSaved: Date.now(),
+            fatigueState: state.fatigueState,
+            provisionsState: state.provisionsState,
+            campingState: state.campingState,
+            currentTerrain: state.currentTerrain,
+            isClockRunning: state.isClockRunning,
+            currentWorldId: state.currentWorldId,
+            discoveredLocationIds: state.discoveredLocationIds,
+            talkedNPCIds: state.talkedNPCIds,
+          };
+
+          await saveSystem.save(slotId, saveData, locationName);
+          set({ lastSaved: Date.now() });
+          state.addNotification('info', 'Game saved.');
+        },
+
+        loadFromSlot: async (slotId: string) => {
+          const saveSystem = getSaveSystem();
+          const data = await saveSystem.load(slotId);
+          if (!data) return false;
+          get().hydrateFromSave(data);
+          return true;
+        },
+
+        getSaveSlots: async () => {
+          const saveSystem = getSaveSystem();
+          return saveSystem.getAllSlots();
+        },
+
+        hydrateFromSave: (data: Record<string, unknown>) => {
+          // Hydrate store from loaded save data
+          const safe = (key: string) => data[key] !== undefined ? data[key] : undefined;
+
+          const patch: Record<string, unknown> = {};
+          const keys = [
+            'playerName', 'playTime', 'playerStats', 'clockState',
+            'currentLocationId', 'initialized', 'worldSeed', 'inventory',
+            'equipment', 'activeQuests', 'completedQuests', 'completedQuestIds',
+            'collectedItemIds', 'settings', 'saveVersion', 'lastSaved',
+            'fatigueState', 'provisionsState', 'campingState', 'currentTerrain',
+            'isClockRunning', 'currentWorldId', 'discoveredLocationIds', 'talkedNPCIds',
+          ];
+
+          for (const key of keys) {
+            const val = safe(key);
+            if (val !== undefined) {
+              patch[key] = val;
+            }
+          }
+
+          patch.phase = 'playing';
+          set(patch as any);
+
+          // Reinitialize world
+          const worldId = (data.currentWorldId as string) ?? 'frontier_territory';
+          get().initWorld(worldId);
+          get().addNotification('info', 'Game loaded.');
+        },
+
         // Travel Actions
         initWorld: (worldId: string) => {
           const world = dataAccess.getWorldById(worldId);
@@ -1064,81 +1166,89 @@ export function createGameStore({
           const travelTime = connection?.travelTime ?? 8;
           const dangerLevel: DangerLevel = connection?.danger ?? 'moderate';
           const method: TravelMethod = connection?.method ?? 'trail';
-          const startedAt = Date.now();
 
           clearTravelTimer();
 
-          const encounterPools: Record<DangerLevel, string[]> = {
-            safe: [],
-            low: ['wolf_pack'],
-            moderate: ['roadside_bandits', 'wolf_pack'],
-            high: ['copperhead_patrol', 'ivrc_checkpoint'],
-            extreme: ['remnant_awakening'],
-          };
-          const encounterChances: Record<DangerLevel, number> = {
-            safe: 0,
-            low: 0.15,
-            moderate: 0.25,
-            high: 0.4,
-            extreme: 0.6,
-          };
-          const pool = encounterPools[dangerLevel] ?? [];
-          const encounterRoll = Math.random();
-          const encounterId =
-            pool.length > 0 && encounterRoll <= (encounterChances[dangerLevel] ?? 0)
-              ? pool[Math.floor(Math.random() * pool.length)]
-              : null;
-          const resolvedEncounterId =
-            encounterId && dataAccess.getEncounterById(encounterId) ? encounterId : null;
+          // Use TravelManager for checkpoint-based encounter rolling
+          const manager = getTravelManager();
+          const initialState = manager.startTravel({
+            fromLocationId: currentLocationId,
+            toLocationId: locationId,
+            method,
+            travelTime,
+            danger: dangerLevel,
+            connection: connection ?? {
+              from: currentLocationId,
+              to: locationId,
+              method,
+              travelTime,
+              danger: dangerLevel,
+              bidirectional: true,
+              passable: true,
+              tags: [],
+            },
+          });
 
           // Start travel sequence
           set({
-            travelState: {
-              fromLocationId: currentLocationId,
-              toLocationId: locationId,
-              method,
-              travelTime,
-              progress: 0,
-              dangerLevel,
-              startedAt,
-              encounterId: resolvedEncounterId,
-            },
+            travelState: initialState,
             phase: 'travel',
           });
 
-          if (resolvedEncounterId) {
-            return;
-          }
-
-          const totalMs = Math.max(2000, travelTime * 1000);
+          // Progress ticker: TravelManager handles timing and encounter checkpoints
           travelTimer = setInterval(() => {
             const state = get();
             if (!state.travelState) {
               clearTravelTimer();
+              manager.cancelTravel();
               return;
             }
 
-            const elapsed = Date.now() - startedAt;
-            const progress = Math.min(100, Math.round((elapsed / totalMs) * 100));
+            const result = manager.tick();
+            if (!result) return; // paused or inactive
 
+            // Update progress in store
             set({
               travelState: {
                 ...state.travelState,
-                progress,
+                progress: result.progress,
               },
             });
 
-            if (progress >= 100) {
+            // Encounter checkpoint triggered
+            if (result.encounterTriggered && result.encounterId) {
+              const resolvedId = dataAccess.getEncounterById(result.encounterId)
+                ? result.encounterId
+                : null;
+
+              if (resolvedId) {
+                clearTravelTimer();
+                set({
+                  travelState: {
+                    ...state.travelState,
+                    progress: result.progress,
+                    encounterId: resolvedId,
+                  },
+                });
+                get().addNotification('warning', 'Ambush! You\'ve been waylaid on the road!');
+                return;
+              }
+            }
+
+            // Travel complete
+            if (result.completed) {
               clearTravelTimer();
+              manager.completeTravel();
               get().completeTravel();
             }
           }, 250);
         },
 
         completeTravel: () => {
-          const { travelState, activeQuests } = get();
+          const { travelState, activeQuests, loadedWorld } = get();
           if (!travelState) return;
           clearTravelTimer();
+          getTravelManager().completeTravel();
 
           const destinationId = travelState.toLocationId;
           const travelHours = travelState.travelTime;
@@ -1159,22 +1269,22 @@ export function createGameStore({
             get().addNotification('warning', 'You ran out of water during the journey.');
           }
 
-          // Update Quest Objectives (Visit)
-          activeQuests.forEach((quest) => {
-            const def = dataAccess.getQuestById(quest.questId);
-            if (!def) return;
+          // Derive destination name for arrival notification
+          const worldRef = loadedWorld?.world ?? loadedWorld;
+          const destLoc = worldRef?.locations?.find?.((l: any) => l.id === destinationId);
+          const destName = destLoc?.name ?? destinationId;
+          get().addNotification('info', `Arrived at ${destName}`);
 
-            const stage = def.stages[quest.currentStageIndex];
-            stage.objectives.forEach((obj: { type: string; target?: string; id: string }) => {
-              if (obj.type === 'visit' && obj.target === destinationId) {
-                get().updateObjective(quest.questId, obj.id, 1);
-              }
-            });
-          });
+          // Emit location visited event (QuestWiring handles objective updates)
+          questEvents.emit('locationVisited', { locationId: destinationId });
+
+          // Auto-save on arrival
+          get().saveGame();
         },
 
         cancelTravel: () => {
           clearTravelTimer();
+          getTravelManager().cancelTravel();
           set({ travelState: null, phase: 'playing' });
         },
 
@@ -1370,6 +1480,13 @@ export function createGameStore({
                 if (target.isPlayer) {
                   // Player died
                   setTimeout(() => get().setPhase('game_over'), 1500);
+                } else {
+                  // Enemy killed - emit quest event
+                  questEvents.emit('enemyKilled', {
+                    enemyType: target.definitionId,
+                    enemyId: target.definitionId,
+                    locationId: get().currentLocationId ?? '',
+                  });
                 }
               }
             } else {
@@ -1570,8 +1687,72 @@ export function createGameStore({
             travelState.encounterId === combatState.encounterId
           ) {
             if (combatState.phase === 'victory') {
+              // Resume travel from where it was paused after winning the encounter
+              const manager = getTravelManager();
               set({ combatState: null });
-              get().completeTravel();
+              get().applyCombatFatigue(1);
+
+              if (manager.isActive()) {
+                // Clear encounter from travel state so TravelTransition shows again
+                set({
+                  travelState: {
+                    ...get().travelState!,
+                    encounterId: null,
+                  },
+                  phase: 'travel',
+                });
+                manager.resume();
+                get().addNotification('info', 'Victory! Resuming journey...');
+
+                // Restart the progress ticker
+                clearTravelTimer();
+                travelTimer = setInterval(() => {
+                  const s = get();
+                  if (!s.travelState) {
+                    clearTravelTimer();
+                    manager.cancelTravel();
+                    return;
+                  }
+
+                  const result = manager.tick();
+                  if (!result) return;
+
+                  set({
+                    travelState: {
+                      ...s.travelState,
+                      progress: result.progress,
+                    },
+                  });
+
+                  // Another encounter checkpoint
+                  if (result.encounterTriggered && result.encounterId) {
+                    const resolvedId = dataAccess.getEncounterById(result.encounterId)
+                      ? result.encounterId
+                      : null;
+                    if (resolvedId) {
+                      clearTravelTimer();
+                      set({
+                        travelState: {
+                          ...s.travelState,
+                          progress: result.progress,
+                          encounterId: resolvedId,
+                        },
+                      });
+                      get().addNotification('warning', 'Another ambush! Enemies on the road!');
+                      return;
+                    }
+                  }
+
+                  if (result.completed) {
+                    clearTravelTimer();
+                    manager.completeTravel();
+                    get().completeTravel();
+                  }
+                }, 250);
+              } else {
+                // TravelManager lost state — fall back to instant completion
+                get().completeTravel();
+              }
               return;
             }
             if (combatState.phase === 'fled') {

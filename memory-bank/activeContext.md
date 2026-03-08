@@ -31,15 +31,16 @@ A dedicated Babylon look‑dev route exists to evaluate visual identity and envi
 - `scripts/blender/optimize_western_town.py` — splits/optimizes western town and retextures with AmbientCG
 - `scripts/generate_western_parts_manifest.mjs` — part manifest generator (if needed)
 
-## Content‑Gen (Meshy) — Migrated to Agentic Library
+## Content‑Gen (Meshy) — Migrated + Running
 
 Meshy generation now uses `@agentic-dev-library/meshy-content-generator`:
-- Shared task definitions in `assets/content/tasks/definitions`
-- Per‑asset pipeline definition stored alongside the asset (e.g. `assets/content/characters/iron-frontier-hero/iron-frontier-hero.pipeline.json`)
-- Hero manifest updated to new schema, including style variants for retexturing
-- Root scripts now call `content-gen run` with local pipelines/tasks
+- Shared task definitions live under `assets/content/tasks/definitions`.
+- Each asset directory hosts its own `*.pipeline.json` (hero pipeline at `assets/content/characters/iron-frontier-hero/iron-frontier-hero.pipeline.json`).
+- Added `scripts/content-gen-run.ts` to mirror the CLI while staying inside our monorepo’s exports.
+- Runner enhancements now fetch final task responses, tolerate array outputs, and skip empty URLs/artifacts.
+- Fresh hero manifest with variants, plus full exports (`concep‌ts`, `preview`, `refined`, variant GLBs) now live under `assets/content/characters/iron-frontier-hero/`.
 
-**Status:** ready to resume generating the hero once API keys are configured.
+**Status:** hero pipeline fully executed (concept→preview→refine→variants→rigging→animations). Running pipeline on additional assets is the next real‑world step.
 
 ## Golden Path (Next)
 
