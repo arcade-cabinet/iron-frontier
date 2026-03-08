@@ -54,31 +54,52 @@ export type InteriorChangeCallback = (interior: InteriorState | null) => void;
  */
 const ARCHETYPE_NPC_SLOTS: Record<string, Array<{ x: number; z: number; role: string }>> = {
   saloon: [
-    { x: 0, z: -2, role: 'bartender' },
+    { x: 0, z: -2.5, role: 'bartender' },
     { x: -3, z: 1, role: 'gambler' },
     { x: 3, z: 1, role: 'drifter' },
   ],
   general_store: [
-    { x: 0, z: -1.5, role: 'merchant' },
+    { x: 0, z: -2.5, role: 'merchant' },
   ],
   sheriff_office: [
-    { x: 0, z: -2, role: 'sheriff' },
-    { x: -2, z: 0, role: 'deputy' },
+    { x: -1.5, z: 1.0, role: 'sheriff' },
+    { x: 2.0, z: -1.0, role: 'deputy' },
   ],
   bank: [
-    { x: 0, z: -2, role: 'banker' },
+    { x: 0, z: -2.0, role: 'banker' },
   ],
-  hotel: [
-    { x: 0, z: -1.5, role: 'merchant' },
+  inn: [
+    { x: -1.5, z: 1.5, role: 'innkeeper' },
+  ],
+  church: [
+    { x: 0, z: -5.0, role: 'preacher' },
+  ],
+  blacksmith: [
+    { x: 0.5, z: 1.0, role: 'blacksmith' },
+  ],
+  doctor_office: [
+    { x: -2.0, z: 1.0, role: 'doctor' },
+  ],
+  newspaper: [
+    { x: -2.0, z: 1.0, role: 'editor' },
+  ],
+  mining_office: [
+    { x: 0, z: -0.5, role: 'mining_foreman' },
+  ],
+  livery: [
+    { x: 0, z: 2.0, role: 'stablehand' },
+  ],
+  telegraph_office: [
+    { x: 0, z: -1.2, role: 'telegraph_operator' },
+  ],
+  undertaker: [
+    { x: 2.0, z: -2.0, role: 'undertaker' },
+  ],
+  barber: [
+    { x: -1.2, z: -0.5, role: 'barber' },
   ],
   stable: [
     { x: 0, z: -2, role: 'rancher' },
-  ],
-  mine_entrance: [
-    { x: -1, z: -1, role: 'miner' },
-  ],
-  train_station: [
-    { x: 0, z: -2, role: 'merchant' },
   ],
   house_small: [],
   house_large: [],
