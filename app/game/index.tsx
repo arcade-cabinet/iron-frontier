@@ -188,7 +188,6 @@ export default function GameScreen() {
     activePuzzle,
     togglePanel,
     closePanel,
-    openPanel,
     travelTo,
   } = useGameStoreShallow((s) => ({
     phase: s.phase,
@@ -200,7 +199,6 @@ export default function GameScreen() {
     activePuzzle: s.activePuzzle,
     togglePanel: s.togglePanel,
     closePanel: s.closePanel,
-    openPanel: s.openPanel,
     travelTo: s.travelTo,
   }));
 
@@ -384,12 +382,6 @@ export default function GameScreen() {
 
     return () => subscription.remove();
   }, [activePanel, worldMapOpen, menuOpen, closePanel]);
-
-  // --- Navigate back to title on game over restart ---
-  const handleReturnToTitle = useCallback(() => {
-    gameOrchestrator.teardown();
-    router.replace('/');
-  }, [router]);
 
   // --- Callbacks ---
   const handleCloseInventory = useCallback(() => {

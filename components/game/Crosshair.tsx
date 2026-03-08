@@ -12,7 +12,7 @@
 // tick frequency to React render cycles.
 
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 // ---------------------------------------------------------------------------

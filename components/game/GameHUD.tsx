@@ -325,7 +325,7 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
   }));
 
   const insets = useSafeAreaInsets();
-  const { isPhone, isDesktop } = useResponsive();
+  const { isPhone } = useResponsive();
 
   const fLabel = fatigueLabel(fatigueCurrent);
   const fVariant = fatigueBadgeVariant(fLabel);

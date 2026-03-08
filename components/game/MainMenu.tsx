@@ -6,8 +6,8 @@
  */
 
 import * as React from 'react';
-import { Alert, FlatList, Modal, Pressable, ScrollView, View } from 'react-native';
-import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
+import { Alert, Modal, Pressable, ScrollView, View } from 'react-native';
+import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 
 import { cn } from '@/lib/utils';
 import {
@@ -176,7 +176,6 @@ export function MainMenu({ onClose }: { onClose?: () => void } = {}) {
   const saveToSlot = gameStore((s) => s.saveToSlot);
   const loadFromSlot = gameStore((s) => s.loadFromSlot);
   const getSaveSlots = gameStore((s) => s.getSaveSlots);
-  const saveGame = gameStore((s) => s.saveGame);
   const resetGame = gameStore((s) => s.resetGame);
   const setPhase = gameStore((s) => s.setPhase);
   const closePanel = gameStore((s) => s.closePanel);
