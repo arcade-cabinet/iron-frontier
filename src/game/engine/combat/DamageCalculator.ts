@@ -19,7 +19,10 @@ export interface WeaponConfig {
   weaponType: string;
   rarity: string;
   damage: number;
+  /** Effective range in meters — full damage within this distance. */
   range: number;
+  /** Maximum range in meters — damage drops to 0 beyond this. Falls back to range * 1.5 if absent. */
+  maxRange?: number;
   accuracy: number;
   fireRate: number;
   reloadTime: number;
@@ -28,6 +31,25 @@ export interface WeaponConfig {
   ammoType: string;
   value: number;
   weight: number;
+  /** Multiplier applied to fire rate when an enemy uses this weapon (< 1 = slower). */
+  enemyFireRateMultiplier?: number;
+}
+
+export interface FpsAccuracyConfig {
+  /** Base accuracy percentage (0-100) at close range. */
+  baseAccuracy: number;
+  /** Distance (meters) at which accuracy starts to fall off. */
+  falloffStartDistance: number;
+  /** Distance (meters) at which accuracy reaches minAccuracy. */
+  falloffEndDistance: number;
+  /** Minimum accuracy percentage at or beyond falloffEndDistance. */
+  minAccuracy: number;
+  /** Accuracy bonus when the enemy is behind cover. */
+  coverBonus: number;
+  /** Minimum reaction delay (seconds) before first shot. */
+  reactionTimeMin: number;
+  /** Maximum reaction delay (seconds) before first shot. */
+  reactionTimeMax: number;
 }
 
 export interface EnemyConfig {
@@ -61,6 +83,8 @@ export interface EnemyConfig {
     accuracyPerLevel: number;
     evasionPerLevel: number;
   };
+  /** FPS-specific accuracy, reaction time, and cover modifiers. */
+  fpsAccuracy?: FpsAccuracyConfig;
   behaviorTags: string[];
   minLevel: number;
   maxLevel: number;
@@ -142,13 +166,14 @@ const HEADSHOT_MULTIPLIER = 2.5;
  * - Between `effectiveRange` and `maxRange`: linear falloff to 0
  * - Beyond `maxRange`: 0 damage
  *
- * For melee weapons (range === 0) we use a fixed 2-unit effective range.
+ * For melee weapons (range <= 2) we use the weapon's own range/maxRange.
  */
 export function distanceFalloff(
   distance: number,
   weaponRange: number,
+  weaponMaxRange?: number,
 ): number {
-  // Melee weapons: full damage within 2 units, drops to 0 at 3
+  // Melee weapons: use range directly (typically 2m effective, 2.5m max)
   if (weaponRange <= 0) {
     const meleeEffective = 2;
     const meleeMax = 3;
@@ -157,13 +182,117 @@ export function distanceFalloff(
     return 1 - (distance - meleeEffective) / (meleeMax - meleeEffective);
   }
 
-  // Ranged: effective range = weapon.range, max range = 1.5x weapon.range
   const effectiveRange = weaponRange;
-  const maxRange = weaponRange * 1.5;
+  const maxRange = weaponMaxRange ?? weaponRange * 1.5;
 
   if (distance <= effectiveRange) return 1;
   if (distance >= maxRange) return 0;
   return 1 - (distance - effectiveRange) / (maxRange - effectiveRange);
+}
+
+// ---------------------------------------------------------------------------
+// Enemy accuracy falloff (FPS)
+// ---------------------------------------------------------------------------
+
+/**
+ * Compute an enemy's effective accuracy at a given distance.
+ *
+ * Uses the enemy's fpsAccuracy config to interpolate between baseAccuracy
+ * and minAccuracy based on distance falloff bands. Applies difficulty
+ * modifier and optional cover penalty (reduces enemy hit chance when
+ * player is behind cover).
+ *
+ * @param enemyId - Enemy definition ID
+ * @param level - Enemy level
+ * @param distance - Distance to target in meters
+ * @param difficulty - Current difficulty level
+ * @param playerBehindCover - Whether the player is currently behind cover
+ * @returns Effective accuracy percentage (0-100)
+ */
+export function getEnemyAccuracyAtDistance(
+  enemyId: string,
+  level: number,
+  distance: number,
+  difficulty: DifficultyLevel,
+  playerBehindCover: boolean = false,
+): number {
+  const enemy = getEnemyConfig(enemyId);
+  if (!enemy) return 30;
+
+  const diff = getDifficultyConfig(difficulty);
+  const fps = enemy.fpsAccuracy;
+
+  if (!fps) {
+    // Legacy fallback: flat accuracy + level scaling + difficulty mod
+    return Math.max(
+      5,
+      Math.min(
+        95,
+        enemy.baseStats.accuracy +
+          enemy.scaling.accuracyPerLevel * (level - 1) +
+          diff.enemyAccuracyMod,
+      ),
+    );
+  }
+
+  // Base accuracy with level scaling
+  let accuracy = fps.baseAccuracy + enemy.scaling.accuracyPerLevel * (level - 1);
+
+  // Distance falloff
+  if (distance > fps.falloffStartDistance) {
+    if (distance >= fps.falloffEndDistance) {
+      accuracy = fps.minAccuracy;
+    } else {
+      const t =
+        (distance - fps.falloffStartDistance) /
+        (fps.falloffEndDistance - fps.falloffStartDistance);
+      accuracy = accuracy - t * (accuracy - fps.minAccuracy);
+    }
+  }
+
+  // Player behind cover reduces enemy accuracy
+  if (playerBehindCover) {
+    accuracy -= fps.coverBonus;
+  }
+
+  // Difficulty modifier
+  accuracy += diff.enemyAccuracyMod;
+
+  return Math.max(5, Math.min(95, accuracy));
+}
+
+/**
+ * Get the reaction time for an enemy before they fire their first shot.
+ *
+ * @param enemyId - Enemy definition ID
+ * @param alertness - 0 (idle/surprised) to 1 (fully alert/already in combat)
+ * @returns Reaction delay in seconds
+ */
+export function getEnemyReactionTime(
+  enemyId: string,
+  alertness: number = 0,
+): number {
+  const enemy = getEnemyConfig(enemyId);
+  if (!enemy?.fpsAccuracy) return 1.0;
+
+  const fps = enemy.fpsAccuracy;
+  // Higher alertness = closer to minimum reaction time
+  const t = Math.max(0, Math.min(1, alertness));
+  return fps.reactionTimeMax - t * (fps.reactionTimeMax - fps.reactionTimeMin);
+}
+
+/**
+ * Get the fire rate for an enemy using a specific weapon.
+ * Enemies fire slightly slower than the player to give the player an edge.
+ *
+ * @param weaponId - Weapon config ID
+ * @returns Fire rate in shots per second
+ */
+export function getEnemyFireRate(weaponId: string): number {
+  const weapon = getWeaponConfig(weaponId);
+  if (!weapon) return 0.8;
+  const multiplier = weapon.enemyFireRateMultiplier ?? 0.8;
+  return weapon.fireRate * multiplier;
 }
 
 // ---------------------------------------------------------------------------
@@ -187,7 +316,7 @@ export interface DamageResult {
  * Calculate damage dealt by the player to an enemy.
  *
  * @param weaponId - ID of the weapon being fired (from weapons.json)
- * @param distance - Distance from player to target in world units
+ * @param distance - Distance from player to target in meters
  * @param isHeadshot - Whether the ray hit the headshot zone
  * @param difficulty - Current difficulty level
  * @param enemyArmor - Target's armor value (flat damage reduction)
@@ -216,8 +345,8 @@ export function calculateDamage(
   // Base damage
   let dmg = weapon.damage;
 
-  // Distance falloff
-  const falloff = distanceFalloff(distance, weapon.range);
+  // Distance falloff (uses maxRange from config)
+  const falloff = distanceFalloff(distance, weapon.range, weapon.maxRange);
   dmg *= falloff;
 
   // Headshot multiplier
@@ -260,7 +389,7 @@ export interface EnemyDamageResult {
  * @param enemyLevel - Current level of the enemy instance
  * @param playerArmor - Player's current armor value
  * @param difficulty - Current difficulty level
- * @param distance - Distance from enemy to player (for ranged falloff)
+ * @param distance - Distance from enemy to player in meters (for ranged falloff)
  * @returns Damage result
  */
 export function calculateEnemyDamage(
@@ -285,7 +414,7 @@ export function calculateEnemyDamage(
   if (enemy.weaponId) {
     const weapon = getWeaponConfig(enemy.weaponId);
     if (weapon && weapon.range > 0) {
-      dmg *= distanceFalloff(distance, weapon.range);
+      dmg *= distanceFalloff(distance, weapon.range, weapon.maxRange);
     }
   }
 

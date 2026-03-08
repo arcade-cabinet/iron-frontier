@@ -11,7 +11,7 @@
       "stackable": false,
       "icon": "revolver",
       "tags": ["weapon", "firearm", "pistol"],
-      "weaponStats": { "weaponType": "revolver", "damage": 15, "range": 30, "accuracy": 70, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 3 }
+      "weaponStats": { "weaponType": "revolver", "damage": 20, "range": 25, "maxRange": 40, "accuracy": 72, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 3 }
     },
     {
       "id": "revolver_basic",
@@ -24,7 +24,7 @@
       "stackable": false,
       "icon": "revolver",
       "tags": ["weapon", "firearm", "pistol"],
-      "weaponStats": { "weaponType": "revolver", "damage": 15, "range": 30, "accuracy": 70, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 3 }
+      "weaponStats": { "weaponType": "revolver", "damage": 20, "range": 25, "maxRange": 40, "accuracy": 72, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 3 }
     },
     {
       "id": "navy_revolver",
@@ -37,7 +37,7 @@
       "stackable": false,
       "icon": "revolver",
       "tags": ["weapon", "firearm", "pistol"],
-      "weaponStats": { "weaponType": "revolver", "damage": 18, "range": 32, "accuracy": 75, "fireRate": 1.6, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.8 }
+      "weaponStats": { "weaponType": "revolver", "damage": 24, "range": 28, "maxRange": 42, "accuracy": 76, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.8 }
     },
     {
       "id": "schofield",
@@ -50,7 +50,7 @@
       "stackable": false,
       "icon": "revolver",
       "tags": ["weapon", "firearm", "pistol", "premium"],
-      "weaponStats": { "weaponType": "revolver", "damage": 22, "range": 35, "accuracy": 82, "fireRate": 1.8, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.0 }
+      "weaponStats": { "weaponType": "revolver", "damage": 28, "range": 30, "maxRange": 45, "accuracy": 82, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.0 }
     },
     {
       "id": "revolver_fancy",
@@ -63,7 +63,7 @@
       "stackable": false,
       "icon": "revolver_fancy",
       "tags": ["weapon", "firearm", "pistol", "fancy"],
-      "weaponStats": { "weaponType": "revolver", "damage": 20, "range": 35, "accuracy": 80, "fireRate": 1.8, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.5 }
+      "weaponStats": { "weaponType": "revolver", "damage": 26, "range": 30, "maxRange": 45, "accuracy": 80, "fireRate": 1.5, "ammoType": "pistol", "clipSize": 6, "reloadTime": 2.5 }
     },
     {
       "id": "hunting_rifle",
@@ -76,7 +76,7 @@
       "stackable": false,
       "icon": "rifle",
       "tags": ["weapon", "firearm", "rifle", "long_gun"],
-      "weaponStats": { "weaponType": "rifle", "damage": 30, "range": 120, "accuracy": 88, "fireRate": 0.5, "ammoType": "rifle", "clipSize": 5, "reloadTime": 5 }
+      "weaponStats": { "weaponType": "rifle", "damage": 45, "range": 80, "maxRange": 150, "accuracy": 88, "fireRate": 0.6, "ammoType": "rifle", "clipSize": 5, "reloadTime": 5 }
     },
     {
       "id": "repeater",
@@ -89,7 +89,7 @@
       "stackable": false,
       "icon": "rifle",
       "tags": ["weapon", "firearm", "rifle", "long_gun"],
-      "weaponStats": { "weaponType": "rifle", "damage": 22, "range": 90, "accuracy": 80, "fireRate": 1.0, "ammoType": "rifle", "clipSize": 12, "reloadTime": 3.5 }
+      "weaponStats": { "weaponType": "rifle", "damage": 32, "range": 60, "maxRange": 100, "accuracy": 80, "fireRate": 1.0, "ammoType": "rifle", "clipSize": 12, "reloadTime": 3.5 }
     },
     {
       "id": "rifle_winchester",
@@ -102,7 +102,7 @@
       "stackable": false,
       "icon": "rifle",
       "tags": ["weapon", "firearm", "rifle", "long_gun"],
-      "weaponStats": { "weaponType": "rifle", "damage": 25, "range": 100, "accuracy": 85, "fireRate": 0.8, "ammoType": "rifle", "clipSize": 15, "reloadTime": 4 }
+      "weaponStats": { "weaponType": "rifle", "damage": 38, "range": 70, "maxRange": 120, "accuracy": 85, "fireRate": 0.8, "ammoType": "rifle", "clipSize": 15, "reloadTime": 4 }
     },
     {
       "id": "shotgun",
@@ -115,7 +115,7 @@
       "stackable": false,
       "icon": "shotgun",
       "tags": ["weapon", "firearm", "shotgun", "close_range"],
-      "weaponStats": { "weaponType": "shotgun", "damage": 35, "range": 12, "accuracy": 55, "fireRate": 0.6, "ammoType": "shotgun", "clipSize": 5, "reloadTime": 4 }
+      "weaponStats": { "weaponType": "shotgun", "damage": 80, "range": 10, "maxRange": 20, "accuracy": 65, "fireRate": 0.6, "ammoType": "shotgun", "clipSize": 5, "reloadTime": 4 }
     },
     {
       "id": "shotgun_coach",
@@ -128,7 +128,7 @@
       "stackable": false,
       "icon": "shotgun",
       "tags": ["weapon", "firearm", "shotgun", "close_range"],
-      "weaponStats": { "weaponType": "shotgun", "damage": 40, "range": 15, "accuracy": 60, "fireRate": 0.5, "ammoType": "shotgun", "clipSize": 2, "reloadTime": 3 }
+      "weaponStats": { "weaponType": "shotgun", "damage": 90, "range": 12, "maxRange": 22, "accuracy": 68, "fireRate": 0.5, "ammoType": "shotgun", "clipSize": 2, "reloadTime": 3 }
     },
     {
       "id": "hunting_knife",
@@ -141,7 +141,7 @@
       "stackable": false,
       "icon": "knife",
       "tags": ["weapon", "melee", "blade", "tool"],
-      "weaponStats": { "weaponType": "knife", "damage": 8, "range": 0, "accuracy": 85, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "knife", "damage": 25, "range": 2, "maxRange": 2.5, "accuracy": 90, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "bowie_knife",
@@ -154,7 +154,7 @@
       "stackable": false,
       "icon": "knife",
       "tags": ["weapon", "melee", "blade"],
-      "weaponStats": { "weaponType": "knife", "damage": 12, "range": 0, "accuracy": 88, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "knife", "damage": 32, "range": 2, "maxRange": 2.5, "accuracy": 92, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "knife_bowie",
@@ -167,7 +167,7 @@
       "stackable": false,
       "icon": "knife",
       "tags": ["weapon", "melee", "blade"],
-      "weaponStats": { "weaponType": "knife", "damage": 10, "range": 0, "accuracy": 90, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "knife", "damage": 28, "range": 2, "maxRange": 2.5, "accuracy": 90, "fireRate": 2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "machete",
@@ -180,7 +180,7 @@
       "stackable": false,
       "icon": "knife",
       "tags": ["weapon", "melee", "blade", "tool"],
-      "weaponStats": { "weaponType": "knife", "damage": 14, "range": 0, "accuracy": 80, "fireRate": 1.5, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "knife", "damage": 35, "range": 2, "maxRange": 2.5, "accuracy": 85, "fireRate": 1.5, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "reinforced_knife",
@@ -193,7 +193,7 @@
       "stackable": false,
       "icon": "knife",
       "tags": ["weapon", "melee", "blade", "premium"],
-      "weaponStats": { "weaponType": "knife", "damage": 18, "range": 0, "accuracy": 92, "fireRate": 2.2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "knife", "damage": 40, "range": 2, "maxRange": 2.5, "accuracy": 92, "fireRate": 2.2, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "pickaxe",
@@ -206,7 +206,7 @@
       "stackable": false,
       "icon": "pickaxe",
       "tags": ["weapon", "melee", "tool", "mining"],
-      "weaponStats": { "weaponType": "melee", "damage": 16, "range": 0, "accuracy": 70, "fireRate": 0.8, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "melee", "damage": 38, "range": 2, "maxRange": 2.5, "accuracy": 75, "fireRate": 0.8, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     },
     {
       "id": "dynamite",
@@ -220,7 +220,7 @@
       "maxStack": 10,
       "icon": "dynamite",
       "tags": ["weapon", "explosive", "thrown"],
-      "weaponStats": { "weaponType": "explosive", "damage": 50, "range": 20, "accuracy": 65, "fireRate": 0.3, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
+      "weaponStats": { "weaponType": "explosive", "damage": 120, "range": 8, "maxRange": 8, "accuracy": 65, "fireRate": 0.3, "ammoType": "none", "clipSize": 0, "reloadTime": 0 }
     }
   ],
   "consumables": [

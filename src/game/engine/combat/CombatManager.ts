@@ -411,8 +411,10 @@ function performRaycast(
 
   _raycaster.setFromCamera(aimPoint, camera);
 
-  // Set max distance based on weapon range (1.5x for the falloff zone)
-  const maxRange = weaponConfig.range > 0 ? weaponConfig.range * 1.5 : 3;
+  // Set max distance based on weapon maxRange (or fallback to 1.5x effective range)
+  const maxRange = weaponConfig.range > 0
+    ? (weaponConfig.maxRange ?? weaponConfig.range * 1.5)
+    : 3;
   _raycaster.far = maxRange;
 
   // Collect all enemy mesh groups for intersection testing

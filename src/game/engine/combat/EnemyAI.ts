@@ -19,7 +19,13 @@ import {
   WanderBehavior,
 } from 'yuka';
 import type { EnemyConfig } from './DamageCalculator';
-import { getEnemyConfig, getWeaponConfig } from './DamageCalculator';
+import {
+  getEnemyConfig,
+  getWeaponConfig,
+  getEnemyAccuracyAtDistance,
+  getEnemyReactionTime,
+  getEnemyFireRate,
+} from './DamageCalculator';
 
 // ---------------------------------------------------------------------------
 // AI States
@@ -83,6 +89,12 @@ export interface EnemyAIState {
   seed: string;
   /** YUKA vehicle for steering behaviors. */
   vehicle: Vehicle;
+  /** Reaction delay remaining before first shot (seconds). */
+  reactionTimer: number;
+  /** Whether the enemy has completed its initial reaction delay. */
+  hasReacted: boolean;
+  /** How alert the enemy is (0 = idle/surprised, 1 = fully alert). Persists across state transitions. */
+  alertness: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -90,10 +102,10 @@ export interface EnemyAIState {
 // ---------------------------------------------------------------------------
 
 /** Base detection radius (can see player within this distance). */
-const DETECTION_RADIUS = 25;
+const DETECTION_RADIUS = 30;
 /** Alert radius (react to gunfire within this distance). */
-const ALERT_RADIUS = 40;
-/** Melee attack range. */
+const ALERT_RADIUS = 50;
+/** Melee attack range in meters. */
 const MELEE_RANGE = 2.5;
 /** Flee health threshold (percentage). */
 const FLEE_THRESHOLD = 0.2;
@@ -156,6 +168,9 @@ export function createEnemyAI(
     patrolIndex: 0,
     seed,
     vehicle,
+    reactionTimer: 0,
+    hasReacted: false,
+    alertness: 0,
   };
 }
 
@@ -243,6 +258,16 @@ export function updateEnemyAI(
   const isMelee = config.behaviorTags.includes('melee') || config.behaviorTags.includes('charges');
   const healthPct = ai.health / ai.maxHealth;
 
+  // Gradually build alertness when in combat states
+  if (ai.state === 'attack' || ai.state === 'pursue') {
+    ai.alertness = Math.min(1, ai.alertness + dt * 0.5);
+  } else if (ai.state === 'alert') {
+    ai.alertness = Math.min(0.5, ai.alertness + dt * 0.3);
+  } else {
+    // Decay alertness when idle/patrolling
+    ai.alertness = Math.max(0, ai.alertness - dt * 0.1);
+  }
+
   // Check for death
   if (ai.health <= 0) {
     ai.state = 'dead';
@@ -269,10 +294,15 @@ export function updateEnemyAI(
         ai.state = 'alert';
         ai.stateTimer = 0;
         ai.lastKnownPlayerPos = { ...playerPos };
+        // Reset reaction timer on new detection
+        ai.hasReacted = false;
+        ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
       } else if (playerFired && dist <= ALERT_RADIUS) {
         ai.state = 'alert';
         ai.stateTimer = 0;
         ai.lastKnownPlayerPos = { ...playerPos };
+        ai.hasReacted = false;
+        ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
       }
       return { type: 'none' };
     }
@@ -285,6 +315,8 @@ export function updateEnemyAI(
         ai.state = 'alert';
         ai.stateTimer = 0;
         ai.lastKnownPlayerPos = { ...playerPos };
+        ai.hasReacted = false;
+        ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
         return { type: 'none' };
       }
 
@@ -292,6 +324,8 @@ export function updateEnemyAI(
         ai.state = 'alert';
         ai.stateTimer = 0;
         ai.lastKnownPlayerPos = { ...playerPos };
+        ai.hasReacted = false;
+        ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
         return { type: 'none' };
       }
 
@@ -320,18 +354,26 @@ export function updateEnemyAI(
     case 'alert': {
       ai.alertTimer += dt;
 
+      // Tick down reaction timer
+      if (!ai.hasReacted) {
+        ai.reactionTimer -= dt;
+        if (ai.reactionTimer <= 0) {
+          ai.hasReacted = true;
+        }
+      }
+
       if (canSeePlayer) {
         ai.lastKnownPlayerPos = { ...playerPos };
       }
 
-      // Aggressive enemies transition to pursue/attack quickly
+      // Aggressive enemies transition to pursue/attack quickly (after reaction)
       const isAggressive = config.behaviorTags.includes('aggressive');
       const alertThreshold = isAggressive ? 0.5 : 1.5;
 
-      if (ai.alertTimer >= alertThreshold) {
+      if (ai.alertTimer >= alertThreshold && ai.hasReacted) {
         if (canSeePlayer) {
           // Decide whether to pursue or attack based on distance
-          const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 20);
+          const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
           if (dist <= attackRange) {
             ai.state = 'attack';
           } else {
@@ -367,7 +409,7 @@ export function updateEnemyAI(
       }
 
       // Check if in attack range
-      const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 20);
+      const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
 
       if (canSeePlayer && dist <= attackRange) {
         ai.state = 'attack';
@@ -395,7 +437,7 @@ export function updateEnemyAI(
 
       ai.lastKnownPlayerPos = { ...playerPos };
 
-      const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 20);
+      const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
 
       // Out of range, switch to pursue
       if (dist > attackRange * 1.2) {
@@ -427,18 +469,22 @@ export function updateEnemyAI(
         return { type: 'none' };
       }
 
-      // Compute attack cooldown from weapon fire rate or base rate
-      let fireRate = 1.0; // attacks per second
+      // Compute attack cooldown from enemy-adjusted weapon fire rate
+      let fireRate = 0.8; // attacks per second (default)
       if (config.weaponId) {
-        const weapon = getWeaponConfig(config.weaponId);
-        if (weapon) fireRate = weapon.fireRate;
+        fireRate = getEnemyFireRate(config.weaponId);
       }
       ai.attackCooldown = 1.0 / Math.max(0.1, fireRate);
 
-      // Accuracy check using enemy stats
+      // FPS accuracy check: uses distance-based falloff
       const accuracyRoll = rng() * 100;
-      const hitChance = config.baseStats.accuracy +
-        config.scaling.accuracyPerLevel * (ai.level - 1);
+      const hitChance = getEnemyAccuracyAtDistance(
+        ai.enemyId,
+        ai.level,
+        dist,
+        'normal', // difficulty applied externally by CombatManager
+        false,    // cover check would be done by CombatManager with scene info
+      );
 
       if (accuracyRoll > hitChance) {
         // Missed — still consume the attack cooldown
