@@ -12,10 +12,16 @@
 export { AudioProvider, useAudioSettings } from './AudioProvider';
 
 // ---------------------------------------------------------------------------
-// HUD & Overlays
+// HUD & Overlays (always-visible ambient HUD)
 // ---------------------------------------------------------------------------
 
 export { GameHUD } from './GameHUD';
+export { CompassBar } from './CompassBar';
+export { PlayerVitals } from './PlayerVitals';
+export { AmmoDisplay } from './AmmoDisplay';
+export { StealthIndicator } from './StealthIndicator';
+export { DamageIndicator } from './DamageIndicator';
+export { QuestNotification } from './QuestNotification';
 export { NotificationFeed } from './NotificationFeed';
 export { GameOverScreen } from './GameOverScreen';
 export { DamageFlash } from './DamageFlash';

@@ -20,6 +20,12 @@ import { usePlatform } from '@/hooks/usePlatform';
 
 import { GameScene } from '@/components/scene';
 import { GameHUD } from '@/components/game/GameHUD';
+import { CompassBar } from '@/components/game/CompassBar';
+import { PlayerVitals } from '@/components/game/PlayerVitals';
+import { AmmoDisplay } from '@/components/game/AmmoDisplay';
+import { StealthIndicator } from '@/components/game/StealthIndicator';
+import { DamageIndicator } from '@/components/game/DamageIndicator';
+import { QuestNotification } from '@/components/game/QuestNotification';
 import { DialogueBox } from '@/components/game/DialogueBox';
 import { InteractionPrompt } from '@/components/game/InteractionPrompt';
 import { InventoryPanel } from '@/components/game/InventoryPanel';
@@ -452,22 +458,51 @@ export default function GameScreen() {
         {/* Notification toast feed */}
         <NotificationFeed />
 
+        {/* Quest notification toasts (upper-right, slide-in) */}
+        <QuestNotification />
+
+        {/* Directional damage indicators (full-screen arcs) */}
+        <DamageIndicator />
+
         {/* --- EXPLORING PHASE --- */}
 
-        {/* HUD: health, quest, time, provisions */}
+        {/* Legacy HUD: location, time, quest summary, gold/fatigue/provisions */}
         {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
           <GameHUD />
+        )}
+
+        {/* Fallout-style compass bar (top center) */}
+        {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          <CompassBar />
+        )}
+
+        {/* Fallout-style player vitals (bottom-left: HP, stamina, food/water) */}
+        {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          <PlayerVitals />
+        )}
+
+        {/* Fallout-style ammo display (bottom-right: clip / total, weapon name) */}
+        {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          <AmmoDisplay />
+        )}
+
+        {/* Stealth detection indicator (center, below compass) */}
+        {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          <StealthIndicator />
         )}
 
         {/* Red damage flash overlay (scales with damage intensity) */}
         <DamageFlash />
 
-        {/* Crosshair */}
+        {/* Fallout-style bracket crosshair (> <) */}
         {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
-          <Crosshair visible />
+          <Crosshair
+            visible
+            isTargetingInteractable={!!interactionTarget}
+          />
         )}
 
-        {/* Interaction prompt (bottom-center, shows when near an interactable) */}
+        {/* Interaction prompt (center-bottom, Fallout-style amber glow text) */}
         {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
           <InteractionPrompt target={interactionTarget} />
         )}

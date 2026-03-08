@@ -1,15 +1,19 @@
 /**
- * InteractionPrompt - Bottom-center overlay showing available interactions
+ * InteractionPrompt - Fallout-style contextual interaction overlay.
  *
- * Displays a context-sensitive prompt when the player is near an interactable
- * entity (NPC, building door, item). Uses Reanimated for fade in/out animation
- * and frontier-themed styling consistent with DialogueBox and GameHUD.
+ * Center-bottom of screen, just above crosshair area. Shows contextual text
+ * like "[E] Talk to Sheriff Cole" / "[E] Open Door" / "[E] Search".
+ *
+ * Desktop: amber text with subtle glow, no background box (clean like Fallout 3).
+ * Mobile: shows as a tappable button instead of keyboard hint.
+ *
+ * Fades in/out based on interaction proximity.
  *
  * @module components/game/InteractionPrompt
  */
 
 import * as React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -21,88 +25,38 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/ui/Text';
+import { usePlatform } from '@/hooks/usePlatform';
 import type { InteractionTarget, InteractionType } from '@/src/game/systems/InteractionSystem';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
+const HUD_AMBER = '#D4A855';
+const HUD_TEXT = '#E8D5A8';
+const HUD_BG = 'rgba(20, 15, 10, 0.7)';
+
+const MONO_FONT = Platform.select({
+  ios: 'Menlo',
+  android: 'monospace',
+  default: 'monospace',
+});
+
 /** Map interaction type to a verb for the prompt text. */
 const ACTION_VERBS: Record<InteractionType, string> = {
-  talk: 'talk to',
-  shop: 'trade with',
-  enter: 'enter',
-  pickup: 'pick up',
+  talk: 'Talk to',
+  shop: 'Trade with',
+  enter: 'Enter',
+  pickup: 'Pick up',
 };
 
-/** Map interaction type to a key icon/label for the prompt. */
+/** Map interaction type to a key label for the prompt. */
 const ACTION_KEYS: Record<InteractionType, string> = {
   talk: 'E',
   shop: 'E',
   enter: 'E',
   pickup: 'E',
 };
-
-/** Map interaction type to a subtle indicator icon. */
-const ACTION_ICONS: Record<InteractionType, string> = {
-  talk: '\u2767', // Rotated floral heart (decorative)
-  shop: '\u2696', // Scales (trade)
-  enter: '\u25B6', // Right-pointing triangle (enter)
-  pickup: '\u2B06', // Upwards arrow (pick up)
-};
-
-// ============================================================================
-// SUB-COMPONENTS
-// ============================================================================
-
-/** Pulsing key badge (E key indicator). */
-function KeyBadge({ keyLabel }: { keyLabel: string }) {
-  const pulse = useSharedValue(1);
-
-  React.useEffect(() => {
-    pulse.value = withRepeat(
-      withSequence(
-        withTiming(0.7, { duration: 800 }),
-        withTiming(1, { duration: 800 }),
-      ),
-      -1, // infinite
-      true,
-    );
-  }, [pulse]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: pulse.value,
-  }));
-
-  return (
-    <Animated.View
-      style={[
-        {
-          width: 28,
-          height: 28,
-          borderRadius: 6,
-          borderWidth: 1.5,
-          borderColor: '#f59e0b', // amber-500
-          backgroundColor: 'rgba(120, 53, 15, 0.6)', // amber-900/60
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        animatedStyle,
-      ]}
-    >
-      <Text
-        style={{
-          color: '#fbbf24', // amber-400
-          fontSize: 13,
-          fontWeight: '700',
-          fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace', default: 'monospace' }),
-        }}
-      >
-        {keyLabel}
-      </Text>
-    </Animated.View>
-  );
-}
 
 // ============================================================================
 // MAIN COMPONENT
@@ -111,99 +65,135 @@ function KeyBadge({ keyLabel }: { keyLabel: string }) {
 export interface InteractionPromptProps {
   /** The current interaction target, or null when nothing is in range. */
   target: InteractionTarget | null;
+  /** Callback when the mobile tap button is pressed. */
+  onTap?: () => void;
 }
 
-export function InteractionPrompt({ target }: InteractionPromptProps) {
+export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
   const insets = useSafeAreaInsets();
+  const { isTouchDevice, isWeb } = usePlatform();
+
+  // Subtle pulse on the key badge
+  const pulse = useSharedValue(1);
+
+  React.useEffect(() => {
+    if (!target) return;
+    pulse.value = withRepeat(
+      withSequence(
+        withTiming(0.6, { duration: 900 }),
+        withTiming(1, { duration: 900 }),
+      ),
+      -1,
+      true,
+    );
+  }, [target, pulse]);
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    opacity: pulse.value,
+  }));
 
   if (!target) return null;
 
   const verb = ACTION_VERBS[target.type];
   const keyLabel = ACTION_KEYS[target.type];
-  const icon = ACTION_ICONS[target.type];
+  const showMobileButton = isTouchDevice && !isWeb;
 
-  return (
-    <View
-      className="absolute inset-x-0 z-40 items-center"
-      style={{ bottom: Math.max(insets.bottom, 16) + 16 }}
-      pointerEvents="none"
+  const content = (
+    <Animated.View
+      entering={FadeIn.duration(200)}
+      exiting={FadeOut.duration(300)}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        // Mobile: add background for tap target; Desktop: clean/transparent
+        ...(showMobileButton
+          ? {
+              backgroundColor: HUD_BG,
+              paddingHorizontal: 16,
+              paddingVertical: 10,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: `${HUD_AMBER}44`,
+            }
+          : {}),
+      }}
     >
-      <Animated.View
-        entering={FadeIn.duration(200)}
-        exiting={FadeOut.duration(150)}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 10,
-          paddingHorizontal: 16,
-          paddingVertical: 10,
-          borderRadius: 10,
-          borderWidth: 1,
-          borderColor: 'rgba(217, 119, 6, 0.4)', // amber-600/40
-          backgroundColor: 'rgba(30, 20, 15, 0.85)', // dark brown/85
-        }}
-      >
-        {/* Key badge */}
-        <KeyBadge keyLabel={keyLabel} />
-
-        {/* Prompt text */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text
-            style={{
-              color: '#d97706', // amber-600
-              fontSize: 12,
-            }}
-          >
-            {icon}
-          </Text>
-          <Text
-            style={{
-              color: '#fbbf24', // amber-400
-              fontSize: 13,
-              fontWeight: '500',
-            }}
-          >
-            Press{' '}
-            <Text
-              style={{
-                color: '#f59e0b', // amber-500
-                fontWeight: '700',
-                fontFamily: Platform.select({
-                  ios: 'Menlo',
-                  android: 'monospace',
-                  default: 'monospace',
-                }),
-              }}
-            >
-              {keyLabel}
-            </Text>
-            {' '}to {verb}{' '}
-            <Text
-              style={{
-                color: '#fef3c7', // amber-50
-                fontWeight: '600',
-              }}
-            >
-              {target.name}
-            </Text>
-          </Text>
-        </View>
-
-        {/* Distance indicator (subtle) */}
-        <Text
+      {/* Key badge or tap icon */}
+      <Animated.View style={pulseStyle}>
+        <View
           style={{
-            color: 'rgba(217, 119, 6, 0.4)', // amber-600/40
-            fontSize: 10,
-            fontFamily: Platform.select({
-              ios: 'Menlo',
-              android: 'monospace',
-              default: 'monospace',
-            }),
+            width: showMobileButton ? 32 : 24,
+            height: showMobileButton ? 32 : 24,
+            borderRadius: showMobileButton ? 16 : 4,
+            borderWidth: 1.5,
+            borderColor: HUD_AMBER,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: showMobileButton ? `${HUD_AMBER}30` : 'transparent',
           }}
         >
-          {target.distance.toFixed(1)}m
-        </Text>
+          <Text
+            style={{
+              color: HUD_AMBER,
+              fontSize: showMobileButton ? 14 : 11,
+              fontWeight: '700',
+              fontFamily: MONO_FONT,
+            }}
+          >
+            {showMobileButton ? '\u25CF' : keyLabel}
+          </Text>
+        </View>
       </Animated.View>
+
+      {/* Prompt text */}
+      <Text
+        style={{
+          color: HUD_TEXT,
+          fontSize: 13,
+          fontWeight: '500',
+          // Subtle text shadow for readability on desktop
+          textShadowColor: 'rgba(212, 168, 85, 0.3)',
+          textShadowOffset: { width: 0, height: 0 },
+          textShadowRadius: 6,
+        }}
+      >
+        {verb}{' '}
+        <Text
+          style={{
+            color: HUD_AMBER,
+            fontWeight: '600',
+          }}
+        >
+          {target.name}
+        </Text>
+      </Text>
+    </Animated.View>
+  );
+
+  const containerStyle = {
+    position: 'absolute' as const,
+    bottom: Math.max(insets.bottom, 16) + 60,
+    left: 0,
+    right: 0,
+    alignItems: 'center' as const,
+    zIndex: 40,
+  };
+
+  // On mobile, wrap in Pressable for tap interaction
+  if (showMobileButton && onTap) {
+    return (
+      <View style={containerStyle}>
+        <Pressable onPress={onTap}>
+          {content}
+        </Pressable>
+      </View>
+    );
+  }
+
+  return (
+    <View style={containerStyle} pointerEvents="none">
+      {content}
     </View>
   );
 }
