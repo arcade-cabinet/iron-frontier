@@ -1,8 +1,7 @@
 // Core Engine Types - Iron Frontier v2
 // Modern diorama-based world with layered terrain
 
-import { Color3, Vector3 } from '@babylonjs/core/Maths/math';
-import { WesternAssets } from '@assets';
+import * as THREE from 'three';
 
 // Re-export shared types
 // This ensures that the engine uses the same data structures as the procedural generation
@@ -10,14 +9,22 @@ export * from '@/types/engine';
 
 import type { BiomeType, ChunkCoord, NPC, StructureType, WorldItem } from '@/types/engine';
 
+// Asset path constants (inline to avoid dead @assets import)
+const WesternAssets = {
+  WATER_TOWER: 'assets/models/structures/watertower.glb',
+  WELL: 'assets/models/structures/well.glb',
+  FENCE: 'assets/models/structures/fence.glb',
+  RAIL: 'assets/models/structures/rail.glb',
+} as const;
+
 // ============================================================================
-// EXTENDED TYPES (Web/Babylon Specific)
+// EXTENDED TYPES (Web/Three.js Specific)
 // ============================================================================
 
 export interface BiomeConfig {
   type: BiomeType;
-  groundColor: Color3; // Babylon Color3
-  detailColor: Color3; // Babylon Color3
+  groundColor: THREE.Color;
+  detailColor: THREE.Color;
   vegetationDensity: number;
   rockDensity: number;
   moisture: number;
@@ -27,8 +34,8 @@ export interface BiomeConfig {
 export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   desert: {
     type: 'desert',
-    groundColor: Color3.FromHexString('#C4A574'),
-    detailColor: Color3.FromHexString('#D4B584'),
+    groundColor: new THREE.Color('#C4A574'),
+    detailColor: new THREE.Color('#D4B584'),
     vegetationDensity: 0.1,
     rockDensity: 0.2,
     moisture: 0.1,
@@ -36,8 +43,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   grassland: {
     type: 'grassland',
-    groundColor: Color3.FromHexString('#8B9A6B'),
-    detailColor: Color3.FromHexString('#A5B57B'),
+    groundColor: new THREE.Color('#8B9A6B'),
+    detailColor: new THREE.Color('#A5B57B'),
     vegetationDensity: 0.7,
     rockDensity: 0.1,
     moisture: 0.5,
@@ -45,8 +52,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   badlands: {
     type: 'badlands',
-    groundColor: Color3.FromHexString('#8B4513'),
-    detailColor: Color3.FromHexString('#A0522D'),
+    groundColor: new THREE.Color('#8B4513'),
+    detailColor: new THREE.Color('#A0522D'),
     vegetationDensity: 0.05,
     rockDensity: 0.6,
     moisture: 0.15,
@@ -54,8 +61,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   riverside: {
     type: 'riverside',
-    groundColor: Color3.FromHexString('#6B8E6B'),
-    detailColor: Color3.FromHexString('#7BA87B'),
+    groundColor: new THREE.Color('#6B8E6B'),
+    detailColor: new THREE.Color('#7BA87B'),
     vegetationDensity: 0.8,
     rockDensity: 0.15,
     moisture: 0.9,
@@ -63,8 +70,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   town: {
     type: 'town',
-    groundColor: Color3.FromHexString('#9B8B7B'),
-    detailColor: Color3.FromHexString('#A89888'),
+    groundColor: new THREE.Color('#9B8B7B'),
+    detailColor: new THREE.Color('#A89888'),
     vegetationDensity: 0.1,
     rockDensity: 0.05,
     moisture: 0.3,
@@ -72,8 +79,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   railyard: {
     type: 'railyard',
-    groundColor: Color3.FromHexString('#5A5A5A'),
-    detailColor: Color3.FromHexString('#6A6A6A'),
+    groundColor: new THREE.Color('#5A5A5A'),
+    detailColor: new THREE.Color('#6A6A6A'),
     vegetationDensity: 0.02,
     rockDensity: 0.1,
     moisture: 0.2,
@@ -81,8 +88,8 @@ export const BIOME_CONFIGS: Record<BiomeType, BiomeConfig> = {
   },
   mine: {
     type: 'mine',
-    groundColor: Color3.FromHexString('#6B5B4B'),
-    detailColor: Color3.FromHexString('#7B6B5B'),
+    groundColor: new THREE.Color('#6B5B4B'),
+    detailColor: new THREE.Color('#7B6B5B'),
     vegetationDensity: 0.05,
     rockDensity: 0.7,
     moisture: 0.2,
@@ -125,10 +132,10 @@ export interface SurfaceOverlay {
   type: OverlayType;
 
   // Spline path for roads/tracks
-  path?: Vector3[];
+  path?: THREE.Vector3[];
 
   // Polygon for area overlays
-  polygon?: Vector3[];
+  polygon?: THREE.Vector3[];
 
   width: number;
   material: string;
@@ -347,7 +354,7 @@ export {
 // ============================================================================
 
 export interface CameraState {
-  focusPoint: Vector3;
+  focusPoint: THREE.Vector3;
   distance: number;
   azimuth: number;
   elevation: number;
@@ -364,7 +371,7 @@ export interface CameraState {
 }
 
 export const DEFAULT_CAMERA_STATE: CameraState = {
-  focusPoint: new Vector3(32, 5, 32), // Start focused near player spawn
+  focusPoint: new THREE.Vector3(32, 5, 32), // Start focused near player spawn
   distance: 30, // Closer for better detail
   azimuth: Math.PI * 0.75, // Rotate to face from top-right
   elevation: 0.4, // ~23° from vertical - more top-down view

@@ -2,7 +2,7 @@
  * Hex Grid System for Iron Frontier
  *
  * This module provides a complete hex-tile map system using axial coordinates.
- * It is designed to work with Kenney Hexagon Kit 3D assets and Babylon.js.
+ * Pure logic: coordinates, ECS, map generation, and types.
  *
  * Usage:
  * ```ts
@@ -110,22 +110,6 @@ export {
   type VisibilityComponent,
 } from './HexECS';
 
-// Grid Renderer (Babylon.js integration)
-export {
-  createEmptyGrid,
-  DEFAULT_ISOMETRIC_CONFIG,
-  HEX_HEIGHT,
-  HEX_SIZE,
-  HEX_WIDTH,
-  type HexGrid,
-  HexGridRenderer,
-  type HexGridRendererConfig,
-  // Vector3 wrappers for coordinate conversion
-  hexToWorld as hexToWorldVector,
-  type IsometricCameraConfig,
-  rotationToRadians,
-  worldToHex as worldToHexFromVector,
-} from './HexGridRenderer';
 // Map Generator
 export {
   createHexMapGenerator,
@@ -135,20 +119,6 @@ export {
   HexMapGenerator,
   type HexTileData as GeneratorTileData,
 } from './HexMapGenerator';
-// Scene Manager (Babylon.js integration)
-export {
-  type HexSceneConfig,
-  HexSceneManager,
-  type WorldPosition as HexWorldPosition,
-} from './HexSceneManager';
-// Tile Loader (Kenney GLB models)
-export {
-  disposeHexTileLoader,
-  getHexTileLoader,
-  HexTileLoader,
-  type HexTileType as LoaderTileType,
-  type TileInstanceOptions,
-} from './HexTileLoader';
 // Types and Enums
 export {
   // Building placement
@@ -195,14 +165,3 @@ export {
   parseHexKey,
   type WorldPosition,
 } from './HexTypes';
-
-// Textured Hex Tiles (PBR materials with custom textures)
-export {
-  disposeTexturedHexTileFactory,
-  getTexturedHexTileFactory,
-  TERRAIN_FALLBACK_COLORS,
-  TERRAIN_TEXTURES,
-  type TerrainTextureConfig,
-  TexturedHexTileFactory,
-  type TextureSet,
-} from './TexturedHexTile';
