@@ -31,6 +31,9 @@ export interface QuestEventMap {
   /** Player interacted with a world object */
   objectInteracted: { targetId: string; locationId: string };
 
+  /** Player moved in 3D space (for proximity-based objective completion) */
+  playerMoved: { x: number; y: number; z: number };
+
   /** A quest was started (downstream notification) */
   questStarted: { questId: string };
 

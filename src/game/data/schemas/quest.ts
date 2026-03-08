@@ -101,6 +101,46 @@ export const ObjectiveSchema = z.object({
       markerLabel: z.string().optional(),
     })
     .optional(),
+
+  /**
+   * 3D marker target for spatial quest tracking.
+   * The actual world position is resolved at runtime from the entity/building
+   * system rather than hardcoded coordinates.
+   *
+   * - type "npc": resolves position from the NPC's current world position
+   * - type "building": resolves position from the building/structure position
+   * - type "location": resolves position from the location/zone center
+   * - type "marker": resolves position from a named world marker
+   */
+  markerTarget: z
+    .discriminatedUnion('type', [
+      z.object({
+        type: z.literal('npc'),
+        npcId: z.string(),
+      }),
+      z.object({
+        type: z.literal('building'),
+        buildingId: z.string(),
+        locationId: z.string().optional(),
+      }),
+      z.object({
+        type: z.literal('location'),
+        locationId: z.string(),
+      }),
+      z.object({
+        type: z.literal('marker'),
+        markerId: z.string(),
+        locationId: z.string().optional(),
+      }),
+    ])
+    .optional(),
+
+  /**
+   * Radius in meters for proximity-based completion of "visit" objectives.
+   * When the player is within this distance of the target, the objective
+   * completes automatically. Defaults to 10 if not specified.
+   */
+  completionRadius: z.number().positive().optional(),
 });
 export type Objective = z.infer<typeof ObjectiveSchema>;
 

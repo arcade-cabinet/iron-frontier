@@ -14,6 +14,7 @@
 
 import type { GameState } from '../store/types';
 import { questEvents, type QuestEventMap, type QuestEventName } from './QuestEvents';
+import { checkProximityObjectives } from './QuestMarkerSystem';
 
 // ============================================================================
 // TYPES
@@ -177,12 +178,34 @@ export function initQuestSystem(store: StoreApi): QuestSystemHandle {
   const onObjectInteracted = (d: QuestEventMap['objectInteracted']) =>
     processEvent(store, 'objectInteracted', d);
 
+  // Proximity-based visit objective completion.
+  // When the player moves, check if they are within the completionRadius
+  // of any active visit-type objectives and auto-complete them.
+  const onPlayerMoved = (_d: QuestEventMap['playerMoved']) => {
+    const state = store.getState();
+    const completions = checkProximityObjectives(state);
+    for (const { questId, objectiveId } of completions) {
+      const aq = state.activeQuests.find((q) => q.questId === questId);
+      if (!aq) continue;
+      const questDef = state.getQuestDefinition(questId);
+      if (!questDef) continue;
+      const stage = questDef.stages[aq.currentStageIndex];
+      if (!stage) continue;
+      const obj = stage.objectives.find((o) => o.id === objectiveId);
+      if (!obj) continue;
+      state.updateObjective(questId, objectiveId, obj.count);
+      // Also emit locationVisited so other systems can react
+      questEvents.emit('locationVisited', { locationId: obj.target });
+    }
+  };
+
   questEvents.on('enemyKilled', onEnemyKilled);
   questEvents.on('itemPickedUp', onItemPickedUp);
   questEvents.on('npcTalkedTo', onNpcTalkedTo);
   questEvents.on('locationVisited', onLocationVisited);
   questEvents.on('itemDelivered', onItemDelivered);
   questEvents.on('objectInteracted', onObjectInteracted);
+  questEvents.on('playerMoved', onPlayerMoved);
 
   return {
     teardown() {
@@ -192,6 +215,7 @@ export function initQuestSystem(store: StoreApi): QuestSystemHandle {
       questEvents.off('locationVisited', onLocationVisited);
       questEvents.off('itemDelivered', onItemDelivered);
       questEvents.off('objectInteracted', onObjectInteracted);
+      questEvents.off('playerMoved', onPlayerMoved);
     },
   };
 }

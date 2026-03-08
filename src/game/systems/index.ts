@@ -224,6 +224,13 @@ export {
   type QuestSystemHandle,
 } from './QuestWiring';
 
+// Quest Marker System (3D spatial quest tracking)
+export {
+  getActiveQuestMarkers,
+  checkProximityObjectives,
+  type QuestMarker,
+} from './QuestMarkerSystem';
+
 // Dialogue ↔ Quest Bridge
 export {
   evaluateCondition,

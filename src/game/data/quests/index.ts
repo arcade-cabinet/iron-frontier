@@ -6,6 +6,10 @@
  *
  * Main Quest: "The Inheritance" - 4 acts following the story bible
  * Side Quests: Optional adventures that enrich the world
+ *
+ * All quest text is written for first-person 3D perspective.
+ * Objectives include markerTarget fields for 3D spatial tracking
+ * and completionRadius for proximity-based auto-completion.
  */
 
 import type { Quest } from '../schemas/quest';
@@ -25,7 +29,7 @@ export const TheInheritance: Quest = {
   id: 'main_the_inheritance',
   title: 'The Inheritance',
   description:
-    'A mysterious letter summoned you to Dusty Springs to "claim what\'s rightfully yours" at an address that doesn\'t seem to exist. The letter is signed only with a gear symbol.',
+    'A mysterious letter brought you to Dusty Springs to claim something at an address that doesn\'t seem to exist. The letter is signed only with a gear symbol.',
   type: 'main',
   giverNpcId: null, // Auto-triggered on game start
   startLocationId: 'dusty_springs',
@@ -46,22 +50,27 @@ export const TheInheritance: Quest = {
       id: 'stage_1_arrival',
       title: 'Arrive in Dusty Springs',
       description:
-        "You've arrived on the last train into Dusty Springs. Find the address mentioned in the mysterious letter.",
+        'You stepped off the last train into Dusty Springs. Find the address mentioned in the mysterious letter.',
       onStartText:
-        'The train hisses to a stop. Dusty Springs. The letter said to find "14 Copper Street." Time to get your bearings.',
+        'The train hisses to a stop. Dusty Springs. The letter said to find "14 Copper Street." Look around and get your bearings.',
       onCompleteText:
         'The address leads to a burned-out lot. Whatever was here is gone, but the fire looks recent.',
       objectives: [
         {
           id: 'obj_explore_town',
-          description: 'Explore Dusty Springs and get your bearings',
+          description: 'Look around Dusty Springs and get your bearings',
           type: 'visit',
           target: 'dusty_springs',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'Take a look around the main street.',
+          hint: 'Walk down the main street and take in the sights.',
+          markerTarget: {
+            type: 'location',
+            locationId: 'dusty_springs',
+          },
+          completionRadius: 30,
         },
         {
           id: 'obj_find_address',
@@ -72,11 +81,17 @@ export const TheInheritance: Quest = {
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'Ask the locals about Copper Street.',
+          hint: 'Ask the locals about Copper Street. Look for the building with the collapsed roof on the east side of town.',
           mapMarker: {
             locationId: 'dusty_springs',
             markerLabel: 'The Address',
           },
+          markerTarget: {
+            type: 'building',
+            buildingId: 'burned_building_01',
+            locationId: 'dusty_springs',
+          },
+          completionRadius: 8,
         },
       ],
       stageRewards: {
@@ -92,9 +107,9 @@ export const TheInheritance: Quest = {
       id: 'stage_2_investigation',
       title: 'Investigate the Burned Building',
       description:
-        "The address from the letter is now a burned ruin. Someone didn't want you finding what was here. Look for clues.",
+        'The address from the letter is now a burned ruin. Someone didn\'t want you finding what was here. Search the rubble for clues.',
       onStartText:
-        'The building burned down within the last week. Charred timbers and ash. But fires leave traces...',
+        'The building burned down within the last week. Charred timbers and ash surround you. But fires leave traces...',
       onCompleteText:
         'You found evidence this was a Freeminer safehouse. And something else - a partial manifest mentioning "The Old Works."',
       objectives: [
@@ -107,7 +122,12 @@ export const TheInheritance: Quest = {
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'Sift through the rubble carefully.',
+          hint: 'Walk up to the rubble and sift through it carefully.',
+          markerTarget: {
+            type: 'building',
+            buildingId: 'burned_building_01',
+            locationId: 'dusty_springs',
+          },
         },
         {
           id: 'obj_find_manifest',
@@ -134,25 +154,32 @@ export const TheInheritance: Quest = {
       id: 'stage_3_sheriff',
       title: 'Talk to Sheriff Cole',
       description:
-        "Sheriff Marcus Cole might know something about the fire. He's an honest man in a town full of IVRC influence.",
+        'Sheriff Marcus Cole might know something about the fire. He\'s an honest man in a town full of IVRC influence.',
       onStartText:
-        "The Sheriff's office is on Main Street. Cole has a reputation for being one of the few straight shooters left.",
+        'The Sheriff\'s office is down Main Street - look for the star on the door. Cole has a reputation for being one of the few straight shooters left.',
       onCompleteText:
         'Cole confirmed your suspicions. IVRC "inspectors" came through asking questions about a Freeminer named Samuel Ironpick. He suggests you head to Freeminer\'s Hollow if you want answers.',
       objectives: [
         {
           id: 'obj_find_sheriff',
-          description: "Find Sheriff Cole at the Sheriff's Office",
+          description: 'Head to the Sheriff\'s Office on Main Street',
           type: 'visit',
           target: 'dusty_springs_sheriff_office',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Look for the wooden building with the star sign hanging out front, down Main Street.',
           mapMarker: {
             locationId: 'dusty_springs',
             markerLabel: "Sheriff's Office",
           },
+          markerTarget: {
+            type: 'building',
+            buildingId: 'dusty_springs_sheriff_office',
+            locationId: 'dusty_springs',
+          },
+          completionRadius: 5,
         },
         {
           id: 'obj_talk_sheriff',
@@ -163,7 +190,11 @@ export const TheInheritance: Quest = {
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'He might be cautious at first. Show him the manifest.',
+          hint: 'Walk up to him and show him the manifest. He might be cautious at first.',
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_sheriff_cole',
+          },
         },
       ],
       stageRewards: {
@@ -179,36 +210,46 @@ export const TheInheritance: Quest = {
       id: 'stage_4_freeminers',
       title: "Travel to Freeminer's Hollow",
       description:
-        "Sheriff Cole pointed you toward Freeminer's Hollow in the Iron Mountains. Someone there knows why IVRC wanted that safehouse destroyed.",
+        'Sheriff Cole pointed you toward Freeminer\'s Hollow in the Iron Mountains. Someone there knows why IVRC wanted that safehouse destroyed.',
       onStartText:
-        "The road to Freeminer's Hollow is long and passes through rough country. Watch yourself.",
+        'The road to Freeminer\'s Hollow stretches into rough country ahead. Watch your step.',
       onCompleteText:
         'You\'ve reached Freeminer\'s Hollow. Old Samuel Ironpick eyes you warily but recognizes the gear symbol. "Your parent sent that letter," he says. "Before IVRC killed them."',
       objectives: [
         {
           id: 'obj_travel_hollow',
-          description: "Travel to Freeminer's Hollow",
+          description: "Head to Freeminer's Hollow",
           type: 'visit',
           target: 'freeminer_hollow',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Follow the mountain road north. The Hollow is nestled in the Iron Mountains.',
           mapMarker: {
             locationId: 'freeminer_hollow',
             markerLabel: "Freeminer's Hollow",
           },
+          markerTarget: {
+            type: 'location',
+            locationId: 'freeminer_hollow',
+          },
+          completionRadius: 15,
         },
         {
           id: 'obj_find_samuel',
-          description: 'Find Old Samuel Ironpick',
+          description: 'Find and speak to Old Samuel Ironpick',
           type: 'talk',
           target: 'npc_samuel_ironpick',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'The leader of the Freeminers should be in the main lodge.',
+          hint: 'Look for the old man in the main lodge at the center of the settlement.',
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_samuel_ironpick',
+          },
         },
       ],
       stageRewards: {
@@ -243,7 +284,7 @@ export const MissingCattle: Quest = {
   id: 'side_missing_cattle',
   title: 'Missing Cattle',
   description:
-    'Silas Blackwood of Sunset Ranch reports that his cattle have been disappearing. He suspects rustlers but needs proof.',
+    'Silas Blackwood at Sunset Ranch says his cattle have been vanishing. He suspects rustlers but needs someone to find proof.',
   type: 'side',
   giverNpcId: 'npc_silas_blackwood',
   startLocationId: 'sunset_ranch',
@@ -264,32 +305,43 @@ export const MissingCattle: Quest = {
       id: 'stage_cattle_investigate',
       title: 'Investigate the Rustling',
       description:
-        'Silas has lost a dozen head this month alone. Check the pastures for signs of how the cattle are being taken.',
+        'Silas has lost a dozen head this month alone. Walk the pastures and look for signs of how the cattle are being taken.',
       onStartText:
-        "Blackwood's foreman Rosa will show you where the cattle were last seen. Keep your eyes open for tracks.",
+        'Blackwood\'s foreman Rosa can show you where the cattle were last seen. Keep your eyes open for tracks on the ground.',
       onCompleteText:
-        "The tracks lead west toward the badlands. Someone's driving the cattle through a hidden canyon pass.",
+        'The tracks lead west toward the badlands. Someone\'s been driving the cattle through a hidden canyon pass.',
       objectives: [
         {
           id: 'obj_talk_rosa',
-          description: 'Speak with Rosa Martinez, the foreman',
+          description: 'Find and speak with Rosa Martinez, the ranch foreman',
           type: 'talk',
           target: 'npc_rosa_martinez',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'She should be near the barn or out in the fields.',
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_rosa_martinez',
+          },
         },
         {
           id: 'obj_find_tracks',
-          description: 'Find cattle tracks in the west pasture',
+          description: 'Search the west pasture for cattle tracks',
           type: 'visit',
           target: 'marker_west_pasture',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
-          hint: 'Check near the fence line.',
+          hint: 'Head west from the barn. Look near the broken fence line for disturbed ground.',
+          markerTarget: {
+            type: 'marker',
+            markerId: 'marker_west_pasture',
+            locationId: 'sunset_ranch',
+          },
+          completionRadius: 8,
         },
         {
           id: 'obj_follow_tracks',
@@ -300,6 +352,13 @@ export const MissingCattle: Quest = {
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'The tracks lead into the rocky badlands to the west. Look for a narrow canyon opening.',
+          markerTarget: {
+            type: 'marker',
+            markerId: 'marker_canyon_entrance',
+            locationId: 'sunset_ranch',
+          },
+          completionRadius: 10,
         },
       ],
       stageRewards: {
@@ -315,31 +374,33 @@ export const MissingCattle: Quest = {
       id: 'stage_cattle_confront',
       title: 'Confront the Rustlers',
       description:
-        'The trail leads to a Copperhead operation. Deal with the rustlers and recover evidence for Blackwood.',
+        'The trail leads to a Copperhead operation hidden in the canyon. Deal with the rustlers and find evidence for Blackwood.',
       onStartText:
-        "You've found a hidden corral. Copperhead bandits are rebranding the cattle. This won't be pretty.",
+        'You can see a hidden corral ahead. Copperhead bandits are rebranding the cattle. This won\'t be pretty.',
       onCompleteText:
-        "The rustlers are dealt with. You found a ledger showing this operation has been running for months - and Rosa's name is in it.",
+        'The rustlers are dealt with. You found a ledger showing this operation has been running for months - and Rosa\'s name is in it.',
       objectives: [
         {
           id: 'obj_defeat_rustlers',
-          description: 'Defeat the rustlers',
+          description: 'Take down the rustlers',
           type: 'kill',
           target: 'enemy_rustler',
           count: 3,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Three armed men guard the stolen cattle.',
         },
         {
           id: 'obj_get_ledger',
-          description: 'Retrieve the rustling ledger',
+          description: 'Pick up the rustling ledger',
           type: 'collect',
           target: 'item_rustling_ledger',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Check the crates near the campfire after dealing with the rustlers.',
         },
       ],
       stageRewards: {
@@ -355,9 +416,9 @@ export const MissingCattle: Quest = {
       id: 'stage_cattle_resolve',
       title: 'Report to Blackwood',
       description:
-        'Return to Silas Blackwood with the evidence. The ledger implicates his own foreman.',
+        'Bring the ledger back to Silas Blackwood at Sunset Ranch. The evidence implicates his own foreman.',
       onStartText:
-        "Rosa's name is in this ledger. Blackwood needs to know, but this will hurt him.",
+        'Rosa\'s name is in this ledger. Blackwood needs to know, but this will hurt him.',
       onCompleteText:
         'Blackwood is devastated but grateful for the truth. He pays you well and promises to "handle" Rosa.',
       objectives: [
@@ -370,9 +431,14 @@ export const MissingCattle: Quest = {
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Head back to the ranch house at Sunset Ranch.',
           mapMarker: {
             locationId: 'sunset_ranch',
             markerLabel: 'Sunset Ranch',
+          },
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_silas_blackwood',
           },
         },
       ],
@@ -408,7 +474,7 @@ export const DocsDilemma: Quest = {
   id: 'side_docs_dilemma',
   title: "Doc's Dilemma",
   description:
-    'Doc Chen Wei is running low on critical medical supplies. The nearest source is either Junction City (expensive) or Coppertown (dangerous).',
+    'Doc Chen Wei is running low on critical medical supplies. You can get them from Junction City - expensive but safe - or Coppertown, where they\'re cheap but the town belongs to IVRC.',
   type: 'side',
   giverNpcId: 'npc_doc_chen_wei',
   startLocationId: 'dusty_springs',
@@ -429,24 +495,29 @@ export const DocsDilemma: Quest = {
       id: 'stage_doc_list',
       title: 'Get the Supply List',
       description:
-        "Doc Chen Wei will give you a list of what's needed. You'll have to decide where to get it.",
+        'Visit Doc Chen Wei at his clinic to get the list of supplies he needs. You\'ll have to decide where to get them.',
       onStartText:
         'The Doc\'s clinic is small but clean. "I\'m treating copper lung, snake bites, and worse," he says. "Without these supplies, people will die."',
       onCompleteText:
-        "You have the list. Junction City has a proper pharmacy but IVRC prices. Coppertown's company store is cheaper but... it's Coppertown.",
+        'You have the list. Junction City has a proper pharmacy but charges IVRC prices. Coppertown\'s company store is cheaper but... it\'s Coppertown.',
       objectives: [
         {
           id: 'obj_talk_doc',
-          description: 'Speak with Doc Chen Wei about supplies',
+          description: 'Speak with Doc Chen Wei about what he needs',
           type: 'talk',
           target: 'npc_doc_chen_wei',
           count: 1,
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'His clinic is the small building with a cross painted on the door, on the south end of Main Street.',
           mapMarker: {
             locationId: 'dusty_springs',
             markerLabel: "Doc's Clinic",
+          },
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_doc_chen_wei',
           },
         },
         {
@@ -473,40 +544,50 @@ export const DocsDilemma: Quest = {
       id: 'stage_doc_acquire',
       title: 'Acquire Medical Supplies',
       description:
-        'Get the medical supplies from either Junction City or Coppertown. Each has its challenges.',
+        'Get the medical supplies. Junction City is the safe route - Coppertown is cheaper but dangerous.',
       onStartText:
-        "Junction City is safer but the IVRC pharmacy charges through the nose. Coppertown's company store is cheaper, but that town belongs to IVRC body and soul.",
+        'Junction City is safer but the IVRC pharmacy charges through the nose. Coppertown\'s company store is cheaper, but that town belongs to IVRC body and soul.',
       onCompleteText:
-        "You've secured the supplies. Now get them back to Doc before someone gets hurt.",
+        'You\'ve secured the supplies. Now get them back to Doc before someone gets hurt.',
       objectives: [
         {
           id: 'obj_junction_supplies',
-          description: 'Purchase supplies in Junction City',
+          description: 'Purchase supplies at the Junction City pharmacy',
           type: 'interact',
           target: 'junction_pharmacy',
           count: 1,
           current: 0,
           optional: true,
           hidden: false,
-          hint: 'Costs 50 gold but no trouble.',
+          hint: 'Head to Junction City. The pharmacy is the large storefront near the train station. Costs 50 gold.',
           mapMarker: {
             locationId: 'junction_city',
             markerLabel: 'IVRC Pharmacy',
           },
+          markerTarget: {
+            type: 'building',
+            buildingId: 'junction_pharmacy',
+            locationId: 'junction_city',
+          },
         },
         {
           id: 'obj_coppertown_supplies',
-          description: 'Acquire supplies in Coppertown',
+          description: 'Acquire supplies from Coppertown\'s company store',
           type: 'interact',
           target: 'coppertown_store',
           count: 1,
           current: 0,
           optional: true,
           hidden: false,
-          hint: 'Costs 20 gold but you might attract attention.',
+          hint: 'Head to Coppertown. The company store is on the main drag. Costs 20 gold but you might attract attention.',
           mapMarker: {
             locationId: 'coppertown',
             markerLabel: 'Company Store',
+          },
+          markerTarget: {
+            type: 'building',
+            buildingId: 'coppertown_store',
+            locationId: 'coppertown',
           },
         },
       ],
@@ -523,13 +604,13 @@ export const DocsDilemma: Quest = {
       id: 'stage_doc_deliver',
       title: 'Deliver to Doc',
       description: 'Bring the medical supplies back to Doc Chen Wei in Dusty Springs.',
-      onStartText: 'The supplies are heavy but lives depend on getting them back.',
+      onStartText: 'The supplies are heavy but lives depend on getting them back. Head to the clinic.',
       onCompleteText:
         'Doc Chen Wei is relieved. "You\'ve saved lives today, stranger. That\'s worth more than gold." He presses payment into your hands anyway.',
       objectives: [
         {
           id: 'obj_deliver_supplies',
-          description: 'Deliver supplies to Doc Chen Wei',
+          description: 'Bring the supplies to Doc Chen Wei',
           type: 'deliver',
           target: 'item_medical_supplies',
           deliverTo: 'npc_doc_chen_wei',
@@ -537,9 +618,14 @@ export const DocsDilemma: Quest = {
           current: 0,
           optional: false,
           hidden: false,
+          hint: 'Head back to the clinic in Dusty Springs and hand the supplies to Doc.',
           mapMarker: {
             locationId: 'dusty_springs',
             markerLabel: "Doc's Clinic",
+          },
+          markerTarget: {
+            type: 'npc',
+            npcId: 'npc_doc_chen_wei',
           },
         },
       ],
