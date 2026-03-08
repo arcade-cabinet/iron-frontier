@@ -1365,7 +1365,7 @@ All visual content is constructed at runtime from Three.js primitives and canvas
 
 ### Material System
 
-- **Canvas textures:** 2D Canvas API generates textures for wood grain, stone, cloth, skin
+- **Canvas textures:** Canvas API generates textures for wood grain, stone, cloth, skin
 - **Material factory:** `engine/materials/` provides cached material creators per surface type
 - **Texture cache:** Each unique material key (type + palette + seed) is created once and reused
 - **No external textures:** All texture data generated procedurally via Canvas API
@@ -1550,7 +1550,7 @@ Pipe-fitter minigame used for lockpicking, safe-cracking, and machinery repair. 
 
 - Puzzle logic in `src/game/puzzles/` (pipe-fitter minigame)
 - Runtime state in `puzzleSlice` (Zustand)
-- Puzzle rendering as 2D overlay (React Native) or 3D in-world panel
+- Puzzle rendering as UI overlay (React Native) or 3D in-world panel
 - Grid state: array of `PipeSegment` objects with `type` and `rotation`
 - Path finding: BFS from source to target checking port connections
 - Pipe textures: canvas-generated pipe graphics
@@ -1718,7 +1718,7 @@ Mobile-first HUD and menu system built with React Native Reusables (shadcn/ui po
 - Base components in `components/ui/` (Button, Card, Dialog, etc.)
 - HUD is a React Native layer above the R3F Canvas
 - Virtual controls use `react-native-gesture-handler` for touch
-- Minimap: simplified 2D rendering of nearby area (canvas or SVG)
+- Minimap: simplified top-down rendering of nearby area (canvas or SVG)
 - Notification system in `uiSlice` with auto-dismiss timer
 - Modal state managed by `uiSlice.modalStack`
 

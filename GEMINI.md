@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Iron Frontier** is a cross-platform isometric RPG set in a Steampunk American Frontier (circa 1887). It features procedural generation, turn-based interactions, and a distinct "diorama" visual style.
+**Iron Frontier** is a cross-platform 3D open-world RPG set in a Steampunk American Frontier (circa 1887). It features procedural generation, real-time first-person combat, and a Fallout-style open world.
 
 *   **Type:** Monorepo (pnpm workspaces)
 *   **Status:** Alpha v0.1 (Release Candidate)

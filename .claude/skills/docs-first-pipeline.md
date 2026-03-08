@@ -26,13 +26,13 @@ Key design facts every agent must know:
 - **Quest Chains.** Multi-step narrative quests with branching dialogue, authored per-town.
 - **NPC Archetypes.** Sheriff, Doc, Blacksmith, Saloon Owner, Prospector, Outlaw, Traveling Merchant, etc.
 - **Real-Time Combat.** Gunslinger mechanics -- revolvers, rifles, melee. Stamina and ammo management.
-- **Hex-Based Overworld.** Travel between towns on hex grid with terrain costs and random encounters.
+- **Open World Overworld.** Travel between towns across continuous terrain with random encounters.
 - **Seeded Determinism.** `seededRandom(seed, ...extra)` everywhere. Zero Math.random().
 - **Zustand + Miniplex ECS.** Static state in Zustand store slices, dynamic entities in Miniplex.
 - **Zod Schemas.** All data structures validated with Zod from `src/game/data/schemas/`.
 - **Mobile-First.** 375px minimum, 44px touch targets, Expo 55 + React Three Fiber.
 - **Canvas Texture Factories.** Procedural textures for wood, brick, metal, dirt, signs, NPC faces.
-- **Diorama Presentation.** Tilt-shift DOF, warm amber lighting, hard shadows, distance fog.
+- **Frontier Atmosphere.** Warm amber lighting, hard shadows, distance fog, immersive first-person view.
 
 ## When the User Gives You a Concept
 

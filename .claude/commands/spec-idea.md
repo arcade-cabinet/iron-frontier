@@ -11,7 +11,7 @@ Document this gameplay concept: $ARGUMENTS
 2. Read `docs/GAME_SPEC.md` to understand current spec structure
 3. Verify the concept is consistent with Iron Frontier's design:
    - Steampunk American Frontier setting
-   - Isometric RPG with diorama presentation
+   - 3D open-world RPG with first-person exploration
    - 14 authored towns (Coppertown, Dusty Springs, Junction City, etc.)
    - Procedural geometry engine (ZERO GLBs in game scene)
    - Quest chains with branching dialogue

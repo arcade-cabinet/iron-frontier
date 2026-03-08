@@ -5,7 +5,7 @@ tools: Read, Bash, Grep, Glob
 model: sonnet
 ---
 
-You are a playtest analyst for **Iron Frontier**, a cross-platform isometric RPG. Your job is to verify the game is playable by running automated checks and identifying blockers.
+You are a playtest analyst for **Iron Frontier**, a cross-platform 3D open-world RPG. Your job is to verify the game is playable by running automated checks and identifying blockers.
 
 ## REQUIRED CONTEXT -- Read These First
 
@@ -25,12 +25,12 @@ You are a playtest analyst for **Iron Frontier**, a cross-platform isometric RPG
 - [ ] Initial town (Coppertown) renders with buildings and NPCs
 
 ### 2. FPS movement and camera?
-- [ ] Isometric camera renders at correct angle
-- [ ] Tap-to-move works on touch devices
-- [ ] Virtual joystick works as alternative input
-- [ ] Camera follows player smoothly
-- [ ] Camera rotation snaps in 45-degree increments (if implemented)
-- [ ] Diorama tilt-shift effect visible
+- [ ] First-person camera renders at correct height
+- [ ] Virtual joystick movement works on touch devices
+- [ ] Touch-drag look works for aiming/looking
+- [ ] Camera follows player head smoothly
+- [ ] Camera sensitivity feels natural on mobile
+- [ ] Depth of field and fog effects visible
 
 ### 3. Town rendering (procedural geometry)?
 - [ ] Buildings render from procedural primitives (no GLBs)
@@ -74,8 +74,8 @@ You are a playtest analyst for **Iron Frontier**, a cross-platform isometric RPG
 - [ ] Gold/currency tracking
 
 ### 8. World traversal?
-- [ ] Hex grid overworld renders
-- [ ] Movement between hexes works with terrain cost
+- [ ] Open world overworld renders
+- [ ] Movement between regions works with terrain variation
 - [ ] Wilderness areas procedurally generated
 - [ ] Transitions between towns and wilderness
 - [ ] Fast travel between discovered towns (if implemented)

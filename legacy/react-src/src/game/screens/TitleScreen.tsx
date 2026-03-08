@@ -314,7 +314,7 @@ function MainMenu() {
             >
               <h2 className="text-xl font-bold text-amber-300 mb-3">About Iron Frontier</h2>
               <p className="text-stone-300 text-sm mb-4">
-                A mobile-first isometric RPG set in a steampunk American frontier. Explore
+                A mobile-first 3D open-world RPG set in a steampunk American frontier. Explore
                 procedurally generated towns, meet quirky NPCs, and uncover the mysteries of the
                 steam age.
               </p>

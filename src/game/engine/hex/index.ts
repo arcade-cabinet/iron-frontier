@@ -1,7 +1,7 @@
 /**
- * Hex Grid System for Iron Frontier
+ * World Coordinate System for Iron Frontier
  *
- * This module provides a complete hex-tile map system using axial coordinates.
+ * This module provides a hex-based coordinate system used for world layout.
  * Pure logic: coordinates, ECS, map generation, and types.
  *
  * Usage:

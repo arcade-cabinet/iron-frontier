@@ -7,7 +7,7 @@
  * NOTE: To avoid naming conflicts, import specific modules directly:
  * - '@/data' for game data
  * - '@/store' for state management
- * - '@/hex' for hex grid utilities
+ * - '@/hex' for world coordinate utilities
  * - '@/rendering' for rendering abstractions
  * - '@/types' for shared types
  */

@@ -159,7 +159,7 @@ iron-frontier/
 │   │
 │   ├── lib/                      # Utilities and helpers
 │   │   ├── prng.ts               # Seeded random number generator
-│   │   ├── hex.ts                # Hex grid utilities
+│   │   ├── hex.ts                # World coordinate utilities
 │   │   ├── database.ts           # SQLite wrapper
 │   │   ├── database.web.ts       # sql.js implementation
 │   │   ├── database.native.ts    # expo-sqlite implementation

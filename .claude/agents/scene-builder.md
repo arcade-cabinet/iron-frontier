@@ -10,11 +10,11 @@ You are a scene builder for **Iron Frontier**, a first-person open world Old Wes
 ## REQUIRED CONTEXT -- Read These First
 
 1. **Architecture:** `docs/ARCHITECTURE.md` -- Rendering pipeline, platform adapters
-2. **Game Design:** `docs/GAME_DESIGN.md` -- Visual identity, diorama presentation
+2. **Game Design:** `docs/GAME_DESIGN.md` -- Visual identity, first-person open world
 3. **Branding:** `docs/BRANDING.md` -- Color palette, visual tokens
 4. **Scene Manager:** `src/game/rendering/SceneManagerBase.ts` -- Base scene manager
 5. **R3F Scene:** `components/scene/` -- React Three Fiber scene components
-6. **Hex Grid:** `src/game/engine/hex/` -- Hex grid renderer and tile system
+6. **World Coords:** `src/game/engine/hex/` -- World coordinate system
 7. **Terrain:** `src/game/engine/terrain/HeightmapGenerator.ts` -- Procedural terrain
 8. **Town Data:** `src/game/data/locations/` -- 14 authored town definitions
 
@@ -27,7 +27,7 @@ Iron Frontier uses **ZERO GLB models** in the game scene. ALL geometry is proced
 | **Buildings** | Box/cylinder primitives + canvas texture factories (wood planks, brick, tin roofing) |
 | **NPCs** | Chibi-style assembled from primitives (sphere head, box torso, cylinder limbs) |
 | **Props** | Barrels (cylinders), crates (boxes), signs (planes + text texture), fences (thin boxes) |
-| **Terrain** | Hex tiles with vertex displacement from heightmap generator |
+| **Terrain** | Continuous terrain chunks with vertex displacement from heightmap generator |
 | **Vegetation** | Cone trees, billboard grass, sphere bushes with noise-displaced verts |
 | **Weapons** | Simple primitive assemblies (cylinder barrel, box stock, etc.) |
 | **Vehicles** | Box chassis + cylinder wheels + primitive details |
@@ -66,23 +66,22 @@ Animation is rigid body rotation at joints -- no skeletal rigs:
 - Talk: head nod, arm gesture
 - Combat: weapon swing (arm rotation)
 
-## Diorama Presentation
+## First-Person Presentation
 
-The world renders as a tilt-shift tabletop diorama:
-- **Isometric camera**: Fixed angle (~30-35 degrees), rotatable in 45-degree snaps
-- **Tilt-shift DOF**: Blur at top/bottom edges for miniature effect
+The world is experienced from a first-person perspective:
+- **FPS camera**: Player-height view, free look with touch or mouse
+- **Depth of field**: Subtle DOF on distant terrain for cinematic feel
 - **Warm lighting**: Amber/golden directional light for frontier sunset feel
-- **Hard shadows**: Crisp shadow maps (PSX-inspired, not soft)
+- **Hard shadows**: Crisp shadow maps for atmospheric depth
 - **Fog**: Distance fog to limit draw distance and add atmosphere
 
-## Hex-Based World
+## Open World Layout
 
-The world is built on a hex grid:
-- Each hex tile is a discrete scene unit
-- Terrain height varies per hex from heightmap
-- Buildings snap to hex centers
-- NPCs path along hex edges
-- Vegetation and props scatter within hex bounds
+The world is built on continuous terrain:
+- Terrain height varies from heightmap data
+- Buildings placed at authored positions within towns
+- NPCs navigate via NavMesh pathfinding
+- Vegetation and props scatter across the landscape
 
 ## Steampunk Visual Elements
 
@@ -111,6 +110,6 @@ Instead of image textures, generate them procedurally:
 4. **Config in JSON.** Building dimensions, NPC proportions, colors in `config/game/`.
 5. **No file over 300 lines.** Each building archetype gets its own file.
 6. **Seeded textures.** Canvas texture factories take a seed for deterministic output.
-7. **Hex-aligned.** All world objects snap to hex grid coordinates.
-8. **Diorama aesthetic.** Tilt-shift, warm lighting, hard shadows. Not photorealistic.
+7. **World-positioned.** All world objects placed at authored world coordinates.
+8. **Frontier aesthetic.** Warm lighting, hard shadows, atmospheric fog. Not photorealistic.
 9. **Instanced rendering.** Use InstancedMesh for repeated elements (fences, barrels, vegetation).

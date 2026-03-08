@@ -1,4 +1,4 @@
-// CanvasTextureFactory — Procedural painterly materials via 2D canvas
+// CanvasTextureFactory — Procedural painterly materials via Canvas API
 // Seeded PRNG (alea) ensures deterministic output — no Math.random().
 
 import {

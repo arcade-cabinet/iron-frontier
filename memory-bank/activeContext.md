@@ -58,7 +58,7 @@ Meshy generation now uses `@agentic-dev-library/meshy-content-generator`:
 - Added CLI resume support for long Meshy jobs.
 
 ### Session 2026‑01‑28 (AI/Physics + Playwright)
-- Integrated Yuka agents and Rapier physics scaffolding into the hex scene manager.
+- Integrated Yuka agents and Rapier physics scaffolding into the scene manager.
 - Expanded Playwright E2E coverage (inventory/shop/combat) and stabilized selectors.
 - Playwright now runs single‑worker for reliability across all viewport projects.
 - Cleaned Angular template warnings and allowed audio CommonJS deps in build.

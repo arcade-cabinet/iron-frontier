@@ -18,10 +18,10 @@ Iron Frontier aims to restore the "soul" of exploration-focused RPGs by:
 - **0-30 Seconds (Hook)**:
   - Beautiful splash screen.
   - Immediate drop into gameplay (no long tutorials).
-  - First "wow" moment with the diorama view.
+  - First "wow" moment stepping into the 3D frontier world.
 
 - **5 Minutes (Engagement)**:
-  - Intuitive movement (tap to go).
+  - Intuitive first-person movement (virtual joystick).
   - First loot drop (satisfying feedback).
   - Clear short-term objective ("Talk to the Sheriff").
 

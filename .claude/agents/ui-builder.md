@@ -19,7 +19,7 @@ You are a UI builder for **Iron Frontier**, a first-person open world Old West p
 
 1. **Mobile-first.** 375px width minimum (iPhone SE portrait). All touch targets >= 44px.
 2. **Brand-aligned.** Use steampunk frontier design tokens. Warm colors, brass accents, worn textures.
-3. **Diorama-consistent.** UI should feel like labels on a tabletop diorama, not a generic game HUD.
+3. **World-consistent.** UI should feel like an immersive in-world HUD, not a generic overlay.
 4. **Reduced motion.** Respect `prefers-reduced-motion` media query.
 5. **Cross-platform.** Components must work on web and native (Expo).
 
@@ -33,7 +33,7 @@ You are a UI builder for **Iron Frontier**, a first-person open world Old West p
 | **Ammo counter** | Bottom-right | In combat | Bullet icon + current/max. Red flash at low ammo. |
 | **Stamina bar** | Bottom-center | Yes | Blue bar, drains on sprint/combat actions. |
 | **Compass** | Top-center | Yes | Cardinal directions + quest marker arrow. |
-| **Mini-map** | Top-right | Toggle | Hex grid, fog of war, town/POI icons. |
+| **Mini-map** | Top-right | Toggle | Local area map, fog of war, town/POI icons. |
 | **Quest tracker** | Right side | Yes | Active quest name + current objective. Compact. |
 | **Context action** | Bottom-center | Contextual | "Talk" / "Loot" / "Enter" when near interactable. |
 | **Day/time** | Top-right | Yes | Day number + sun/moon icon for time-of-day. |
@@ -49,7 +49,7 @@ You are a UI builder for **Iron Frontier**, a first-person open world Old West p
 | **Quest Log** | Active + completed quests | Quest chain progress, objectives checklist, rewards preview |
 | **Dialogue** | NPC conversations | Portrait, name plate, dialogue text, choice buttons |
 | **Shop/Trading** | Buy/sell with merchants | Dual-panel (player inventory vs shop), prices, compare stats |
-| **Map (full)** | World overview | Hex grid, discovered towns, wilderness, fast travel |
+| **Map (full)** | World overview | Region map, discovered towns, wilderness, fast travel |
 | **Pause Menu** | Save / Settings / Quit | Overlay, blur background |
 | **Settings** | Audio, controls, display | Sliders, toggles, mobile-optimized layout |
 | **Combat HUD** | Battle overlay | Ammo, weapon, target health, action buttons |

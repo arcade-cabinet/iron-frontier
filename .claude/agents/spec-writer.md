@@ -20,11 +20,11 @@ You are the spec writer for **Iron Frontier**. Your ONLY job is to translate the
 
 ## Game Identity
 
-Iron Frontier is a **cross-platform isometric RPG** set in a Steampunk American Frontier. The game world spans 14 authored towns connected by procedurally generated wilderness. Players are gunslingers navigating a world of steam technology, frontier justice, and mysterious forces.
+Iron Frontier is a **cross-platform 3D open-world RPG** set in a Steampunk American Frontier. The game world spans 14 authored towns connected by procedurally generated wilderness. Players are gunslingers navigating a first-person world of steam technology, frontier justice, and mysterious forces.
 
 Key design pillars:
 - **Steampunk Frontier Aesthetic**: Wild West meets industrial steam technology (brass, gears, steam pipes)
-- **Diorama Presentation**: Tilt-shift tabletop world, not flat grid tiles
+- **First-Person Open World**: Immersive 3D frontier, explored from the player's perspective
 - **14 Authored Towns**: Coppertown, Dusty Springs, Junction City, Rattlesnake Canyon, etc.
 - **Quest Chains**: Multi-step narrative quests with branching dialogue
 - **NPC Archetypes**: Sheriff, Doc, Blacksmith, Saloon Owner, Prospector, Outlaw, etc.

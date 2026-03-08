@@ -1,5 +1,5 @@
 /**
- * WorldMap - Overhead view of the Frontier Territory
+ * WorldMap - Map view of the Frontier Territory
  *
  * Displays an old western paper map style visualization of the world
  * with regions, locations, connections, and fog of war.

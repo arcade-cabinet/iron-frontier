@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document defines the comprehensive end-to-end testing requirements for Iron Frontier, a cross-platform isometric RPG set in a Steampunk American Frontier. The testing suite will cover every game system, UI component, collision boundary, state transition, and edge case to ensure complete game stability and correctness before release.
+This document defines the comprehensive end-to-end testing requirements for Iron Frontier, a cross-platform 3D open-world RPG set in a Steampunk American Frontier. The testing suite will cover every game system, UI component, collision boundary, state transition, and edge case to ensure complete game stability and correctness before release.
 
 ## Glossary
 

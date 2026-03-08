@@ -77,7 +77,7 @@ const HEX_ROTATION_STEP = Math.PI / 3;
 
 /** Convert hex-grid offset to a local XZ position relative to the town anchor. */
 function hexToLocal(q: number, r: number): [number, number] {
-  // Offset hex grid (odd-r) to flat XZ
+  // Offset coordinate (odd-r) to flat XZ
   const x = q * HEX_CELL_SIZE + (r % 2 === 0 ? 0 : HEX_CELL_SIZE * 0.5);
   const z = r * HEX_CELL_SIZE * 0.866; // sqrt(3)/2
   return [x, z];

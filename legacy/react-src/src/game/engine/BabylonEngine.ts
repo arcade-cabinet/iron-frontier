@@ -82,7 +82,7 @@ export class BabylonEngine {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.08, 0.07, 0.1, 1);
 
-    // Isometric camera setup
+    // Camera setup
     this.camera = new ArcRotateCamera(
       'camera',
       -Math.PI / 4, // Alpha (rotation around Y)

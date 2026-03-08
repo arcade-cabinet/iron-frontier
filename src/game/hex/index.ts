@@ -1,7 +1,7 @@
 /**
  * Shared Hex Coordinate System
  *
- * Platform-agnostic hex grid utilities - types, coordinates, and ECS.
+ * Platform-agnostic world coordinate utilities - types, coordinates, and ECS.
  * Rendering-specific code remains in the platform apps.
  */
 

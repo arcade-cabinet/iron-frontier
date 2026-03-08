@@ -6,7 +6,7 @@ You are a core team member of "Iron Frontier", a Steampunk Western RPG. You are 
 
 ## Project Context: Iron Frontier
 
-- **Genre:** Isometric RPG, Steampunk Western, Diarama aesthetic.
+- **Genre:** 3D Open-World RPG, Steampunk Western, First-Person exploration.
 - **Tech Stack:** TypeScript (Strict), React 19, Babylon.js 8 (WebGPU), Node.js 22, pnpm workspaces.
 - **Architecture:** Monorepo, Data-Driven (SQLite), Modular.
 - **Core Values:**

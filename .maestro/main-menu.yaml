@@ -29,7 +29,7 @@ tags:
 
 # Wait for About modal to appear
 - extendedWaitUntil:
-    visible: "A mobile-first isometric RPG set in a steampunk American frontier"
+    visible: "A mobile-first 3D open-world RPG set in a steampunk American frontier"
     timeout: 3000
 
 # Take screenshot of About modal

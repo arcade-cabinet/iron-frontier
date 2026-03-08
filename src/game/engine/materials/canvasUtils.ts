@@ -11,7 +11,7 @@ export function makePRNG(seed: string): PRNG {
   return Alea(seed) as unknown as PRNG;
 }
 
-/** Create an off-screen 2D canvas and its context. */
+/** Create an off-screen canvas and its rendering context. */
 export function makeCanvas(
   width: number,
   height: number,

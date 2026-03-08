@@ -13,7 +13,7 @@ Run a full audit of Iron Frontier's current state.
 - Can you start a new game and reach the first town?
 
 ### 2. Core gameplay loop
-- Can the player move through the isometric world?
+- Can the player move through the 3D world?
 - Do NPCs appear in towns with distinct appearances?
 - Can the player interact with NPCs (dialogue, quests)?
 - Does combat work (attack, damage, defeat)?
@@ -41,8 +41,8 @@ Run a full audit of Iron Frontier's current state.
 - Does loot drop from defeated enemies?
 
 ### 6. World traversal
-- Does hex-based overworld movement work?
-- Does terrain vary between hexes?
+- Does open-world overworld movement work?
+- Does terrain vary between regions?
 - Do wilderness encounters spawn?
 - Can the player travel between towns?
 - Does day/night cycle progress?

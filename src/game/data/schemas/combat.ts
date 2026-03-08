@@ -89,8 +89,8 @@ export const EnemyDefinitionSchema = z.object({
   /** Description for UI */
   description: z.string().optional(),
 
-  /** Sprite/model ID */
-  spriteId: z.string().optional(),
+  /** Model ID for rendering */
+  modelId: z.string().optional(),
 
   /** Tags for filtering */
   tags: z.array(z.string()).default([]),

@@ -5,7 +5,7 @@
 
 ## Summary
 
-Complete pivot from Ionic Angular + Capacitor + Babylon.js isometric RPG to first-person open world Old West punk RPG built on Expo 55 + React Three Fiber + React Native Reusables.
+Complete pivot from Ionic Angular + Capacitor + Babylon.js to first-person open world Old West punk RPG built on Expo 55 + React Three Fiber + React Native Reusables.
 
 ## What We're Keeping
 
@@ -24,7 +24,7 @@ All pure TypeScript game logic ports directly — it has zero framework coupling
 | Name/NPC generators | `src/game/data/generation/generators/` | Direct port |
 | Combat calculations | `src/game/data/schemas/combat.ts` | Adapt to real-time FPS |
 | Game systems | `src/game/systems/` | Adapt (turn-based → real-time) |
-| Hex grid system | `src/game/hex/` | Keep for world map reference |
+| World coordinate system | `src/game/hex/` | Keep for world map reference |
 | Tone.js audio | `src/app/game/services/audio/` | Direct port |
 
 ## What We're Porting (Not Deleting)
@@ -200,7 +200,7 @@ On XR: UI layer renders as world-space panels (VRHUDLayer pattern from will-it-b
 
 ## Visual Identity
 
-**Art style:** "Desert Toy Theater" — everything looks like a handcrafted toy diorama of the Old West.
+**Art style:** "Desert Toy Theater" — everything looks like a handcrafted miniature of the Old West, experienced from ground level.
 
 - Warm color palette: dust, rust, brass, copper, leather, gunmetal, whiskey
 - Canvas textures painted with visible brush strokes (not photorealistic)

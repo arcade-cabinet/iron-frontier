@@ -2,7 +2,7 @@
 //
 // Bridges the pure-TypeScript CombatManager with the React/R3F rendering
 // layer. Manages the list of active combat enemies, processes combat ticks
-// via useFrame, and renders hit effect sprites (damage numbers, impact sparks).
+// via useFrame, and renders hit effects (damage numbers, impact sparks).
 // Connects to the Zustand game store for player health/damage.
 //
 // Wires enemy death -> rewards (XP, gold, loot drops, quest events),
@@ -112,7 +112,7 @@ function getWeaponSlots(
 }
 
 // ---------------------------------------------------------------------------
-// Damage number sprite
+// Damage number billboard (Three.js Sprite)
 // ---------------------------------------------------------------------------
 
 function DamageNumber({ data }: { data: DamageNumberData }) {

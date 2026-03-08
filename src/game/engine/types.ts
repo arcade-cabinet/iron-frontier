@@ -1,5 +1,5 @@
 // Core Engine Types - Iron Frontier v2
-// Modern diorama-based world with layered terrain
+// Modern 3D open-world with layered terrain
 
 import * as THREE from 'three';
 
@@ -374,11 +374,11 @@ export const DEFAULT_CAMERA_STATE: CameraState = {
   focusPoint: new THREE.Vector3(32, 5, 32), // Start focused near player spawn
   distance: 30, // Closer for better detail
   azimuth: Math.PI * 0.75, // Rotate to face from top-right
-  elevation: 0.4, // ~23° from vertical - more top-down view
+  elevation: 0.4, // ~23° from vertical - higher vantage point
 
   minDistance: 15,
   maxDistance: 80,
-  minElevation: 0.2, // Allow near top-down
+  minElevation: 0.2, // Allow steep viewing angle
   maxElevation: 1.4, // Allow fairly horizontal
 
   followLag: 0.1,

@@ -13,7 +13,7 @@
  */
 
 /**
- * Axis-Aligned Bounding Box for 2D collision (x/z plane)
+ * Axis-Aligned Bounding Box for collision on the x/z plane
  */
 export interface AABB {
   min: { x: number; z: number };

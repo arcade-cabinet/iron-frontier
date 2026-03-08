@@ -119,8 +119,8 @@ export interface Combatant {
   hasActedThisTurn: boolean;
   /** AI behavior type (for enemies) */
   behavior?: 'aggressive' | 'defensive' | 'ranged' | 'random' | 'support';
-  /** Sprite/model ID for rendering */
-  spriteId?: string;
+  /** Model ID for rendering */
+  modelId?: string;
   /** XP reward when defeated (enemies only) */
   xpReward?: number;
   /** Gold reward when defeated (enemies only) */

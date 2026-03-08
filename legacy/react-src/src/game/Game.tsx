@@ -1,5 +1,5 @@
-// Iron Frontier - Hex-Tile Based Western RPG
-// Fallout 2-style isometric view with Kenney Hexagon Kit tiles
+// Iron Frontier - 3D Open World Western RPG
+// Fallout-style first-person exploration
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {

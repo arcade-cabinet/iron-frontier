@@ -1,7 +1,7 @@
 // HitEffects — Visual feedback data for combat events.
 //
 // Pure data generators: no rendering, no side effects. Each function returns
-// a descriptor object that React components consume to render sprites,
+// a descriptor object that React components consume to render effects,
 // particles, or overlay flashes.
 
 // ---------------------------------------------------------------------------

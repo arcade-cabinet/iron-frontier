@@ -8,7 +8,7 @@ Iron Frontier is a steampunk western RPG with the following key screens:
 - **Splash Screen** - Animated gears with "Loading Steam..." text
 - **Title Screen** - Main menu with Continue/New Game/About options
 - **Character Creation** - Name input for new characters (max 20 chars)
-- **Gameplay** - 3D isometric view with HUD, action bar, and various panels
+- **Gameplay** - 3D first-person view with HUD, action bar, and various panels
 
 ## Test Flows
 
