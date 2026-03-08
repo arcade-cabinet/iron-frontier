@@ -107,7 +107,7 @@ export function createEnemyCombatant(enemy: EnemyDefinition, index: number): Com
     isAlive: true,
     hasActedThisTurn: false,
     behavior: enemy.behavior,
-    spriteId: enemy.spriteId,
+    modelId: enemy.modelId,
     xpReward: enemy.xpReward,
     goldReward: enemy.goldReward,
     lootTableId: enemy.lootTableId,
