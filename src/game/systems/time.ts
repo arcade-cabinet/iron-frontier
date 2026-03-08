@@ -94,11 +94,12 @@ export interface GameClockState {
 
 /**
  * Default configuration for the GameClock.
- * 1 game hour = 2 real minutes (120,000ms)
- * 1 game minute = 2 real seconds (2000ms)
+ * 1 game hour = 4 real minutes (240,000ms)
+ * 1 game minute = 4 real seconds (4000ms)
+ * Full game day = ~96 real minutes (~1.5 hours)
  */
 export const DEFAULT_CLOCK_CONFIG: GameClockConfig = {
-  msPerGameMinute: 2000,
+  msPerGameMinute: 4000,
   tickInterval: 1000,
   phaseBoundaries: {
     dawn: [5, 7],

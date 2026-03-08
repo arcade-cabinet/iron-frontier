@@ -8,11 +8,12 @@
       "collapsed": 100
     },
     "rates": {
-      "travel": 8,
-      "combat": 15,
-      "nightPenalty": 5,
-      "idle": 2
+      "travel": 2,
+      "combat": 5,
+      "nightPenalty": 1.5,
+      "idle": 0.5
     },
+    "rateUnit": "perRealMinute",
     "recovery": {
       "inn": 25,
       "camp": 15,
@@ -65,8 +66,8 @@
     "maxFood": 100,
     "maxWater": 100,
     "consumption": {
-      "food": 4,
-      "water": 6
+      "food": 2,
+      "water": 2.5
     },
     "depletionEffects": {
       "noFood": 2.0,

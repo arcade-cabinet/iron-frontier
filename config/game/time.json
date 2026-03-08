@@ -1,5 +1,5 @@
 {
-  "msPerGameMinute": 2000,
+  "msPerGameMinute": 4000,
   "tickInterval": 1000,
   "startingHour": 10,
   "startingMinute": 0,
@@ -69,5 +69,5 @@
     }
   },
   "daysPerSeason": 30,
-  "realMinutesPerGameDay": 48
+  "realMinutesPerGameDay": 96
 }

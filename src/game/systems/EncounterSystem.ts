@@ -1,12 +1,15 @@
 /**
  * EncounterSystem.ts - Random encounter triggering for Iron Frontier v2
  *
- * Pokemon-style encounter system that triggers based on:
- * - Steps taken in encounter-enabled zones
- * - Time of day (more dangerous at night)
- * - Current route/area danger level
- * - Player level (scaling)
- * - Repel items
+ * Distance-based encounter system for 3D first-person gameplay.
+ * Triggers are based on meters traveled in 3D space, not tile steps.
+ *
+ * Design targets:
+ * - Average encounter every 200-400m of wilderness travel (randomized)
+ * - No encounters within 50m of town boundaries
+ * - Time of day modifiers (more dangerous at night)
+ * - Terrain-based rate modifiers
+ * - Repel items prevent encounters for a distance
  */
 
 /**
@@ -15,10 +18,10 @@
 export interface EncounterZone {
   /** Zone identifier */
   id: string;
-  /** Base encounter rate (0-1, chance per step) */
+  /** Base encounter rate (0-1, chance per distance check) */
   baseRate: number;
-  /** Minimum steps before encounter can trigger */
-  minSteps: number;
+  /** Minimum meters traveled before encounter can trigger */
+  minDistance: number;
   /** Available encounter IDs in this zone */
   encounterPool: string[];
   /** Time-based rate modifiers */
@@ -29,7 +32,12 @@ export interface EncounterZone {
     night: number;
   };
   /** Terrain type affects encounter rate */
-  terrain: 'grass' | 'desert' | 'mountain' | 'road' | 'forest';
+  terrain: 'grass' | 'desert' | 'mountain' | 'road' | 'forest' | 'town';
+  /**
+   * @deprecated Use minDistance instead. Kept for backwards compatibility.
+   * If present and minDistance is not set, will be converted to minDistance.
+   */
+  minSteps?: number;
 }
 
 /**
@@ -50,25 +58,34 @@ export interface EncounterTrigger {
  * Encounter system state
  */
 interface EncounterState {
-  /** Steps taken since last encounter */
-  stepsSinceEncounter: number;
+  /** Meters traveled since last encounter */
+  distanceSinceEncounter: number;
   /** Current zone (null if in safe area) */
   currentZone: EncounterZone | null;
-  /** Repel steps remaining */
-  repelSteps: number;
+  /** Repel distance remaining (meters) */
+  repelDistance: number;
   /** Is encounter system active */
   enabled: boolean;
+  /** Distance to nearest town boundary (meters); 0 = unknown */
+  distanceToTown: number;
 }
 
 type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
 type EncounterCallback = (trigger: EncounterTrigger) => void;
 
+/** Meters between each encounter-chance check */
+const DISTANCE_CHECK_INTERVAL = 10; // check every 10 meters traveled
+
+/** No encounters within this distance of town boundaries */
+const TOWN_SAFE_RADIUS = 50; // meters
+
 export class EncounterSystem {
   private state: EncounterState = {
-    stepsSinceEncounter: 0,
+    distanceSinceEncounter: 0,
     currentZone: null,
-    repelSteps: 0,
+    repelDistance: 0,
     enabled: true,
+    distanceToTown: Infinity,
   };
 
   private zones: Map<string, EncounterZone> = new Map();
@@ -78,7 +95,6 @@ export class EncounterSystem {
   // Movement tracking
   private lastPosition: { x: number; z: number } = { x: 0, z: 0 };
   private accumulatedDistance = 0;
-  private readonly STEP_DISTANCE = 1.0; // Units of movement per "step"
 
   // Terrain-based rate modifiers
   private readonly TERRAIN_MODIFIERS: Record<string, number> = {
@@ -87,16 +103,22 @@ export class EncounterSystem {
     mountain: 0.5,
     road: 0.2,
     forest: 1.2,
+    town: 0, // no encounters in town
   };
 
   constructor() {
-    console.log('[EncounterSystem] Initialized');
+    console.log('[EncounterSystem] Initialized (distance-based, 3D)');
   }
 
   /**
-   * Register an encounter zone
+   * Register an encounter zone.
+   * Handles backwards-compatible conversion of minSteps to minDistance.
    */
   public registerZone(zone: EncounterZone): void {
+    // Backwards compat: if zone has minSteps but no minDistance, convert
+    if (zone.minSteps !== undefined && zone.minDistance === undefined) {
+      zone = { ...zone, minDistance: zone.minSteps * DISTANCE_CHECK_INTERVAL };
+    }
     this.zones.set(zone.id, zone);
   }
 
@@ -119,7 +141,16 @@ export class EncounterSystem {
   }
 
   /**
-   * Update player position (call when player moves)
+   * Set distance to nearest town boundary.
+   * Encounters are suppressed within TOWN_SAFE_RADIUS (50m).
+   */
+  public setDistanceToTown(meters: number): void {
+    this.state.distanceToTown = meters;
+  }
+
+  /**
+   * Update player position (call when player moves in 3D world).
+   * Coordinates are in world-space meters.
    */
   public updatePosition(x: number, z: number): void {
     if (!this.state.enabled || !this.state.currentZone) {
@@ -127,7 +158,7 @@ export class EncounterSystem {
       return;
     }
 
-    // Calculate distance moved
+    // Calculate distance moved (meters)
     const dx = x - this.lastPosition.x;
     const dz = z - this.lastPosition.z;
     const distance = Math.sqrt(dx * dx + dz * dz);
@@ -135,30 +166,35 @@ export class EncounterSystem {
     this.accumulatedDistance += distance;
     this.lastPosition = { x, z };
 
-    // Convert distance to steps
-    while (this.accumulatedDistance >= this.STEP_DISTANCE) {
-      this.accumulatedDistance -= this.STEP_DISTANCE;
-      this.processStep();
+    // Check every DISTANCE_CHECK_INTERVAL meters
+    while (this.accumulatedDistance >= DISTANCE_CHECK_INTERVAL) {
+      this.accumulatedDistance -= DISTANCE_CHECK_INTERVAL;
+      this.processDistanceCheck();
     }
   }
 
   /**
-   * Process a single step for encounter checking
+   * Process a distance check (every DISTANCE_CHECK_INTERVAL meters).
    */
-  private processStep(): void {
+  private processDistanceCheck(): void {
     const zone = this.state.currentZone;
     if (!zone) return;
 
-    this.state.stepsSinceEncounter++;
+    this.state.distanceSinceEncounter += DISTANCE_CHECK_INTERVAL;
 
-    // Check repel effect
-    if (this.state.repelSteps > 0) {
-      this.state.repelSteps--;
+    // Suppress encounters near towns (within 50m)
+    if (this.state.distanceToTown < TOWN_SAFE_RADIUS) {
       return;
     }
 
-    // Must take minimum steps before encounter
-    if (this.state.stepsSinceEncounter < zone.minSteps) {
+    // Check repel effect
+    if (this.state.repelDistance > 0) {
+      this.state.repelDistance -= DISTANCE_CHECK_INTERVAL;
+      return;
+    }
+
+    // Must travel minimum distance before encounter can trigger
+    if (this.state.distanceSinceEncounter < zone.minDistance) {
       return;
     }
 
@@ -172,7 +208,7 @@ export class EncounterSystem {
   }
 
   /**
-   * Calculate current encounter chance
+   * Calculate current encounter chance for this distance check.
    */
   private calculateEncounterChance(zone: EncounterZone): number {
     let rate = zone.baseRate;
@@ -183,10 +219,11 @@ export class EncounterSystem {
     // Apply terrain modifier
     rate *= this.TERRAIN_MODIFIERS[zone.terrain] ?? 1.0;
 
-    // Increase chance slightly based on steps since last encounter
-    // This prevents long dry spells
-    const stepBonus = Math.min(0.1, (this.state.stepsSinceEncounter - zone.minSteps) * 0.002);
-    rate += stepBonus;
+    // Increase chance based on distance since last encounter to prevent
+    // long dry spells. Each check beyond minDistance adds a small bonus.
+    const checksOverMin = Math.max(0, (this.state.distanceSinceEncounter - zone.minDistance) / DISTANCE_CHECK_INTERVAL);
+    const distanceBonus = Math.min(0.1, checksOverMin * 0.002);
+    rate += distanceBonus;
 
     // Cap at reasonable maximum
     return Math.min(0.25, rate);
@@ -208,13 +245,13 @@ export class EncounterSystem {
       timeOfDay: this.timeOfDay,
     };
 
-    // Reset step counter
-    this.state.stepsSinceEncounter = 0;
+    // Reset distance counter
+    this.state.distanceSinceEncounter = 0;
 
     // Notify listeners
     this.encounterCallbacks.forEach((cb) => cb(trigger));
 
-    console.log(`[EncounterSystem] Triggered: ${encounterId} in ${zone.id}`);
+    console.log(`[EncounterSystem] Triggered: ${encounterId} in ${zone.id} (distance-based)`);
   }
 
   /**
@@ -228,18 +265,28 @@ export class EncounterSystem {
   }
 
   /**
-   * Apply repel effect (no encounters for N steps)
+   * Apply repel effect (no encounters for N meters of travel).
+   * For backwards compatibility, also accepts the old "steps" count
+   * and converts to meters (steps * DISTANCE_CHECK_INTERVAL).
    */
-  public applyRepel(steps: number): void {
-    this.state.repelSteps = Math.max(this.state.repelSteps, steps);
-    console.log(`[EncounterSystem] Repel active for ${this.state.repelSteps} steps`);
+  public applyRepel(distance: number): void {
+    this.state.repelDistance = Math.max(this.state.repelDistance, distance);
+    console.log(`[EncounterSystem] Repel active for ${this.state.repelDistance}m`);
   }
 
   /**
-   * Get remaining repel steps
+   * Get remaining repel distance (meters).
+   * @deprecated Renamed from getRepelSteps for clarity; kept for compat.
    */
   public getRepelSteps(): number {
-    return this.state.repelSteps;
+    return this.state.repelDistance;
+  }
+
+  /**
+   * Get remaining repel distance in meters.
+   */
+  public getRepelDistance(): number {
+    return this.state.repelDistance;
   }
 
   /**
@@ -260,8 +307,9 @@ export class EncounterSystem {
    * Reset encounter state (e.g., after loading a save)
    */
   public reset(): void {
-    this.state.stepsSinceEncounter = 0;
-    this.state.repelSteps = 0;
+    this.state.distanceSinceEncounter = 0;
+    this.state.repelDistance = 0;
+    this.state.distanceToTown = Infinity;
     this.accumulatedDistance = 0;
   }
 
@@ -270,17 +318,23 @@ export class EncounterSystem {
    */
   public getDebugInfo(): {
     zone: string | null;
+    /** Meters traveled since last encounter */
     steps: number;
+    /** Remaining repel distance in meters */
     repel: number;
+    /** Current encounter chance per distance check */
     chance: number;
+    /** Distance to nearest town (meters) */
+    distanceToTown: number;
   } {
     return {
       zone: this.state.currentZone?.id ?? null,
-      steps: this.state.stepsSinceEncounter,
-      repel: this.state.repelSteps,
+      steps: this.state.distanceSinceEncounter,
+      repel: this.state.repelDistance,
       chance: this.state.currentZone
         ? this.calculateEncounterChance(this.state.currentZone)
         : 0,
+      distanceToTown: this.state.distanceToTown,
     };
   }
 }
@@ -296,22 +350,26 @@ export function getEncounterSystem(): EncounterSystem {
 }
 
 /**
- * Create default route encounter zones
+ * Create default route encounter zones (distance-based for 3D).
+ *
+ * Design target: average encounter every 200-400m of wilderness travel.
+ * minDistance is the mandatory safe travel before first possible encounter.
+ * baseRate is the per-check (every 10m) chance once past minDistance.
  */
 export function createRouteEncounterZones(): EncounterZone[] {
   return [
     {
       id: 'dusty_trail',
       baseRate: 0.08,
-      minSteps: 15,
+      minDistance: 150,  // 150m minimum before encounters
       encounterPool: ['bandit_ambush', 'coyote_pack', 'rattlesnake'],
       timeModifiers: { dawn: 0.8, day: 1.0, dusk: 1.2, night: 1.5 },
       terrain: 'desert',
     },
     {
       id: 'canyon_pass',
-      baseRate: 0.1,
-      minSteps: 10,
+      baseRate: 0.10,
+      minDistance: 100,  // Tight quarters, shorter safe distance
       encounterPool: ['bandit_gang', 'mountain_lion', 'rockslide'],
       timeModifiers: { dawn: 0.9, day: 1.0, dusk: 1.3, night: 1.8 },
       terrain: 'mountain',
@@ -319,7 +377,7 @@ export function createRouteEncounterZones(): EncounterZone[] {
     {
       id: 'riverside_path',
       baseRate: 0.06,
-      minSteps: 20,
+      minDistance: 200,  // Calmer area, longer between encounters
       encounterPool: ['snake_nest', 'wild_boar', 'drifter'],
       timeModifiers: { dawn: 1.1, day: 0.9, dusk: 1.0, night: 1.3 },
       terrain: 'grass',
@@ -327,7 +385,7 @@ export function createRouteEncounterZones(): EncounterZone[] {
     {
       id: 'forest_road',
       baseRate: 0.09,
-      minSteps: 12,
+      minDistance: 120,  // Dense terrain, more frequent checks
       encounterPool: ['wolf_pack', 'bear', 'outlaw_camp'],
       timeModifiers: { dawn: 1.0, day: 0.8, dusk: 1.4, night: 2.0 },
       terrain: 'forest',
@@ -335,7 +393,7 @@ export function createRouteEncounterZones(): EncounterZone[] {
     {
       id: 'main_road',
       baseRate: 0.03,
-      minSteps: 30,
+      minDistance: 300,  // Safe patrolled road, rare encounters
       encounterPool: ['highwayman', 'traveling_merchant'],
       timeModifiers: { dawn: 0.5, day: 0.3, dusk: 0.8, night: 1.5 },
       terrain: 'road',

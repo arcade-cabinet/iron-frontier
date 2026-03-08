@@ -120,9 +120,9 @@ export interface SurvivalActions {
   /**
    * Applies fatigue from combat.
    *
-   * @param intensity - Combat intensity multiplier
+   * @param realMinutes - Real-time minutes in active combat
    */
-  applyCombatFatigue: (intensity?: number) => void;
+  applyCombatFatigue: (realMinutes?: number) => void;
 
   /**
    * Applies rest recovery (from items).
@@ -428,6 +428,15 @@ export const createSurvivalSlice: StateCreator<
   const provisions = new ProvisionsSystem();
   const camping = new CampingSystem();
 
+  /**
+   * Converts game hours to real minutes using the clock's time scale.
+   * With msPerGameMinute = 4000: 1 game hour = 60 * 4000ms = 240s = 4 real minutes.
+   */
+  const gameHoursToRealMinutes = (gameHours: number): number => {
+    const msPerGameMinute = clock['config']?.msPerGameMinute ?? 4000;
+    return (gameHours * 60 * msPerGameMinute) / 60_000;
+  };
+
   // Sync system state from store state
   const syncSystems = () => {
     const state = get();
@@ -469,10 +478,10 @@ export const createSurvivalSlice: StateCreator<
       syncSystems();
       clock.advanceHours(hours);
 
-      // Apply night fatigue if awake at night
+      // Apply night fatigue if awake at night (convert to real minutes)
       const isNight = clock.isNight();
       if (isNight) {
-        fatigue.applyNightFatigue(hours);
+        fatigue.applyNightFatigue(gameHoursToRealMinutes(hours));
       }
 
       set({
@@ -517,21 +526,23 @@ export const createSurvivalSlice: StateCreator<
       syncSystems();
       const isNight = clock.isNight();
       const provisionMultiplier = provisions.getFatigueMultiplier();
+      const realMinutes = gameHoursToRealMinutes(hours);
 
-      fatigue.applyTravelFatigue(hours, isNight);
+      fatigue.applyTravelFatigue(realMinutes, isNight);
 
-      // Apply provision penalty
+      // Apply provision penalty (scaled to real minutes)
       if (provisionMultiplier > 1) {
-        const extraFatigue = hours * 8 * (provisionMultiplier - 1);
+        const baseFatiguePerRealMin = 2; // matches travel rate
+        const extraFatigue = realMinutes * baseFatiguePerRealMin * (provisionMultiplier - 1);
         fatigue.addFatigue(extraFatigue);
       }
 
       set({ fatigueState: fatigue.getState() });
     },
 
-    applyCombatFatigue: (intensity = 1) => {
+    applyCombatFatigue: (realMinutes = 1) => {
       syncSystems();
-      fatigue.applyCombatFatigue(intensity);
+      fatigue.applyCombatFatigue(realMinutes);
       set({ fatigueState: fatigue.getState() });
     },
 
@@ -679,19 +690,21 @@ export const createSurvivalSlice: StateCreator<
     performTravel: (hours: number) => {
       syncSystems();
       const isNight = clock.isNight();
+      const realMinutes = gameHoursToRealMinutes(hours);
 
       // Advance time
       clock.advanceHours(hours);
 
-      // Consume provisions
+      // Consume provisions (still denominated in game hours)
       const consumed = provisions.consumeForTravel(hours);
 
-      // Apply fatigue with provision multiplier
+      // Apply fatigue with provision multiplier (now real-minute-based)
       const provisionMultiplier = provisions.getFatigueMultiplier();
-      fatigue.applyTravelFatigue(hours, isNight);
+      fatigue.applyTravelFatigue(realMinutes, isNight);
 
       if (provisionMultiplier > 1) {
-        const extraFatigue = hours * 8 * (provisionMultiplier - 1);
+        const baseFatiguePerRealMin = 2; // matches travel rate
+        const extraFatigue = realMinutes * baseFatiguePerRealMin * (provisionMultiplier - 1);
         fatigue.addFatigue(extraFatigue);
       }
 
@@ -704,9 +717,11 @@ export const createSurvivalSlice: StateCreator<
         fatigueState: fatigue.getState(),
       });
 
+      const baseFatigue = realMinutes * 2; // travel rate
+      const nightExtra = isNight ? realMinutes * 1.5 : 0;
       return {
         hoursElapsed: hours,
-        fatigueGained: hours * 8 * provisionMultiplier + (isNight ? hours * 5 : 0),
+        fatigueGained: (baseFatigue + nightExtra) * provisionMultiplier,
         provisionsConsumed: {
           food: consumed.foodConsumed,
           water: consumed.waterConsumed,

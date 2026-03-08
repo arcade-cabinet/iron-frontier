@@ -127,14 +127,20 @@ export interface ProvisionsState {
 
 /**
  * Default provisions configuration.
+ *
+ * Consumption rates are per game hour. With msPerGameMinute = 4000:
+ *   1 game hour = 4 real minutes
+ *   food  = 2/game-hr → starting 75 lasts ~37.5 game-hours (~2.5 real hours) of travel
+ *   water = 2.5/game-hr → starting 75 lasts ~30 game-hours (~2 real hours) of travel
+ * Idle consumption (25% of travel) extends this to 3+ real hours of mixed play.
  */
 export const DEFAULT_PROVISIONS_CONFIG: ProvisionsConfig = {
   maxFood: 100,
   maxWater: 100,
 
   consumption: {
-    food: 4,   // 4 units per hour of travel (25 hours to deplete)
-    water: 6,  // 6 units per hour of travel (16.7 hours to deplete)
+    food: 2,    // 2 units per game hour of travel
+    water: 2.5, // 2.5 units per game hour of travel
   },
 
   depletionEffects: {

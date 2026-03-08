@@ -92,6 +92,14 @@ export interface FatigueState {
 
 /**
  * Default fatigue configuration.
+ *
+ * Rates are denominated in fatigue per REAL minute to decouple from the
+ * tile/step-based legacy model. With maxFatigue=100 and travel=2/real-min,
+ * the player can explore for ~50 real minutes before needing rest.
+ *
+ * Conversion context (msPerGameMinute = 4000):
+ *   1 game hour = 4 real minutes
+ *   1 game day  ≈ 96 real minutes (~1.5 hours)
  */
 export const DEFAULT_FATIGUE_CONFIG: FatigueConfig = {
   maxFatigue: 100,
@@ -102,14 +110,14 @@ export const DEFAULT_FATIGUE_CONFIG: FatigueConfig = {
     collapsed: 100,
   },
   rates: {
-    travel: 8,      // 8 fatigue per hour of travel
-    combat: 15,     // 15 fatigue per combat encounter
-    nightPenalty: 5, // Extra 5 fatigue per hour awake at night
-    idle: 2,        // 2 fatigue per hour just being awake
+    travel: 2,       // ~2 fatigue per real minute of movement → 50 min to exhaust
+    combat: 5,       // ~5 fatigue per real minute in active combat
+    nightPenalty: 1.5, // Extra 1.5 fatigue per real minute awake at night
+    idle: 0.5,       // 0.5 fatigue per real minute standing still
   },
   recovery: {
-    inn: 25,    // 25 fatigue recovered per hour at inn
-    camp: 15,   // 15 fatigue recovered per hour camping
+    inn: 25,    // 25 fatigue recovered per game hour at inn
+    camp: 15,   // 15 fatigue recovered per game hour camping
     item: 20,   // 20 fatigue recovered per rest item
   },
 };
@@ -325,13 +333,15 @@ export class FatigueSystem {
   /**
    * Applies fatigue from traveling.
    *
-   * @param hours - Number of game hours traveled
+   * Rates are per real minute. Pass real minutes of travel, not game hours.
+   *
+   * @param realMinutes - Real-time minutes of travel/movement
    * @param isNight - Whether it's currently night time
    */
-  applyTravelFatigue(hours: number, isNight = false): void {
-    let fatigue = hours * this.config.rates.travel;
+  applyTravelFatigue(realMinutes: number, isNight = false): void {
+    let fatigue = realMinutes * this.config.rates.travel;
     if (isNight) {
-      fatigue += hours * this.config.rates.nightPenalty;
+      fatigue += realMinutes * this.config.rates.nightPenalty;
     }
     this.addFatigue(fatigue);
   }
@@ -339,22 +349,25 @@ export class FatigueSystem {
   /**
    * Applies fatigue from combat.
    *
-   * @param intensity - Combat intensity multiplier (default: 1)
+   * Rates are per real minute. The `realMinutes` parameter represents the
+   * duration of the combat encounter in real time.
+   *
+   * @param realMinutes - Real-time minutes in active combat (default: 1)
    */
-  applyCombatFatigue(intensity = 1): void {
-    this.addFatigue(this.config.rates.combat * intensity);
+  applyCombatFatigue(realMinutes = 1): void {
+    this.addFatigue(this.config.rates.combat * realMinutes);
   }
 
   /**
    * Applies fatigue from being awake (idle time).
    *
-   * @param hours - Number of game hours awake
+   * @param realMinutes - Real-time minutes awake idle
    * @param isNight - Whether it's currently night time
    */
-  applyIdleFatigue(hours: number, isNight = false): void {
-    let fatigue = hours * this.config.rates.idle;
+  applyIdleFatigue(realMinutes: number, isNight = false): void {
+    let fatigue = realMinutes * this.config.rates.idle;
     if (isNight) {
-      fatigue += hours * this.config.rates.nightPenalty;
+      fatigue += realMinutes * this.config.rates.nightPenalty;
     }
     this.addFatigue(fatigue);
   }
@@ -362,10 +375,10 @@ export class FatigueSystem {
   /**
    * Applies fatigue from the night penalty only.
    *
-   * @param hours - Number of game hours awake at night
+   * @param realMinutes - Real-time minutes awake at night
    */
-  applyNightFatigue(hours: number): void {
-    this.addFatigue(hours * this.config.rates.nightPenalty);
+  applyNightFatigue(realMinutes: number): void {
+    this.addFatigue(realMinutes * this.config.rates.nightPenalty);
   }
 
   /**
@@ -479,18 +492,18 @@ export function createFatigueSystem(
 /**
  * Calculates fatigue gain for a travel segment.
  *
- * @param hours - Travel duration in game hours
+ * @param realMinutes - Travel duration in real minutes
  * @param phase - Current time phase
  * @returns Fatigue amount
  */
 export function calculateTravelFatigue(
-  hours: number,
+  realMinutes: number,
   phase: TimePhase
 ): number {
   const isNight = phase === 'night';
-  let fatigue = hours * DEFAULT_FATIGUE_CONFIG.rates.travel;
+  let fatigue = realMinutes * DEFAULT_FATIGUE_CONFIG.rates.travel;
   if (isNight) {
-    fatigue += hours * DEFAULT_FATIGUE_CONFIG.rates.nightPenalty;
+    fatigue += realMinutes * DEFAULT_FATIGUE_CONFIG.rates.nightPenalty;
   }
   return fatigue;
 }

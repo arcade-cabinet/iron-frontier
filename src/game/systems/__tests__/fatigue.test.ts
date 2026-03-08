@@ -169,59 +169,59 @@ describe('FatigueSystem', () => {
   });
 
   describe('travel fatigue', () => {
-    it('should apply travel fatigue', () => {
-      fatigue.applyTravelFatigue(2);
-      expect(fatigue.getCurrent()).toBe(16); // 2 hours * 8 per hour
+    it('should apply travel fatigue (per real minute)', () => {
+      fatigue.applyTravelFatigue(2); // 2 real minutes
+      expect(fatigue.getCurrent()).toBe(4); // 2 min * 2 per min
     });
 
     it('should apply night penalty', () => {
-      fatigue.applyTravelFatigue(2, true);
-      expect(fatigue.getCurrent()).toBe(26); // (2 * 8) + (2 * 5)
+      fatigue.applyTravelFatigue(2, true); // 2 real minutes at night
+      expect(fatigue.getCurrent()).toBe(7); // (2 * 2) + (2 * 1.5)
     });
 
     it('should not apply night penalty during day', () => {
       fatigue.applyTravelFatigue(2, false);
-      expect(fatigue.getCurrent()).toBe(16);
+      expect(fatigue.getCurrent()).toBe(4);
     });
 
     it('should accumulate over multiple travels', () => {
       fatigue.applyTravelFatigue(1);
       fatigue.applyTravelFatigue(1);
-      expect(fatigue.getCurrent()).toBe(16);
+      expect(fatigue.getCurrent()).toBe(4); // 2 * 2
     });
   });
 
   describe('combat fatigue', () => {
-    it('should apply combat fatigue', () => {
-      fatigue.applyCombatFatigue();
-      expect(fatigue.getCurrent()).toBe(15);
+    it('should apply combat fatigue (per real minute)', () => {
+      fatigue.applyCombatFatigue(); // 1 real minute default
+      expect(fatigue.getCurrent()).toBe(5); // 1 * 5
     });
 
-    it('should apply combat fatigue with intensity', () => {
-      fatigue.applyCombatFatigue(2);
-      expect(fatigue.getCurrent()).toBe(30);
+    it('should apply combat fatigue with duration', () => {
+      fatigue.applyCombatFatigue(2); // 2 real minutes of combat
+      expect(fatigue.getCurrent()).toBe(10); // 2 * 5
     });
 
-    it('should apply fractional intensity', () => {
+    it('should apply fractional duration', () => {
       fatigue.applyCombatFatigue(0.5);
-      expect(fatigue.getCurrent()).toBe(7.5);
+      expect(fatigue.getCurrent()).toBe(2.5); // 0.5 * 5
     });
   });
 
   describe('idle fatigue', () => {
-    it('should apply idle fatigue', () => {
-      fatigue.applyIdleFatigue(2);
-      expect(fatigue.getCurrent()).toBe(4); // 2 hours * 2 per hour
+    it('should apply idle fatigue (per real minute)', () => {
+      fatigue.applyIdleFatigue(2); // 2 real minutes
+      expect(fatigue.getCurrent()).toBe(1); // 2 min * 0.5 per min
     });
 
     it('should apply night penalty when idle at night', () => {
       fatigue.applyIdleFatigue(2, true);
-      expect(fatigue.getCurrent()).toBe(14); // (2 * 2) + (2 * 5)
+      expect(fatigue.getCurrent()).toBe(4); // (2 * 0.5) + (2 * 1.5)
     });
 
     it('should apply night fatigue only', () => {
-      fatigue.applyNightFatigue(2);
-      expect(fatigue.getCurrent()).toBe(10); // 2 * 5
+      fatigue.applyNightFatigue(2); // 2 real minutes
+      expect(fatigue.getCurrent()).toBe(3); // 2 * 1.5
     });
   });
 
@@ -405,9 +405,9 @@ describe('FatigueSystem', () => {
       expect(fatigue.getCurrent()).toBe(50);
     });
 
-    it('should handle negative intensity', () => {
+    it('should handle negative duration', () => {
       fatigue.applyCombatFatigue(-1);
-      expect(fatigue.getCurrent()).toBe(-15);
+      expect(fatigue.getCurrent()).toBe(-5);
     });
 
     it('should handle very large fatigue values', () => {
@@ -438,22 +438,22 @@ describe('utility functions', () => {
   describe('calculateTravelFatigue', () => {
     it('should calculate day travel fatigue', () => {
       const fatigue = calculateTravelFatigue(2, 'day');
-      expect(fatigue).toBe(16); // 2 * 8
+      expect(fatigue).toBe(4); // 2 * 2
     });
 
     it('should calculate night travel fatigue', () => {
       const fatigue = calculateTravelFatigue(2, 'night');
-      expect(fatigue).toBe(26); // (2 * 8) + (2 * 5)
+      expect(fatigue).toBe(7); // (2 * 2) + (2 * 1.5)
     });
 
     it('should handle dawn as day', () => {
       const fatigue = calculateTravelFatigue(2, 'dawn');
-      expect(fatigue).toBe(16);
+      expect(fatigue).toBe(4);
     });
 
     it('should handle dusk as day', () => {
       const fatigue = calculateTravelFatigue(2, 'dusk');
-      expect(fatigue).toBe(16);
+      expect(fatigue).toBe(4);
     });
   });
 

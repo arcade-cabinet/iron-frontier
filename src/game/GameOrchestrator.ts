@@ -330,10 +330,10 @@ class GameOrchestrator {
    * Apply passive survival effects proportional to elapsed game time.
    *
    * Called ~1 Hz during active gameplay. Handles:
-   * - Idle fatigue accumulation (2/game-hour base, +5/hour at night)
+   * - Idle fatigue accumulation (0.5/real-min base, +1.5/real-min at night)
    * - Passive provision consumption (at 25% of travel rate)
    * - Dehydration health damage (5 HP/game-hour when water is depleted)
-   * - Fatigue speed warnings at thresholds
+   * - Graduated HUD warnings for fatigue, food, and water
    */
   private tickSurvival(elapsedGameMinutes: number): void {
     const state = gameStore.getState();
@@ -341,13 +341,15 @@ class GameOrchestrator {
 
     if (elapsedHours <= 0) return;
 
-    // --- Idle fatigue (2 fatigue per game hour, +5 at night) ---
-    // The fatigue system's applyIdleFatigue is not exposed on the slice,
-    // so we use setFatigue to manually apply the idle rate.
+    // Convert game time to real minutes for fatigue (msPerGameMinute = 4000)
+    // 1 game minute = 4 real seconds = 4/60 real minutes
+    const realMinutesElapsed = (elapsedGameMinutes * 4000) / 60_000;
+
+    // --- Idle fatigue (0.5 per real minute, +1.5 at night) ---
     const isNight = state.isNight();
-    const idleFatigueRate = 2; // per game hour
-    const nightPenaltyRate = isNight ? 5 : 0;
-    const fatigueGain = (idleFatigueRate + nightPenaltyRate) * elapsedHours;
+    const idleFatigueRate = 0.5;  // per real minute
+    const nightPenaltyRate = isNight ? 1.5 : 0;
+    const fatigueGain = (idleFatigueRate + nightPenaltyRate) * realMinutesElapsed;
 
     if (fatigueGain > 0) {
       const currentFatigue = state.fatigueState.current;
@@ -356,26 +358,44 @@ class GameOrchestrator {
         state.setFatigue(newFatigue);
       }
 
-      // Warn at threshold crossings
-      if (currentFatigue < 75 && newFatigue >= 75) {
-        state.addNotification('warning', 'You are exhausted. Movement speed is severely reduced. Rest soon!');
+      // Graduated fatigue warnings at threshold crossings
+      if (currentFatigue < 90 && newFatigue >= 90) {
+        state.addNotification('warning', "You're exhausted! Find shelter to rest.");
+      } else if (currentFatigue < 75 && newFatigue >= 75) {
+        state.addNotification('warning', "You're getting tired...");
       } else if (currentFatigue < 50 && newFatigue >= 50) {
         state.addNotification('warning', 'Weariness slows your movements. You should rest.');
       }
     }
 
     // --- Passive provision consumption (at reduced idle rate) ---
-    // Use consumeProvisions with a fraction of the elapsed time to
-    // simulate background food/water needs (25% of travel consumption rate)
     const idleConsumptionHours = elapsedHours * IDLE_PROVISION_RATE;
     if (idleConsumptionHours > 0) {
+      // Snapshot provision levels BEFORE consuming
+      const foodBefore = state.provisionsState.food;
+      const waterBefore = state.provisionsState.water;
+      const maxFood = 100; // matches DEFAULT_PROVISIONS_CONFIG.maxFood
+      const maxWater = 100;
+
       const consumption = state.consumeProvisions(idleConsumptionHours);
 
+      // Re-read after consumption
+      const afterState = gameStore.getState();
+      const foodAfter = afterState.provisionsState.food;
+      const waterAfter = afterState.provisionsState.water;
+
+      // --- Food warnings ---
       if (consumption.ranOutOfFood) {
-        state.addNotification('warning', 'You have run out of food! Fatigue will increase rapidly.');
+        state.addNotification('warning', "You're starving! Find food immediately.");
+      } else if (foodBefore / maxFood > 0.25 && foodAfter / maxFood <= 0.25) {
+        state.addNotification('warning', 'Supplies running low.');
       }
+
+      // --- Water warnings ---
       if (consumption.ranOutOfWater) {
-        state.addNotification('warning', 'You have run out of water! Health will drain over time.');
+        state.addNotification('warning', "You're dehydrated! Find water immediately.");
+      } else if (waterBefore / maxWater > 0.25 && waterAfter / maxWater <= 0.25) {
+        state.addNotification('warning', 'Water is running low. Find a source soon.');
       }
     }
 
@@ -390,9 +410,8 @@ class GameOrchestrator {
 
     // --- Fatigue collapse check ---
     const finalState = gameStore.getState();
-    if (finalState.phase === 'game_over') return; // Player died from dehydration; skip further checks
+    if (finalState.phase === 'game_over') return;
     if (finalState.fatigueState.current >= 100 && finalState.playerStats.health > 0) {
-      // Collapsed from exhaustion — force rest notification
       state.addNotification('warning', 'You collapse from exhaustion and cannot continue!');
     }
   }

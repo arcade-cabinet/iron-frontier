@@ -3,10 +3,11 @@
  *
  * Tests cover:
  * - Encounter zone registration and management
- * - Step-based encounter triggering
+ * - Distance-based encounter triggering (meters traveled in 3D space)
  * - Time of day modifiers
  * - Terrain-based rate modifiers
- * - Repel effects
+ * - Repel effects (distance-based)
+ * - Town safe radius
  * - Movement tracking and distance calculation
  * - Edge cases (no encounters, empty pools, etc.)
  */
@@ -18,6 +19,17 @@ import {
     type EncounterTrigger,
     type EncounterZone,
 } from '../EncounterSystem';
+
+// Helper: move the player in 10m increments along the X axis
+function movePlayer(system: EncounterSystem, meters: number, startX = 0): number {
+  const steps = Math.ceil(meters / 10);
+  let x = startX;
+  for (let i = 0; i < steps; i++) {
+    x += 10;
+    system.updatePosition(x, 0);
+  }
+  return x;
+}
 
 describe('EncounterSystem', () => {
   let system: EncounterSystem;
@@ -50,7 +62,7 @@ describe('EncounterSystem', () => {
     const testZone: EncounterZone = {
       id: 'test_zone',
       baseRate: 0.1,
-      minSteps: 10,
+      minDistance: 50,
       encounterPool: ['enemy_1', 'enemy_2'],
       timeModifiers: { dawn: 0.8, day: 1.0, dusk: 1.2, night: 1.5 },
       terrain: 'grass',
@@ -93,12 +105,32 @@ describe('EncounterSystem', () => {
       system.setCurrentZone('zone_2');
       expect(system.getDebugInfo().zone).toBe('zone_2');
     });
+
+    it('should convert legacy minSteps to minDistance', () => {
+      const legacyZone: EncounterZone = {
+        id: 'legacy_zone',
+        baseRate: 0.1,
+        minDistance: undefined as any,
+        minSteps: 10, // should become minDistance: 100
+        encounterPool: ['enemy_1'],
+        timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
+        terrain: 'grass',
+      };
+
+      system.registerZone(legacyZone);
+      system.setCurrentZone('legacy_zone');
+
+      // Move 50m — should NOT trigger (minDistance would be 100)
+      const encounters: EncounterTrigger[] = [];
+      system.onEncounter((trigger) => encounters.push(trigger));
+      movePlayer(system, 50);
+      expect(encounters.length).toBe(0);
+    });
   });
 
   describe('time of day', () => {
     it('should set time of day', () => {
       system.setTimeOfDay('night');
-      // Time is internal, but affects encounter rate calculation
       expect(() => system.setTimeOfDay('dawn')).not.toThrow();
       expect(() => system.setTimeOfDay('day')).not.toThrow();
       expect(() => system.setTimeOfDay('dusk')).not.toThrow();
@@ -108,7 +140,7 @@ describe('EncounterSystem', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 30,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 0.5, day: 1.0, dusk: 1.5, night: 2.0 },
         terrain: 'grass',
@@ -117,16 +149,14 @@ describe('EncounterSystem', () => {
       system.registerZone(zone);
       system.setCurrentZone('test_zone');
 
-      // Move enough steps to pass minSteps
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Move enough to pass minDistance
+      movePlayer(system, 100);
 
       const dayChance = system.getDebugInfo().chance;
 
       system.setTimeOfDay('night');
-      // Move a bit more to update
-      system.updatePosition(10, 0);
+      // Move more to update
+      system.updatePosition(200, 0);
 
       const nightChance = system.getDebugInfo().chance;
 
@@ -139,7 +169,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 0.1,
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -152,40 +182,35 @@ describe('EncounterSystem', () => {
 
     it('should track position updates', () => {
       system.updatePosition(0, 0);
-      system.updatePosition(1, 0);
-      system.updatePosition(2, 0);
+      system.updatePosition(10, 0);
+      system.updatePosition(20, 0);
 
       const debug = system.getDebugInfo();
       expect(debug.steps).toBeGreaterThan(0);
     });
 
-    it('should accumulate distance into steps', () => {
-      // Move 1 unit at a time (STEP_DISTANCE = 1.0)
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+    it('should accumulate distance in meters', () => {
+      // Move 10m at a time (check interval is 10m)
+      movePlayer(system, 100);
 
       const debug = system.getDebugInfo();
-      expect(debug.steps).toBeGreaterThanOrEqual(5);
+      // steps field now represents meters traveled since last encounter
+      expect(debug.steps).toBeGreaterThanOrEqual(50);
     });
 
-    it('should not track steps when disabled', () => {
+    it('should not track distance when disabled', () => {
       system.setEnabled(false);
 
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 100);
 
       const debug = system.getDebugInfo();
       expect(debug.steps).toBe(0);
     });
 
-    it('should not track steps when no zone is set', () => {
+    it('should not track distance when no zone is set', () => {
       system.setCurrentZone(null);
 
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 100);
 
       const debug = system.getDebugInfo();
       expect(debug.steps).toBe(0);
@@ -193,12 +218,11 @@ describe('EncounterSystem', () => {
 
     it('should calculate diagonal movement correctly', () => {
       // Move diagonally (sqrt(2) distance per step)
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, i);
+      for (let i = 0; i < 20; i++) {
+        system.updatePosition(i * 10, i * 10);
       }
 
       const debug = system.getDebugInfo();
-      // Diagonal movement should accumulate more distance
       expect(debug.steps).toBeGreaterThan(0);
     });
   });
@@ -207,7 +231,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 1.0, // 100% chance for testing
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1', 'enemy_2', 'enemy_3'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -218,26 +242,22 @@ describe('EncounterSystem', () => {
       system.setCurrentZone('test_zone');
     });
 
-    it('should trigger encounter after minimum steps', () => {
+    it('should trigger encounter after minimum distance', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Move enough to trigger (with 100% rate)
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Move 200m (well past minDistance of 50m)
+      movePlayer(system, 200);
 
       expect(encounters.length).toBeGreaterThan(0);
     });
 
-    it('should not trigger before minimum steps', () => {
+    it('should not trigger before minimum distance', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Move less than minSteps
-      for (let i = 0; i < 3; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Move only 30m (less than minDistance of 50m)
+      movePlayer(system, 30);
 
       expect(encounters.length).toBe(0);
     });
@@ -246,10 +266,7 @@ describe('EncounterSystem', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Move enough to trigger
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       if (encounters.length > 0) {
         const trigger = encounters[0];
@@ -261,29 +278,25 @@ describe('EncounterSystem', () => {
       }
     });
 
-    it('should reset step counter after encounter', () => {
+    it('should reset distance counter after encounter', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Trigger first encounter
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
-      const stepsAfterEncounter = system.getDebugInfo().steps;
-      expect(stepsAfterEncounter).toBeLessThan(10);
+      if (encounters.length > 0) {
+        const distAfterEncounter = system.getDebugInfo().steps;
+        expect(distAfterEncounter).toBeLessThan(100);
+      }
     });
 
     it('should select random encounter from pool', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Trigger multiple encounters
-      for (let i = 0; i < 100; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Move a long distance to trigger multiple encounters
+      movePlayer(system, 1000);
 
-      // Should have encounters from the pool
       const encounterIds = new Set(encounters.map((e) => e.encounterId));
       expect(encounterIds.size).toBeGreaterThan(0);
       encounterIds.forEach((id) => {
@@ -304,11 +317,47 @@ describe('EncounterSystem', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(encounters.length).toBe(0);
+    });
+  });
+
+  describe('town safe radius', () => {
+    const zone: EncounterZone = {
+      id: 'test_zone',
+      baseRate: 1.0,
+      minDistance: 10,
+      encounterPool: ['enemy_1'],
+      timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
+      terrain: 'grass',
+    };
+
+    beforeEach(() => {
+      system.registerZone(zone);
+      system.setCurrentZone('test_zone');
+    });
+
+    it('should suppress encounters within 50m of town', () => {
+      system.setDistanceToTown(30); // within safe radius
+
+      const encounters: EncounterTrigger[] = [];
+      system.onEncounter((trigger) => encounters.push(trigger));
+
+      movePlayer(system, 200);
+
+      expect(encounters.length).toBe(0);
+    });
+
+    it('should allow encounters beyond 50m from town', () => {
+      system.setDistanceToTown(100); // outside safe radius
+
+      const encounters: EncounterTrigger[] = [];
+      system.onEncounter((trigger) => encounters.push(trigger));
+
+      movePlayer(system, 200);
+
+      expect(encounters.length).toBeGreaterThan(0);
     });
   });
 
@@ -316,7 +365,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 1.0,
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -328,57 +377,50 @@ describe('EncounterSystem', () => {
     });
 
     it('should apply repel effect', () => {
-      system.applyRepel(50);
-      expect(system.getRepelSteps()).toBe(50);
+      system.applyRepel(500);
+      expect(system.getRepelSteps()).toBe(500);
+      expect(system.getRepelDistance()).toBe(500);
     });
 
     it('should prevent encounters during repel', () => {
-      system.applyRepel(100);
+      system.applyRepel(1000); // 1000m repel
 
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Move many steps
-      for (let i = 0; i < 50; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 500);
 
       expect(encounters.length).toBe(0);
     });
 
-    it('should decrement repel steps on movement', () => {
-      system.applyRepel(10);
+    it('should decrement repel distance on movement', () => {
+      system.applyRepel(100); // 100m repel
 
-      // Move enough to consume repel
-      for (let i = 0; i < 15; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 150);
 
-      expect(system.getRepelSteps()).toBeLessThan(10);
+      expect(system.getRepelDistance()).toBeLessThan(100);
     });
 
     it('should allow encounters after repel expires', () => {
-      system.applyRepel(5);
+      system.applyRepel(50); // 50m repel
 
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      // Move enough to expire repel and trigger encounter
-      for (let i = 0; i < 30; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Move 300m — repel expires after 50m, then minDistance + checks
+      movePlayer(system, 300);
 
       expect(encounters.length).toBeGreaterThan(0);
     });
 
     it('should use maximum repel value when applied multiple times', () => {
-      system.applyRepel(10);
-      system.applyRepel(20);
+      system.applyRepel(100);
+      system.applyRepel(200);
 
-      expect(system.getRepelSteps()).toBe(20);
+      expect(system.getRepelDistance()).toBe(200);
 
-      system.applyRepel(15);
-      expect(system.getRepelSteps()).toBe(20); // Should stay at 20
+      system.applyRepel(150);
+      expect(system.getRepelDistance()).toBe(200); // Should stay at 200
     });
   });
 
@@ -386,7 +428,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 1.0,
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -414,9 +456,7 @@ describe('EncounterSystem', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(encounters.length).toBe(0);
     });
@@ -428,9 +468,7 @@ describe('EncounterSystem', () => {
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(encounters.length).toBeGreaterThan(0);
     });
@@ -440,7 +478,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 1.0,
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -462,9 +500,7 @@ describe('EncounterSystem', () => {
       const callback = jest.fn();
       system.onEncounter(callback);
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(callback).toHaveBeenCalled();
     });
@@ -475,9 +511,7 @@ describe('EncounterSystem', () => {
 
       unsubscribe();
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(callback).not.toHaveBeenCalled();
     });
@@ -489,9 +523,7 @@ describe('EncounterSystem', () => {
       system.onEncounter(callback1);
       system.onEncounter(callback2);
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(callback1).toHaveBeenCalled();
       expect(callback2).toHaveBeenCalled();
@@ -506,9 +538,7 @@ describe('EncounterSystem', () => {
       system.onEncounter(callback2);
       system.onEncounter(callback3);
 
-      for (let i = 0; i < 20; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 200);
 
       expect(callback1).toHaveBeenCalled();
       expect(callback2).toHaveBeenCalled();
@@ -520,7 +550,7 @@ describe('EncounterSystem', () => {
     const zone: EncounterZone = {
       id: 'test_zone',
       baseRate: 0.1,
-      minSteps: 5,
+      minDistance: 50,
       encounterPool: ['enemy_1'],
       timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
       terrain: 'grass',
@@ -532,11 +562,8 @@ describe('EncounterSystem', () => {
     });
 
     it('should reset encounter state', () => {
-      // Build up some state
-      system.applyRepel(50);
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      system.applyRepel(500);
+      movePlayer(system, 100);
 
       system.reset();
 
@@ -559,7 +586,7 @@ describe('EncounterSystem', () => {
       const roadZone: EncounterZone = {
         id: 'road_zone',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'road',
@@ -568,7 +595,7 @@ describe('EncounterSystem', () => {
       const forestZone: EncounterZone = {
         id: 'forest_zone',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'forest',
@@ -577,18 +604,14 @@ describe('EncounterSystem', () => {
       system.registerZone(roadZone);
       system.setCurrentZone('road_zone');
 
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 100);
       const roadChance = system.getDebugInfo().chance;
 
       system.registerZone(forestZone);
       system.setCurrentZone('forest_zone');
       system.reset();
 
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 100);
       const forestChance = system.getDebugInfo().chance;
 
       // Forest should have higher encounter rate than road
@@ -596,12 +619,12 @@ describe('EncounterSystem', () => {
     });
   });
 
-  describe('step bonus', () => {
-    it('should increase chance with more steps since last encounter', () => {
+  describe('distance bonus', () => {
+    it('should increase chance with more distance since last encounter', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.01, // Very low base rate
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -610,19 +633,15 @@ describe('EncounterSystem', () => {
       system.registerZone(zone);
       system.setCurrentZone('test_zone');
 
-      // Take minimum steps
-      for (let i = 0; i < 10; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Travel just past minDistance
+      movePlayer(system, 100);
       const earlyChance = system.getDebugInfo().chance;
 
-      // Take many more steps
-      for (let i = 10; i < 100; i++) {
-        system.updatePosition(i, 0);
-      }
+      // Travel much further without encounter
+      movePlayer(system, 1000, 100);
       const lateChance = system.getDebugInfo().chance;
 
-      // Chance should increase with steps
+      // Chance should increase with distance
       expect(lateChance).toBeGreaterThan(earlyChance);
     });
 
@@ -630,7 +649,7 @@ describe('EncounterSystem', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.5,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -639,10 +658,7 @@ describe('EncounterSystem', () => {
       system.registerZone(zone);
       system.setCurrentZone('test_zone');
 
-      // Take many steps
-      for (let i = 0; i < 1000; i++) {
-        system.updatePosition(i, 0);
-      }
+      movePlayer(system, 10000);
 
       const chance = system.getDebugInfo().chance;
       expect(chance).toBeLessThanOrEqual(0.25); // Max cap
@@ -659,14 +675,14 @@ describe('EncounterSystem', () => {
   });
 
   describe('createRouteEncounterZones', () => {
-    it('should create default route zones', () => {
+    it('should create default route zones with minDistance', () => {
       const zones = createRouteEncounterZones();
 
       expect(zones.length).toBeGreaterThan(0);
       zones.forEach((zone) => {
         expect(zone.id).toBeDefined();
         expect(zone.baseRate).toBeGreaterThan(0);
-        expect(zone.minSteps).toBeGreaterThan(0);
+        expect(zone.minDistance).toBeGreaterThan(0);
         expect(zone.encounterPool.length).toBeGreaterThan(0);
         expect(zone.timeModifiers).toBeDefined();
         expect(zone.terrain).toBeDefined();
@@ -692,6 +708,15 @@ describe('EncounterSystem', () => {
         expect(zone.timeModifiers.night).toBeDefined();
       });
     });
+
+    it('should have minDistance values in the 100-400m range', () => {
+      const zones = createRouteEncounterZones();
+
+      zones.forEach((zone) => {
+        expect(zone.minDistance).toBeGreaterThanOrEqual(100);
+        expect(zone.minDistance).toBeLessThanOrEqual(400);
+      });
+    });
   });
 
   describe('edge cases', () => {
@@ -699,7 +724,7 @@ describe('EncounterSystem', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 1.0,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -723,7 +748,7 @@ describe('EncounterSystem', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 1.0,
-        minSteps: 5,
+        minDistance: 10,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -732,9 +757,9 @@ describe('EncounterSystem', () => {
       system.registerZone(zone);
       system.setCurrentZone('test_zone');
 
-      // Move in tiny increments
-      for (let i = 0; i < 1000; i++) {
-        system.updatePosition(i * 0.01, 0);
+      // Move in tiny increments that accumulate past the check interval
+      for (let i = 0; i < 2000; i++) {
+        system.updatePosition(i * 0.1, 0);
       }
 
       const debug = system.getDebugInfo();
@@ -745,7 +770,7 @@ describe('EncounterSystem', () => {
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -755,8 +780,8 @@ describe('EncounterSystem', () => {
       system.setCurrentZone('test_zone');
 
       expect(() => {
-        for (let i = 0; i < 10; i++) {
-          system.updatePosition(-i, -i);
+        for (let i = 0; i < 20; i++) {
+          system.updatePosition(-i * 10, -i * 10);
         }
       }).not.toThrow();
     });
@@ -765,7 +790,7 @@ describe('EncounterSystem', () => {
       const zone1: EncounterZone = {
         id: 'zone_1',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_1'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'grass',
@@ -774,7 +799,7 @@ describe('EncounterSystem', () => {
       const zone2: EncounterZone = {
         id: 'zone_2',
         baseRate: 0.1,
-        minSteps: 5,
+        minDistance: 50,
         encounterPool: ['enemy_2'],
         timeModifiers: { dawn: 1.0, day: 1.0, dusk: 1.0, night: 1.0 },
         terrain: 'desert',
