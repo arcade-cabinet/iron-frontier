@@ -1,7 +1,15 @@
 /**
  * Rattlesnake Canyon - Bandit Hideout
  *
- * A dangerous outlaw camp hidden in a canyon. Combat-focused location.
+ * A dangerous outlaw camp hidden in a narrow canyon in the badlands.
+ * The canyon mouth is the only approach, with sheer rock walls on
+ * either side creating a natural ambush corridor. The main camp sits
+ * in a wider area at the canyon's heart, with lookout positions on
+ * the rocky outcrops above.
+ *
+ * Layout: Narrow canyon mouth opens to a wider camp area. Ruined
+ * cabin for loot stash, sniper rocks on the east rim, and a campfire
+ * lookout on the west side.
  */
 
 import { type Location, validateLocation } from '../schemas/spatial';
@@ -117,11 +125,99 @@ export const RattlesnakeCanyon: Location = validateLocation({
     facing: 5, // Facing into the canyon
   },
 
+  // =========================================================================
+  // NPC MARKERS - Bandits at various positions
+  // =========================================================================
+  npcMarkers: [
+    // Bandit leader at the main camp
+    {
+      role: 'bandit_leader',
+      position: { x: 40, y: 0, z: 24 },
+      facing: 180,
+      activity: 'standing',
+      assignedTo: 'main_camp',
+      tags: ['hostile', 'leader', 'combat'],
+    },
+    // Lookout on the west side campfire
+    {
+      role: 'bandit_lookout',
+      position: { x: 20, y: 2, z: 16 },
+      facing: 180,
+      activity: 'guarding',
+      assignedTo: 'lookout_camp',
+      tags: ['hostile', 'lookout'],
+    },
+    // Sniper behind the eastern rocks
+    {
+      role: 'bandit_sniper',
+      position: { x: 56, y: 2, z: 20 },
+      facing: 270,
+      activity: 'guarding',
+      assignedTo: 'sniper_rocks',
+      tags: ['hostile', 'ranged', 'elevated'],
+    },
+    // Guard patrolling the canyon passage
+    {
+      role: 'bandit_guard',
+      position: { x: 40, y: 0, z: 48 },
+      facing: 180,
+      activity: 'patrolling',
+      assignedTo: 'canyon_entrance',
+      waypoints: [
+        { x: 40, y: 0, z: 48 },
+        { x: 40, y: 0, z: 40 },
+        { x: 36, y: 0, z: 36 },
+        { x: 44, y: 0, z: 36 },
+      ],
+      tags: ['hostile', 'patrol'],
+    },
+  ],
+
+  // =========================================================================
+  // ROADS - Canyon floor paths
+  // =========================================================================
+  roads: [
+    {
+      id: 'canyon_path',
+      type: 'trail',
+      width: 3,
+      surface: 'stone',
+      points: [
+        { x: 40, y: 0, z: 60 },
+        { x: 40, y: 0, z: 48 },
+        { x: 40, y: 0, z: 32 },
+        { x: 40, y: 0, z: 24 },
+      ],
+      tags: ['primary', 'canyon_floor'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 5, // Very dangerous
-    wealthLevel: 3, // Stolen goods
+    dangerLevel: 5,
+    wealthLevel: 3,
     populationDensity: 'sparse',
     lawLevel: 'lawless',
+
+    sound: {
+      base: 'mountain_wind',
+      accents: ['raven_call', 'gunshot_distant'],
+    },
+
+    lighting: {
+      lanternPositions: [],
+      litWindows: [],
+      campfires: [
+        { x: 20, y: 0, z: 16 },   // Lookout campfire
+        { x: 40, y: 0, z: 24 },   // Main camp fire
+      ],
+      peakActivity: 'night',
+    },
+
+    weather: {
+      dominant: 'dusty',
+      variability: 'mild',
+      particleEffect: 'dust_heavy',
+    },
   },
 
   tags: ['hostile', 'combat', 'bandit', 'loot', 'dangerous'],

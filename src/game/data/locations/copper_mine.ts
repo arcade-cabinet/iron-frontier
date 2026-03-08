@@ -1,7 +1,13 @@
 /**
  * Copper Mine - Industrial mining location
  *
- * A working mine with entrance, processing area, and workers' camp.
+ * A working copper mine set into a rocky hillside. The mine entrance
+ * gapes open at the north end, framed by timber supports and ore-cart
+ * tracks. The foreman's cabin sits west of the main path, overlooking
+ * operations. Workers' tents cluster to the southwest around a communal
+ * campfire. A mule stable to the east houses the pack animals that haul
+ * ore down to the processing works. Rocky terrain and sparse vegetation
+ * surround the site.
  */
 
 import { type Location, validateLocation } from '../schemas/spatial';
@@ -160,11 +166,131 @@ export const CopperMine: Location = validateLocation({
     facing: 5, // Facing toward mine
   },
 
+  npcMarkers: [
+    // Mine foreman outside his cabin, watching the operation
+    {
+      role: 'foreman',
+      position: { x: 20, y: 0, z: 32 },
+      facing: 90,
+      activity: 'standing',
+      assignedTo: 'foreman_cabin',
+      tags: ['management', 'quest_giver'],
+    },
+    // Miner heading into the shaft
+    {
+      role: 'miner',
+      position: { x: 36, y: 0, z: 20 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'mine_entrance',
+      tags: ['worker', 'copper'],
+    },
+    // Mule handler at the stable
+    {
+      role: 'mule_handler',
+      position: { x: 48, y: 0, z: 40 },
+      facing: 270,
+      activity: 'working',
+      assignedTo: 'mule_stable',
+      tags: ['logistics', 'animals'],
+    },
+    // Camp cook at the campfire
+    {
+      role: 'cook',
+      position: { x: 20, y: 0, z: 48 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'camp_fire',
+      tags: ['worker', 'social'],
+    },
+    // Guard patrolling the perimeter
+    {
+      role: 'guard',
+      position: { x: 36, y: 0, z: 56 },
+      facing: 180,
+      activity: 'patrolling',
+      waypoints: [
+        { x: 36, y: 0, z: 56 },
+        { x: 48, y: 0, z: 48 },
+        { x: 48, y: 0, z: 28 },
+        { x: 36, y: 0, z: 20 },
+        { x: 20, y: 0, z: 28 },
+        { x: 12, y: 0, z: 40 },
+      ],
+      tags: ['security', 'armed'],
+    },
+  ],
+
+  roads: [
+    // Main road from southern entry up to the mine entrance
+    {
+      id: 'mine_road',
+      type: 'main_street',
+      width: 5,
+      surface: 'dirt',
+      points: [
+        { x: 36, y: 0, z: 64 },
+        { x: 36, y: 0, z: 40 },
+        { x: 36, y: 0, z: 20 },
+      ],
+      tags: ['primary', 'south_entry'],
+    },
+    // Branch west to foreman's cabin and worker camp
+    {
+      id: 'camp_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 36, y: 0, z: 40 },
+        { x: 24, y: 0, z: 40 },
+        { x: 20, y: 0, z: 48 },
+      ],
+      tags: ['west', 'to_camp'],
+    },
+    // Branch east to mule stable
+    {
+      id: 'stable_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 36, y: 0, z: 40 },
+        { x: 48, y: 0, z: 40 },
+      ],
+      tags: ['east', 'to_stable'],
+    },
+  ],
+
   atmosphere: {
     dangerLevel: 3, // Moderate - cave-ins, bandits
     wealthLevel: 4, // Good money in mining
     populationDensity: 'sparse',
     lawLevel: 'lawless',
+
+    sound: {
+      base: 'mine_echoes',
+      accents: ['pickaxe_clink', 'cart_creak', 'steam_hiss'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 36, y: 3, z: 20 },  // Mine entrance
+        { x: 20, y: 3, z: 32 },  // Foreman's cabin porch
+        { x: 48, y: 3, z: 40 },  // Stable entrance
+      ],
+      litWindows: ['foreman_cabin'],
+      campfires: [
+        { x: 20, y: 0, z: 48 },  // Worker campfire
+      ],
+      peakActivity: 'morning',
+    },
+
+    weather: {
+      dominant: 'dusty',
+      variability: 'mild',
+      particleEffect: 'dust_light',
+    },
   },
 
   tags: ['industrial', 'mining', 'resource'],

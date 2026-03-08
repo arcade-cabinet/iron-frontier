@@ -189,11 +189,95 @@ export const SunsetRanch: Location = validateLocation({
     facing: 5, // Facing toward ranch buildings
   },
 
+  npcMarkers: [
+    // Ranch owner on the main house porch
+    {
+      role: 'ranch_owner',
+      position: { x: 40, y: 0, z: 24 },
+      facing: 180,
+      activity: 'standing',
+      assignedTo: 'main_ranch',
+      tags: ['wealthy', 'quest_giver'],
+    },
+    // Ranch hand patrolling between buildings
+    {
+      role: 'ranch_hand',
+      position: { x: 24, y: 0, z: 40 },
+      facing: 90,
+      activity: 'patrolling',
+      assignedTo: 'bunkhouse_2',
+      waypoints: [
+        { x: 20, y: 0, z: 32 },
+        { x: 40, y: 0, z: 32 },
+        { x: 64, y: 0, z: 32 },
+        { x: 40, y: 0, z: 44 },
+      ],
+      tags: ['worker', 'cattle'],
+    },
+    // Stable hand at the horse stable
+    {
+      role: 'stable_hand',
+      position: { x: 64, y: 0, z: 32 },
+      facing: 270,
+      activity: 'working',
+      assignedTo: 'horse_stable',
+      tags: ['mounts', 'service'],
+    },
+  ],
+
+  roads: [
+    {
+      id: 'ranch_road',
+      type: 'main_street',
+      width: 5,
+      surface: 'dirt',
+      points: [
+        { x: 40, y: 0, z: 68 },
+        { x: 40, y: 0, z: 40 },
+      ],
+      tags: ['primary', 'south_entry'],
+    },
+    {
+      id: 'bunkhouse_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 24, y: 0, z: 40 },
+        { x: 40, y: 0, z: 40 },
+        { x: 60, y: 0, z: 40 },
+      ],
+      tags: ['east_west', 'to_stable'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 1, // Safe, well-guarded
-    wealthLevel: 5, // Very prosperous
+    dangerLevel: 1,
+    wealthLevel: 5,
     populationDensity: 'normal',
-    lawLevel: 'orderly', // Ranch has its own security
+    lawLevel: 'orderly',
+
+    sound: {
+      base: 'prairie_breeze',
+      accents: ['cattle_low', 'horse_whinny', 'rooster_crow', 'dog_bark'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 40, y: 3, z: 24 },  // Main house porch
+        { x: 20, y: 3, z: 32 },  // Bunkhouse entrance
+        { x: 64, y: 3, z: 32 },  // Stable entrance
+      ],
+      litWindows: ['main_ranch', 'bunkhouse_2'],
+      campfires: [],
+      peakActivity: 'morning',
+    },
+
+    weather: {
+      dominant: 'clear',
+      variability: 'mild',
+      particleEffect: 'none',
+    },
   },
 
   tags: ['ranch', 'wealthy', 'cattle', 'employment'],

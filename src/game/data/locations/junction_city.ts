@@ -5,6 +5,14 @@
  * for the railroad. The class divide is literal: north of the tracks live
  * the suits, south of the tracks live the workers who build their empire.
  *
+ * Layout (top-down, north is up):
+ *   - Railroad tracks run east-west through the center, dividing the town
+ *   - NORTH: Company district with HQ, bank, hotel, Pinkerton office, manager homes
+ *   - CENTER: Grand Station dominates, with roundhouse and water tower to the east
+ *   - SOUTH: Workers' district with saloon, barracks, warehouses
+ *   - Main Street runs north-south crossing the tracks at the station
+ *   - Coal yard west of the tracks, railyard extends east
+ *
  * "The Iron Valley Railroad Company thanks you for your patronage."
  */
 
@@ -1023,6 +1031,162 @@ export const JunctionCity: Location = validateLocation({
   },
 
   // ========================================================================
+  // NPC MARKERS
+  // ========================================================================
+  npcMarkers: [
+    // Pinkerton agent patrolling the company district
+    {
+      role: 'pinkerton_agent',
+      position: { x: 48, y: 0, z: 40 },
+      facing: 90,
+      activity: 'patrolling',
+      assignedTo: 'pinkerton_office',
+      waypoints: [
+        { x: 48, y: 0, z: 40 },
+        { x: 100, y: 0, z: 40 },
+        { x: 100, y: 0, z: 32 },
+        { x: 48, y: 0, z: 32 },
+      ],
+      tags: ['ivrc', 'security', 'hostile'],
+    },
+    // Station master at Grand Station
+    {
+      role: 'station_master',
+      position: { x: 100, y: 0, z: 68 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'grand_station',
+      tags: ['ivrc', 'railroad', 'service'],
+    },
+    // Telegraph operator
+    {
+      role: 'telegraph_operator',
+      position: { x: 80, y: 0, z: 64 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'telegraph_office',
+      tags: ['ivrc', 'communication'],
+    },
+    // Bank teller
+    {
+      role: 'banker',
+      position: { x: 72, y: 0, z: 32 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'company_bank',
+      tags: ['ivrc', 'finance'],
+    },
+    // Brake House Saloon bartender
+    {
+      role: 'bartender',
+      position: { x: 80, y: 0, z: 104 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'brake_house_saloon',
+      tags: ['workers', 'social', 'rumors', 'copperhead_sympathy'],
+    },
+    // Company store clerk
+    {
+      role: 'shopkeeper',
+      position: { x: 152, y: 0, z: 40 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'company_store',
+      tags: ['ivrc', 'commerce'],
+    },
+    // Yard worker patrolling the railyard
+    {
+      role: 'yard_worker',
+      position: { x: 168, y: 0, z: 72 },
+      facing: 270,
+      activity: 'patrolling',
+      assignedTo: 'roundhouse',
+      waypoints: [
+        { x: 152, y: 0, z: 68 },
+        { x: 168, y: 0, z: 68 },
+        { x: 176, y: 0, z: 76 },
+        { x: 168, y: 0, z: 80 },
+        { x: 152, y: 0, z: 76 },
+      ],
+      tags: ['ivrc', 'worker', 'industrial'],
+    },
+    // Coal worker at the coal yard
+    {
+      role: 'coal_worker',
+      position: { x: 28, y: 0, z: 68 },
+      facing: 90,
+      activity: 'working',
+      assignedTo: 'coal_yard',
+      tags: ['worker', 'industrial'],
+    },
+  ],
+
+  // ========================================================================
+  // ROADS
+  // ========================================================================
+  roads: [
+    {
+      id: 'main_street',
+      type: 'main_street',
+      width: 8,
+      surface: 'packed_earth',
+      points: [
+        { x: 100, y: 0, z: 140 },
+        { x: 100, y: 0, z: 68 },
+        { x: 100, y: 0, z: 40 },
+      ],
+      tags: ['primary', 'north_south'],
+    },
+    {
+      id: 'company_road',
+      type: 'side_street',
+      width: 6,
+      surface: 'gravel',
+      points: [
+        { x: 40, y: 0, z: 40 },
+        { x: 100, y: 0, z: 40 },
+        { x: 168, y: 0, z: 40 },
+      ],
+      tags: ['company_district', 'east_west'],
+    },
+    {
+      id: 'workers_road',
+      type: 'side_street',
+      width: 5,
+      surface: 'dirt',
+      points: [
+        { x: 32, y: 0, z: 104 },
+        { x: 100, y: 0, z: 104 },
+        { x: 132, y: 0, z: 104 },
+      ],
+      tags: ['workers_district', 'east_west'],
+    },
+    {
+      id: 'main_railroad',
+      type: 'railroad',
+      width: 4,
+      surface: 'rail_bed',
+      points: [
+        { x: 0, y: 0, z: 68 },
+        { x: 100, y: 0, z: 68 },
+        { x: 200, y: 0, z: 68 },
+      ],
+      tags: ['railroad', 'main_line', 'ivrc'],
+    },
+    {
+      id: 'siding_spur',
+      type: 'railroad',
+      width: 3,
+      surface: 'rail_bed',
+      points: [
+        { x: 144, y: 0, z: 72 },
+        { x: 164, y: 0, z: 72 },
+      ],
+      tags: ['railroad', 'siding'],
+    },
+  ],
+
+  // ========================================================================
   // ATMOSPHERE
   // ========================================================================
   atmosphere: {
@@ -1030,6 +1194,48 @@ export const JunctionCity: Location = validateLocation({
     wealthLevel: 7, // Company money flows, but not to workers
     populationDensity: 'crowded',
     lawLevel: 'strict', // IVRC law, not real law
+
+    sound: {
+      base: 'industrial_hum',
+      accents: [
+        'train_whistle',
+        'steam_hiss',
+        'blacksmith_hammer',
+        'cart_creak',
+        'saloon_chatter',
+      ],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 100, y: 4, z: 68 },   // Grand Station platform
+        { x: 100, y: 3, z: 32 },   // IVRC HQ entrance
+        { x: 72, y: 3, z: 32 },    // Bank entrance
+        { x: 128, y: 3, z: 32 },   // Hotel entrance
+        { x: 48, y: 3, z: 40 },    // Pinkerton office
+        { x: 80, y: 3, z: 104 },   // Saloon porch
+        { x: 100, y: 4, z: 140 },  // South entrance lantern
+        { x: 176, y: 6, z: 68 },   // Water tower light
+      ],
+      litWindows: [
+        'grand_station',
+        'ivrc_headquarters',
+        'ironclad_hotel',
+        'company_bank',
+        'brake_house_saloon',
+        'pinkerton_office',
+      ],
+      campfires: [
+        { x: 168, y: 0, z: 88 },  // Yard workers' fire
+      ],
+      peakActivity: 'morning',
+    },
+
+    weather: {
+      dominant: 'overcast',
+      variability: 'moderate',
+      particleEffect: 'ash',
+    },
   },
 
   tags: [

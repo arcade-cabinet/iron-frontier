@@ -377,11 +377,133 @@ export const ThornwoodStation: Location = validateLocation({
     facing: 2, // Facing south toward the town
   },
 
+  npcMarkers: [
+    // Station master at the platform
+    {
+      role: 'station_master',
+      position: { x: 48, y: 0, z: 36 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'station',
+      tags: ['ivrc', 'railroad', 'service'],
+    },
+    // Telegraph operator
+    {
+      role: 'telegraph_operator',
+      position: { x: 72, y: 0, z: 24 },
+      facing: 270,
+      activity: 'working',
+      assignedTo: 'telegraph',
+      tags: ['ivrc', 'communication'],
+    },
+    // Innkeeper at the waystation inn
+    {
+      role: 'innkeeper',
+      position: { x: 64, y: 0, z: 48 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'waystation_inn',
+      tags: ['service', 'lodging'],
+    },
+    // Shopkeeper at the travel store
+    {
+      role: 'shopkeeper',
+      position: { x: 80, y: 0, z: 48 },
+      facing: 270,
+      activity: 'working',
+      assignedTo: 'travel_store',
+      tags: ['commerce', 'supplies'],
+    },
+    // Stable hand
+    {
+      role: 'stable_hand',
+      position: { x: 24, y: 0, z: 48 },
+      facing: 90,
+      activity: 'working',
+      assignedTo: 'stable',
+      tags: ['mounts', 'service'],
+    },
+    // Railroad maintenance worker near water tower
+    {
+      role: 'maintenance_worker',
+      position: { x: 44, y: 0, z: 40 },
+      facing: 0,
+      activity: 'patrolling',
+      waypoints: [
+        { x: 40, y: 0, z: 40 },
+        { x: 48, y: 0, z: 36 },
+        { x: 56, y: 0, z: 36 },
+        { x: 48, y: 0, z: 44 },
+      ],
+      tags: ['worker', 'railroad'],
+    },
+  ],
+
+  roads: [
+    {
+      id: 'railroad_tracks',
+      type: 'railroad',
+      width: 3,
+      surface: 'rail_bed',
+      points: [
+        { x: 0, y: 0, z: 36 },
+        { x: 48, y: 0, z: 36 },
+        { x: 100, y: 0, z: 36 },
+      ],
+      tags: ['railroad', 'ivrc'],
+    },
+    {
+      id: 'station_road',
+      type: 'main_street',
+      width: 5,
+      surface: 'packed_earth',
+      points: [
+        { x: 16, y: 0, z: 56 },
+        { x: 48, y: 0, z: 56 },
+        { x: 88, y: 0, z: 56 },
+      ],
+      tags: ['primary', 'east_west'],
+    },
+    {
+      id: 'platform_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'packed_earth',
+      points: [
+        { x: 48, y: 0, z: 56 },
+        { x: 48, y: 0, z: 40 },
+      ],
+      tags: ['to_platform'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 1, // Safe railroad stop
-    wealthLevel: 4, // Railroad money flows through
-    populationDensity: 'sparse', // ~20 permanent, plus transients
-    lawLevel: 'frontier', // IVRC keeps order here
+    dangerLevel: 1,
+    wealthLevel: 4,
+    populationDensity: 'sparse',
+    lawLevel: 'frontier',
+
+    sound: {
+      base: 'prairie_breeze',
+      accents: ['train_whistle', 'horse_whinny', 'cart_creak'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 48, y: 3, z: 36 },   // Station platform
+        { x: 64, y: 3, z: 48 },   // Inn porch
+        { x: 80, y: 3, z: 48 },   // Store entrance
+      ],
+      litWindows: ['station', 'waystation_inn', 'travel_store'],
+      campfires: [],
+      peakActivity: 'afternoon',
+    },
+
+    weather: {
+      dominant: 'clear',
+      variability: 'mild',
+      particleEffect: 'dust_light',
+    },
   },
 
   tags: ['dry_creek_valley', 'railroad', 'ivrc', 'gateway', 'travelers', 'level_1', 'entry_point'],

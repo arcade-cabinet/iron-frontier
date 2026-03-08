@@ -6,6 +6,15 @@
  * Company. Workers are paid in company script, redeemable only at the company store.
  * Copper-green stains streak the stone buildings. The air tastes of sulfur and desperation.
  *
+ * Layout (top-down, north is up):
+ *   - The Pit (open mine) dominates the northeast, cut into the mountainside
+ *   - Company office and foreman's house on the upper tier to the northwest
+ *   - Processing mill and tool shed in the middle tier, connected by ore cart tracks
+ *   - Company store and mess hall on the lower-middle tier along a cross-street
+ *   - Worker cabins packed in rows on the lower tier (south)
+ *   - Mountain wall forms an impassable northern boundary
+ *   - Single entry from the south via mountain trail; rail spur from the east
+ *
  * Theme: Corporate control, exploitation, simmering resistance
  * Region: Iron Mountains (Level 3)
  * Population: ~300 workers + families
@@ -992,6 +1001,185 @@ export const Coppertown: Location = validateLocation({
   },
 
   // ============================================================================
+  // NPC MARKERS - Company employees, workers, and resistance members
+  // ============================================================================
+  npcMarkers: [
+    // Company Foreman - in front of the company office, overseeing operations
+    {
+      role: 'foreman',
+      position: { x: 80, y: 0, z: 24 },
+      facing: 180,
+      activity: 'guarding',
+      assignedTo: 'company_office',
+      tags: ['ivrc', 'authority', 'quest_giver'],
+    },
+    // Company Store clerk - behind the counter
+    {
+      role: 'shopkeeper',
+      position: { x: 60, y: 0, z: 88 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'company_store',
+      tags: ['ivrc', 'commerce', 'company_script'],
+    },
+    // Mess Hall cook - serving workers
+    {
+      role: 'cook',
+      position: { x: 80, y: 0, z: 96 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'mess_hall',
+      tags: ['ivrc', 'food', 'social'],
+    },
+    // Company doctor (underfunded infirmary)
+    {
+      role: 'doctor',
+      position: { x: 48, y: 0, z: 96 },
+      facing: 90,
+      activity: 'working',
+      assignedTo: 'infirmary',
+      tags: ['medical', 'underfunded'],
+    },
+    // Guard patrolling the checkpoint between tiers
+    {
+      role: 'guard',
+      position: { x: 40, y: 0, z: 56 },
+      facing: 180,
+      activity: 'patrolling',
+      assignedTo: 'guard_post',
+      waypoints: [
+        { x: 40, y: 0, z: 56 },
+        { x: 60, y: 0, z: 56 },
+        { x: 60, y: 0, z: 76 },
+        { x: 40, y: 0, z: 76 },
+      ],
+      tags: ['ivrc', 'security', 'hostile'],
+    },
+    // Miner working near the pit entrance
+    {
+      role: 'miner',
+      position: { x: 140, y: 0, z: 32 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'the_big_dig',
+      tags: ['worker', 'npc'],
+    },
+    // Resistance contact lurking near the abandoned assay office
+    {
+      role: 'resistance_contact',
+      position: { x: 20, y: 0, z: 72 },
+      facing: 90,
+      activity: 'standing',
+      assignedTo: 'old_assay_office',
+      tags: ['resistance', 'secret', 'quest_giver'],
+    },
+    // Worker patrol in the housing area
+    {
+      role: 'worker',
+      position: { x: 56, y: 0, z: 124 },
+      facing: 0,
+      activity: 'patrolling',
+      waypoints: [
+        { x: 32, y: 0, z: 112 },
+        { x: 56, y: 0, z: 112 },
+        { x: 80, y: 0, z: 112 },
+        { x: 80, y: 0, z: 124 },
+        { x: 32, y: 0, z: 124 },
+      ],
+      tags: ['worker', 'off_duty'],
+    },
+  ],
+
+  // ============================================================================
+  // ROADS - Tiered road system connecting the different levels
+  // ============================================================================
+  roads: [
+    {
+      id: 'mountain_trail',
+      type: 'main_street',
+      width: 5,
+      surface: 'gravel',
+      points: [
+        { x: 60, y: 0, z: 156 },
+        { x: 60, y: 0, z: 128 },
+        { x: 60, y: 0, z: 100 },
+      ],
+      tags: ['primary', 'south_entry'],
+    },
+    {
+      id: 'commerce_street',
+      type: 'side_street',
+      width: 4,
+      surface: 'gravel',
+      points: [
+        { x: 48, y: 0, z: 100 },
+        { x: 60, y: 0, z: 100 },
+        { x: 80, y: 0, z: 100 },
+      ],
+      tags: ['commerce', 'cross_street'],
+    },
+    {
+      id: 'industrial_road',
+      type: 'side_street',
+      width: 4,
+      surface: 'stone',
+      points: [
+        { x: 60, y: 0, z: 76 },
+        { x: 100, y: 0, z: 76 },
+      ],
+      tags: ['industrial', 'cross_road'],
+    },
+    {
+      id: 'admin_road',
+      type: 'side_street',
+      width: 3.5,
+      surface: 'gravel',
+      points: [
+        { x: 44, y: 0, z: 52 },
+        { x: 60, y: 0, z: 52 },
+        { x: 72, y: 0, z: 52 },
+      ],
+      tags: ['admin', 'upper_tier'],
+    },
+    {
+      id: 'mine_road',
+      type: 'trail',
+      width: 3,
+      surface: 'stone',
+      points: [
+        { x: 72, y: 0, z: 52 },
+        { x: 100, y: 0, z: 44 },
+        { x: 120, y: 0, z: 40 },
+        { x: 132, y: 0, z: 32 },
+      ],
+      tags: ['mine_access', 'dangerous'],
+    },
+    {
+      id: 'worker_housing_lane',
+      type: 'alley',
+      width: 2.5,
+      surface: 'dirt',
+      points: [
+        { x: 32, y: 0, z: 128 },
+        { x: 80, y: 0, z: 128 },
+      ],
+      tags: ['housing', 'workers'],
+    },
+    {
+      id: 'rail_spur',
+      type: 'railroad',
+      width: 3,
+      surface: 'rail_bed',
+      points: [
+        { x: 168, y: 0, z: 80 },
+        { x: 148, y: 0, z: 76 },
+        { x: 136, y: 0, z: 68 },
+      ],
+      tags: ['railroad', 'freight', 'ivrc'],
+    },
+  ],
+
+  // ============================================================================
   // ATMOSPHERE
   // ============================================================================
   atmosphere: {
@@ -999,6 +1187,39 @@ export const Coppertown: Location = validateLocation({
     wealthLevel: 2, // Poor - workers paid in script, everything owned by company
     populationDensity: 'crowded', // Lots of workers crammed into small area
     lawLevel: 'strict', // Company rules enforced harshly
+
+    sound: {
+      base: 'industrial_hum',
+      accents: [
+        'pickaxe_clink',
+        'steam_hiss',
+        'cart_creak',
+        'blacksmith_hammer',
+      ],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 80, y: 3, z: 24 },   // Company office entrance
+        { x: 60, y: 3, z: 88 },   // Company store front
+        { x: 80, y: 3, z: 96 },   // Mess hall entrance
+        { x: 40, y: 3, z: 56 },   // Guard post
+        { x: 60, y: 4, z: 128 },  // Housing area post
+        { x: 32, y: 4, z: 128 },  // Housing area west
+        { x: 80, y: 4, z: 128 },  // Housing area east
+      ],
+      litWindows: ['company_office', 'company_store', 'mess_hall', 'guard_post'],
+      campfires: [
+        { x: 56, y: 0, z: 116 },  // Workers' evening gathering fire
+      ],
+      peakActivity: 'morning',
+    },
+
+    weather: {
+      dominant: 'overcast',
+      variability: 'moderate',
+      particleEffect: 'ash',
+    },
   },
 
   // ============================================================================

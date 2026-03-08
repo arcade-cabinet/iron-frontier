@@ -6,6 +6,18 @@
  *
  * Design principle: Generate once, reprogram infinitely.
  *
+ * COORDINATE SYSTEM:
+ * All positions use 3D world-space coordinates in meters.
+ * - x: East-West (positive = east)
+ * - y: Elevation (positive = up), 0 = ground level
+ * - z: North-South (positive = south)
+ * - facing: Compass degrees (0 = north, 90 = east, 180 = south, 270 = west)
+ *
+ * BUILDING FOOTPRINTS:
+ * Each building archetype has a footprint (width x depth in meters).
+ * Placement positions refer to the building's front-center point.
+ * Adjacent buildings must have at least 3-4m gaps for streets/alleys.
+ *
  * SLOTS - Functional roles that can be filled ("tavern", "law_office")
  * MARKERS - Named points for spawning/interaction ("bar_counter", "jail_cell")
  * ZONES - Areas that can be dynamically populated ("quest_staging", "loot_area")
@@ -24,6 +36,17 @@ export const HexCoordSchema = z.object({
 });
 export type HexCoord = z.infer<typeof HexCoordSchema>;
 
+/** 3D world-space position in meters */
+export const Vec3Schema = z.object({
+  x: z.number(), // East-West (positive = east)
+  y: z.number().default(0), // Elevation (positive = up)
+  z: z.number(), // North-South (positive = south)
+});
+export type Vec3 = z.infer<typeof Vec3Schema>;
+
+/** Compass facing in degrees: 0=north, 90=east, 180=south, 270=west */
+export const FacingSchema = z.number().min(0).max(360);
+
 export const WorldPosSchema = z.object({
   x: z.number(),
   y: z.number(),
@@ -31,6 +54,133 @@ export const WorldPosSchema = z.object({
 export type WorldPos = z.infer<typeof WorldPosSchema>;
 
 export const HexRotationSchema = z.number().int().min(0).max(5);
+
+// ============================================================================
+// BUILDING FOOTPRINT - Physical dimensions of a building
+// ============================================================================
+
+/** Physical building dimensions in meters for 3D placement validation */
+export const BuildingFootprintSchema = z.object({
+  /** Width in meters (along x axis) */
+  width: z.number().positive(),
+  /** Depth in meters (along z axis) */
+  depth: z.number().positive(),
+  /** Height in meters (for collision/visibility) */
+  height: z.number().positive().default(4),
+  /** Door offset from front-center in meters (x, z relative to building center) */
+  doorOffset: Vec3Schema.optional(),
+});
+export type BuildingFootprint = z.infer<typeof BuildingFootprintSchema>;
+
+// ============================================================================
+// NPC PLACEMENT - Where NPCs stand, sit, patrol
+// ============================================================================
+
+/** Static NPC position marker */
+export const NpcMarkerSchema = z.object({
+  /** NPC role identifier (e.g., 'shopkeeper', 'sheriff', 'guard') */
+  role: z.string(),
+  /** World-space position in meters */
+  position: Vec3Schema,
+  /** Compass facing in degrees */
+  facing: FacingSchema.default(0),
+  /** What the NPC is doing at this position */
+  activity: z.enum(['standing', 'sitting', 'working', 'patrolling', 'guarding']).default('standing'),
+  /** For patrolling NPCs: ordered list of waypoints in world-space */
+  waypoints: z.array(Vec3Schema).optional(),
+  /** Which building/area this NPC belongs to */
+  assignedTo: z.string().optional(),
+  /** Tags for additional context */
+  tags: z.array(z.string()).default([]),
+});
+export type NpcMarker = z.infer<typeof NpcMarkerSchema>;
+
+// ============================================================================
+// ROAD SEGMENT - Walkable path between points
+// ============================================================================
+
+/** A road or path defined as a series of world-space points */
+export const RoadSegmentSchema = z.object({
+  /** Unique identifier */
+  id: z.string(),
+  /** Road type affects rendering and width */
+  type: z.enum(['main_street', 'side_street', 'alley', 'trail', 'railroad', 'boardwalk']),
+  /** Width in meters */
+  width: z.number().positive(),
+  /** Ordered centerline points in world-space */
+  points: z.array(Vec3Schema).min(2),
+  /** Surface material */
+  surface: z.enum(['dirt', 'gravel', 'packed_earth', 'boardwalk', 'stone', 'rail_bed']).default('dirt'),
+  /** Tags */
+  tags: z.array(z.string()).default([]),
+});
+export type RoadSegment = z.infer<typeof RoadSegmentSchema>;
+
+// ============================================================================
+// ATMOSPHERE (expanded for 3D environments)
+// ============================================================================
+
+/** Ambient sound profile for a location */
+export const AmbientSoundSchema = z.object({
+  /** Base ambient loop (wind, crowd, etc.) */
+  base: z.enum([
+    'desert_wind',
+    'mountain_wind',
+    'prairie_breeze',
+    'town_bustle',
+    'crowd_murmur',
+    'mine_echoes',
+    'river_flow',
+    'forest_ambience',
+    'industrial_hum',
+    'silence',
+  ]),
+  /** Layered accents that play intermittently */
+  accents: z.array(z.enum([
+    'crickets',
+    'coyote_howl',
+    'horse_whinny',
+    'blacksmith_hammer',
+    'piano_distant',
+    'steam_hiss',
+    'pickaxe_clink',
+    'church_bell',
+    'train_whistle',
+    'gunshot_distant',
+    'dog_bark',
+    'rooster_crow',
+    'owl_hoot',
+    'raven_call',
+    'cattle_low',
+    'saloon_chatter',
+    'cart_creak',
+  ])).default([]),
+});
+export type AmbientSound = z.infer<typeof AmbientSoundSchema>;
+
+/** Lighting configuration for time-of-day */
+export const LightingHintsSchema = z.object({
+  /** Positions of lanterns/torches for nighttime (world-space) */
+  lanternPositions: z.array(Vec3Schema).default([]),
+  /** Interior light sources (windows that glow at night) */
+  litWindows: z.array(z.string()).default([]), // References building instanceIds
+  /** Campfire positions that provide light */
+  campfires: z.array(Vec3Schema).default([]),
+  /** Time of day when most activity happens */
+  peakActivity: z.enum(['dawn', 'morning', 'midday', 'afternoon', 'evening', 'night']).default('midday'),
+});
+export type LightingHints = z.infer<typeof LightingHintsSchema>;
+
+/** Weather tendencies for a location */
+export const WeatherProfileSchema = z.object({
+  /** Dominant weather condition */
+  dominant: z.enum(['clear', 'dusty', 'windy', 'overcast', 'rainy', 'foggy', 'stormy', 'snowy']),
+  /** How often weather changes */
+  variability: z.enum(['static', 'mild', 'moderate', 'volatile']).default('mild'),
+  /** Seasonal dust/sand particles */
+  particleEffect: z.enum(['none', 'dust_light', 'dust_heavy', 'sand_blow', 'ash', 'snow_light', 'rain_mist']).default('none'),
+});
+export type WeatherProfile = z.infer<typeof WeatherProfileSchema>;
 
 // ============================================================================
 // TERRAIN & VISUALS (what it LOOKS like, not what it DOES)
@@ -548,6 +698,12 @@ export const LocationSchema = z.object({
       populationDensity: z.enum(['abandoned', 'sparse', 'normal', 'crowded']).default('normal'),
       /** Lawfulness (affects NPC behavior) */
       lawLevel: z.enum(['lawless', 'frontier', 'orderly', 'strict']).default('frontier'),
+      /** Ambient sound profile */
+      sound: AmbientSoundSchema.optional(),
+      /** Lighting hints for time-of-day rendering */
+      lighting: LightingHintsSchema.optional(),
+      /** Weather tendencies */
+      weather: WeatherProfileSchema.optional(),
     })
     .default(() => ({
       dangerLevel: 0,
@@ -555,6 +711,28 @@ export const LocationSchema = z.object({
       populationDensity: 'normal' as const,
       lawLevel: 'frontier' as const,
     })),
+
+  // ========================================================================
+  // 3D ENVIRONMENT DATA
+  // ========================================================================
+
+  /**
+   * NPC placement markers in world-space.
+   * Each marker defines where an NPC stands/sits/patrols.
+   */
+  npcMarkers: z.array(NpcMarkerSchema).default([]),
+
+  /**
+   * Road and path definitions with proper widths for 3D navigation.
+   * Main streets ~6-8m wide, side streets ~3-4m, alleys ~2m.
+   */
+  roads: z.array(RoadSegmentSchema).default([]),
+
+  /**
+   * Building footprints for overlap validation.
+   * Maps instanceId -> footprint for each placed building.
+   */
+  buildingFootprints: z.record(z.string(), BuildingFootprintSchema).default({}),
 });
 export type Location = z.infer<typeof LocationSchema>;
 

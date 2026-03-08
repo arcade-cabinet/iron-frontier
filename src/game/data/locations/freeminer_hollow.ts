@@ -459,11 +459,115 @@ any stolen ore.`,
     facing: 5, // Facing north into the hollow
   },
 
+  npcMarkers: [
+    // Old Samuel Ironpick - at his cabin, the community leader
+    {
+      role: 'community_leader',
+      position: { x: 40, y: 0, z: 32 },
+      facing: 90,
+      activity: 'standing',
+      assignedTo: 'samuel_cabin',
+      tags: ['quest_giver', 'leader', 'resistance'],
+    },
+    // Lookout guard on the western rocks
+    {
+      role: 'lookout',
+      position: { x: 20, y: 4, z: 20 },
+      facing: 180,
+      activity: 'guarding',
+      assignedTo: 'lookout_post',
+      tags: ['defensive', 'guard'],
+    },
+    // Cook at the communal kitchen
+    {
+      role: 'cook',
+      position: { x: 72, y: 0, z: 56 },
+      facing: 270,
+      activity: 'working',
+      assignedTo: 'communal_kitchen',
+      tags: ['food', 'community'],
+    },
+    // Miner patrolling between shaft and processing
+    {
+      role: 'miner',
+      position: { x: 80, y: 0, z: 20 },
+      facing: 0,
+      activity: 'patrolling',
+      assignedTo: 'main_shaft',
+      waypoints: [
+        { x: 80, y: 0, z: 20 },
+        { x: 96, y: 0, z: 40 },
+        { x: 80, y: 0, z: 40 },
+      ],
+      tags: ['worker', 'industrial'],
+    },
+    // Storyteller near the campfire circle
+    {
+      role: 'storyteller',
+      position: { x: 64, y: 0, z: 72 },
+      facing: 0,
+      activity: 'sitting',
+      assignedTo: 'campfire_circle',
+      tags: ['social', 'lore'],
+    },
+  ],
+
+  roads: [
+    {
+      id: 'canyon_entry',
+      type: 'trail',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 64, y: 0, z: 108 },
+        { x: 64, y: 0, z: 80 },
+        { x: 64, y: 0, z: 60 },
+      ],
+      tags: ['primary', 'south_entry'],
+    },
+    {
+      id: 'mine_path',
+      type: 'trail',
+      width: 2.5,
+      surface: 'stone',
+      points: [
+        { x: 64, y: 0, z: 60 },
+        { x: 72, y: 0, z: 40 },
+        { x: 80, y: 0, z: 20 },
+      ],
+      tags: ['mine_access'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 3, // Moderate - IVRC raids, mine dangers
-    wealthLevel: 4, // Decent - honest ore
+    dangerLevel: 3,
+    wealthLevel: 4,
     populationDensity: 'normal',
-    lawLevel: 'frontier', // Self-governed
+    lawLevel: 'frontier',
+
+    sound: {
+      base: 'mountain_wind',
+      accents: ['pickaxe_clink', 'blacksmith_hammer', 'owl_hoot'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 60, y: 3, z: 48 },  // Meeting hall entrance
+        { x: 40, y: 3, z: 32 },  // Samuel's cabin
+        { x: 80, y: 3, z: 20 },  // Mine entrance
+      ],
+      litWindows: ['meeting_hall', 'samuel_cabin', 'communal_kitchen'],
+      campfires: [
+        { x: 64, y: 0, z: 72 },  // Campfire circle
+      ],
+      peakActivity: 'evening',
+    },
+
+    weather: {
+      dominant: 'overcast',
+      variability: 'moderate',
+      particleEffect: 'none',
+    },
   },
 
   tags: ['freeminers', 'community', 'mining', 'resistance', 'defensible', 'mountain'],

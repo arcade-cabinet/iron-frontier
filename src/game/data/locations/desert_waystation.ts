@@ -1,7 +1,12 @@
 /**
  * Desert Waystation - Rest stop along trade routes
  *
- * A small waystation in the desert with oasis, rest facilities, and stables.
+ * A small waystation along the desert trade road, built around a natural
+ * spring. The main building sits north of the trail with a covered porch
+ * facing south. The oasis pool is southwest, sheltered by rock formations.
+ * A campfire area east of the station serves as a gathering spot for
+ * travelers passing through. Cacti and sand dunes mark the harsh
+ * surroundings.
  */
 
 import { type Location, validateLocation } from '../schemas/spatial';
@@ -157,11 +162,67 @@ export const DesertWaystation: Location = validateLocation({
     facing: 0, // Facing east toward the station
   },
 
+  npcMarkers: [
+    {
+      role: 'waystation_keeper',
+      position: { x: 32, y: 0, z: 24 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'main_station',
+      tags: ['service', 'trade', 'quest_giver'],
+    },
+    {
+      role: 'traveler',
+      position: { x: 40, y: 0, z: 40 },
+      facing: 270,
+      activity: 'sitting',
+      assignedTo: 'traveler_camp',
+      tags: ['transient', 'social'],
+    },
+  ],
+
+  roads: [
+    {
+      id: 'trade_trail',
+      type: 'trail',
+      width: 4,
+      surface: 'packed_earth',
+      points: [
+        { x: 0, y: 0, z: 32 },
+        { x: 32, y: 0, z: 32 },
+        { x: 56, y: 0, z: 32 },
+      ],
+      tags: ['primary', 'east_west', 'trade_route'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 2, // Relatively safe rest stop
-    wealthLevel: 2, // Modest
+    dangerLevel: 2,
+    wealthLevel: 2,
     populationDensity: 'sparse',
     lawLevel: 'frontier',
+
+    sound: {
+      base: 'desert_wind',
+      accents: ['coyote_howl'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 32, y: 3, z: 24 },
+      ],
+      litWindows: ['main_station'],
+      campfires: [
+        { x: 40, y: 0, z: 40 },
+      ],
+      peakActivity: 'evening',
+    },
+
+    weather: {
+      dominant: 'clear',
+      variability: 'mild',
+      particleEffect: 'dust_light',
+    },
   },
 
   tags: ['desert', 'rest_stop', 'water', 'trade_route'],

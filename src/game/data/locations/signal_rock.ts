@@ -460,11 +460,95 @@ the old carvings glow faint blue, but that's probably just miner's whiskey talki
     facing: 5, // Facing north toward the rock
   },
 
+  npcMarkers: [
+    // Lookout guard on the wooden platform
+    {
+      role: 'outlaw_lookout',
+      position: { x: 44, y: 8, z: 24 },
+      facing: 180,
+      activity: 'guarding',
+      assignedTo: 'lookout_platform',
+      tags: ['outlaw', 'lookout', 'elevated'],
+    },
+    // Fire tender near the signal fire pit
+    {
+      role: 'fire_tender',
+      position: { x: 40, y: 8, z: 20 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'signal_fire_pit',
+      tags: ['outlaw', 'signal'],
+    },
+    // Camp guard patrolling the hidden camp area
+    {
+      role: 'outlaw_guard',
+      position: { x: 24, y: 0, z: 32 },
+      facing: 90,
+      activity: 'patrolling',
+      assignedTo: 'hidden_camp',
+      waypoints: [
+        { x: 24, y: 0, z: 32 },
+        { x: 32, y: 0, z: 40 },
+        { x: 24, y: 0, z: 48 },
+        { x: 16, y: 0, z: 40 },
+      ],
+      tags: ['outlaw', 'patrol'],
+    },
+  ],
+
+  roads: [
+    {
+      id: 'approach_trail',
+      type: 'trail',
+      width: 2,
+      surface: 'stone',
+      points: [
+        { x: 40, y: 0, z: 76 },
+        { x: 40, y: 0, z: 56 },
+        { x: 40, y: 0, z: 48 },
+      ],
+      tags: ['primary', 'south_approach'],
+    },
+    {
+      id: 'climb_path',
+      type: 'trail',
+      width: 1.5,
+      surface: 'stone',
+      points: [
+        { x: 48, y: 0, z: 48 },
+        { x: 48, y: 4, z: 36 },
+        { x: 44, y: 8, z: 24 },
+      ],
+      tags: ['climb', 'to_summit'],
+    },
+  ],
+
   atmosphere: {
-    dangerLevel: 4, // High - outlaw territory
-    wealthLevel: 2, // Low - lookout post, not a base
+    dangerLevel: 4,
+    wealthLevel: 2,
     populationDensity: 'sparse',
     lawLevel: 'lawless',
+
+    sound: {
+      base: 'mountain_wind',
+      accents: ['raven_call', 'coyote_howl'],
+    },
+
+    lighting: {
+      lanternPositions: [],
+      litWindows: [],
+      campfires: [
+        { x: 48, y: 0, z: 48 },   // Base camp fire
+        { x: 40, y: 8, z: 20 },    // Signal fire (when lit)
+      ],
+      peakActivity: 'night',
+    },
+
+    weather: {
+      dominant: 'windy',
+      variability: 'moderate',
+      particleEffect: 'dust_light',
+    },
   },
 
   tags: ['landmark', 'outlaw', 'lookout', 'ancient', 'navigation', 'dangerous', 'devil_backbone'],

@@ -396,11 +396,216 @@ export const Prospect: Location = validateLocation({
     facing: 0, // Facing east toward town center
   },
 
+  npcMarkers: [
+    // Mayor / community leader at the town hall (former assay office)
+    {
+      role: 'mayor',
+      position: { x: 56, y: 0, z: 56 },
+      facing: 180,
+      activity: 'standing',
+      assignedTo: 'town_hall',
+      tags: ['civic', 'quest_giver', 'community_leader'],
+    },
+    // Shopkeeper inside the general store
+    {
+      role: 'shopkeeper',
+      position: { x: 72, y: 0, z: 56 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'general_store',
+      tags: ['commerce', 'trade'],
+    },
+    // Innkeeper at the boarding house
+    {
+      role: 'innkeeper',
+      position: { x: 40, y: 0, z: 56 },
+      facing: 90,
+      activity: 'standing',
+      assignedTo: 'boarding_house',
+      tags: ['lodging', 'social', 'rumors'],
+    },
+    // Blacksmith working at the forge
+    {
+      role: 'blacksmith',
+      position: { x: 88, y: 0, z: 56 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'blacksmith',
+      tags: ['industrial', 'farm_equipment', 'service'],
+    },
+    // Pastor at the church
+    {
+      role: 'pastor',
+      position: { x: 40, y: 0, z: 32 },
+      facing: 180,
+      activity: 'standing',
+      assignedTo: 'church',
+      tags: ['religious', 'healing', 'community'],
+    },
+    // Farmer on the north farmstead
+    {
+      role: 'farmer',
+      position: { x: 80, y: 0, z: 24 },
+      facing: 180,
+      activity: 'working',
+      assignedTo: 'farmstead_north',
+      tags: ['agriculture', 'resident'],
+    },
+    // Farmer on the east farmstead, patrolling between fields
+    {
+      role: 'farmer',
+      position: { x: 96, y: 0, z: 72 },
+      facing: 270,
+      activity: 'patrolling',
+      assignedTo: 'farmstead_east',
+      waypoints: [
+        { x: 96, y: 0, z: 72 },
+        { x: 96, y: 0, z: 80 },
+        { x: 88, y: 0, z: 80 },
+        { x: 88, y: 0, z: 72 },
+      ],
+      tags: ['agriculture', 'resident'],
+    },
+    // Farmer on the south farmstead near the grain silo
+    {
+      role: 'farmer',
+      position: { x: 56, y: 0, z: 88 },
+      facing: 0,
+      activity: 'working',
+      assignedTo: 'farmstead_south',
+      tags: ['agriculture', 'grain', 'resident'],
+    },
+    // Old prospector lingering near the abandoned mine
+    {
+      role: 'prospector',
+      position: { x: 24, y: 0, z: 24 },
+      facing: 90,
+      activity: 'sitting',
+      assignedTo: 'abandoned_mine',
+      tags: ['lore', 'history', 'storyteller'],
+    },
+    // Townsfolk at the well (social gathering)
+    {
+      role: 'townsfolk',
+      position: { x: 60, y: 0, z: 44 },
+      facing: 270,
+      activity: 'standing',
+      assignedTo: 'town_well',
+      tags: ['social', 'gossip', 'community'],
+    },
+  ],
+
+  roads: [
+    // Main street running east-west through town center
+    {
+      id: 'main_street',
+      type: 'main_street',
+      width: 6,
+      surface: 'dirt',
+      points: [
+        { x: 12, y: 0, z: 60 },
+        { x: 40, y: 0, z: 60 },
+        { x: 60, y: 0, z: 60 },
+        { x: 88, y: 0, z: 60 },
+        { x: 108, y: 0, z: 60 },
+      ],
+      tags: ['primary', 'east_west'],
+    },
+    // Path north from main street to the well and church
+    {
+      id: 'well_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 60, y: 0, z: 60 },
+        { x: 60, y: 0, z: 44 },
+      ],
+      tags: ['north', 'to_well'],
+    },
+    // Path from well to church
+    {
+      id: 'church_path',
+      type: 'side_street',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 60, y: 0, z: 44 },
+        { x: 40, y: 0, z: 36 },
+        { x: 40, y: 0, z: 32 },
+      ],
+      tags: ['to_church'],
+    },
+    // Trail to the abandoned mine (overgrown, narrow)
+    {
+      id: 'mine_trail',
+      type: 'trail',
+      width: 2,
+      surface: 'packed_earth',
+      points: [
+        { x: 40, y: 0, z: 36 },
+        { x: 28, y: 0, z: 32 },
+        { x: 24, y: 0, z: 24 },
+      ],
+      tags: ['abandoned', 'overgrown', 'to_mine'],
+    },
+    // Farm road north to farmsteads
+    {
+      id: 'north_farm_road',
+      type: 'trail',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 60, y: 0, z: 44 },
+        { x: 60, y: 0, z: 20 },
+        { x: 80, y: 0, z: 24 },
+      ],
+      tags: ['farm_access', 'north'],
+    },
+    // Farm road south to grain silo and south farmstead
+    {
+      id: 'south_farm_road',
+      type: 'trail',
+      width: 3,
+      surface: 'dirt',
+      points: [
+        { x: 60, y: 0, z: 60 },
+        { x: 56, y: 0, z: 72 },
+        { x: 56, y: 0, z: 88 },
+      ],
+      tags: ['farm_access', 'south', 'to_silo'],
+    },
+  ],
+
   atmosphere: {
     dangerLevel: 1, // Safe farming community
     wealthLevel: 3, // Modest but hopeful
     populationDensity: 'sparse', // ~80 souls
     lawLevel: 'frontier', // Self-governing community
+
+    sound: {
+      base: 'prairie_breeze',
+      accents: ['rooster_crow', 'cattle_low', 'church_bell', 'dog_bark', 'cart_creak'],
+    },
+
+    lighting: {
+      lanternPositions: [
+        { x: 56, y: 3, z: 56 },  // Town hall entrance
+        { x: 72, y: 3, z: 56 },  // General store porch
+        { x: 40, y: 3, z: 56 },  // Boarding house entrance
+        { x: 60, y: 3, z: 44 },  // Near the well
+        { x: 40, y: 3, z: 32 },  // Church entrance
+      ],
+      litWindows: ['town_hall', 'general_store', 'boarding_house', 'church'],
+      campfires: [],
+      peakActivity: 'morning',
+    },
+
+    weather: {
+      dominant: 'clear',
+      variability: 'mild',
+      particleEffect: 'none',
+    },
   },
 
   tags: ['dry_creek_valley', 'farming', 'former_mining', 'community', 'level_1_2', 'resilience'],
