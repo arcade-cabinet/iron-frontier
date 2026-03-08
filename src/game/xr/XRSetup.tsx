@@ -20,6 +20,9 @@ import { Platform } from 'react-native';
 // On native the module import is skipped to avoid bundling WebXR code.
 const xrModule = Platform.OS === 'web' ? require('@react-three/xr') : null;
 
+// Declare __DEV__ before first use (set by bundlers like Metro/Vite).
+declare const __DEV__: boolean;
+
 // ---------------------------------------------------------------------------
 // XR Store singleton
 // ---------------------------------------------------------------------------
@@ -60,8 +63,6 @@ interface XRSetupProps {
  * </Canvas>
  * ```
  */
-declare const __DEV__: boolean;
-
 export function XRSetup({ children }: XRSetupProps) {
   if (Platform.OS !== 'web' || !xrModule || !xrStore) {
     return <>{children}</>;

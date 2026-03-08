@@ -374,7 +374,7 @@ export function TravelPanel() {
   const dangerStyle = DANGER_STYLES[travel.dangerLevel] ?? DANGER_STYLES.moderate;
 
   return (
-    <Modal visible={!!travel && !!travel.encounterId} transparent animationType="none" onRequestClose={cancelTravel}>
+    <Modal visible transparent animationType="none" onRequestClose={cancelTravel}>
       <Animated.View
         entering={FadeIn.duration(150)}
         exiting={FadeOut.duration(150)}

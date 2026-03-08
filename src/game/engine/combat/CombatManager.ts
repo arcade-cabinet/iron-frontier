@@ -491,7 +491,7 @@ function performRaycast(
           });
         }
 
-        // "KILL" damage number
+        // "KILL" damage number (skip numeric damage to avoid duplicate display)
         result.damageNumbers.push(
           createDamageNumber(
             { x: hit.point.x, y: hit.point.y + 0.5, z: hit.point.z },
@@ -500,16 +500,16 @@ function performRaycast(
             'KILL',
           ),
         );
+      } else {
+        // Damage number (only when target survives; kills show "KILL" text instead)
+        result.damageNumbers.push(
+          createDamageNumber(
+            { x: hit.point.x, y: hit.point.y, z: hit.point.z },
+            damageResult.damage,
+            damageResult.isCritical,
+          ),
+        );
       }
-
-      // Damage number
-      result.damageNumbers.push(
-        createDamageNumber(
-          { x: hit.point.x, y: hit.point.y, z: hit.point.z },
-          damageResult.damage,
-          damageResult.isCritical,
-        ),
-      );
 
       // Hit marker
       result.hitMarker = createHitMarker(true, isHeadshot, killed);

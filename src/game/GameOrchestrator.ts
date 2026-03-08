@@ -390,6 +390,7 @@ class GameOrchestrator {
 
     // --- Fatigue collapse check ---
     const finalState = gameStore.getState();
+    if (finalState.phase === 'game_over') return; // Player died from dehydration; skip further checks
     if (finalState.fatigueState.current >= 100 && finalState.playerStats.health > 0) {
       // Collapsed from exhaustion — force rest notification
       state.addNotification('warning', 'You collapse from exhaustion and cannot continue!');

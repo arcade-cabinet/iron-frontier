@@ -637,6 +637,10 @@ export interface GameStateActions {
   closeShop: () => void;
   buyItem: (itemId: string) => void;
   sellItem: (inventoryId: string) => void;
+
+  // Lifecycle
+  /** Clean up timers and resources. Call before discarding the store. */
+  destroyStore: () => void;
 }
 
 /**

@@ -149,7 +149,7 @@ export function createGameStore({
           if (rewards.xp) get().gainXP(rewards.xp);
           if (rewards.gold) get().addGold(rewards.gold);
           rewards.items?.forEach((item: { itemId: string; quantity: number; chance: number }) => {
-            const roll = Math.random();
+            const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
             if (roll <= (item.chance ?? 1)) {
               get().addItemById(item.itemId, item.quantity ?? 1);
             }
@@ -588,8 +588,6 @@ export function createGameStore({
               targetSlot = 'accessory';
             }
           }
-
-          if (!targetSlot) return;
 
           // Unequip current item in slot
           const currentEquippedId = state.equipment[targetSlot];
@@ -1909,6 +1907,10 @@ export function createGameStore({
 
           state.addNotification('item', `Sold ${item.name} for ${price}g`);
         },
+
+          destroyStore: () => {
+            clearTravelTimer();
+          },
 
           ...createSurvivalSlice(set, get, api),
         };

@@ -251,14 +251,11 @@ export class AmbientManager {
     if (this.activeVolume && this.activeFilter) {
       const preset = ZONE_PRESETS[this.currentZone];
       let volumeOffset = 0;
-      let filterMod = 0;
 
       if (isNight) {
         volumeOffset = -4; // Quieter at night
-        filterMod = -100; // Warmer / more muffled
       } else if (isDawn) {
         volumeOffset = -2;
-        filterMod = 50; // Slightly brighter at dawn
       }
 
       this.activeVolume.volume.rampTo(preset.baseVolume + volumeOffset, CROSSFADE_DURATION);

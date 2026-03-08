@@ -133,7 +133,7 @@ export const createCombatSlice = (
     if (rewards.xp) state.gainXP(rewards.xp);
     if (rewards.gold) state.addGold(rewards.gold);
     rewards.items?.forEach((item: { itemId: string; quantity: number; chance: number }) => {
-      const roll = Math.random();
+      const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
       if (roll <= (item.chance ?? 1)) {
         state.addItemById(item.itemId, item.quantity ?? 1);
       }

@@ -364,8 +364,6 @@ export const createInventorySlice = (
         }
       }
 
-      if (!targetSlot) return;
-
       set((s) => ({
         equipment: { ...s.equipment, [targetSlot]: inventoryItemId },
       }));

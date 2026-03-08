@@ -490,7 +490,7 @@ export class CampingSystem {
     let wasInterrupted = false;
 
     // Rest hour by hour to check for encounters
-    for (let hour = 0; hour < duration && !wasInterrupted; hour++) {
+    for (let hour = 0; hour < duration; hour++) {
       const isNight = clock.isNight();
 
       // Check for encounter

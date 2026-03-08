@@ -103,18 +103,14 @@ const KEY_BINDINGS: Record<string, { panel?: PanelType; action?: string }> = {
 function useInteractionDispatch() {
   const {
     startDialogue,
-    endDialogue,
     openShop,
     collectWorldItem,
     addNotification,
-    dialogueState,
   } = useGameStoreShallow((s) => ({
     startDialogue: s.startDialogue,
-    endDialogue: s.endDialogue,
     openShop: s.openShop,
     collectWorldItem: s.collectWorldItem,
     addNotification: s.addNotification,
-    dialogueState: s.dialogueState,
   }));
 
   const interiorManager = getInteriorManager();
@@ -134,14 +130,16 @@ function useInteractionDispatch() {
           // If no dialogue tree exists, open the shop directly.
           if (action.npcId) {
             startDialogue(action.npcId);
-            // If dialogue did not start (NPC has nothing to say), open shop directly
+            // If dialogue did not start (NPC has nothing to say), open shop directly.
             // We check after a microtask since startDialogue is sync.
             if (action.shopId) {
+              const shopId = action.shopId;
               queueMicrotask(() => {
-                // If no dialogue was opened, go straight to shop
-                const currentDialogue = dialogueState;
-                if (!currentDialogue) {
-                  openShop(action.shopId!);
+                // Read fresh state from the store instead of the stale closure value
+                const freshDialogue =
+                  require('@/src/game/store/webGameStore').gameStore.getState().dialogueState;
+                if (!freshDialogue) {
+                  openShop(shopId);
                 }
               });
             }
@@ -165,7 +163,7 @@ function useInteractionDispatch() {
         }
       }
     },
-    [startDialogue, openShop, collectWorldItem, addNotification, dialogueState, interiorManager],
+    [startDialogue, openShop, collectWorldItem, addNotification, interiorManager],
   );
 
   return dispatch;

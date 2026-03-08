@@ -421,7 +421,7 @@ export const createSurvivalSlice: StateCreator<
   [],
   [],
   SurvivalSlice
-> = (set, get) => {
+> = (set, get, _api) => {
   // Create system instances (these hold no state, just logic)
   const clock = new GameClock();
   const fatigue = new FatigueSystem();
