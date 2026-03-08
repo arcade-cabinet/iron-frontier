@@ -18,9 +18,9 @@ GAME_DESIGN.md  ->  GAME_SPEC.md  ->  *.test.ts  ->  *.ts  ->  wire to store/loo
 `docs/GAME_DESIGN.md` is the **master design document** -- the vision for all game systems. When writing spec sections or implementing systems, this document is THE authority on how the game works.
 
 Key design facts every agent must know:
-- **Steampunk Frontier RPG.** Isometric perspective, diorama presentation, Old West meets steam technology.
+- **Steampunk Frontier RPG.** First-person perspective, Old West meets steam technology.
 - **14 Authored Towns.** Coppertown, Dusty Springs, Junction City, Rattlesnake Canyon, Freeminer Hollow, Signal Rock, Thornwood Station, Copper Mine, Old Works, Prospect, Desert Waystation, Sunset Ranch, and more.
-- **Procedural Geometry Engine.** ZERO GLBs in the game scene. All buildings, NPCs, props, terrain, and vegetation are built from Babylon.js/Three.js primitives + canvas texture factories.
+- **Procedural Geometry Engine.** ZERO GLBs in the game scene. All buildings, NPCs, props, terrain, and vegetation are built from Three.js primitives (via R3F) + canvas texture factories.
 - **Chibi NPCs.** Assembled from primitives (sphere head, box torso, cylinder limbs). Rigid body animation at joints.
 - **Building Archetypes.** Saloon, Sheriff Office, General Store, Blacksmith, Bank, Train Station, Church, Doctor's Office -- all procedural primitives.
 - **Quest Chains.** Multi-step narrative quests with branching dialogue, authored per-town.
@@ -30,7 +30,7 @@ Key design facts every agent must know:
 - **Seeded Determinism.** `seededRandom(seed, ...extra)` everywhere. Zero Math.random().
 - **Zustand + Miniplex ECS.** Static state in Zustand store slices, dynamic entities in Miniplex.
 - **Zod Schemas.** All data structures validated with Zod from `src/game/data/schemas/`.
-- **Mobile-First.** 375px minimum, 44px touch targets, Ionic Angular + Capacitor.
+- **Mobile-First.** 375px minimum, 44px touch targets, Expo 55 + React Three Fiber.
 - **Canvas Texture Factories.** Procedural textures for wood, brick, metal, dirt, signs, NPC faces.
 - **Diorama Presentation.** Tilt-shift DOF, warm amber lighting, hard shadows, distance fog.
 
@@ -69,5 +69,5 @@ Key design facts every agent must know:
 - Importing GLB models in game code (all geometry must be procedural)
 - Ignoring Zod schemas (all game data must be validated)
 - Building features inconsistent with the 14-town authored world structure
-- Using raw WebGL/WebGPU instead of Babylon.js abstractions
+- Using raw WebGL/WebGPU instead of R3F/Three.js abstractions
 - Creating new Vector3 instances in render loops (reuse module-scope temps)

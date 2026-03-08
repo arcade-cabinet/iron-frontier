@@ -34,7 +34,8 @@
       },
       "suspicious": {
         "noConsole": "off",
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noExplicitAny": "warn"
       },
       "style": {
         "useImportType": "warn",
