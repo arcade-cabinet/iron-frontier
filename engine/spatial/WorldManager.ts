@@ -16,8 +16,17 @@ import { getLocationById } from '@/src/game/data/locations/index';
 /** World-coord -> 3-D multiplier. Each wx/wy grid cell is this many metres. */
 export const WORLD_CELL_SIZE = 200;
 
-/** Radius (in world units) around a town center that counts as "in town". */
+/** Default radius (in world units) around a town center that counts as "in town". */
 export const TOWN_BOUNDARY_RADIUS = 80;
+
+/** Size-based town radii: larger locations have bigger boundaries. */
+const SIZE_RADIUS: Record<string, number> = {
+  tiny: 50,
+  small: 80,
+  medium: 120,
+  large: 160,
+  huge: 250,
+};
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -83,17 +92,18 @@ export class WorldManager {
   constructor(world: World) {
     this.world = world;
 
-    // Pre-compute town info
+    // Pre-compute town info with size-based radii
     for (const ref of world.locations) {
       const pos = worldCoordToPosition(ref.coord.wx, ref.coord.wy);
       const location = ref.locationDataId
         ? getLocationById(ref.locationDataId) ?? null
         : null;
+      const radius = SIZE_RADIUS[ref.size] ?? TOWN_BOUNDARY_RADIUS;
       this.towns.push({
         ref,
         location,
         worldPosition: pos,
-        radius: TOWN_BOUNDARY_RADIUS,
+        radius,
       });
     }
   }
@@ -213,6 +223,47 @@ export class WorldManager {
       const d = distSq2D(px, pz, t.worldPosition[0], t.worldPosition[2]);
       return d <= vdSq;
     });
+  }
+
+  // -----------------------------------------------------------------------
+  // Distance queries
+  // -----------------------------------------------------------------------
+
+  /**
+   * Get the distance from a position to the nearest town boundary edge.
+   * Returns 0 if inside a town, positive distance if outside.
+   * Used by EncounterSystem to suppress encounters near towns.
+   */
+  getDistanceToNearestTown(px: number, pz: number): number {
+    let minDist = Infinity;
+    for (const town of this.towns) {
+      const dist = Math.sqrt(
+        distSq2D(px, pz, town.worldPosition[0], town.worldPosition[2]),
+      );
+      const distToBoundary = dist - town.radius;
+      if (distToBoundary < minDist) {
+        minDist = distToBoundary;
+      }
+    }
+    return Math.max(0, minDist);
+  }
+
+  /**
+   * Get the town the player is closest to, along with distance to its center.
+   */
+  getNearestTown(px: number, pz: number): { town: TownInfo; distance: number } | null {
+    let nearest: TownInfo | null = null;
+    let minDist = Infinity;
+    for (const town of this.towns) {
+      const dist = Math.sqrt(
+        distSq2D(px, pz, town.worldPosition[0], town.worldPosition[2]),
+      );
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = town;
+      }
+    }
+    return nearest ? { town: nearest, distance: minDist } : null;
   }
 
   // -----------------------------------------------------------------------

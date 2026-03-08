@@ -106,6 +106,18 @@ export interface ShopKeeper {
 export interface NPCSchedule {
   currentActivity: string;
   homePosition: Position;
+  /** Schedule template ID used by NPCScheduleResolver */
+  scheduleTemplateId?: string;
+  /** Building/area this NPC is assigned to */
+  assignedTo?: string;
+  /** Whether the NPC is currently indoors */
+  isIndoors?: boolean;
+  /** Whether the NPC is available for interaction */
+  isAvailable?: boolean;
+  /** Target position from schedule resolver */
+  targetPosition?: Position;
+  /** Dialogue override for the current time period */
+  dialogueOverride?: string;
 }
 
 // ============================================================================

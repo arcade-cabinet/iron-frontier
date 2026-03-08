@@ -9,6 +9,7 @@
 import type { StateCreator } from 'zustand';
 import type { CombatEncounter } from '../../data/schemas/combat';
 import type { DangerLevel, TravelMethod } from '../../data/schemas/world';
+import { FrontierTerritory } from '../../data/worlds/frontier_territory';
 import type {
   GamePhase,
   Notification,
@@ -297,10 +298,14 @@ export const createTravelSlice = (
       const state = get();
       const { discoveredLocationIds } = state;
       if (!discoveredLocationIds.includes(locationId)) {
+        // Look up location name for the notification
+        const locRef = FrontierTerritory.locations.find((l) => l.id === locationId);
+        const locationName = locRef?.name ?? locationId;
+
         set({
           discoveredLocationIds: [...discoveredLocationIds, locationId],
         });
-        state.addNotification('info', 'Discovered new location!');
+        state.addNotification('info', `Discovered: ${locationName}`);
       }
     },
 

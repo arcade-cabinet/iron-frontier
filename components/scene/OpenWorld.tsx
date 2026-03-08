@@ -26,8 +26,19 @@ import {
 
 import { WorldManager } from '@/engine/spatial/WorldManager';
 import { ARCHETYPE_REGISTRY } from '@/src/game/engine/archetypes/index';
+import {
+  addInteriorLighting,
+  hasInterior,
+  getDoorWorldPosition,
+} from '@/src/game/engine/interiors/InteriorGenerator';
+import { getDoorSystem } from '@/src/game/engine/interiors/DoorSystem';
 import { VegetationField } from '@/components/scene/VegetationField';
 import type { World } from '@/src/game/data/schemas/world';
+import { getEncounterSystem } from '@/src/game/systems/EncounterSystem';
+import { getTownBoundarySystem } from '@/src/game/systems/TownBoundarySystem';
+
+/** Distance at which building interiors become visible (meters). */
+const INTERIOR_RENDER_DISTANCE = 30;
 
 // ---------------------------------------------------------------------------
 // Props
@@ -142,6 +153,15 @@ export function OpenWorld({
     () => new Set(),
   );
 
+  // Town boundary system integration
+  const townBoundary = useMemo(() => getTownBoundarySystem(), []);
+  const encounterSystem = useMemo(() => getEncounterSystem(), []);
+
+  // Track town visibility factors for smooth fading
+  const [townOpacities, setTownOpacities] = useState<Map<string, number>>(
+    () => new Map(),
+  );
+
   // Per-frame update
   useFrame(() => {
     const px = camera.position.x;
@@ -163,13 +183,45 @@ export function OpenWorld({
     // Update world manager for town transition events
     worldManager.tick(px, camera.position.y, pz, loadRadius);
 
-    // Update visible towns
+    // Update town boundary system
+    townBoundary.update(px, pz);
+
+    // Feed distance-to-town into the encounter system for safety suppression
+    const distToTown = worldManager.getDistanceToNearestTown(px, pz);
+    encounterSystem.setDistanceToTown(distToTown);
+
+    // Update encounter system with player position
+    encounterSystem.updatePosition(px, pz);
+
+    // Update visible towns with smooth fade based on distance
     const visible = worldManager.getVisibleTowns(px, pz, viewDistance);
     const visibleIds = new Set(visible.map((t) => t.ref.id));
+
+    // Calculate opacity for each visible town (smooth blend zone)
+    const newOpacities = new Map<string, number>();
+    for (const town of visible) {
+      const opacity = townBoundary.getTownVisibility(town.ref.id, px, pz);
+      // Clamp: always show if within view distance (min 0.3 opacity), full at boundary
+      const clampedOpacity = opacity > 0 ? Math.max(0.3, opacity) : 1;
+      newOpacities.set(town.ref.id, clampedOpacity);
+    }
 
     // Only update React state if the set actually changed
     if (visibleIds.size !== visibleTownIds.size) {
       setVisibleTownIds(visibleIds);
+    }
+
+    // Update opacities if any changed significantly
+    let opacitiesChanged = false;
+    for (const [id, opacity] of newOpacities) {
+      const prev = townOpacities.get(id) ?? 1;
+      if (Math.abs(prev - opacity) > 0.05) {
+        opacitiesChanged = true;
+        break;
+      }
+    }
+    if (opacitiesChanged || newOpacities.size !== townOpacities.size) {
+      setTownOpacities(newOpacities);
     }
   });
 
@@ -199,7 +251,7 @@ export function OpenWorld({
         ))}
       </group>
 
-      {/* Town buildings */}
+      {/* Town buildings (with smooth fade at boundary) */}
       <group name="towns">
         {Array.from(townPlacements.entries()).map(([townId, placement]) => {
           if (!visibleTownIds.has(townId)) return null;
@@ -218,6 +270,15 @@ export function OpenWorld({
               ))}
             </group>
           );
+        })}
+      </group>
+
+      {/* Signposts at road junctions (placed at town entry points) */}
+      <group name="signposts">
+        {routes.map((route) => {
+          // Place a signpost at the midpoint of each route
+          if (!route.group.children.length) return null;
+          return null; // Signpost geometry handled by RouteRenderer
         })}
       </group>
 

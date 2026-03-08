@@ -639,18 +639,23 @@ function LocationIcon({ type, color, size }: { type: string; color: string; size
   }
 }
 
-/** Tooltip showing location info */
+/** Tooltip showing location info with travel button */
 function LocationTooltip({
   data,
   currentLocationId,
+  isDiscovered,
   onDismiss,
+  onTravel,
 }: {
   data: TooltipData;
   currentLocationId: string;
+  isDiscovered: boolean;
   onDismiss: () => void;
+  onTravel: (locationId: string) => void;
 }) {
   const { location, travelInfo } = data;
   const isHere = location.id === currentLocationId;
+  const canTravel = isDiscovered && !isHere && travelInfo != null;
 
   return (
     <Animated.View
@@ -697,6 +702,26 @@ function LocationTooltip({
           )}
 
           {isHere && <Text className="mt-2 text-xs italic text-amber-500">You are here</Text>}
+
+          {!isDiscovered && (
+            <Text className="mt-2 text-xs italic text-amber-500/70">
+              Explore the frontier to discover this location
+            </Text>
+          )}
+
+          {/* Fast-travel button */}
+          {canTravel && (
+            <Pressable
+              className="mt-3 min-h-[40px] items-center justify-center rounded-lg bg-amber-700 px-4 py-2"
+              onPress={() => onTravel(location.id)}
+              accessibilityRole="button"
+              accessibilityLabel={`Fast travel to ${location.name}`}
+            >
+              <Text className="text-sm font-medium text-amber-100">
+                Fast Travel ({travelInfo.travelTime}h)
+              </Text>
+            </Pressable>
+          )}
         </View>
       </Pressable>
     </Animated.View>
@@ -1142,7 +1167,9 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
             <LocationTooltip
               data={tooltip}
               currentLocationId={currentLocationId}
+              isDiscovered={discoveredIds.has(tooltip.location.id)}
               onDismiss={() => setTooltip(null)}
+              onTravel={handleTravel}
             />
           )}
         </View>

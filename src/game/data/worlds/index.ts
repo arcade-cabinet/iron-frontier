@@ -15,6 +15,24 @@ export {
   validateWorldReferences,
 } from './WorldLoader';
 
+// World map spatial graph
+export {
+  getWorldMap,
+  getEdgesFrom,
+  getEdgeDestination,
+  findEdge,
+  getNodePosition,
+  getNodeRadius,
+  findNearestTown,
+  getTownAt,
+  rollFastTravelEncounters,
+  calculateTravelTime,
+  getStartingDiscoveredIds,
+  type WorldMapNode,
+  type WorldMapEdge,
+  type WorldMap,
+} from './worldMap';
+
 // ============================================================================
 // WORLD REGISTRY
 // ============================================================================
