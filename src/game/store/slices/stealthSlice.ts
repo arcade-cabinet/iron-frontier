@@ -60,28 +60,31 @@ export const DEFAULT_STEALTH_STATE: StealthSliceState = {
 /**
  * Creates the stealth Zustand slice.
  */
-export const createStealthSlice: StateCreator<StealthSlice, [], [], StealthSlice> = (
+export const createStealthSlice: StateCreator<any, [], [], any> = (
   set,
   _get,
 ) => ({
-  // State
-  ...DEFAULT_STEALTH_STATE,
+  // Nested state object matching GameStateData.stealthState
+  stealthState: { ...DEFAULT_STEALTH_STATE },
 
-  // Actions
+  // Actions at root level matching GameStateActions
   setCrouching: (crouching: boolean) => {
-    set({ isCrouching: crouching });
+    set((s: any) => ({ stealthState: { ...s.stealthState, isCrouching: crouching } }));
   },
 
   toggleCrouch: () => {
-    set((state) => ({ isCrouching: !state.isCrouching }));
+    set((s: any) => ({ stealthState: { ...s.stealthState, isCrouching: !s.stealthState.isCrouching } }));
   },
 
   updateStealthDetection: (detectionLevel: number, nearestDistance: number) => {
     const clamped = Math.max(0, Math.min(100, detectionLevel));
-    set({
-      detectionLevel: clamped,
-      isHidden: clamped < 30,
-      nearestHostileDistance: nearestDistance,
-    });
+    set((s: any) => ({
+      stealthState: {
+        ...s.stealthState,
+        detectionLevel: clamped,
+        isHidden: clamped < 30,
+        nearestHostileDistance: nearestDistance,
+      },
+    }));
   },
 });

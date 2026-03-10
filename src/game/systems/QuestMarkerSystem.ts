@@ -52,7 +52,7 @@ export interface QuestMarker {
  * Resolve an NPC's current 3D position from the game state.
  */
 function resolveNPCPosition(npcId: string, state: GameState): WorldPosition | null {
-  const npc: NPC | undefined = state.npcs[npcId];
+  const npc: NPC | undefined = state.npcs?.[npcId];
   if (npc) return npc.position;
   return null;
 }
@@ -61,7 +61,7 @@ function resolveNPCPosition(npcId: string, state: GameState): WorldPosition | nu
  * Resolve a building/structure's position from the game state.
  */
 function resolveBuildingPosition(buildingId: string, state: GameState): WorldPosition | null {
-  const structure: Structure | undefined = state.structures[buildingId];
+  const structure: Structure | undefined = state.structures?.[buildingId];
   if (structure) return structure.position;
   return null;
 }
