@@ -8,6 +8,7 @@
  */
 
 import type { CombatEncounter } from '../../data/schemas/combat';
+import { scopedRNG, rngTick } from '../../lib/prng';
 import type {
   Combatant,
   EquipmentState,
@@ -125,8 +126,8 @@ export function grantEncounterRewards(
   const rewards = encounter.rewards;
   if (rewards.xp) state.gainXP(rewards.xp);
   if (rewards.gold) state.addGold(rewards.gold);
-  rewards.items?.forEach((item: { itemId: string; quantity: number; chance: number }) => {
-    const roll = crypto.getRandomValues(new Uint32Array(1))[0] / 0xFFFFFFFF;
+  rewards.items?.forEach((item: { itemId: string; quantity: number; chance: number }, idx: number) => {
+    const roll = scopedRNG('combat.loot', 42, rngTick(), idx);
     if (roll <= (item.chance ?? 1)) {
       state.addItemById(item.itemId, item.quantity ?? 1);
     }

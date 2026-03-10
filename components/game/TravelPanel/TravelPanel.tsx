@@ -194,11 +194,9 @@ export function TravelPanel() {
               dangerLevel={travel.dangerLevel}
             />
 
-            {showEncounter && travel.encounterId ? (
+            {showEncounter ? (
               <EncounterPanel travel={travel} onFight={handleFight} onFlee={handleFlee} />
-            ) : null}
-
-            {!showEncounter && !travel.encounterId ? (
+            ) : (
               <View className="items-center py-4">
                 <TravelBobIcon iconChar={methodInfo.iconChar} />
                 <Text className="mt-3 text-sm text-amber-400/70">
@@ -208,7 +206,7 @@ export function TravelPanel() {
                   {methodInfo.speed} travel speed
                 </Text>
               </View>
-            ) : null}
+            )}
           </View>
 
           {/* Footer */}

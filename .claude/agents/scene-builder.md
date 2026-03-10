@@ -14,8 +14,8 @@ You are a scene builder for **Iron Frontier**, a first-person open world Old Wes
 3. **Branding:** `docs/BRANDING.md` -- Color palette, visual tokens
 4. **Scene Manager:** `src/game/rendering/SceneManagerBase.ts` -- Base scene manager
 5. **R3F Scene:** `components/scene/` -- React Three Fiber scene components
-6. **World Coords:** `src/game/engine/hex/` -- World coordinate system
-7. **Terrain:** `src/game/engine/terrain/HeightmapGenerator.ts` -- Procedural terrain
+6. **World/Chunks:** `src/game/engine/world/` -- Chunk management, town placement, route building
+7. **Terrain:** `src/game/engine/terrain/HeightmapGenerator.ts` -- Procedural terrain heightmaps
 8. **Town Data:** `src/game/data/locations/` -- 14 authored town definitions
 
 ## CRITICAL RULE: ZERO GLBs
