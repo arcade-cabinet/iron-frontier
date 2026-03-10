@@ -7,7 +7,21 @@ import {
   type QuestTemplate,
   QuestTemplateSchema,
 } from '../../../schemas/generation.ts';
-import { QUEST_TEMPLATES } from './index.ts';
+import { COMBAT_QUEST_TEMPLATES } from './combat.ts';
+import { DELIVERY_QUEST_TEMPLATES } from './delivery.ts';
+import { ECONOMIC_QUEST_TEMPLATES } from './economic.ts';
+import { EXPLORATION_QUEST_TEMPLATES } from './exploration.ts';
+import { RETRIEVAL_QUEST_TEMPLATES } from './retrieval.ts';
+import { SOCIAL_QUEST_TEMPLATES } from './social.ts';
+
+export const QUEST_TEMPLATES: QuestTemplate[] = [
+  ...COMBAT_QUEST_TEMPLATES,
+  ...RETRIEVAL_QUEST_TEMPLATES,
+  ...DELIVERY_QUEST_TEMPLATES,
+  ...SOCIAL_QUEST_TEMPLATES,
+  ...EXPLORATION_QUEST_TEMPLATES,
+  ...ECONOMIC_QUEST_TEMPLATES,
+];
 
 // Validate all templates at load time
 QUEST_TEMPLATES.forEach((template, index) => {
