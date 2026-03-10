@@ -1,0 +1,58 @@
+import type { EnemyDefinition } from '../schemas/combat.ts';
+
+export const RemnantSentry: EnemyDefinition = {
+  id: 'remnant_sentry',
+  name: 'Sentry Automaton',
+  type: 'automaton',
+  faction: 'remnant',
+  maxHealth: 50,
+  actionPoints: 3,
+  baseDamage: 12,
+  armor: 8,
+  accuracyMod: 0,
+  evasion: 0,
+  xpReward: 40,
+  goldReward: 5,
+  lootTableId: 'automaton_scrap',
+  behavior: 'defensive',
+  description: 'A mechanical guardian from a forgotten age.',
+  tags: ['ranged', 'uncommon', 'automaton'],
+};
+
+export const RemnantScout: EnemyDefinition = {
+  id: 'remnant_scout',
+  name: 'Scout Automaton',
+  type: 'automaton',
+  faction: 'remnant',
+  maxHealth: 30,
+  actionPoints: 5,
+  baseDamage: 10,
+  armor: 4,
+  accuracyMod: 10,
+  evasion: 15,
+  xpReward: 35,
+  goldReward: 5,
+  lootTableId: 'automaton_scrap',
+  behavior: 'ranged',
+  description: 'A fast, agile reconnaissance machine.',
+  tags: ['ranged', 'uncommon', 'automaton'],
+};
+
+export const RemnantJuggernaut: EnemyDefinition = {
+  id: 'remnant_juggernaut',
+  name: 'Juggernaut Automaton',
+  type: 'automaton',
+  faction: 'remnant',
+  maxHealth: 100,
+  actionPoints: 2,
+  baseDamage: 25,
+  armor: 15,
+  accuracyMod: -10,
+  evasion: 0,
+  xpReward: 100,
+  goldReward: 20,
+  lootTableId: 'automaton_rare',
+  behavior: 'aggressive',
+  description: 'A massive, heavily armored war machine.',
+  tags: ['melee', 'rare', 'automaton', 'mini_boss'],
+};

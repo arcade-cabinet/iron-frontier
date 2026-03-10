@@ -1,0 +1,172 @@
+/**
+ * NPC Templates - Services (Doctor, Undertaker, Hotel, Stable)
+ */
+
+import type { NPCTemplate } from '../../../schemas/generation.ts';
+
+export const DoctorTemplate: NPCTemplate = {
+  id: 'doctor',
+  name: 'Doctor',
+  description: 'Healer on the frontier - where medical school meets frontier surgery.',
+  role: 'doctor',
+  allowedFactions: ['neutral', 'townsfolk'],
+  personality: {
+    aggression: [0.1, 0.3],
+    friendliness: [0.5, 0.8],
+    curiosity: [0.6, 0.9],
+    greed: [0.2, 0.5],
+    honesty: [0.6, 0.9],
+    lawfulness: [0.5, 0.8],
+  },
+  nameOrigins: [
+    { origin: 'frontier_anglo', weight: 3 },
+    { origin: 'frontier_chinese', weight: 3 },
+    { origin: 'frontier_european', weight: 4 },
+  ],
+  genderDistribution: [0.6, 0.4, 0],
+  backstoryTemplates: [
+    'Dr. {{name}} studied medicine in {{hometown}} before {{event}} drove {{firstName}} to seek a simpler life. The frontier proved anything but simple.',
+    '{{name}} served as a field surgeon during the war. The skills learned amid cannon fire serve well in {{location}}.',
+    'A practitioner of both Western and Eastern medicine, {{name}} combines traditions in ways that scandalize purists and save lives.',
+    '{{name}} came to {{location}} following an outbreak of {{event}}. {{firstName}} stayed because the people needed someone.',
+    "They say {{name}} lost {{relative}} to a disease {{firstName}} couldn't cure. Now {{firstName}} fights death like a personal enemy.",
+  ],
+  descriptionTemplates: [
+    "Spectacles and a medical bag that never leaves {{firstName}}'s side. The smell of carbolic acid clings to everything.",
+    'Tired eyes but steady hands. {{firstName}} has seen too much death to let another patient slip away without a fight.',
+    "A gentle demeanor that puts patients at ease. {{firstName}}'s bedside manner is as important as {{firstName}}'s medicine.",
+    "Blood stains on the cuffs that won't quite wash out. {{firstName}}'s clothes tell the story of the day's work.",
+    'Gray-streaked hair and a calm presence. {{firstName}} brings peace even to the dying.',
+  ],
+  dialogueTreeIds: ['doctor_generic', 'doctor_treatment', 'doctor_shop'],
+  questGiverChance: 0.5,
+  shopChance: 0.8,
+  tags: ['healer', 'educated', 'essential', 'quest_giver'],
+  validLocationTypes: ['town', 'city'],
+  minImportance: 0.6,
+};
+
+export const UndertakerTemplate: NPCTemplate = {
+  id: 'undertaker',
+  name: 'Undertaker',
+  description: 'Guardian of the departed - the last friend many will ever have.',
+  role: 'undertaker',
+  allowedFactions: ['neutral', 'townsfolk'],
+  personality: {
+    aggression: [0.1, 0.3],
+    friendliness: [0.3, 0.6],
+    curiosity: [0.4, 0.7],
+    greed: [0.3, 0.6],
+    honesty: [0.5, 0.8],
+    lawfulness: [0.5, 0.8],
+  },
+  nameOrigins: [
+    { origin: 'frontier_anglo', weight: 5 },
+    { origin: 'frontier_european', weight: 5 },
+  ],
+  genderDistribution: [0.7, 0.3, 0],
+  backstoryTemplates: [
+    '{{name}} came to the undertaking trade after {{event}}. Preparing the dead seemed preferable to making more of them.',
+    'Three generations of {{lastName}}s have buried the citizens of {{location}}. {{name}} knows where all the bodies are - literally.',
+    '{{name}} was a carpenter before the bodies started piling up faster than the furniture orders. Coffins pay better.',
+    'A former battlefield medic, {{name}} found {{firstName}} could help the dead better than the living.',
+    "{{name}} claims to speak to the departed. Whether it's true or marketing, business has never been better.",
+  ],
+  descriptionTemplates: [
+    "Pale from too much time indoors with the wrong kind of company. {{firstName}}'s hands are always clean - professionally so.",
+    'A somber expression that seems permanent. {{firstName}} has attended too many funerals to smile easily.',
+    'Black suit, black hat, black mood. {{firstName}} has made an aesthetic of death.',
+    'Quiet voice and measured movements. {{firstName}} treats every body with the same respect.',
+    "Formaldehyde and furniture polish - the signature scent of {{firstName}}'s profession.",
+  ],
+  dialogueTreeIds: ['undertaker_generic', 'undertaker_service'],
+  questGiverChance: 0.3,
+  shopChance: 0.4,
+  tags: ['death', 'information', 'macabre'],
+  validLocationTypes: ['town', 'city'],
+  minImportance: 0.3,
+};
+
+export const HotelOwnerTemplate: NPCTemplate = {
+  id: 'hotel_owner',
+  name: 'Hotel Owner',
+  description: 'Keeper of beds and secrets - knows who sleeps where and with whom.',
+  role: 'merchant',
+  allowedFactions: ['neutral', 'townsfolk', 'ivrc'],
+  personality: {
+    aggression: [0.1, 0.3],
+    friendliness: [0.5, 0.8],
+    curiosity: [0.5, 0.8],
+    greed: [0.4, 0.7],
+    honesty: [0.4, 0.7],
+    lawfulness: [0.4, 0.7],
+  },
+  nameOrigins: [
+    { origin: 'frontier_anglo', weight: 4 },
+    { origin: 'frontier_european', weight: 4 },
+    { origin: 'frontier_hispanic', weight: 2 },
+  ],
+  genderDistribution: [0.4, 0.6, 0],
+  backstoryTemplates: [
+    '{{name}} built the hotel when the railroad came through. {{firstName}} bet on {{location}} and won.',
+    "A widow who turned {{relative}}'s death into opportunity, {{name}} now runs the finest hotel this side of {{hometown}}.",
+    '{{name}} worked in hospitality back East before {{event}} brought {{firstName}} to the frontier. Standards have... adjusted.',
+    'The {{faction}} owns the hotel, but {{name}} runs it. {{firstName}} pretends not to notice certain guests.',
+    '{{name}} came west as a mail-order bride, but when the groom died, {{firstName}} kept the hotel instead.',
+  ],
+  descriptionTemplates: [
+    "Impeccably dressed despite the dust. {{firstName}} maintains standards even when the frontier won't.",
+    "A hospitality professional's smile - warm but calculated. {{firstName}} is always evaluating.",
+    'Key ring at the hip like a weapon. {{firstName}} knows every room and every guest.',
+    'Tired but gracious. Running a frontier hotel is a 24-hour job.',
+    'Sharp eyes notice every muddy boot and every suspicious package. {{firstName}} sees all.',
+  ],
+  dialogueTreeIds: ['hotel_generic', 'hotel_room', 'hotel_gossip'],
+  questGiverChance: 0.4,
+  shopChance: 0.8,
+  tags: ['merchant', 'social', 'information', 'lodging'],
+  validLocationTypes: ['town', 'city'],
+  minImportance: 0.4,
+};
+
+export const StableMasterTemplate: NPCTemplate = {
+  id: 'stable_master',
+  name: 'Stable Master',
+  description: 'Keeper of horses and secrets of the road - knows who comes and goes.',
+  role: 'merchant',
+  allowedFactions: ['neutral', 'townsfolk'],
+  personality: {
+    aggression: [0.2, 0.4],
+    friendliness: [0.4, 0.7],
+    curiosity: [0.3, 0.6],
+    greed: [0.3, 0.6],
+    honesty: [0.5, 0.8],
+    lawfulness: [0.4, 0.7],
+  },
+  nameOrigins: [
+    { origin: 'frontier_anglo', weight: 4 },
+    { origin: 'frontier_hispanic', weight: 4 },
+    { origin: 'frontier_native', weight: 2 },
+  ],
+  genderDistribution: [0.7, 0.3, 0],
+  backstoryTemplates: [
+    '{{name}} has been around horses longer than most folks have been alive. The animals trust {{firstName}} more than they trust most humans.',
+    'A former cavalry horse handler, {{name}} retired from the army but not from horses.',
+    '{{name}} inherited the stable from {{relative}}. What {{firstName}} lacks in business sense, {{firstName}} makes up in animal care.',
+    'After {{event}}, {{name}} found that horses made better company than people.',
+    "{{name}} can tell a horse's health at a glance and a rider's character just as quick.",
+  ],
+  descriptionTemplates: [
+    'Hay in the hair and horse smell that never quite washes off. {{firstName}} is more comfortable in a stable than a saloon.',
+    'Bow-legged from a lifetime in the saddle. {{firstName}} walks like the ground is an inconvenience.',
+    "Gentle hands that can calm the most nervous horse. {{firstName}}'s voice is soft but carries.",
+    'Sun-weathered face with laugh lines from years of good horses and bad jokes.',
+    'A whistle brings horses running. {{firstName}} has a way with animals that borders on magical.',
+  ],
+  dialogueTreeIds: ['stable_generic', 'stable_shop', 'stable_horse_trade'],
+  questGiverChance: 0.3,
+  shopChance: 0.9,
+  tags: ['merchant', 'animals', 'transport'],
+  validLocationTypes: ['town', 'city', 'outpost', 'ranch'],
+  minImportance: 0.4,
+};

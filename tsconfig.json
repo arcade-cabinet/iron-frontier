@@ -18,7 +18,6 @@
     "src/game/engine/hex/**",
     "src/game/engine/rendering/**",
     "src/game/engine/terrain/**",
-    "src/game/engine/types.ts",
     "src/game/engine/physics/RapierWorld.ts",
     "src/game/rendering/**",
     "node_modules"

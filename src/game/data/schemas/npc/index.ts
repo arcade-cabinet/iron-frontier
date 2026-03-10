@@ -38,11 +38,10 @@ export type {
   NPCRole,
 } from './definition.ts';
 
-// Validation & Utilities
+// Validation & Utilities (SCHEMA_VERSION re-exported from hex-world.ts via parent barrel)
 export {
   getAvailableChoices,
   getDialogueEntryNode,
-  SCHEMA_VERSION,
   validateDialogueNode,
   validateDialogueTree,
   validateDialogueTreeIntegrity,

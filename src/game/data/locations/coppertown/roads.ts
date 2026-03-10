@@ -1,0 +1,85 @@
+export const coppertownRoads = [
+    {
+      id: 'mountain_trail',
+      type: 'main_street',
+      width: 5,
+      surface: 'gravel',
+      points: [
+        { x: 60, y: 0, z: 156 },
+        { x: 60, y: 0, z: 128 },
+        { x: 60, y: 0, z: 100 },
+      ],
+      tags: ['primary', 'south_entry'],
+    },
+    {
+      id: 'commerce_street',
+      type: 'side_street',
+      width: 4,
+      surface: 'gravel',
+      points: [
+        { x: 48, y: 0, z: 100 },
+        { x: 60, y: 0, z: 100 },
+        { x: 80, y: 0, z: 100 },
+      ],
+      tags: ['commerce', 'cross_street'],
+    },
+    {
+      id: 'industrial_road',
+      type: 'side_street',
+      width: 4,
+      surface: 'stone',
+      points: [
+        { x: 60, y: 0, z: 76 },
+        { x: 100, y: 0, z: 76 },
+      ],
+      tags: ['industrial', 'cross_road'],
+    },
+    {
+      id: 'admin_road',
+      type: 'side_street',
+      width: 3.5,
+      surface: 'gravel',
+      points: [
+        { x: 44, y: 0, z: 52 },
+        { x: 60, y: 0, z: 52 },
+        { x: 72, y: 0, z: 52 },
+      ],
+      tags: ['admin', 'upper_tier'],
+    },
+    {
+      id: 'mine_road',
+      type: 'trail',
+      width: 3,
+      surface: 'stone',
+      points: [
+        { x: 72, y: 0, z: 52 },
+        { x: 100, y: 0, z: 44 },
+        { x: 120, y: 0, z: 40 },
+        { x: 132, y: 0, z: 32 },
+      ],
+      tags: ['mine_access', 'dangerous'],
+    },
+    {
+      id: 'worker_housing_lane',
+      type: 'alley',
+      width: 2.5,
+      surface: 'dirt',
+      points: [
+        { x: 32, y: 0, z: 128 },
+        { x: 80, y: 0, z: 128 },
+      ],
+      tags: ['housing', 'workers'],
+    },
+    {
+      id: 'rail_spur',
+      type: 'railroad',
+      width: 3,
+      surface: 'rail_bed',
+      points: [
+        { x: 168, y: 0, z: 80 },
+        { x: 148, y: 0, z: 76 },
+        { x: 136, y: 0, z: 68 },
+      ],
+      tags: ['railroad', 'freight', 'ivrc'],
+    },
+  ];

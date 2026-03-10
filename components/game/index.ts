@@ -17,11 +17,11 @@ export { AudioProvider, useAudioSettings } from "./AudioProvider.tsx";
 
 export { AmmoDisplay } from "./AmmoDisplay.tsx";
 export { CompassBar } from "./CompassBar/index.ts";
-export { Crosshair } from "./Crosshair.tsx";
+export { Crosshair } from "./Crosshair/index.ts";
 export { DamageFlash } from "./DamageFlash.tsx";
 export { DamageIndicator } from "./DamageIndicator.tsx";
 export { GameHUD } from "./GameHUD/index.ts";
-export { GameOverScreen } from "./GameOverScreen.tsx";
+export { GameOverScreen } from "./GameOverScreen/index.ts";
 export { NotificationFeed } from "./NotificationFeed.tsx";
 export { PlayerVitals } from "./PlayerVitals/index.ts";
 export { QuestNotification } from "./QuestNotification.tsx";

@@ -14,15 +14,15 @@ export type {
   TownPlacement,
 } from "./TownPlacer.ts";
 export { placeTown } from "./TownPlacer.ts";
+export { WorldManager } from "./WorldManager.ts";
 export type {
   TownInfo,
   WorldEntity,
   WorldEvent,
   WorldEventListener,
-} from "./WorldManager.ts";
+} from "./worldTypes.ts";
 export {
   TOWN_BOUNDARY_RADIUS,
   WORLD_CELL_SIZE,
-  WorldManager,
   worldCoordToPosition,
-} from "./WorldManager.ts";
+} from "./worldTypes.ts";
