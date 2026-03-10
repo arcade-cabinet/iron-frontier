@@ -1,0 +1,17 @@
+export const LOADING_TIPS: string[] = [
+  "The frontier waits for no one.",
+  "A wise gunslinger always checks their six.",
+  "Water is worth more than gold in the badlands.",
+  "The rail lines carry more than cargo - they carry secrets.",
+  "Trust is earned slowly and lost in a heartbeat out here.",
+  "A good horse is worth more than a fast draw.",
+  "The desert remembers everything and forgives nothing.",
+  "Keep your powder dry and your wits sharp.",
+  "Dusty Springs was built on copper and broken promises.",
+  "Even outlaws need a code to live by.",
+  "The old mine holds more than ore, they say.",
+  "A stranger with no name has no debts - and no friends.",
+  "Night falls fast on the frontier. Find shelter before it does.",
+  "The sheriff sees all - or so the townsfolk believe.",
+  "Provisions run low when the trail runs long.",
+];

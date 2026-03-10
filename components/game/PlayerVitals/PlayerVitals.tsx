@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "@/components/ui/Text";
 import { useGameStoreShallow } from "@/hooks/useGameStore";
 import { useResponsive } from "@/hooks/useResponsive";
-import { SegmentedBar } from "./VitalBars";
+import { SegmentedBar } from "./VitalBars.tsx";
 
 const HUD_AMBER = "#D4A855";
 const HUD_AMBER_DIM = "#C4963F";

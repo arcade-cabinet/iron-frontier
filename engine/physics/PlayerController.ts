@@ -8,8 +8,8 @@
 import * as THREE from "three";
 
 import type { InputFrame } from "@/src/game/input/InputFrame";
-
-import type { PhysicsWorld, TriggerEvent, TriggerOverlapInfo } from "./PhysicsWorld.ts";
+import type { PhysicsWorld } from "./PhysicsWorld.ts";
+import type { TriggerEvent, TriggerOverlapInfo } from "./physicsTypes.ts";
 
 // ---------------------------------------------------------------------------
 // Constants

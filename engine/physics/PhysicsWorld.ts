@@ -1,9 +1,7 @@
 // PhysicsWorld — Raycasting-based physics abstraction with trigger support.
 //
-// Maintains a registry of static colliders (buildings, terrain, triggers) and
-// provides collision queries: movePlayer (with slide response and step-up),
-// raycast (weapons, interact), ground-height sampling, and trigger overlap
-// tests. No rigid-body engine required.
+// Maintains a registry of static colliders and provides collision queries:
+// movePlayer, raycast, ground-height sampling, and trigger overlap tests.
 
 import * as THREE from "three";
 import type {
@@ -16,47 +14,20 @@ import type {
 } from "./CollisionShapes.ts";
 import { buildHeightfieldMesh } from "./CollisionShapes.ts";
 
-// ---------------------------------------------------------------------------
-// Public types
-// ---------------------------------------------------------------------------
+export type {
+  MoveResult,
+  RaycastHit,
+  RaycastMiss,
+  RaycastResult,
+  TriggerEvent,
+  TriggerOverlapInfo,
+} from "./physicsTypes.ts";
 
-export interface RaycastHit {
-  hit: true;
-  point: THREE.Vector3;
-  normal: THREE.Vector3;
-  distance: number;
-  colliderId: string;
-}
-
-export interface RaycastMiss {
-  hit: false;
-}
-
-export type RaycastResult = RaycastHit | RaycastMiss;
-
-export interface MoveResult {
-  position: THREE.Vector3;
-  grounded: boolean;
-}
-
-export interface TriggerEvent {
-  type: "enter" | "exit";
-  colliderId: string;
-  tag?: string;
-}
-
-export interface TriggerOverlapInfo {
-  id: string;
-  tag?: string;
-}
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
+import { computeBoxPushOut, raycastBox, SKIN_WIDTH } from "./physicsHelpers.ts";
+import type { MoveResult, RaycastHit, RaycastResult, TriggerOverlapInfo } from "./physicsTypes.ts";
 
 const GRAVITY = 20;
 const STEP_HEIGHT = 0.3;
-const SKIN_WIDTH = 0.05;
 const MAX_SLIDE_ITERATIONS = 3;
 
 // Scratch objects (reused to avoid per-frame allocation)
@@ -67,11 +38,6 @@ const _testPos = new THREE.Vector3();
 const _slideNormal = new THREE.Vector3();
 const _displacement = new THREE.Vector3();
 const _playerBox = new THREE.Box3();
-const _pushDir = new THREE.Vector3();
-
-// ---------------------------------------------------------------------------
-// PhysicsWorld
-// ---------------------------------------------------------------------------
 
 export class PhysicsWorld {
   private boxColliders: Map<string, BoxCollider> = new Map();
@@ -79,10 +45,6 @@ export class PhysicsWorld {
   private heightfieldColliders: Map<string, HeightfieldCollider> = new Map();
   private sphereColliders: Map<string, SphereCollider> = new Map();
   private triggerColliders: Map<string, TriggerCollider> = new Map();
-
-  // -----------------------------------------------------------------------
-  // Collider registration
-  // -----------------------------------------------------------------------
 
   addStaticCollider(collider: Collider): void {
     switch (collider.type) {
@@ -102,7 +64,6 @@ export class PhysicsWorld {
         this.sphereColliders.set(collider.id, collider);
         break;
       case "capsule": {
-        // Capsule colliders (NPCs) approximated as box for static collision
         const halfW = collider.radius;
         const halfH = collider.height / 2;
         const center = collider.center.clone();
@@ -153,19 +114,6 @@ export class PhysicsWorld {
     );
   }
 
-  // -----------------------------------------------------------------------
-  // Player movement
-  // -----------------------------------------------------------------------
-
-  /**
-   * Move a player capsule through the world, resolving collisions.
-   *
-   * @param position   Current player feet position.
-   * @param velocity   Velocity vector (includes gravity contribution).
-   * @param radius     Player capsule radius (horizontal).
-   * @param height     Player capsule total height.
-   * @param deltaTime  Frame delta in seconds.
-   */
   movePlayer(
     position: THREE.Vector3,
     velocity: THREE.Vector3,
@@ -176,7 +124,6 @@ export class PhysicsWorld {
     _displacement.copy(velocity).multiplyScalar(deltaTime);
     const newPos = position.clone().add(_displacement);
 
-    // Slide against box colliders
     for (let iter = 0; iter < MAX_SLIDE_ITERATIONS; iter++) {
       const penetration = this.checkBoxPenetration(newPos, radius, height);
       if (!penetration) break;
@@ -186,7 +133,6 @@ export class PhysicsWorld {
       if (dot < 0) velocity.addScaledVector(_slideNormal, -dot);
     }
 
-    // Step-up: if still blocked, try stepping up
     if (this.checkBoxPenetration(newPos, radius, height)) {
       _testPos.copy(newPos).setY(newPos.y + STEP_HEIGHT);
       if (!this.checkBoxPenetration(_testPos, radius, height)) {
@@ -194,7 +140,6 @@ export class PhysicsWorld {
       }
     }
 
-    // Ground snap via terrain raycast (trimesh + heightfield)
     const groundHeight = this.sampleGroundHeight(newPos.x, newPos.z);
     let grounded = false;
     if (groundHeight !== null && newPos.y <= groundHeight + SKIN_WIDTH) {
@@ -206,14 +151,8 @@ export class PhysicsWorld {
     return { position: newPos, grounded };
   }
 
-  // -----------------------------------------------------------------------
-  // Ground sampling
-  // -----------------------------------------------------------------------
-
-  /** Sample terrain height at world XZ. Returns null if no terrain found. */
   sampleGroundHeight(x: number, z: number): number | null {
     const hasTerrain = this.trimeshColliders.size > 0 || this.heightfieldColliders.size > 0;
-
     if (!hasTerrain) return 0;
 
     _origin.set(x, 200, z);
@@ -223,7 +162,6 @@ export class PhysicsWorld {
 
     let closestY: number | null = null;
 
-    // Trimesh terrain
     for (const collider of this.trimeshColliders.values()) {
       const hits = _ray.intersectObject(collider.mesh, false);
       if (hits.length > 0) {
@@ -232,7 +170,6 @@ export class PhysicsWorld {
       }
     }
 
-    // Heightfield terrain
     for (const collider of this.heightfieldColliders.values()) {
       if (!collider.mesh) continue;
       const hits = _ray.intersectObject(collider.mesh, false);
@@ -245,11 +182,6 @@ export class PhysicsWorld {
     return closestY;
   }
 
-  // -----------------------------------------------------------------------
-  // Raycasting
-  // -----------------------------------------------------------------------
-
-  /** Cast a ray and return the first intersection with any collider. */
   raycast(origin: THREE.Vector3, direction: THREE.Vector3, maxDistance: number): RaycastResult {
     _ray.set(origin, direction.clone().normalize());
     _ray.far = maxDistance;
@@ -257,7 +189,6 @@ export class PhysicsWorld {
 
     let best: RaycastHit | null = null;
 
-    // Trimesh (terrain)
     for (const collider of this.trimeshColliders.values()) {
       const hits = _ray.intersectObject(collider.mesh, false);
       if (hits.length > 0 && hits[0].distance <= maxDistance) {
@@ -274,7 +205,6 @@ export class PhysicsWorld {
       }
     }
 
-    // Heightfield (terrain)
     for (const collider of this.heightfieldColliders.values()) {
       if (!collider.mesh) continue;
       const hits = _ray.intersectObject(collider.mesh, false);
@@ -292,7 +222,6 @@ export class PhysicsWorld {
       }
     }
 
-    // Box (buildings)
     for (const collider of this.boxColliders.values()) {
       const h = raycastBox(origin, direction, maxDistance, collider);
       if (h && (!best || h.distance < best.distance)) best = h;
@@ -301,13 +230,6 @@ export class PhysicsWorld {
     return best ?? { hit: false };
   }
 
-  // -----------------------------------------------------------------------
-  // Trigger queries
-  // -----------------------------------------------------------------------
-
-  /**
-   * Query which trigger volumes overlap a player-shaped AABB.
-   */
   queryTriggerOverlaps(
     feetPos: THREE.Vector3,
     radius: number,
@@ -327,20 +249,10 @@ export class PhysicsWorld {
     return overlaps;
   }
 
-  // -----------------------------------------------------------------------
-  // Gravity
-  // -----------------------------------------------------------------------
-
-  /** Apply gravity to a velocity vector. Call once per frame before movePlayer. */
   applyGravity(velocity: THREE.Vector3, deltaTime: number, grounded: boolean): void {
     if (!grounded) velocity.y -= GRAVITY * deltaTime;
   }
 
-  // -----------------------------------------------------------------------
-  // Private helpers
-  // -----------------------------------------------------------------------
-
-  /** Check player AABB against all box colliders. Returns push-out vector or null. */
   private checkBoxPenetration(
     feetPos: THREE.Vector3,
     radius: number,
@@ -364,83 +276,4 @@ export class PhysicsWorld {
     }
     return result;
   }
-}
-
-// ---------------------------------------------------------------------------
-// Free functions (kept out of class to reduce method count)
-// ---------------------------------------------------------------------------
-
-/** Minimum translation vector to separate two AABBs. */
-function computeBoxPushOut(playerBox: THREE.Box3, staticBox: THREE.Box3): THREE.Vector3 | null {
-  const ox1 = playerBox.max.x - staticBox.min.x;
-  const ox2 = staticBox.max.x - playerBox.min.x;
-  const oy1 = playerBox.max.y - staticBox.min.y;
-  const oy2 = staticBox.max.y - playerBox.min.y;
-  const oz1 = playerBox.max.z - staticBox.min.z;
-  const oz2 = staticBox.max.z - playerBox.min.z;
-
-  if (ox1 <= 0 || ox2 <= 0 || oy1 <= 0 || oy2 <= 0 || oz1 <= 0 || oz2 <= 0) return null;
-
-  let min = ox1;
-  _pushDir.set(-1, 0, 0);
-  if (ox2 < min) {
-    min = ox2;
-    _pushDir.set(1, 0, 0);
-  }
-  if (oy1 < min) {
-    min = oy1;
-    _pushDir.set(0, -1, 0);
-  }
-  if (oy2 < min) {
-    min = oy2;
-    _pushDir.set(0, 1, 0);
-  }
-  if (oz1 < min) {
-    min = oz1;
-    _pushDir.set(0, 0, -1);
-  }
-  if (oz2 < min) {
-    min = oz2;
-    _pushDir.set(0, 0, 1);
-  }
-
-  return _pushDir.clone().multiplyScalar(min + SKIN_WIDTH);
-}
-
-/** Slab-method ray vs AABB intersection. */
-function raycastBox(
-  origin: THREE.Vector3,
-  direction: THREE.Vector3,
-  maxDist: number,
-  collider: BoxCollider,
-): RaycastHit | null {
-  const ix = direction.x !== 0 ? 1 / direction.x : 1e10;
-  const iy = direction.y !== 0 ? 1 / direction.y : 1e10;
-  const iz = direction.z !== 0 ? 1 / direction.z : 1e10;
-
-  const t1 = (collider.box.min.x - origin.x) * ix;
-  const t2 = (collider.box.max.x - origin.x) * ix;
-  const t3 = (collider.box.min.y - origin.y) * iy;
-  const t4 = (collider.box.max.y - origin.y) * iy;
-  const t5 = (collider.box.min.z - origin.z) * iz;
-  const t6 = (collider.box.max.z - origin.z) * iz;
-
-  const tMin = Math.max(Math.min(t1, t2), Math.min(t3, t4), Math.min(t5, t6));
-  const tMax = Math.min(Math.max(t1, t2), Math.max(t3, t4), Math.max(t5, t6));
-
-  if (tMax < 0 || tMin > tMax || tMin > maxDist) return null;
-  const t = tMin >= 0 ? tMin : tMax;
-  if (t > maxDist) return null;
-
-  const point = origin.clone().addScaledVector(direction, t);
-  const normal = new THREE.Vector3();
-  const eps = 0.001;
-  if (Math.abs(point.x - collider.box.min.x) < eps) normal.set(-1, 0, 0);
-  else if (Math.abs(point.x - collider.box.max.x) < eps) normal.set(1, 0, 0);
-  else if (Math.abs(point.y - collider.box.min.y) < eps) normal.set(0, -1, 0);
-  else if (Math.abs(point.y - collider.box.max.y) < eps) normal.set(0, 1, 0);
-  else if (Math.abs(point.z - collider.box.min.z) < eps) normal.set(0, 0, -1);
-  else normal.set(0, 0, 1);
-
-  return { hit: true, point, normal, distance: t, colliderId: collider.id };
 }
