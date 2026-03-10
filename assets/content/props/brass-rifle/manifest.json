@@ -1,0 +1,71 @@
+{
+  "id": "brass-rifle",
+  "name": "Brass Rifle",
+  "type": "prop",
+  "seed": 773091441,
+  "description": "Long rifle with brass receiver, walnut stock, and steam-era detailing.",
+  "textToImageTask": {
+    "prompt": "Long steampunk rifle, brass receiver, walnut stock, steam-era detailing, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Steampunk long rifle prop, brass receiver, walnut stock, detailed barrel",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 18000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "brass receiver with light patina, oiled walnut, steel barrel, worn edges",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "frontier-worn",
+    "railway-issue",
+    "marksman-polish"
+  ],
+  "styleTexturePrompts": {
+    "frontier-worn": "dusty brass, scratched stock, utilitarian field wear",
+    "railway-issue": "industrial steel accents, darker wood, practical maintenance",
+    "marksman-polish": "clean brass, polished stock, refined marksman finish"
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c0600-f978-74d5-8683-632d973e43c0",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0600-f978-74d5-8683-632d973e43c0"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c0601-4d38-7e1a-9352-21822594c152",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0601-4d38-7e1a-9352-21822594c152"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c0602-f919-753f-bf61-08850afef94f",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0602-f919-753f-bf61-08850afef94f"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c0606-e61c-7b60-b288-d53a08d10f5e",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0606-e61c-7b60-b288-d53a08d10f5e"
+      },
+      "artifacts": {}
+    }
+  }
+}

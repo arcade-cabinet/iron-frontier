@@ -1,0 +1,105 @@
+{
+  "id": "iron-frontier-preacher-john",
+  "name": "Preacher John",
+  "type": "npc",
+  "seed": 341875009,
+  "description": "Frontier preacher with worn clerical coat, scripture, and solemn demeanor.",
+  "textToImageTask": {
+    "prompt": "Full-body frontier preacher, worn clerical coat, simple vest, bible in hand, calm stance, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Frontier preacher character, full body, neutral A-pose, clerical coat and vest, scripture in hand",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 42000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "poseMode": "a-pose",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "worn wool coat, muted fabrics, simple leather belt, subtle brass details, realistic materials",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "revival-preacher",
+    "chapel-keeper",
+    "circuit-rider"
+  ],
+  "styleTexturePrompts": {
+    "revival-preacher": "dusty coat, travel-worn boots, dramatic revival attire",
+    "chapel-keeper": "cleaner vest, neat coat, chapel caretaker look",
+    "circuit-rider": "travel cloak, weathered leather, rugged frontier preacher gear"
+  },
+  "riggingTask": {
+    "heightMeters": 1.75
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back"
+    ]
+  },
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c05ee-7a5e-7860-b700-02a7089b4a60",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05ee-7a5e-7860-b700-02a7089b4a60"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c05ee-fe61-7038-9f74-9b3c3b2d5bb9",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05ee-fe61-7038-9f74-9b3c3b2d5bb9"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c05f1-5a01-7ba4-9858-94becea8c34a",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f1-5a01-7ba4-9858-94becea8c34a"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05f5-b770-71ad-8a38-54b088dc21ef",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f5-b770-71ad-8a38-54b088dc21ef"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019c05f7-2066-78ff-a1a6-1783e7f3baea",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f7-2066-78ff-a1a6-1783e7f3baea",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05f7-2066-78ff-a1a6-1783e7f3baea/output/Character_output.glb?Expires=1769885834&Signature=iNsSzpwrlywmKJTLNiBEffh~o1psnlvr~p0XOWqu-jRGar-wYa7l-~HZ7A5ELtZhU4V7rjTgZ1X0mCXo6~8xcoHOY1mUy3IPege6gLBZBZa66gzu-d8YNbG4RRPo-qtUnt3TGJRLTUYyybkq-g43XnfGC2MGDYb1gG9REgW-0EjSuyk~l-MNZm~GESfHl10e4y00VgG8OG6YvBIfuPIBXXFuF7L-sbFsKKVE0C7RnrXKnvAyXElMgLiHnzK4Zxpme~CgEPuLGP-MLxCHKlnsmrkgNbYA8ESmA1U1cpJHfWf1Mkj4Lud3KTFbHjCaL2SYX~D2dZwPJhGI5k-CSmXIVQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "riggedModel": "rigged.glb"
+      }
+    },
+    "animation": {
+      "taskId": "019c05f9-0c8d-72e4-9a94-ae0f07d7de14",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05f9-0c8d-72e4-9a94-ae0f07d7de14",
+        "animation": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05f9-0c8d-72e4-9a94-ae0f07d7de14/output/Animation_Walking_Scan_with_Sudden_Look_Back_withSkin.glb?Expires=1769885958&Signature=fG8jBrXb-v4LYQ28G2X9SGj8bbNYcrVT~TS-QRVwQ4~6uP4PyjrYTiw-zTPAv2b3CsPpnkY7fl68jTsvdM5QFVHGfhGHKOqHjkqLVrLaPjSeUraZ~YDmmGse586LPkQ6Kz5oprq9zRCSpQ0TpMncJ3EfslhDSPJso93Ah9fktuh6j8Pc~ihvgjUx6WZhEGiaaaOuut9FiQVA5zCVHj3Klr~hOEaaaDzucMzM6Hjl1ZvsyzSUCbd5IB3eIaDp7j4F48iqo3oXk5aCiC7pPuakIy9kLNh-9RljvHsXbmU5hgbmFqU4FZJ6h8CfPnrkCrnDMyhb-p8dVB0OtG59RH-AVQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "animation": "animations/DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back.glb"
+      }
+    }
+  }
+}

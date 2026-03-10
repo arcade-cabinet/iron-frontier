@@ -1,0 +1,92 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95" *ngIf="phase === 'game_over'" data-testid="game-over-screen">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      class="absolute inset-0"
+      style="
+        background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+      "
+    ></div>
+    <div class="absolute inset-0 opacity-20">
+      <span
+        *ngFor="let particle of dustParticles"
+        class="dust-particle absolute h-1 w-1 rounded-full bg-amber-500/50"
+        [style.left.%]="particle.left"
+        [style.animationDuration.s]="particle.duration"
+        [style.animationDelay.s]="particle.delay"
+      ></span>
+    </div>
+  </div>
+
+  <div class="relative mx-4 w-full max-w-md overflow-hidden rounded-xl border-2 border-red-900/60 bg-amber-950 shadow-2xl">
+    <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent"></div>
+
+    <div class="p-6 text-center sm:p-8">
+      <div class="mb-4 flex justify-center sm:mb-6">
+        <div
+          class="flex h-20 w-20 items-center justify-center rounded-full border-2 border-red-800/50 bg-red-950/50 sm:h-24 sm:w-24"
+        >
+          <svg class="h-12 w-12 text-red-600 sm:h-16 sm:w-16" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12c0 3.5 1.8 6.58 4.53 8.38V22h2.94v-1h5.06v1h2.94v-1.62C20.2 18.58 22 15.5 22 12c0-5.52-4.48-10-10-10zm-2.5 12c-.83 0-1.5-.67-1.5-1.5S8.67 11 9.5 11s1.5.67 1.5 1.5S10.33 14 9.5 14zm5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <h1
+        class="mb-3 text-3xl font-bold tracking-wider text-red-500 sm:text-4xl"
+        style="font-family: serif; text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);"
+      >
+        DEAD
+      </h1>
+      <p class="text-sm text-amber-300/90 sm:text-base">{{ playerName }} met their end on the frontier.</p>
+      <p class="mb-6 text-xs text-amber-500/60 sm:text-sm">The West claims another soul...</p>
+
+      <div class="mb-6 flex items-end justify-center gap-2 text-amber-800/40 sm:gap-3">
+        <svg class="h-8 w-5 sm:h-10 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M8 6h8M6 22h12" />
+        </svg>
+        <div class="rounded-t-lg border border-amber-800/30 bg-amber-900/30 px-3 py-1.5 sm:px-4 sm:py-2">
+          <div class="text-[9px] uppercase tracking-widest text-amber-500/50 sm:text-[10px]">R.I.P.</div>
+          <div class="text-[10px] text-amber-400/60 sm:text-xs">{{ playerName }}</div>
+        </div>
+        <svg class="h-8 w-5 sm:h-10 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M8 6h8M6 22h12" />
+        </svg>
+      </div>
+
+      <div class="space-y-2 sm:space-y-3">
+        <button
+          type="button"
+          class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-lg bg-amber-700 px-4 py-3 text-sm font-medium text-amber-100 transition hover:bg-amber-600 sm:min-h-0 sm:text-base"
+          (click)="loadLastSave()"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+          </svg>
+          Rise Again
+        </button>
+        <button
+          type="button"
+          class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-lg border border-amber-700/50 bg-amber-900/50 px-4 py-3 text-sm font-medium text-amber-300 transition hover:bg-amber-800/50 sm:min-h-0 sm:text-base"
+          (click)="returnToTitle()"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          Return to Title
+        </button>
+      </div>
+
+      <div class="mt-4 border-t border-amber-800/30 pt-3 text-[10px] italic text-amber-600/40 sm:mt-8 sm:pt-4 sm:text-xs">
+        "Every man dies. Not every man really lives."
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-700/50 to-transparent"></div>
+  </div>
+</div>

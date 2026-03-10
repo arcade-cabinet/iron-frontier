@@ -1,0 +1,18 @@
+{
+  "id": "frontier_territory",
+  "name": "Frontier Territory",
+  "description": "The main campaign of Iron Frontier. Journey through the untamed West, uncover the secrets of the IVRC, and forge your own destiny.",
+  "startingLevelId": "dusty_springs",
+  "levelIds": [
+    "dusty_springs",
+    "silver_creek_mine",
+    "devils_canyon",
+    "fort_valor",
+    "ghost_town",
+    "railroad_camp"
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "author": "Iron Frontier Team"
+  }
+}

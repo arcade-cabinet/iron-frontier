@@ -1,46 +1,53 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-border: 214.3 31.8% 91.4%;
-  --color-input: 214.3 31.8% 91.4%;
-  --color-ring: 222.2 84% 4.9%;
-  --color-background: 0 0% 100%;
-  --color-foreground: 222.2 84% 4.9%;
-  --color-primary: 222.2 47.4% 11.2%;
-  --color-primary-foreground: 210 40% 98%;
-  --color-secondary: 210 40% 96.1%;
-  --color-secondary-foreground: 222.2 47.4% 11.2%;
-  --color-destructive: 0 84.2% 60.2%;
-  --color-destructive-foreground: 210 40% 98%;
-  --color-muted: 210 40% 96.1%;
-  --color-muted-foreground: 215.4 16.3% 46.9%;
-  --color-accent: 210 40% 96.1%;
-  --color-accent-foreground: 222.2 47.4% 11.2%;
-  --color-popover: 0 0% 100%;
-  --color-popover-foreground: 222.2 84% 4.9%;
-  --color-card: 0 0% 100%;
-  --color-card-foreground: 222.2 84% 4.9%;
-  --radius: 0.5rem;
-}
+@layer base {
+  :root {
+    /* Iron Frontier Light Mode — daytime desert */
+    --background: 30 40% 95%;
+    --foreground: 20 30% 15%;
+    --card: 32 35% 90%;
+    --card-foreground: 20 30% 15%;
+    --popover: 33 38% 93%;
+    --popover-foreground: 20 30% 15%;
+    --primary: 36 70% 45%;
+    --primary-foreground: 30 40% 95%;
+    --secondary: 32 35% 88%;
+    --secondary-foreground: 20 30% 15%;
+    --muted: 33 25% 90%;
+    --muted-foreground: 20 15% 40%;
+    --accent: 38 60% 50%;
+    --accent-foreground: 20 30% 15%;
+    --destructive: 0 72% 40%;
+    --destructive-foreground: 30 40% 95%;
+    --border: 30 25% 75%;
+    --input: 30 25% 75%;
+    --ring: 36 70% 45%;
+    --radius: 0.5rem;
+  }
 
-.dark {
-  --color-border: 217.2 32.6% 17.5%;
-  --color-input: 217.2 32.6% 17.5%;
-  --color-ring: 212.7 26.8% 83.9%;
-  --color-background: 222.2 84% 4.9%;
-  --color-foreground: 210 40% 98%;
-  --color-primary: 210 40% 98%;
-  --color-primary-foreground: 222.2 47.4% 11.2%;
-  --color-secondary: 217.2 32.6% 17.5%;
-  --color-secondary-foreground: 210 40% 98%;
-  --color-destructive: 0 62.8% 30.6%;
-  --color-destructive-foreground: 210 40% 98%;
-  --color-muted: 217.2 32.6% 17.5%;
-  --color-muted-foreground: 215 20.2% 65.1%;
-  --color-accent: 217.2 32.6% 17.5%;
-  --color-accent-foreground: 210 40% 98%;
-  --color-popover: 222.2 84% 4.9%;
-  --color-popover-foreground: 210 40% 98%;
-  --color-card: 222.2 84% 4.9%;
-  --color-card-foreground: 210 40% 98%;
+  :root.dark {
+    /* Iron Frontier Dark Mode — night saloon / lamplight */
+    --background: 220 30% 8%;
+    --foreground: 30 20% 90%;
+    --card: 20 25% 12%;
+    --card-foreground: 30 20% 90%;
+    --popover: 215 25% 14%;
+    --popover-foreground: 30 20% 90%;
+    --primary: 38 70% 50%;
+    --primary-foreground: 220 30% 8%;
+    --secondary: 215 20% 16%;
+    --secondary-foreground: 30 20% 90%;
+    --muted: 220 15% 16%;
+    --muted-foreground: 30 12% 55%;
+    --accent: 25 40% 18%;
+    --accent-foreground: 30 20% 90%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 30 20% 90%;
+    --border: 220 15% 25%;
+    --input: 220 15% 25%;
+    --ring: 38 70% 50%;
+    --radius: 0.5rem;
+  }
 }

@@ -49,7 +49,7 @@ The game has complete monorepo infrastructure with DRY cross-platform architectu
 - [x] Continue from save (localStorage persistence)
 
 ### 1.4 Basic Gameplay - DONE
-- [x] Tap-to-move working
+- [x] Player movement working
 - [x] Item collection working
 - [x] NPC dialogue working
 - [x] XP and leveling working
@@ -103,7 +103,7 @@ The game has complete monorepo infrastructure with DRY cross-platform architectu
 **Goal**: Great mobile UX on Pixel 8A through OnePlus Open
 
 ### 3.1 Touch Controls
-- [x] Tap-to-move implemented
+- [x] First-person movement implemented
 - [ ] Virtual joystick option (setting exists)
 - [x] Pinch zoom camera
 - [x] Two-finger pan camera

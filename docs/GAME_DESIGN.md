@@ -2,7 +2,7 @@
 
 ## Vision Statement
 
-Iron Frontier is a **mobile-first isometric RPG** that captures the atmosphere of classic PS1-era RPGs (like Final Fantasy VII's pre-rendered backgrounds) while leveraging modern procedural generation and touch-first design.
+Iron Frontier is a **mobile-first 3D open-world RPG** that captures the atmosphere of classic Fallout-style RPGs while leveraging modern procedural generation and touch-first design. Players explore the frontier from a first-person perspective.
 
 The game should be:
 - **Compelling within 30 seconds** of starting
@@ -64,7 +64,7 @@ The game uses multiple motivational systems:
 - Immediate drop into first sector
 
 ### First 5 Minutes
-- Tutorial-lite: Tap to move is intuitive
+- Tutorial-lite: First-person movement is intuitive
 - Find first item (satisfying pickup animation)
 - Meet first NPC with personality
 - Receive first quest with clear objective
@@ -83,24 +83,24 @@ The game uses multiple motivational systems:
 
 ## Control Systems
 
-### Primary: Tap-to-Move
-- Tap anywhere on walkable ground to move
-- Character pathfinds to destination
-- Tap on NPC to approach and talk
-- Tap on item to approach and collect
+### Primary: First-Person Movement
+- Virtual joystick for movement (left thumb)
+- Touch-drag to look around (right thumb)
+- Walk toward NPCs to interact
+- Walk toward items to collect
 - Long-press for context menu (future)
 
-### Secondary: Virtual Joystick (Toggle)
-- Optional floating joystick
-- Appears on touch, disappears on release
-- Direct 360° movement control
-- Better for precise movement
+### Secondary: Direct Touch Aiming
+- Tap to interact with objects in view
+- Swipe to look around the 3D world
+- Direct first-person aiming for combat
+- Smooth camera movement with touch sensitivity options
 
 ### Camera Controls
-- Two-finger pan to rotate view
-- Pinch to zoom in/out
-- Auto-follow player (smooth)
-- Bounds to keep player visible
+- First-person camera locked to player view
+- Touch-drag for look direction
+- Gyroscope aiming option (mobile)
+- Smooth head-bob during movement
 
 ### Touch Target Guidelines
 - Minimum 44x44px for all interactive elements
@@ -113,9 +113,9 @@ The game uses multiple motivational systems:
 ## World Design
 
 ### Sector Structure
-Each sector is a 24x24 grid (48x48 world units):
+Each sector is a continuous 3D area (48x48 world units):
 - Multiple landmarks (buildings, plazas)
-- Connected by carved paths
+- Connected by roads and trails
 - 2-4 exits to other sectors
 - Theme-appropriate props and NPCs
 
@@ -429,7 +429,7 @@ interface GameSettings {
   musicVolume: number;      // 0-1
   sfxVolume: number;        // 0-1
   haptics: boolean;         // Vibration feedback
-  controlMode: 'tap' | 'joystick';
+  controlMode: 'joystick' | 'gyro';
   reducedMotion: boolean;   // Respect system pref
   showMinimap: boolean;
   lowPowerMode: boolean;    // Reduce visual effects

@@ -2,7 +2,7 @@
 # Tests the character name input flow with various scenarios
 # Validates input validation, character limits, and edge cases
 
-appId: com.ironfrontier.mobile
+appId: com.arcade_cabinet.iron_frontier
 name: "Character Creation"
 tags:
   - character
@@ -12,7 +12,7 @@ tags:
 
 # Launch app with clean state
 - launchApp:
-    appId: com.ironfrontier.mobile
+    appId: com.arcade_cabinet.iron_frontier
     clearState: true
 
 # Wait for main menu
@@ -22,7 +22,7 @@ tags:
 
 # Navigate to character creation
 - tapOn:
-    text: ".*Adventure|.*New Game.*"
+    text: "Start"
     regex: true
 
 # Wait for name input
@@ -35,7 +35,7 @@ tags:
 
 # Test 1: Try to start with empty name (should not proceed)
 - tapOn:
-    text: "Start"
+    text: "Begin Adventure"
 
 # Should still be on name input screen
 - assertVisible:
@@ -63,7 +63,7 @@ tags:
 
 # Return to name input
 - tapOn:
-    text: ".*Adventure|.*New Game.*"
+    text: "Start"
     regex: true
 
 # Wait for name input
@@ -82,7 +82,7 @@ tags:
 
 # Test 4: Actually create the character
 - tapOn:
-    text: "Start"
+    text: "Begin Adventure"
 
 # Wait for game to initialize
 - extendedWaitUntil:

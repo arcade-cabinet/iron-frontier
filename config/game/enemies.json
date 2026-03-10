@@ -1,0 +1,967 @@
+[
+  {
+    "id": "bandit_thug",
+    "name": "Bandit Thug",
+    "type": "bandit",
+    "faction": "raiders",
+    "description": "A desperate criminal with little to lose.",
+    "maxHealth": 75,
+    "actionPoints": 4,
+    "baseDamage": 8,
+    "armor": 1,
+    "accuracyMod": -10,
+    "evasion": 5,
+    "weaponId": "rusty_knife",
+    "xpReward": 15,
+    "goldReward": 5,
+    "behavior": "aggressive",
+    "tags": ["melee", "common"],
+    "baseStats": {
+      "health": 75,
+      "damage": 10,
+      "armor": 1,
+      "accuracy": 55,
+      "evasion": 5
+    },
+    "scaling": {
+      "healthPerLevel": 1.12,
+      "damagePerLevel": 1.08,
+      "armorPerLevel": 1.05,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 55,
+      "falloffStartDistance": 3,
+      "falloffEndDistance": 8,
+      "minAccuracy": 20,
+      "coverBonus": 10,
+      "reactionTimeMin": 0.3,
+      "reactionTimeMax": 0.6
+    },
+    "namePool": {
+      "prefixes": ["Dirty", "Mean", "Ugly", "Scarred", "One-Eyed", "Drunk"]
+    },
+    "behaviorTags": ["aggressive", "melee", "charges", "dumb"],
+    "minLevel": 1,
+    "maxLevel": 6,
+    "xpModifier": 0.9,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_pistol", "bandages"],
+      "uncommon": ["whiskey"],
+      "rare": []
+    }
+  },
+  {
+    "id": "bandit_gunman",
+    "name": "Bandit Gunman",
+    "type": "gunslinger",
+    "faction": "raiders",
+    "description": "A pistol-wielding outlaw.",
+    "maxHealth": 80,
+    "actionPoints": 4,
+    "baseDamage": 12,
+    "armor": 2,
+    "accuracyMod": 0,
+    "evasion": 10,
+    "weaponId": "worn_revolver",
+    "xpReward": 20,
+    "goldReward": 8,
+    "behavior": "ranged",
+    "tags": ["ranged", "common"],
+    "baseStats": {
+      "health": 80,
+      "damage": 14,
+      "armor": 2,
+      "accuracy": 60,
+      "evasion": 8
+    },
+    "scaling": {
+      "healthPerLevel": 1.12,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.06,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 60,
+      "falloffStartDistance": 10,
+      "falloffEndDistance": 30,
+      "minAccuracy": 20,
+      "coverBonus": 15,
+      "reactionTimeMin": 0.5,
+      "reactionTimeMax": 1.2
+    },
+    "namePool": {
+      "prefixes": ["Quick-Draw", "Dusty", "Cold", "Dead-Eye", "Lucky", "Mean"],
+      "suffixes": ["the Kid", "Two-Guns"]
+    },
+    "behaviorTags": ["aggressive", "ranged", "mobile", "smart"],
+    "minLevel": 1,
+    "maxLevel": 8,
+    "xpModifier": 1.0,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_pistol", "revolver_ammo"],
+      "uncommon": ["bandages", "whiskey"],
+      "rare": ["revolver"]
+    }
+  },
+  {
+    "id": "bandit_sharpshooter",
+    "name": "Bandit Sharpshooter",
+    "type": "sharpshooter",
+    "faction": "raiders",
+    "description": "A deadly accurate rifleman who prefers to keep distance.",
+    "maxHealth": 65,
+    "actionPoints": 3,
+    "baseDamage": 18,
+    "armor": 1,
+    "accuracyMod": 15,
+    "evasion": 5,
+    "weaponId": "hunting_rifle",
+    "xpReward": 30,
+    "goldReward": 12,
+    "behavior": "ranged",
+    "tags": ["ranged", "uncommon"],
+    "baseStats": {
+      "health": 65,
+      "damage": 22,
+      "armor": 1,
+      "accuracy": 70,
+      "evasion": 12
+    },
+    "scaling": {
+      "healthPerLevel": 1.1,
+      "damagePerLevel": 1.12,
+      "armorPerLevel": 1.05,
+      "accuracyPerLevel": 1.0,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 70,
+      "falloffStartDistance": 30,
+      "falloffEndDistance": 80,
+      "minAccuracy": 30,
+      "coverBonus": 20,
+      "reactionTimeMin": 0.8,
+      "reactionTimeMax": 1.5
+    },
+    "namePool": {
+      "prefixes": ["Dead-Eye", "Hawk-Eye", "Silent", "Patient", "Cold"],
+      "titles": ["Sniper"],
+      "suffixes": ["the Ghost", "Long-Shot"]
+    },
+    "behaviorTags": ["defensive", "ranged", "stationary", "smart", "ambusher"],
+    "minLevel": 2,
+    "maxLevel": 10,
+    "xpModifier": 1.3,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_rifle"],
+      "uncommon": ["hunting_rifle", "bandages"],
+      "rare": ["schofield"]
+    }
+  },
+  {
+    "id": "bandit_leader",
+    "name": "Bandit Leader",
+    "type": "gunslinger",
+    "faction": "raiders",
+    "description": "A hardened criminal who commands respect through fear and violence.",
+    "maxHealth": 180,
+    "actionPoints": 5,
+    "baseDamage": 16,
+    "armor": 6,
+    "accuracyMod": 10,
+    "evasion": 12,
+    "weaponId": "schofield",
+    "xpReward": 75,
+    "goldReward": 30,
+    "behavior": "aggressive",
+    "tags": ["ranged", "rare", "mini_boss"],
+    "baseStats": {
+      "health": 180,
+      "damage": 22,
+      "armor": 6,
+      "accuracy": 68,
+      "evasion": 10
+    },
+    "scaling": {
+      "healthPerLevel": 1.15,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.08,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 68,
+      "falloffStartDistance": 12,
+      "falloffEndDistance": 35,
+      "minAccuracy": 25,
+      "coverBonus": 18,
+      "reactionTimeMin": 0.4,
+      "reactionTimeMax": 0.8
+    },
+    "namePool": {
+      "prefixes": ["Boss", "Big", "Captain", "Chief"],
+      "titles": ["Boss", "Captain", "Chief"],
+      "suffixes": ["the Cruel", "the Butcher", "Blood-Hand"]
+    },
+    "behaviorTags": ["aggressive", "ranged", "mobile", "leader", "smart"],
+    "minLevel": 3,
+    "maxLevel": 10,
+    "xpModifier": 2.0,
+    "lootTable": {
+      "always": ["ammo_pistol"],
+      "common": ["whiskey", "bandages"],
+      "uncommon": ["schofield", "medical_kit"],
+      "rare": ["revolver_fancy"]
+    }
+  },
+  {
+    "id": "copperhead_enforcer",
+    "name": "Copperhead Enforcer",
+    "type": "brute",
+    "faction": "copperhead",
+    "description": "A tough gang member who does the dirty work.",
+    "maxHealth": 150,
+    "actionPoints": 3,
+    "baseDamage": 15,
+    "armor": 6,
+    "accuracyMod": -5,
+    "evasion": 5,
+    "weaponId": "shotgun",
+    "xpReward": 40,
+    "goldReward": 15,
+    "behavior": "aggressive",
+    "tags": ["melee", "uncommon", "copperhead"],
+    "baseStats": {
+      "health": 150,
+      "damage": 25,
+      "armor": 6,
+      "accuracy": 80,
+      "evasion": 5
+    },
+    "scaling": {
+      "healthPerLevel": 1.14,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.08,
+      "accuracyPerLevel": 1.0,
+      "evasionPerLevel": 0.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 80,
+      "falloffStartDistance": 5,
+      "falloffEndDistance": 15,
+      "minAccuracy": 15,
+      "coverBonus": 10,
+      "reactionTimeMin": 0.4,
+      "reactionTimeMax": 0.9
+    },
+    "namePool": {
+      "prefixes": ["Big", "Heavy", "Brutal", "Mean"],
+      "titles": ["Enforcer", "Breaker", "Crusher"],
+      "suffixes": ["the Hammer", "Iron-Fist"]
+    },
+    "behaviorTags": ["aggressive", "melee", "charges", "berserker", "dumb"],
+    "minLevel": 2,
+    "maxLevel": 9,
+    "xpModifier": 1.4,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_shotgun", "whiskey"],
+      "uncommon": ["shotgun", "bandages"],
+      "rare": ["medical_kit"]
+    }
+  },
+  {
+    "id": "copperhead_gunslinger",
+    "name": "Copperhead Gunslinger",
+    "type": "gunslinger",
+    "faction": "copperhead",
+    "description": "A quick-draw artist loyal to the gang.",
+    "maxHealth": 100,
+    "actionPoints": 5,
+    "baseDamage": 14,
+    "armor": 3,
+    "accuracyMod": 10,
+    "evasion": 15,
+    "weaponId": "revolver",
+    "xpReward": 45,
+    "goldReward": 20,
+    "behavior": "ranged",
+    "tags": ["ranged", "uncommon", "copperhead"],
+    "baseStats": {
+      "health": 100,
+      "damage": 18,
+      "armor": 3,
+      "accuracy": 65,
+      "evasion": 12
+    },
+    "scaling": {
+      "healthPerLevel": 1.12,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.06,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 65,
+      "falloffStartDistance": 10,
+      "falloffEndDistance": 30,
+      "minAccuracy": 22,
+      "coverBonus": 15,
+      "reactionTimeMin": 0.4,
+      "reactionTimeMax": 1.0
+    },
+    "namePool": {
+      "prefixes": ["Copper", "Snake", "Viper", "Deadly", "Quick"],
+      "titles": ["Gunslinger", "Shooter", "Pistolero"],
+      "suffixes": ["the Snake", "Copperhead"]
+    },
+    "behaviorTags": ["aggressive", "ranged", "mobile", "smart", "flanker"],
+    "minLevel": 2,
+    "maxLevel": 9,
+    "xpModifier": 1.2,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_pistol"],
+      "uncommon": ["revolver", "whiskey"],
+      "rare": ["navy_revolver"]
+    }
+  },
+  {
+    "id": "copperhead_dynamiter",
+    "name": "Copperhead Dynamiter",
+    "type": "dynamiter",
+    "faction": "copperhead",
+    "description": "A demolitions expert who loves making things go boom.",
+    "maxHealth": 70,
+    "actionPoints": 4,
+    "baseDamage": 25,
+    "armor": 2,
+    "accuracyMod": -15,
+    "evasion": 10,
+    "weaponId": "dynamite",
+    "xpReward": 50,
+    "goldReward": 25,
+    "behavior": "ranged",
+    "tags": ["explosives", "rare", "copperhead"],
+    "baseStats": {
+      "health": 70,
+      "damage": 40,
+      "armor": 2,
+      "accuracy": 55,
+      "evasion": 10
+    },
+    "scaling": {
+      "healthPerLevel": 1.1,
+      "damagePerLevel": 1.12,
+      "armorPerLevel": 1.05,
+      "accuracyPerLevel": 1.0,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 55,
+      "falloffStartDistance": 5,
+      "falloffEndDistance": 18,
+      "minAccuracy": 25,
+      "coverBonus": 5,
+      "reactionTimeMin": 0.8,
+      "reactionTimeMax": 1.5
+    },
+    "namePool": {
+      "prefixes": ["Boom", "Blast", "Powder", "Fuse"],
+      "titles": ["Dynamiter", "Blaster", "Demo-Man"],
+      "suffixes": ["Kaboom", "the Bomber"]
+    },
+    "behaviorTags": ["aggressive", "ranged", "erratic", "retreats"],
+    "minLevel": 3,
+    "maxLevel": 10,
+    "xpModifier": 1.5,
+    "lootTable": {
+      "always": ["dynamite"],
+      "common": ["bandages"],
+      "uncommon": ["dynamite", "whiskey"],
+      "rare": []
+    }
+  },
+  {
+    "id": "ivrc_guard",
+    "name": "IVRC Guard",
+    "type": "gunslinger",
+    "faction": "ivrc_guards",
+    "description": "A company security guard protecting IVRC interests.",
+    "maxHealth": 100,
+    "actionPoints": 4,
+    "baseDamage": 12,
+    "armor": 4,
+    "accuracyMod": 5,
+    "evasion": 8,
+    "weaponId": "revolver",
+    "xpReward": 35,
+    "goldReward": 10,
+    "behavior": "defensive",
+    "tags": ["ranged", "common", "ivrc"],
+    "baseStats": {
+      "health": 100,
+      "damage": 16,
+      "armor": 4,
+      "accuracy": 62,
+      "evasion": 6
+    },
+    "scaling": {
+      "healthPerLevel": 1.12,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.08,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 62,
+      "falloffStartDistance": 10,
+      "falloffEndDistance": 28,
+      "minAccuracy": 22,
+      "coverBonus": 18,
+      "reactionTimeMin": 0.5,
+      "reactionTimeMax": 1.0
+    },
+    "behaviorTags": ["defensive", "ranged", "smart", "pack_tactics", "stationary"],
+    "minLevel": 1,
+    "maxLevel": 8,
+    "xpModifier": 1.1,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_pistol", "bandages"],
+      "uncommon": ["revolver", "medical_kit"],
+      "rare": ["ivrc_scrip"]
+    }
+  },
+  {
+    "id": "ivrc_marksman",
+    "name": "IVRC Marksman",
+    "type": "sharpshooter",
+    "faction": "ivrc_guards",
+    "description": "An elite company sniper.",
+    "maxHealth": 80,
+    "actionPoints": 4,
+    "baseDamage": 20,
+    "armor": 3,
+    "accuracyMod": 20,
+    "evasion": 5,
+    "weaponId": "rifle",
+    "xpReward": 50,
+    "goldReward": 15,
+    "behavior": "ranged",
+    "tags": ["ranged", "uncommon", "ivrc"],
+    "baseStats": {
+      "health": 80,
+      "damage": 24,
+      "armor": 3,
+      "accuracy": 72,
+      "evasion": 10
+    },
+    "scaling": {
+      "healthPerLevel": 1.1,
+      "damagePerLevel": 1.12,
+      "armorPerLevel": 1.05,
+      "accuracyPerLevel": 1.0,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 72,
+      "falloffStartDistance": 30,
+      "falloffEndDistance": 90,
+      "minAccuracy": 30,
+      "coverBonus": 22,
+      "reactionTimeMin": 0.8,
+      "reactionTimeMax": 1.5
+    },
+    "behaviorTags": ["defensive", "ranged", "smart", "ambusher", "stationary"],
+    "minLevel": 2,
+    "maxLevel": 9,
+    "xpModifier": 1.4,
+    "lootTable": {
+      "always": [],
+      "common": ["ammo_rifle"],
+      "uncommon": ["hunting_rifle"],
+      "rare": ["rifle_winchester"]
+    }
+  },
+  {
+    "id": "ivrc_captain",
+    "name": "IVRC Captain",
+    "type": "gunslinger",
+    "faction": "ivrc_guards",
+    "description": "A seasoned commander of IVRC security forces.",
+    "maxHealth": 200,
+    "actionPoints": 5,
+    "baseDamage": 16,
+    "armor": 7,
+    "accuracyMod": 15,
+    "evasion": 12,
+    "weaponId": "revolver",
+    "xpReward": 75,
+    "goldReward": 30,
+    "behavior": "defensive",
+    "tags": ["ranged", "rare", "ivrc", "mini_boss"],
+    "baseStats": {
+      "health": 200,
+      "damage": 24,
+      "armor": 7,
+      "accuracy": 70,
+      "evasion": 8
+    },
+    "scaling": {
+      "healthPerLevel": 1.14,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.1,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 70,
+      "falloffStartDistance": 12,
+      "falloffEndDistance": 35,
+      "minAccuracy": 28,
+      "coverBonus": 20,
+      "reactionTimeMin": 0.3,
+      "reactionTimeMax": 0.7
+    },
+    "behaviorTags": ["aggressive", "ranged", "leader", "smart", "mobile"],
+    "minLevel": 3,
+    "maxLevel": 10,
+    "xpModifier": 1.8,
+    "lootTable": {
+      "always": ["ammo_pistol"],
+      "common": ["medical_kit"],
+      "uncommon": ["schofield", "ivrc_scrip"],
+      "rare": ["revolver_fancy"]
+    }
+  },
+  {
+    "id": "desert_wolf",
+    "name": "Desert Wolf",
+    "type": "animal",
+    "faction": "wildlife",
+    "description": "A lean, hungry predator of the wastes.",
+    "maxHealth": 60,
+    "actionPoints": 5,
+    "baseDamage": 10,
+    "armor": 0,
+    "accuracyMod": 0,
+    "evasion": 20,
+    "xpReward": 12,
+    "goldReward": 0,
+    "behavior": "aggressive",
+    "tags": ["melee", "common", "animal"],
+    "baseStats": {
+      "health": 60,
+      "damage": 15,
+      "armor": 0,
+      "accuracy": 75,
+      "evasion": 18
+    },
+    "scaling": {
+      "healthPerLevel": 1.1,
+      "damagePerLevel": 1.08,
+      "armorPerLevel": 1.0,
+      "accuracyPerLevel": 1,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 75,
+      "falloffStartDistance": 2,
+      "falloffEndDistance": 4,
+      "minAccuracy": 40,
+      "coverBonus": 0,
+      "reactionTimeMin": 0.2,
+      "reactionTimeMax": 0.5
+    },
+    "namePool": {
+      "prefixes": ["Mangy", "Hungry", "Wild", "Gray", "Feral", "Rabid"]
+    },
+    "behaviorTags": ["aggressive", "melee", "charges", "pack_tactics", "mobile"],
+    "minLevel": 1,
+    "maxLevel": 6,
+    "xpModifier": 0.8,
+    "lootTable": {
+      "always": [],
+      "common": ["wolf_pelt"],
+      "uncommon": [],
+      "rare": []
+    }
+  },
+  {
+    "id": "rattlesnake",
+    "name": "Rattlesnake",
+    "type": "animal",
+    "faction": "wildlife",
+    "description": "A venomous serpent that strikes without warning.",
+    "maxHealth": 30,
+    "actionPoints": 6,
+    "baseDamage": 6,
+    "armor": 0,
+    "accuracyMod": 10,
+    "evasion": 30,
+    "xpReward": 8,
+    "goldReward": 0,
+    "behavior": "defensive",
+    "tags": ["melee", "common", "animal", "poison"],
+    "baseStats": {
+      "health": 30,
+      "damage": 12,
+      "armor": 0,
+      "accuracy": 80,
+      "evasion": 25
+    },
+    "scaling": {
+      "healthPerLevel": 1.08,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.0,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 2
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 80,
+      "falloffStartDistance": 1,
+      "falloffEndDistance": 2.5,
+      "minAccuracy": 50,
+      "coverBonus": 0,
+      "reactionTimeMin": 0.1,
+      "reactionTimeMax": 0.3
+    },
+    "namePool": {
+      "prefixes": ["Diamondback", "Western", "Sidewinder", "Timber", "Mojave"]
+    },
+    "behaviorTags": ["defensive", "melee", "ambusher", "poisonous", "stationary"],
+    "minLevel": 1,
+    "maxLevel": 5,
+    "xpModifier": 0.7,
+    "lootTable": {
+      "always": [],
+      "common": [],
+      "uncommon": ["antivenom"],
+      "rare": []
+    }
+  },
+  {
+    "id": "mountain_lion",
+    "name": "Mountain Lion",
+    "type": "animal",
+    "faction": "wildlife",
+    "description": "A powerful feline ambush predator.",
+    "maxHealth": 120,
+    "actionPoints": 5,
+    "baseDamage": 15,
+    "armor": 2,
+    "accuracyMod": 5,
+    "evasion": 25,
+    "xpReward": 25,
+    "goldReward": 0,
+    "behavior": "aggressive",
+    "tags": ["melee", "uncommon", "animal"],
+    "baseStats": {
+      "health": 120,
+      "damage": 22,
+      "armor": 2,
+      "accuracy": 78,
+      "evasion": 22
+    },
+    "scaling": {
+      "healthPerLevel": 1.12,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.05,
+      "accuracyPerLevel": 1,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 78,
+      "falloffStartDistance": 2,
+      "falloffEndDistance": 5,
+      "minAccuracy": 45,
+      "coverBonus": 0,
+      "reactionTimeMin": 0.15,
+      "reactionTimeMax": 0.4
+    },
+    "namePool": {
+      "prefixes": ["Scarred", "Old", "Massive", "Hungry", "Shadow"]
+    },
+    "behaviorTags": ["aggressive", "melee", "charges", "ambusher", "flanker", "smart"],
+    "minLevel": 2,
+    "maxLevel": 8,
+    "xpModifier": 1.4,
+    "lootTable": {
+      "always": [],
+      "common": [],
+      "uncommon": ["dried_jerky"],
+      "rare": []
+    }
+  },
+  {
+    "id": "grizzly_bear",
+    "name": "Grizzly Bear",
+    "type": "animal",
+    "faction": "wildlife",
+    "description": "A massive, terrifying creature that dominates the frontier wilderness.",
+    "maxHealth": 250,
+    "actionPoints": 3,
+    "baseDamage": 20,
+    "armor": 5,
+    "accuracyMod": -5,
+    "evasion": 5,
+    "xpReward": 60,
+    "goldReward": 0,
+    "behavior": "aggressive",
+    "tags": ["melee", "rare", "animal", "mini_boss"],
+    "baseStats": {
+      "health": 250,
+      "damage": 28,
+      "armor": 5,
+      "accuracy": 70,
+      "evasion": 3
+    },
+    "scaling": {
+      "healthPerLevel": 1.14,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.06,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 0
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 70,
+      "falloffStartDistance": 2,
+      "falloffEndDistance": 5,
+      "minAccuracy": 50,
+      "coverBonus": 0,
+      "reactionTimeMin": 0.3,
+      "reactionTimeMax": 0.6
+    },
+    "namePool": {
+      "prefixes": ["Grizzled", "Massive", "Angry", "Old", "Scarred", "Raging"]
+    },
+    "behaviorTags": ["aggressive", "melee", "charges", "berserker", "dumb"],
+    "minLevel": 3,
+    "maxLevel": 10,
+    "xpModifier": 2.0,
+    "lootTable": {
+      "always": [],
+      "common": ["dried_jerky"],
+      "uncommon": [],
+      "rare": []
+    }
+  },
+  {
+    "id": "scorpion",
+    "name": "Giant Scorpion",
+    "type": "animal",
+    "faction": "wildlife",
+    "description": "An oversized arachnid with pincers and a venomous stinger.",
+    "maxHealth": 35,
+    "actionPoints": 4,
+    "baseDamage": 8,
+    "armor": 4,
+    "accuracyMod": 0,
+    "evasion": 15,
+    "xpReward": 6,
+    "goldReward": 0,
+    "behavior": "aggressive",
+    "tags": ["melee", "common", "animal", "poison", "swarm"],
+    "baseStats": {
+      "health": 35,
+      "damage": 10,
+      "armor": 4,
+      "accuracy": 72,
+      "evasion": 14
+    },
+    "scaling": {
+      "healthPerLevel": 1.08,
+      "damagePerLevel": 1.08,
+      "armorPerLevel": 1.06,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 1
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 72,
+      "falloffStartDistance": 1,
+      "falloffEndDistance": 2.5,
+      "minAccuracy": 50,
+      "coverBonus": 0,
+      "reactionTimeMin": 0.1,
+      "reactionTimeMax": 0.3
+    },
+    "namePool": {
+      "prefixes": ["Desert", "Bark", "Emperor", "Giant", "Venomous"]
+    },
+    "behaviorTags": ["aggressive", "melee", "poisonous", "stationary", "pack_tactics"],
+    "minLevel": 1,
+    "maxLevel": 5,
+    "xpModifier": 0.6,
+    "lootTable": {
+      "always": [],
+      "common": [],
+      "uncommon": ["antivenom"],
+      "rare": []
+    }
+  },
+  {
+    "id": "remnant_sentry",
+    "name": "Sentry Automaton",
+    "type": "automaton",
+    "faction": "remnant",
+    "description": "A mechanical guardian from a forgotten age.",
+    "maxHealth": 180,
+    "actionPoints": 3,
+    "baseDamage": 12,
+    "armor": 10,
+    "accuracyMod": 0,
+    "evasion": 0,
+    "xpReward": 40,
+    "goldReward": 5,
+    "lootTableId": "automaton_scrap",
+    "behavior": "defensive",
+    "tags": ["ranged", "uncommon", "automaton"],
+    "baseStats": {
+      "health": 180,
+      "damage": 20,
+      "armor": 10,
+      "accuracy": 68,
+      "evasion": 3
+    },
+    "scaling": {
+      "healthPerLevel": 1.14,
+      "damagePerLevel": 1.1,
+      "armorPerLevel": 1.1,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 0
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 68,
+      "falloffStartDistance": 15,
+      "falloffEndDistance": 40,
+      "minAccuracy": 30,
+      "coverBonus": 12,
+      "reactionTimeMin": 0.3,
+      "reactionTimeMax": 0.6
+    },
+    "behaviorTags": ["defensive", "ranged", "stationary", "smart"],
+    "minLevel": 3,
+    "maxLevel": 9,
+    "xpModifier": 1.5,
+    "lootTable": {
+      "always": ["scrap_metal"],
+      "common": ["oil_can"],
+      "uncommon": ["scrap_metal"],
+      "rare": ["automaton_core"]
+    }
+  },
+  {
+    "id": "remnant_scout",
+    "name": "Scout Automaton",
+    "type": "automaton",
+    "faction": "remnant",
+    "description": "A fast, agile reconnaissance machine.",
+    "maxHealth": 90,
+    "actionPoints": 5,
+    "baseDamage": 10,
+    "armor": 5,
+    "accuracyMod": 10,
+    "evasion": 15,
+    "xpReward": 35,
+    "goldReward": 5,
+    "lootTableId": "automaton_scrap",
+    "behavior": "ranged",
+    "tags": ["ranged", "uncommon", "automaton"],
+    "baseStats": {
+      "health": 90,
+      "damage": 16,
+      "armor": 5,
+      "accuracy": 72,
+      "evasion": 16
+    },
+    "scaling": {
+      "healthPerLevel": 1.1,
+      "damagePerLevel": 1.08,
+      "armorPerLevel": 1.06,
+      "accuracyPerLevel": 1.0,
+      "evasionPerLevel": 1.5
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 72,
+      "falloffStartDistance": 12,
+      "falloffEndDistance": 35,
+      "minAccuracy": 28,
+      "coverBonus": 10,
+      "reactionTimeMin": 0.2,
+      "reactionTimeMax": 0.5
+    },
+    "behaviorTags": ["aggressive", "ranged", "mobile", "smart", "flanker"],
+    "minLevel": 2,
+    "maxLevel": 8,
+    "xpModifier": 1.1,
+    "lootTable": {
+      "always": [],
+      "common": ["scrap_metal"],
+      "uncommon": ["oil_can"],
+      "rare": []
+    }
+  },
+  {
+    "id": "remnant_juggernaut",
+    "name": "Juggernaut Automaton",
+    "type": "automaton",
+    "faction": "remnant",
+    "description": "A massive, heavily armored war machine.",
+    "maxHealth": 600,
+    "actionPoints": 2,
+    "baseDamage": 25,
+    "armor": 18,
+    "accuracyMod": -10,
+    "evasion": 0,
+    "xpReward": 100,
+    "goldReward": 20,
+    "lootTableId": "automaton_rare",
+    "behavior": "aggressive",
+    "tags": ["melee", "rare", "automaton", "mini_boss"],
+    "baseStats": {
+      "health": 600,
+      "damage": 35,
+      "armor": 18,
+      "accuracy": 60,
+      "evasion": 0
+    },
+    "scaling": {
+      "healthPerLevel": 1.16,
+      "damagePerLevel": 1.12,
+      "armorPerLevel": 1.1,
+      "accuracyPerLevel": 1.5,
+      "evasionPerLevel": 0
+    },
+    "fpsAccuracy": {
+      "baseAccuracy": 60,
+      "falloffStartDistance": 8,
+      "falloffEndDistance": 25,
+      "minAccuracy": 30,
+      "coverBonus": 8,
+      "reactionTimeMin": 0.5,
+      "reactionTimeMax": 1.0
+    },
+    "namePool": {
+      "prefixes": ["Titan", "Colossus", "Omega"],
+      "titles": ["Juggernaut", "Destroyer", "Annihilator"],
+      "suffixes": ["Prime", "Alpha", "Omega"]
+    },
+    "behaviorTags": ["aggressive", "ranged", "melee", "stationary", "berserker"],
+    "minLevel": 5,
+    "maxLevel": 10,
+    "xpModifier": 3.0,
+    "lootTable": {
+      "always": ["automaton_core", "scrap_metal"],
+      "common": ["scrap_metal", "oil_can"],
+      "uncommon": ["scrap_metal"],
+      "rare": []
+    }
+  }
+]

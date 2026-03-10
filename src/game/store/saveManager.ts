@@ -59,7 +59,7 @@ export async function getSaveSlots(): Promise<SaveSlot[]> {
     return slots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
     console.error('Failed to get save slots:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -97,7 +97,7 @@ export async function loadGame(saveId: string): Promise<any | null> {
         await dbManager.init(binary);
         return dbManager.loadGameState();
       } catch (e) {
-        console.warn('Binary load failed, falling back to JSON', e);
+        console.error('Binary load failed, falling back to JSON — possible data corruption', e);
       }
     }
 

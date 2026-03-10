@@ -1,0 +1,71 @@
+{
+  "id": "telegraph-terminal",
+  "name": "Telegraph Terminal",
+  "type": "prop",
+  "seed": 196520345,
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c0619-bcb7-7f38-8330-48c5278246bd",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0619-bcb7-7f38-8330-48c5278246bd"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c061a-1849-78f3-9a68-fbb92d784c1d",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c061a-1849-78f3-9a68-fbb92d784c1d"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c061b-df53-7941-97e2-8824ba9eabeb",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c061b-df53-7941-97e2-8824ba9eabeb"
+      },
+      "artifacts": {}
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c0623-a42b-70a9-b5b8-919053d623be",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0623-a42b-70a9-b5b8-919053d623be"
+      },
+      "artifacts": {}
+    }
+  },
+  "description": "Desk telegraph terminal with brass keys, wood base, and copper wiring.",
+  "textToImageTask": {
+    "prompt": "Steampunk telegraph terminal, brass keys, wood base, copper wiring, clean background, multi-view sheet",
+    "generateMultiView": true,
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Telegraph terminal prop, brass keys, wood base, copper wiring, compact desk device",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 14000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "polished wood base, brass keys with light wear, copper wiring, vintage instrument",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "station-issue",
+    "portable-kit",
+    "executive-polish"
+  ],
+  "styleTexturePrompts": {
+    "station-issue": "utilitarian wood, tarnished brass, rugged station use",
+    "portable-kit": "compact casing, reinforced leather pads, travel-ready finish",
+    "executive-polish": "rich wood, polished brass, upscale office finish"
+  }
+}

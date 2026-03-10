@@ -1,0 +1,50 @@
+{
+  "easy": {
+    "label": "Greenhorn",
+    "description": "For those new to the frontier. Reduced enemy damage, more loot, slower fatigue.",
+    "playerDamageMultiplier": 1.25,
+    "enemyDamageMultiplier": 0.7,
+    "enemyHealthMultiplier": 0.75,
+    "enemyAccuracyMod": -10,
+    "lootMultiplier": 1.5,
+    "xpMultiplier": 1.25,
+    "goldMultiplier": 1.5,
+    "fatigueRateMultiplier": 0.75,
+    "provisionConsumptionMultiplier": 0.75,
+    "healingMultiplier": 1.25,
+    "criticalHitChanceBonus": 0.05,
+    "encounterFrequency": 0.75
+  },
+  "normal": {
+    "label": "Frontier",
+    "description": "The way the West was meant to be played. Balanced challenge and reward.",
+    "playerDamageMultiplier": 1.0,
+    "enemyDamageMultiplier": 1.0,
+    "enemyHealthMultiplier": 1.0,
+    "enemyAccuracyMod": 0,
+    "lootMultiplier": 1.0,
+    "xpMultiplier": 1.0,
+    "goldMultiplier": 1.0,
+    "fatigueRateMultiplier": 1.0,
+    "provisionConsumptionMultiplier": 1.0,
+    "healingMultiplier": 1.0,
+    "criticalHitChanceBonus": 0,
+    "encounterFrequency": 1.0
+  },
+  "hard": {
+    "label": "Outlaw",
+    "description": "For hardened gunslingers. Deadlier enemies, scarcer supplies, no mercy.",
+    "playerDamageMultiplier": 0.85,
+    "enemyDamageMultiplier": 1.4,
+    "enemyHealthMultiplier": 1.5,
+    "enemyAccuracyMod": 10,
+    "lootMultiplier": 0.7,
+    "xpMultiplier": 1.5,
+    "goldMultiplier": 0.75,
+    "fatigueRateMultiplier": 1.25,
+    "provisionConsumptionMultiplier": 1.5,
+    "healingMultiplier": 0.75,
+    "criticalHitChanceBonus": -0.03,
+    "encounterFrequency": 1.35
+  }
+}

@@ -2,11 +2,11 @@
 
 ## A Cross-Platform Steampunk Frontier RPG
 
-Single Expo App: Web + Android
+Expo 55 + React Three Fiber: Web + Android + iOS
 
-![Status: Alpha v0.1](https://img.shields.io/badge/status-alpha%20v0.1-orange)
-![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20android-blue)
-![Framework: Expo SDK 54](https://img.shields.io/badge/expo-SDK%2054-blue)
+![Status: Alpha v0.2](https://img.shields.io/badge/status-alpha%20v0.2-orange)
+![Platform: Cross-Platform](https://img.shields.io/badge/platform-web%20%2B%20android%20%2B%20ios-blue)
+![Framework: Expo%2055](https://img.shields.io/badge/framework-expo%2055-blue)
 
 ---
 
@@ -16,31 +16,44 @@ Single Expo App: Web + Android
 # Install dependencies
 pnpm install
 
-# Start development server
-pnpm start
+# Start Expo dev server
+pnpm dev
 
-# Web development
+# Start web
 pnpm web
 
-# Android development
+# Start Android
 pnpm android
 
-# Build for production
-pnpm build:web
-pnpm build:android
+# Start iOS
+pnpm ios
+```
+
+## Testing
+
+```bash
+# Unit tests (Jest)
+pnpm test
+
+# Web E2E (Playwright)
+pnpm test:e2e
+
+# Mobile E2E (Maestro)
+pnpm test:maestro
 ```
 
 ---
 
 ## What is Iron Frontier?
 
-Iron Frontier is an isometric RPG set in a steampunk American frontier (circa 1887). Players explore procedurally generated locations, meet quirky NPCs, collect items, and complete quests.
+Iron Frontier is a first-person open world RPG set in a steampunk American frontier (circa 1887). Players explore 14 hand-crafted towns connected by authored open world terrain, meet quirky NPCs, collect items, and complete quests. All geometry is procedurally constructed from Three.js primitives and canvas textures -- zero GLB models in the game scene.
 
 ### Core Features
 
-- **Isometric 3D** - Babylon.js React Native for cross-platform 3D
-- **Procedural Generation** - Daggerfall-style deterministic content
-- **Cross-Platform** - Web and Android from single Expo app
+- **First-Person 3D** - React Three Fiber for cross-platform 3D rendering
+- **Authored Open World** - 14 hand-crafted towns with deterministic layout
+- **Procedural Geometry** - All visuals from Three.js primitives + canvas textures (zero GLBs)
+- **Cross-Platform** - Web, Android, and iOS from a single Expo app
 - **Persistent Progress** - SQLite-backed save system
 
 ### Theme & Setting
@@ -62,35 +75,38 @@ iron-frontier/
 │   │   └── _layout.tsx     # Tab layout
 │   ├── index.tsx           # Root index
 │   └── _layout.tsx         # Root layout
-├── src/                    # Game source code
-│   ├── data/               # Game data & schemas (Zod)
-│   │   ├── schemas/        # Type definitions
-│   │   ├── items/          # Item definitions
-│   │   ├── npcs/           # NPC definitions
-│   │   ├── quests/         # Quest definitions
-│   │   └── generation/     # Procedural generators
-│   ├── game/               # Game logic
-│   │   ├── components/     # Game components
-│   │   ├── screens/        # Game screens
-│   │   ├── ui/             # UI panels
-│   │   └── store/          # Zustand state management
-│   ├── engine/             # 3D rendering engine
-│   │   ├── hex/            # Hex grid system
-│   │   ├── rendering/      # Scene management
-│   │   └── terrain/        # Terrain generation
-│   ├── hooks/              # React hooks
-│   ├── lib/                # Utilities
-│   └── types/              # TypeScript types
-├── assets/                 # Static assets
-│   ├── models/             # 3D models (GLTF/GLB)
-│   ├── textures/           # Textures
-│   ├── images/             # UI images
-│   └── fonts/              # Fonts
-├── components/             # Shared React Native components
-├── constants/              # App constants
+├── components/             # React Native + R3F components
+│   ├── ui/                 # React Native Reusables base components
+│   ├── game/               # Game UI (HUD, dialogue, inventory, shops)
+│   ├── scene/              # R3F scene (Camera, Lighting, Sky, Terrain)
+│   └── entities/           # R3F entities (NPCs, projectiles, pickups)
+├── engine/                 # Procedural rendering engine (pure Three.js)
+│   ├── archetypes/         # Building archetypes (Saloon, Inn, etc.)
+│   ├── renderers/          # Terrain, vegetation, sky, weapon renderers
+│   ├── materials/          # Canvas texture factories
+│   └── spatial/            # Spatial hashing, chunk management
+├── src/game/               # Game logic (engine-agnostic)
+│   ├── data/               # Schemas, authored content
+│   │   ├── schemas/        # Zod schemas
+│   │   ├── worlds/         # World map definitions
+│   │   ├── locations/      # 14 town definitions
+│   │   ├── npcs/           # NPC dialogues and data
+│   │   ├── quests/         # Quest chain definitions
+│   │   ├── items/          # Item and world item data
+│   │   ├── enemies/        # Enemy type definitions
+│   │   └── shops/          # Shop inventory data
+│   ├── store/              # Zustand store
+│   │   ├── createGameStore.ts
+│   │   └── slices/         # 12 slices (core, player, combat, etc.)
+│   └── systems/            # Game systems (combat, encounter, zone, etc.)
+├── input/                  # Universal FPS input system
+├── ecs/                    # Miniplex ECS (dynamic entities only)
+├── config/game/            # JSON config (all tuning values)
+├── assets/                 # Fonts, sounds, textures (NO GLB models)
+├── tests/                  # Test suites
 ├── docs/                   # Documentation
 ├── memory-bank/            # AI context files
-└── .github/workflows/      # CI/CD pipelines
+└── .maestro/               # Maestro mobile E2E test flows
 ```
 
 ---
@@ -99,28 +115,20 @@ iron-frontier/
 
 | Component | Technology | Version |
 |-----------|------------|---------|
-| **Framework** | Expo | SDK 54 |
-| **Runtime** | React Native | 0.81.5 |
-| **3D Engine** | Babylon.js React Native | 1.9.0 |
-| **State** | Zustand | 5.0.10 |
-| **Persistence** | expo-sqlite / sql.js | 16.0.10 / 1.13.0 |
-| **Styling** | Tailwind CSS v4 + NativeWind | 4.1.18 / 4.2.1 |
-| **Schemas** | Zod | 4.3.6 |
-| **Routing** | Expo Router | 6.0.22 |
-| **Package Manager** | pnpm | 10.20.0 |
-
----
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [AGENTS.md](./AGENTS.md) | AI agent development guide |
-| [CLAUDE.md](./CLAUDE.md) | Quick reference for Claude |
-| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | System design |
-| [docs/GAME_DESIGN.md](./docs/GAME_DESIGN.md) | Gameplay systems |
-| [docs/DEVELOPMENT_GUIDE.md](./docs/DEVELOPMENT_GUIDE.md) | How to develop |
-| [docs/ROADMAP.md](./docs/ROADMAP.md) | Development priorities |
+| **Framework** | Expo | SDK 55 |
+| **Runtime** | React Native | 0.83 |
+| **3D Engine** | React Three Fiber + drei | 9.x / 10.x |
+| **State** | Zustand | 5.x |
+| **ECS** | Miniplex | 2.x |
+| **Persistence** | expo-sqlite | 16.x |
+| **Styling** | NativeWind + Tailwind CSS | 4.x / 3.x |
+| **Schemas** | Zod | 4.x |
+| **Routing** | Expo Router | 5.x |
+| **AI/Behavior** | Yuka | 0.7 |
+| **Audio** | Tone.js | 15.x |
+| **Lint/Format** | Biome | 2.4 |
+| **Testing** | Jest + Playwright + Maestro | |
+| **Package Manager** | pnpm | 10.20 |
 
 ---
 
@@ -128,60 +136,61 @@ iron-frontier/
 
 ```bash
 # Development
-pnpm start            # Start Expo dev server
+pnpm dev              # Start Expo dev server
 pnpm web              # Start web
 pnpm android          # Start Android
 pnpm ios              # Start iOS
 
 # Build
-pnpm build:web        # Export web build
-pnpm build:android    # Build Android APK
+pnpm build            # Export web build
+pnpm build:android    # Build Android APK (EAS)
+pnpm build:ios        # Build iOS app (EAS)
 
 # Quality
 pnpm typecheck        # TypeScript check
-pnpm lint             # Biome linting
+pnpm lint             # Biome lint + format check
 pnpm lint:fix         # Auto-fix lint issues
+pnpm check            # Full check (lint + format, write fixes)
 ```
 
 ---
 
-## Current Status (v0.1-candidate)
+## Documentation
 
-### Completed
-
-- [x] Unified Expo app (migrated from monorepo)
-- [x] Zod schemas for game data
-- [x] Web app with Babylon.js rendering
-- [x] Mobile app with Expo + Babylon.js React Native
-- [x] Procedural generation system (15,000+ lines)
-- [x] Turn-based combat system
-- [x] Shop and equipment systems
-- [x] Responsive UI (mobile-first)
-- [x] SQLite persistence layer
-- [x] CI/CD with GitHub Actions
-- [x] 203 tests passing
-- [x] Documentation site (Astro)
-
-### In Progress
-
-- [ ] PR #1 review and merge
-- [ ] Render.com deployment
-- [ ] Audio system
+| Document | Description |
+|----------|-------------|
+| [CLAUDE.md](./CLAUDE.md) | Quick reference for Claude |
+| [docs/GAME_SPEC.md](./docs/GAME_SPEC.md) | Single source of truth for game design |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | System design |
+| [docs/GAME_DESIGN.md](./docs/GAME_DESIGN.md) | Gameplay systems |
+| [docs/BRANDING.md](./docs/BRANDING.md) | Visual identity and style guide |
 
 ---
 
-## For AI Agents
+## Current Status (v0.2)
 
-Read [AGENTS.md](./AGENTS.md) for:
-- Monorepo structure
-- Critical files
-- Common patterns
-- Testing commands
+### Completed
 
-Read [memory-bank/](./memory-bank/) for:
-- Current context
-- Architecture decisions
-- Progress tracking
+- [x] Expo 55 + React Three Fiber setup
+- [x] First-person 3D scene with R3F
+- [x] Procedural geometry engine (zero GLBs)
+- [x] Zustand store with 12 slices
+- [x] Miniplex ECS for dynamic entities
+- [x] Zod schemas for all game data
+- [x] 14 authored town definitions
+- [x] Universal FPS input system
+- [x] Real-time combat system
+- [x] Quest and dialogue systems
+- [x] Shop and equipment systems
+- [x] SQLite persistence layer
+- [x] Mobile-first responsive UI
+- [x] CI/CD with GitHub Actions
+
+### In Progress
+
+- [ ] Content generation pipeline (Meshy 3D)
+- [ ] Audio system (Tone.js)
+- [ ] Full E2E test coverage
 
 ---
 
@@ -189,10 +198,18 @@ Read [memory-bank/](./memory-bank/) for:
 
 | Platform | Targets |
 |----------|---------|
-| **Web** | Chrome, Firefox, Safari (WebGPU) |
-| **Mobile** | Android 10+, iOS 14+ |
-| **Viewport** | 320px - 1920px responsive |
-| **Performance** | 60fps target |
+| **Web** | Chrome, Firefox, Safari (WebGPU/WebGL) |
+| **Mobile** | Android 10+, iOS 16+ |
+| **Viewport** | 375px - 1920px responsive |
+| **Performance** | 60fps target (55fps mobile min) |
+
+---
+
+## For AI Agents
+
+Read [CLAUDE.md](./CLAUDE.md) for project rules, tech stack, and architecture.
+
+Read [memory-bank/](./memory-bank/) for current context and progress tracking.
 
 ---
 

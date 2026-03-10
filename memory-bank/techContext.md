@@ -2,66 +2,46 @@
 
 ## Technology Stack
 
-### Web App (`apps/web/`)
-
 | Layer | Technology |
 |-------|------------|
-| **Framework** | React 19 |
-| **Build Tool** | Vite 7 |
-| **Language** | TypeScript (strict-ready) |
-| **3D Engine** | Babylon.js 8 (WebGPU) |
-| **State** | Zustand |
-| **Persistence** | sql.js + IndexedDB |
-| **Styling** | Tailwind CSS v4, shadcn/ui |
-| **Animation** | Framer Motion |
-| **Testing** | Vitest, Playwright |
-| **Linting** | Biome |
-
-### Mobile App (`apps/mobile/`)
-
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Expo SDK 54, React Native 0.81 |
-| **Language** | TypeScript |
-| **3D Engine** | React Native Filament |
-| **State** | Zustand |
-| **Persistence** | expo-sqlite |
-| **Styling** | NativeWind |
-| **Testing** | Maestro |
-| **Build** | EAS Build |
-
-### Shared Package (`packages/shared/`)
-
-| Layer | Technology |
-|-------|------------|
+| **Framework** | Expo 55 (React Native 0.83) |
+| **Navigation** | Expo Router |
+| **Language** | TypeScript 5.9 |
+| **3D Engine** | React Three Fiber v9 + Three.js v0.175 |
+| **3D Helpers** | @react-three/drei v10, @react-three/xr v6 |
+| **Styling** | NativeWind v4 (Tailwind CSS for React Native) |
+| **State** | Zustand v5 (12 modular slices) |
 | **Schemas** | Zod v4 |
-| **Types** | TypeScript |
-| **Build** | tsup |
-
-### Documentation (`apps/docs/`)
-
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Astro 5 |
-| **Theme** | Starlight |
-| **API Docs** | TypeDoc |
+| **ECS** | Miniplex v2 |
+| **AI** | Yuka v0.7 (behavior trees, steering) |
+| **Audio** | Tone.js v15 |
+| **Noise** | simplex-noise v4 |
+| **RNG** | Alea (seeded PRNG) |
+| **Persistence** | expo-sqlite, idb-keyval |
+| **Animation** | React Native Reanimated v4 |
+| **UI Primitives** | class-variance-authority, clsx, tailwind-merge |
+| **Testing (Unit)** | Jest v29 + jest-expo |
+| **Testing (E2E)** | Playwright |
+| **Testing (Property)** | fast-check v4 |
+| **Linting** | Biome v2 |
+| **Build** | Metro bundler (via Expo) |
 
 ## Development Environment
 
 | Tool | Version |
 |------|---------|
-| **Node.js** | 22.11.0 |
+| **Node.js** | 22+ (LTS recommended) |
 | **Package Manager** | pnpm 10.20.0 |
-| **Dev Port** | 8080 (web), 8081 (mobile) |
+| **Dev Server** | Expo CLI (`expo start`) |
+| **Web Port** | 8081 (Expo default) |
 
-## CI/CD
+## Build Targets
 
-| Platform | Purpose |
-|----------|---------|
-| **GitHub Actions** | CI/CD pipelines |
-| **Render.com** | Web app hosting |
-| **GitHub Pages** | Documentation hosting |
-| **EAS** | Mobile app builds |
+| Target | Method |
+|--------|--------|
+| **Web** | `expo start --web` (dev) / `expo export` (prod) |
+| **Android** | EAS Build (`eas build --platform android`) |
+| **iOS** | EAS Build (`eas build --platform ios`) |
 
 ## Key Constraints
 
@@ -70,14 +50,19 @@
 | **Performance** | 60fps on mid-range mobile |
 | **Asset Budget** | ~100MB initial load |
 | **Touch Targets** | Minimum 44px |
-| **Offline** | PWA-ready, works without internet |
-| **Responsive** | 320px - 1920px viewports |
+| **Offline** | Works without internet (local persistence) |
+| **Orientation** | Landscape primary |
 
-## Build Outputs
+## Configuration Files
 
-| App | Output |
-|-----|--------|
-| **Web** | Single HTML file (7.7 MB) |
-| **Mobile Android** | Debug APK |
-| **Mobile iOS** | IPA via EAS |
-| **Docs** | Static site |
+| File | Purpose |
+|------|---------|
+| `app.json` | Expo app configuration |
+| `babel.config.js` | Babel transforms (decorators, class properties) |
+| `metro.config.js` | Metro bundler configuration |
+| `tailwind.config.js` | Tailwind/NativeWind theme |
+| `tsconfig.json` | TypeScript configuration |
+| `biome.json` | Biome linter/formatter settings |
+| `jest.config.js` | Jest test runner configuration |
+| `playwright.config.ts` | Playwright E2E configuration |
+| `nativewind-env.d.ts` | NativeWind type declarations |

@@ -1,11 +1,7 @@
 /**
- * Game Services - Re-exports from packages/shared
- *
- * Platform-specific services can be added here. Common services are
- * imported from the shared package.
+ * Game Services - Platform-agnostic business logic for game systems
  */
 
-// Re-export shared services
 export {
   // Travel functions
   canTravel,
@@ -20,4 +16,30 @@ export {
   type TravelCost,
   type TravelGameState,
   type TravelResult,
-} from '@/services';
+} from './TravelService';
+
+// Audio
+export { audioService } from './AudioService';
+export { AmbienceManager } from './audio/AmbienceManager';
+export { MusicManager } from './audio/MusicManager';
+export { SoundManager } from './audio/SoundManager';
+
+// Audio bridge & catalog (new)
+export {
+  GameAudioBridge,
+  gameAudioBridge,
+  type AudioBridgeStoreShape,
+  type GameAudioBridgeOptions,
+} from './audio/GameAudioBridge';
+export {
+  SFX_CATALOG,
+  WEAPON_SOUND_MAP,
+  getWeaponSounds,
+  randomDetune,
+  type SFXEntry,
+} from './audio/SFXCatalog';
+export {
+  AmbientManager,
+  type AmbientZone,
+  type AmbientLayerConfig,
+} from './audio/AmbientManager';

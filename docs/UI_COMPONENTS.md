@@ -237,7 +237,7 @@ closeDialogue() → dialogueOpen=false
 │ Sound Effects         [━━━━━━━━○━] 80%          │
 │                                                 │
 │ CONTROLS                                        │
-│ Control Mode          [Tap-to-Move ▼]           │
+│ Control Mode          [Virtual Joystick ▼]       │
 │ Haptic Feedback       [ON]                      │
 │                                                 │
 │ DISPLAY                                         │

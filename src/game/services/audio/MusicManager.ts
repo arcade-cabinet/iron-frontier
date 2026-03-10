@@ -1,4 +1,5 @@
 import * as Tone from 'tone';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 type MusicState = 'exploration_day' | 'exploration_night' | 'combat' | 'town';
 
@@ -13,22 +14,17 @@ export class MusicManager {
   private scale = ['E3', 'G3', 'A3', 'B3', 'D4', 'E4', 'G4'];
 
   constructor() {
-    this.guitar = new Tone.PolySynth(
-      Tone.PluckSynth as any,
-      {
-        attackNoise: 1,
-        dampening: 4000,
-        resonance: 0.98,
-      } as any
-    ).toDestination();
+    this.guitar = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: 'triangle' },
+      envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.8 },
+    }).toDestination();
     this.guitar.volume.value = -12;
 
-    this.ambience = new Tone.PolySynth(Tone.AMSynth).toDestination();
-    this.ambience.volume.value = -20;
-    this.ambience.set({
+    this.ambience = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: 'sine' },
       envelope: { attack: 1, decay: 2, sustain: 0.5, release: 3 },
-    });
+    }).toDestination();
+    this.ambience.volume.value = -20;
   }
 
   public async start() {
@@ -62,14 +58,14 @@ export class MusicManager {
     // 4/4 Time, simplistic "Western" picking pattern generator
     this.loop = new Tone.Loop((time) => {
       // 30% chance to play a note
-      if (Math.random() > 0.7) {
-        const note = this.scale[Math.floor(Math.random() * this.scale.length)];
-        const length = Math.random() > 0.5 ? '8n' : '4n';
+      if (scopedRNG('audio', 42, rngTick()) > 0.7) {
+        const note = this.scale[Math.floor(scopedRNG('audio', 42, rngTick()) * this.scale.length)];
+        const length = scopedRNG('audio', 42, rngTick()) > 0.5 ? '8n' : '4n';
         this.guitar.triggerAttackRelease(note, length, time);
       }
 
       // Occasional atmospheric chord
-      if (Math.random() > 0.95) {
+      if (scopedRNG('audio', 42, rngTick()) > 0.95) {
         this.ambience.triggerAttackRelease(['E2', 'B2'], '1m', time);
       }
     }, '8n').start(0);

@@ -1,0 +1,48 @@
+# World Map Flow - Iron Frontier
+# Mirrors Playwright map open test
+
+appId: com.arcade_cabinet.iron_frontier
+name: "World Map"
+tags:
+  - gameplay
+  - travel
+  - map
+
+---
+
+- launchApp:
+    appId: com.arcade_cabinet.iron_frontier
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Tales of the Steam Frontier"
+    timeout: 15000
+
+- tapOn:
+    text: "Begin Adventure"
+
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "Ada"
+
+- tapOn:
+    text: "Start"
+
+- extendedWaitUntil:
+    visible: "Lv."
+    timeout: 30000
+
+# Open World Map (label visible on tablet/landscape)
+- tapOn:
+    text: "Territory"
+
+- extendedWaitUntil:
+    visible: "Current Location"
+    timeout: 10000
+
+- takeScreenshot: screenshots/20_world_map_open

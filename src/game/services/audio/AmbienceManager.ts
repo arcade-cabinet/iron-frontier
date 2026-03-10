@@ -1,4 +1,5 @@
 import * as Tone from 'tone';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 export class AmbienceManager {
   private wind: Tone.Noise;
@@ -47,12 +48,12 @@ export class AmbienceManager {
   private scheduleInsects() {
     if (!this.isPlaying) return;
 
-    const delay = Math.random() * 2 + 1; // 1-3 seconds
+    const delay = scopedRNG('audio', 42, rngTick()) * 2 + 1; // 1-3 seconds
     setTimeout(() => {
       if (!this.isPlaying) return;
 
       // Play a chirp (high pitch triad)
-      if (Math.random() > 0.5) {
+      if (scopedRNG('audio', 42, rngTick()) > 0.5) {
         this.insects.triggerAttackRelease(['F#6', 'A6'], '32n');
       }
       this.scheduleInsects();

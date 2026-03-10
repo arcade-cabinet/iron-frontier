@@ -1,6 +1,16 @@
-import initSqlJs from 'sql.js';
-
 let SQL: any = null;
+
+async function loadSqlJs(): Promise<any> {
+  if (SQL) return SQL;
+  const mod = await import(
+    /* webpackIgnore: true */ 'https://sql.js.org/dist/sql-wasm.js'
+  );
+  const initSqlJs = (mod as any).default ?? mod;
+  SQL = await initSqlJs({
+    locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
+  });
+  return SQL;
+}
 
 // ============================================================================
 // SCHEMA CONSTANTS
@@ -94,11 +104,7 @@ export class DatabaseManager {
     // Close existing connection if any
     this.dispose();
 
-    if (!SQL) {
-      SQL = await initSqlJs({
-        locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
-      });
-    }
+    await loadSqlJs();
 
     if (binaryData) {
       this.db = new SQL.Database(binaryData);
@@ -127,8 +133,8 @@ export class DatabaseManager {
   }
 
   /**
-   * Execute a raw SQL statement
-   * Silently returns if database not yet initialized (save will happen later)
+   * Run a raw SQL statement.
+   * Silently returns if database not yet initialized (save will happen later).
    */
   run(sql: string, params?: any[]): void {
     if (!this.db) return; // Silently skip if not initialized
@@ -136,9 +142,9 @@ export class DatabaseManager {
   }
 
   /**
-   * Execute a query and return results
+   * Query and return results
    */
-  exec(sql: string, params?: any[]): any[] {
+  query(sql: string, params?: any[]): any[] {
     if (!this.db) throw new Error('Database not initialized');
     const results = this.db.exec(sql, params);
     if (results.length === 0) return [];
@@ -220,11 +226,11 @@ export class DatabaseManager {
    * Load the full game state from the database
    */
   loadGameState(): any {
-    const players = this.exec('SELECT * FROM player LIMIT 1');
+    const players = this.query('SELECT * FROM player LIMIT 1');
     if (players.length === 0) return null;
 
     const p = players[0];
-    const inventory = this.exec('SELECT * FROM inventory');
+    const inventory = this.query('SELECT * FROM inventory');
 
     return {
       playerName: p.name,

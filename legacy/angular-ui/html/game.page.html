@@ -1,0 +1,56 @@
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="(gameStore.state$ | async) as state">
+    <div class="fixed inset-0 bg-stone-950" *ngIf="state.phase === 'title'">
+      <app-title-screen></app-title-screen>
+    </div>
+
+    <div class="relative w-full h-full min-h-screen bg-stone-950 overflow-hidden" *ngIf="state.phase !== 'title'">
+      <div class="absolute inset-0">
+        <canvas #renderCanvas id="game-canvas" class="w-full h-full touch-none"></canvas>
+      </div>
+
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="pointer-events-auto">
+          <app-game-hud></app-game-hud>
+          <app-action-bar (openMap)="worldMapOpen = true"></app-action-bar>
+          <app-dialogue-box></app-dialogue-box>
+          <app-notification-feed></app-notification-feed>
+        </div>
+      </div>
+
+      <app-character-panel></app-character-panel>
+      <app-inventory-panel></app-inventory-panel>
+      <app-quest-log></app-quest-log>
+      <app-menu-panel></app-menu-panel>
+
+      <app-world-map [isOpen]="worldMapOpen" (close)="worldMapOpen = false"></app-world-map>
+
+      <app-combat-panel *ngIf="state.phase === 'combat'"></app-combat-panel>
+      <app-pipe-puzzle *ngIf="state.phase === 'puzzle'"></app-pipe-puzzle>
+      <app-shop-panel *ngIf="state.shopState"></app-shop-panel>
+      <app-travel-panel *ngIf="state.travelState"></app-travel-panel>
+      <app-game-over-screen></app-game-over-screen>
+
+      <div class="absolute inset-0 flex items-center justify-center bg-stone-950/80" *ngIf="isLoading">
+        <div class="text-center">
+          <div class="text-amber-500 text-xl mb-2">Loading Iron Frontier...</div>
+          <div class="text-stone-400 text-sm">Generating hex terrain</div>
+        </div>
+      </div>
+
+      <div class="absolute inset-0 flex items-center justify-center bg-stone-950/90" *ngIf="loadError">
+        <div class="text-center max-w-md p-4">
+          <div class="text-red-500 text-xl mb-2">Failed to load game</div>
+          <div class="text-stone-400 text-sm mb-4">{{ loadError }}</div>
+          <button
+            type="button"
+            class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded"
+            (click)="reloadPage()"
+          >
+            Reload
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

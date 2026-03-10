@@ -1,139 +1,136 @@
 # System Patterns
 
-## Architecture: Monorepo with DRY Shared Package
+## Architecture: Expo + React Three Fiber
 
-The project uses a pnpm monorepo with platform-specific apps sharing common code:
+The project is a single Expo 55 app with React Three Fiber for 3D rendering and React Native overlays for UI/HUD:
 
 ```
 iron-frontier/
-├── apps/
-│   ├── web/          # Platform-specific: Babylon.js, sql.js
-│   ├── mobile/       # Platform-specific: Filament, expo-sqlite
-│   └── docs/         # Documentation site
-└── packages/
-    └── shared/       # DRY: Schemas, data, types, generation
+├── app/              # Expo Router pages (_layout.tsx, index.tsx, game/)
+├── components/
+│   ├── scene/        # R3F 3D components (Terrain, Sky, FPSCamera, etc.)
+│   ├── game/         # React Native HUD overlays (GameHUD, DialogueBox, etc.)
+│   ├── entities/     # Entity renderers (NPCEntity, EnemyEntity)
+│   └── ui/           # Reusable UI primitives (Button, Card, Dialog, etc.)
+├── engine/
+│   ├── renderers/    # Terrain chunks, atmospheric effects, day/night
+│   ├── physics/      # Physics integration
+│   └── spatial/      # Spatial data structures
+├── hooks/            # React hooks (useGameStore, usePlatform, useResponsive)
+├── src/game/         # Core game logic (non-rendering)
+│   ├── data/         # Game content (locations, NPCs, items, schemas)
+│   ├── ddl/          # Data definition layer
+│   ├── ecs/          # Miniplex ECS (components, archetypes, systems)
+│   ├── generation/   # Procedural generation (characters, etc.)
+│   ├── store/        # Zustand store with modular slices
+│   ├── systems/      # Game systems (combat, dialogue, travel, survival, etc.)
+│   └── types/        # TypeScript type definitions
+├── config/           # Game configuration
+├── packages/         # Shared packages (retained from monorepo era)
+├── tests/e2e/        # Playwright E2E tests
+└── memory-bank/      # AI context files
 ```
 
-### Key Principle: Shared Everything Possible
+### Key Principle: Rendering vs. Logic Separation
 
-- **Schemas**: All Zod schemas in `packages/shared/`
-- **Data**: Items, NPCs, quests, dialogues in `packages/shared/`
-- **Types**: All TypeScript types exported from `packages/shared/`
-- **Generation**: Procedural generators in `packages/shared/`
-- **Platform-specific**: Only rendering and persistence differ
+- **`components/scene/`** contains R3F components that render inside the Three.js Canvas. These are React components using Three.js primitives (`<mesh>`, `<group>`, hooks like `useFrame`, `useThree`).
+- **`components/game/`** contains React Native components that render as overlays on top of the Canvas. These are standard React Native views styled with NativeWind.
+- **`src/game/`** contains pure game logic with no rendering dependencies. Systems, data, and store code can be tested independently.
+
+### Navigation
+
+Expo Router file-based routing:
+- `app/index.tsx` — Entry/main menu
+- `app/game/index.tsx` — Game screen (R3F Canvas + HUD overlays)
 
 ## 3D Rendering
 
-### Web: Reactylon Pattern
+### React Three Fiber (R3F)
 
-React + Babylon.js integration using declarative components:
-
-```tsx
-// CORRECT - use options prop
-<box name="myBox" options={{ width: 1, height: 2 }} position={pos}>
-  <standardMaterial name="mat" diffuseColor={color} />
-</box>
-```
-
-### Mobile: React Native Filament
-
-Native 3D rendering via Google Filament wrapper:
+3D scene is composed declaratively with R3F components:
 
 ```tsx
-<FilamentRenderer modelPath="assets/models/character.glb" />
+<Canvas>
+  <Sky />
+  <DayNightCycle />
+  <Lighting />
+  <Terrain />
+  <VegetationField />
+  <OpenWorld />
+  <EntitySpawner />
+  <FPSCamera />
+  <WeaponView />
+  <CombatSystem />
+</Canvas>
 ```
+
+Engine-level rendering (terrain chunks, atmospheric effects) lives in `engine/renderers/`.
 
 ## State Management
 
-### Zustand as Single Source of Truth
+### Zustand v5 with Modular Slices
 
-- Runtime state in Zustand store
-- Platform-specific store extensions
-- Shared types for cross-platform compatibility
+Store is composed from 12 slices in `src/game/store/slices/`:
 
-```typescript
-// Shared types
-interface BaseGameState {
-  phase: GamePhase;
-  playerStats: PlayerStats;
-  inventory: InventoryItem[];
-  activeQuests: ActiveQuest[];
-}
+| Slice | Responsibility |
+|-------|---------------|
+| `coreSlice` | Game phase, time, world seed |
+| `playerSlice` | Player stats, position, level |
+| `combatSlice` | Active combat, enemies, turn state |
+| `dialogueSlice` | Active dialogue, NPC, choices |
+| `inventorySlice` | Items, equipment, weight |
+| `questSlice` | Active/completed quests, objectives |
+| `shopSlice` | Shop inventory, transactions |
+| `travelSlice` | Current location, travel state |
+| `puzzleSlice` | Puzzle state, solutions |
+| `settingsSlice` | Audio, graphics, controls settings |
+| `uiSlice` | Active panel, notifications, menus |
+| `survivalStore` | Fatigue, provisions, camping |
 
-// Web extends with platform-specific
-interface WebGameState extends BaseGameState {
-  sceneManager: HexSceneManager | null;
-}
-```
+Access via `useGameStore` hook or direct `gameStore` import.
 
-### SQLite Persistence
+### Persistence (Planned)
 
-- **Web**: sql.js (WASM) + IndexedDB for binary storage
-- **Mobile**: expo-sqlite (native)
-- Both use same schema structure
+- **Web**: IndexedDB via `idb-keyval`
+- **Mobile**: expo-sqlite
+- Storage adapter pattern in `src/game/store/StorageAdapter.ts`
+
+## ECS: Miniplex
+
+Entity-component-system via Miniplex:
+- Components defined in `src/game/ecs/components.ts`
+- Archetypes in `src/game/ecs/archetypes.ts`
+- Systems in `src/game/ecs/systems/`
+- World in `src/game/ecs/world.ts`
 
 ## Procedural Generation
 
-### Daggerfall-Style Seeded Generation
+### Seeded Generation
 
 All content generation is deterministic from seed:
 
 ```typescript
-// Seed hierarchy
 worldSeed → regionSeed → locationSeed → contentSeed
-
-// Same seed = identical output
-const npcs = generateNPCs(locationSeed, locationId);
 ```
 
-### Template System
+### Data Definitions
 
-Content generated from template pools:
-- 30+ NPC archetypes
-- 20+ quest templates
-- 28 encounter templates
-- 60+ dialogue snippets
-- 7 name origin pools
-
-## UI Patterns
-
-### Responsive Breakpoints
-
-```css
-xs: 0-479px    /* Mobile portrait */
-sm: 480px+     /* Mobile landscape */
-md: 768px+     /* Tablet */
-lg: 1024px+    /* Desktop */
-```
-
-### Touch-First Design
-
-- Minimum touch targets: 44px (iOS HIG)
-- Mobile: 56px touch targets, icon-only
-- Tablet+: 44px targets, labels visible
-
-### Panel System
-
-Single active panel at a time:
-
-```typescript
-type PanelType =
-  | 'character'
-  | 'inventory'
-  | 'quests'
-  | 'menu'
-  | 'shop'
-  | null;
-
-// Only one panel open
-activePanel: PanelType;
-```
+Content defined in `src/game/data/`:
+- 12 location files (Coppertown, Dusty Springs, Junction City, etc.)
+- Town definitions with buildings, NPCs, shops, and schedules
+- NPC data with dialogue trees
+- Item and enemy registries
+- Quest definitions
 
 ## Data Patterns
 
-### Zod Schema Conventions
+### Zod v4 Schema Conventions
+
+Schemas in `src/game/data/schemas/` define all game entities:
 
 ```typescript
+import { z } from 'zod';
+
 // Optional arrays with empty default
 tags: z.array(z.string()).optional().default([])
 
@@ -145,28 +142,70 @@ rewards: z.object({...}).default(() => ({
 }))
 ```
 
-### Import Patterns
+### DDL Layer
 
-```typescript
-// From shared package
-import { ItemSchema, type Item } from '@iron-frontier/shared/data/schemas/item';
-import { getItem } from '@iron-frontier/shared/data/items';
+Data Definition Language layer in `src/game/ddl/` for structured data loading and validation.
+
+## UI Patterns
+
+### HUD Architecture
+
+The HUD is a React Native view tree layered over the R3F Canvas:
+
+```tsx
+<View style={{ flex: 1 }}>
+  <Canvas>{/* 3D scene */}</Canvas>
+  <GameHUD>
+    <PlayerVitals />
+    <CompassBar />
+    <AmmoDisplay />
+    <Crosshair />
+    {/* Panels appear/disappear based on uiSlice state */}
+    {activePanel === 'inventory' && <InventoryPanel />}
+    {activePanel === 'dialogue' && <DialogueBox />}
+  </GameHUD>
+</View>
 ```
 
-## CI/CD Patterns
+### Responsive Design
+
+- NativeWind (Tailwind) breakpoints for responsive layouts
+- `useResponsive` hook for platform-aware sizing
+- `usePlatform` hook for platform detection
+- Touch-first: minimum 44px touch targets
+
+## Testing
+
+### E2E: Playwright
+
+Tests organized by category under `tests/e2e/`:
+- `core/` — fundamental game flow
+- `systems/` — combat, dialogue, quest, travel
+- `ui/` — panel interactions, HUD
+- `persistence/` — save/load
+- `spatial/` — world/map interactions
+- `quality/` — accessibility, performance
+- `validation/` — data integrity
+
+### Unit: Jest
+
+Jest with `jest-expo` preset. Property-based testing with `fast-check`.
+
+## CI/CD
 
 ### GitHub Actions
 
-- All actions pinned to exact SHAs (not version tags)
+- All actions pinned to exact SHAs
 - Parallel jobs where possible
-- Artifacts for build outputs
 - Conditional E2E tests (PRs only)
 
-### Monorepo Commands
+### Commands
 
 ```bash
-pnpm dev              # Web dev server
-pnpm test             # All tests
-pnpm typecheck        # TypeScript check all packages
-pnpm build            # Production build
+pnpm dev              # Expo dev server
+pnpm test             # Jest unit tests
+pnpm test:e2e         # Playwright E2E
+pnpm typecheck        # TypeScript check
+pnpm lint             # Biome linting
+pnpm build            # Expo export
 ```

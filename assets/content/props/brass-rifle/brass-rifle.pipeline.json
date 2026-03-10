@@ -1,0 +1,47 @@
+{
+  "name": "brass-rifle",
+  "description": "Prop pipeline with preview, refine, and material variants",
+  "version": "1.0.0",
+  "steps": [
+    {
+      "id": "concept",
+      "task": "text-to-image",
+      "inputs": [
+        { "name": "prompt", "source": "manifest", "path": "textToImageTask.prompt" },
+        { "name": "ai_model", "source": "literal", "value": "nano-banana-pro" },
+        { "name": "generate_multi_view", "source": "manifest", "path": "textToImageTask.generateMultiView", "default": true }
+      ]
+    },
+    {
+      "id": "preview",
+      "task": "text-to-3d-preview",
+      "dependsOn": ["concept"],
+      "inputs": [
+        { "name": "prompt", "source": "manifest", "path": "textTo3DPreviewTask.prompt" }
+      ]
+    },
+    {
+      "id": "refine",
+      "task": "text-to-3d-refine",
+      "dependsOn": ["preview"],
+      "inputs": [
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
+        { "name": "texture_prompt", "source": "manifest", "path": "textTo3DRefineTask.texturePrompt" }
+      ]
+    },
+    {
+      "id": "variants",
+      "task": "text-to-3d-refine-variant",
+      "dependsOn": ["preview"],
+      "forEach": {
+        "source": "manifest",
+        "path": "styleVariants",
+        "as": "styleId"
+      },
+      "inputs": [
+        { "name": "preview_task_id", "source": "step", "step": "preview", "path": "taskId" },
+        { "name": "texture_prompt", "source": "manifest", "path": "styleTexturePrompts.{{styleId}}" }
+      ]
+    }
+  ]
+}

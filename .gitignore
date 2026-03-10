@@ -5,6 +5,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+package-lock.json
+npm-shrinkwrap.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -145,3 +147,18 @@ test-results/
 
 .gemini/
 gha-creds-*.json
+.DS_Store
+
+# Angular / Ionic
+.angular/
+www/
+
+# Capacitor native build artifacts
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+ios/App/Pods/
+ios/App/build/
+ios/App/Podfile.lock
+electron/app/

@@ -1,0 +1,148 @@
+import type { DialogueNode } from '../../../schemas/npc.ts';
+
+export const sheriff_cole_nodes_3: DialogueNode[] = [
+{
+      id: 'quest_info',
+      text: "What do you need to know? Ask, and I'll tell you what I can.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [],
+      tags: [],
+      choices: [
+        {
+          text: 'Tell me about Samuel Ironpick.',
+          nextNodeId: 'samuel_info',
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+        {
+          text: 'What should I avoid saying?',
+          nextNodeId: 'what_to_avoid',
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+        {
+          text: "Nevermind, I'll figure it out.",
+          nextNodeId: null,
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'samuel_info',
+      text: "Old man, tough as the mountain rock. Lost his son to a mine collapse - one that IVRC's safety inspectors should've prevented. Now he leads what's left of the independent miners. Suspicious of anyone he don't know, but fair once you've proven yourself.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [],
+      tags: [],
+      choices: [
+        {
+          text: 'How do I prove myself?',
+          nextNodeId: 'prove_yourself',
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'prove_yourself',
+      text: "Help 'em with somethin'. They're always needin' supplies, protection from claim jumpers. Show 'em you ain't there to exploit. Actions speak louder than words in that country.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [],
+      tags: [],
+      choices: [
+        {
+          text: 'Good advice. Thanks.',
+          nextNodeId: null,
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'what_to_avoid',
+      text: "Don't mention IVRC in a positive light. Don't ask too many questions right off. And for God's sake, don't mention you've talked to me. Like I said, they think I'm compromised. Let 'em learn different through your actions.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [],
+      tags: [],
+      choices: [
+        {
+          text: "I'll be careful.",
+          nextNodeId: null,
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'show_letter',
+      text: "*He takes the letter, reads it carefully* This is the same mark. The gear. And this address... that's the Ironpick place. Whoever sent this knew somethin'. Knew enough to get themselves killed, maybe. You watch yourself, hear?",
+      expression: 'worried',
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [
+        { type: 'set_flag', target: 'sheriff_examined_letter' },
+        { type: 'change_reputation', value: 15 },
+      ],
+      tags: [],
+      choices: [
+        {
+          text: 'What do you think it means?',
+          nextNodeId: 'letter_meaning',
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'letter_meaning',
+      text: "Means someone wanted you to find somethin'. Somethin' at that burned-down house. Or maybe somethin' that was there before it burned. The Ironpicks knew things, had proof of IVRC's dirty work. If any of that survived... you could be sittin' on a powder keg.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [],
+      tags: [],
+      choices: [
+        {
+          text: "I'll investigate carefully.",
+          nextNodeId: null,
+          conditions: [],
+          effects: [{ type: 'start_quest', target: 'investigate_letter' }],
+          tags: [],
+        },
+      ],
+    },
+{
+      id: 'secretive_response',
+      text: "*He frowns* Your business is your own, I suppose. But secrets have a way of gettin' folks killed in these parts. If you change your mind, you know where to find me.",
+      conditions: [],
+      nextNodeId: null,
+      choiceDelay: 0,
+      onEnterEffects: [{ type: 'change_reputation', value: -5 }],
+      tags: [],
+      choices: [
+        {
+          text: "I'll keep that in mind.",
+          nextNodeId: null,
+          conditions: [],
+          effects: [],
+          tags: [],
+        },
+      ],
+    },
+];

@@ -29,7 +29,7 @@ pnpm build
 
 ## Project Overview
 
-**Iron Frontier** is a cross-platform isometric RPG set in a Steampunk American Frontier (late 1800s).
+**Iron Frontier** is a cross-platform 3D open-world RPG set in a Steampunk American Frontier (late 1800s).
 
 ### Tech Stack
 
@@ -74,7 +74,7 @@ iron-frontier/
 │   │   │   │       ├── procgen.ts        # Sector generator
 │   │   │   │       └── prng.ts           # Seeded RNG
 │   │   │   ├── engine/                   # Babylon.js rendering
-│   │   │   │   ├── hex/                  # Hex grid system
+│   │   │   │   ├── hex/                  # World coordinate system
 │   │   │   │   ├── rendering/            # SceneManager
 │   │   │   │   └── terrain/              # Heightmap, chunks
 │   │   │   └── components/ui/            # shadcn/ui

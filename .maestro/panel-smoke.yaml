@@ -1,0 +1,98 @@
+# Panel Smoke Test - Iron Frontier
+# Opens core HUD panels on mobile and verifies basic visibility.
+
+appId: com.arcade_cabinet.iron_frontier
+name: "Panel Smoke"
+tags:
+  - gameplay
+  - ui
+  - panels
+
+---
+
+- launchApp:
+    appId: com.arcade_cabinet.iron_frontier
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Tales of the Steam Frontier"
+    timeout: 15000
+
+- tapOn:
+    text: "Begin Adventure"
+    regex: true
+
+- extendedWaitUntil:
+    visible: "Enter your name, stranger..."
+    timeout: 5000
+
+- tapOn:
+    text: "Enter your name, stranger..."
+
+- inputText: "Maestro"
+
+- tapOn:
+    text: "Start"
+
+- extendedWaitUntil:
+    visible: "Maestro"
+    timeout: 30000
+
+- takeScreenshot: screenshots/panels_01_loaded
+
+# Character panel (leftmost)
+- tapOn:
+    point: "12%,94%"
+
+- extendedWaitUntil:
+    visible: "Outlaw"
+    timeout: 5000
+
+- takeScreenshot: screenshots/panels_02_character
+
+- tapOn:
+    text: "✕"
+
+# Inventory panel (center)
+- tapOn:
+    point: "50%,94%"
+
+- extendedWaitUntil:
+    visible: "Saddlebag"
+    timeout: 5000
+
+- takeScreenshot: screenshots/panels_03_inventory
+
+- tapOn:
+    point: "50%,10%"
+
+# Quest journal (right of center)
+- tapOn:
+    point: "70%,94%"
+
+- extendedWaitUntil:
+    visible: "Quest Journal"
+    timeout: 5000
+
+- takeScreenshot: screenshots/panels_04_quests
+
+- tapOn:
+    text: "✕"
+
+# Menu panel (rightmost)
+- tapOn:
+    point: "88%,94%"
+
+- extendedWaitUntil:
+    visible: "Menu"
+    timeout: 5000
+
+- takeScreenshot: screenshots/panels_05_menu
+
+- tapOn:
+    text: "✕"
+
+- runScript:
+    script: |
+      console.log('Panel smoke test completed successfully');
+      output.panelSmokeSuccess = true;

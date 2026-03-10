@@ -1,0 +1,227 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-50" data-testid="menu-panel">
+  <div class="absolute inset-0 bg-black/50" (click)="close()"></div>
+  <div class="absolute left-0 top-0 bottom-0 w-full sm:w-[320px] bg-amber-950 border-r border-amber-700">
+    <div class="p-3 sm:p-4 pb-2 border-b border-amber-800/50">
+      <div class="text-amber-100 text-base sm:text-lg font-bold tracking-wide">Iron Frontier</div>
+    </div>
+
+    <div class="flex w-full border-b border-amber-800/50 bg-amber-900/30">
+      <button
+        class="flex-1 py-2 sm:py-2.5 min-h-[44px] text-amber-400"
+        [ngClass]="activeTab === 'game' ? 'bg-amber-800/50 text-amber-100' : ''"
+        (click)="activeTab = 'game'"
+      >
+        Game
+      </button>
+      <button
+        class="flex-1 py-2 sm:py-2.5 min-h-[44px] text-amber-400"
+        [ngClass]="activeTab === 'settings' ? 'bg-amber-800/50 text-amber-100' : ''"
+        (click)="activeTab = 'settings'"
+      >
+        Settings
+      </button>
+    </div>
+
+    <div class="h-[calc(100%-120px)] overflow-y-auto" *ngIf="(gameStore.state$ | async) as state">
+      <div class="p-4 space-y-4" *ngIf="activeTab === 'game'">
+        <div class="bg-amber-900/40 border border-amber-700/50 rounded-lg p-3">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-amber-700/80 flex items-center justify-center border-2 border-amber-600/50">
+              <svg class="w-5 h-5 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-amber-100 font-bold text-sm truncate">{{ state.playerName }}</div>
+              <div class="text-amber-400 text-xs">Level {{ state.playerStats.level }} Outlaw</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between text-[10px] text-amber-400/80 mb-0.5">
+                <span>HP</span>
+                <span>{{ state.playerStats.health }}/{{ state.playerStats.maxHealth }}</span>
+              </div>
+              <div class="h-1.5 bg-amber-900/50 rounded overflow-hidden">
+                <div class="h-full bg-red-500" [style.width.%]="getHealthPercent(state)"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-[10px] text-amber-400/80 mb-0.5">
+                <span>XP</span>
+                <span>{{ state.playerStats.xp }}/{{ state.playerStats.xpToNext }}</span>
+              </div>
+              <div class="h-1.5 bg-amber-900/50 rounded overflow-hidden">
+                <div class="h-full bg-amber-500" [style.width.%]="getXpPercent(state)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mt-3 pt-2 border-t border-amber-700/30">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+              <span class="text-yellow-400 font-bold text-sm">{{ state.playerStats.gold }}</span>
+            </div>
+            <div class="text-xs font-medium" [ngClass]="state.playerStats.reputation >= 0 ? 'text-green-400' : 'text-red-400'">
+              Rep: {{ state.playerStats.reputation >= 0 ? '+' : '' }}{{ state.playerStats.reputation }}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <button
+            class="w-full border border-amber-700 text-amber-200 hover:bg-amber-800/50 justify-start gap-2 h-11 sm:h-10 min-h-[44px] rounded flex items-center px-3"
+            (click)="handleSave()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
+            Save Progress
+          </button>
+
+          <button
+            class="w-full border border-amber-700 text-amber-200 hover:bg-amber-800/50 justify-start gap-2 h-11 sm:h-10 min-h-[44px] rounded flex items-center px-3"
+            (click)="handleMainMenu()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Main Menu
+          </button>
+
+          <div class="border-t border-amber-700/30 my-2"></div>
+
+          <button
+            class="w-full border border-red-700/50 text-red-400 hover:bg-red-900/30 justify-start gap-2 h-11 sm:h-10 min-h-[44px] rounded flex items-center px-3"
+            (click)="handleNewGame()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            New Game
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3" *ngIf="activeTab === 'settings'">
+        <div class="bg-amber-900/30 border border-amber-700/50 rounded-lg p-3">
+          <div class="flex items-center gap-2 text-amber-300 font-medium text-sm mb-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+            Audio
+          </div>
+          <div class="py-2">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-amber-100 text-sm">Music</span>
+              <span class="text-amber-400 text-xs font-mono">{{ roundPercent(state.settings.musicVolume) }}%</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              [value]="state.settings.musicVolume"
+              (input)="updateSetting('musicVolume', $any($event.target).valueAsNumber)"
+              class="w-full"
+            />
+          </div>
+          <div class="py-2">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-amber-100 text-sm">Sound Effects</span>
+              <span class="text-amber-400 text-xs font-mono">{{ roundPercent(state.settings.sfxVolume) }}%</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              [value]="state.settings.sfxVolume"
+              (input)="updateSetting('sfxVolume', $any($event.target).valueAsNumber)"
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <div class="bg-amber-900/30 border border-amber-700/50 rounded-lg p-3">
+          <div class="flex items-center gap-2 text-amber-300 font-medium text-sm mb-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+            </svg>
+            Controls
+          </div>
+          <div class="py-2">
+            <div class="text-amber-100 text-sm mb-2 block">Movement</div>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="flex-1 py-1.5 px-2 rounded text-xs font-medium transition-colors"
+                [ngClass]="state.settings.controlMode === 'tap' ? 'bg-amber-600 text-white' : 'bg-amber-900/50 text-amber-300 hover:bg-amber-800/50'"
+                (click)="updateSetting('controlMode', 'tap')"
+              >
+                Tap to Move
+              </button>
+              <button
+                type="button"
+                class="flex-1 py-1.5 px-2 rounded text-xs font-medium transition-colors"
+                [ngClass]="state.settings.controlMode === 'joystick' ? 'bg-amber-600 text-white' : 'bg-amber-900/50 text-amber-300 hover:bg-amber-800/50'"
+                (click)="updateSetting('controlMode', 'joystick')"
+              >
+                Joystick
+              </button>
+            </div>
+          </div>
+          <div class="border-t border-amber-700/30 my-1"></div>
+          <label class="flex items-center justify-between py-2">
+            <div>
+              <div class="text-amber-100 text-sm">Haptic Feedback</div>
+              <div class="text-xs text-amber-500/70 mt-0.5">Vibration on interactions</div>
+            </div>
+            <input type="checkbox" [checked]="state.settings.haptics" (change)="updateSetting('haptics', $any($event.target).checked)" />
+          </label>
+        </div>
+
+        <div class="bg-amber-900/30 border border-amber-700/50 rounded-lg p-3">
+          <div class="flex items-center gap-2 text-amber-300 font-medium text-sm mb-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Display
+          </div>
+          <label class="flex items-center justify-between py-2">
+            <span class="text-amber-100 text-sm">Show Minimap</span>
+            <input type="checkbox" [checked]="state.settings.showMinimap" (change)="updateSetting('showMinimap', $any($event.target).checked)" />
+          </label>
+          <div class="border-t border-amber-700/30 my-1"></div>
+          <label class="flex items-center justify-between py-2">
+            <div>
+              <div class="text-amber-100 text-sm">Low Power Mode</div>
+              <div class="text-xs text-amber-500/70 mt-0.5">Reduce effects for battery</div>
+            </div>
+            <input type="checkbox" [checked]="state.settings.lowPowerMode" (change)="updateSetting('lowPowerMode', $any($event.target).checked)" />
+          </label>
+          <div class="border-t border-amber-700/30 my-1"></div>
+          <label class="flex items-center justify-between py-2">
+            <div>
+              <div class="text-amber-100 text-sm">Reduced Motion</div>
+              <div class="text-xs text-amber-500/70 mt-0.5">Minimize animations</div>
+            </div>
+            <input type="checkbox" [checked]="state.settings.reducedMotion" (change)="updateSetting('reducedMotion', $any($event.target).checked)" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-2 left-0 right-0 text-center pb-safe">
+      <p class="text-amber-600/40 text-[9px] sm:text-[10px]">Iron Frontier v0.1</p>
+    </div>
+  </div>
+</div>

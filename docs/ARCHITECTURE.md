@@ -1,10 +1,10 @@
-# Iron Frontier - Modern Diorama Architecture
+# Iron Frontier - 3D Open World Architecture
 
 ## Core Philosophy
 
-**No tiles. No isometric constraints. Pure 3D diorama with layered terrain overlays.**
+**No tiles. No grid constraints. Pure 3D open world with layered terrain and first-person exploration.**
 
-Think Warcraft 3's fluid terrain meets Red Dead Redemption's western aesthetic, rendered as a tabletop diorama you can rotate and explore.
+Think Fallout: New Vegas meets Red Dead Redemption's western aesthetic, rendered as a vast explorable frontier from the player's first-person perspective.
 
 ---
 
@@ -294,7 +294,7 @@ type BehaviorNode =
 
 ## Camera System
 
-### Diorama Camera
+### First-Person Camera
 
 ```typescript
 interface CameraState {

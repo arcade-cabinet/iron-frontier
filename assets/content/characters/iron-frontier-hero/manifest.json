@@ -1,0 +1,131 @@
+{
+  "id": "iron-frontier-hero",
+  "name": "Iron Frontier Hero",
+  "type": "character",
+  "seed": 1598883206,
+  "tasks": {
+    "text-to-image": {
+      "taskId": "019c0591-5004-740d-b93a-35799333bdd7",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "images": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019c0591-bf6e-7ab6-b7ac-aec8d35ae768_part_0.png?Expires=1769879164&Signature=Uc7ML74O2Rsbmy0uKJiEdukuAZ8H02RKY3oLpKSlwWiR-3nWheuCwq5akWLCLnHAI2IWpxNXebB5t92Vywae0TJTZC8JOA5znJykP39vLDx7qHrQrGC4XzXivfH~BrxPZptPw9tOqacD9TN~Xb2~~ZXAXZutg-Xn0r13XaEzQhu-iniSSem29q9M6oyzv87GZ7ozgiioEcujtl5A2QKzkaAGK7Y8gTSY~dk0-7MU6vcs9INY7ZAbIQuGJ5JoKSmQjFztqNJHGmfgNzgq1~C37pT2iE-oSqDf6seWRgNlV4FH~u77N-l5CoHq9WJiBetQaZ-0oa0sBfk24cEA~TrN6Q__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019c0591-bf6e-7ab6-b7ac-aec8d35ae768_part_1.png?Expires=1769879164&Signature=b275CG0WiA41nuDyoa2IDFZ6sCsSkx13JH5lT~jStWDuMlqBQ3YZCV~8VkLAhT-VyahoCHgKK3NyPvUXzu1aq5mx6F6brs-U0mWN7uspXpMcqesbxmt0zVNF-HklHGTfcGeZXma6vfp2EezlWjX2cj5ZcWxH-SYrTSa4FHhDzwTrD~XFPay3~DWdDOCn3Fk1MZKllOBodMCkttAM9vskB699Jr69bD4p0TPCJqiDfo9wRo9tBHbuggHle55UEwmI1lTIxSOy1IZwgW9rS7sdqP7J83Ti-RcGS35gSGdYGrL4G5kz45PGH-fF2xmwLRZwX7352f11PIJXMe-5~I4Vhw__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019c0591-bf6e-7ab6-b7ac-aec8d35ae768_part_2.png?Expires=1769879164&Signature=UQtQ5dGTkpxpcyYfMxzUWVFap8T5Nzc~sP3LkiJnVBsp7ayNGBngf~lN1XIBujfqrJM6DgSuYkFvAQA3EA6QTERcVbmDxqHS9hsj0-aE1eqT~DRL4X3YQG~kg-r0ShH-aqZaI2BBIZIIx1dYkPEt5xI0dq~D~pZIjaGGJvxPrWrBwpTj6s4BPOudWxP16MHlGgWV2dYoZYnzEOOC4fUqex3XX~dKmR2ckMmJa693n0WnCNC4DLDCsC7Q5PrpLVtrrU6TsSUIzcL-E6O1phb59BVlSLdN1IeixlhpB01oZq4p5SteOcrCduU6vU4d9HPzOGY0KTYxJgzx4qqnRAHdmg__&Key-Pair-Id=KL5I0C8H7HX83"
+        ],
+        "taskId": "019c0591-5004-740d-b93a-35799333bdd7"
+      },
+      "artifacts": {
+        "images.0": "concept_0.png",
+        "images.1": "concept_1.png",
+        "images.2": "concept_2.png"
+      }
+    },
+    "text-to-3d-preview": {
+      "taskId": "019c0591-c53b-769b-b17a-6f02893d193b",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0591-c53b-769b-b17a-6f02893d193b",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0591-c53b-769b-b17a-6f02893d193b/output/model.glb?Expires=4923158400&Signature=aMYA0SftyliwSu1Q~nIKmTny5acHRISD6T6Il9jL3Va3LOPxJxSW4eOdzm5bppY0hfoLl0goiD3A~uI0XcKuDSbMTMwZKEEBoqkKWIXQkgCagFc1dIrnZZDkL8xMr-zp2MECiKix7UvoEgh2OeRaFVaOC1ZmFYKUjG75YcwXOGji5GXajC6FqtPpy5FFn3vl6ZqYfXr-AypI2KsRRkfWDQYuAcisyZ-BkOyZcrJ56LCOfqcZQ1playkkb-LtD96uISnwO3rWdCd3EuHVQXeqyE4ggosSRTivH4UwMn0o3lDkSSoOES7zQK9tEwtJRV1ZMxZ34kBXuRmyBcSy-loNzQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "model": "preview.glb"
+      }
+    },
+    "text-to-3d-refine": {
+      "taskId": "019c0593-7e60-7a19-aeca-4f0276c55c2e",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c0593-7e60-7a19-aeca-4f0276c55c2e",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/model.glb?Expires=4923158400&Signature=S4b0f0dZegGiyw81HHtzuasideH4hDcAJhkalIqa4OshyvPq88QzvjlrQbn5DfFGYmoUNc49XzX5ZEiFdi3OVH6xRuMxAXdvjhEorF7s-bHUgQnGu2~ET0Hxkq-LbBg9ypwsfHmRmOdk-sml3IQ24nVL-OXpnxn4pMs0b2-Cjbdh87w3uBkDIHTGZ10LnBIpKaNeHmnWOP1A~Xxn9S6Q8eqzFsirdTxrxp~rM0OQQE-Hid5zLVnYIG8ZzoKqR-aTDbzOIIDI6FoTbsH2YaEjG~lEY6Vh7Fh8mgHHavh3lwO0AOqPgOfC5nyueGMMTVAQnB0YzDFhcAvoZzkgOisL-g__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/texture_0.png?Expires=4923158400&Signature=GcmbdzMTgVW8eBO1oXEqmjYwMIlXO8tSQVMWX7AsRQWkqBCE2QC8WdNTuMNY1rPiqZBS9GZ0dsa3VjzodtYv38q9vaXBqwDC92TRTSEwbsMdw4WH6MzTdpw3MlsO4b5E82wuMjOilz0QVNpzUpkKBCgBXB~uEyB0M0nlo-r4yuqtDjK85QmaCf9WD0VWmEbXeLVBVLmknNNX34xuxFhu8TkeMYIHO8XJoGCEfhTQQgrOodo3yhzzML7SmK4G~ywNQPE-GS0zy--LJIq8Fgf9Gu3OYnBRGODjOS9r--d~eeuc0kQkAphAnGhINdVHpowi63ygEk4SdsD-ekeEl3eYIA__&Key-Pair-Id=KL5I0C8H7HX83",
+            "metallic": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/texture_0_metallic.png?Expires=4923158400&Signature=KJgJjuz1C22KtXf1MjyaiLCYPshA1b8Re4u~84HCIFsnu2UNjz20LYRXAqLFkANNmThKrXS1vLpijqVb5BsvT6ftbZW3WFXEMxJTWWqfZE3DQ9Rs8wm-fWzUEwl4Guv0PK~lLDcMaygyVrYhthZL2aKUdnkQF6ly8BdTsrZ0jBxDPQPpeM0JHJtHmUwnKhiqtyjdUeesLarEIQayuxWd-0ODI8-3AmIEqdOPr7LJtdsLd~-6Ik7bJbMdr14c70xiqxyseZw9n~R3d4H2IoN9lXdGXutJ8fiVmHN-F7jcHflHoziV4I0WxQ4uzbm1mL47gi6e7zZ~RR1rGlvBobIQSw__&Key-Pair-Id=KL5I0C8H7HX83",
+            "roughness": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/texture_0_roughness.png?Expires=4923158400&Signature=L-aZSAz86LoptOa9jDlD1Sif45CV5liGNgx1OAeujcCF6xxGfsuIkwLWqbIP1~99uaTd7OKRVnHSwVdmR9844ffLXkZD8HpEhgEkKQxujQDBGuGBPTMsXiyt2NFdEJgEwPOOH1RJLvAi7Dclpo382wAezqZlBkxQWiKWbJ3GNztyP-L8HfLgWvRG4mzlCSnOgJG4CMfkO3abeYlgai7FO7WbefpT7Hedt701kinPYq5NQWMytk9nrM9BlFC22Eg-yhlGIlUBYyOi5CrW9U69Raah4c3Yqh66dNj4Ujza~vqqvJR0Zpsi9V60uiqc75TKzXTQi7xQgfUHjuZ1nhFCnQ__&Key-Pair-Id=KL5I0C8H7HX83",
+            "normal": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/texture_0_normal.png?Expires=4923158400&Signature=bgr3sTWYDH5Km86XZjp8a3i6cScchJHNc8VSn4pD69mgFOxCQV65JyXFTMe4TCBvyqjes2nLjjGwQrmAd~9Hm7FDBj5Yvnq2QrFQfRcjLJfMAWQ9mR-bfwZkRAgckmaOpb2MuQyVoz-aXZosQaC-UpNUJfGdedwrirVHREpbB~FUlA6hEHwFg-f4aWH~mRXZcY86y6Fx3eSDTcJjxMOLHo32LFL1PO53qdUwT21xDnA0s7Kf2imh2gCqTRGtQ7HPbfcI~fmT3TFM6kbUKPuVbt~b60rgM5md5CkATDPj1t0BfJDu8q7bRJVAW9oB6lK~wgk1oUO6gBzIl55UuZFdnw__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c0593-7e60-7a19-aeca-4f0276c55c2e/output/texture_0.png?Expires=4923158400&Signature=GcmbdzMTgVW8eBO1oXEqmjYwMIlXO8tSQVMWX7AsRQWkqBCE2QC8WdNTuMNY1rPiqZBS9GZ0dsa3VjzodtYv38q9vaXBqwDC92TRTSEwbsMdw4WH6MzTdpw3MlsO4b5E82wuMjOilz0QVNpzUpkKBCgBXB~uEyB0M0nlo-r4yuqtDjK85QmaCf9WD0VWmEbXeLVBVLmknNNX34xuxFhu8TkeMYIHO8XJoGCEfhTQQgrOodo3yhzzML7SmK4G~ywNQPE-GS0zy--LJIq8Fgf9Gu3OYnBRGODjOS9r--d~eeuc0kQkAphAnGhINdVHpowi63ygEk4SdsD-ekeEl3eYIA__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {
+        "model": "refined.glb"
+      }
+    },
+    "text-to-3d-refine-variant": {
+      "taskId": "019c05a4-8157-7a4f-9d7a-dab693bf4551",
+      "status": "SUCCEEDED",
+      "outputs": {
+        "taskId": "019c05a4-8157-7a4f-9d7a-dab693bf4551",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05a4-8157-7a4f-9d7a-dab693bf4551/output/model.glb?Expires=4923158400&Signature=dwRZVvpjEm5HrAfzk-KN7IfoGXey6fzsORYROzS9bQHUyn2N3Ty33cIH5ERdv5yes2VaC7ppqWhq9QOhdylYCRubi-ZeKWpZUk8TnK3lK64EZghxy-hcV-wVw0DCNltSD-h143Zk5m19ExED0tFXURgO5EMb-WPSoP3rqFwiHNsCr67GzPbUJ0IIuMHEOoIFGjkB-FDQSqW5tpCOer-ah0wv2r4Gn6Thz7rJJDJ7laECk~GK4lvcqkbIfWhduGhE9mbPIT9Z4IaOLRckFAHa0uu3ZRLaYc7gA9Aj3ZDMCwxzcKv08xCsc5IxPQJWUIgsp~wrDXqgsBpZ3Wsj1QROcA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05a4-8157-7a4f-9d7a-dab693bf4551/output/texture_0.png?Expires=4923158400&Signature=kAfg6gyOfpgwkrYJ60KvrsIvAUjdxNf7Ydn3KMJriEdDfsXfpYnvSY-t26GTt3ULhbgt5zwH1kAni5Cvsx2dZ9PNyP15JqEGO3Z2T1uqH-4JWitLx5BKc~BjPcRk9W0RdeguStqXtXEC4Bkfm0Ybl6byKx2ERZWe-JzC-0lu1QDlS7bu6Ja7UkH9Avbd6~IQ0qFU1WouOWLjtPe-hYv-dhwZeFp62YMxOvPAhDXLxJOAZbWcTxCl43JbclZMH8F6XbMx93r9ChwVMYzqXKHLlkVehtudp2WGT-wcX6heOiN5WNmbNyMKRRY7FK81w-TVS9oYJSW9BSHK55~G7bxSxA__&Key-Pair-Id=KL5I0C8H7HX83",
+            "metallic": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05a4-8157-7a4f-9d7a-dab693bf4551/output/texture_0_metallic.png?Expires=4923158400&Signature=FdWE8jOtw8JkSnEbexRuHs6W50Mfc34ZvFddy58fZVZ2LyDvidCtjDt9ioEkbTVEzrFRmSGJAsk30HJjjFXJrjJgLLGrUSEN~GAInNJGpZVwOhj55Rv4NT4dv6~TfxM1VxGHCpNAuC8eGDkznWKqvwfaGIgWNwSEChKtZCY3feV4sF3CPvx2-kVv2HG1pizptN1Nr~~4DvnebXmQAyoIcAbiRksodWOsi0-41AosaBEQva0tzf-SU~b0UuaKtRyV0WgHylOJUZ-SDQPOUa~ActXLoQFeasCBhkzWedrKxTg8oI8qtSWyyX3jMeInBa8RT31kZC8JHrMkPmwuxI0bOA__&Key-Pair-Id=KL5I0C8H7HX83",
+            "roughness": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05a4-8157-7a4f-9d7a-dab693bf4551/output/texture_0_roughness.png?Expires=4923158400&Signature=MhBuGIz4hzgmDq69zsKxT00RkYR7dXZHos~mBF2~Ox-nsWEwxkAi7o3g4jeEfXC58Rh-KRLzRjb5GA2fLV45fYWNYqI-XH616CdKqD7as~aNYvs7T0wKGIbhGS0QMyqmO9w4dls35mT4aLyWy0cYnQu1CzUZO0I0CGmJDspyzp~JtLkD4hNkMpEo8HxlopLPj0wKKcL1dLcjACZa15YmJVaRc8C1lP-fkiPbJ97tkrstY7OIFiKspw9FRb-WZuKRVddbVaFRaY4NlZPSwgsKRxdU88IjKmFvtfRE-fUPAq1~AEDkHTblTAIqKj4N2DTEPS1OyCC9FMBBUuG3yLDizQ__&Key-Pair-Id=KL5I0C8H7HX83",
+            "normal": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019c05a4-8157-7a4f-9d7a-dab693bf4551/output/texture_0_normal.png?Expires=4923158400&Signature=bK9zXkCgLTewjQAq8nkTu61NnyLYdHLVLZPRZweRCgaq97ztTiNMJ5pmhgkPWUWwW1eYMODXqeFqrrMOPnFUXwPajJ8l7xw6MI5KzGDq19LOzSUzRjh-6Agb5jviAE07AR~eKsk2AxlhsN2oLt4qQ8NbB-9~hD57h9SauMo8Bb0M9RxMU2QiZ3bOH0eMc1mO597fjviD1M6b~ry7G7b0oGgCQZyKFJ33bQAw6yMg2--bB2U9qTt6BkI7XO8sbuGCJNsZPw3Dt0hUARcbBj0IQWJhVUPw6e17M5oLHHby-3Dgas2Od7GfOvvAb961dDw5LbOJHseEbuisTopg9bg7Vw__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ]
+      },
+      "artifacts": {
+        "model": "variants/desert-ranger.glb"
+      }
+    }
+  },
+  "description": "Playable protagonist for Iron Frontier. Old west steampunk gunslinger with rugged frontier gear.",
+  "textToImageTask": {
+    "prompt": "Full-body old west steampunk gunslinger, leather duster coat, brass goggles, rugged frontier boots, bandolier, revolver holster, steam canister pack, neutral A-pose, clean background, high detail, multi-view sheet",
+    "generateMultiView": true,
+    "poseMode": "a-pose",
+    "aiModel": "nano-banana-pro"
+  },
+  "textTo3DPreviewTask": {
+    "prompt": "Old west steampunk gunslinger character, full body, neutral A-pose, clean silhouette, wearable gear, no weapons drawn",
+    "artStyle": "realistic",
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 45000,
+    "shouldRemesh": true,
+    "symmetryMode": "auto",
+    "poseMode": "a-pose",
+    "moderation": false
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "weathered leather coat, brass buckles, oxidized copper tubing, dusty cloth, worn boots, steampunk patina, realistic materials",
+    "enablePbr": true,
+    "moderation": false
+  },
+  "styleVariants": [
+    "brass-patina",
+    "dusty-canvas",
+    "midnight-coat",
+    "copper-oxide",
+    "railroad-union",
+    "frontier-merc",
+    "steam-sheriff",
+    "desert-ranger"
+  ],
+  "styleTexturePrompts": {
+    "brass-patina": "warm brass hardware with patina, oil-stained leather, soot-dusted cloth, sun-faded bandolier",
+    "dusty-canvas": "dusty canvas coat, sunbleached fabric, minimal brass accents, utilitarian frontier gear",
+    "midnight-coat": "deep charcoal duster coat, matte black leather, subtle brass trim, understated steampunk details",
+    "copper-oxide": "oxidized copper tubing, teal patina accents, rough leather, industrial steam canister pack",
+    "railroad-union": "railroad engineer palette, burgundy vest, brass buckles, weathered denim, workman gloves",
+    "frontier-merc": "battle-worn leather armor, reinforced shoulder pads, dust-caked boots, pragmatic mercenary vibe",
+    "steam-sheriff": "lawman blue coat, brass badge, crisp leather holster, polished boots, steam-era authority",
+    "desert-ranger": "sandstone palette, sun-scorched leather, canvas wraps, desert dust, rugged ranger feel"
+  },
+  "riggingTask": {
+    "heightMeters": 1.78
+  },
+  "animationTask": {
+    "animations": [
+      "DailyActions.Idle.Idle",
+      "DailyActions.Idle.Idle_03",
+      "DailyActions.LookingAround.Walk_Slowly_and_Look_Around",
+      "DailyActions.LookingAround.Walking_Scan_with_Sudden_Look_Back",
+      "Fighting.AttackingwithWeapon.Walk_Forward_While_Shooting_inplace",
+      "Fighting.Transitioning.Slow_Walk_Reload_inplace"
+    ]
+  }
+}

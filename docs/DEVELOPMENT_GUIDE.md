@@ -483,7 +483,7 @@ vi.mock('@/components/ui/sheet', () => ({
 - [ ] About modal opens/closes
 
 **Gameplay**:
-- [ ] Tap-to-move works
+- [ ] First-person movement works
 - [ ] Camera follows player
 - [ ] Items can be collected
 - [ ] NPCs can be talked to

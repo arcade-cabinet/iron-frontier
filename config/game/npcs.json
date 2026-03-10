@@ -1,0 +1,408 @@
+{
+  "archetypes": [
+    {
+      "id": "lawman",
+      "name": "Lawman",
+      "description": "Sheriffs, marshals, and deputies keeping order on the frontier.",
+      "defaultFaction": "law_enforcement",
+      "traits": ["authoritative", "observant", "stern"],
+      "scheduleTemplateId": "sheriff_schedule",
+      "schedules": {
+        "dawn": "office",
+        "day": "patrol",
+        "dusk": "office",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "State your business, stranger.",
+          "Keep your hands where I can see them.",
+          "Welcome to town. Behave yourself."
+        ],
+        "friendly": [
+          "Good to see you, partner.",
+          "Always glad to see a law-abiding citizen.",
+          "You're welcome in my town any time."
+        ],
+        "hostile": [
+          "You've got some nerve showing your face here.",
+          "I'd arrest you right now if I had the proof.",
+          "Turn around and ride out. Now."
+        ]
+      },
+      "services": ["bounty_board", "quest_giver", "jail_release"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 60, "damage": 14, "armor": 3 }
+    },
+    {
+      "id": "outlaw",
+      "name": "Outlaw",
+      "description": "Bandits, rustlers, and desperados living outside the law.",
+      "defaultFaction": "desperados",
+      "traits": ["aggressive", "cunning", "distrustful"],
+      "scheduleTemplateId": "outlaw_schedule",
+      "schedules": {
+        "dawn": "hideout",
+        "day": "hideout",
+        "dusk": "outskirts",
+        "night": "outskirts"
+      },
+      "greetings": {
+        "neutral": [
+          "Don't know you. Don't want to.",
+          "You lost, friend?",
+          "Mind your own business."
+        ],
+        "friendly": [
+          "Heard about what you did. Impressive.",
+          "Pull up a seat, you're one of us now.",
+          "Need a job? I might have something."
+        ],
+        "hostile": [
+          "You're a dead man walking.",
+          "The boys have been looking for you.",
+          "Should've stayed away."
+        ]
+      },
+      "services": ["black_market", "quest_giver", "fence"],
+      "combatBehavior": "aggressive",
+      "baseStats": { "health": 35, "damage": 12, "armor": 1 }
+    },
+    {
+      "id": "merchant",
+      "name": "Merchant",
+      "description": "Shopkeepers and traders selling goods to frontier folk.",
+      "defaultFaction": "merchants_guild",
+      "traits": ["shrewd", "friendly", "calculating"],
+      "scheduleTemplateId": "store_owner_schedule",
+      "schedules": {
+        "dawn": "home",
+        "day": "shop",
+        "dusk": "shop",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Welcome! Have a look around.",
+          "Best prices in town, I guarantee it.",
+          "What can I get for you today?"
+        ],
+        "friendly": [
+          "My favorite customer! I set aside something special.",
+          "I'll give you the good price, friend.",
+          "Come in, come in! Always good to see you."
+        ],
+        "hostile": [
+          "We don't serve your kind here.",
+          "I've got nothing for you. Get out.",
+          "Shop's closed. For you, permanently."
+        ]
+      },
+      "services": ["shop", "buy", "sell", "trade"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 25, "damage": 6, "armor": 0 }
+    },
+    {
+      "id": "rancher",
+      "name": "Rancher",
+      "description": "Cattle ranchers and farmhands working the open range.",
+      "defaultFaction": "cattle_barons",
+      "traits": ["hardworking", "honest", "territorial"],
+      "scheduleTemplateId": "ranch_hand_schedule",
+      "schedules": {
+        "dawn": "barn",
+        "day": "fields",
+        "dusk": "home",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Howdy, stranger. Just passing through?",
+          "Watch where you step. That's cattle country.",
+          "Name's on the gate. What do you want?"
+        ],
+        "friendly": [
+          "Good to see you, neighbor.",
+          "Stay for supper? The missus is cooking.",
+          "Need a hand with anything? You've earned it."
+        ],
+        "hostile": [
+          "Get off my land before I put lead in you.",
+          "I know what you did. Stay away from my cattle.",
+          "Rustler! I'll string you up myself!"
+        ]
+      },
+      "services": ["quest_giver", "horse_trading", "provisioning"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 40, "damage": 10, "armor": 1 }
+    },
+    {
+      "id": "miner",
+      "name": "Miner",
+      "description": "Prospectors and mine workers digging for gold and copper.",
+      "defaultFaction": "prospectors_union",
+      "traits": ["tough", "superstitious", "determined"],
+      "scheduleTemplateId": "miner_schedule",
+      "schedules": {
+        "dawn": "mine_entrance",
+        "day": "mine",
+        "dusk": "saloon",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Can't talk long. Break's almost over.",
+          "You here about work? Talk to the foreman.",
+          "Watch your head down there."
+        ],
+        "friendly": [
+          "Hey, it's you! Grab a pick and join us.",
+          "Found a vein today. Drinks are on me!",
+          "Union meeting tonight. You should come."
+        ],
+        "hostile": [
+          "Company stooge. Get lost.",
+          "Claim jumper! Boys, we got trouble!",
+          "You ain't welcome in this mine."
+        ]
+      },
+      "services": ["quest_giver", "ore_trading", "mining_info"],
+      "combatBehavior": "aggressive",
+      "baseStats": { "health": 35, "damage": 10, "armor": 2 }
+    },
+    {
+      "id": "bartender",
+      "name": "Bartender",
+      "description": "Saloon keepers who serve drinks and trade in rumors.",
+      "defaultFaction": "merchants_guild",
+      "traits": ["observant", "discreet", "social"],
+      "scheduleTemplateId": "bartender_schedule",
+      "schedules": {
+        "dawn": "home",
+        "day": "saloon",
+        "dusk": "saloon",
+        "night": "saloon"
+      },
+      "greetings": {
+        "neutral": [
+          "What'll it be?",
+          "Belly up to the bar, stranger.",
+          "We got whiskey, beer, and water. Choose wisely."
+        ],
+        "friendly": [
+          "The usual? Coming right up.",
+          "There's a rumor going around you might want to hear.",
+          "First one's on the house, friend."
+        ],
+        "hostile": [
+          "You're not welcome here. Door's that way.",
+          "I've got a shotgun under this bar. Test me.",
+          "Drink somewhere else."
+        ]
+      },
+      "services": ["shop", "rumors", "quest_giver", "gambling"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 30, "damage": 8, "armor": 0 }
+    },
+    {
+      "id": "doctor",
+      "name": "Doctor",
+      "description": "Frontier physicians treating everything from gunshots to snakebites.",
+      "defaultFaction": "town_council",
+      "traits": ["compassionate", "educated", "pragmatic"],
+      "scheduleTemplateId": "doctor_schedule",
+      "schedules": {
+        "dawn": "clinic",
+        "day": "clinic",
+        "dusk": "clinic",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "What ails you?",
+          "Sit down. Let me take a look.",
+          "I hope you're here for supplies, not stitches."
+        ],
+        "friendly": [
+          "You look well! A rare sight around here.",
+          "I have fresh medicine in stock. Your timing is good.",
+          "How can I help my favorite patient?"
+        ],
+        "hostile": [
+          "I took an oath to do no harm. Don't test it.",
+          "I'll treat your wounds. But then you leave.",
+          "Even outlaws need a doctor. Sit down."
+        ]
+      },
+      "services": ["shop", "healing", "cure_poison", "quest_giver"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 20, "damage": 4, "armor": 0 }
+    },
+    {
+      "id": "blacksmith",
+      "name": "Blacksmith",
+      "description": "Smiths and gunsmiths who forge, repair, and maintain equipment.",
+      "defaultFaction": "merchants_guild",
+      "traits": ["strong", "practical", "patient"],
+      "scheduleTemplateId": "blacksmith_schedule",
+      "schedules": {
+        "dawn": "forge",
+        "day": "forge",
+        "dusk": "forge",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Need something fixed? Or something new?",
+          "Steel and iron, that's my trade.",
+          "Come on in. Mind the sparks."
+        ],
+        "friendly": [
+          "I sharpened something special for you.",
+          "Best work I've done in years. Take a look.",
+          "Got a custom order ready. You'll like it."
+        ],
+        "hostile": [
+          "I don't shoe horses for your kind.",
+          "No service for troublemakers. Move along.",
+          "My hammer works on more than iron. Remember that."
+        ]
+      },
+      "services": ["shop", "repair", "upgrade", "quest_giver"],
+      "combatBehavior": "aggressive",
+      "baseStats": { "health": 45, "damage": 14, "armor": 3 }
+    },
+    {
+      "id": "preacher",
+      "name": "Preacher",
+      "description": "Men and women of faith offering spiritual guidance on the frontier.",
+      "defaultFaction": "town_council",
+      "traits": ["pious", "compassionate", "judgmental"],
+      "scheduleTemplateId": "preacher_schedule",
+      "schedules": {
+        "dawn": "church",
+        "day": "church",
+        "dusk": "town_center",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Welcome, my child. All are equal in God's house.",
+          "The Lord watches over even these wild lands.",
+          "Seeking redemption? You've come to the right place."
+        ],
+        "friendly": [
+          "Bless you for your good works.",
+          "The town speaks well of you. As do I.",
+          "Your deeds bring light to this dark corner of the world."
+        ],
+        "hostile": [
+          "Even I have limits of forgiveness.",
+          "I'll pray for your soul. You'll need it.",
+          "Repent your sins, or answer to a higher power."
+        ]
+      },
+      "services": ["healing", "blessing", "quest_giver", "burial"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 20, "damage": 4, "armor": 0 }
+    },
+    {
+      "id": "banker",
+      "name": "Banker",
+      "description": "Financial officers managing the frontier's wealth and loans.",
+      "defaultFaction": "railroad_company",
+      "traits": ["calculating", "wealthy", "cautious"],
+      "scheduleTemplateId": "banker_schedule",
+      "schedules": {
+        "dawn": "home",
+        "day": "bank",
+        "dusk": "bank",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Deposits or withdrawals?",
+          "Interest rates are posted on the board.",
+          "We handle gold, silver, and company scrip."
+        ],
+        "friendly": [
+          "Your account is doing well. Shall we discuss investments?",
+          "I have a private proposition for someone of your standing.",
+          "Always a pleasure doing business with you."
+        ],
+        "hostile": [
+          "Your credit is no good here.",
+          "I've frozen your accounts pending investigation.",
+          "Security! Remove this person at once."
+        ]
+      },
+      "services": ["banking", "loans", "quest_giver", "investments"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 15, "damage": 4, "armor": 0 }
+    },
+    {
+      "id": "stable_hand",
+      "name": "Stable Hand",
+      "description": "Hostlers and grooms caring for horses and pack animals.",
+      "defaultFaction": "neutral",
+      "traits": ["patient", "hardworking", "animal_lover"],
+      "scheduleTemplateId": "stable_hand_schedule",
+      "schedules": {
+        "dawn": "stable",
+        "day": "stable",
+        "dusk": "stable",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": [
+          "Looking to stable a horse?",
+          "She's a fine mount you've got there.",
+          "Mind the mules, they bite."
+        ],
+        "friendly": [
+          "Your horse has been fed and brushed.",
+          "Got a strong one in the back. Might be your type.",
+          "Any friend of horses is a friend of mine."
+        ],
+        "hostile": [
+          "I don't like how you treat your animals.",
+          "Stable's full. Try somewhere else.",
+          "Get away from the horses."
+        ]
+      },
+      "services": ["horse_trading", "mount_storage", "provisioning"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 30, "damage": 8, "armor": 1 }
+    },
+    {
+      "id": "townsfolk",
+      "name": "Townsfolk",
+      "description": "Ordinary citizens going about their daily lives.",
+      "defaultFaction": "neutral",
+      "traits": ["curious", "cautious", "gossipy"],
+      "scheduleTemplateId": "elderly_schedule",
+      "schedules": {
+        "dawn": "home",
+        "day": "market",
+        "dusk": "home",
+        "night": "home"
+      },
+      "greetings": {
+        "neutral": ["Morning, stranger.", "Fine day, ain't it?", "Passing through?"],
+        "friendly": [
+          "Hey there! Heard anything interesting?",
+          "Good to see a friendly face.",
+          "Come join us for a spell."
+        ],
+        "hostile": [
+          "We don't want trouble here.",
+          "Best keep walking, friend.",
+          "Someone call the sheriff!"
+        ]
+      },
+      "services": ["rumors"],
+      "combatBehavior": "defensive",
+      "baseStats": { "health": 15, "damage": 4, "armor": 0 }
+    }
+  ]
+}

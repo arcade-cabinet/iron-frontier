@@ -1,5 +1,5 @@
 import * as Tone from 'tone';
-import { useGameStore } from '../store/webGameStore';
+import { gameStore } from '../store/webGameStore';
 import { AmbienceManager } from './audio/AmbienceManager';
 import { MusicManager } from './audio/MusicManager';
 import { SoundManager } from './audio/SoundManager';
@@ -16,7 +16,7 @@ class AudioService {
     this.soundManager = new SoundManager();
 
     // Subscribe to store changes
-    useGameStore.subscribe((state, prevState) => {
+    gameStore.subscribe((state, prevState) => {
       // Volume changes (Global listener for now, can be granular)
       if (state.settings.musicVolume !== prevState.settings.musicVolume) {
         Tone.Destination.volume.rampTo(Tone.gainToDb(state.settings.musicVolume), 0.1);
@@ -58,7 +58,7 @@ class AudioService {
     // This method should be called from a UI event handler (e.g. "Enter Game" button).
     await Tone.start();
 
-    const settings = useGameStore.getState().settings;
+    const settings = gameStore.getState().settings;
     Tone.Destination.volume.value = Tone.gainToDb(settings.musicVolume); // utilizing music volume as master for now
 
     this.initialized = true;
@@ -90,7 +90,7 @@ class AudioService {
         this.soundManager.playGunshot();
         break;
       default:
-        // Fallback for unmapped sounds
+        console.warn(`[AudioService] Unmapped sound ID "${sfxId}" — playing click as placeholder`);
         this.soundManager.playClick();
         break;
     }
