@@ -27,7 +27,7 @@ import { DEFAULT_WORLD_POSITION } from "@/src/game/store/defaults";
 import { useXRMode } from "@/src/game/xr/useXRMode";
 import { XRSetup } from "@/src/game/xr/XRSetup";
 
-import { CombatSystem } from "./CombatSystem.tsx";
+import { CombatSystem } from "./CombatSystem/index.ts";
 import { DayNightCycle, type DayNightCycleProps } from "./DayNightCycle.tsx";
 import { DesertAtmosphere } from "./DesertAtmosphere/index.ts";
 import { DesertEnvironment } from "./DesertEnvironment.tsx";

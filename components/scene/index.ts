@@ -1,6 +1,6 @@
 // scene — Barrel export for R3F scene components
 
-export { CombatSystem, type CombatSystemProps } from "./CombatSystem.tsx";
+export { CombatSystem, type CombatSystemProps } from "./CombatSystem/index.ts";
 export { DayNightCycle, type DayNightCycleProps } from "./DayNightCycle.tsx";
 export { DesertEnvironment, type DesertEnvironmentProps } from "./DesertEnvironment.tsx";
 export { EntitySpawner, type EntitySpawnerProps } from "./EntitySpawner/index.ts";

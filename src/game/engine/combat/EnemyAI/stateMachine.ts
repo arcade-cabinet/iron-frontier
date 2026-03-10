@@ -1,0 +1,348 @@
+import Alea from 'alea';
+import {
+  getEnemyConfig,
+  getWeaponConfig,
+  getEnemyAccuracyAtDistance,
+  getEnemyReactionTime,
+  getEnemyFireRate,
+} from '../DamageCalculator';
+import type { AIAction, EnemyAIState } from './types';
+import {
+  DETECTION_RADIUS,
+  ALERT_RADIUS,
+  MELEE_RANGE,
+  FLEE_THRESHOLD,
+  ALERT_DURATION,
+  PURSUE_TIMEOUT,
+} from './types';
+import { distance, canDetectPlayer, normalize } from './detection';
+
+export function updateEnemyAI(
+  ai: EnemyAIState,
+  dt: number,
+  playerPos: { x: number; y: number; z: number },
+  playerFired: boolean,
+): AIAction {
+  if (ai.state === 'dead') {
+    return { type: 'none' };
+  }
+
+  const config = getEnemyConfig(ai.enemyId);
+  if (!config) return { type: 'none' };
+
+  const rng = Alea(`${ai.seed}-${Math.floor(ai.stateTimer * 10)}`) as unknown as () => number;
+  ai.stateTimer += dt;
+  ai.attackCooldown = Math.max(0, ai.attackCooldown - dt);
+
+  const dist = distance(ai.position, playerPos);
+  const canSeePlayer = canDetectPlayer(ai.position, playerPos, DETECTION_RADIUS);
+  const isRanged = config.behaviorTags.includes('ranged');
+  const isMelee = config.behaviorTags.includes('melee') || config.behaviorTags.includes('charges');
+  const healthPct = ai.health / ai.maxHealth;
+
+  if (ai.state === 'attack' || ai.state === 'pursue') {
+    ai.alertness = Math.min(1, ai.alertness + dt * 0.5);
+  } else if (ai.state === 'alert') {
+    ai.alertness = Math.min(0.5, ai.alertness + dt * 0.3);
+  } else {
+    ai.alertness = Math.max(0, ai.alertness - dt * 0.1);
+  }
+
+  if (ai.health <= 0) {
+    ai.state = 'dead';
+    return { type: 'none' };
+  }
+
+  if (
+    healthPct <= FLEE_THRESHOLD &&
+    ai.state !== 'flee' &&
+    config.behaviorTags.includes('retreats')
+  ) {
+    ai.state = 'flee';
+    ai.stateTimer = 0;
+  }
+
+  switch (ai.state) {
+    case 'idle':
+      return updateIdle(ai, canSeePlayer, playerFired, dist, playerPos);
+
+    case 'patrol':
+      return updatePatrol(ai, canSeePlayer, playerFired, dist, playerPos);
+
+    case 'alert':
+      return updateAlert(ai, dt, canSeePlayer, dist, config, isMelee, playerPos);
+
+    case 'pursue':
+      return updatePursue(ai, canSeePlayer, dist, config, isMelee, playerPos);
+
+    case 'attack':
+      return updateAttack(ai, rng, canSeePlayer, dist, config, isRanged, isMelee, playerPos);
+
+    case 'flee':
+      return updateFlee(ai, dist, playerPos);
+  }
+}
+
+function updateIdle(
+  ai: EnemyAIState,
+  canSeePlayer: boolean,
+  playerFired: boolean,
+  dist: number,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  if (canSeePlayer) {
+    ai.state = 'alert';
+    ai.stateTimer = 0;
+    ai.lastKnownPlayerPos = { ...playerPos };
+    ai.hasReacted = false;
+    ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
+  } else if (playerFired && dist <= ALERT_RADIUS) {
+    ai.state = 'alert';
+    ai.stateTimer = 0;
+    ai.lastKnownPlayerPos = { ...playerPos };
+    ai.hasReacted = false;
+    ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
+  }
+  return { type: 'none' };
+}
+
+function updatePatrol(
+  ai: EnemyAIState,
+  canSeePlayer: boolean,
+  playerFired: boolean,
+  dist: number,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  if (canSeePlayer) {
+    ai.state = 'alert';
+    ai.stateTimer = 0;
+    ai.lastKnownPlayerPos = { ...playerPos };
+    ai.hasReacted = false;
+    ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
+    return { type: 'none' };
+  }
+
+  if (playerFired && dist <= ALERT_RADIUS) {
+    ai.state = 'alert';
+    ai.stateTimer = 0;
+    ai.lastKnownPlayerPos = { ...playerPos };
+    ai.hasReacted = false;
+    ai.reactionTimer = getEnemyReactionTime(ai.enemyId, ai.alertness);
+    return { type: 'none' };
+  }
+
+  if (ai.patrolWaypoints.length > 0) {
+    const target = ai.patrolWaypoints[ai.patrolIndex];
+    const distToWaypoint = distance(ai.position, target);
+
+    if (distToWaypoint < 1.0) {
+      ai.patrolIndex = (ai.patrolIndex + 1) % ai.patrolWaypoints.length;
+    }
+
+    return {
+      type: 'move',
+      targetPosition: { ...target },
+    };
+  }
+
+  return { type: 'none' };
+}
+
+function updateAlert(
+  ai: EnemyAIState,
+  dt: number,
+  canSeePlayer: boolean,
+  dist: number,
+  config: { behaviorTags: string[]; weaponId?: string },
+  isMelee: boolean,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  ai.alertTimer += dt;
+
+  if (!ai.hasReacted) {
+    ai.reactionTimer -= dt;
+    if (ai.reactionTimer <= 0) {
+      ai.hasReacted = true;
+    }
+  }
+
+  if (canSeePlayer) {
+    ai.lastKnownPlayerPos = { ...playerPos };
+  }
+
+  const isAggressive = config.behaviorTags.includes('aggressive');
+  const alertThreshold = isAggressive ? 0.5 : 1.5;
+
+  if (ai.alertTimer >= alertThreshold && ai.hasReacted) {
+    if (canSeePlayer) {
+      const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
+      if (dist <= attackRange) {
+        ai.state = 'attack';
+      } else {
+        ai.state = 'pursue';
+      }
+      ai.stateTimer = 0;
+      ai.alertTimer = 0;
+    } else if (ai.alertTimer >= ALERT_DURATION) {
+      ai.state = ai.patrolWaypoints.length > 0 ? 'patrol' : 'idle';
+      ai.stateTimer = 0;
+      ai.alertTimer = 0;
+    }
+  }
+
+  return { type: 'none' };
+}
+
+function updatePursue(
+  ai: EnemyAIState,
+  canSeePlayer: boolean,
+  dist: number,
+  config: { behaviorTags: string[]; weaponId?: string },
+  isMelee: boolean,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  if (canSeePlayer) {
+    ai.lastKnownPlayerPos = { ...playerPos };
+    ai.stateTimer = 0;
+  }
+
+  if (ai.stateTimer > PURSUE_TIMEOUT) {
+    ai.state = ai.patrolWaypoints.length > 0 ? 'patrol' : 'idle';
+    ai.stateTimer = 0;
+    return { type: 'none' };
+  }
+
+  const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
+
+  if (canSeePlayer && dist <= attackRange) {
+    ai.state = 'attack';
+    ai.stateTimer = 0;
+    return { type: 'none' };
+  }
+
+  const moveTarget = ai.lastKnownPlayerPos ?? playerPos;
+  return {
+    type: 'move',
+    targetPosition: { ...moveTarget },
+  };
+}
+
+function updateAttack(
+  ai: EnemyAIState,
+  rng: () => number,
+  canSeePlayer: boolean,
+  dist: number,
+  config: { behaviorTags: string[]; weaponId?: string; baseStats: { damage: number }; scaling: { damagePerLevel: number } },
+  isRanged: boolean,
+  isMelee: boolean,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  if (!canSeePlayer) {
+    ai.state = 'pursue';
+    ai.stateTimer = 0;
+    return { type: 'none' };
+  }
+
+  ai.lastKnownPlayerPos = { ...playerPos };
+
+  const attackRange = isMelee ? MELEE_RANGE : (getWeaponConfig(config.weaponId ?? '')?.range ?? 25);
+
+  if (dist > attackRange * 1.2) {
+    ai.state = 'pursue';
+    ai.stateTimer = 0;
+    return { type: 'none' };
+  }
+
+  if (ai.attackCooldown > 0) {
+    if (isRanged && rng() > 0.5) {
+      const toPlayer = normalize({
+        x: playerPos.x - ai.position.x,
+        y: 0,
+        z: playerPos.z - ai.position.z,
+      });
+      const strafeDir = rng() > 0.5 ? 1 : -1;
+      return {
+        type: 'move',
+        targetPosition: {
+          x: ai.position.x + (-toPlayer.z * strafeDir) * 3,
+          y: ai.position.y,
+          z: ai.position.z + (toPlayer.x * strafeDir) * 3,
+        },
+      };
+    }
+    return { type: 'none' };
+  }
+
+  let fireRate = 0.8;
+  if (config.weaponId) {
+    fireRate = getEnemyFireRate(config.weaponId);
+  }
+  ai.attackCooldown = 1.0 / Math.max(0.1, fireRate);
+
+  const accuracyRoll = rng() * 100;
+  const hitChance = getEnemyAccuracyAtDistance(
+    ai.enemyId,
+    ai.level,
+    dist,
+    'normal',
+    false,
+  );
+
+  if (accuracyRoll > hitChance) {
+    return { type: 'none' };
+  }
+
+  const direction = normalize({
+    x: playerPos.x - ai.position.x,
+    y: playerPos.y - ai.position.y,
+    z: playerPos.z - ai.position.z,
+  });
+
+  if (isMelee && dist <= MELEE_RANGE) {
+    return {
+      type: 'attack_melee',
+      attackDirection: direction,
+      damage: config.baseStats.damage *
+        Math.pow(config.scaling.damagePerLevel, ai.level - 1),
+    };
+  }
+
+  if (isRanged) {
+    return {
+      type: 'attack_ranged',
+      attackDirection: direction,
+      damage: config.baseStats.damage *
+        Math.pow(config.scaling.damagePerLevel, ai.level - 1),
+    };
+  }
+
+  return { type: 'none' };
+}
+
+function updateFlee(
+  ai: EnemyAIState,
+  dist: number,
+  playerPos: { x: number; y: number; z: number },
+): AIAction {
+  const awayDir = normalize({
+    x: ai.position.x - playerPos.x,
+    y: 0,
+    z: ai.position.z - playerPos.z,
+  });
+
+  const fleeTarget = {
+    x: ai.position.x + awayDir.x * 15,
+    y: ai.position.y,
+    z: ai.position.z + awayDir.z * 15,
+  };
+
+  if (dist > ALERT_RADIUS * 1.5) {
+    ai.state = 'idle';
+    ai.stateTimer = 0;
+  }
+
+  return {
+    type: 'flee',
+    targetPosition: fleeTarget,
+  };
+}
