@@ -155,3 +155,12 @@ export {
   type GameFlowSliceDeps,
   type GameFlowState,
 } from './gameFlowSlice';
+
+// Stealth slice - detection and crouching
+export {
+  createStealthSlice,
+  DEFAULT_STEALTH_STATE,
+  type StealthActions,
+  type StealthSlice,
+  type StealthSliceState,
+} from './stealthSlice';

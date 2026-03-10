@@ -27,6 +27,7 @@ import {
   createSaveSlice,
   createSettingsSlice,
   createShopSlice,
+  createStealthSlice,
   createTravelSlice,
   createUISlice,
 } from './slices';
@@ -89,6 +90,9 @@ export function createGameStore({
         ...(createUISlice as any)(set, get, api),
         ...(createSettingsSlice as any)(set, get, api),
         ...(createAudioSlice as any)(set, get, api),
+
+        // Stealth slice
+        ...(createStealthSlice as any)(set, get, api),
 
         // Persistence and lifecycle
         ...saveSlice(set, get, api),
