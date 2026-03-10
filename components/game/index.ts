@@ -20,7 +20,7 @@ export { CompassBar } from "./CompassBar.tsx";
 export { Crosshair } from "./Crosshair.tsx";
 export { DamageFlash } from "./DamageFlash.tsx";
 export { DamageIndicator } from "./DamageIndicator.tsx";
-export { GameHUD } from "./GameHUD.tsx";
+export { GameHUD } from "./GameHUD/index.ts";
 export { GameOverScreen } from "./GameOverScreen.tsx";
 export { NotificationFeed } from "./NotificationFeed.tsx";
 export { PlayerVitals } from "./PlayerVitals.tsx";
@@ -31,9 +31,9 @@ export { StealthIndicator } from "./StealthIndicator.tsx";
 // Panels (full-screen / modal)
 // ---------------------------------------------------------------------------
 
-export { CharacterPanel } from "./CharacterPanel.tsx";
+export { CharacterPanel } from "./CharacterPanel/index.ts";
 export { InventoryPanel } from "./InventoryPanel/index.ts";
-export { MainMenu } from "./MainMenu.tsx";
+export { MainMenu } from "./MainMenu/index.ts";
 export { QuestLog } from "./QuestLog/index.ts";
 export { ShopPanel } from "./ShopPanel/index.ts";
 
@@ -41,7 +41,7 @@ export { ShopPanel } from "./ShopPanel/index.ts";
 // Dialogue
 // ---------------------------------------------------------------------------
 
-export { DialogueBox } from "./DialogueBox.tsx";
+export { DialogueBox } from "./DialogueBox/index.ts";
 
 // ---------------------------------------------------------------------------
 // Interaction
@@ -53,7 +53,7 @@ export { InteractionPrompt } from "./InteractionPrompt.tsx";
 // Map & Travel
 // ---------------------------------------------------------------------------
 
-export { TravelPanel } from "./TravelPanel.tsx";
+export { TravelPanel } from "./TravelPanel/index.ts";
 export { TravelTransition } from "./TravelTransition.tsx";
 export { WorldMap } from "./WorldMap/index.ts";
 
@@ -61,4 +61,4 @@ export { WorldMap } from "./WorldMap/index.ts";
 // Minigames
 // ---------------------------------------------------------------------------
 
-export { PipePuzzle } from "./PipePuzzle.tsx";
+export { PipePuzzle } from "./PipePuzzle/index.ts";

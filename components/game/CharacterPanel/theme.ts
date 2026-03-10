@@ -1,0 +1,9 @@
+export const AMBER = "#D4A855";
+export const AMBER_DIM = "#8B7034";
+export const AMBER_FAINT = "#D4A85530";
+export const AMBER_DARK = "#3D3118";
+export const BG_DARK = "#1A150E";
+export const BG_SECTION = "#221C12";
+export const BORDER_AMBER = "#4A3D20";
+export const GREEN_GOOD = "#4ADE80";
+export const GOLD = "#FFD700";

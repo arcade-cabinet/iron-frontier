@@ -29,14 +29,14 @@ import { XRSetup } from "@/src/game/xr/XRSetup";
 
 import { CombatSystem } from "./CombatSystem.tsx";
 import { DayNightCycle, type DayNightCycleProps } from "./DayNightCycle.tsx";
-import { DesertAtmosphere } from "./DesertAtmosphere.tsx";
+import { DesertAtmosphere } from "./DesertAtmosphere/index.ts";
 import { DesertEnvironment } from "./DesertEnvironment.tsx";
-import { EntitySpawner } from "./EntitySpawner.tsx";
+import { EntitySpawner } from "./EntitySpawner/index.ts";
 import { FPSCamera } from "./FPSCamera.tsx";
 import { InteractionDetector, type InteractionTarget } from "./InteractionDetector.tsx";
 import { NPCIndicators } from "./NPCIndicator.tsx";
 import { ObjectiveMarker } from "./ObjectiveMarker.tsx";
-import { OpenWorld } from "./OpenWorld.tsx";
+import { OpenWorld } from "./OpenWorld/index.ts";
 import { PhysicsProvider } from "./PhysicsProvider.tsx";
 import { StealthDetector } from "./StealthDetector.tsx";
 import { Terrain } from "./Terrain.tsx";

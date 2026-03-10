@@ -3,7 +3,7 @@
 export { CombatSystem, type CombatSystemProps } from "./CombatSystem.tsx";
 export { DayNightCycle, type DayNightCycleProps } from "./DayNightCycle.tsx";
 export { DesertEnvironment, type DesertEnvironmentProps } from "./DesertEnvironment.tsx";
-export { EntitySpawner, type EntitySpawnerProps } from "./EntitySpawner.tsx";
+export { EntitySpawner, type EntitySpawnerProps } from "./EntitySpawner/index.ts";
 export { Fireflies, type FirefliesProps } from "./Fireflies.tsx";
 export { FPSCamera } from "./FPSCamera.tsx";
 export { GameScene, type GameSceneProps } from "./GameScene.tsx";
@@ -16,7 +16,7 @@ export {
 export { Lighting, type LightingProps } from "./Lighting.tsx";
 export { NPCIndicators } from "./NPCIndicator.tsx";
 export { ObjectiveMarker } from "./ObjectiveMarker.tsx";
-export { OpenWorld, type OpenWorldProps } from "./OpenWorld.tsx";
+export { OpenWorld, type OpenWorldProps } from "./OpenWorld/index.ts";
 export { PhysicsProvider, type PhysicsProviderProps, usePhysics } from "./PhysicsProvider.tsx";
 export {
   PropCluster,
