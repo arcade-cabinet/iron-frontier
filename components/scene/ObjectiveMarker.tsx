@@ -12,8 +12,6 @@ import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-
-import { useGameStore } from "@/hooks/useGameStore";
 import { gameStore } from "@/src/game/store/webGameStore";
 import { getActiveQuestMarkers, type QuestMarker } from "@/src/game/systems/QuestMarkerSystem";
 
@@ -48,7 +46,7 @@ function formatDistance(meters: number): string {
 export function ObjectiveMarker() {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
-  const textRef = useRef<any>(null);
+  const textRef = useRef<THREE.Mesh & { text?: string }>(null);
   const animState = useRef({ phase: 0 });
 
   // Create diamond geometry (octahedron with 0 detail = diamond shape)

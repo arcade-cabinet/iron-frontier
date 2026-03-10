@@ -32,12 +32,12 @@ export function CompassBar() {
   const questMarkers = React.useMemo(() => {
     const state = gameStore.getState();
     return getActiveQuestMarkers(state);
-  }, [playerRotation]);
+  }, []);
 
   const enemyBearings = React.useMemo(() => {
     if (!combatState) return [];
     const state = gameStore.getState();
-    const playerPos = state.playerPosition;
+    const _playerPos = state.playerPosition;
     return combatState.combatants
       .filter((c) => !c.isPlayer && !c.isDead)
       .map((enemy) => {

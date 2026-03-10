@@ -140,7 +140,7 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
               fontFamily: MONO_FONT,
             }}
           >
-            {showMobileButton ? "\u25CF" : keyLabel}
+            {showMobileButton ? "\u25CF" : (keyLabel ?? "")}
           </Text>
         </View>
       </Animated.View>

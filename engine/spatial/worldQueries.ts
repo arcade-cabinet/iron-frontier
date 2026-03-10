@@ -3,9 +3,9 @@
 // Distance calculations, biome lookups, route data access.
 
 import type { BiomeId } from "@/engine/renderers/TerrainConfig";
-import type { Connection, Region } from "@/src/game/data/schemas/world";
+import type { Region } from "@/src/game/data/schemas/world";
 import type { TownInfo } from "./worldTypes.ts";
-import { WORLD_CELL_SIZE, worldCoordToPosition } from "./worldTypes.ts";
+import { WORLD_CELL_SIZE } from "./worldTypes.ts";
 
 function distSq2D(ax: number, az: number, bx: number, bz: number): number {
   return (ax - bx) ** 2 + (az - bz) ** 2;

@@ -3,7 +3,6 @@
  * QuestChainIndicator, RewardsRow.
  */
 
-import * as React from "react";
 import { View } from "react-native";
 
 import { Progress, Text } from "@/components/ui";
@@ -45,25 +44,25 @@ export function ObjectiveRow({
           {showCount ? ` (${current}/${objective.count})` : ""}
         </Text>
 
-        {objective.optional && (
+        {objective.optional ? (
           <Text className="text-xs text-muted-foreground font-body">(Optional)</Text>
-        )}
+        ) : null}
 
-        {objective.mapMarker && (
+        {objective.mapMarker ? (
           <View className="flex-row items-center gap-1 mt-0.5">
             <Text className="text-xs text-muted-foreground">{"\u{1F4CD}"}</Text>
             <Text className="text-xs text-muted-foreground font-body">
               {objective.mapMarker.markerLabel ?? objective.mapMarker.locationId}
             </Text>
           </View>
-        )}
+        ) : null}
       </View>
 
-      {showCount && !completed && (
+      {showCount && !completed ? (
         <View className="w-16 justify-center">
           <Progress value={(current / objective.count) * 100} className="h-2" />
         </View>
-      )}
+      ) : null}
     </View>
   );
 }
@@ -146,35 +145,33 @@ export function RewardsRow({ rewards }: { rewards: Quest["rewards"] }) {
   return (
     <View className="flex-row items-center gap-3 flex-wrap">
       <Text className="text-xs text-muted-foreground font-body">Rewards:</Text>
-      {rewards.xp > 0 && (
+      {rewards.xp > 0 ? (
         <Text className="text-xs text-frontier-sky font-body font-medium">+{rewards.xp} XP</Text>
-      )}
-      {rewards.gold > 0 && (
+      ) : null}
+      {rewards.gold > 0 ? (
         <Text className="text-xs text-frontier-whiskey font-body font-medium">
           +{rewards.gold} Gold
         </Text>
-      )}
-      {rewards.reputation && Object.keys(rewards.reputation).length > 0 && (
-        <>
-          {Object.entries(rewards.reputation).map(([faction, rep]) => (
-            <Text
-              key={faction}
-              className={cn(
-                "text-xs font-body font-medium",
-                rep > 0 ? "text-frontier-sage" : "text-frontier-blood",
-              )}
-            >
-              {rep > 0 ? "+" : ""}
-              {rep} {faction}
-            </Text>
-          ))}
-        </>
-      )}
-      {(rewards.items?.length ?? 0) > 0 && (
+      ) : null}
+      {rewards.reputation &&
+        Object.keys(rewards.reputation).length > 0 &&
+        Object.entries(rewards.reputation).map(([faction, rep]) => (
+          <Text
+            key={faction}
+            className={cn(
+              "text-xs font-body font-medium",
+              rep > 0 ? "text-frontier-sage" : "text-frontier-blood",
+            )}
+          >
+            {rep > 0 ? "+" : ""}
+            {rep} {faction}
+          </Text>
+        ))}
+      {(rewards.items?.length ?? 0) > 0 ? (
         <Text className="text-xs text-frontier-sky font-body font-medium">
-          +{rewards.items!.length} Item{rewards.items!.length > 1 ? "s" : ""}
+          +{rewards.items?.length} Item{rewards.items?.length > 1 ? "s" : ""}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 }

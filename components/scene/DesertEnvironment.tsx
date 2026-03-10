@@ -11,7 +11,6 @@
 
 import Alea from "alea";
 import { useMemo } from "react";
-import * as THREE from "three";
 import { createStoneTexture, createWoodTexture } from "@/src/game/engine/materials";
 
 // ---------------------------------------------------------------------------

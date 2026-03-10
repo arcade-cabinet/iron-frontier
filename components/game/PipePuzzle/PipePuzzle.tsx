@@ -195,11 +195,11 @@ export function PipePuzzle() {
               </View>
             </View>
 
-            {activePuzzle.solved && (
+            {activePuzzle.solved ? (
               <PuzzleSolvedBanner isLockpick={isLockpick} onSuccess={handleSuccess} />
-            )}
+            ) : null}
 
-            {!activePuzzle.solved && (
+            {!activePuzzle.solved ? (
               <PuzzleBottomActions
                 isLockpick={isLockpick}
                 canForce={canForce}
@@ -207,7 +207,7 @@ export function PipePuzzle() {
                 onForceLock={handleForceLock}
                 onAbandon={handleAbandon}
               />
-            )}
+            ) : null}
           </View>
         </Animated.View>
       </Animated.View>

@@ -91,7 +91,7 @@ export function PlayerVitals() {
               color={hpColor}
               width={barWidth}
             />
-            {showNumbers && (
+            {showNumbers ? (
               <Text
                 style={{
                   color: hpColor,
@@ -102,7 +102,7 @@ export function PlayerVitals() {
               >
                 {health}/{maxHealth}
               </Text>
-            )}
+            ) : null}
           </View>
 
           <Animated.View
@@ -142,7 +142,7 @@ export function PlayerVitals() {
             color={HUD_AMBER_DIM}
             width={barWidth}
           />
-          {showNumbers && (
+          {showNumbers ? (
             <Text
               style={{
                 color: HUD_AMBER_DIM,
@@ -152,7 +152,7 @@ export function PlayerVitals() {
             >
               {stamina}/{maxStamina}
             </Text>
-          )}
+          ) : null}
         </View>
       </View>
     </Pressable>

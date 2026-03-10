@@ -17,7 +17,7 @@
 // the imperative Crosshair.flash() API.
 
 import { useFrame } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Crosshair } from "@/components/game/Crosshair";
 import { useGameStore } from "@/hooks/useGameStore";
@@ -237,7 +237,7 @@ export function GameScene({
         <NPCIndicators />
 
         {/* Detects when the scene has rendered a few frames and signals ready */}
-        {onSceneReady && <SceneReadyDetector onReady={onSceneReady} />}
+        {onSceneReady ? <SceneReadyDetector onReady={onSceneReady} /> : null}
       </PhysicsProvider>
     </XRSetup>
   );

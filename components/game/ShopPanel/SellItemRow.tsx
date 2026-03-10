@@ -2,7 +2,6 @@
  * A single item row in the Sell tab.
  */
 
-import * as React from "react";
 import { Platform, View } from "react-native";
 
 import { Badge } from "@/components/ui/Badge";

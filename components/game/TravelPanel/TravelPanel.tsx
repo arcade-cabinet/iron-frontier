@@ -31,7 +31,7 @@ import { EncounterPanel } from "./EncounterPanel.tsx";
 import { RouteHeader, TravelBobIcon } from "./RouteHeader.tsx";
 import { TravelCosts } from "./TravelCosts.tsx";
 import { TravelProgressBar } from "./TravelProgressBar.tsx";
-import { DANGER_STYLES, getLocationName, METHOD_INFO } from "./travelConstants.ts";
+import { getLocationName, METHOD_INFO } from "./travelConstants.ts";
 
 export function TravelPanel() {
   const [showEncounter, setShowEncounter] = React.useState(false);
@@ -194,11 +194,11 @@ export function TravelPanel() {
               dangerLevel={travel.dangerLevel}
             />
 
-            {showEncounter && travel.encounterId && (
+            {showEncounter && travel.encounterId ? (
               <EncounterPanel travel={travel} onFight={handleFight} onFlee={handleFlee} />
-            )}
+            ) : null}
 
-            {!showEncounter && !travel.encounterId && (
+            {!showEncounter && !travel.encounterId ? (
               <View className="items-center py-4">
                 <TravelBobIcon iconChar={methodInfo.iconChar} />
                 <Text className="mt-3 text-sm text-amber-400/70">
@@ -208,7 +208,7 @@ export function TravelPanel() {
                   {methodInfo.speed} travel speed
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
 
           {/* Footer */}

@@ -58,7 +58,7 @@ export function InventoryPanel({ visible, onClose }: InventoryPanelProps) {
 
   React.useEffect(() => {
     setSelectedItemId(null);
-  }, [activeTab]);
+  }, []);
 
   React.useEffect(() => {
     if (selectedItemId && !inventory.some((i) => i.id === selectedItemId)) {

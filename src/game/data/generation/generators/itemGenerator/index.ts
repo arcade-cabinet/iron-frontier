@@ -34,7 +34,7 @@ export {
   WEAPON_SUFFIXES,
 } from './pools.ts';
 
-// Helpers and initialization
+// Registry, helpers, and initialization
 export {
   calculateItemValue,
   getItemTemplate,
@@ -43,7 +43,29 @@ export {
   getLootTablesByTag,
   initItemGeneration,
   scaleStatByLevel,
-} from './helpers.ts';
+  getMaterialForItem,
+  getMaterialPoolRegistry,
+  getQualityForRarity,
+  getQualityPoolRegistry,
+  getStyleForItem,
+  getStylePoolRegistry,
+  getItemTemplatesRegistry,
+  getLootTablesRegistry,
+  randomInRange,
+  randomIntInRange,
+  rollRarity,
+} from './registry.ts';
+
+// Default template accessors
+export {
+  getDefaultWeaponTemplate,
+  getDefaultArmorTemplate,
+  getDefaultConsumableTemplate,
+  getDefaultItemTemplates,
+} from './defaultTemplates.ts';
+
+// Default loot tables
+export { getDefaultLootTables } from './defaultLootTables.ts';
 
 // Generators
 export { generateWeapon } from './weaponGenerator.ts';

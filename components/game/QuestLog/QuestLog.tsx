@@ -84,40 +84,34 @@ export function QuestLog({ open, onClose }: QuestLogProps) {
   const questListContent = (
     <View className={cn("border-border/30", isWide ? "w-80 border-r" : "flex-1")}>
       <ScrollArea className="flex-1">
-        {activeTab === "active" && (
-          <>
-            {activeQuestsWithDefs.length === 0 ? (
-              <EmptyActiveQuests />
-            ) : (
-              activeQuestsWithDefs.map((item) => (
-                <QuestListItem
-                  key={item.quest.id}
-                  item={item}
-                  isSelected={selectedQuestId === item.quest.id}
-                  isTracked={trackedQuestId === item.quest.id}
-                  onSelect={() => setSelectedQuestId(item.quest.id)}
-                  onToggleTrack={() => handleToggleTrack(item.quest.id)}
-                />
-              ))
-            )}
-          </>
-        )}
-        {activeTab === "completed" && (
-          <>
-            {completedQuestsDisplay.length === 0 ? (
-              <EmptyCompletedQuests />
-            ) : (
-              completedQuestsDisplay.map((quest) => (
-                <CompletedQuestListItem
-                  key={quest.id}
-                  quest={quest}
-                  isSelected={selectedQuestId === quest.id}
-                  onSelect={() => setSelectedQuestId(quest.id)}
-                />
-              ))
-            )}
-          </>
-        )}
+        {activeTab === "active" &&
+          (activeQuestsWithDefs.length === 0 ? (
+            <EmptyActiveQuests />
+          ) : (
+            activeQuestsWithDefs.map((item) => (
+              <QuestListItem
+                key={item.quest.id}
+                item={item}
+                isSelected={selectedQuestId === item.quest.id}
+                isTracked={trackedQuestId === item.quest.id}
+                onSelect={() => setSelectedQuestId(item.quest.id)}
+                onToggleTrack={() => handleToggleTrack(item.quest.id)}
+              />
+            ))
+          ))}
+        {activeTab === "completed" &&
+          (completedQuestsDisplay.length === 0 ? (
+            <EmptyCompletedQuests />
+          ) : (
+            completedQuestsDisplay.map((quest) => (
+              <CompletedQuestListItem
+                key={quest.id}
+                quest={quest}
+                isSelected={selectedQuestId === quest.id}
+                onSelect={() => setSelectedQuestId(quest.id)}
+              />
+            ))
+          ))}
       </ScrollArea>
     </View>
   );

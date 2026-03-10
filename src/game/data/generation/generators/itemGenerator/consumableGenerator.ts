@@ -6,7 +6,6 @@ import { substituteTemplate } from '../../../schemas/generation';
 import type { ConsumableItem, ItemRarity } from '../../../schemas/item';
 import { SeededRandom } from '../../seededRandom';
 import {
-  getDefaultConsumableTemplate,
   getItemTemplatesRegistry,
   getMaterialPoolRegistry,
   getQualityForRarity,
@@ -14,7 +13,8 @@ import {
   randomInRange,
   randomIntInRange,
   rollRarity,
-} from './helpers.ts';
+} from './registry.ts';
+import { getDefaultConsumableTemplate } from './defaultTemplates.ts';
 import { CONSUMABLE_PREFIXES, CONSUMABLE_SUFFIXES } from './pools.ts';
 import type { GeneratedItem, ItemTemplate } from './schemas.ts';
 

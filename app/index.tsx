@@ -161,16 +161,16 @@ export default function TitleScreen() {
       </Text>
 
       {/* Load Game slot picker modal */}
-      {showLoadPicker && (
+      {showLoadPicker ? (
         <LoadGameModal
           slots={slots}
           onLoadSlot={handleLoadFromSlot}
           onClose={() => setShowLoadPicker(false)}
         />
-      )}
+      ) : null}
 
       {/* Settings modal */}
-      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+      {showSettings ? <SettingsModal onClose={() => setShowSettings(false)} /> : null}
     </View>
   );
 }

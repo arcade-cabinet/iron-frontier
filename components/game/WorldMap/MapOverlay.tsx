@@ -2,7 +2,6 @@
  * Map overlay components: region backgrounds, labels, compass, legend, and tooltip.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
@@ -181,7 +180,7 @@ export function LocationTooltip({
             <Text className="text-xs capitalize text-amber-400">{location.type}</Text>
           </View>
 
-          {location.tags && location.tags.length > 0 && (
+          {location.tags && location.tags.length > 0 ? (
             <View className="mt-1.5 flex-row flex-wrap gap-1">
               {location.tags.slice(0, 4).map((tag) => (
                 <View key={tag} className="rounded bg-amber-800/50 px-1.5 py-0.5">
@@ -189,9 +188,9 @@ export function LocationTooltip({
                 </View>
               ))}
             </View>
-          )}
+          ) : null}
 
-          {travelInfo && (
+          {travelInfo ? (
             <View className="mt-2 border-t border-amber-700/50 pt-2">
               <Text className="text-xs text-amber-300">
                 <Text className="capitalize">{travelInfo.method}</Text>
@@ -208,17 +207,17 @@ export function LocationTooltip({
                 </Text>
               </View>
             </View>
-          )}
+          ) : null}
 
-          {isHere && <Text className="mt-2 text-xs italic text-amber-500">You are here</Text>}
+          {isHere ? <Text className="mt-2 text-xs italic text-amber-500">You are here</Text> : null}
 
-          {!isDiscovered && (
+          {!isDiscovered ? (
             <Text className="mt-2 text-xs italic text-amber-500/70">
               Explore the frontier to discover this location
             </Text>
-          )}
+          ) : null}
 
-          {canTravel && (
+          {canTravel ? (
             <Pressable
               className="mt-3 min-h-[40px] items-center justify-center rounded-lg bg-amber-700 px-4 py-2"
               onPress={() => onTravel(location.id)}
@@ -229,7 +228,7 @@ export function LocationTooltip({
                 Fast Travel ({travelInfo.travelTime}h)
               </Text>
             </Pressable>
-          )}
+          ) : null}
         </View>
       </Pressable>
     </Animated.View>

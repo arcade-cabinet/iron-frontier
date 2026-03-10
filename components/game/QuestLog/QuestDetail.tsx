@@ -2,7 +2,6 @@
  * QuestLog detail views: active and completed quest detail panels.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { Badge, ScrollArea, Separator, Text } from "@/components/ui";
@@ -36,7 +35,7 @@ export function ActiveQuestDetail({ item, isTracked, onToggleTrack }: ActiveQues
       <View className="flex-row items-start justify-between mb-1">
         <View className="flex-1 min-w-0 mr-3">
           <View className="flex-row items-center gap-2">
-            {quest.type === "main" && <StarIcon />}
+            {quest.type === "main" ? <StarIcon /> : null}
             <Text variant="subheading" className="text-card-foreground">
               {quest.title}
             </Text>
@@ -106,7 +105,7 @@ export function ActiveQuestDetail({ item, isTracked, onToggleTrack }: ActiveQues
 
       <Separator className="my-3" />
 
-      {currentStage && (
+      {currentStage ? (
         <>
           <Text className="text-sm text-card-foreground font-heading font-semibold mb-1">
             {currentStage.title}
@@ -125,7 +124,7 @@ export function ActiveQuestDetail({ item, isTracked, onToggleTrack }: ActiveQues
             );
           })}
         </>
-      )}
+      ) : null}
 
       <Separator className="my-3" />
 

@@ -40,7 +40,7 @@ export function generateChunk(
   biome: BiomeId = "desert",
 ): THREE.Mesh {
   const definition = BIOME_DEFINITIONS[biome];
-  const chunkSeed = `${seed}:${chunkX}:${chunkZ}`;
+  const _chunkSeed = `${seed}:${chunkX}:${chunkZ}`;
 
   // Create a seeded noise function unique to this chunk's world seed.
   // We use the global seed (not chunk-local) so neighbouring chunks stitch.

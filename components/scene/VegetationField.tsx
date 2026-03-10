@@ -11,7 +11,6 @@ import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 import {
-  type CactusVariant,
   createCactus,
   createDeadTree,
   createRock,
@@ -175,11 +174,11 @@ function mergeGroupToMesh(group: THREE.Group): THREE.Mesh | null {
 /** Simple buffer geometry merge (position + normal). */
 function mergeBufferGeometries(geometries: THREE.BufferGeometry[]): THREE.BufferGeometry | null {
   let totalVerts = 0;
-  let totalIndices = 0;
+  let _totalIndices = 0;
 
   for (const geo of geometries) {
     totalVerts += geo.attributes.position.count;
-    totalIndices += geo.index ? geo.index.count : geo.attributes.position.count;
+    _totalIndices += geo.index ? geo.index.count : geo.attributes.position.count;
   }
 
   const positions = new Float32Array(totalVerts * 3);
@@ -187,7 +186,7 @@ function mergeBufferGeometries(geometries: THREE.BufferGeometry[]): THREE.Buffer
   const indices: number[] = [];
 
   let vertOffset = 0;
-  const idxOffset = 0;
+  const _idxOffset = 0;
 
   for (const geo of geometries) {
     const posAttr = geo.attributes.position as THREE.BufferAttribute;

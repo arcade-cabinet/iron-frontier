@@ -33,42 +33,44 @@ export function EntitySpawner({ onEnemiesChange, onInteractablesChange }: Entity
   return (
     <group name="entity-spawner">
       {/* Town NPCs with schedule-driven movement */}
-      {isTown &&
-        locationNPCs.map((npc) => {
-          const moveState = movementSystemRef.current?.getState(npc.id);
-          return (
-            <NPCEntity
-              key={npc.id}
-              config={npcToChibiConfig(npc)}
-              position={[npc.position.x, npc.position.y, npc.position.z]}
-              name={npc.name}
-              rotation={npc.rotation}
-              seed={`npc-${npc.id}`}
-              movementState={moveState}
-              hidden={moveState?.isIndoors === true}
-            />
-          );
-        })}
+      {isTown
+        ? locationNPCs.map((npc) => {
+            const moveState = movementSystemRef.current?.getState(npc.id);
+            return (
+              <NPCEntity
+                key={npc.id}
+                config={npcToChibiConfig(npc)}
+                position={[npc.position.x, npc.position.y, npc.position.z]}
+                name={npc.name}
+                rotation={npc.rotation}
+                seed={`npc-${npc.id}`}
+                movementState={moveState}
+                hidden={moveState?.isIndoors === true}
+              />
+            );
+          })
+        : null}
 
       {/* Wilderness + encounter enemies */}
-      {!isTown &&
-        allEnemies.map((enemy) => (
-          <group
-            key={enemy.id}
-            ref={(g) => {
-              if (g) enemyGroupRefs.current.set(enemy.id, g);
-            }}
-          >
-            <EnemyEntity
-              enemyType={enemy.enemyType}
-              position={enemy.position}
-              seed={enemy.seed}
-              name={enemy.name}
-              healthPercent={getHealthPercent(enemy.id)}
-              isDead={isEnemyDead(enemy.id)}
-            />
-          </group>
-        ))}
+      {!isTown
+        ? allEnemies.map((enemy) => (
+            <group
+              key={enemy.id}
+              ref={(g) => {
+                if (g) enemyGroupRefs.current.set(enemy.id, g);
+              }}
+            >
+              <EnemyEntity
+                enemyType={enemy.enemyType}
+                position={enemy.position}
+                seed={enemy.seed}
+                name={enemy.name}
+                healthPercent={getHealthPercent(enemy.id)}
+                isDead={isEnemyDead(enemy.id)}
+              />
+            </group>
+          ))
+        : null}
     </group>
   );
 }

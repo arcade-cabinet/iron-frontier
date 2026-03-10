@@ -2,7 +2,6 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameStore } from "@/hooks/useGameStore";
 import {
-  type CombatEnemy,
   createWeaponState,
   type DamageNumberData,
   getDifficultyConfig,
@@ -64,7 +63,7 @@ export function CombatSystem({
   const weaponSlots = useMemo(
     () => getWeaponSlots(inventory),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inventory.length, equipment.weapon],
+    [inventory.length, inventory],
   );
 
   const deadEnemyTimers = useRef<Map<string, number>>(new Map());

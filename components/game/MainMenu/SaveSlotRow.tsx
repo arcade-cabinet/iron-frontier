@@ -6,7 +6,7 @@ import type { SaveSlotMeta } from "@/src/game/systems/SaveSystem";
 export function SaveSlotRow({
   slot,
   onPress,
-  mode,
+  mode: _mode,
 }: {
   slot: SaveSlotMeta;
   onPress: () => void;

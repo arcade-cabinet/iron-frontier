@@ -2,7 +2,7 @@
  * WorldMap shared types, constants, and coordinate helpers.
  */
 
-import type { Connection, LocationRef, Region, World } from "@/src/game/data/schemas/world";
+import type { LocationRef, World } from "@/src/game/data/schemas/world";
 import { FrontierTerritory } from "@/src/game/data/worlds/frontier_territory";
 
 // =============================================================================

@@ -2,7 +2,6 @@
  * QuestLog list items: active and completed quest rows for the left panel.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { Badge, Text } from "@/components/ui";

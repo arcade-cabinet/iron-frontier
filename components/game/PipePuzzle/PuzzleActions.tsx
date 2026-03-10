@@ -97,7 +97,7 @@ export function PuzzleBottomActions({
         TAP PIPES TO ROTATE. CONNECT [IN] TO [OUT].
       </Text>
 
-      {isLockpick && (
+      {isLockpick ? (
         <View
           style={{
             flexDirection: "row",
@@ -153,7 +153,7 @@ export function PuzzleBottomActions({
             </View>
           </Pressable>
         </View>
-      )}
+      ) : null}
     </View>
   );
 }

@@ -4,10 +4,10 @@
  * This module exports all NPC definitions and their associated dialogue trees.
  */
 
-import { ProceduralLocationManager } from '../generation/ProceduralLocationManager.ts';
+import { ProceduralLocationManager } from '../generation/ProceduralLocationManager';
 import type { DialogueTree, NPCDefinition } from '../schemas/npc.ts';
 
-export type { ProceduralNPC } from '../generation/ProceduralLocationManager.ts';
+export type { ProceduralNPC } from '../generation/ProceduralLocationManager';
 export type { DialogueTree, NPCDefinition } from '../schemas/npc.ts';
 
 // Re-export NPC definitions

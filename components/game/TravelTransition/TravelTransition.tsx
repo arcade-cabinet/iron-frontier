@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Modal, Pressable, View } from "react-native";
 import Animated, { Easing, FadeIn, FadeOut, SlideInDown } from "react-native-reanimated";
 

@@ -49,7 +49,7 @@ export function PuzzleHeader({
         >
           {title}
         </Text>
-        {subtitle && (
+        {subtitle ? (
           <Text
             style={{
               color: AMBER_DIM,
@@ -60,7 +60,7 @@ export function PuzzleHeader({
           >
             {subtitle}
           </Text>
-        )}
+        ) : null}
       </View>
       <Pressable onPress={onClose}>
         <Text
@@ -142,7 +142,7 @@ export function PuzzleStatusBar({
         >
           TIME:{formattedTime}
         </Text>
-        {isLockpick && (
+        {isLockpick ? (
           <Text
             style={{
               color: lockpickCount > 0 ? AMBER_DIM : "#EF4444",
@@ -152,7 +152,7 @@ export function PuzzleStatusBar({
           >
             PICKS:{lockpickCount}
           </Text>
-        )}
+        ) : null}
       </View>
     </View>
   );

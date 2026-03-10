@@ -16,7 +16,7 @@
 
 import * as React from "react";
 import { Platform, View } from "react-native";
-import Animated, { FadeOut, Layout, SlideInRight } from "react-native-reanimated";
+import Animated, { FadeOut, LinearTransition, SlideInRight } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@/components/ui/Text";
@@ -85,7 +85,7 @@ const ToastItem = React.memo(function ToastItem({ toast }: ToastItemProps) {
     <Animated.View
       entering={SlideInRight.duration(300).springify()}
       exiting={FadeOut.duration(400)}
-      layout={Layout.springify()}
+      layout={LinearTransition.springify()}
       style={{
         flexDirection: "column",
         paddingHorizontal: 12,
@@ -126,7 +126,7 @@ const ToastItem = React.memo(function ToastItem({ toast }: ToastItemProps) {
       </Text>
 
       {/* Detail text */}
-      {toast.detail && (
+      {toast.detail ? (
         <Text
           style={{
             color: HUD_AMBER_DIM,
@@ -138,7 +138,7 @@ const ToastItem = React.memo(function ToastItem({ toast }: ToastItemProps) {
         >
           {toast.detail}
         </Text>
-      )}
+      ) : null}
     </Animated.View>
   );
 });

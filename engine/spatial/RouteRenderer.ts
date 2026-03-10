@@ -241,7 +241,7 @@ function addFencePosts(
   to: [number, number, number],
   seed: string,
 ): void {
-  const rng = Alea(seed + "fence" + from[0]) as unknown as () => number;
+  const rng = Alea(`${seed}fence${from[0]}`) as unknown as () => number;
 
   const dx = to[0] - from[0];
   const dz = to[2] - from[2];

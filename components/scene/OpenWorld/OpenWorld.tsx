@@ -25,7 +25,6 @@ import {
   type FlattenZone,
   placeTown,
   type TownPlacement,
-  WORLD_CELL_SIZE,
 } from "@/src/game/engine/world/index";
 import { getEncounterSystem } from "@/src/game/systems/EncounterSystem";
 import { getTownBoundarySystem } from "@/src/game/systems/TownBoundarySystem";
@@ -114,7 +113,7 @@ export function OpenWorld({
     // Register flatten zones before first update so terrain is flat under buildings
     cm.addFlattenZones(allFlattenZones);
     return cm;
-  }, [world, seed, loadRadius, renderRadius, worldManager, allFlattenZones]);
+  }, [seed, loadRadius, renderRadius, worldManager, allFlattenZones]);
 
   // Clean up on unmount
   useEffect(() => {

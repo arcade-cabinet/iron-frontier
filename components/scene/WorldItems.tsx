@@ -9,7 +9,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { useGameStore, useGameStoreShallow } from "@/hooks/useGameStore";
+import { useGameStore } from "@/hooks/useGameStore";
 import type { WorldItem } from "@/src/game/store/types";
 import { rngTick, scopedRNG } from "../../src/game/lib/prng.ts";
 

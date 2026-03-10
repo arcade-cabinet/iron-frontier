@@ -2,7 +2,6 @@
  * Confirmation dialog for buy/sell actions and empty state component.
  */
 
-import * as React from "react";
 import { Modal, Platform, Pressable, View } from "react-native";
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from "react-native-reanimated";
 

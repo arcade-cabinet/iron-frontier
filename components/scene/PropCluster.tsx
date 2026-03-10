@@ -4,7 +4,6 @@
 // constructors from engine/renderers/Props. Each prop is looked up by
 // type string and converted to a <primitive> for rendering.
 
-import { useThree } from "@react-three/fiber";
 import { useMemo } from "react";
 import type * as THREE from "three";
 

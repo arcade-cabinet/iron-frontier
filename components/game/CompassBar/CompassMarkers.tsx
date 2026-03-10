@@ -33,7 +33,7 @@ export const Tick = React.memo(function Tick({ xFraction, label, major, compassW
           opacity: major ? 0.9 : 0.4,
         }}
       />
-      {label && (
+      {label ? (
         <Text
           style={{
             color: HUD_AMBER,
@@ -50,7 +50,7 @@ export const Tick = React.memo(function Tick({ xFraction, label, major, compassW
         >
           {label}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 });
@@ -89,7 +89,7 @@ export const MarkerDiamond = React.memo(function MarkerDiamond({
           opacity: 0.9,
         }}
       />
-      {label && (
+      {label ? (
         <Text
           style={{
             color: HUD_TEXT,
@@ -102,7 +102,7 @@ export const MarkerDiamond = React.memo(function MarkerDiamond({
         >
           {label}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 });

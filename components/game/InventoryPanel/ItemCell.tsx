@@ -2,7 +2,6 @@
  * Single item cell in the inventory grid.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { Badge } from "@/components/ui/Badge";
@@ -55,11 +54,11 @@ export function ItemCell({
           </Text>
           <View className="flex-row items-center gap-1.5 mt-0.5">
             <Text className="text-frontier-dust/40 text-[10px] font-data">x{item.quantity}</Text>
-            {isEquipped && (
+            {isEquipped ? (
               <Badge variant="info" className="px-1.5 py-0">
                 <Text className="text-[9px]">E</Text>
               </Badge>
-            )}
+            ) : null}
           </View>
         </View>
 

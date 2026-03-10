@@ -10,7 +10,7 @@ import { rngTick, scopedRNG } from "../../../src/game/lib/prng.ts";
 
 export function DustParticle({
   left,
-  delay,
+  delay: _delay,
   duration,
 }: {
   left: number;

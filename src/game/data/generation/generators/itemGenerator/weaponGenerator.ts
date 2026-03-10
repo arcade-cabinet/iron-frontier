@@ -11,12 +11,12 @@ import {
   getMaterialForItem,
   getQualityForRarity,
   getStyleForItem,
-  getDefaultWeaponTemplate,
   randomInRange,
   randomIntInRange,
   rollRarity,
   scaleStatByLevel,
-} from './helpers.ts';
+} from './registry.ts';
+import { getDefaultWeaponTemplate } from './defaultTemplates.ts';
 import { WEAPON_PREFIXES, WEAPON_SUFFIXES } from './pools.ts';
 import type { GeneratedItem, ItemTemplate } from './schemas.ts';
 

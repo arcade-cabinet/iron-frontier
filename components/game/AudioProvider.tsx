@@ -14,7 +14,6 @@
  * @module components/game/AudioProvider
  */
 
-import * as React from "react";
 import {
   createContext,
   type ReactNode,

@@ -15,11 +15,11 @@ import * as React from "react";
 import { View } from "react-native";
 import Animated, {
   Easing,
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 // ============================================================================
 // CONSTANTS
@@ -63,11 +63,13 @@ function DamageArc({ angle, intensity, onComplete }: ArcProps) {
       },
       (finished) => {
         if (finished) {
-          runOnJS(onComplete)();
+          scheduleOnRN(() => {
+            onComplete();
+          });
         }
       },
     );
-  }, [opacity, intensity, onComplete]);
+  }, [opacity, onComplete]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

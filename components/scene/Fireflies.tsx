@@ -70,16 +70,7 @@ export function Fireflies({ nightFactor, seed = "iron-frontier-fireflies" }: Fir
     }
 
     return result;
-  }, [
-    seed,
-    count,
-    radius,
-    heightRange,
-    floatAmplitude,
-    floatFrequency,
-    driftSpeed,
-    pulseFrequency,
-  ]);
+  }, [seed]);
 
   // Material — emissive glow, no lighting needed
   const material = useMemo(() => {
@@ -91,12 +82,12 @@ export function Fireflies({ nightFactor, seed = "iron-frontier-fireflies" }: Fir
       toneMapped: false,
       depthWrite: false,
     });
-  }, [color]);
+  }, []);
 
   // Geometry
   const geometry = useMemo(() => {
     return new THREE.SphereGeometry(size, 6, 6);
-  }, [size]);
+  }, []);
 
   useFrame((_state, delta) => {
     if (!meshRef.current) return;

@@ -230,7 +230,7 @@ export function TouchOverlayWeb({ interactionNearby }: { interactionNearby: bool
       </div>
 
       {/* Interact (conditional) */}
-      {interactionNearby && (
+      {interactionNearby ? (
         <div
           onTouchStart={pulse("interact")}
           style={{
@@ -243,7 +243,7 @@ export function TouchOverlayWeb({ interactionNearby }: { interactionNearby: bool
         >
           <span style={webBtnLabelSm}>USE</span>
         </div>
-      )}
+      ) : null}
 
       {/* Weapon prev/next */}
       <div onTouchStart={weaponSwitch(-1)} style={{ ...webTinyBtn, right: 105, bottom: 12 }}>

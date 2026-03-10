@@ -12,7 +12,7 @@ import {
   getLootTablesRegistry,
   randomIntInRange,
   rollRarity,
-} from './helpers.ts';
+} from './registry.ts';
 import type { GeneratedItem, ShopInventoryItem } from './schemas.ts';
 import { generateWeapon } from './weaponGenerator.ts';
 

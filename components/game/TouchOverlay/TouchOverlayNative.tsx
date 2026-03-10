@@ -202,14 +202,14 @@ export function TouchOverlayNative({ interactionNearby }: { interactionNearby: b
           onPressOut={() => setAction("fire", false)}
         />
         <View style={{ flexDirection: "row", gap: 12 }}>
-          {interactionNearby && (
+          {interactionNearby ? (
             <NativeButton
               label="Use"
               bg={FRONTIER.interactBtn}
               border={FRONTIER.interactBorder}
               onPressIn={() => setAction("interact", true)}
             />
-          )}
+          ) : null}
           <NativeButton
             label="Jump"
             bg={FRONTIER.jumpBtn}

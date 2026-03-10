@@ -7,9 +7,8 @@
  * to the uiSlice notifications array via the game store.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
-import Animated, { FadeInUp, FadeOutUp, Layout } from "react-native-reanimated";
+import Animated, { FadeInUp, FadeOutUp, LinearTransition } from "react-native-reanimated";
 import { Text } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Notification } from "@/src/game/store/types";
@@ -72,7 +71,6 @@ function getNotificationStyle(type: NotificationType): NotificationStyle {
         textColor: "text-red-200",
         icon: "\u{26A0}", // warning
       };
-    case "info":
     default:
       return {
         bg: "bg-slate-800/90",
@@ -100,7 +98,7 @@ function Toast({
     <Animated.View
       entering={FadeInUp.duration(200).springify()}
       exiting={FadeOutUp.duration(180)}
-      layout={Layout.springify()}
+      layout={LinearTransition.springify()}
     >
       <Pressable
         className={cn(

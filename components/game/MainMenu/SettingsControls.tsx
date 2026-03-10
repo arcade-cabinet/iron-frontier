@@ -25,7 +25,7 @@ export function SliderRow({
       <View className="h-3 w-full overflow-hidden rounded-full bg-muted">
         <Pressable
           className="absolute inset-0"
-          onPress={(e) => {
+          onPress={(_e) => {
             const newVal = Math.min(1, Math.max(0, Math.round((value + 0.1) * 10) / 10));
             if (newVal > 1) {
               onValueChange(0);
@@ -61,11 +61,11 @@ export function ToggleRow({
         <Text variant="small" className="text-foreground">
           {label}
         </Text>
-        {description && (
+        {description ? (
           <Text variant="caption" className="text-muted-foreground">
             {description}
           </Text>
-        )}
+        ) : null}
       </View>
       <View
         className={cn(

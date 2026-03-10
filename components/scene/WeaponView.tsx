@@ -116,7 +116,7 @@ export function WeaponView({ weaponType: weaponTypeProp, weaponItemId }: WeaponV
 
     // Default
     return "revolver";
-  }, [weaponTypeProp, weaponItemId, equippedWeapon?.itemId]);
+  }, [weaponTypeProp, weaponItemId, equippedWeapon?.itemId, equippedWeapon]);
 
   // Track previous fire/reload to detect rising edge (press, not hold)
   const prevFireRef = useRef(false);

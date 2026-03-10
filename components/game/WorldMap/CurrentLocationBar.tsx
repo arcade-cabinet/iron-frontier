@@ -3,7 +3,6 @@
  * below the map canvas.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { Text } from "@/components/ui/Text";

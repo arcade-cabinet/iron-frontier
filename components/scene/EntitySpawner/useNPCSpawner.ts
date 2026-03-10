@@ -61,7 +61,7 @@ export function useNPCSpawner(
   }, [locationNPCs, currentLocationId]);
 
   // Track NPC IDs for dependency comparison (avoids re-running on object identity)
-  const npcIds = useMemo(
+  const _npcIds = useMemo(
     () =>
       locationNPCs
         .map((n) => n.id)
@@ -111,13 +111,15 @@ export function useNPCSpawner(
 
     for (const npc of locationNPCs) {
       const def = npcDefMap.get(npc.id);
-      const schedule = def
-        ? (getScheduleForRole(def.role) ??
-          (console.error(`[EntitySpawner] No schedule for NPC role "${def.role}" (${def.id})`),
-          DEFAULT_IDLE_SCHEDULE))
-        : (getScheduleForRole(npc.role) ??
-          (console.error(`[EntitySpawner] No schedule for NPC role "${npc.role}" (${npc.id})`),
-          DEFAULT_IDLE_SCHEDULE));
+      const roleForSchedule = def ? def.role : npc.role;
+      const idForLog = def ? def.id : npc.id;
+      let schedule = getScheduleForRole(roleForSchedule);
+      if (!schedule) {
+        console.error(
+          `[EntitySpawner] No schedule for NPC role "${roleForSchedule}" (${idForLog})`,
+        );
+        schedule = DEFAULT_IDLE_SCHEDULE;
+      }
 
       const assignedTo =
         npc.homeStructureId ??
@@ -159,7 +161,7 @@ export function useNPCSpawner(
       onInteractablesChange?.([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLocationId, isTown, npcIds]);
+  }, [currentLocationId, isTown, locationNPCs, onInteractablesChange, time.hour]);
 
   // ---------------------------------------------------------------------------
   // Per-frame: tick the NPC movement system and update interactable positions

@@ -2,7 +2,6 @@
  * Item detail card and stat rows for the inventory panel.
  */
 
-import * as React from "react";
 import { View } from "react-native";
 
 import { Badge } from "@/components/ui/Badge";
@@ -72,11 +71,11 @@ export function ItemDetail({
             <Badge variant={rarityBadgeVariant(item.rarity)}>
               <Text className="text-xs capitalize">{item.rarity}</Text>
             </Badge>
-            {equipped && (
+            {equipped ? (
               <Badge variant="info">
                 <Text className="text-xs">Equipped</Text>
               </Badge>
-            )}
+            ) : null}
           </View>
         </View>
 
@@ -91,14 +90,14 @@ export function ItemDetail({
         <View className="gap-1.5 mb-3">
           <StatRow label="Type" value={getItemTypeName(item.type as ItemType)} />
           <StatRow label="Weight" value={`${item.weight} lbs`} />
-          {item.type === "weapon" && (
+          {item.type === "weapon" ? (
             <>
               <StatRow
                 label="Condition"
                 value={`${item.condition}%`}
                 valueClassName={conditionColor(item.condition)}
               />
-              {def?.weaponStats && (
+              {def?.weaponStats ? (
                 <>
                   <StatRow
                     label="Damage"
@@ -108,10 +107,10 @@ export function ItemDetail({
                   <StatRow label="Range" value={`${def.weaponStats.range}m`} />
                   <StatRow label="Accuracy" value={`${def.weaponStats.accuracy}%`} />
                 </>
-              )}
+              ) : null}
             </>
-          )}
-          {item.type === "consumable" && def?.consumableStats && (
+          ) : null}
+          {item.type === "consumable" && def?.consumableStats ? (
             <>
               {def.consumableStats.healAmount > 0 && (
                 <StatRow
@@ -128,8 +127,8 @@ export function ItemDetail({
                 />
               )}
             </>
-          )}
-          {item.type === "armor" && def?.armorStats && (
+          ) : null}
+          {item.type === "armor" && def?.armorStats ? (
             <>
               <StatRow
                 label="Defense"
@@ -138,12 +137,12 @@ export function ItemDetail({
               />
               <StatRow label="Slot" value={def.armorStats.slot} />
             </>
-          )}
+          ) : null}
         </View>
 
         {/* Action buttons */}
         <View className="flex-row gap-2">
-          {item.usable && (
+          {item.usable ? (
             <Button
               variant="outline"
               size="sm"
@@ -152,8 +151,8 @@ export function ItemDetail({
             >
               <Text className="text-frontier-sage text-xs font-body">Use</Text>
             </Button>
-          )}
-          {canEquip && (
+          ) : null}
+          {canEquip ? (
             <Button
               variant="outline"
               size="sm"
@@ -175,8 +174,8 @@ export function ItemDetail({
                 {equipped ? "Equipped" : "Equip"}
               </Text>
             </Button>
-          )}
-          {item.droppable && (
+          ) : null}
+          {item.droppable ? (
             <Button
               variant="outline"
               size="sm"
@@ -185,7 +184,7 @@ export function ItemDetail({
             >
               <Text className="text-frontier-blood text-xs font-body">Drop</Text>
             </Button>
-          )}
+          ) : null}
         </View>
       </CardContent>
     </Card>

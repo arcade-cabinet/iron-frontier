@@ -2,7 +2,6 @@
  * Equipment slots strip showing currently equipped items.
  */
 
-import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { ScrollArea } from "@/components/ui/ScrollArea";

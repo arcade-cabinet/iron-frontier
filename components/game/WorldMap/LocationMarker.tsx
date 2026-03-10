@@ -207,9 +207,9 @@ export function LocationMarker({
       accessibilityRole="button"
       accessibilityLabel={isDiscovered ? `${location.name}, ${location.type}` : "Unknown location"}
     >
-      {isCurrent && <PulseRing size={size} />}
+      {isCurrent ? <PulseRing size={size} /> : null}
 
-      {isConnected && !isCurrent && isDiscovered && (
+      {isConnected && !isCurrent && isDiscovered ? (
         <View
           style={{
             position: "absolute",
@@ -222,7 +222,7 @@ export function LocationMarker({
             opacity: 0.5,
           }}
         />
-      )}
+      ) : null}
 
       <View
         style={{

@@ -101,7 +101,7 @@ export function EnemyEntity({
           if (!mat.transparent) {
             mat.transparent = true;
           }
-          (mat as any).opacity = Math.max(0, 1 - t);
+          (mat as THREE.MeshStandardMaterial).opacity = Math.max(0, 1 - t);
         }
       });
 
@@ -189,7 +189,7 @@ export function EnemyEntity({
       </group>
 
       {/* Floating name label */}
-      {name && (
+      {name ? (
         <Text
           position={[0, NAME_Y_OFFSET, 0]}
           fontSize={0.13}
@@ -202,7 +202,7 @@ export function EnemyEntity({
         >
           {name}
         </Text>
-      )}
+      ) : null}
     </group>
   );
 }

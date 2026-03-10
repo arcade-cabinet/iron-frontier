@@ -136,7 +136,7 @@ export function useEnemySpawner(
   // Clear encounter enemies on location change
   useEffect(() => {
     setEncounterEnemies([]);
-  }, [currentLocationId]);
+  }, []);
 
   // Cleanup old ECS entities on location change
   useEffect(() => {

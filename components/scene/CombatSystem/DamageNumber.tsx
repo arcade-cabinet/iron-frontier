@@ -12,7 +12,8 @@ export function DamageNumber({ data }: { data: DamageNumberData }) {
     const canvas = document.createElement("canvas");
     canvas.width = 128;
     canvas.height = 64;
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return new THREE.CanvasTexture(canvas);
 
     const displayText = data.label ?? String(data.value);
 

@@ -235,7 +235,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
               {world.regions.map((region) => (
                 <React.Fragment key={region.id}>
                   <RegionRect region={region} isDiscovered={discoveredRegionIds.has(region.id)} />
-                  {discoveredRegionIds.has(region.id) && <RegionLabel region={region} />}
+                  {discoveredRegionIds.has(region.id) ? <RegionLabel region={region} /> : null}
                 </React.Fragment>
               ))}
 
@@ -277,7 +277,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
             />
           </ScrollView>
 
-          {tooltip && (
+          {tooltip ? (
             <LocationTooltip
               data={tooltip}
               currentLocationId={currentLocationId}
@@ -285,7 +285,7 @@ export function WorldMap({ isOpen, onClose, onTravelTo }: WorldMapProps) {
               onDismiss={() => setTooltip(null)}
               onTravel={handleTravel}
             />
-          )}
+          ) : null}
         </View>
       </View>
     </Modal>

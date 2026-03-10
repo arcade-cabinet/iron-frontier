@@ -7,7 +7,6 @@ import type { ArmorItem, ItemRarity } from '../../../schemas/item';
 import { SeededRandom } from '../../seededRandom';
 import {
   calculateItemValue,
-  getDefaultArmorTemplate,
   getItemTemplatesRegistry,
   getMaterialForItem,
   getQualityForRarity,
@@ -16,7 +15,8 @@ import {
   randomIntInRange,
   rollRarity,
   scaleStatByLevel,
-} from './helpers.ts';
+} from './registry.ts';
+import { getDefaultArmorTemplate } from './defaultTemplates.ts';
 import { ARMOR_PREFIXES, ARMOR_SUFFIXES } from './pools.ts';
 import type { GeneratedItem, ItemTemplate } from './schemas.ts';
 

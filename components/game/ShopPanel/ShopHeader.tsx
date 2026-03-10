@@ -2,7 +2,6 @@
  * Shop header with shop name, gold display, and close button.
  */
 
-import * as React from "react";
 import { Platform, Pressable, View } from "react-native";
 
 import { Text } from "@/components/ui/Text";

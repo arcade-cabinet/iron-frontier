@@ -27,12 +27,12 @@ export function LoadingScreen({ stages, allReady }: LoadingScreenProps) {
   );
 
   // Rotate tips every 4 seconds
-  const [currentTip, setCurrentTip] = React.useState(LOADING_TIPS[tipIndex]!);
+  const [currentTip, setCurrentTip] = React.useState(LOADING_TIPS[tipIndex] ?? "");
   React.useEffect(() => {
     let idx = tipIndex;
     const interval = setInterval(() => {
       idx = (idx + 1) % LOADING_TIPS.length;
-      setCurrentTip(LOADING_TIPS[idx]!);
+      setCurrentTip(LOADING_TIPS[idx] ?? "");
     }, 4000);
     return () => clearInterval(interval);
   }, [tipIndex]);

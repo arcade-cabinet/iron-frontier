@@ -9,7 +9,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-import { dialogueTargets, npcs as npcQuery } from "@/src/game/ecs/world";
+import { dialogueTargets } from "@/src/game/ecs/world";
 import { getDoorSystem } from "@/src/game/engine/interiors/DoorSystem";
 
 // ---------------------------------------------------------------------------

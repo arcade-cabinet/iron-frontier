@@ -17,10 +17,10 @@ export interface CharacterPanelProps {
 export function CharacterPanel({ visible, onClose }: CharacterPanelProps) {
   const playerName = gameStore((s) => s.playerName);
   const playerStats = gameStore((s) => s.playerStats);
-  const equipment = gameStore((s) => s.equipment);
+  const _equipment = gameStore((s) => s.equipment);
   const getEquipmentBonuses = gameStore((s) => s.getEquipmentBonuses);
 
-  const bonuses = React.useMemo(() => getEquipmentBonuses(), [equipment, getEquipmentBonuses]);
+  const bonuses = React.useMemo(() => getEquipmentBonuses(), [getEquipmentBonuses]);
 
   if (!visible) return null;
 

@@ -90,7 +90,7 @@ export function PipeTile({
           />
         ))}
 
-        {(isSource || isSink) && (
+        {isSource || isSink ? (
           <View
             style={{
               position: "absolute",
@@ -116,9 +116,9 @@ export function PipeTile({
               {isSource ? "IN" : "OUT"}
             </Text>
           </View>
-        )}
+        ) : null}
 
-        {cell.locked && !cell.fixed && (
+        {cell.locked && !cell.fixed ? (
           <View
             style={{
               position: "absolute",
@@ -140,7 +140,7 @@ export function PipeTile({
               X
             </Text>
           </View>
-        )}
+        ) : null}
       </Animated.View>
     </Pressable>
   );

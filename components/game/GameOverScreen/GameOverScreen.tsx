@@ -65,6 +65,7 @@ export function GameOverScreen() {
   // Derive town name for respawn notification
   const townName = React.useMemo(() => {
     if (!currentLocationId || !loadedWorld) return "the last town";
+    // biome-ignore lint/suspicious/noExplicitAny: loadedWorld has dynamic structure from DDL loader
     const loc = (loadedWorld as any)?.locations?.get?.(currentLocationId);
     return loc?.ref?.name ?? currentLocationId.replace(/_/g, " ");
   }, [currentLocationId, loadedWorld]);

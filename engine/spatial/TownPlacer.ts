@@ -4,8 +4,6 @@
 // positions into 3-D world-space placements suitable for the renderer.
 // Returns arrays of building, NPC, and prop placements.
 
-import Alea from "alea";
-
 import type { Location, SlotInstance, TileDef } from "@/src/game/data/schemas/spatial";
 
 // ---------------------------------------------------------------------------

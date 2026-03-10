@@ -32,6 +32,12 @@ import { HitMarker } from "./HitMarker.tsx";
 import { InteractCrosshair } from "./InteractCrosshair.tsx";
 
 // ---------------------------------------------------------------------------
+// Module-level ref for imperative flash API
+// ---------------------------------------------------------------------------
+type FlashFn = (isHeadshot: boolean, isKill: boolean) => void;
+let _crosshairFlashRef: FlashFn | undefined;
+
+// ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
@@ -105,9 +111,9 @@ export function Crosshair({
   flashRef.current = flashHitMarker;
 
   React.useEffect(() => {
-    (Crosshair as any)._flash = flashRef.current;
+    _crosshairFlashRef = flashRef.current;
     return () => {
-      (Crosshair as any)._flash = undefined;
+      _crosshairFlashRef = undefined;
     };
   }, []);
 
@@ -205,7 +211,7 @@ export function Crosshair({
  * Imperative API: flash the hit marker from outside React.
  */
 Crosshair.flash = (isHeadshot: boolean, isKill: boolean) => {
-  (Crosshair as any)._flash?.(isHeadshot, isKill);
+  _crosshairFlashRef?.(isHeadshot, isKill);
 };
 
 // ---------------------------------------------------------------------------

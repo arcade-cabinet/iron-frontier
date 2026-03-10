@@ -52,7 +52,7 @@ import { getDoorSystem } from "@/src/game/engine/interiors/DoorSystem";
 import { gameOrchestrator } from "@/src/game/GameOrchestrator";
 import { hasTouchCapability, initializeInput } from "@/src/game/input/InputInitializer";
 import { InputManager } from "@/src/game/input/InputManager";
-import type { GamePhase, PanelType } from "@/src/game/store/types";
+import type { PanelType } from "@/src/game/store/types";
 import {
   type InteractableEntity,
   type InteractionAction,
@@ -285,7 +285,7 @@ export default function GameScreen() {
       gameOrchestrator.teardown();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [markStage]);
 
   // --- Re-detect touch on fold/unfold (foldable phones) ---
   useEffect(() => {
@@ -322,6 +322,7 @@ export default function GameScreen() {
       // TODO: Read actual player position/forward from the 3D scene.
       // For now we read from the store's playerPosition and playerRotation.
       const storeState =
+        // biome-ignore lint/suspicious/noExplicitAny: bridging untyped GameOrchestrator internal API
         (gameOrchestrator as any)._getStoreState?.() ??
         require("@/src/game/store/webGameStore").gameStore.getState();
       const playerPos = storeState.playerPosition ?? { x: 0, y: 0, z: 0 };
@@ -364,7 +365,7 @@ export default function GameScreen() {
           const storeState = require("@/src/game/store/webGameStore").gameStore.getState();
           // Only open shop if we're back in playing phase
           if (storeState.phase === "playing") {
-            storeState.openShop(entity.shopId!);
+            storeState.openShop(entity.shopId ?? "");
           }
         }, 300);
         // Cleanup if component unmounts during timeout
@@ -561,25 +562,27 @@ export default function GameScreen() {
           <LocationEntry />
 
           {/* Tutorial hints (bottom-center, timed sequence for new players) */}
-          {isExploring && <TutorialHints />}
+          {isExploring ? <TutorialHints /> : null}
 
           {/* ============================================================ */}
           {/* MINIMAL DEFAULT HUD — always visible while exploring         */}
           {/* ============================================================ */}
 
           {/* Crosshair: subtle center dot/bracket (always visible) */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? (
             <Crosshair visible isTargetingInteractable={!!interactionTarget} />
-          )}
+          ) : null}
 
           {/* Compass bar: thin strip at top-center */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <CompassBar />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? <CompassBar /> : null}
 
           {/* HP bar only (bottom-left, thin, minimal — no name/level/XP) */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <PlayerVitals />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? <PlayerVitals /> : null}
 
           {/* Quest objective: typewriter text, bottom-center, auto-fades */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <QuestObjectiveToast />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? (
+            <QuestObjectiveToast />
+          ) : null}
 
           {/* ============================================================ */}
           {/* SHOW ON DEMAND — fade in when relevant, fade out after       */}
@@ -587,34 +590,34 @@ export default function GameScreen() {
 
           {/* Ammo display: only visible when weapon is equipped (AmmoDisplay
             already returns null when no weapon is equipped) */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <AmmoDisplay />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? <AmmoDisplay /> : null}
 
           {/* Location name handled by LocationEntry (always-visible layer above).
             Shows full-screen centered text on area transitions. */}
 
           {/* Survival warnings: fatigue/hunger/thirst only when in warning state */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <SurvivalWarning />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? <SurvivalWarning /> : null}
 
           {/* Stealth detection indicator: only when near hostiles */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && <StealthIndicator />}
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? <StealthIndicator /> : null}
 
           {/* Interaction prompt (center-bottom, Fallout-style amber glow text) */}
-          {isExploring && !menuOpen && !worldMapOpen && !activePanel && (
+          {isExploring && !menuOpen && !worldMapOpen && !activePanel ? (
             <InteractionPrompt target={interactionTarget} />
-          )}
+          ) : null}
 
           {/* Touch overlay — virtual joystick + action buttons for mobile/tablet */}
-          {isExploring && touchActive && !menuOpen && !worldMapOpen && !activePanel && (
+          {isExploring && touchActive && !menuOpen && !worldMapOpen && !activePanel ? (
             <TouchOverlay interactionNearby={!!interactionTarget} />
-          )}
+          ) : null}
 
           {/* --- DIALOGUE PHASE --- */}
 
-          {isDialogue && <DialogueBox />}
+          {isDialogue ? <DialogueBox /> : null}
 
           {/* --- SHOP PHASE --- */}
 
-          {isShopping && <ShopPanel />}
+          {isShopping ? <ShopPanel /> : null}
 
           {/* --- TRAVEL PHASE --- */}
 
@@ -622,11 +625,11 @@ export default function GameScreen() {
           <TravelTransition />
 
           {/* TravelPanel: encounter interruption during travel */}
-          {isTraveling && <TravelPanel />}
+          {isTraveling ? <TravelPanel /> : null}
 
           {/* --- PUZZLE PHASE --- */}
 
-          {isPuzzle && <PipePuzzle />}
+          {isPuzzle ? <PipePuzzle /> : null}
 
           {/* --- TOGGLED PANELS --- */}
 
@@ -647,11 +650,11 @@ export default function GameScreen() {
           />
 
           {/* Main Menu (Escape key) */}
-          {menuOpen && <MainMenu onClose={() => setMenuOpen(false)} />}
+          {menuOpen ? <MainMenu onClose={() => setMenuOpen(false)} /> : null}
 
           {/* --- GAME OVER --- */}
 
-          {isGameOver && <GameOverScreen />}
+          {isGameOver ? <GameOverScreen /> : null}
 
           {/* NOTE: EnterVRButton and MAP button removed from default HUD.
             VR entry is available from the pause menu (MainMenu).

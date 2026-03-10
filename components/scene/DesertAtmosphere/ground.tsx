@@ -15,7 +15,7 @@ export function GroundVariation({
   cz?: number;
 }) {
   const patches = useMemo(() => {
-    const rng = makePrng(seed + "-patches");
+    const rng = makePrng(`${seed}-patches`);
     const colors = ["#8B7355", "#A08060", "#B8956A", "#7A5C3A", "#9E7B5A", "#6B5240"];
     return Array.from({ length: GROUND_PATCH_COUNT }, () => ({
       x: cx + (rng() - 0.5) * 160,
@@ -29,7 +29,7 @@ export function GroundVariation({
   }, [seed, cx, cz]);
 
   const stones = useMemo(() => {
-    const rng = makePrng(seed + "-stones");
+    const rng = makePrng(`${seed}-stones`);
     return Array.from({ length: STONE_COUNT }, () => ({
       x: cx + (rng() - 0.5) * 120,
       z: cz + (rng() - 0.5) * 120,

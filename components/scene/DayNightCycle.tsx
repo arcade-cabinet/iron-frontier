@@ -57,7 +57,7 @@ function DustParticles({
         driftAngle: rng() * Math.PI * 2,
       };
     });
-  }, [seed, count, radius, driftSpeed]);
+  }, [seed]);
 
   const material = useMemo(
     () =>
@@ -68,9 +68,9 @@ function DustParticles({
         depthWrite: false,
         toneMapped: false,
       }),
-    [color],
+    [],
   );
-  const geometry = useMemo(() => new THREE.SphereGeometry(size, 4, 4), [size]);
+  const geometry = useMemo(() => new THREE.SphereGeometry(size, 4, 4), []);
 
   useFrame((_s, delta) => {
     if (!meshRef.current) return;
@@ -155,7 +155,7 @@ export function DayNightCycle({
 
   const manager = useMemo(
     () => new DayNightManager(initialTime, timeMultiplier),
-    [], // Stable — initialTime/timeMultiplier are startup values
+    [initialTime, timeMultiplier], // Stable — initialTime/timeMultiplier are startup values
   );
 
   useEffect(() => {
