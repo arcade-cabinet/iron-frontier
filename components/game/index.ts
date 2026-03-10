@@ -9,56 +9,56 @@
 // Audio
 // ---------------------------------------------------------------------------
 
-export { AudioProvider, useAudioSettings } from './AudioProvider';
+export { AudioProvider, useAudioSettings } from "./AudioProvider.tsx";
 
 // ---------------------------------------------------------------------------
 // HUD & Overlays (always-visible ambient HUD)
 // ---------------------------------------------------------------------------
 
-export { GameHUD } from './GameHUD';
-export { CompassBar } from './CompassBar';
-export { PlayerVitals } from './PlayerVitals';
-export { AmmoDisplay } from './AmmoDisplay';
-export { StealthIndicator } from './StealthIndicator';
-export { DamageIndicator } from './DamageIndicator';
-export { QuestNotification } from './QuestNotification';
-export { NotificationFeed } from './NotificationFeed';
-export { GameOverScreen } from './GameOverScreen';
-export { DamageFlash } from './DamageFlash';
-export { Crosshair } from './Crosshair';
+export { AmmoDisplay } from "./AmmoDisplay.tsx";
+export { CompassBar } from "./CompassBar.tsx";
+export { Crosshair } from "./Crosshair.tsx";
+export { DamageFlash } from "./DamageFlash.tsx";
+export { DamageIndicator } from "./DamageIndicator.tsx";
+export { GameHUD } from "./GameHUD.tsx";
+export { GameOverScreen } from "./GameOverScreen.tsx";
+export { NotificationFeed } from "./NotificationFeed.tsx";
+export { PlayerVitals } from "./PlayerVitals.tsx";
+export { QuestNotification } from "./QuestNotification.tsx";
+export { StealthIndicator } from "./StealthIndicator.tsx";
 
 // ---------------------------------------------------------------------------
 // Panels (full-screen / modal)
 // ---------------------------------------------------------------------------
 
-export { CharacterPanel } from './CharacterPanel';
-export { MainMenu } from './MainMenu';
-export { InventoryPanel } from './InventoryPanel';
-export { ShopPanel } from './ShopPanel';
-export { QuestLog } from './QuestLog';
+export { CharacterPanel } from "./CharacterPanel.tsx";
+export { InventoryPanel } from "./InventoryPanel/index.ts";
+export { MainMenu } from "./MainMenu.tsx";
+export { QuestLog } from "./QuestLog/index.ts";
+export { ShopPanel } from "./ShopPanel/index.ts";
 
 // ---------------------------------------------------------------------------
 // Dialogue
 // ---------------------------------------------------------------------------
 
-export { DialogueBox } from './DialogueBox';
+export { DialogueBox } from "./DialogueBox.tsx";
 
 // ---------------------------------------------------------------------------
 // Interaction
 // ---------------------------------------------------------------------------
 
-export { InteractionPrompt } from './InteractionPrompt';
+export { InteractionPrompt } from "./InteractionPrompt.tsx";
 
 // ---------------------------------------------------------------------------
 // Map & Travel
 // ---------------------------------------------------------------------------
 
-export { WorldMap } from './WorldMap';
-export { TravelPanel } from './TravelPanel';
-export { TravelTransition } from './TravelTransition';
+export { TravelPanel } from "./TravelPanel.tsx";
+export { TravelTransition } from "./TravelTransition.tsx";
+export { WorldMap } from "./WorldMap/index.ts";
 
 // ---------------------------------------------------------------------------
 // Minigames
 // ---------------------------------------------------------------------------
 
-export { PipePuzzle } from './PipePuzzle';
+export { PipePuzzle } from "./PipePuzzle.tsx";

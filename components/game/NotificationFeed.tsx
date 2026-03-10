@@ -7,14 +7,13 @@
  * to the uiSlice notifications array via the game store.
  */
 
-import * as React from 'react';
-import { Pressable, View } from 'react-native';
-import Animated, { FadeInUp, FadeOutUp, Layout } from 'react-native-reanimated';
-
-import { cn } from '@/lib/utils';
-import { Text } from '@/components/ui';
-import { gameStore } from '@/src/game/store/webGameStore';
-import type { Notification } from '@/src/game/store/types';
+import * as React from "react";
+import { Pressable, View } from "react-native";
+import Animated, { FadeInUp, FadeOutUp, Layout } from "react-native-reanimated";
+import { Text } from "@/components/ui";
+import { cn } from "@/lib/utils";
+import type { Notification } from "@/src/game/store/types";
+import { gameStore } from "@/src/game/store/webGameStore";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -27,7 +26,7 @@ const MAX_VISIBLE = 3;
 // Helpers
 // ---------------------------------------------------------------------------
 
-type NotificationType = Notification['type'];
+type NotificationType = Notification["type"];
 
 interface NotificationStyle {
   bg: string;
@@ -38,48 +37,48 @@ interface NotificationStyle {
 
 function getNotificationStyle(type: NotificationType): NotificationStyle {
   switch (type) {
-    case 'item':
+    case "item":
       return {
-        bg: 'bg-amber-900/90',
-        border: 'border-amber-600/50',
-        textColor: 'text-amber-200',
-        icon: '\u{1F4E6}', // package
+        bg: "bg-amber-900/90",
+        border: "border-amber-600/50",
+        textColor: "text-amber-200",
+        icon: "\u{1F4E6}", // package
       };
-    case 'xp':
+    case "xp":
       return {
-        bg: 'bg-purple-900/90',
-        border: 'border-purple-600/50',
-        textColor: 'text-purple-200',
-        icon: '\u{2B50}', // star
+        bg: "bg-purple-900/90",
+        border: "border-purple-600/50",
+        textColor: "text-purple-200",
+        icon: "\u{2B50}", // star
       };
-    case 'quest':
+    case "quest":
       return {
-        bg: 'bg-yellow-900/90',
-        border: 'border-yellow-600/50',
-        textColor: 'text-yellow-200',
-        icon: '\u{1F4DC}', // scroll
+        bg: "bg-yellow-900/90",
+        border: "border-yellow-600/50",
+        textColor: "text-yellow-200",
+        icon: "\u{1F4DC}", // scroll
       };
-    case 'level':
+    case "level":
       return {
-        bg: 'bg-green-900/90',
-        border: 'border-green-600/50',
-        textColor: 'text-green-200',
-        icon: '\u{2B06}', // up arrow
+        bg: "bg-green-900/90",
+        border: "border-green-600/50",
+        textColor: "text-green-200",
+        icon: "\u{2B06}", // up arrow
       };
-    case 'warning':
+    case "warning":
       return {
-        bg: 'bg-red-900/90',
-        border: 'border-red-600/50',
-        textColor: 'text-red-200',
-        icon: '\u{26A0}', // warning
+        bg: "bg-red-900/90",
+        border: "border-red-600/50",
+        textColor: "text-red-200",
+        icon: "\u{26A0}", // warning
       };
-    case 'info':
+    case "info":
     default:
       return {
-        bg: 'bg-slate-800/90',
-        border: 'border-slate-600/50',
-        textColor: 'text-slate-200',
-        icon: '\u{2139}', // info
+        bg: "bg-slate-800/90",
+        border: "border-slate-600/50",
+        textColor: "text-slate-200",
+        icon: "\u{2139}", // info
       };
   }
 }
@@ -105,14 +104,14 @@ function Toast({
     >
       <Pressable
         className={cn(
-          'flex-row items-center gap-2.5 rounded-lg border px-4 py-2.5 shadow-lg',
+          "flex-row items-center gap-2.5 rounded-lg border px-4 py-2.5 shadow-lg",
           style.bg,
           style.border,
         )}
         onPress={() => onDismiss(notification.id)}
       >
         <Text className="text-base">{style.icon}</Text>
-        <Text variant="small" className={cn('flex-1', style.textColor)}>
+        <Text variant="small" className={cn("flex-1", style.textColor)}>
           {notification.message}
         </Text>
       </Pressable>

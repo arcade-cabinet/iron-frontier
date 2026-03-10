@@ -118,12 +118,14 @@ describe('ProvisionsSystem', () => {
   describe('duration estimates', () => {
     it('should estimate food duration', () => {
       const duration = provisions.estimateFoodDuration();
-      expect(duration).toBe(75 / 4); // 18.75 hours
+      // food=75, consumption.food=2 → 75/2 = 37.5 hours
+      expect(duration).toBe(75 / 2);
     });
 
     it('should estimate water duration', () => {
       const duration = provisions.estimateWaterDuration();
-      expect(duration).toBe(75 / 6); // 12.5 hours
+      // water=75, consumption.water=2.5 → 75/2.5 = 30 hours
+      expect(duration).toBe(75 / 2.5);
     });
 
     it('should return zero when depleted', () => {
@@ -137,10 +139,11 @@ describe('ProvisionsSystem', () => {
     it('should consume provisions for travel', () => {
       const result = provisions.consumeForTravel(2);
 
-      expect(result.foodConsumed).toBe(8); // 2 * 4
-      expect(result.waterConsumed).toBe(12); // 2 * 6
-      expect(provisions.getFood()).toBe(67);
-      expect(provisions.getWater()).toBe(63);
+      // consumption.food=2, consumption.water=2.5
+      expect(result.foodConsumed).toBe(4);  // 2 * 2
+      expect(result.waterConsumed).toBe(5); // 2 * 2.5
+      expect(provisions.getFood()).toBe(71);  // 75 - 4
+      expect(provisions.getWater()).toBe(70); // 75 - 5
     });
 
     it('should track hours since consumption', () => {
@@ -162,16 +165,17 @@ describe('ProvisionsSystem', () => {
     });
 
     it('should not consume below zero', () => {
-      provisions.loadState({ food: 5, water: 5 });
-      provisions.consumeForTravel(2);
+      // food=3, water=3. Travel 4h: needs food=8, water=10. Clamps to 0.
+      provisions.loadState({ food: 3, water: 3 });
+      provisions.consumeForTravel(4);
 
       expect(provisions.getFood()).toBe(0);
       expect(provisions.getWater()).toBe(0);
     });
 
     it('should flag when running out', () => {
-      provisions.loadState({ food: 5, water: 5 });
-      const result = provisions.consumeForTravel(2);
+      provisions.loadState({ food: 3, water: 3 });
+      const result = provisions.consumeForTravel(4);
 
       expect(result.ranOutOfFood).toBe(true);
       expect(result.ranOutOfWater).toBe(true);
@@ -189,8 +193,9 @@ describe('ProvisionsSystem', () => {
     it('should consume at half rate while camping', () => {
       const result = provisions.consumeForCamping(2);
 
-      expect(result.foodConsumed).toBe(4); // (2 * 4) / 2
-      expect(result.waterConsumed).toBe(6); // (2 * 6) / 2
+      // camping = travel / 2: food=(2*2)/2=2, water=(2*2.5)/2=2.5
+      expect(result.foodConsumed).toBe(2);
+      expect(result.waterConsumed).toBe(2.5);
     });
 
     it('should not go below zero', () => {
@@ -469,9 +474,10 @@ describe('ProvisionsSystem', () => {
     });
 
     it('should handle fractional consumption', () => {
+      // 0.5 hours: food=0.5*2=1, water=0.5*2.5=1.25
       provisions.consumeForTravel(0.5);
-      expect(provisions.getFood()).toBe(73); // 75 - 2
-      expect(provisions.getWater()).toBe(72); // 75 - 3
+      expect(provisions.getFood()).toBe(74);    // 75 - 1
+      expect(provisions.getWater()).toBe(73.75); // 75 - 1.25
     });
 
     it('should handle skill modifier above 1', () => {
@@ -500,9 +506,10 @@ describe('utility functions', () => {
 
   describe('calculateTravelConsumption', () => {
     it('should calculate consumption for hours', () => {
+      // food=2/hr, water=2.5/hr
       const consumption = calculateTravelConsumption(2);
-      expect(consumption.food).toBe(8);
-      expect(consumption.water).toBe(12);
+      expect(consumption.food).toBe(4);   // 2 * 2
+      expect(consumption.water).toBe(5);  // 2 * 2.5
     });
 
     it('should handle zero hours', () => {
@@ -513,30 +520,34 @@ describe('utility functions', () => {
 
     it('should handle fractional hours', () => {
       const consumption = calculateTravelConsumption(1.5);
-      expect(consumption.food).toBe(6);
-      expect(consumption.water).toBe(9);
+      expect(consumption.food).toBe(3);    // 1.5 * 2
+      expect(consumption.water).toBe(3.75); // 1.5 * 2.5
     });
   });
 
   describe('hasEnoughProvisions', () => {
+    // 5 hours needs: food=5*2=10, water=5*2.5=12.5
     it('should return true when sufficient', () => {
       expect(hasEnoughProvisions(50, 50, 5)).toBe(true);
     });
 
     it('should return false when food insufficient', () => {
-      expect(hasEnoughProvisions(10, 50, 5)).toBe(false);
+      // food=5 < 10 needed
+      expect(hasEnoughProvisions(5, 50, 5)).toBe(false);
     });
 
     it('should return false when water insufficient', () => {
-      expect(hasEnoughProvisions(50, 10, 5)).toBe(false);
+      // water=5 < 12.5 needed
+      expect(hasEnoughProvisions(50, 5, 5)).toBe(false);
     });
 
     it('should return false when both insufficient', () => {
-      expect(hasEnoughProvisions(10, 10, 5)).toBe(false);
+      expect(hasEnoughProvisions(5, 5, 5)).toBe(false);
     });
 
     it('should handle exact amounts', () => {
-      expect(hasEnoughProvisions(20, 30, 5)).toBe(true);
+      // Exactly food=10, water=12.5 for 5 hours
+      expect(hasEnoughProvisions(10, 12.5, 5)).toBe(true);
     });
   });
 

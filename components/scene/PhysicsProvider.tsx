@@ -4,28 +4,29 @@
 // and runs the physics tick each frame via useFrame. Child components (Terrain,
 // Building) register their colliders through the exposed context helpers.
 
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
-  type ReactNode,
-} from 'react';
-import * as THREE from 'three';
+} from "react";
+import * as THREE from "three";
 
 import {
-  PhysicsWorld,
-  PlayerController,
+  type Collider,
   createTerrainCollider,
   createTriggerVolume,
   extractBuildingColliders,
-  type Collider,
+  PhysicsWorld,
+  PlayerController,
   type TriggerCallback,
-} from '@/engine/physics';
-import { InputManager } from '@/src/game/input';
+} from "@/engine/physics";
+import { InputManager } from "@/src/game/input";
+import { gameStore } from "@/src/game/store/webGameStore";
 
 // ---------------------------------------------------------------------------
 // Context type
@@ -68,7 +69,7 @@ const PhysicsContext = createContext<PhysicsContextValue | null>(null);
 export function usePhysics(): PhysicsContextValue {
   const ctx = useContext(PhysicsContext);
   if (!ctx) {
-    throw new Error('usePhysics must be used inside a <PhysicsProvider>');
+    throw new Error("usePhysics must be used inside a <PhysicsProvider>");
   }
   return ctx;
 }
@@ -80,6 +81,8 @@ export function usePhysics(): PhysicsContextValue {
 export interface PhysicsProviderProps {
   /** Initial player spawn position (feet/ground level). */
   spawnPosition?: THREE.Vector3;
+  /** Initial camera yaw in radians. 0 = north, -PI/2 = east, PI/2 = west. */
+  initialYaw?: number;
   children: ReactNode;
 }
 
@@ -87,18 +90,18 @@ export interface PhysicsProviderProps {
 // Component
 // ---------------------------------------------------------------------------
 
-export function PhysicsProvider({
-  spawnPosition,
-  children,
-}: PhysicsProviderProps) {
+export function PhysicsProvider({ spawnPosition, initialYaw, children }: PhysicsProviderProps) {
   const { camera } = useThree();
 
   // Create physics singletons once (stable across renders)
   const world = useMemo(() => new PhysicsWorld(), []);
-  const player = useMemo(
-    () => new PlayerController(world, spawnPosition),
-    [world, spawnPosition],
-  );
+  const player = useMemo(() => {
+    const ctrl = new PlayerController(world, spawnPosition);
+    if (initialYaw !== undefined) {
+      ctrl.yaw = initialYaw;
+    }
+    return ctrl;
+  }, [world, spawnPosition, initialYaw]);
 
   // Track registered collider ids for cleanup
   const registeredIds = useRef<Set<string>>(new Set());
@@ -195,8 +198,13 @@ export function PhysicsProvider({
     input.tick();
     const frame = input.getFrame();
 
+    // Overlay store crouch state onto input frame so PlayerController
+    // applies crouch speed. The C-key toggle is handled by StealthDetector.
+    const isCrouching = gameStore.getState().stealthState.isCrouching;
+    const patchedFrame = isCrouching ? { ...frame, crouch: true } : frame;
+
     // Run character controller (applies input, gravity, collision response)
-    player.update(frame, dt);
+    player.update(patchedFrame, dt);
 
     // Sync R3F camera to the resolved physics position and rotation
     player.getEyePosition(eyePos.current);
@@ -219,12 +227,17 @@ export function PhysicsProvider({
       onTrigger: onTriggerCb,
       unregister,
     }),
-    [world, player, registerTerrain, registerBuilding, registerTrigger, registerCollider, onTriggerCb, unregister],
+    [
+      world,
+      player,
+      registerTerrain,
+      registerBuilding,
+      registerTrigger,
+      registerCollider,
+      onTriggerCb,
+      unregister,
+    ],
   );
 
-  return (
-    <PhysicsContext.Provider value={value}>
-      {children}
-    </PhysicsContext.Provider>
-  );
+  return <PhysicsContext.Provider value={value}>{children}</PhysicsContext.Provider>;
 }

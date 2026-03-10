@@ -13,6 +13,8 @@ import {
 import {
   createMetalTexture,
   createWoodTexture,
+  createPBRClayAdobe,
+  createPBRWoodAged,
 } from '../materials';
 
 import { createWindow } from './BuildingBase.composite';
@@ -42,7 +44,7 @@ export function createCross(height: number): Group {
 
 export function createSteeple(steepleBase: number, steepleHeight: number): Group {
   const group = new Group();
-  const wallMat = createWoodTexture('#E8DDD0', '#C8BDB0');
+  const wallMat = createPBRClayAdobe(2);
 
   const tower = new Mesh(new BoxGeometry(steepleBase, steepleHeight, steepleBase), wallMat);
   tower.position.y = steepleHeight / 2;
@@ -64,7 +66,7 @@ export function createSteeple(steepleBase: number, steepleHeight: number): Group
   }
 
   // Pointed spire
-  const roofMat = createWoodTexture('#4A3A2A', '#2E2418');
+  const roofMat = createPBRWoodAged(2);
   const spireH = 2.5;
   const spire = new Mesh(new CylinderGeometry(0.05, steepleBase * 0.7, spireH, 4), roofMat);
   spire.position.y = steepleHeight + spireH / 2;

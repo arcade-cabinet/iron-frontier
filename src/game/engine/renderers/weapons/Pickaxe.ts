@@ -103,7 +103,7 @@ export class Pickaxe extends WeaponViewModel {
     root.rotation.z = 0.1;
 
     // Store rest transforms
-    this.restPositionLocal.copy(root.position);
+    this.restPositionLocal = root.position.clone();
 
     return root;
   }

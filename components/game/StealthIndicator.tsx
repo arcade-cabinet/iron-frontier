@@ -5,17 +5,18 @@
  *   [HIDDEN] / [CAUTION] / [DANGER]
  *
  * Animates smoothly between states using react-native-reanimated.
- * Only visible when relevant (hidden by default in towns/non-stealth).
+ * Only visible when there are nearby hostiles (nearestHostileDistance > 0).
  *
- * Currently reads from a placeholder detection level. Will integrate with
- * a StealthSystem once one exists in the game store.
+ * Reads detection level from the Zustand game store (stealthState).
+ * Falls back to an optional prop for manual override.
  *
  * @module components/game/StealthIndicator
  */
 
-import * as React from 'react';
-import { Platform, View } from 'react-native';
+import * as React from "react";
+import { Platform, View } from "react-native";
 import Animated, {
+  Easing,
   FadeIn,
   FadeOut,
   useAnimatedStyle,
@@ -23,36 +24,52 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-  Easing,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Text } from '@/components/ui/Text';
-import { useResponsive } from '@/hooks/useResponsive';
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { useResponsive } from "@/hooks/useResponsive";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const HUD_AMBER = '#D4A855';
-const HUD_AMBER_DIM = '#C4963F';
-const HUD_RED = '#CC4444';
-const HUD_YELLOW = '#D4A017';
+const HUD_AMBER = "#D4A855";
+const HUD_RED = "#CC4444";
+const HUD_YELLOW = "#D4A017";
 
 const MONO_FONT = Platform.select({
-  ios: 'Menlo',
-  android: 'monospace',
-  default: 'monospace',
+  ios: "Menlo",
+  android: "monospace",
+  default: "monospace",
 });
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-export type DetectionLevel = 'hidden' | 'caution' | 'danger';
+export type DetectionLevel = "hidden" | "caution" | "danger";
 
 export interface StealthIndicatorProps {
-  /** Current detection state. Pass null or undefined to hide. */
+  /** Manual override for detection state. If omitted, reads from store. */
   detectionLevel?: DetectionLevel | null;
+}
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+
+/**
+ * Convert a numeric detection level (0-100) to a named state.
+ *
+ *   0-29  = hidden
+ *   30-79 = caution
+ *   80+   = danger
+ */
+function numericToDetectionLevel(value: number): DetectionLevel {
+  if (value >= 80) return "danger";
+  if (value >= 30) return "caution";
+  return "hidden";
 }
 
 // ============================================================================
@@ -60,17 +77,31 @@ export interface StealthIndicatorProps {
 // ============================================================================
 
 const DETECTION_STYLES: Record<DetectionLevel, { label: string; color: string; pulse: boolean }> = {
-  hidden: { label: 'HIDDEN', color: HUD_AMBER, pulse: false },
-  caution: { label: 'CAUTION', color: HUD_YELLOW, pulse: true },
-  danger: { label: 'DANGER', color: HUD_RED, pulse: true },
+  hidden: { label: "HIDDEN", color: HUD_AMBER, pulse: false },
+  caution: { label: "CAUTION", color: HUD_YELLOW, pulse: true },
+  danger: { label: "DANGER", color: HUD_RED, pulse: true },
 };
 
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
-export function StealthIndicator({ detectionLevel }: StealthIndicatorProps) {
+export function StealthIndicator({ detectionLevel: detectionLevelProp }: StealthIndicatorProps) {
   const { isPhone } = useResponsive();
+
+  // Read stealth state from the store
+  const { storeDetection, nearestHostileDistance } = useGameStoreShallow((s) => ({
+    storeDetection: s.stealthState.detectionLevel,
+    nearestHostileDistance: s.stealthState.nearestHostileDistance,
+  }));
+
+  // Determine the active detection level: prop override > store
+  const detectionLevel =
+    detectionLevelProp ??
+    // Only show indicator when there are nearby hostiles (or detection is still decaying)
+    (nearestHostileDistance > 0 || storeDetection > 1
+      ? numericToDetectionLevel(storeDetection)
+      : null);
 
   // Pulse animation for caution/danger
   const pulseOpacity = useSharedValue(1);
@@ -105,36 +136,33 @@ export function StealthIndicator({ detectionLevel }: StealthIndicatorProps) {
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: isPhone ? 44 : 50,
         left: 0,
         right: 0,
-        alignItems: 'center',
+        alignItems: "center",
       }}
       pointerEvents="none"
     >
-      <Animated.View
-        entering={FadeIn.duration(200)}
-        exiting={FadeOut.duration(300)}
-      >
+      <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut.duration(300)}>
         <Animated.View style={animatedTextStyle}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
               style={{
                 color: style.color,
                 fontSize,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontFamily: MONO_FONT,
                 letterSpacing: 2,
               }}
             >
-              {'[  '}
+              {"[  "}
             </Text>
             <Text
               style={{
                 color: style.color,
                 fontSize,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontFamily: MONO_FONT,
                 letterSpacing: 3,
               }}
@@ -145,12 +173,12 @@ export function StealthIndicator({ detectionLevel }: StealthIndicatorProps) {
               style={{
                 color: style.color,
                 fontSize,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontFamily: MONO_FONT,
                 letterSpacing: 2,
               }}
             >
-              {'  ]'}
+              {"  ]"}
             </Text>
           </View>
         </Animated.View>

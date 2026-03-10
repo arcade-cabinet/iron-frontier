@@ -2,7 +2,7 @@
 //
 // Each enemy type has distinct idle/attack behaviours applied via useFrame.
 // All animations are deterministic — phase offsets seeded via alea.
-// No Math.random().
+// No scopedRNG('render', 42, rngTick()).
 //
 // Actual per-type tick functions live in EnemyAnimations.ticks.ts
 // to keep each file under 300 lines.
@@ -22,6 +22,7 @@ import {
   animateWendigo,
   animateRailWraith,
 } from './EnemyAnimations.ticks';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Animation state tracked per-enemy instance

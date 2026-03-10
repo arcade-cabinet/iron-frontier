@@ -4,12 +4,12 @@
 // via alea-seeded positions, and sine-wave float motion. Fade in/out
 // based on night factor (0 during day, 1 at full night).
 
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
-import Alea from 'alea';
-import * as THREE from 'three';
+import { useFrame } from "@react-three/fiber";
+import Alea from "alea";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
-import { FIREFLY_CONFIG } from '@/engine/renderers/AtmosphericEffects';
+import { FIREFLY_CONFIG } from "@/engine/renderers/AtmosphericEffects";
 
 export interface FirefliesProps {
   /** 0 = day (invisible), 1 = full night (fully visible) */
@@ -31,11 +31,22 @@ interface FireflyData {
 const _dummy = new THREE.Object3D();
 const _color = new THREE.Color();
 
-export function Fireflies({ nightFactor, seed = 'iron-frontier-fireflies' }: FirefliesProps) {
+export function Fireflies({ nightFactor, seed = "iron-frontier-fireflies" }: FirefliesProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const elapsedRef = useRef(0);
 
-  const { count, size, color, emissiveIntensity, heightRange, floatAmplitude, floatFrequency, driftSpeed, radius, pulseFrequency } = FIREFLY_CONFIG;
+  const {
+    count,
+    size,
+    color,
+    emissiveIntensity,
+    heightRange,
+    floatAmplitude,
+    floatFrequency,
+    driftSpeed,
+    radius,
+    pulseFrequency,
+  } = FIREFLY_CONFIG;
 
   // Generate deterministic firefly data
   const fireflies = useMemo<FireflyData[]>(() => {
@@ -48,11 +59,7 @@ export function Fireflies({ nightFactor, seed = 'iron-frontier-fireflies' }: Fir
       const y = heightRange[0] + rng() * (heightRange[1] - heightRange[0]);
 
       result.push({
-        basePosition: new THREE.Vector3(
-          Math.cos(angle) * dist,
-          y,
-          Math.sin(angle) * dist,
-        ),
+        basePosition: new THREE.Vector3(Math.cos(angle) * dist, y, Math.sin(angle) * dist),
         phase: rng() * Math.PI * 2,
         phaseSpeed: floatFrequency * (0.7 + rng() * 0.6),
         driftAngle: rng() * Math.PI * 2,
@@ -63,7 +70,16 @@ export function Fireflies({ nightFactor, seed = 'iron-frontier-fireflies' }: Fir
     }
 
     return result;
-  }, [seed, count, radius, heightRange, floatAmplitude, floatFrequency, driftSpeed, pulseFrequency]);
+  }, [
+    seed,
+    count,
+    radius,
+    heightRange,
+    floatAmplitude,
+    floatFrequency,
+    driftSpeed,
+    pulseFrequency,
+  ]);
 
   // Material — emissive glow, no lighting needed
   const material = useMemo(() => {
@@ -131,11 +147,5 @@ export function Fireflies({ nightFactor, seed = 'iron-frontier-fireflies' }: Fir
     meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
-  return (
-    <instancedMesh
-      ref={meshRef}
-      args={[geometry, material, count]}
-      frustumCulled={false}
-    />
-  );
+  return <instancedMesh ref={meshRef} args={[geometry, material, count]} frustumCulled={false} />;
 }

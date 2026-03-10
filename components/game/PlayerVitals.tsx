@@ -11,37 +11,37 @@
  * @module components/game/PlayerVitals
  */
 
-import * as React from 'react';
-import { Platform, Pressable, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as React from "react";
+import { Platform, Pressable, View } from "react-native";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
-  Easing,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from '@/components/ui/Text';
-import { useGameStoreShallow } from '@/hooks/useGameStore';
-import { useResponsive } from '@/hooks/useResponsive';
-import { DEFAULT_PROVISIONS_CONFIG } from '@/src/game/systems/provisions';
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { useResponsive } from "@/hooks/useResponsive";
+import { DEFAULT_PROVISIONS_CONFIG } from "@/src/game/systems/provisions";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const HUD_AMBER = '#D4A855';
-const HUD_AMBER_DIM = '#C4963F';
-const HUD_TEXT = '#E8D5A8';
-const HUD_BG = 'rgba(20, 15, 10, 0.6)';
-const HUD_RED = '#CC4444';
+const HUD_AMBER = "#D4A855";
+const HUD_AMBER_DIM = "#C4963F";
+const HUD_TEXT = "#E8D5A8";
+const HUD_BG = "rgba(20, 15, 10, 0.6)";
+const HUD_RED = "#CC4444";
 
 const HP_SEGMENTS = 10;
 const MONO_FONT = Platform.select({
-  ios: 'Menlo',
-  android: 'monospace',
-  default: 'monospace',
+  ios: "Menlo",
+  android: "monospace",
+  default: "monospace",
 });
 
 // ============================================================================
@@ -80,8 +80,8 @@ const SegmentedBar = React.memo(function SegmentedBar({
   return (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         height: height + 4,
         width,
       }}
@@ -99,8 +99,8 @@ const SegmentedBar = React.memo(function SegmentedBar({
       />
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           gap: 2,
           paddingHorizontal: 1,
           flex: 1,
@@ -116,9 +116,7 @@ const SegmentedBar = React.memo(function SegmentedBar({
               style={{
                 flex: 1,
                 height,
-                backgroundColor: isFilled
-                  ? color
-                  : `${color}20`,
+                backgroundColor: isFilled ? color : `${color}20`,
                 borderRadius: 1,
                 opacity: isFilled ? (isPartial ? 0.7 : 0.9) : 0.3,
               }}
@@ -164,7 +162,7 @@ const VerticalFill = React.memo(function VerticalFill({
   const fillHeight = Math.round(pct * height);
 
   return (
-    <View style={{ alignItems: 'center', gap: 2 }}>
+    <View style={{ alignItems: "center", gap: 2 }}>
       <View
         style={{
           width: 8,
@@ -173,13 +171,13 @@ const VerticalFill = React.memo(function VerticalFill({
           borderWidth: 1,
           borderColor: `${color}66`,
           backgroundColor: `${color}15`,
-          justifyContent: 'flex-end',
-          overflow: 'hidden',
+          justifyContent: "flex-end",
+          overflow: "hidden",
         }}
       >
         <View
           style={{
-            width: '100%',
+            width: "100%",
             height: fillHeight,
             backgroundColor: color,
             opacity: 0.8,
@@ -192,7 +190,7 @@ const VerticalFill = React.memo(function VerticalFill({
           color: `${color}AA`,
           fontSize: 7,
           fontFamily: MONO_FONT,
-          fontWeight: '600',
+          fontWeight: "600",
         }}
       >
         {label}
@@ -210,20 +208,11 @@ export function PlayerVitals() {
   const { isPhone } = useResponsive();
   const [showNumbers, setShowNumbers] = React.useState(false);
 
-  const {
-    health,
-    maxHealth,
-    stamina,
-    maxStamina,
-    food,
-    water,
-  } = useGameStoreShallow((s) => ({
+  const { health, maxHealth, stamina, maxStamina } = useGameStoreShallow((s) => ({
     health: s.playerStats.health,
     maxHealth: s.playerStats.maxHealth,
     stamina: s.playerStats.stamina,
     maxStamina: s.playerStats.maxStamina,
-    food: s.provisionsState.food,
-    water: s.provisionsState.water,
   }));
 
   // Damage flash animation
@@ -248,7 +237,6 @@ export function PlayerVitals() {
   const barWidth = isPhone ? 110 : 140;
   const barHeight = isPhone ? 6 : 8;
   const smallBarHeight = isPhone ? 4 : 5;
-  const fillBarHeight = isPhone ? 24 : 30;
 
   // Determine HP bar color based on health percentage
   const hpPct = maxHealth > 0 ? health / maxHealth : 0;
@@ -258,20 +246,20 @@ export function PlayerVitals() {
     <Pressable
       onPress={() => setShowNumbers((prev) => !prev)}
       style={{
-        position: 'absolute',
+        position: "absolute",
         bottom: Math.max(insets.bottom, 8) + 8,
         left: Math.max(insets.left, 8) + 8,
       }}
     >
-      <View style={{ gap: isPhone ? 4 : 6 }}>
-        {/* HP bar */}
+      <View style={{ gap: isPhone ? 3 : 4 }}>
+        {/* HP bar — minimal, thin */}
         <View style={{ gap: 2 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <Text
               style={{
                 color: HUD_AMBER,
                 fontSize: isPhone ? 9 : 10,
-                fontWeight: '700',
+                fontWeight: "700",
                 fontFamily: MONO_FONT,
                 width: 20,
               }}
@@ -292,7 +280,7 @@ export function PlayerVitals() {
                   color: hpColor,
                   fontSize: isPhone ? 9 : 10,
                   fontFamily: MONO_FONT,
-                  fontWeight: '600',
+                  fontWeight: "600",
                 }}
               >
                 {health}/{maxHealth}
@@ -304,7 +292,7 @@ export function PlayerVitals() {
           <Animated.View
             style={[
               {
-                position: 'absolute',
+                position: "absolute",
                 top: 0,
                 left: 0,
                 right: 0,
@@ -318,13 +306,13 @@ export function PlayerVitals() {
           />
         </View>
 
-        {/* Stamina bar */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        {/* Stamina bar — smaller, below HP */}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <Text
             style={{
               color: HUD_AMBER_DIM,
               fontSize: isPhone ? 8 : 9,
-              fontWeight: '600',
+              fontWeight: "600",
               fontFamily: MONO_FONT,
               width: 20,
             }}
@@ -352,23 +340,8 @@ export function PlayerVitals() {
           )}
         </View>
 
-        {/* Food / Water vertical indicators */}
-        <View style={{ flexDirection: 'row', gap: 8, marginLeft: 22, marginTop: 2 }}>
-          <VerticalFill
-            label="F"
-            value={food}
-            maxValue={DEFAULT_PROVISIONS_CONFIG.maxFood}
-            color={HUD_AMBER}
-            height={fillBarHeight}
-          />
-          <VerticalFill
-            label="W"
-            value={water}
-            maxValue={DEFAULT_PROVISIONS_CONFIG.maxWater}
-            color="#6BA3C4"
-            height={fillBarHeight}
-          />
-        </View>
+        {/* Food/water indicators removed — SurvivalWarning handles
+            low-provision alerts. Tap HP bar to see numeric values. */}
       </View>
     </Pressable>
   );

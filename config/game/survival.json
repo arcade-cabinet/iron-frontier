@@ -38,7 +38,7 @@
       },
       "weary": {
         "accuracyModifier": 0.85,
-        "damageModifier": 0.90,
+        "damageModifier": 0.9,
         "speedModifier": 0.8,
         "stumbleChance": 0.05,
         "canAct": true,
@@ -76,9 +76,9 @@
     "dehydrationDamage": 5,
     "statusThresholds": {
       "abundant": 0.75,
-      "adequate": 0.50,
+      "adequate": 0.5,
       "low": 0.25,
-      "critical": 0.10,
+      "critical": 0.1,
       "depleted": 0
     },
     "startingFood": 75,
@@ -89,10 +89,10 @@
       "desert": 0.05,
       "plains": 0.25,
       "grassland": 0.35,
-      "forest": 0.50,
+      "forest": 0.5,
       "mountains": 0.15,
-      "badlands": 0.10,
-      "riverside": 0.60,
+      "badlands": 0.1,
+      "riverside": 0.6,
       "town": 0
     },
     "yields": {

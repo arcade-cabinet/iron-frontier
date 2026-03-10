@@ -4,33 +4,33 @@
 // Scatter positions are deterministic via alea PRNG + chunk seed.
 // Only renders instances within a configurable distance threshold.
 
-import { Merged } from '@react-three/drei';
-import { useFrame, useThree } from '@react-three/fiber';
-import { useMemo, useRef, useState } from 'react';
-import Alea from 'alea';
-import * as THREE from 'three';
+import { Merged } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import Alea from "alea";
+import { useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 
 import {
+  type CactusVariant,
   createCactus,
   createDeadTree,
   createRock,
   createScrubBrush,
   createTumbleweed,
-  type CactusVariant,
-} from '@/src/game/engine/renderers';
+} from "@/src/game/engine/renderers";
 
 // --- Types ---
 
 export type VegetationType =
-  | 'saguaro'
-  | 'barrel'
-  | 'prickly'
-  | 'tumbleweed'
-  | 'scrub'
-  | 'deadTree'
-  | 'rockSmall'
-  | 'rockMedium'
-  | 'rockLarge';
+  | "saguaro"
+  | "barrel"
+  | "prickly"
+  | "tumbleweed"
+  | "scrub"
+  | "deadTree"
+  | "rockSmall"
+  | "rockMedium"
+  | "rockLarge";
 
 export interface VegetationFieldProps {
   /** World-space center of the scattering region */
@@ -48,8 +48,14 @@ export interface VegetationFieldProps {
 }
 
 const DEFAULT_TYPES: VegetationType[] = [
-  'saguaro', 'barrel', 'prickly', 'tumbleweed', 'scrub',
-  'deadTree', 'rockSmall', 'rockMedium',
+  "saguaro",
+  "barrel",
+  "prickly",
+  "tumbleweed",
+  "scrub",
+  "deadTree",
+  "rockSmall",
+  "rockMedium",
 ];
 
 const DEFAULT_DENSITY = 0.02;
@@ -88,11 +94,7 @@ function generateScatterPoints(
     const typeIdx = Math.floor(rng() * types.length);
     points.push({
       type: types[typeIdx],
-      position: new THREE.Vector3(
-        center[0] + x,
-        center[1],
-        center[2] + z,
-      ),
+      position: new THREE.Vector3(center[0] + x, center[1], center[2] + z),
       rotation: rng() * Math.PI * 2,
       scale: 0.7 + rng() * 0.6,
     });
@@ -120,24 +122,24 @@ function buildSourceMeshes(types: VegetationType[]): Record<string, THREE.Mesh> 
 
 function buildGroupForType(type: VegetationType): THREE.Group {
   switch (type) {
-    case 'saguaro':
-      return createCactus('saguaro', type);
-    case 'barrel':
-      return createCactus('barrel', type);
-    case 'prickly':
-      return createCactus('prickly', type);
-    case 'tumbleweed':
+    case "saguaro":
+      return createCactus("saguaro", type);
+    case "barrel":
+      return createCactus("barrel", type);
+    case "prickly":
+      return createCactus("prickly", type);
+    case "tumbleweed":
       return createTumbleweed(type);
-    case 'scrub':
+    case "scrub":
       return createScrubBrush(type);
-    case 'deadTree':
+    case "deadTree":
       return createDeadTree(type);
-    case 'rockSmall':
-      return createRock('small', type);
-    case 'rockMedium':
-      return createRock('medium', type);
-    case 'rockLarge':
-      return createRock('large', type);
+    case "rockSmall":
+      return createRock("small", type);
+    case "rockMedium":
+      return createRock("medium", type);
+    case "rockLarge":
+      return createRock("large", type);
   }
 }
 
@@ -171,9 +173,7 @@ function mergeGroupToMesh(group: THREE.Group): THREE.Mesh | null {
 }
 
 /** Simple buffer geometry merge (position + normal). */
-function mergeBufferGeometries(
-  geometries: THREE.BufferGeometry[],
-): THREE.BufferGeometry | null {
+function mergeBufferGeometries(geometries: THREE.BufferGeometry[]): THREE.BufferGeometry | null {
   let totalVerts = 0;
   let totalIndices = 0;
 
@@ -187,7 +187,7 @@ function mergeBufferGeometries(
   const indices: number[] = [];
 
   let vertOffset = 0;
-  let idxOffset = 0;
+  const idxOffset = 0;
 
   for (const geo of geometries) {
     const posAttr = geo.attributes.position as THREE.BufferAttribute;
@@ -212,8 +212,8 @@ function mergeBufferGeometries(
   }
 
   const merged = new THREE.BufferGeometry();
-  merged.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  merged.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+  merged.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  merged.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
   merged.setIndex(indices);
   return merged;
 }
@@ -243,9 +243,7 @@ export function VegetationField({
   const sourceMeshes = useMemo(() => buildSourceMeshes(types), [types]);
 
   // Track visibility per frame
-  const [visibleIndices, setVisibleIndices] = useState<Set<number>>(
-    () => new Set(),
-  );
+  const [visibleIndices, setVisibleIndices] = useState<Set<number>>(() => new Set());
 
   useFrame(() => {
     camera.getWorldPosition(_cameraPos);
@@ -268,7 +266,16 @@ export function VegetationField({
 
   return (
     <Merged meshes={sourceMeshes}>
-      {(instances: Record<string, React.FC<{ position?: THREE.Vector3Tuple; rotation?: THREE.Euler | THREE.Vector3Tuple; scale?: number | THREE.Vector3Tuple }>>) => (
+      {(
+        instances: Record<
+          string,
+          React.FC<{
+            position?: THREE.Vector3Tuple;
+            rotation?: THREE.Euler | THREE.Vector3Tuple;
+            scale?: number | THREE.Vector3Tuple;
+          }>
+        >,
+      ) => (
         <group ref={groupRef}>
           {points.map((pt, i) => {
             if (!visibleIndices.has(i)) return null;

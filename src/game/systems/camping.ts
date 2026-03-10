@@ -7,6 +7,7 @@
  * @module systems/camping
  */
 
+import { scopedRNG, rngTick } from '../lib/prng';
 import type { FatigueSystem } from './fatigue';
 import type { ProvisionsSystem, TerrainType } from './provisions';
 import type { GameClock, TimePhase } from './time';
@@ -482,7 +483,7 @@ export class CampingSystem {
     terrain: TerrainType,
     rng?: () => number
   ): CampingResult {
-    const random = rng ?? Math.random;
+    const random = rng ?? (() => scopedRNG('camping', 42, rngTick()));
 
     let hoursRested = 0;
     let fatigueRecovered = 0;
@@ -572,7 +573,7 @@ export class CampingSystem {
     isNight: boolean,
     rng?: () => number
   ): CampEncounter {
-    const random = rng ?? Math.random;
+    const random = rng ?? (() => scopedRNG('camping', 42, rngTick()));
     const chance = this.getEncounterChance(terrain, isNight, this.hasFire());
 
     // Roll for encounter
@@ -638,7 +639,8 @@ export class CampingSystem {
       }
     }
 
-    return 'wildlife_passive'; // Fallback
+    console.error(`[CampingSystem] Encounter probability roll fell through — probabilities may not sum to 1`);
+    return 'wildlife_passive';
   }
 
   /**

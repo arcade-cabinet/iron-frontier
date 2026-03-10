@@ -2,13 +2,14 @@
 //
 // Builds dustDevil, wendigo, and railWraith from Three.js primitives.
 // These enemies use transparency, emissives, and eerie visual effects.
-// All deterministic via alea. No Math.random().
+// All deterministic via alea. No scopedRNG('render', 42, rngTick()).
 
 import * as THREE from 'three';
 
 import { makePRNG } from '../materials/canvasUtils';
 import { constructChibi, type ChibiConfig, HEAD_RADIUS, BODY_H, BODY_W, BODY_D } from './ChibiRenderer';
 import { paintHollowFace } from './MonsterFaces';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Dust Devil — swirling cone with inner emissive core and debris

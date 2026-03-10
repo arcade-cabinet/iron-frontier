@@ -9,6 +9,7 @@ module.exports = {
   },
   setupFiles: ["<rootDir>/jest.setup.ts"],
   testMatch: ["**/*.test.ts", "**/*.test.tsx"],
+  testPathIgnorePatterns: ["/node_modules/", "/.claude/worktrees/", "/legacy/"],
   collectCoverageFrom: [
     "game/**/*.{ts,tsx}",
     "engine/**/*.{ts,tsx}",

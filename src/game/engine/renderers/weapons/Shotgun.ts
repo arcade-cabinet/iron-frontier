@@ -158,7 +158,7 @@ export class Shotgun extends WeaponViewModel {
 
     // Store rest transforms
     this.pumpRestZ = this.pumpSlide.position.z;
-    this.restPositionLocal.copy(root.position);
+    this.restPositionLocal = root.position.clone();
 
     return root;
   }

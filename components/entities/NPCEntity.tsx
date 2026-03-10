@@ -11,17 +11,14 @@
 // - Walk animation: arm/leg swing when speed > 0
 // - Rotation facing movement direction
 
-import { Text } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import Alea from 'alea';
-import { useMemo, useRef } from 'react';
-import * as THREE from 'three';
+import { Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import Alea from "alea";
+import { useMemo, useRef } from "react";
+import type * as THREE from "three";
 
-import {
-  constructChibi,
-  type ChibiConfig,
-} from '@/src/game/engine/renderers/ChibiRenderer';
-import type { NPCMovementState } from '@/src/game/systems/NPCMovementSystem';
+import { type ChibiConfig, constructChibi } from "@/src/game/engine/renderers/ChibiRenderer";
+import type { NPCMovementState } from "@/src/game/systems/NPCMovementSystem";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -79,7 +76,7 @@ export function NPCEntity({
   position,
   name,
   rotation = 0,
-  seed = 'npc-anim',
+  seed = "npc-anim",
   movementState,
   hidden = false,
 }: NPCEntityProps) {
@@ -96,11 +93,12 @@ export function NPCEntity({
     headTarget: 0,
     headCurrent: 0,
     walkPhase: 0,
-    // Smoothed position for interpolation
-    smoothX: position[0],
-    smoothY: position[1],
-    smoothZ: position[2],
-    smoothYaw: rotation,
+    // Smoothed position for interpolation -- initialize from movementState
+    // when available so there's no initial teleport from spawn to schedule pos.
+    smoothX: movementState?.currentPosition.x ?? position[0],
+    smoothY: movementState?.currentPosition.y ?? position[1],
+    smoothZ: movementState?.currentPosition.z ?? position[2],
+    smoothYaw: movementState?.facingYaw ?? rotation,
   });
 
   // Build a per-instance PRNG so each NPC has distinct animation timing
@@ -114,11 +112,11 @@ export function NPCEntity({
     const group = constructChibi(config);
 
     // Grab refs to animated subgroups
-    headRef.current = group.getObjectByName('head') ?? null;
-    leftArmRef.current = group.getObjectByName('left_arm') ?? null;
-    rightArmRef.current = group.getObjectByName('right_arm') ?? null;
-    leftLegRef.current = group.getObjectByName('left_leg') ?? null;
-    rightLegRef.current = group.getObjectByName('right_leg') ?? null;
+    headRef.current = group.getObjectByName("head") ?? null;
+    leftArmRef.current = group.getObjectByName("left_arm") ?? null;
+    rightArmRef.current = group.getObjectByName("right_arm") ?? null;
+    leftLegRef.current = group.getObjectByName("left_leg") ?? null;
+    rightLegRef.current = group.getObjectByName("right_leg") ?? null;
 
     return group;
   }, [config]);
@@ -237,8 +235,12 @@ export function NPCEntity({
   return (
     <group
       ref={groupRef}
-      position={[position[0], position[1], position[2]]}
-      rotation={[0, rotation, 0]}
+      position={[
+        movementState?.currentPosition.x ?? position[0],
+        movementState?.currentPosition.y ?? position[1],
+        movementState?.currentPosition.z ?? position[2],
+      ]}
+      rotation={[0, movementState?.facingYaw ?? rotation, 0]}
     >
       <primitive object={chibiGroup} />
 

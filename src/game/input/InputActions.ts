@@ -18,6 +18,7 @@ export enum InputAction {
 
   Jump,
   Sprint,
+  Crouch,
 
   Inventory,
   Map,

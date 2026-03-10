@@ -62,6 +62,25 @@ export const MOCK_PLAYER_STATS: PlayerStats = {
   gold: 50,
   ivrcScript: 0,
   reputation: 0,
+  attributes: {
+    grit: 5,
+    perception: 5,
+    endurance: 5,
+    charisma: 5,
+    intelligence: 5,
+    agility: 5,
+    luck: 5,
+  },
+  skills: {
+    guns: 15,
+    melee: 15,
+    lockpick: 15,
+    speech: 15,
+    repair: 15,
+    medicine: 15,
+    survival: 15,
+    barter: 15,
+  },
 };
 
 /** Player stats with low health for testing edge cases */
@@ -488,8 +507,10 @@ export const DEFAULT_APPEARANCE: CharacterAppearance = {
 
 /** Default game settings */
 export const DEFAULT_SETTINGS: GameSettings = {
+  masterVolume: 1.0,
   musicVolume: 0.7,
   sfxVolume: 0.8,
+  muted: false,
   haptics: true,
   controlMode: 'tap',
   reducedMotion: false,

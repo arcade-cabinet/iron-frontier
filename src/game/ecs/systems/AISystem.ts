@@ -5,7 +5,7 @@
  * Supports patrol (follow waypoints), pursue (chase target), flee (run away),
  * idle (stand still), and guard (hold position, face threats).
  *
- * Uses alea PRNG for deterministic AI decisions; no Math.random().
+ * Uses alea PRNG for deterministic AI decisions; no scopedRNG('npc', 42, rngTick()).
  */
 
 import Alea from 'alea';
@@ -13,6 +13,7 @@ import Alea from 'alea';
 import type { World } from 'miniplex';
 import type { Entity, Position } from '../components';
 import { npcs } from '../world';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // CONSTANTS

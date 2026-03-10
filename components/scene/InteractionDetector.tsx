@@ -5,18 +5,18 @@
 // player can interact with. Exposes the current interaction target via
 // callback so the UI layer can show "Press E" prompts.
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useRef } from 'react';
-import * as THREE from 'three';
+import { useFrame, useThree } from "@react-three/fiber";
+import { useRef } from "react";
+import * as THREE from "three";
 
-import { npcs as npcQuery, dialogueTargets } from '@/src/game/ecs/world';
-import { getDoorSystem } from '@/src/game/engine/interiors/DoorSystem';
+import { dialogueTargets, npcs as npcQuery } from "@/src/game/ecs/world";
+import { getDoorSystem } from "@/src/game/engine/interiors/DoorSystem";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type InteractionType = 'npc' | 'door' | 'item' | 'none';
+export type InteractionType = "npc" | "door" | "item" | "none";
 
 export interface InteractionTarget {
   type: InteractionType;
@@ -94,9 +94,9 @@ export function InteractionDetector({
       if (dist < bestDist) {
         bestDist = dist;
         bestTarget = {
-          type: 'npc',
-          name: entity.name ?? 'NPC',
-          entityId: entity.dialogueTarget?.npcId ?? '',
+          type: "npc",
+          name: entity.name ?? "NPC",
+          entityId: entity.dialogueTarget?.npcId ?? "",
           distance: dist,
           position: _targetPos.clone(),
         };
@@ -121,7 +121,7 @@ export function InteractionDetector({
       if (dist < bestDist) {
         bestDist = dist;
         bestTarget = {
-          type: 'door',
+          type: "door",
           name: door.buildingName,
           entityId: door.buildingId,
           distance: dist,
@@ -131,9 +131,7 @@ export function InteractionDetector({
     }
 
     // Only fire the callback when the target changes
-    const targetKey = bestTarget
-      ? `${bestTarget.type}:${bestTarget.entityId}`
-      : null;
+    const targetKey = bestTarget ? `${bestTarget.type}:${bestTarget.entityId}` : null;
 
     if (targetKey !== prevTargetRef.current) {
       prevTargetRef.current = targetKey;

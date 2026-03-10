@@ -14,6 +14,7 @@ export interface InputFrame {
   interact: boolean;
   jump: boolean;
   sprint: boolean;
+  crouch: boolean;
   inventory: boolean;
   map: boolean;
   menu: boolean;
@@ -48,6 +49,7 @@ export function createEmptyFrame(): InputFrame {
     interact: false,
     jump: false,
     sprint: false,
+    crouch: false,
     inventory: false,
     map: false,
     menu: false,

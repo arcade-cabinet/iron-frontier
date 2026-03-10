@@ -96,15 +96,39 @@ export const DEFAULT_PLAYER_STATS: PlayerStats = {
   gold: 50,
   ivrcScript: 0,
   reputation: 0,
+  attributes: {
+    grit: 5,
+    perception: 5,
+    endurance: 5,
+    charisma: 5,
+    intelligence: 5,
+    agility: 5,
+    luck: 5,
+  },
+  skills: {
+    guns: 20,
+    melee: 15,
+    lockpick: 15,
+    speech: 20,
+    repair: 15,
+    medicine: 15,
+    survival: 25,
+    barter: 20,
+  },
 };
 
 /**
  * Default world position.
  */
+/**
+ * Default player spawn position in world space.
+ * Corresponds to the west entry of Dusty Springs (starting town).
+ * Town center at (2200, 0, 1800); player arrives from the west road.
+ */
 export const DEFAULT_WORLD_POSITION: WorldPosition = {
-  x: 0,
+  x: 2160,
   y: 0,
-  z: 0,
+  z: 1798,
 };
 
 /**

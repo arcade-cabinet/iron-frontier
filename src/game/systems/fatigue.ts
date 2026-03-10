@@ -8,6 +8,7 @@
  */
 
 import type { TimePhase } from './time';
+import { scopedRNG, rngTick } from '../lib/prng';
 
 // ============================================================================
 // TYPES
@@ -296,7 +297,7 @@ export class FatigueSystem {
     const effects = this.getEffects();
     if (effects.stumbleChance <= 0) return false;
 
-    const shouldStumble = Math.random() < effects.stumbleChance;
+    const shouldStumble = scopedRNG('survival', 42, rngTick()) < effects.stumbleChance;
     if (shouldStumble) {
       this.state.pendingStumble = true;
     }

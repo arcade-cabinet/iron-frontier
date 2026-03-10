@@ -2,11 +2,12 @@
 //
 // Extends ChibiFace with menacing enemy-specific variants:
 // scarred faces, bandana-masked faces, hollow eye sockets, glowing eyes.
-// Deterministic via alea — no Math.random().
+// Deterministic via alea — no scopedRNG('render', 42, rngTick()).
 
 import { CanvasTexture, SRGBColorSpace } from 'three';
 
 import { makeCanvas, makePRNG, shiftColor } from '../materials/canvasUtils';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Scarred face — angry expression with visible scars

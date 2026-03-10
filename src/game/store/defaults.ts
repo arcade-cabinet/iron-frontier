@@ -25,6 +25,25 @@ export const DEFAULT_PLAYER_STATS: PlayerStats = {
   gold: 50,
   ivrcScript: 0,
   reputation: 0,
+  attributes: {
+    grit: 5,
+    perception: 5,
+    endurance: 5,
+    charisma: 5,
+    intelligence: 5,
+    agility: 5,
+    luck: 5,
+  },
+  skills: {
+    guns: 15,
+    melee: 15,
+    lockpick: 15,
+    speech: 15,
+    repair: 15,
+    medicine: 15,
+    survival: 15,
+    barter: 15,
+  },
 };
 
 export const DEFAULT_EQUIPMENT: EquipmentState = {
@@ -36,8 +55,10 @@ export const DEFAULT_EQUIPMENT: EquipmentState = {
 };
 
 export const DEFAULT_SETTINGS: GameSettings = {
+  masterVolume: 1.0,
   musicVolume: 0.7,
   sfxVolume: 0.8,
+  muted: false,
   haptics: true,
   controlMode: 'tap',
   reducedMotion: false,
@@ -61,9 +82,9 @@ export const DEFAULT_WEATHER: WeatherState = {
 
 export const DEFAULT_CAMERA_STATE: CameraState = {
   focusPoint: { x: 32, y: 5, z: 32 },
-  distance: 30,
+  distance: 35,
   azimuth: Math.PI * 0.75,
-  elevation: 0.4,
+  elevation: 0.55,
   minDistance: 15,
   maxDistance: 80,
   minElevation: 0.2,
@@ -77,7 +98,15 @@ export const DEFAULT_AUDIO_STATE: AudioState = {
   isPlaying: false,
 };
 
-export const DEFAULT_WORLD_POSITION = { x: 128, y: 0, z: 128 };
+/**
+ * Default player spawn position in world space.
+ * Corresponds to the west entry of Dusty Springs (starting town).
+ *
+ * Dusty Springs world coord is (11, 9) with WORLD_CELL_SIZE=200, so town center
+ * is at (2200, 0, 1800). The player arrives from the west road, placing them
+ * at the western edge of town looking east down Main Street.
+ */
+export const DEFAULT_WORLD_POSITION = { x: 2120, y: 0, z: 1798 };
 
 export const SAVE_VERSION = 2;
 

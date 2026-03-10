@@ -1,18 +1,18 @@
 // BuildingBase — Shared construction helpers for procedural buildings (part 1).
 // Core primitives: walls, floors, roofs.
 // Every helper returns fully positioned geometry using CanvasTextureFactory materials.
-// No Math.random() — all randomness via alea.
+// No scopedRNG('render', 42, rngTick()) — all randomness via alea.
 
 import {
   BoxGeometry,
-  DoubleSide,
   Group,
   Mesh,
   MeshStandardMaterial,
   PlaneGeometry,
 } from 'three';
 
-import { createWoodTexture } from '../materials';
+import { createWoodTexture, createPBRWoodAged } from '../materials';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Color palette defaults
@@ -73,7 +73,7 @@ export function createRoof(
   style: 'flat' | 'peaked' | 'shed',
   material?: MeshStandardMaterial,
 ): Group {
-  const mat = material ?? createWoodTexture('#5A3A2A', '#3E2418');
+  const mat = material ?? createPBRWoodAged(2);
   const group = new Group();
 
   if (style === 'flat') {
@@ -81,43 +81,43 @@ export function createRoof(
     slab.castShadow = true;
     group.add(slab);
   } else if (style === 'peaked') {
-    // Two angled planes meeting at a ridge
+    // Two solid sloped panels meeting at a ridge — BoxGeometry for visible
+    // thickness and correct normals (no DoubleSide needed)
+    const ROOF_THICK = 0.12;
     const halfW = (width + 0.6) / 2;
     const slopeLen = Math.sqrt(halfW * halfW + 1.5 * 1.5);
     const angle = Math.atan2(1.5, halfW);
 
-    const leftGeo = new PlaneGeometry(slopeLen, depth + 0.6);
+    const leftGeo = new BoxGeometry(slopeLen, ROOF_THICK, depth + 0.6);
     const left = new Mesh(leftGeo, mat);
     left.rotation.z = angle;
     left.position.set(-halfW / 2, 0.75, 0);
     left.castShadow = true;
-    left.material = mat.clone();
-    (left.material as MeshStandardMaterial).side = DoubleSide;
+    left.receiveShadow = true;
 
-    const rightGeo = new PlaneGeometry(slopeLen, depth + 0.6);
+    const rightGeo = new BoxGeometry(slopeLen, ROOF_THICK, depth + 0.6);
     const right = new Mesh(rightGeo, mat);
     right.rotation.z = -angle;
     right.position.set(halfW / 2, 0.75, 0);
     right.castShadow = true;
-    right.material = mat.clone();
-    (right.material as MeshStandardMaterial).side = DoubleSide;
+    right.receiveShadow = true;
 
     group.add(left, right);
 
     // Ridge cap
-    const ridge = new Mesh(new BoxGeometry(0.12, 0.08, depth + 0.8), mat);
+    const ridge = new Mesh(new BoxGeometry(0.14, 0.1, depth + 0.8), mat);
     ridge.position.y = 1.5;
     group.add(ridge);
   } else {
-    // Shed roof — single slope
+    // Shed roof — single solid slope
+    const ROOF_THICK = 0.12;
     const slopeLen = Math.sqrt(width * width + 1.2 * 1.2);
     const angle = Math.atan2(1.2, width);
-    const slab = new Mesh(new PlaneGeometry(slopeLen, depth + 0.4), mat);
+    const slab = new Mesh(new BoxGeometry(slopeLen, ROOF_THICK, depth + 0.4), mat);
     slab.rotation.z = angle;
     slab.position.y = 0.6;
     slab.castShadow = true;
-    slab.material = mat.clone();
-    (slab.material as MeshStandardMaterial).side = DoubleSide;
+    slab.receiveShadow = true;
     group.add(slab);
   }
 

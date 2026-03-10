@@ -56,7 +56,7 @@ export class WebStorageAdapter implements StorageAdapter {
       // eslint-disable-next-line no-console
       if (typeof console !== 'undefined')
         console.error('[WebStorageAdapter] Failed to get item:', key, error);
-      return null;
+      throw error;
     }
   }
 
@@ -146,7 +146,7 @@ export class NativeStorageAdapter implements StorageAdapter {
   async getItem(key: string): Promise<string | null> {
     try {
       await this.dbReady;
-      if (!this.db) return null;
+      if (!this.db) throw new Error('[NativeStorageAdapter] Database not initialized — cannot read');
       const row = this.db.getFirstSync<{ value: string }>(
         'SELECT value FROM kv WHERE key = ?',
         [key]
@@ -156,14 +156,14 @@ export class NativeStorageAdapter implements StorageAdapter {
       if (typeof console !== 'undefined') {
         console.error('[NativeStorageAdapter] Failed to get item:', key, error);
       }
-      return null;
+      throw error;
     }
   }
 
   async setItem(key: string, value: string): Promise<void> {
     try {
       await this.dbReady;
-      if (!this.db) return;
+      if (!this.db) throw new Error('[NativeStorageAdapter] Database not initialized — cannot write');
       this.db.runSync(
         'INSERT OR REPLACE INTO kv (key, value) VALUES (?, ?)',
         [key, value]
@@ -179,7 +179,7 @@ export class NativeStorageAdapter implements StorageAdapter {
   async removeItem(key: string): Promise<void> {
     try {
       await this.dbReady;
-      if (!this.db) return;
+      if (!this.db) throw new Error('[NativeStorageAdapter] Database not initialized — cannot delete');
       this.db.runSync('DELETE FROM kv WHERE key = ?', [key]);
     } catch (error) {
       if (typeof console !== 'undefined') {

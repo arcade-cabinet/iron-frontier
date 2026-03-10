@@ -9,6 +9,7 @@ import {
 } from 'three';
 
 import {
+  createPBRWoodPlanks,
   createWoodTexture,
 } from '../materials';
 
@@ -117,10 +118,7 @@ function createDisplayShelf(shelfW: number, shelfH: number, shelves: number): Gr
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallBase = palette[0] ?? '#8B7B6A';
-  const wallGrain = palette[1] ?? '#6B5E4A';
-  const wallMat = createWoodTexture(wallBase, wallGrain);
+  const wallMat = createPBRWoodPlanks(2);
 
   // Walls
   const backWall = createWall(WIDTH, WALL_HEIGHT, WALL_THICK, wallMat);

@@ -2,9 +2,10 @@
 //
 // Split from MonsterCreatures to stay under 300 lines per file.
 // Builds multi-legged arachnid / arthropod enemies from Three.js primitives.
-// All deterministic via alea. No Math.random().
+// All deterministic via alea. No scopedRNG('render', 42, rngTick()).
 
 import * as THREE from 'three';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Scorpion — flattened body, 8 legs, pincers, arching tail with stinger

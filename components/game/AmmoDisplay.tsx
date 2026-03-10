@@ -9,26 +9,26 @@
  * @module components/game/AmmoDisplay
  */
 
-import * as React from 'react';
-import { Platform, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as React from "react";
+import { Platform, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from '@/components/ui/Text';
-import { useGameStoreShallow } from '@/hooks/useGameStore';
-import { useResponsive } from '@/hooks/useResponsive';
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { useResponsive } from "@/hooks/useResponsive";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const HUD_AMBER = '#D4A855';
-const HUD_AMBER_DIM = '#C4963F';
-const HUD_TEXT = '#E8D5A8';
+const HUD_AMBER = "#D4A855";
+const HUD_AMBER_DIM = "#C4963F";
+const HUD_TEXT = "#E8D5A8";
 
 const MONO_FONT = Platform.select({
-  ios: 'Menlo',
-  android: 'monospace',
-  default: 'monospace',
+  ios: "Menlo",
+  android: "monospace",
+  default: "monospace",
 });
 
 // ============================================================================
@@ -65,33 +65,38 @@ export function AmmoDisplay() {
     if (!weapon) return 0;
     // Sum up all ammo-type items (items with type 'ammo')
     return inventory
-      .filter((item) => item.type === 'ammo')
+      .filter((item) => item.type === "ammo")
       .reduce((sum, item) => sum + item.quantity, 0);
   }, [weapon, inventory]);
 
   // Don't render if no weapon is equipped
   if (!weapon) return null;
 
-  const displayClip = ammoInClip ?? 6; // Fallback display
+  if (ammoInClip == null) {
+    console.error(
+      `[AmmoDisplay] ammoInClip is null for weapon "${weapon.name}" — check combat state`,
+    );
+  }
+  const displayClip = ammoInClip ?? 0;
   const weaponName = weapon.name;
 
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         bottom: Math.max(insets.bottom, 8) + 8,
         right: Math.max(insets.right, 8) + 8,
-        alignItems: 'flex-end',
+        alignItems: "flex-end",
       }}
       pointerEvents="none"
     >
       {/* Ammo count: clip / total */}
-      <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+      <View style={{ flexDirection: "row", alignItems: "baseline" }}>
         <Text
           style={{
             color: HUD_AMBER,
             fontSize: isPhone ? 18 : 22,
-            fontWeight: '700',
+            fontWeight: "700",
             fontFamily: MONO_FONT,
           }}
         >
@@ -101,7 +106,7 @@ export function AmmoDisplay() {
           style={{
             color: HUD_AMBER_DIM,
             fontSize: isPhone ? 12 : 14,
-            fontWeight: '400',
+            fontWeight: "400",
             fontFamily: MONO_FONT,
             marginHorizontal: 4,
           }}
@@ -112,7 +117,7 @@ export function AmmoDisplay() {
           style={{
             color: HUD_AMBER_DIM,
             fontSize: isPhone ? 14 : 16,
-            fontWeight: '600',
+            fontWeight: "600",
             fontFamily: MONO_FONT,
           }}
         >
@@ -125,7 +130,7 @@ export function AmmoDisplay() {
         style={{
           color: HUD_TEXT,
           fontSize: isPhone ? 9 : 10,
-          fontWeight: '400',
+          fontWeight: "400",
           fontFamily: MONO_FONT,
           opacity: 0.7,
           marginTop: 2,

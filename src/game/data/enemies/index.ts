@@ -5,6 +5,7 @@
  */
 
 import type { CombatEncounter, EnemyDefinition } from '../schemas/combat';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // ENEMY DEFINITIONS
@@ -26,6 +27,7 @@ export const BanditThug: EnemyDefinition = {
   weaponId: 'rusty_knife',
   xpReward: 15,
   goldReward: 5,
+  lootTableId: 'bandit_common',
   behavior: 'aggressive',
   description: 'A desperate criminal with little to lose.',
   tags: ['melee', 'common'],
@@ -45,6 +47,7 @@ export const BanditGunman: EnemyDefinition = {
   weaponId: 'worn_revolver',
   xpReward: 20,
   goldReward: 8,
+  lootTableId: 'bandit_common',
   behavior: 'ranged',
   description: 'A pistol-wielding outlaw.',
   tags: ['ranged', 'common'],
@@ -64,6 +67,7 @@ export const BanditSharpshooter: EnemyDefinition = {
   weaponId: 'hunting_rifle',
   xpReward: 30,
   goldReward: 12,
+  lootTableId: 'bandit_uncommon',
   behavior: 'ranged',
   description: 'A deadly accurate rifleman who prefers to keep distance.',
   tags: ['ranged', 'uncommon'],
@@ -85,6 +89,7 @@ export const CopperheadEnforcer: EnemyDefinition = {
   weaponId: 'shotgun',
   xpReward: 40,
   goldReward: 15,
+  lootTableId: 'copperhead_common',
   behavior: 'aggressive',
   description: 'A tough gang member who does the dirty work.',
   tags: ['melee', 'uncommon', 'copperhead'],
@@ -104,6 +109,7 @@ export const CopperheadGunslinger: EnemyDefinition = {
   weaponId: 'revolver',
   xpReward: 45,
   goldReward: 20,
+  lootTableId: 'copperhead_common',
   behavior: 'ranged',
   description: 'A quick-draw artist loyal to the gang.',
   tags: ['ranged', 'uncommon', 'copperhead'],
@@ -123,6 +129,7 @@ export const CopperheadDynamiter: EnemyDefinition = {
   weaponId: 'dynamite',
   xpReward: 50,
   goldReward: 25,
+  lootTableId: 'copperhead_uncommon',
   behavior: 'ranged',
   description: 'A demolitions expert who loves making things go boom.',
   tags: ['explosives', 'rare', 'copperhead'],
@@ -144,6 +151,7 @@ export const IVRCGuard: EnemyDefinition = {
   weaponId: 'revolver',
   xpReward: 35,
   goldReward: 10,
+  lootTableId: 'ivrc_common',
   behavior: 'defensive',
   description: 'A company security guard protecting IVRC interests.',
   tags: ['ranged', 'common', 'ivrc'],
@@ -163,6 +171,7 @@ export const IVRCMarksman: EnemyDefinition = {
   weaponId: 'rifle',
   xpReward: 50,
   goldReward: 15,
+  lootTableId: 'ivrc_uncommon',
   behavior: 'ranged',
   description: 'An elite company sniper.',
   tags: ['ranged', 'uncommon', 'ivrc'],
@@ -182,6 +191,7 @@ export const IVRCCaptain: EnemyDefinition = {
   weaponId: 'revolver',
   xpReward: 75,
   goldReward: 30,
+  lootTableId: 'ivrc_rare',
   behavior: 'defensive',
   description: 'A seasoned commander of IVRC security forces.',
   tags: ['ranged', 'rare', 'ivrc', 'mini_boss'],
@@ -202,6 +212,7 @@ export const DesertWolf: EnemyDefinition = {
   evasion: 20,
   xpReward: 12,
   goldReward: 0,
+  lootTableId: 'wildlife_common',
   behavior: 'aggressive',
   description: 'A lean, hungry predator of the wastes.',
   tags: ['melee', 'common', 'animal'],
@@ -220,6 +231,7 @@ export const Rattlesnake: EnemyDefinition = {
   evasion: 30,
   xpReward: 8,
   goldReward: 0,
+  lootTableId: 'wildlife_common',
   behavior: 'defensive',
   description: 'A venomous serpent that strikes without warning.',
   tags: ['melee', 'common', 'animal', 'poison'],
@@ -238,9 +250,87 @@ export const MountainLion: EnemyDefinition = {
   evasion: 25,
   xpReward: 25,
   goldReward: 0,
+  lootTableId: 'wildlife_uncommon',
   behavior: 'aggressive',
   description: 'A powerful feline ambush predator.',
   tags: ['melee', 'uncommon', 'animal'],
+};
+
+export const GrizzlyBear: EnemyDefinition = {
+  id: 'grizzly_bear',
+  name: 'Grizzly Bear',
+  type: 'animal',
+  faction: 'wildlife',
+  maxHealth: 80,
+  actionPoints: 3,
+  baseDamage: 18,
+  armor: 3,
+  accuracyMod: -5,
+  evasion: 5,
+  xpReward: 50,
+  goldReward: 0,
+  lootTableId: 'wildlife_bear',
+  behavior: 'aggressive',
+  description: 'A massive, terrifying creature that dominates the frontier wilderness.',
+  tags: ['melee', 'rare', 'animal', 'mini_boss'],
+};
+
+export const Scorpion: EnemyDefinition = {
+  id: 'scorpion',
+  name: 'Scorpion',
+  type: 'animal',
+  faction: 'wildlife',
+  maxHealth: 8,
+  actionPoints: 6,
+  baseDamage: 5,
+  armor: 2,
+  accuracyMod: 5,
+  evasion: 35,
+  xpReward: 6,
+  goldReward: 0,
+  lootTableId: 'wildlife_common',
+  behavior: 'aggressive',
+  description: 'A venomous desert arachnid with a deadly sting.',
+  tags: ['melee', 'common', 'animal', 'poison'],
+};
+
+export const Vulture: EnemyDefinition = {
+  id: 'vulture',
+  name: 'Vulture',
+  type: 'animal',
+  faction: 'wildlife',
+  maxHealth: 12,
+  actionPoints: 5,
+  baseDamage: 6,
+  armor: 0,
+  accuracyMod: 0,
+  evasion: 40,
+  xpReward: 8,
+  goldReward: 0,
+  lootTableId: 'wildlife_common',
+  behavior: 'defensive',
+  description: 'A scavenging bird that grows bold when it smells weakness.',
+  tags: ['melee', 'common', 'animal'],
+};
+
+export const BanditLeader: EnemyDefinition = {
+  id: 'bandit_leader',
+  name: 'Bandit Leader',
+  type: 'gunslinger',
+  faction: 'raiders',
+  maxHealth: 55,
+  actionPoints: 5,
+  baseDamage: 16,
+  armor: 4,
+  accuracyMod: 10,
+  evasion: 12,
+  weaponId: 'revolver',
+  xpReward: 65,
+  goldReward: 30,
+  lootTableId: 'bandit_rare',
+  behavior: 'ranged',
+  description: 'A cunning outlaw boss who commands respect through fear.',
+  tags: ['ranged', 'rare', 'mini_boss'],
 };
 
 // --- THE REMNANT (Automatons) ---
@@ -323,6 +413,11 @@ export const ALL_ENEMIES: EnemyDefinition[] = [
   DesertWolf,
   Rattlesnake,
   MountainLion,
+  GrizzlyBear,
+  Scorpion,
+  Vulture,
+  // Bandits (boss)
+  BanditLeader,
   // Remnant
   RemnantSentry,
   RemnantScout,
@@ -498,6 +593,15 @@ export function getEncountersByTag(tag: string): CombatEncounter[] {
   return ALL_ENCOUNTERS.filter((e) => e.tags.includes(tag));
 }
 
+/**
+ * Register a dynamically generated encounter so it can be looked up by ID.
+ * Used by the procedural encounter system to bridge generated encounters
+ * into the combat system.
+ */
+export function registerEncounter(encounter: CombatEncounter): void {
+  ENCOUNTERS_BY_ID[encounter.id] = encounter;
+}
+
 export function getRandomEncounter(
   playerLevel: number,
   tags?: string[]
@@ -510,5 +614,5 @@ export function getRandomEncounter(
 
   if (candidates.length === 0) return undefined;
 
-  return candidates[Math.floor(Math.random() * candidates.length)];
+  return candidates[Math.floor(scopedRNG('data', 42, rngTick()) * candidates.length)];
 }

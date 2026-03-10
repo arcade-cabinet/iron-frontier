@@ -17,6 +17,7 @@ type BooleanFrameKey =
   | 'interact'
   | 'jump'
   | 'sprint'
+  | 'crouch'
   | 'inventory'
   | 'map'
   | 'menu';
@@ -28,6 +29,7 @@ const BOOLEAN_KEYS: readonly BooleanFrameKey[] = [
   'interact',
   'jump',
   'sprint',
+  'crouch',
   'inventory',
   'map',
   'menu',

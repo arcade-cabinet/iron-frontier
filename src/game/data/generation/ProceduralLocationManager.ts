@@ -185,7 +185,7 @@ class ProceduralLocationManagerClass {
    * Generate content for a procedural location
    */
   generateLocationContent(
-    resolved: ResolvedLocation,
+    resolved: ResolvedLocation & { _regionId?: string },
     options: {
       npcCount?: { background: number; notable: number };
       itemCount?: number;
@@ -210,11 +210,14 @@ class ProceduralLocationManagerClass {
     const rng = new SeededRandom(locationSeed);
     const locationType = this.inferLocationType(resolved.ref);
 
+    // Use region from caller if provided, otherwise 'unknown'
+    const regionId = resolved._regionId ?? 'unknown';
+
     // Create generation context
     const context: GenerationContext = {
       worldSeed: this.worldSeed,
       locationId,
-      regionId: 'unknown', // Region determined at world level, not location level
+      regionId,
       playerLevel: 1, // Default, could be passed in
       gameHour: 12,
       factionTensions: {},

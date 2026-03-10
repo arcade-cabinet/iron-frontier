@@ -1,8 +1,8 @@
 // RouteRenderer — Road/trail/railroad geometry between towns.
-import Alea from 'alea';
-import * as THREE from 'three';
-import { createDirtTexture } from '@/src/game/engine/materials';
-import type { Connection } from '@/src/game/data/schemas/world';
+import Alea from "alea";
+import * as THREE from "three";
+import type { Connection } from "@/src/game/data/schemas/world";
+import { createDirtTexture } from "@/src/game/engine/materials";
 
 export interface RouteSegment {
   connectionId: string;
@@ -17,10 +17,17 @@ export interface RouteEndpoints {
   to: [number, number, number];
 }
 
-const ROAD_WIDTH = 4, TRAIL_WIDTH = 2, RAILROAD_WIDTH = 3, ROAD_Y_OFFSET = 0.15;
-const ROAD_COLOR = '#8B7355', TRAIL_COLOR = '#A09070', RAILROAD_COLOR = '#6B5B4B';
-const RAIL_COLOR = '#4A4A4A', FENCE_POST_SPACING = 12;
-const FENCE_POST_HEIGHT = 1.2, FENCE_POST_RADIUS = 0.06;
+const ROAD_WIDTH = 4,
+  TRAIL_WIDTH = 2,
+  RAILROAD_WIDTH = 3,
+  ROAD_Y_OFFSET = 0.15;
+const ROAD_COLOR = "#8B7355",
+  TRAIL_COLOR = "#A09070",
+  RAILROAD_COLOR = "#6B5B4B";
+const RAIL_COLOR = "#4A4A4A",
+  FENCE_POST_SPACING = 12;
+const FENCE_POST_HEIGHT = 1.2,
+  FENCE_POST_RADIUS = 0.06;
 
 /**
  * Build a renderable route segment between two world positions.
@@ -36,17 +43,17 @@ export function buildRoute(
   const { from, to } = endpoints;
 
   switch (connection.method) {
-    case 'railroad':
+    case "railroad":
       buildRailroad(group, from, to, seed);
       break;
-    case 'road':
+    case "road":
       buildRoad(group, from, to, ROAD_WIDTH, ROAD_COLOR, seed);
       addFencePosts(group, from, to, seed);
       break;
-    case 'trail':
+    case "trail":
       buildRoad(group, from, to, TRAIL_WIDTH, TRAIL_COLOR, seed);
       break;
-    case 'wilderness':
+    case "wilderness":
       // Wilderness routes are barely visible — thin faded trail
       buildRoad(group, from, to, TRAIL_WIDTH * 0.6, TRAIL_COLOR, seed);
       break;
@@ -77,16 +84,14 @@ export function buildAllRoutes(
 
   for (const conn of connections) {
     // Avoid duplicates for bidirectional connections
-    const key = [conn.from, conn.to].sort().join('|');
+    const key = [conn.from, conn.to].sort().join("|");
     if (built.has(key)) continue;
 
     const fromPos = getPosition(conn.from);
     const toPos = getPosition(conn.to);
     if (!fromPos || !toPos) continue;
 
-    segments.push(
-      buildRoute(conn, { from: fromPos, to: toPos }, seed),
-    );
+    segments.push(buildRoute(conn, { from: fromPos, to: toPos }, seed));
     built.add(key);
   }
 
@@ -123,20 +128,12 @@ function buildRoad(
     const t = i / segments;
     // Quadratic bezier: from -> mid -> to
     const oneMinusT = 1 - t;
-    const px =
-      oneMinusT * oneMinusT * from[0] +
-      2 * oneMinusT * t * midX +
-      t * t * to[0];
-    const pz =
-      oneMinusT * oneMinusT * from[2] +
-      2 * oneMinusT * t * midZ +
-      t * t * to[2];
+    const px = oneMinusT * oneMinusT * from[0] + 2 * oneMinusT * t * midX + t * t * to[0];
+    const pz = oneMinusT * oneMinusT * from[2] + 2 * oneMinusT * t * midZ + t * t * to[2];
 
     // Perpendicular direction for width
-    const tangentX =
-      2 * oneMinusT * (midX - from[0]) + 2 * t * (to[0] - midX);
-    const tangentZ =
-      2 * oneMinusT * (midZ - from[2]) + 2 * t * (to[2] - midZ);
+    const tangentX = 2 * oneMinusT * (midX - from[0]) + 2 * t * (to[0] - midX);
+    const tangentZ = 2 * oneMinusT * (midZ - from[2]) + 2 * t * (to[2] - midZ);
     const tangentLen = Math.sqrt(tangentX * tangentX + tangentZ * tangentZ);
     const nx = -tangentZ / tangentLen;
     const nz = tangentX / tangentLen;
@@ -160,14 +157,8 @@ function buildRoad(
   }
 
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute(
-    'position',
-    new THREE.Float32BufferAttribute(positions, 3),
-  );
-  geometry.setAttribute(
-    'uv',
-    new THREE.Float32BufferAttribute(uvs, 2),
-  );
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
 
@@ -177,7 +168,7 @@ function buildRoad(
   material.depthWrite = false;
 
   const mesh = new THREE.Mesh(geometry, material);
-  mesh.name = 'road_surface';
+  mesh.name = "road_surface";
   mesh.receiveShadow = true;
   mesh.renderOrder = 1;
 
@@ -227,7 +218,7 @@ function buildRailroad(
   const sleeperCount = Math.floor(length / sleeperSpacing);
   const sleeperGeo = new THREE.BoxGeometry(RAILROAD_WIDTH * 0.8, 0.08, 0.2);
   const sleeperMat = new THREE.MeshStandardMaterial({
-    color: '#5C4033',
+    color: "#5C4033",
     roughness: 0.9,
   });
 
@@ -250,7 +241,7 @@ function addFencePosts(
   to: [number, number, number],
   seed: string,
 ): void {
-  const rng = Alea(seed + 'fence' + from[0]) as unknown as () => number;
+  const rng = Alea(seed + "fence" + from[0]) as unknown as () => number;
 
   const dx = to[0] - from[0];
   const dz = to[2] - from[2];
@@ -269,7 +260,7 @@ function addFencePosts(
     6,
   );
   const postMat = new THREE.MeshStandardMaterial({
-    color: '#7B6B5B',
+    color: "#7B6B5B",
     roughness: 0.95,
   });
 

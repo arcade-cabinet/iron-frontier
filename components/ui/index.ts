@@ -1,38 +1,31 @@
-export { Text, TextClassContext, textVariants } from './Text';
-export type { TextProps } from './Text';
-
-export { Button, buttonTextVariants, buttonVariants } from './Button';
-export type { ButtonProps } from './Button';
+export type { BadgeProps } from "./Badge.tsx";
+export { Badge, badgeTextVariants, badgeVariants } from "./Badge.tsx";
+export type { ButtonProps } from "./Button.tsx";
+export { Button, buttonTextVariants, buttonVariants } from "./Button.tsx";
 
 export {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from './Card';
-
-export { Progress, progressTrackVariants } from './Progress';
-export type { ProgressProps } from './Progress';
-
-export { Badge, badgeVariants, badgeTextVariants } from './Badge';
-export type { BadgeProps } from './Badge';
-
+} from "./Card.tsx";
 export {
   Dialog,
-  DialogOverlay,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from './Dialog';
-
-export { Separator } from './Separator';
-export type { SeparatorProps } from './Separator';
-
-export { ScrollArea } from './ScrollArea';
-export type { ScrollAreaProps } from './ScrollArea';
-
-export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+} from "./Dialog.tsx";
+export type { ProgressProps } from "./Progress.tsx";
+export { Progress, progressTrackVariants } from "./Progress.tsx";
+export type { ScrollAreaProps } from "./ScrollArea.tsx";
+export { ScrollArea } from "./ScrollArea.tsx";
+export type { SeparatorProps } from "./Separator.tsx";
+export { Separator } from "./Separator.tsx";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs.tsx";
+export type { TextProps } from "./Text.tsx";
+export { Text, TextClassContext, textVariants } from "./Text.tsx";

@@ -231,46 +231,48 @@ describe('CampingSystem', () => {
 
     it('should consume provisions while resting', () => {
       const initialFood = provisions.getFood();
-      camping.rest(2, fatigue, provisions, clock, 'plains');
+      camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
 
       expect(provisions.getFood()).toBeLessThan(initialFood);
     });
 
     it('should advance time', () => {
       const initialMinutes = clock.getTotalMinutes();
-      camping.rest(2, fatigue, provisions, clock, 'plains');
+      camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
 
       expect(clock.getTotalMinutes()).toBeGreaterThan(initialMinutes);
     });
 
     it('should recover more fatigue with fire', () => {
       camping.setupCamp(true, 10, 0);
-      const result = camping.rest(2, fatigue, provisions, clock, 'plains');
+      const rng = () => 0.99; // High roll avoids random encounters
+      const result = camping.rest(2, fatigue, provisions, clock, 'plains', rng);
 
       expect(result.fatigueRecovered).toBeGreaterThan(24); // More than no-fire rate
     });
 
     it('should consume fuel during rest', () => {
       camping.setupCamp(true, 5, 0);
-      camping.rest(2, fatigue, provisions, clock, 'plains');
+      const rng = () => 0.99;
+      camping.rest(2, fatigue, provisions, clock, 'plains', rng);
 
       expect(camping.getFuelRemaining()).toBeLessThan(5);
     });
 
     it('should extinguish fire when out of fuel', () => {
       camping.setupCamp(true, 1, 0);
-      camping.rest(2, fatigue, provisions, clock, 'plains');
+      camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
 
       expect(camping.getFireState()).toBe('smoldering');
     });
 
     it('should return end phase', () => {
-      const result = camping.rest(2, fatigue, provisions, clock, 'plains');
+      const result = camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
       expect(result.endPhase).toBeDefined();
     });
 
     it('should generate summary', () => {
-      const result = camping.rest(2, fatigue, provisions, clock, 'plains');
+      const result = camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
       expect(result.summary).toContain('rested');
     });
   });
@@ -404,8 +406,8 @@ describe('CampingSystem', () => {
     });
 
     it('should accumulate hours camped', () => {
-      camping.rest(2, fatigue, provisions, clock, 'plains');
-      camping.rest(2, fatigue, provisions, clock, 'plains');
+      camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
+      camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
 
       expect(camping.getHoursCamped()).toBe(4);
     });
@@ -462,13 +464,13 @@ describe('CampingSystem', () => {
   describe('edge cases', () => {
     it('should handle zero duration rest', () => {
       camping.setupCamp(false, 0, 0);
-      const result = camping.rest(2, fatigue, provisions, clock, 'plains');
+      const result = camping.rest(2, fatigue, provisions, clock, 'plains', () => 0.99);
       expect(result.hoursRested).toBeGreaterThanOrEqual(0);
     });
 
     it('should handle negative fuel', () => {
       camping.setupCamp(true, 1, 0);
-      camping.rest(4, fatigue, provisions, clock, 'plains');
+      camping.rest(4, fatigue, provisions, clock, 'plains', () => 0.99);
       expect(camping.getFuelRemaining()).toBe(0);
     });
 

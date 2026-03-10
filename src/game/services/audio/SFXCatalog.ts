@@ -10,6 +10,7 @@
  */
 
 import * as Tone from 'tone';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // TYPES
@@ -44,7 +45,7 @@ export interface SFXEntry {
  * Returns a random detune value within the given cent range.
  */
 export function randomDetune(range: [number, number]): number {
-  return range[0] + Math.random() * (range[1] - range[0]);
+  return range[0] + scopedRNG('audio', 42, rngTick()) * (range[1] - range[0]);
 }
 
 // ============================================================================

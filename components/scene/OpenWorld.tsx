@@ -3,39 +3,53 @@
 // Uses the src/game/engine/world/ system for 256x256 chunks, terrain
 // flattening under buildings, and internal road connections within towns.
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
+import { VegetationField } from "@/components/scene/VegetationField";
 
+import { WorldManager } from "@/engine/spatial/WorldManager";
+import type { World } from "@/src/game/data/schemas/world";
+import { ARCHETYPE_REGISTRY } from "@/src/game/engine/archetypes/index";
+import { getDoorSystem } from "@/src/game/engine/interiors/DoorSystem";
 import {
-  ChunkManager,
-  type ChunkState,
-  type FlattenZone,
+  addInteriorLighting,
+  getDoorWorldPosition,
+  hasInterior,
+} from "@/src/game/engine/interiors/InteriorGenerator";
+import {
+  createGlassTexture,
+  createMetalTexture,
+  createPBRClayAdobe,
+  createPBRMetalCorrugated,
+  createPBRMetalRusted,
+  createPBRRustHeavy,
+  createPBRStoneRough,
+  createPBRWoodAged,
+  createPBRWoodPlanks,
+  createPBRWoodSiding,
+  createRustTexture,
+  createStoneTexture,
+  createWoodTexture,
+} from "@/src/game/engine/materials";
+import {
   buildAllRoutes,
   buildInternalRoadMesh,
-  collectRouteFlattenZones,
-  placeTown,
-  type TownPlacement,
   CHUNK_SIZE,
-  WORLD_CELL_SIZE,
-  DEFAULT_VIEW_DISTANCE as CONFIG_VIEW_DISTANCE,
+  ChunkManager,
+  type ChunkState,
   DEFAULT_LOAD_RADIUS as CONFIG_LOAD_RADIUS,
   DEFAULT_RENDER_RADIUS as CONFIG_RENDER_RADIUS,
   DEFAULT_SEED as CONFIG_SEED,
-} from '@/src/game/engine/world/index';
-
-import { WorldManager } from '@/engine/spatial/WorldManager';
-import { ARCHETYPE_REGISTRY } from '@/src/game/engine/archetypes/index';
-import {
-  addInteriorLighting,
-  hasInterior,
-  getDoorWorldPosition,
-} from '@/src/game/engine/interiors/InteriorGenerator';
-import { getDoorSystem } from '@/src/game/engine/interiors/DoorSystem';
-import { VegetationField } from '@/components/scene/VegetationField';
-import type { World } from '@/src/game/data/schemas/world';
-import { getEncounterSystem } from '@/src/game/systems/EncounterSystem';
-import { getTownBoundarySystem } from '@/src/game/systems/TownBoundarySystem';
+  DEFAULT_VIEW_DISTANCE as CONFIG_VIEW_DISTANCE,
+  collectRouteFlattenZones,
+  type FlattenZone,
+  placeTown,
+  type TownPlacement,
+  WORLD_CELL_SIZE,
+} from "@/src/game/engine/world/index";
+import { getEncounterSystem } from "@/src/game/systems/EncounterSystem";
+import { getTownBoundarySystem } from "@/src/game/systems/TownBoundarySystem";
 
 /** Distance at which building interiors become visible (meters). */
 const INTERIOR_RENDER_DISTANCE = 30;
@@ -111,7 +125,7 @@ export function OpenWorld({
   // Chunk manager — creates and manages 256x256 terrain chunks
   const chunkManager = useMemo(() => {
     const cm = new ChunkManager(
-      { loadRadius, renderRadius, seed, defaultBiome: 'desert' },
+      { loadRadius, renderRadius, seed, defaultBiome: "desert" },
       (cx, cz) => {
         return worldManager.getBiomeAt(
           cx * CHUNK_SIZE + CHUNK_SIZE / 2,
@@ -149,9 +163,7 @@ export function OpenWorld({
   const lastChunkCenter = useRef({ cx: -9999, cz: -9999 });
 
   // Visible towns (updated per frame)
-  const [visibleTownIds, setVisibleTownIds] = useState<Set<string>>(
-    () => new Set(),
-  );
+  const [visibleTownIds, setVisibleTownIds] = useState<Set<string>>(() => new Set());
 
   // Town boundary system integration
   const townBoundary = useMemo(() => getTownBoundarySystem(), []);
@@ -159,9 +171,7 @@ export function OpenWorld({
   const doorSystem = useMemo(() => getDoorSystem(), []);
 
   // Track town visibility factors for smooth fading
-  const [townOpacities, setTownOpacities] = useState<Map<string, number>>(
-    () => new Map(),
-  );
+  const [townOpacities, setTownOpacities] = useState<Map<string, number>>(() => new Map());
 
   // Per-frame update
   useFrame((_state, dt) => {
@@ -175,10 +185,7 @@ export function OpenWorld({
     const cx = Math.floor(px / CHUNK_SIZE);
     const cz = Math.floor(pz / CHUNK_SIZE);
 
-    if (
-      cx !== lastChunkCenter.current.cx ||
-      cz !== lastChunkCenter.current.cz
-    ) {
+    if (cx !== lastChunkCenter.current.cx || cz !== lastChunkCenter.current.cz) {
       lastChunkCenter.current = { cx, cz };
       const updated = chunkManager.update(px, pz);
       setChunks(updated);
@@ -241,10 +248,7 @@ export function OpenWorld({
       {/* Inter-town route segments (roads, trails, railroads) */}
       <group name="routes">
         {routes.map((route) => (
-          <primitive
-            key={route.connectionId}
-            object={route.group}
-          />
+          <primitive key={route.connectionId} object={route.group} />
         ))}
       </group>
 
@@ -300,7 +304,7 @@ export function OpenWorld({
               ]}
               radius={CHUNK_SIZE / 2}
               seed={`${seed}:veg:${chunk.key}`}
-              density={chunk.biome === 'grassland' ? 0.03 : 0.015}
+              density={chunk.biome === "grassland" ? 0.03 : 0.015}
               viewDistance={80}
             />
           ))}
@@ -352,7 +356,10 @@ function TownBuilding({
       return group;
     }
 
-    // Fallback: procedural colored box based on structure type
+    // No archetype registered — use procedural PBR building
+    console.warn(
+      `[OpenWorld] No archetype "${archetypeKey}" for structure "${structureType}" — using procedural building`,
+    );
     return buildFallbackBuilding(structureType, importance);
   }, [archetypeKey, structureType, name, importance]);
 
@@ -360,12 +367,7 @@ function TownBuilding({
   useEffect(() => {
     if (!hasInterior(archetypeKey)) return;
 
-    const doorPos = getDoorWorldPosition(
-      archetypeKey,
-      position[0],
-      position[2],
-      rotation,
-    );
+    const doorPos = getDoorWorldPosition(archetypeKey, position[0], position[2], rotation);
     if (!doorPos) return;
 
     const doorSystem = getDoorSystem();
@@ -373,7 +375,7 @@ function TownBuilding({
     // Find the door mesh inside the building group for animation
     let doorMesh: THREE.Object3D | undefined;
     buildingGroup.traverse((child) => {
-      if (child.name === 'door' || child.name === 'door-panel') {
+      if (child.name === "door" || child.name === "door-panel") {
         doorMesh = child;
       }
     });
@@ -409,47 +411,167 @@ function TownBuilding({
 // ---------------------------------------------------------------------------
 
 const STRUCTURE_TO_ARCHETYPE: Record<string, string> = {
-  saloon_building: 'saloon', store_building: 'general_store',
-  office_building: 'office', bank_building: 'bank', hotel_building: 'hotel',
-  church_building: 'church', station_building: 'station',
-  telegraph_building: 'telegraph', workshop_building: 'workshop',
-  mine_building: 'mine', warehouse: 'warehouse', stable: 'stable',
-  mansion: 'mansion', house: 'house', cabin: 'cabin', well: 'well',
-  water_tower: 'water_tower', watch_tower: 'watch_tower', fort: 'fort',
+  saloon_building: "saloon",
+  store_building: "general_store",
+  office_building: "doctor_office",
+  bank_building: "bank",
+  hotel_building: "inn",
+  church_building: "church",
+  telegraph_building: "telegraph_office",
+  workshop_building: "blacksmith",
+  mine_building: "mining_office",
+  stable: "livery",
+  // These have no matching archetype — fall through to procedural building
+  station_building: "station",
+  warehouse: "warehouse",
+  mansion: "mansion",
+  house: "house",
+  cabin: "cabin",
+  well: "well",
+  water_tower: "water_tower",
+  watch_tower: "watch_tower",
+  fort: "fort",
 };
 
-const FALLBACK_COLORS: Record<string, string> = {
-  saloon_building: '#8B6914', store_building: '#A0522D',
-  office_building: '#6B5B4B', bank_building: '#696969',
-  hotel_building: '#CD853F', church_building: '#DEB887',
-  station_building: '#8B7355', stable: '#8B4513', mansion: '#D2B48C',
-  house: '#B8860B', cabin: '#654321', well: '#808080',
-  water_tower: '#4682B4', warehouse: '#5F5F5F',
+// Material configs for fallback buildings: [wallFactory, roofFactory]
+// Each factory returns a cached MeshStandardMaterial with a procedural texture.
+type MaterialConfig = {
+  wall: () => THREE.MeshStandardMaterial;
+  roof: () => THREE.MeshStandardMaterial;
+  trim?: () => THREE.MeshStandardMaterial;
+};
+
+const FALLBACK_MATERIALS: Record<string, MaterialConfig> = {
+  saloon_building: {
+    wall: () => createPBRWoodSiding(),
+    roof: () => createPBRMetalCorrugated(),
+  },
+  store_building: {
+    wall: () => createPBRWoodPlanks(),
+    roof: () => createPBRMetalCorrugated(),
+  },
+  office_building: {
+    wall: () => createPBRStoneRough(),
+    roof: () => createPBRWoodAged(),
+  },
+  bank_building: {
+    wall: () => createPBRStoneRough(),
+    roof: () => createPBRMetalRusted(),
+    trim: () => createPBRMetalRusted(),
+  },
+  hotel_building: {
+    wall: () => createPBRWoodSiding(),
+    roof: () => createPBRWoodAged(),
+  },
+  church_building: {
+    wall: () => createPBRClayAdobe(),
+    roof: () => createPBRWoodAged(),
+  },
+  station_building: {
+    wall: () => createPBRStoneRough(),
+    roof: () => createPBRMetalCorrugated(),
+  },
+  stable: {
+    wall: () => createPBRWoodPlanks(),
+    roof: () => createPBRWoodAged(),
+  },
+  mansion: {
+    wall: () => createPBRClayAdobe(),
+    roof: () => createPBRWoodAged(),
+    trim: () => createPBRWoodSiding(),
+  },
+  house: {
+    wall: () => createPBRWoodSiding(),
+    roof: () => createPBRWoodPlanks(),
+  },
+  cabin: {
+    wall: () => createPBRWoodPlanks(),
+    roof: () => createPBRWoodAged(),
+  },
+  well: {
+    wall: () => createPBRStoneRough(),
+    roof: () => createPBRWoodAged(),
+  },
+  water_tower: {
+    wall: () => createPBRMetalCorrugated(),
+    roof: () => createPBRMetalRusted(),
+    trim: () => createPBRWoodAged(),
+  },
+  warehouse: {
+    wall: () => createPBRMetalCorrugated(),
+    roof: () => createPBRRustHeavy(),
+  },
 };
 
 function buildFallbackBuilding(structureType: string, importance: number): THREE.Group {
   const group = new THREE.Group();
   group.name = `fallback-${structureType}`;
-  const w = 2 + importance * 0.5, h = 2 + importance * 0.4;
-  const color = FALLBACK_COLORS[structureType] ?? '#7B6B5B';
+  const w = 2 + importance * 0.5,
+    h = 2 + importance * 0.4;
 
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, w),
-    new THREE.MeshStandardMaterial({ color, roughness: 0.85 }),
-  );
+  const matConfig = FALLBACK_MATERIALS[structureType] ?? {
+    wall: () => createWoodTexture("#7B6B5B", "#5A4A3A"),
+    roof: () => createWoodTexture("#3A2518", "#2A1A10"),
+  };
+
+  // Main body — textured walls
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, w), matConfig.wall());
   body.position.y = h / 2;
   body.castShadow = true;
   body.receiveShadow = true;
   group.add(body);
 
-  const roof = new THREE.Mesh(
-    new THREE.ConeGeometry(w * 0.75, h * 0.4, 4),
-    new THREE.MeshStandardMaterial({ color: '#4A3728', roughness: 0.9 }),
-  );
+  // Roof — textured
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(w * 0.75, h * 0.4, 4), matConfig.roof());
   roof.position.y = h + h * 0.2;
   roof.rotation.y = Math.PI / 4;
   roof.castShadow = true;
   group.add(roof);
+
+  // Door — dark wood plank
+  const doorMat = createWoodTexture("#3A2010", "#251508");
+  const door = new THREE.Mesh(new THREE.BoxGeometry(w * 0.18, h * 0.45, 0.05), doorMat);
+  door.position.set(0, h * 0.22, w / 2 + 0.025);
+  door.name = "door-panel";
+  group.add(door);
+
+  // Windows — glass panes on two sides
+  const glassMat = createGlassTexture("#C8DDE8");
+  const windowGeo = new THREE.BoxGeometry(w * 0.15, h * 0.18, 0.03);
+  const windowOffsetY = h * 0.55;
+
+  // Front windows flanking the door
+  const winL = new THREE.Mesh(windowGeo, glassMat);
+  winL.position.set(-w * 0.28, windowOffsetY, w / 2 + 0.02);
+  group.add(winL);
+  const winR = new THREE.Mesh(windowGeo, glassMat);
+  winR.position.set(w * 0.28, windowOffsetY, w / 2 + 0.02);
+  group.add(winR);
+
+  // Side windows
+  const winSide = new THREE.Mesh(windowGeo, glassMat);
+  winSide.position.set(w / 2 + 0.02, windowOffsetY, 0);
+  winSide.rotation.y = Math.PI / 2;
+  group.add(winSide);
+
+  // Trim / accent details if configured
+  if (matConfig.trim) {
+    const trimMat = matConfig.trim();
+    // Corner trim posts
+    const trimGeo = new THREE.BoxGeometry(0.08, h, 0.08);
+    const corners: [number, number][] = [
+      [w / 2, w / 2],
+      [-w / 2, w / 2],
+      [w / 2, -w / 2],
+      [-w / 2, -w / 2],
+    ];
+    for (const [cx, cz] of corners) {
+      const post = new THREE.Mesh(trimGeo, trimMat);
+      post.position.set(cx, h / 2, cz);
+      post.castShadow = true;
+      group.add(post);
+    }
+  }
 
   return group;
 }

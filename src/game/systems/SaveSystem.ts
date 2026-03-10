@@ -6,7 +6,11 @@
  * - Auto-save functionality
  * - Quick save/quick load
  * - Save file versioning and migration
+ * - SQLite persistence via expo-sqlite (native + web OPFS)
+ * - localStorage fallback for web
  */
+
+import { Platform } from 'react-native';
 
 /**
  * Data structure for persisted game saves.
@@ -96,8 +100,8 @@ export class LocalStorageSaveAdapter implements SaveStorageAdapter {
           try {
             const file = JSON.parse(raw) as SaveFile;
             slots.push(file.meta);
-          } catch {
-            // Skip invalid saves
+          } catch (error) {
+            console.error(`[SaveSystem] Skipping invalid save at key "${key}":`, error);
           }
         }
       }
@@ -123,6 +127,116 @@ export class LocalStorageSaveAdapter implements SaveStorageAdapter {
   }
 }
 
+/**
+ * SQLite storage adapter using expo-sqlite
+ *
+ * Uses a dedicated `saves` table with structured columns for efficient
+ * querying of save metadata without deserializing all save data.
+ * Works on iOS/Android natively and on web via OPFS backend.
+ */
+export class SQLiteSaveAdapter implements SaveStorageAdapter {
+  private db: import('expo-sqlite').SQLiteDatabase | null = null;
+  private dbReady: Promise<void>;
+
+  constructor() {
+    this.dbReady = this.initDb();
+  }
+
+  private async initDb(): Promise<void> {
+    try {
+      const { openDatabaseSync } = await import('expo-sqlite');
+      this.db = openDatabaseSync('iron-frontier-saves.db');
+      this.db.execSync(`
+        CREATE TABLE IF NOT EXISTS saves (
+          slot TEXT PRIMARY KEY,
+          data TEXT NOT NULL,
+          metadata TEXT NOT NULL,
+          updated_at INTEGER NOT NULL
+        )
+      `);
+    } catch (error) {
+      console.error('[SQLiteSaveAdapter] Failed to init database:', error);
+    }
+  }
+
+  async saveToSlot(slotId: string, data: SaveFile): Promise<void> {
+    await this.dbReady;
+    if (!this.db) throw new Error('[SQLiteSaveAdapter] Database not initialized');
+
+    const dataJson = JSON.stringify(data.data);
+    const metaJson = JSON.stringify(data.meta);
+    const updatedAt = Date.now();
+
+    this.db.runSync(
+      'INSERT OR REPLACE INTO saves (slot, data, metadata, updated_at) VALUES (?, ?, ?, ?)',
+      [slotId, dataJson, metaJson, updatedAt]
+    );
+  }
+
+  async loadFromSlot(slotId: string): Promise<SaveFile | null> {
+    await this.dbReady;
+    if (!this.db) return null;
+
+    const row = this.db.getFirstSync<{ data: string; metadata: string }>(
+      'SELECT data, metadata FROM saves WHERE slot = ?',
+      [slotId]
+    );
+
+    if (!row) return null;
+
+    try {
+      return {
+        data: JSON.parse(row.data) as GameSaveData,
+        meta: JSON.parse(row.metadata) as SaveSlotMeta,
+      };
+    } catch {
+      console.error(`[SQLiteSaveAdapter] Failed to parse save file: ${slotId}`);
+      return null;
+    }
+  }
+
+  async deleteSlot(slotId: string): Promise<void> {
+    await this.dbReady;
+    if (!this.db) return;
+
+    this.db.runSync('DELETE FROM saves WHERE slot = ?', [slotId]);
+  }
+
+  async listSlots(): Promise<SaveSlotMeta[]> {
+    await this.dbReady;
+    if (!this.db) return [];
+
+    const rows = this.db.getAllSync<{ metadata: string }>(
+      'SELECT metadata FROM saves ORDER BY updated_at DESC'
+    );
+
+    const slots: SaveSlotMeta[] = [];
+    for (const row of rows) {
+      try {
+        slots.push(JSON.parse(row.metadata) as SaveSlotMeta);
+      } catch (error) {
+        console.error(`[SQLiteSaveAdapter] Skipping invalid save metadata:`, error);
+      }
+    }
+
+    return slots;
+  }
+
+  async exportSave(slotId: string): Promise<string> {
+    const file = await this.loadFromSlot(slotId);
+    if (!file) throw new Error('Save not found');
+    return btoa(JSON.stringify(file));
+  }
+
+  async importSave(data: string): Promise<SaveSlotMeta> {
+    const file = JSON.parse(atob(data)) as SaveFile;
+    const newSlotId = `import-${Date.now()}`;
+    file.meta.slotId = newSlotId;
+    await this.saveToSlot(newSlotId, file);
+    return file.meta;
+  }
+}
+
 type SaveCallback = (slot: SaveSlotMeta) => void;
 type LoadCallback = (data: GameSaveData) => void;
 
@@ -140,7 +254,7 @@ export class SaveSystem {
   // Quick save slot
   private readonly QUICK_SAVE_SLOT = 'quicksave';
   private readonly AUTO_SAVE_SLOT = 'autosave';
-  private readonly MAX_MANUAL_SLOTS = 10;
+  private readonly MAX_MANUAL_SLOTS = 3;
 
   // Current save version
   private readonly SAVE_VERSION = 1;
@@ -294,6 +408,15 @@ export class SaveSystem {
   }
 
   /**
+   * Get the most recent save slot (any type: manual, auto, quick).
+   * Returns null if no saves exist.
+   */
+  public async getMostRecentSlot(): Promise<SaveSlotMeta | null> {
+    const slots = await this.adapter.listSlots();
+    return slots.length > 0 ? slots[0] : null; // Already sorted newest-first
+  }
+
+  /**
    * Delete a save slot
    */
   public async deleteSlot(slotId: string): Promise<void> {
@@ -390,12 +513,30 @@ export class SaveSystem {
   }
 }
 
+/**
+ * Create the platform-appropriate save adapter.
+ *
+ * - Native (iOS/Android): SQLiteSaveAdapter via expo-sqlite
+ * - Web: localStorage (SQLite OPFS requires SharedArrayBuffer + COOP/COEP headers
+ *         which are not available in most dev/hosting setups)
+ */
+function createPlatformSaveAdapter(): SaveStorageAdapter {
+  // On web, use localStorage — SQLite's OPFS backend needs SharedArrayBuffer
+  // which requires Cross-Origin-Isolation headers the dev server doesn't provide.
+  if (Platform.OS === 'web') {
+    return new LocalStorageSaveAdapter();
+  }
+
+  // On native platforms, use SQLite
+  return new SQLiteSaveAdapter();
+}
+
 // Singleton instance
 let saveSystemInstance: SaveSystem | null = null;
 
 export function getSaveSystem(): SaveSystem {
   if (!saveSystemInstance) {
-    saveSystemInstance = new SaveSystem();
+    saveSystemInstance = new SaveSystem(createPlatformSaveAdapter());
   }
   return saveSystemInstance;
 }

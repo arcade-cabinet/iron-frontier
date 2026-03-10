@@ -1,174 +1,232 @@
 /**
- * CharacterPanel - Full-screen player stats, equipment, and faction reputation view.
+ * CharacterPanel - Fallout/Western themed RPG stats overlay.
  *
- * Ported from legacy/angular-ui/character-panel.component.ts
+ * Displays player attributes (S.P.E.C.I.A.L-style with Western naming),
+ * skills with visual bars, level/XP progress, skill points status,
+ * earned perks, and equipment bonuses.
+ *
+ * Matches the warm dark-tinted Pip-Boy aesthetic with amber accents.
  */
 
-import * as React from 'react';
-import { Modal, Pressable, View } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import * as React from "react";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
-import { cn } from '@/lib/utils';
-import {
-  Text,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Progress,
-  Badge,
-  ScrollArea,
-  Separator,
-} from '@/components/ui';
-import { gameStore } from '@/src/game/store/webGameStore';
-import type { EquipmentSlot, InventoryItem } from '@/src/game/store/types';
-import { getRarityColor } from '@/src/game/data/schemas/item';
-import { getItem } from '@/src/game/data/items';
+import { Text } from "@/components/ui";
+import { gameStore } from "@/src/game/store";
+import type { PlayerAttributes, PlayerSkills } from "@/src/game/store/types";
 
 // ---------------------------------------------------------------------------
-// Constants
+// Prop types
 // ---------------------------------------------------------------------------
 
-const EQUIPMENT_SLOTS: { slot: EquipmentSlot; label: string; icon: string }[] = [
-  { slot: 'weapon', label: 'Main Weapon', icon: '\u{1F52B}' },
-  { slot: 'offhand', label: 'Sidearm', icon: '\u{1F5E1}' },
-  { slot: 'head', label: 'Hat', icon: '\u{1F3A9}' },
-  { slot: 'body', label: 'Vest', icon: '\u{1F9E5}' },
-  { slot: 'accessory', label: 'Accessory', icon: '\u{1F48D}' },
+export interface CharacterPanelProps {
+  /** Whether the panel is visible */
+  visible: boolean;
+  /** Called when the panel should close */
+  onClose: () => void;
+}
+
+// ---------------------------------------------------------------------------
+// Theme constants (matching ShopPanel / global HUD)
+// ---------------------------------------------------------------------------
+
+const AMBER = "#D4A855";
+const AMBER_DIM = "#8B7034";
+const AMBER_FAINT = "#D4A85530";
+const AMBER_DARK = "#3D3118";
+const BG_DARK = "#1A150E";
+const BG_SECTION = "#221C12";
+const BORDER_AMBER = "#4A3D20";
+const GREEN_GOOD = "#4ADE80";
+const GOLD = "#FFD700";
+
+// ---------------------------------------------------------------------------
+// Attribute & skill metadata
+// ---------------------------------------------------------------------------
+
+/**
+ * S.P.E.C.I.A.L.-style attribute system with Western RPG naming:
+ * G.P.E.C.I.A.L. = Grit, Perception, Endurance, Charisma, Intelligence, Agility, Luck
+ */
+const ATTRIBUTE_ENTRIES: {
+  key: keyof PlayerAttributes;
+  label: string;
+  abbrev: string;
+  description: string;
+}[] = [
+  { key: "grit", label: "Grit", abbrev: "G", description: "Raw toughness and willpower" },
+  { key: "perception", label: "Perception", abbrev: "P", description: "Awareness and aim" },
+  { key: "endurance", label: "Endurance", abbrev: "E", description: "Stamina and resilience" },
+  { key: "charisma", label: "Charisma", abbrev: "C", description: "Speech and persuasion" },
+  {
+    key: "intelligence",
+    label: "Intelligence",
+    abbrev: "I",
+    description: "Problem solving and crafting",
+  },
+  { key: "agility", label: "Agility", abbrev: "A", description: "Speed and reflexes" },
+  { key: "luck", label: "Luck", abbrev: "L", description: "Fortune and critical chance" },
 ];
 
-/** Simplified faction list for the character panel. */
-const DISPLAY_FACTIONS = [
-  { id: 'law_enforcement', label: 'Lawmen' },
-  { id: 'desperados', label: 'Outlaws' },
-  { id: 'mining_consortium', label: 'Miners' },
-  { id: 'cattle_barons', label: 'Ranchers' },
-  { id: 'railroad_company', label: 'Railroad' },
-] as const;
+const SKILL_ENTRIES: { key: keyof PlayerSkills; label: string }[] = [
+  { key: "guns", label: "Guns" },
+  { key: "melee", label: "Melee" },
+  { key: "lockpick", label: "Lockpick" },
+  { key: "speech", label: "Speech" },
+  { key: "repair", label: "Repair" },
+  { key: "medicine", label: "Medicine" },
+  { key: "survival", label: "Survival" },
+  { key: "barter", label: "Barter" },
+];
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Perk definitions (basic set)
 // ---------------------------------------------------------------------------
 
-function getReputationColor(rep: number): {
-  label: string;
-  textClass: string;
-  barClass: string;
-} {
-  if (rep >= 60) return { label: 'Allied', textClass: 'text-yellow-400', barClass: 'bg-yellow-500' };
-  if (rep >= 20) return { label: 'Friendly', textClass: 'text-green-400', barClass: 'bg-green-500' };
-  if (rep >= -9) return { label: 'Neutral', textClass: 'text-gray-400', barClass: 'bg-gray-500' };
-  if (rep >= -30) return { label: 'Unfriendly', textClass: 'text-orange-400', barClass: 'bg-orange-500' };
-  return { label: 'Hostile', textClass: 'text-red-400', barClass: 'bg-red-500' };
+interface Perk {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  minLevel: number;
 }
+
+const PERKS: Perk[] = [
+  { id: "steady_hand", name: "Steady Hand", icon: "+", description: "+10% accuracy", minLevel: 2 },
+  {
+    id: "quick_draw",
+    name: "Quick Draw",
+    icon: ">",
+    description: "Faster weapon swap",
+    minLevel: 4,
+  },
+  {
+    id: "tough_hide",
+    name: "Tough Hide",
+    icon: "#",
+    description: "+5 damage resistance",
+    minLevel: 6,
+  },
+  {
+    id: "silver_tongue",
+    name: "Silver Tongue",
+    icon: "*",
+    description: "+15 speech skill",
+    minLevel: 8,
+  },
+  { id: "deadeye", name: "Deadeye", icon: "@", description: "+20% crit chance", minLevel: 10 },
+];
 
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function StatBar({
+/** S.P.E.C.I.A.L-style attribute row with large letter, name, value, and bar. */
+function AttributeRow({
+  abbrev,
   label,
-  current,
+  description,
+  value,
   max,
-  variant,
 }: {
+  abbrev: string;
   label: string;
-  current: number;
+  description: string;
+  value: number;
   max: number;
-  variant?: 'health' | 'xp' | 'default';
 }) {
-  const pct = max > 0 ? (current / max) * 100 : 0;
+  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
+  // Color-code based on stat level
+  const barColor =
+    value <= 3 ? "#EF4444" : value <= 5 ? AMBER : value <= 7 ? AMBER_DIM : GREEN_GOOD;
+
   return (
-    <View className="gap-1">
-      <View className="flex-row items-center justify-between">
-        <Text variant="small" className="text-muted-foreground">
-          {label}
-        </Text>
-        <Text variant="small" className="text-foreground">
-          {Math.round(current)}/{max}
-        </Text>
+    <View style={styles.attrRow}>
+      <View style={styles.attrLetterBox}>
+        <Text style={styles.attrLetter}>{abbrev}</Text>
       </View>
-      <Progress value={pct} variant={variant ?? 'default'} />
+      <View style={styles.attrContent}>
+        <View style={styles.attrHeader}>
+          <Text style={styles.attrLabel}>{label}</Text>
+          <Text style={styles.attrValue}>{value}</Text>
+        </View>
+        <View style={styles.barTrack}>
+          <View style={[styles.barFill, { width: `${pct}%`, backgroundColor: barColor }]} />
+          {/* Pip markers at each unit */}
+          {Array.from({ length: max }).map((_, i) => (
+            <View key={i} style={[styles.barPip, { left: `${((i + 1) / max) * 100}%` }]} />
+          ))}
+        </View>
+        <Text style={styles.attrDesc}>{description}</Text>
+      </View>
     </View>
   );
 }
 
-function EquipmentSlotRow({
-  slot,
-  label,
-  icon,
-  item,
-  onUnequip,
-}: {
-  slot: EquipmentSlot;
-  label: string;
-  icon: string;
-  item: InventoryItem | null;
-  onUnequip: (slot: EquipmentSlot) => void;
-}) {
-  const itemDef = item ? getItem(item.itemId) : null;
-  const rarityColor = itemDef ? getRarityColor(itemDef.rarity ?? 'common') : undefined;
+/** Skill row with name, value, and progress bar. */
+function SkillRow({ label, value, max }: { label: string; value: number; max: number }) {
+  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
 
   return (
-    <Pressable
-      className={cn(
-        'flex-row items-center gap-3 rounded-md border border-border/50 bg-muted/30 px-3 py-2.5',
-        item && 'active:bg-muted/60',
-      )}
-      onPress={() => item && onUnequip(slot)}
-    >
-      <Text className="text-lg">{icon}</Text>
-      <View className="flex-1">
-        <Text variant="caption" className="text-muted-foreground">
-          {label}
-        </Text>
-        {item ? (
-          <Text
-            variant="small"
-            style={rarityColor ? { color: rarityColor } : undefined}
-          >
-            {item.name}
-          </Text>
-        ) : (
-          <Text variant="small" className="text-muted-foreground/50 italic">
-            Empty
-          </Text>
-        )}
+    <View style={styles.skillRow}>
+      <View style={styles.skillHeader}>
+        <Text style={styles.skillLabel}>{label}</Text>
+        <Text style={styles.skillValue}>{value}</Text>
       </View>
-    </Pressable>
+      <View style={styles.barTrackThin}>
+        <View style={[styles.barFillThin, { width: `${pct}%` }]} />
+      </View>
+    </View>
   );
 }
 
-function FactionReputationRow({
-  factionId,
-  label,
-  reputation,
-}: {
-  factionId: string;
-  label: string;
-  reputation: number;
-}) {
-  const { label: tierLabel, textClass, barClass } = getReputationColor(reputation);
-  // Normalize reputation from -100..100 to 0..100 for the bar
-  const barPercent = ((reputation + 100) / 200) * 100;
+/** XP progress bar */
+function XPBar({ xp, xpToNext }: { xp: number; xpToNext: number }) {
+  const pct = xpToNext > 0 ? Math.min((xp / xpToNext) * 100, 100) : 0;
 
   return (
-    <View className="gap-1">
-      <View className="flex-row items-center justify-between">
-        <Text variant="small" className="text-foreground">
-          {label}
-        </Text>
-        <Text variant="caption" className={textClass}>
-          {tierLabel}
+    <View style={styles.xpSection}>
+      <View style={styles.xpHeader}>
+        <Text style={styles.xpLabel}>EXPERIENCE</Text>
+        <Text style={styles.xpValue}>
+          {xp} / {xpToNext}
         </Text>
       </View>
-      <View className="h-2 w-full overflow-hidden rounded-full bg-muted">
-        <View
-          className={cn('h-full rounded-full', barClass)}
-          style={{ width: `${Math.max(2, barPercent)}%` }}
-        />
+      <View style={styles.xpBarTrack}>
+        <View style={[styles.xpBarFill, { width: `${pct}%` }]} />
       </View>
+      <Text style={styles.xpPercent}>{Math.round(pct)}% TO NEXT LEVEL</Text>
+    </View>
+  );
+}
+
+/** Section header with amber accent line. */
+function SectionHeader({ title }: { title: string }) {
+  return (
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.sectionLine} />
+    </View>
+  );
+}
+
+/** Perk row */
+function PerkRow({ perk, earned }: { perk: Perk; earned: boolean }) {
+  return (
+    <View style={[styles.perkRow, !earned && { opacity: 0.35 }]}>
+      <View style={styles.perkIcon}>
+        <Text style={styles.perkIconText}>{perk.icon}</Text>
+      </View>
+      <View style={styles.perkContent}>
+        <Text style={styles.perkName}>{perk.name}</Text>
+        <Text style={styles.perkDesc}>{perk.description}</Text>
+      </View>
+      {earned ? (
+        <Text style={styles.perkEarned}>ACTIVE</Text>
+      ) : (
+        <Text style={styles.perkLocked}>LV {perk.minLevel}</Text>
+      )}
     </View>
   );
 }
@@ -177,143 +235,530 @@ function FactionReputationRow({
 // Main Component
 // ---------------------------------------------------------------------------
 
-export function CharacterPanel() {
-  const isOpen = gameStore((s) => s.activePanel === 'character');
-  const playerStats = gameStore((s) => s.playerStats);
+export function CharacterPanel({ visible, onClose }: CharacterPanelProps) {
   const playerName = gameStore((s) => s.playerName);
+  const playerStats = gameStore((s) => s.playerStats);
   const equipment = gameStore((s) => s.equipment);
-  const togglePanel = gameStore((s) => s.togglePanel);
-  const getEquippedItem = gameStore((s) => s.getEquippedItem);
-  const unequipItem = gameStore((s) => s.unequipItem);
   const getEquipmentBonuses = gameStore((s) => s.getEquipmentBonuses);
 
   const bonuses = React.useMemo(() => getEquipmentBonuses(), [equipment, getEquipmentBonuses]);
 
-  if (!isOpen) return null;
+  if (!visible) return null;
+
+  const { level, xp, xpToNext, attributes, skills, gold } = playerStats;
+
+  // Simulate skill points (based on level, 2 per level after 1)
+  const totalSkillPoints = Math.max(0, (level - 1) * 2);
+  const usedSkillPoints =
+    Object.values(skills).reduce((a, b) => a + b, 0) - SKILL_ENTRIES.length * 15;
+  const availableSkillPoints = Math.max(0, totalSkillPoints - usedSkillPoints);
 
   return (
-    <Modal transparent visible={isOpen} onRequestClose={() => togglePanel('character')}>
+    <View style={styles.overlay} pointerEvents="box-none">
       <Animated.View
         entering={FadeIn.duration(200)}
         exiting={FadeOut.duration(150)}
-        className="absolute inset-0 bg-black/70"
+        style={StyleSheet.absoluteFill}
+        pointerEvents="box-none"
       >
-        <View className="flex-1 px-4 py-12">
-          <Card className="flex-1 border-frontier-leather/40">
-            {/* Header */}
-            <CardHeader className="flex-row items-center justify-between">
-              <CardTitle>
-                <Text variant="subheading">{playerName || 'Stranger'}</Text>
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onPress={() => togglePanel('character')}
-              >
-                <Text variant="small">Close</Text>
-              </Button>
-            </CardHeader>
+        {/* Dismiss backdrop */}
+        <Pressable style={styles.backdrop} onPress={onClose} />
 
-            <ScrollArea className="flex-1" contentContainerClassName="pb-6">
-              <CardContent className="gap-6">
-                {/* ----- Player Stats ----- */}
-                <View className="gap-3">
-                  <Text variant="label" className="text-muted-foreground uppercase tracking-widest">
-                    Vitals
-                  </Text>
-
-                  <View className="flex-row items-center gap-4">
-                    <Badge variant="info">
-                      <Text>Lv. {playerStats.level}</Text>
-                    </Badge>
-                    <Text variant="caption" className="text-foreground">
-                      {playerStats.gold} Gold
-                    </Text>
-                  </View>
-
-                  <StatBar
-                    label="Health"
-                    current={playerStats.health}
-                    max={playerStats.maxHealth}
-                    variant="health"
-                  />
-                  <StatBar
-                    label="Stamina"
-                    current={playerStats.stamina}
-                    max={playerStats.maxStamina}
-                  />
-                  <StatBar
-                    label="Experience"
-                    current={playerStats.xp}
-                    max={playerStats.xpToNext}
-                    variant="xp"
-                  />
+        <View style={styles.panelContainer} pointerEvents="auto">
+          <View style={styles.panel}>
+            {/* ---- Header ---- */}
+            <View style={styles.header}>
+              <View style={styles.headerLeft}>
+                <Text style={styles.headerName}>{playerName || "STRANGER"}</Text>
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelLabel}>LV</Text>
+                  <Text style={styles.levelValue}>{level}</Text>
                 </View>
+              </View>
+              <View style={styles.headerRight}>
+                <Text style={styles.goldDisplay}>$ {gold}</Text>
+                <Pressable onPress={onClose} style={styles.closeBtn}>
+                  <Text style={styles.closeBtnText}>[X]</Text>
+                </Pressable>
+              </View>
+            </View>
 
-                <Separator />
+            {/* ---- XP Bar ---- */}
+            <XPBar xp={xp} xpToNext={xpToNext} />
 
-                {/* ----- Equipment Bonuses ----- */}
-                {(bonuses.damage > 0 || bonuses.defense > 0 || bonuses.accuracy > 0) && (
-                  <>
-                    <View className="flex-row gap-4">
-                      {bonuses.damage > 0 && (
-                        <Badge variant="danger">
-                          <Text>+{bonuses.damage} DMG</Text>
-                        </Badge>
-                      )}
-                      {bonuses.defense > 0 && (
-                        <Badge variant="info">
-                          <Text>+{bonuses.defense} DEF</Text>
-                        </Badge>
-                      )}
-                      {bonuses.accuracy > 0 && (
-                        <Badge variant="success">
-                          <Text>+{bonuses.accuracy} ACC</Text>
-                        </Badge>
-                      )}
+            {/* ---- Skill Points Banner ---- */}
+            {availableSkillPoints > 0 && (
+              <View style={styles.skillPointsBanner}>
+                <Text style={styles.skillPointsText}>
+                  {availableSkillPoints} SKILL POINT{availableSkillPoints !== 1 ? "S" : ""}{" "}
+                  AVAILABLE
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.separator} />
+
+            {/* ---- Scrollable body ---- */}
+            <Animated.ScrollView
+              style={styles.scrollBody}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* G.P.E.C.I.A.L. Attributes */}
+              <SectionHeader title="G.P.E.C.I.A.L." />
+              {ATTRIBUTE_ENTRIES.map(({ key, label, abbrev, description }) => (
+                <AttributeRow
+                  key={key}
+                  abbrev={abbrev}
+                  label={label}
+                  description={description}
+                  value={attributes[key]}
+                  max={10}
+                />
+              ))}
+
+              <View style={styles.separator} />
+
+              {/* Skills */}
+              <SectionHeader title="SKILLS" />
+              {SKILL_ENTRIES.map(({ key, label }) => (
+                <SkillRow key={key} label={label} value={skills[key]} max={100} />
+              ))}
+
+              {/* Equipment bonuses */}
+              {(bonuses.damage > 0 || bonuses.defense > 0 || bonuses.accuracy > 0) && (
+                <>
+                  <View style={styles.separator} />
+                  <SectionHeader title="EQUIPMENT BONUSES" />
+                  {bonuses.damage > 0 && (
+                    <View style={styles.bonusRow}>
+                      <Text style={styles.bonusLabel}>Damage</Text>
+                      <Text style={styles.bonusValue}>+{bonuses.damage}</Text>
                     </View>
-                    <Separator />
-                  </>
-                )}
+                  )}
+                  {bonuses.defense > 0 && (
+                    <View style={styles.bonusRow}>
+                      <Text style={styles.bonusLabel}>Defense</Text>
+                      <Text style={styles.bonusValue}>+{bonuses.defense}</Text>
+                    </View>
+                  )}
+                  {bonuses.accuracy > 0 && (
+                    <View style={styles.bonusRow}>
+                      <Text style={styles.bonusLabel}>Accuracy</Text>
+                      <Text style={styles.bonusValue}>+{bonuses.accuracy}</Text>
+                    </View>
+                  )}
+                </>
+              )}
 
-                {/* ----- Equipment Slots ----- */}
-                <View className="gap-3">
-                  <Text variant="label" className="text-muted-foreground uppercase tracking-widest">
-                    Equipment
-                  </Text>
-                  {EQUIPMENT_SLOTS.map(({ slot, label, icon }) => (
-                    <EquipmentSlotRow
-                      key={slot}
-                      slot={slot}
-                      label={label}
-                      icon={icon}
-                      item={getEquippedItem(slot)}
-                      onUnequip={unequipItem}
-                    />
-                  ))}
-                </View>
+              {/* Perks */}
+              <View style={styles.separator} />
+              <SectionHeader title="PERKS" />
+              {PERKS.map((perk) => (
+                <PerkRow key={perk.id} perk={perk} earned={level >= perk.minLevel} />
+              ))}
+            </Animated.ScrollView>
 
-                <Separator />
-
-                {/* ----- Faction Reputation ----- */}
-                <View className="gap-3">
-                  <Text variant="label" className="text-muted-foreground uppercase tracking-widest">
-                    Reputation
-                  </Text>
-                  {DISPLAY_FACTIONS.map(({ id, label }) => (
-                    <FactionReputationRow
-                      key={id}
-                      factionId={id}
-                      label={label}
-                      reputation={playerStats.reputation ?? 0}
-                    />
-                  ))}
-                </View>
-              </CardContent>
-            </ScrollArea>
-          </Card>
+            {/* ---- Footer ---- */}
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>[C] CLOSE</Text>
+            </View>
+          </View>
         </View>
       </Animated.View>
-    </Modal>
+    </View>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
+
+const styles = StyleSheet.create({
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  panelContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: "85%",
+    maxWidth: 500,
+    paddingVertical: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    justifyContent: "center",
+  },
+  panel: {
+    backgroundColor: BG_DARK,
+    borderWidth: 1,
+    borderColor: BORDER_AMBER,
+    overflow: "hidden",
+  },
+
+  // Header
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: BG_SECTION,
+    borderBottomWidth: 1,
+    borderBottomColor: BORDER_AMBER,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerName: {
+    color: AMBER,
+    fontSize: 18,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+    letterSpacing: 2,
+    textTransform: "uppercase",
+  },
+  levelBadge: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    backgroundColor: "rgba(212,168,85,0.12)",
+    borderWidth: 1,
+    borderColor: BORDER_AMBER,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 4,
+  },
+  levelLabel: {
+    color: AMBER_DIM,
+    fontSize: 10,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    letterSpacing: 1,
+  },
+  levelValue: {
+    color: AMBER,
+    fontSize: 16,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+  goldDisplay: {
+    color: GOLD,
+    fontSize: 14,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+  closeBtn: {
+    minHeight: 44,
+    minWidth: 44,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  closeBtnText: {
+    color: AMBER_DIM,
+    fontSize: 14,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+
+  // XP Section
+  xpSection: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  xpHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  xpLabel: {
+    color: AMBER_DIM,
+    fontSize: 10,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    textTransform: "uppercase",
+    letterSpacing: 2,
+  },
+  xpValue: {
+    color: AMBER,
+    fontSize: 12,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+  },
+  xpBarTrack: {
+    height: 8,
+    backgroundColor: AMBER_DARK,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: BORDER_AMBER,
+  },
+  xpBarFill: {
+    height: "100%",
+    backgroundColor: AMBER,
+  },
+  xpPercent: {
+    color: AMBER_DIM,
+    fontSize: 9,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    letterSpacing: 1,
+    marginTop: 3,
+    textAlign: "center",
+  },
+
+  // Skill Points Banner
+  skillPointsBanner: {
+    backgroundColor: "rgba(74,222,128,0.15)",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: GREEN_GOOD,
+    paddingVertical: 6,
+    alignItems: "center",
+  },
+  skillPointsText: {
+    color: GREEN_GOOD,
+    fontSize: 11,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+    letterSpacing: 2,
+  },
+
+  // Separator
+  separator: {
+    height: 1,
+    backgroundColor: BORDER_AMBER,
+    marginHorizontal: 16,
+  },
+
+  // Section header
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 10,
+    marginTop: 6,
+  },
+  sectionTitle: {
+    color: AMBER,
+    fontSize: 11,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 2,
+  },
+  sectionLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: BORDER_AMBER,
+  },
+
+  // Attribute rows (S.P.E.C.I.A.L.)
+  attrRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+    gap: 10,
+  },
+  attrLetterBox: {
+    width: 28,
+    height: 28,
+    borderWidth: 1,
+    borderColor: AMBER,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(212,168,85,0.08)",
+  },
+  attrLetter: {
+    color: AMBER,
+    fontSize: 16,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+  attrContent: {
+    flex: 1,
+  },
+  attrHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 3,
+  },
+  attrLabel: {
+    color: AMBER,
+    fontSize: 13,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "600",
+  },
+  attrValue: {
+    color: AMBER,
+    fontSize: 14,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+  attrDesc: {
+    color: AMBER_DIM,
+    fontSize: 9,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    marginTop: 2,
+  },
+
+  // Bar (thick, for attributes)
+  barTrack: {
+    height: 6,
+    backgroundColor: AMBER_DARK,
+    overflow: "hidden",
+    position: "relative",
+  },
+  barFill: {
+    height: "100%",
+    backgroundColor: AMBER,
+  },
+  barPip: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: 1,
+    backgroundColor: "rgba(26,21,14,0.7)",
+  },
+
+  // Bar (thin, for skills)
+  barTrackThin: {
+    height: 3,
+    backgroundColor: AMBER_DARK,
+    overflow: "hidden",
+  },
+  barFillThin: {
+    height: "100%",
+    backgroundColor: AMBER,
+  },
+
+  // Skill rows
+  skillRow: {
+    marginBottom: 8,
+  },
+  skillHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 3,
+  },
+  skillLabel: {
+    color: AMBER,
+    fontSize: 12,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+  },
+  skillValue: {
+    color: AMBER,
+    fontSize: 12,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+
+  // Bonus rows
+  bonusRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 4,
+  },
+  bonusLabel: {
+    color: AMBER_DIM,
+    fontSize: 13,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+  },
+  bonusValue: {
+    color: GREEN_GOOD,
+    fontSize: 13,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+
+  // Perk rows
+  perkRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 6,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(212,168,85,0.08)",
+    gap: 10,
+  },
+  perkIcon: {
+    width: 24,
+    height: 24,
+    borderWidth: 1,
+    borderColor: AMBER_DIM,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(212,168,85,0.06)",
+  },
+  perkIconText: {
+    color: AMBER,
+    fontSize: 14,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+  },
+  perkContent: {
+    flex: 1,
+  },
+  perkName: {
+    color: AMBER,
+    fontSize: 12,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "600",
+  },
+  perkDesc: {
+    color: AMBER_DIM,
+    fontSize: 9,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    marginTop: 1,
+  },
+  perkEarned: {
+    color: GREEN_GOOD,
+    fontSize: 9,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    fontWeight: "700",
+    letterSpacing: 1,
+  },
+  perkLocked: {
+    color: AMBER_DIM,
+    fontSize: 9,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    letterSpacing: 1,
+  },
+
+  // Scrollable body
+  scrollBody: {
+    flexShrink: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+
+  // Footer
+  footer: {
+    borderTopWidth: 1,
+    borderTopColor: BORDER_AMBER,
+    paddingVertical: 8,
+    alignItems: "center",
+    backgroundColor: BG_SECTION,
+  },
+  footerText: {
+    color: AMBER_DIM,
+    fontSize: 11,
+    fontFamily: Platform.select({ web: "monospace", default: undefined }),
+    letterSpacing: 1,
+    textTransform: "uppercase",
+  },
+});

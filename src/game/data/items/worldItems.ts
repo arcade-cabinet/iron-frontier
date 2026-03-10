@@ -8,8 +8,13 @@
  * via the ProceduralLocationManager.
  */
 
-import type { HexCoord } from '../../hex/HexTypes';
 import { ProceduralLocationManager } from '../generation/ProceduralLocationManager';
+
+/** Axial hex coordinate (legacy hex grid reference) */
+interface HexCoord {
+  readonly q: number;
+  readonly r: number;
+}
 
 export interface WorldItem {
   id: string;

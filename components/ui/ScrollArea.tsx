@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { cn } from '@/lib/utils';
+import type * as React from "react";
+import { ScrollView } from "react-native";
+import { cn } from "@/lib/utils";
 
-type ScrollAreaProps = React.ComponentProps<typeof ScrollView> &
-  React.RefAttributes<ScrollView>;
+type ScrollAreaProps = React.ComponentProps<typeof ScrollView> & React.RefAttributes<ScrollView>;
 
 function ScrollArea({ className, contentContainerClassName, ...props }: ScrollAreaProps) {
   return (
     <ScrollView
-      className={cn('flex-1', className)}
+      className={cn("flex-1", className)}
       contentContainerClassName={cn(contentContainerClassName)}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}

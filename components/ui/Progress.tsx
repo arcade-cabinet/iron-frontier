@@ -1,29 +1,26 @@
-import * as React from 'react';
-import { View } from 'react-native';
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
+import { View } from "react-native";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-  Easing,
-} from 'react-native-reanimated';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+} from "react-native-reanimated";
+import { cn } from "@/lib/utils";
 
-const progressTrackVariants = cva(
-  'h-3 w-full overflow-hidden rounded-full bg-muted',
-  {
-    variants: {
-      variant: {
-        default: '',
-        health: '',
-        xp: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
+const progressTrackVariants = cva("h-3 w-full overflow-hidden rounded-full bg-muted", {
+  variants: {
+    variant: {
+      default: "",
+      health: "",
+      xp: "",
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
 /**
  * Returns the fill color class based on variant and current value.
@@ -31,15 +28,15 @@ const progressTrackVariants = cva(
  */
 function getFillColor(variant: string | null | undefined, value: number): string {
   switch (variant) {
-    case 'health': {
-      if (value > 60) return 'bg-frontier-sage';
-      if (value > 30) return 'bg-frontier-whiskey';
-      return 'bg-frontier-blood';
+    case "health": {
+      if (value > 60) return "bg-frontier-sage";
+      if (value > 30) return "bg-frontier-whiskey";
+      return "bg-frontier-blood";
     }
-    case 'xp':
-      return 'bg-frontier-sky';
+    case "xp":
+      return "bg-frontier-sky";
     default:
-      return 'bg-primary';
+      return "bg-primary";
   }
 }
 
@@ -49,12 +46,7 @@ type ProgressProps = React.ComponentProps<typeof View> &
     value?: number;
   };
 
-function Progress({
-  className,
-  variant = 'default',
-  value = 0,
-  ...props
-}: ProgressProps) {
+function Progress({ className, variant = "default", value = 0, ...props }: ProgressProps) {
   const clampedValue = Math.max(0, Math.min(100, value));
   const animatedWidth = useSharedValue(clampedValue);
 
@@ -80,10 +72,7 @@ function Progress({
       aria-valuenow={clampedValue}
       {...props}
     >
-      <Animated.View
-        className={cn('h-full rounded-full', fillColor)}
-        style={animatedStyle}
-      />
+      <Animated.View className={cn("h-full rounded-full", fillColor)} style={animatedStyle} />
     </View>
   );
 }

@@ -37,6 +37,7 @@ import {
   type EnemyAIState,
 } from './EnemyAI';
 import { HEAD_RADIUS } from '@/src/game/engine/renderers/ChibiRenderer';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Reload state machine
@@ -405,8 +406,8 @@ function performRaycast(
   result: CombatTickResult,
 ): void {
   // Apply spread to ray direction
-  const spreadX = (Math.random() - 0.5) * weaponState.currentSpread;
-  const spreadY = (Math.random() - 0.5) * weaponState.currentSpread;
+  const spreadX = (scopedRNG('combat', 42, rngTick()) - 0.5) * weaponState.currentSpread;
+  const spreadY = (scopedRNG('combat', 42, rngTick()) - 0.5) * weaponState.currentSpread;
   const aimPoint = new THREE.Vector2(spreadX, spreadY);
 
   _raycaster.setFromCamera(aimPoint, camera);

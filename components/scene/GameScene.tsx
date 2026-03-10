@@ -16,28 +16,32 @@
 // routes crosshair spread and hit marker data to the Crosshair via
 // the imperative Crosshair.flash() API.
 
-import { useCallback, useState } from 'react';
+import { useFrame } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
+import { Crosshair } from "@/components/game/Crosshair";
+import { useGameStore } from "@/hooks/useGameStore";
+import type { World } from "@/src/game/data/schemas/world";
+import type { CombatEnemy } from "@/src/game/engine/combat";
+import { DEFAULT_WORLD_POSITION } from "@/src/game/store/defaults";
+import { useXRMode } from "@/src/game/xr/useXRMode";
+import { XRSetup } from "@/src/game/xr/XRSetup";
 
-import { useGameStore } from '@/hooks/useGameStore';
-import { Crosshair } from '@/components/game/Crosshair';
-import type { CombatEnemy } from '@/src/game/engine/combat';
-import type { World } from '@/src/game/data/schemas/world';
-import { XRSetup } from '@/src/game/xr/XRSetup';
-import { useXRMode } from '@/src/game/xr/useXRMode';
-
-import { CombatSystem } from './CombatSystem';
-import { DayNightCycle, type DayNightCycleProps } from './DayNightCycle';
-import { EntitySpawner } from './EntitySpawner';
-import { FPSCamera } from './FPSCamera';
-import {
-  InteractionDetector,
-  type InteractionTarget,
-} from './InteractionDetector';
-import { OpenWorld } from './OpenWorld';
-import { PhysicsProvider } from './PhysicsProvider';
-import { Terrain } from './Terrain';
-import { WeaponView } from './WeaponView';
-import { WorldItems } from './WorldItems';
+import { CombatSystem } from "./CombatSystem.tsx";
+import { DayNightCycle, type DayNightCycleProps } from "./DayNightCycle.tsx";
+import { DesertAtmosphere } from "./DesertAtmosphere.tsx";
+import { DesertEnvironment } from "./DesertEnvironment.tsx";
+import { EntitySpawner } from "./EntitySpawner.tsx";
+import { FPSCamera } from "./FPSCamera.tsx";
+import { InteractionDetector, type InteractionTarget } from "./InteractionDetector.tsx";
+import { NPCIndicators } from "./NPCIndicator.tsx";
+import { ObjectiveMarker } from "./ObjectiveMarker.tsx";
+import { OpenWorld } from "./OpenWorld.tsx";
+import { PhysicsProvider } from "./PhysicsProvider.tsx";
+import { StealthDetector } from "./StealthDetector.tsx";
+import { Terrain } from "./Terrain.tsx";
+import { WeaponView } from "./WeaponView.tsx";
+import { WorldItems } from "./WorldItems.tsx";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -51,19 +55,30 @@ export interface GameSceneProps {
   /** Pause time progression (menus, dialogue). */
   paused?: boolean;
   /** Callback when the day/night phase changes. */
-  onPhaseChange?: DayNightCycleProps['onPhaseChange'];
+  onPhaseChange?: DayNightCycleProps["onPhaseChange"];
   /** World definition for OpenWorld rendering. If null, falls back to Terrain only. */
   world?: World | null;
   /** Callback when an interactable is in range (for UI "Press E" prompt). */
   onInteractionChange?: (target: InteractionTarget | null) => void;
+  /** Callback when EntitySpawner updates the list of interactable entities (NPCs). */
+  onInteractablesChange?: (
+    entities: import("@/src/game/systems/InteractionSystem").InteractableEntity[],
+  ) => void;
   /** Callback when crosshair spread changes (routed to Crosshair overlay). */
   onCrosshairSpreadChange?: (spread: number) => void;
   /** Callback when player takes damage (for DamageFlash overlay). */
   onPlayerDamage?: (damage: number) => void;
+  /** Callback when player takes damage with direction info (for DamageIndicator). */
+  onPlayerDamageDirectional?: (
+    damage: number,
+    direction: { x: number; y: number; z: number },
+  ) => void;
   /** Current location ID for quest event emission on enemy kills. */
   locationId?: string;
   /** Difficulty level for combat. */
-  difficulty?: 'easy' | 'normal' | 'hard';
+  difficulty?: "easy" | "normal" | "hard";
+  /** Called once the 3D scene has rendered its first few frames. */
+  onSceneReady?: () => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -72,24 +87,24 @@ export interface GameSceneProps {
 
 /** Maps item IDs / weapon def weaponType fields to WeaponView model names. */
 const WEAPON_TYPE_MAP: Record<string, string> = {
-  revolver: 'revolver',
-  revolver_basic: 'revolver',
-  navy_revolver: 'revolver',
-  revolver_fancy: 'revolver',
-  hunting_rifle: 'rifle',
-  lever_action_rifle: 'rifle',
-  rifle_winchester: 'rifle',
-  shotgun: 'shotgun',
-  shotgun_coach: 'shotgun',
-  dynamite: 'dynamite',
-  pickaxe: 'pickaxe',
-  lantern: 'lantern',
-  lasso: 'lasso',
+  revolver: "revolver",
+  revolver_basic: "revolver",
+  navy_revolver: "revolver",
+  revolver_fancy: "revolver",
+  hunting_rifle: "rifle",
+  lever_action_rifle: "rifle",
+  rifle_winchester: "rifle",
+  shotgun: "shotgun",
+  shotgun_coach: "shotgun",
+  dynamite: "dynamite",
+  pickaxe: "pickaxe",
+  lantern: "lantern",
+  lasso: "lasso",
 };
 
 function resolveWeaponType(equipmentWeaponId: string | null): string {
-  if (!equipmentWeaponId) return 'revolver';
-  return WEAPON_TYPE_MAP[equipmentWeaponId] ?? 'revolver';
+  if (!equipmentWeaponId) return "revolver";
+  return WEAPON_TYPE_MAP[equipmentWeaponId] ?? "revolver";
 }
 
 // ---------------------------------------------------------------------------
@@ -103,11 +118,25 @@ export function GameScene({
   onPhaseChange,
   world = null,
   onInteractionChange,
+  onInteractablesChange,
   onCrosshairSpreadChange,
   onPlayerDamage,
+  onPlayerDamageDirectional,
   locationId,
-  difficulty = 'normal',
+  difficulty = "normal",
+  onSceneReady,
 }: GameSceneProps) {
+  // --- Spawn position (stable, computed once) ---
+  const spawnPosition = useMemo(
+    () =>
+      new THREE.Vector3(
+        DEFAULT_WORLD_POSITION.x,
+        DEFAULT_WORLD_POSITION.y,
+        DEFAULT_WORLD_POSITION.z,
+      ),
+    [],
+  );
+
   // --- Store reads ---
   const equippedWeaponId = useGameStore((s) => s.equipment.weapon);
   const weaponType = resolveWeaponType(equippedWeaponId);
@@ -127,9 +156,7 @@ export function GameScene({
 
   // --- Weapon switch sync ---
   // When CombatSystem detects a weapon switch (number keys), update WeaponView
-  const [activeWeaponItemId, setActiveWeaponItemId] = useState<string | undefined>(
-    undefined,
-  );
+  const [activeWeaponItemId, setActiveWeaponItemId] = useState<string | undefined>(undefined);
   const handleWeaponSwitch = useCallback((weaponId: string) => {
     setActiveWeaponItemId(weaponId);
   }, []);
@@ -141,7 +168,7 @@ export function GameScene({
 
   return (
     <XRSetup>
-      <PhysicsProvider>
+      <PhysicsProvider spawnPosition={spawnPosition} initialYaw={-Math.PI / 2}>
         {/* First-person camera (projection config; position driven by physics) */}
         <FPSCamera />
 
@@ -160,8 +187,17 @@ export function GameScene({
           <Terrain seed="iron-frontier-terrain" biome="desert" />
         )}
 
+        {/* Desert environment dressing: distant mountains, extra vegetation near spawn */}
+        <DesertEnvironment townCenter={[2200, 0, 1800]} />
+
+        {/* Desert atmosphere: animated buzzards, tumbleweeds, clouds, infrastructure, dust */}
+        <DesertAtmosphere townCenter={[2200, 0, 1800]} />
+
         {/* Entity spawning: NPCs in towns, enemies in wilderness */}
-        <EntitySpawner onEnemiesChange={handleEnemiesChange} />
+        <EntitySpawner
+          onEnemiesChange={handleEnemiesChange}
+          onInteractablesChange={onInteractablesChange}
+        />
 
         {/* World item pickups (dropped loot, glowing collectibles) */}
         <WorldItems />
@@ -180,6 +216,7 @@ export function GameScene({
           onCrosshairSpreadChange={onCrosshairSpreadChange}
           onHitMarker={handleHitMarker}
           onPlayerDamage={onPlayerDamage}
+          onPlayerDamageDirectional={onPlayerDamageDirectional}
           onWeaponSwitch={handleWeaponSwitch}
         />
 
@@ -187,11 +224,50 @@ export function GameScene({
             is represented by the physical controller in the player's hand */}
         <VRGatedWeaponView weaponType={displayWeaponType} />
 
+        {/* Stealth detection (calculates detection level from enemy proximity) */}
+        <StealthDetector />
+
         {/* Interaction detection (NPC proximity, building doors) */}
         <InteractionDetector onInteractionChange={onInteractionChange} />
+
+        {/* Quest objective waypoint marker (floating amber diamond) */}
+        <ObjectiveMarker />
+
+        {/* NPC interaction indicators (!, ?, ... above heads) */}
+        <NPCIndicators />
+
+        {/* Detects when the scene has rendered a few frames and signals ready */}
+        {onSceneReady && <SceneReadyDetector onReady={onSceneReady} />}
       </PhysicsProvider>
     </XRSetup>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Scene ready detector
+// ---------------------------------------------------------------------------
+
+/**
+ * Invisible component that counts rendered frames via useFrame.
+ * Fires `onReady` once after a few frames have been painted, ensuring
+ * the terrain, sky, and basic geometry are visible.
+ */
+const READY_FRAME_THRESHOLD = 5;
+
+function SceneReadyDetector({ onReady }: { onReady: () => void }) {
+  const frameCount = useRef(0);
+  const fired = useRef(false);
+
+  useFrame(() => {
+    if (fired.current) return;
+    frameCount.current += 1;
+    if (frameCount.current >= READY_FRAME_THRESHOLD) {
+      fired.current = true;
+      onReady();
+    }
+  });
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------

@@ -388,11 +388,7 @@
         "night": "home"
       },
       "greetings": {
-        "neutral": [
-          "Morning, stranger.",
-          "Fine day, ain't it?",
-          "Passing through?"
-        ],
+        "neutral": ["Morning, stranger.", "Fine day, ain't it?", "Passing through?"],
         "friendly": [
           "Hey there! Heard anything interesting?",
           "Good to see a friendly face.",

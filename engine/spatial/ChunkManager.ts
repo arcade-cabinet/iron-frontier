@@ -5,10 +5,10 @@
 // render radius (chunks are visible with full detail).  Far chunks
 // are flagged for simplified rendering (no vegetation, no props).
 
-import * as THREE from 'three';
+import type * as THREE from "three";
 
-import { generateChunk } from '@/engine/renderers/TerrainChunk';
-import { CHUNK_SIZE, type BiomeId, DEFAULT_SEED } from '@/engine/renderers/TerrainConfig';
+import { generateChunk } from "@/engine/renderers/TerrainChunk";
+import { type BiomeId, CHUNK_SIZE, DEFAULT_SEED } from "@/engine/renderers/TerrainConfig";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -39,7 +39,7 @@ const DEFAULT_CONFIG: ChunkManagerConfig = {
   loadRadius: 2,
   renderRadius: 1,
   seed: DEFAULT_SEED,
-  defaultBiome: 'desert',
+  defaultBiome: "desert",
 };
 
 // ---------------------------------------------------------------------------
@@ -83,10 +83,7 @@ export class ChunkManager {
    * Update the chunk grid based on player position.
    * Returns the list of chunks that should be rendered this frame.
    */
-  update(
-    playerX: number,
-    playerZ: number,
-  ): readonly ChunkState[] {
+  update(playerX: number, playerZ: number): readonly ChunkState[] {
     const cx = worldToChunk(playerX);
     const cz = worldToChunk(playerZ);
 

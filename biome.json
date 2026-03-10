@@ -107,6 +107,14 @@
       }
     },
     {
+      "includes": ["components/scene/**"],
+      "linter": {
+        "rules": {
+          "suspicious": { "noArrayIndexKey": "off" }
+        }
+      }
+    },
+    {
       "includes": ["app/**/*.tsx"],
       "linter": {
         "rules": {

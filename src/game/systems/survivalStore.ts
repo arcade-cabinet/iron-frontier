@@ -499,9 +499,10 @@ export const createSurvivalSlice: StateCreator<
     tickClock: () => {
       if (!get().isClockRunning) return;
 
-      // This is called externally (e.g., in a useEffect)
-      // The clock handles its own timing internally
-      syncSystems();
+      // Read the clock's current state — it advances via its own internal
+      // interval (clock.start()). We must NOT call syncSystems() here because
+      // that overwrites the clock's internally-advanced totalMinutes with the
+      // stale store value, preventing time from ever progressing.
       const nextClock = clock.getState();
       set((state) => {
         const timeState = (state as { time?: { hour: number; dayOfYear: number } }).time;
@@ -674,6 +675,15 @@ export const createSurvivalSlice: StateCreator<
         clockState: clock.getState(),
       });
 
+      // Heal some HP while camping (5 HP per hour rested)
+      // The full store has a `heal` action from the player slice.
+      // At runtime `get()` returns the full store state, so we cast.
+      const healAmount = result.hoursRested * 5;
+      if (healAmount > 0) {
+        const store = get() as SurvivalSlice & { heal?: (amount: number) => void };
+        store.heal?.(healAmount);
+      }
+
       return result;
     },
 
@@ -747,6 +757,13 @@ export const createSurvivalSlice: StateCreator<
         clockState: clock.getState(),
         fatigueState: fatigue.getState(),
       });
+
+      // Heal HP while resting at an inn (10 HP per hour — better than camping)
+      const healAmount = hours * 10;
+      if (healAmount > 0) {
+        const store = get() as SurvivalSlice & { heal?: (amount: number) => void };
+        store.heal?.(healAmount);
+      }
 
       return {
         hoursRested: hours,
@@ -857,6 +874,9 @@ export const createSurvivalSlice: StateCreator<
         campingState: state.campingState ?? current.campingState,
         currentTerrain: state.currentTerrain ?? current.currentTerrain,
       }));
+      // Sync system instances from the newly loaded store state so the
+      // clock (and other systems) pick up the saved values.
+      syncSystems();
     },
 
     resetSurvival: () => {

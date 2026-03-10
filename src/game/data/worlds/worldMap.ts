@@ -15,6 +15,7 @@
 
 import { FrontierTerritory } from './frontier_territory';
 import type { Connection, DangerLevel, TravelMethod } from '../schemas/world';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // CONSTANTS
@@ -277,7 +278,7 @@ export function rollFastTravelEncounters(
 
   for (let i = 0; i < maxEncounters; i++) {
     const threshold = expectedEncounters / maxEncounters;
-    if (Math.random() < threshold) {
+    if (scopedRNG('world', 42, rngTick()) < threshold) {
       count++;
     }
   }

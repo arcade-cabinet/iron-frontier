@@ -360,7 +360,7 @@ describe('Combat Edge Cases', () => {
       expect(result.message).toContain('No item');
     });
 
-    it('should handle skill action (not implemented)', () => {
+    it('should reject unknown skill action', () => {
       const state = createQuickCombat(
         mockPlayerStats,
         [{ definition: mockEnemy, count: 1 }],
@@ -374,7 +374,7 @@ describe('Combat Edge Cases', () => {
       });
 
       expect(result.success).toBe(false);
-      expect(result.message).toContain('not yet implemented');
+      expect(result.message).toContain('Unknown skill');
     });
 
     it('should handle action from invalid actor', () => {

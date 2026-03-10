@@ -9,6 +9,7 @@
 //   E              — interact
 //   Space          — jump
 //   ShiftLeft      — sprint
+//   C              — crouch (toggle stealth)
 //   Tab            — inventory
 //   KeyM           — map
 //   Escape         — menu (also releases pointer lock)
@@ -123,6 +124,7 @@ export class KeyboardMouseProvider implements IInputProvider {
       interact: this.keysDown.has('KeyE'),
       jump: this.keysDown.has('Space'),
       sprint: this.keysDown.has('ShiftLeft') || this.keysDown.has('ShiftRight'),
+      crouch: this.keysDown.has('KeyC'),
       inventory: this.keysDown.has('Tab'),
       map: this.keysDown.has('KeyM'),
       menu: this.keysDown.has('Escape'),
@@ -265,7 +267,7 @@ const GAME_KEYS = new Set<string>([
   'KeyW', 'KeyA', 'KeyS', 'KeyD',
   'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
   'Space', 'ShiftLeft', 'ShiftRight',
-  'KeyR', 'KeyE', 'KeyM', 'Tab',
+  'KeyR', 'KeyE', 'KeyM', 'KeyC', 'Tab',
   'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6',
 ]);
 

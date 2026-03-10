@@ -3,21 +3,21 @@
 // Uses simplex-noise + alea for deterministic, seed-based terrain.
 // Returns a frozen THREE.Mesh suitable for static scene placement.
 
-import Alea from 'alea';
-import { createNoise2D, type NoiseFunction2D } from 'simplex-noise';
-import * as THREE from 'three';
+import Alea from "alea";
+import { createNoise2D, type NoiseFunction2D } from "simplex-noise";
+import * as THREE from "three";
 
-import { createDirtTexture, createSandTexture } from '@/src/game/engine/materials';
+import { createDirtTexture, createSandTexture } from "@/src/game/engine/materials";
 
 import {
-  type BiomeDefinition,
   BIOME_DEFINITIONS,
+  type BiomeDefinition,
   type BiomeId,
   CHUNK_SEGMENTS,
   CHUNK_SIZE,
   DEFAULT_SEED,
   type NoiseParams,
-} from './TerrainConfig';
+} from "./TerrainConfig.ts";
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -37,7 +37,7 @@ export function generateChunk(
   chunkX: number,
   chunkZ: number,
   seed: string = DEFAULT_SEED,
-  biome: BiomeId = 'desert',
+  biome: BiomeId = "desert",
 ): THREE.Mesh {
   const definition = BIOME_DEFINITIONS[biome];
   const chunkSeed = `${seed}:${chunkX}:${chunkZ}`;
@@ -73,12 +73,7 @@ function buildGeometry(
   noise: NoiseParams,
   noiseFn: NoiseFunction2D,
 ): THREE.PlaneGeometry {
-  const geo = new THREE.PlaneGeometry(
-    CHUNK_SIZE,
-    CHUNK_SIZE,
-    CHUNK_SEGMENTS,
-    CHUNK_SEGMENTS,
-  );
+  const geo = new THREE.PlaneGeometry(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SEGMENTS, CHUNK_SEGMENTS);
 
   // PlaneGeometry is XY by default — rotate to XZ (face up)
   geo.rotateX(-Math.PI / 2);
@@ -150,18 +145,15 @@ function sampleFBM(
 // Material
 // ---------------------------------------------------------------------------
 
-function buildMaterial(
-  biome: BiomeId,
-  definition: BiomeDefinition,
-): THREE.MeshStandardMaterial {
+function buildMaterial(biome: BiomeId, definition: BiomeDefinition): THREE.MeshStandardMaterial {
   // Reuse the existing procedural canvas texture factories
   switch (biome) {
-    case 'desert':
+    case "desert":
       return createSandTexture(definition.textureBaseColor);
-    case 'canyon':
-    case 'mountain':
+    case "canyon":
+    case "mountain":
       return createDirtTexture(definition.textureBaseColor);
-    case 'grassland':
+    case "grassland":
       return createDirtTexture(definition.textureBaseColor);
     default: {
       const _exhaustive: never = biome;

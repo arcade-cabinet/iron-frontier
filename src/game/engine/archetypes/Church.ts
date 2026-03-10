@@ -7,7 +7,7 @@ import {
   Mesh,
 } from 'three';
 
-import { createWoodTexture } from '../materials';
+import { createWoodTexture, createPBRClayAdobe, createPBRWoodAged } from '../materials';
 
 import { createFloor, createRoof, createWall } from './BuildingBase';
 import { createDoor } from './BuildingBase.composite';
@@ -31,7 +31,7 @@ const STEEPLE_BASE = 2.0;
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const wallMat = createWoodTexture('#E8DDD0', '#C8BDB0');
+  const wallMat = createPBRClayAdobe(2);
 
   const backWall = createWall(WIDTH, WALL_HEIGHT, WALL_THICK, wallMat);
   backWall.position.set(0, WALL_HEIGHT / 2, -DEPTH / 2);
@@ -68,8 +68,8 @@ function buildExterior(slots: BuildingSlots): Group {
     }
   }
 
-  // Roof (peaked)
-  const roof = createRoof(WIDTH, DEPTH, 'peaked');
+  // Roof (peaked) — PBR aged wood for visible sloped surface
+  const roof = createRoof(WIDTH, DEPTH, 'peaked', createPBRWoodAged(2));
   roof.position.set(0, WALL_HEIGHT, 0);
   group.add(roof);
 

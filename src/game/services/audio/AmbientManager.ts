@@ -14,6 +14,7 @@
 
 import * as Tone from 'tone';
 import type { TimeOfDay } from '../../ddl/types';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // TYPES
@@ -286,13 +287,13 @@ export class AmbientManager {
   private scheduleCricketChirp(): void {
     if (!this.crickets || !this.isPlaying) return;
 
-    const delay = Math.random() * 2 + 0.8; // 0.8-2.8 seconds
+    const delay = scopedRNG('audio', 42, rngTick()) * 2 + 0.8; // 0.8-2.8 seconds
     this.cricketTimer = setTimeout(() => {
       if (!this.crickets || !this.isPlaying) return;
 
-      if (Math.random() > 0.4) {
+      if (scopedRNG('audio', 42, rngTick()) > 0.4) {
         // Vary the cricket pitch slightly each chirp
-        const baseFreq = 5500 + Math.random() * 1500;
+        const baseFreq = 5500 + scopedRNG('audio', 42, rngTick()) * 1500;
         const note1 = Tone.Frequency(baseFreq, 'hz').toNote();
         const note2 = Tone.Frequency(baseFreq * 1.18, 'hz').toNote();
         this.crickets.triggerAttackRelease([note1, note2], '32n');

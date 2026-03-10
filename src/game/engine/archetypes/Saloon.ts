@@ -12,6 +12,7 @@ import {
 import {
   createMetalTexture,
   createWoodTexture,
+  createPBRWoodSiding,
 } from '../materials';
 
 import { createFloor, createRoof, createWall, DEFAULT_PALETTE } from './BuildingBase';
@@ -42,10 +43,7 @@ const SECOND_FLOOR_HEIGHT = 3.2;
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallBase = palette[0] ?? DEFAULT_PALETTE.wallBase;
-  const wallGrain = palette[1] ?? DEFAULT_PALETTE.wallGrain;
-  const wallMat = createWoodTexture(wallBase, wallGrain);
+  const wallMat = createPBRWoodSiding(2);
 
   // ----- Four walls -----
 

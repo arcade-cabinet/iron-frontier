@@ -12,14 +12,14 @@
  *   DamageFlash.trigger(damage)
  */
 
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import * as React from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
   Easing,
-} from 'react-native-reanimated';
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -77,12 +77,7 @@ export function DamageFlash() {
     opacity: opacity.value,
   }));
 
-  return (
-    <Animated.View
-      style={[styles.overlay, animatedStyle]}
-      pointerEvents="none"
-    />
-  );
+  return <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents="none" />;
 }
 
 /**
@@ -101,11 +96,11 @@ DamageFlash.trigger = (damage: number) => {
 
 const styles = StyleSheet.create({
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#CC0000',
+    backgroundColor: "#CC0000",
   },
 });

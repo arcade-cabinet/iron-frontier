@@ -1,7 +1,7 @@
 // MonsterCreatures — Coyote and Rattlesnake enemy constructors
 //
 // Builds four-legged coyote and segmented rattlesnake from Three.js
-// primitives. All deterministic via alea. No Math.random().
+// primitives. All deterministic via alea. No scopedRNG('render', 42, rngTick()).
 // Scorpion and MineCrawler live in MonsterArachnids.ts.
 
 import * as THREE from 'three';
@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import { makePRNG } from '../materials/canvasUtils';
 import { createFabricTexture } from '../materials/CanvasTextureFactory';
 import { createLeatherTexture } from '../materials/CanvasTextureFactory.organic';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Coyote — four-legged chibi animal

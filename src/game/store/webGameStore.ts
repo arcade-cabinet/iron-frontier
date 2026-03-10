@@ -18,7 +18,7 @@ import { ENCOUNTER_TEMPLATES } from '../data/generation/templates/encounterTempl
 // Import data access functions from the shared data layer
 import { getItem, STARTER_INVENTORY } from '../data/items';
 import { getWorldItemsForLocation } from '../data/items/worldItems';
-import { getDialogueTreeById, getNPCById, getPrimaryDialogueTree } from '../data/npcs';
+import { getDialogueTreeById, getNPCById, getNPCsByLocation, getPrimaryDialogueTree } from '../data/npcs';
 import { getQuestById } from '../data/quests';
 import {
   AP_COSTS,
@@ -55,6 +55,7 @@ const webDataAccess: DataAccess = {
 
   // NPCs
   getNPCById: (npcId: string) => getNPCById(npcId),
+  getNPCsByLocation: (locationId: string) => getNPCsByLocation(locationId),
   getDialogueTreeById: (treeId: string) => getDialogueTreeById(treeId),
   getPrimaryDialogueTree: (npcId: string) => getPrimaryDialogueTree(npcId),
   getDialogueEntryNode: (tree: any, checkCondition: (c: any) => boolean) =>
@@ -110,11 +111,43 @@ const webDataAccess: DataAccess = {
 
   // Procedural
   ProceduralLocationManager: {
-    initialize: async (seed: number) => ProceduralLocationManager.initialize(seed),
-    generateLocationContent: async (location: any) =>
-      ProceduralLocationManager.generateLocationContent(location),
+    initialize: (seed: number) => ProceduralLocationManager.initialize(seed),
+    isInitialized: () => ProceduralLocationManager.isInitialized(),
+    generateLocationContent: (resolved: any, options?: any) =>
+      ProceduralLocationManager.generateLocationContent(resolved, options),
     hasGeneratedContent: (locationId: string) =>
       ProceduralLocationManager.hasGeneratedContent(locationId),
+    getOrGenerateNPCs: (locationId: string, resolved?: any) =>
+      ProceduralLocationManager.getOrGenerateNPCs(locationId, resolved),
+  },
+
+  // World resolution
+  getResolvedLocation: (loadedWorld: any, locationId: string) => {
+    // loadedWorld is a LoadedWorld object with a getLocation method
+    if (loadedWorld?.getLocation) {
+      return loadedWorld.getLocation(locationId);
+    }
+    // loadedWorld doesn't have getLocation method — unexpected shape
+    console.error(`[webGameStore] loadedWorld missing getLocation() — falling back to Map lookup`);
+    if (loadedWorld?.locations?.get) {
+      return loadedWorld.locations.get(locationId);
+    }
+    console.error(`[webGameStore] Could not resolve location "${locationId}" from loadedWorld`);
+    return undefined;
+  },
+  getRegionForLocation: (world: any, locationId: string) => {
+    // Find which region contains this location based on world coordinates
+    if (!world?.regions || !world?.locations) return 'unknown';
+    const locRef = world.locations.find?.((l: any) => l.id === locationId);
+    if (!locRef?.coord) return 'unknown';
+    const { wx, wy } = locRef.coord;
+    for (const region of world.regions) {
+      const b = region.bounds;
+      if (b && wx >= b.minX && wx <= b.maxX && wy >= b.minY && wy <= b.maxY) {
+        return region.id;
+      }
+    }
+    return 'unknown';
   },
 
   // Seeded random
@@ -126,6 +159,11 @@ const webDataAccess: DataAccess = {
 /**
  * Create the web game store with platform-appropriate persistence
  */
+// Debug: expose store on window for playtesting (remove before release)
+if (typeof window !== 'undefined') {
+  (window as any).__IRON_FRONTIER_STORE__ = null; // placeholder, set below
+}
+
 export const gameStore = createGameStore({
   storageAdapter: Platform.OS !== 'web'
     ? new NativeStorageAdapter()
@@ -134,6 +172,11 @@ export const gameStore = createGameStore({
   databaseManager: dbManager,
   dataAccess: webDataAccess,
 });
+
+// Assign the actual store reference for debug access
+if (typeof window !== 'undefined') {
+  (window as any).__IRON_FRONTIER_STORE__ = gameStore;
+}
 
 // Re-export types for convenience
 export type { GameState };

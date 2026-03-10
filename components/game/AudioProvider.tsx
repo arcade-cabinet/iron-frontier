@@ -14,21 +14,21 @@
  * @module components/game/AudioProvider
  */
 
-import * as React from 'react';
+import * as React from "react";
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useRef,
   useState,
-  type ReactNode,
-} from 'react';
-import * as Tone from 'tone';
-import { gameStore } from '@/src/game/store';
-import { gameAudioBridge } from '@/src/game/services/audio/GameAudioBridge';
-import { MusicManager } from '@/src/game/services/audio/MusicManager';
-import type { AudioBridgeStoreShape } from '@/src/game/services/audio/GameAudioBridge';
+} from "react";
+import * as Tone from "tone";
+import type { AudioBridgeStoreShape } from "@/src/game/services/audio/GameAudioBridge";
+import { gameAudioBridge } from "@/src/game/services/audio/GameAudioBridge";
+import { MusicManager } from "@/src/game/services/audio/MusicManager";
+import { gameStore } from "@/src/game/store";
 
 // ============================================================================
 // CONTEXT TYPES
@@ -73,7 +73,7 @@ const AudioSettingsContext = createContext<AudioSettingsAPI | null>(null);
 export function useAudioSettings(): AudioSettingsAPI {
   const ctx = useContext(AudioSettingsContext);
   if (!ctx) {
-    throw new Error('useAudioSettings must be used within an <AudioProvider>');
+    throw new Error("useAudioSettings must be used within an <AudioProvider>");
   }
   return ctx;
 }
@@ -124,14 +124,17 @@ export function AudioProvider({ children }: AudioProviderProps) {
 
       // Initialize the bridge with the store and music manager
       gameAudioBridge.init({
-        store: gameStore as unknown as import('zustand').StoreApi<AudioBridgeStoreShape>,
+        store: gameStore as unknown as import("zustand").StoreApi<AudioBridgeStoreShape>,
         musicManager: musicManagerRef.current,
       });
 
+      // Start the generative music loop and transport
+      await musicManagerRef.current.start();
+
       setAudioReady(true);
-      console.log('[AudioProvider] Audio context started, bridge initialized');
+      console.log("[AudioProvider] Audio context started, music + bridge initialized");
     } catch (err) {
-      console.warn('[AudioProvider] Failed to start audio context:', err);
+      console.warn("[AudioProvider] Failed to start audio context:", err);
     }
   }, [audioReady]);
 
@@ -141,20 +144,21 @@ export function AudioProvider({ children }: AudioProviderProps) {
 
   useEffect(() => {
     if (audioReady) return;
+    if (typeof document === "undefined") return; // Native: no DOM events
 
     const handleInteraction = () => {
       resumeAudio();
     };
 
     // Listen on both click and keydown for the first interaction
-    document.addEventListener('click', handleInteraction, { once: true });
-    document.addEventListener('keydown', handleInteraction, { once: true });
-    document.addEventListener('touchstart', handleInteraction, { once: true });
+    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("keydown", handleInteraction, { once: true });
+    document.addEventListener("touchstart", handleInteraction, { once: true });
 
     return () => {
-      document.removeEventListener('click', handleInteraction);
-      document.removeEventListener('keydown', handleInteraction);
-      document.removeEventListener('touchstart', handleInteraction);
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("keydown", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
     };
   }, [audioReady, resumeAudio]);
 
@@ -224,9 +228,5 @@ export function AudioProvider({ children }: AudioProviderProps) {
     resumeAudio,
   };
 
-  return (
-    <AudioSettingsContext.Provider value={value}>
-      {children}
-    </AudioSettingsContext.Provider>
-  );
+  return <AudioSettingsContext.Provider value={value}>{children}</AudioSettingsContext.Provider>;
 }

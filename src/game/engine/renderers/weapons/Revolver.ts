@@ -140,10 +140,12 @@ export class Revolver extends WeaponViewModel {
     root.add(this.muzzleFlash);
 
     // Store rest transforms
+    // NOTE: Field initializers haven't run yet when the base constructor
+    // calls constructModel(), so we must assign these objects here.
     this.hammerRestRotation = this.hammerMesh.rotation.x;
     this.cylinderRestRotation = this.cylinderGroup.rotation.x;
-    this.restQuaternion.copy(root.quaternion);
-    this.restPositionLocal.copy(root.position);
+    this.restQuaternion = root.quaternion.clone();
+    this.restPositionLocal = root.position.clone();
 
     return root;
   }

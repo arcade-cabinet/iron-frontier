@@ -297,7 +297,9 @@
       "id": "duel_challenge",
       "name": "Duel at High Noon",
       "descriptionTemplate": "A stranger steps into the street. You and me. Right here. Right now.",
-      "enemies": [{ "enemyIdOrTag": "copperhead_gunslinger", "countRange": [1, 1], "levelScale": 1.3 }],
+      "enemies": [
+        { "enemyIdOrTag": "copperhead_gunslinger", "countRange": [1, 1], "levelScale": 1.3 }
+      ],
       "difficultyRange": [4, 6],
       "validBiomes": ["desert", "grassland", "scrubland", "badlands"],
       "validLocationTypes": ["town", "village", "hamlet", "outpost"],
@@ -314,7 +316,7 @@
       "minTimeBetweenHours": 2
     },
     "trail": {
-      "baseChancePerHour": 0.10,
+      "baseChancePerHour": 0.1,
       "minTimeBetweenHours": 3
     },
     "road": {

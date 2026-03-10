@@ -63,18 +63,26 @@ export interface TravelManagerState {
   pauseStartedAt: number;
 }
 
+/**
+ * Callback for resolving encounters procedurally.
+ * Called at each checkpoint; returns a registered CombatEncounter ID or null.
+ *
+ * Parameters:
+ * - danger: the route's danger level
+ * - method: the travel method (road, trail, wilderness, etc.)
+ * - fromLocationId: origin location
+ * - toLocationId: destination location
+ */
+export type ProceduralEncounterResolver = (
+  danger: DangerLevel,
+  method: TravelMethod,
+  fromLocationId: string,
+  toLocationId: string,
+) => string | null;
+
 // ============================================================================
 // CONSTANTS
 // ============================================================================
-
-/** Encounter pools indexed by danger level */
-const ENCOUNTER_POOLS: Record<DangerLevel, string[]> = {
-  safe: [],
-  low: ['wolf_pack'],
-  moderate: ['roadside_bandits', 'wolf_pack', 'coyote_pack'],
-  high: ['copperhead_patrol', 'ivrc_checkpoint', 'roadside_bandits'],
-  extreme: ['remnant_awakening', 'copperhead_patrol'],
-};
 
 /** Base encounter chance per checkpoint, indexed by danger level */
 const ENCOUNTER_CHANCE: Record<DangerLevel, number> = {
@@ -107,6 +115,15 @@ const MAX_TRAVEL_MS = 12000;
 
 export class TravelManager {
   private state: TravelManagerState | null = null;
+  private encounterResolver: ProceduralEncounterResolver | null = null;
+
+  /**
+   * Set the procedural encounter resolver.
+   * When set, checkpoints use this instead of hardcoded encounter pools.
+   */
+  setEncounterResolver(resolver: ProceduralEncounterResolver): void {
+    this.encounterResolver = resolver;
+  }
 
   // --------------------------------------------------------------------------
   // LIFECYCLE
@@ -287,16 +304,26 @@ export class TravelManager {
   /**
    * Roll for an encounter at a checkpoint.
    *
+   * If a procedural encounter resolver is set, delegates to it.
+   * Otherwise falls back to hardcoded encounter pools.
+   *
    * @returns encounter ID if triggered, null otherwise.
    */
   private rollEncounter(danger: DangerLevel): string | null {
-    const pool = ENCOUNTER_POOLS[danger];
-    if (!pool || pool.length === 0) return null;
+    // Use procedural resolver if available
+    if (this.encounterResolver && this.state) {
+      const route = this.state.route;
+      return this.encounterResolver(
+        danger,
+        route.method,
+        route.fromLocationId,
+        route.toLocationId,
+      );
+    }
 
-    const chance = ENCOUNTER_CHANCE[danger] ?? 0;
-    if (Math.random() > chance) return null;
-
-    return pool[Math.floor(Math.random() * pool.length)];
+    // No resolver set — this is a configuration error
+    console.error('[TravelManager] No encounter resolver set — cannot roll encounter. Call setEncounterResolver() during init.');
+    return null;
   }
 }
 

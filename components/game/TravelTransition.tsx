@@ -14,8 +14,8 @@
  * encounter interruptions.
  */
 
-import * as React from 'react';
-import { Modal, Pressable, View } from 'react-native';
+import * as React from "react";
+import { Modal, Pressable, View } from "react-native";
 import Animated, {
   Easing,
   FadeIn,
@@ -25,42 +25,43 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Text } from '@/components/ui/Text';
-import { useGameStoreShallow } from '@/hooks/useGameStore';
-import { cn } from '@/lib/utils';
-import type { DangerLevel, TravelMethod } from '@/src/game/data/schemas/world';
-import { FrontierTerritory } from '@/src/game/data/worlds/frontier_territory';
-import type { TravelState } from '@/src/game/store/types';
-import { dangerDescription, methodDescription } from '@/src/game/systems/TravelManager';
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { cn } from "@/lib/utils";
+import type { DangerLevel, TravelMethod } from "@/src/game/data/schemas/world";
+import { FrontierTerritory } from "@/src/game/data/worlds/frontier_territory";
+import type { TravelState } from "@/src/game/store/types";
+import { dangerDescription, methodDescription } from "@/src/game/systems/TravelManager";
+import { rngTick, scopedRNG } from "../../src/game/lib/prng.ts";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const DANGER_COLORS: Record<DangerLevel, string> = {
-  safe: '#22c55e',
-  low: '#84cc16',
-  moderate: '#eab308',
-  high: '#f97316',
-  extreme: '#ef4444',
+  safe: "#22c55e",
+  low: "#84cc16",
+  moderate: "#eab308",
+  high: "#f97316",
+  extreme: "#ef4444",
 };
 
 const DANGER_BG: Record<DangerLevel, string> = {
-  safe: 'bg-green-900/40',
-  low: 'bg-lime-900/40',
-  moderate: 'bg-yellow-900/40',
-  high: 'bg-orange-900/40',
-  extreme: 'bg-red-900/40',
+  safe: "bg-green-900/40",
+  low: "bg-lime-900/40",
+  moderate: "bg-yellow-900/40",
+  high: "bg-orange-900/40",
+  extreme: "bg-red-900/40",
 };
 
 const DANGER_BORDER: Record<DangerLevel, string> = {
-  safe: 'border-green-700/40',
-  low: 'border-lime-700/40',
-  moderate: 'border-yellow-700/40',
-  high: 'border-orange-700/40',
-  extreme: 'border-red-700/40',
+  safe: "border-green-700/40",
+  low: "border-lime-700/40",
+  moderate: "border-yellow-700/40",
+  high: "border-orange-700/40",
+  extreme: "border-red-700/40",
 };
 
 type MethodVisual = {
@@ -70,11 +71,11 @@ type MethodVisual = {
 };
 
 const METHOD_VISUALS: Record<TravelMethod, MethodVisual> = {
-  road: { label: 'Road', icon: '\u{1F40E}', speed: 'Fast' },
-  trail: { label: 'Trail', icon: '\u{1F97E}', speed: 'Moderate' },
-  railroad: { label: 'Railroad', icon: '\u{1F682}', speed: 'Very Fast' },
-  wilderness: { label: 'Wilderness', icon: '\u{1F97E}', speed: 'Slow' },
-  river: { label: 'River', icon: '\u{1F6F6}', speed: 'Varies' },
+  road: { label: "Road", icon: "\u{1F40E}", speed: "Fast" },
+  trail: { label: "Trail", icon: "\u{1F97E}", speed: "Moderate" },
+  railroad: { label: "Railroad", icon: "\u{1F682}", speed: "Very Fast" },
+  wilderness: { label: "Wilderness", icon: "\u{1F97E}", speed: "Slow" },
+  river: { label: "River", icon: "\u{1F6F6}", speed: "Varies" },
 };
 
 // =============================================================================
@@ -82,7 +83,7 @@ const METHOD_VISUALS: Record<TravelMethod, MethodVisual> = {
 // =============================================================================
 
 function getLocationName(locationId: string | null | undefined): string {
-  if (!locationId) return 'Unknown';
+  if (!locationId) return "Unknown";
   const loc = FrontierTerritory.locations.find((l) => l.id === locationId);
   return loc?.name ?? locationId;
 }
@@ -96,7 +97,7 @@ function LandscapeSilhouette({ method }: { method: TravelMethod }) {
   const translateX = useSharedValue(0);
 
   React.useEffect(() => {
-    const speed = method === 'railroad' ? 3000 : method === 'road' ? 5000 : 7000;
+    const speed = method === "railroad" ? 3000 : method === "road" ? 5000 : 7000;
     translateX.value = withRepeat(
       withTiming(-200, { duration: speed, easing: Easing.linear }),
       -1,
@@ -114,10 +115,10 @@ function LandscapeSilhouette({ method }: { method: TravelMethod }) {
     // Create a repeating pattern wider than the view
     for (let i = 0; i < 12; i++) {
       items.push({
-        left: i * 60 + Math.random() * 20,
-        width: 30 + Math.random() * 40,
-        height: 20 + Math.random() * 50,
-        opacity: 0.15 + Math.random() * 0.2,
+        left: i * 60 + scopedRNG("ui", 42, rngTick()) * 20,
+        width: 30 + scopedRNG("ui", 42, rngTick()) * 40,
+        height: 20 + scopedRNG("ui", 42, rngTick()) * 50,
+        opacity: 0.15 + scopedRNG("ui", 42, rngTick()) * 0.2,
       });
     }
     return items;
@@ -128,13 +129,13 @@ function LandscapeSilhouette({ method }: { method: TravelMethod }) {
       <Animated.View
         style={[
           {
-            flexDirection: 'row',
-            position: 'absolute',
+            flexDirection: "row",
+            position: "absolute",
             bottom: 0,
             left: 0,
             width: 900,
             height: 80,
-            alignItems: 'flex-end',
+            alignItems: "flex-end",
           },
           animatedStyle,
         ]}
@@ -143,12 +144,12 @@ function LandscapeSilhouette({ method }: { method: TravelMethod }) {
           <View
             key={`mtn-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: shape.left,
               bottom: 0,
               width: shape.width,
               height: shape.height,
-              backgroundColor: '#4a3728',
+              backgroundColor: "#4a3728",
               opacity: shape.opacity,
               borderTopLeftRadius: shape.width * 0.3,
               borderTopRightRadius: shape.width * 0.2,
@@ -158,12 +159,12 @@ function LandscapeSilhouette({ method }: { method: TravelMethod }) {
         {/* Ground line */}
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
             height: 2,
-            backgroundColor: '#4a3728',
+            backgroundColor: "#4a3728",
             opacity: 0.3,
           }}
         />
@@ -204,12 +205,12 @@ function TravelProgress({
           <View
             key={`tick-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: `${(i + 1) * 25}%`,
               top: 0,
               bottom: 0,
               width: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
             }}
           />
         ))}
@@ -223,9 +224,7 @@ function TravelProgress({
         <Text className="max-w-[35%] text-xs text-amber-500" numberOfLines={1}>
           {fromName}
         </Text>
-        <Text className="font-mono text-sm font-bold text-amber-300">
-          {Math.round(progress)}%
-        </Text>
+        <Text className="font-mono text-sm font-bold text-amber-300">{Math.round(progress)}%</Text>
         <Text className="max-w-[35%] text-right text-xs text-amber-500" numberOfLines={1}>
           {toName}
         </Text>
@@ -251,7 +250,7 @@ function TravelIcon({ icon }: { icon: string }) {
   }));
 
   return (
-    <Animated.View style={[{ alignItems: 'center' }, animatedStyle]}>
+    <Animated.View style={[{ alignItems: "center" }, animatedStyle]}>
       <Text style={{ fontSize: 56 }}>{icon}</Text>
     </Animated.View>
   );
@@ -270,7 +269,7 @@ export function TravelTransition() {
   }));
 
   // Only show during travel phase when there's no encounter (TravelPanel handles encounters)
-  const shouldShow = phase === 'travel' && travel && !travel.encounterId;
+  const shouldShow = phase === "travel" && travel && !travel.encounterId;
 
   if (!shouldShow || !travel) return null;
 
@@ -297,14 +296,12 @@ export function TravelTransition() {
           >
             {/* Header */}
             <View className="border-b border-amber-800/50 bg-amber-900/30 px-5 py-4">
-              <Text className="text-center text-lg font-bold text-amber-200">
-                Traveling...
-              </Text>
+              <Text className="text-center text-lg font-bold text-amber-200">Traveling...</Text>
               <View className="mt-1 flex-row items-center justify-center gap-2">
                 <Text className="text-sm text-amber-400" numberOfLines={1}>
                   {fromName}
                 </Text>
-                <Text className="text-amber-600">{'\u{2192}'}</Text>
+                <Text className="text-amber-600">{"\u{2192}"}</Text>
                 <Text className="text-sm text-amber-400" numberOfLines={1}>
                   {toName}
                 </Text>
@@ -324,7 +321,7 @@ export function TravelTransition() {
                 </View>
 
                 <View className="flex-row items-center gap-2 rounded-lg border border-amber-700/40 bg-amber-900/40 px-3 py-1.5">
-                  <Text style={{ fontSize: 14 }}>{'\u{1F9ED}'}</Text>
+                  <Text style={{ fontSize: 14 }}>{"\u{1F9ED}"}</Text>
                   <Text className="text-xs text-amber-300">{travel.travelTime}h journey</Text>
                 </View>
               </View>
@@ -335,26 +332,14 @@ export function TravelTransition() {
               {/* Travel icon */}
               <View className="items-center py-2">
                 <TravelIcon icon={visual.icon} />
-                <Text className="mt-2 text-xs italic text-amber-400/60">
-                  {methodDesc}
-                </Text>
+                <Text className="mt-2 text-xs italic text-amber-400/60">{methodDesc}</Text>
               </View>
 
               {/* Progress bar */}
-              <TravelProgress
-                progress={travel.progress}
-                fromName={fromName}
-                toName={toName}
-              />
+              <TravelProgress progress={travel.progress} fromName={fromName} toName={toName} />
 
               {/* Danger level */}
-              <View
-                className={cn(
-                  'rounded-lg border px-4 py-3',
-                  dangerBg,
-                  dangerBorder,
-                )}
-              >
+              <View className={cn("rounded-lg border px-4 py-3", dangerBg, dangerBorder)}>
                 <View className="flex-row items-center gap-2">
                   <View
                     style={{
@@ -364,16 +349,11 @@ export function TravelTransition() {
                       backgroundColor: dangerColor,
                     }}
                   />
-                  <Text
-                    className="text-xs font-bold capitalize"
-                    style={{ color: dangerColor }}
-                  >
+                  <Text className="text-xs font-bold capitalize" style={{ color: dangerColor }}>
                     {travel.dangerLevel} danger
                   </Text>
                 </View>
-                <Text className="mt-1 text-[11px] text-amber-300/70">
-                  {dangerDesc}
-                </Text>
+                <Text className="mt-1 text-[11px] text-amber-300/70">{dangerDesc}</Text>
               </View>
             </View>
 
@@ -385,12 +365,8 @@ export function TravelTransition() {
                 accessibilityRole="button"
                 accessibilityLabel="Cancel travel and return to origin"
               >
-                <Text className="text-sm font-medium text-amber-300">
-                  Cancel Journey
-                </Text>
-                <Text className="mt-0.5 text-[10px] text-amber-500/60">
-                  Return to {fromName}
-                </Text>
+                <Text className="text-sm font-medium text-amber-300">Cancel Journey</Text>
+                <Text className="mt-0.5 text-[10px] text-amber-500/60">Return to {fromName}</Text>
               </Pressable>
             </View>
           </Animated.View>

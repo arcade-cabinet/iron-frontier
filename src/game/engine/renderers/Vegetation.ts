@@ -1,7 +1,7 @@
 // Vegetation — Procedural vegetation geometry constructors for the Old West.
 //
 // Each function returns a THREE.Group of primitives. Materials come from
-// CanvasTextureFactory. No Math.random() — alea PRNG for all variation.
+// CanvasTextureFactory. No scopedRNG('render', 42, rngTick()) — alea PRNG for all variation.
 
 import Alea from 'alea';
 import * as THREE from 'three';
@@ -11,6 +11,7 @@ import {
   createStoneTexture,
   createWoodTexture,
 } from '../materials';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // --- Types ---
 

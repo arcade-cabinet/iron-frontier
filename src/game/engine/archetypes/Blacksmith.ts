@@ -10,6 +10,7 @@ import {
 
 import {
   createMetalTexture,
+  createPBRWoodAged,
   createRustTexture,
   createStoneTexture,
   createWoodTexture,
@@ -31,8 +32,7 @@ const WALL_THICK = 0.2;
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallMat = createWoodTexture(palette[0] ?? '#6B5B4A', palette[1] ?? '#4B3E2A');
+  const wallMat = createPBRWoodAged(2);
 
   // Back wall
   const backWall = createWall(WIDTH, WALL_HEIGHT, WALL_THICK, wallMat);

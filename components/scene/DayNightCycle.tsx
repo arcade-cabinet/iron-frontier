@@ -4,16 +4,20 @@
 // and Lighting, renders atmospheric effects (fog, fireflies, dust), and
 // manages a player lantern (point light child of camera) during nighttime.
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
-import Alea from 'alea';
-import * as THREE from 'three';
-
-import { DayNightManager, type PhaseChangeCallback } from '@/engine/renderers/DayNightManager';
-import { DUST_PARTICLES, LANTERN_CONFIG, getDustFactor, getLanternFactor } from '@/engine/renderers/AtmosphericEffects';
-import { Fireflies } from './Fireflies';
-import { Lighting } from './Lighting';
-import { Sky } from './Sky';
+import { useFrame, useThree } from "@react-three/fiber";
+import Alea from "alea";
+import { useEffect, useMemo, useRef } from "react";
+import * as THREE from "three";
+import {
+  DUST_PARTICLES,
+  getDustFactor,
+  getLanternFactor,
+  LANTERN_CONFIG,
+} from "@/engine/renderers/AtmosphericEffects";
+import { DayNightManager, type PhaseChangeCallback } from "@/engine/renderers/DayNightManager";
+import { Fireflies } from "./Fireflies.tsx";
+import { Lighting } from "./Lighting.tsx";
+import { Sky } from "./Sky.tsx";
 
 export interface DayNightCycleProps {
   /** Starting time of day (0-24 float). Default: 10 (10 AM). */
@@ -30,7 +34,13 @@ export interface DayNightCycleProps {
 
 const _dustDummy = new THREE.Object3D();
 
-function DustParticles({ dustFactor, seed = 'iron-frontier-dust' }: { dustFactor: number; seed?: string }) {
+function DustParticles({
+  dustFactor,
+  seed = "iron-frontier-dust",
+}: {
+  dustFactor: number;
+  seed?: string;
+}) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const elapsedRef = useRef(0);
   const { count, radius, size, baseOpacity, color, driftSpeed } = DUST_PARTICLES;
@@ -49,14 +59,25 @@ function DustParticles({ dustFactor, seed = 'iron-frontier-dust' }: { dustFactor
     });
   }, [seed, count, radius, driftSpeed]);
 
-  const material = useMemo(() => new THREE.MeshBasicMaterial({
-    color, transparent: true, opacity: 0, depthWrite: false, toneMapped: false,
-  }), [color]);
+  const material = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        toneMapped: false,
+      }),
+    [color],
+  );
   const geometry = useMemo(() => new THREE.SphereGeometry(size, 4, 4), [size]);
 
   useFrame((_s, delta) => {
     if (!meshRef.current) return;
-    if (dustFactor < 0.01) { meshRef.current.visible = false; return; }
+    if (dustFactor < 0.01) {
+      meshRef.current.visible = false;
+      return;
+    }
     meshRef.current.visible = true;
     elapsedRef.current += delta;
     const t = elapsedRef.current;
@@ -90,7 +111,10 @@ function PlayerLantern({ nightFactor }: { nightFactor: number }) {
   useFrame((_s, delta) => {
     if (!lightRef.current) return;
     const factor = getLanternFactor(nightFactor);
-    if (factor < 0.01) { lightRef.current.visible = false; return; }
+    if (factor < 0.01) {
+      lightRef.current.visible = false;
+      return;
+    }
     lightRef.current.visible = true;
     elapsedRef.current += delta;
 
@@ -98,14 +122,22 @@ function PlayerLantern({ nightFactor }: { nightFactor: number }) {
     lightRef.current.position.copy(camera.position).add(_offsetVec);
 
     const t = elapsedRef.current;
-    const flicker = Math.sin(t * flickerSpeed) * 0.5
-      + Math.sin(t * flickerSpeed * 1.7 + 0.5) * 0.3
-      + Math.sin(t * flickerSpeed * 3.1 + 1.2) * 0.2;
+    const flicker =
+      Math.sin(t * flickerSpeed) * 0.5 +
+      Math.sin(t * flickerSpeed * 1.7 + 0.5) * 0.3 +
+      Math.sin(t * flickerSpeed * 3.1 + 1.2) * 0.2;
     lightRef.current.intensity = intensity * factor * (1 + flicker * flickerAmplitude);
   });
 
   return (
-    <pointLight ref={lightRef} color={color} intensity={0} distance={range} decay={decay} castShadow={false} />
+    <pointLight
+      ref={lightRef}
+      color={color}
+      intensity={0}
+      distance={range}
+      decay={decay}
+      castShadow={false}
+    />
   );
 }
 
@@ -140,10 +172,13 @@ export function DayNightCycle({
   const scene = useThree((s) => s.scene);
 
   useEffect(() => {
-    const fog = new THREE.FogExp2(0x111122, 0.002);
+    const fog = new THREE.FogExp2(0xc8b090, 0.0008);
     scene.fog = fog;
     fogRef.current = fog;
-    return () => { scene.fog = null; fogRef.current = null; };
+    return () => {
+      scene.fog = null;
+      fogRef.current = null;
+    };
   }, [scene]);
 
   // Tick every frame

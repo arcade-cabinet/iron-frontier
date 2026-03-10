@@ -27,10 +27,14 @@ export interface SettingsState {
 export interface SettingsActions {
   /** Update settings (partial) */
   updateSettings: (settings: Partial<GameSettings>) => void;
+  /** Set master volume (0-1) */
+  setMasterVolume: (volume: number) => void;
   /** Set music volume */
   setMusicVolume: (volume: number) => void;
   /** Set SFX volume */
   setSfxVolume: (volume: number) => void;
+  /** Toggle mute on/off */
+  toggleMute: () => void;
   /** Toggle haptics */
   toggleHaptics: () => void;
   /** Set control mode */
@@ -60,8 +64,10 @@ export type SettingsSlice = SettingsState & SettingsActions;
  * Default game settings.
  */
 export const DEFAULT_SETTINGS: GameSettings = {
+  masterVolume: 1.0,
   musicVolume: 0.7,
   sfxVolume: 0.8,
+  muted: false,
   haptics: true,
   controlMode: 'tap',
   reducedMotion: false,
@@ -98,6 +104,12 @@ export const createSettingsSlice: StateCreator<SettingsSlice, [], [], SettingsSl
     }));
   },
 
+  setMasterVolume: (volume: number) => {
+    set((state) => ({
+      settings: { ...state.settings, masterVolume: Math.max(0, Math.min(1, volume)) },
+    }));
+  },
+
   setMusicVolume: (volume: number) => {
     set((state) => ({
       settings: { ...state.settings, musicVolume: Math.max(0, Math.min(1, volume)) },
@@ -107,6 +119,12 @@ export const createSettingsSlice: StateCreator<SettingsSlice, [], [], SettingsSl
   setSfxVolume: (volume: number) => {
     set((state) => ({
       settings: { ...state.settings, sfxVolume: Math.max(0, Math.min(1, volume)) },
+    }));
+  },
+
+  toggleMute: () => {
+    set((state) => ({
+      settings: { ...state.settings, muted: !state.settings.muted },
     }));
   },
 

@@ -1,3 +1,4 @@
+import { scopedRNG, rngTick } from '../../lib/prng';
 // HitEffects — Visual feedback data for combat events.
 //
 // Pure data generators: no rendering, no side effects. Each function returns
@@ -39,9 +40,9 @@ export function createDamageNumber(
   return {
     id: `dmg-${++damageNumberCounter}`,
     position: {
-      x: position.x + (Math.random() - 0.5) * 0.3,
+      x: position.x + (scopedRNG('combat', 42, rngTick()) - 0.5) * 0.3,
       y: position.y + 0.5,
-      z: position.z + (Math.random() - 0.5) * 0.3,
+      z: position.z + (scopedRNG('combat', 42, rngTick()) - 0.5) * 0.3,
     },
     value,
     label,
@@ -199,7 +200,7 @@ export function createImpactSpark(
   return {
     position: { ...position },
     normal: { ...normal },
-    count: 4 + Math.floor(Math.random() * 4),
+    count: 4 + Math.floor(scopedRNG('combat', 42, rngTick()) * 4),
     createdAt: performance.now(),
     duration: 0.3,
   };

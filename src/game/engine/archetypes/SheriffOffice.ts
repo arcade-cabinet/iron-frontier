@@ -14,6 +14,7 @@ import {
 
 import {
   createMetalTexture,
+  createPBRStoneRough,
   createWoodTexture,
 } from '../materials';
 
@@ -110,10 +111,7 @@ function createJailCell(cellWidth: number, cellDepth: number, cellHeight: number
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallBase = palette[0] ?? '#7B6B5A';
-  const wallGrain = palette[1] ?? '#5B4E3A';
-  const wallMat = createWoodTexture(wallBase, wallGrain);
+  const wallMat = createPBRStoneRough(2);
 
   // Walls
   const backWall = createWall(WIDTH, WALL_HEIGHT, WALL_THICK, wallMat);

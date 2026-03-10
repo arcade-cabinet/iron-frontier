@@ -20,9 +20,6 @@ import { Platform } from 'react-native';
 // On native the module import is skipped to avoid bundling WebXR code.
 const xrModule = Platform.OS === 'web' ? require('@react-three/xr') : null;
 
-// Declare __DEV__ before first use (set by bundlers like Metro/Vite).
-declare const __DEV__: boolean;
-
 // ---------------------------------------------------------------------------
 // XR Store singleton
 // ---------------------------------------------------------------------------
@@ -37,9 +34,10 @@ export const xrStore = xrModule
       // Disable the automatic offer-session browser prompt — we control entry
       // via the EnterVRButton component.
       offerSession: false,
-      // Emulate a Meta Quest 3 in development when WebXR is not natively available.
-      // Disabled in production to avoid shipping the emulator bundle.
-      emulate: typeof __DEV__ !== 'undefined' && __DEV__ ? 'metaQuest3' : undefined,
+      // XR device emulation is disabled — it renders a large dark overlay panel
+      // that covers part of the game view, obscuring gameplay. VR features can be
+      // tested on an actual headset or by enabling browser WebXR DevTools instead.
+      emulate: false,
     })
   : null;
 

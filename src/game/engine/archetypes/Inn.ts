@@ -12,6 +12,7 @@ import {
 
 import {
   createFabricTexture,
+  createPBRWoodSiding,
   createWoodTexture,
 } from '../materials';
 
@@ -36,10 +37,7 @@ const WALL_THICK = 0.2;
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallBase = palette[0] ?? '#9B7B5A';
-  const wallGrain = palette[1] ?? '#7B5E42';
-  const wallMat = createWoodTexture(wallBase, wallGrain);
+  const wallMat = createPBRWoodSiding(2);
 
   // Back wall
   const backWall = createWall(WIDTH, WALL_HEIGHT, WALL_THICK, wallMat);

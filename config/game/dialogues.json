@@ -220,15 +220,31 @@
       "reload": ["Reloading!", "Cover me!", "Hold on..."]
     },
     "exploration": {
-      "discover_location": ["Well, would you look at that.", "Haven't seen this before.", "Interesting..."],
+      "discover_location": [
+        "Well, would you look at that.",
+        "Haven't seen this before.",
+        "Interesting..."
+      ],
       "danger_nearby": ["Something doesn't feel right.", "Stay alert.", "I've got a bad feeling."],
       "treasure_found": ["Jackpot!", "Now that's a find.", "Well worth the trip."],
-      "weather_hot": ["Sun's beating down hard today.", "Could fry an egg on these rocks.", "Need to find shade soon."],
+      "weather_hot": [
+        "Sun's beating down hard today.",
+        "Could fry an egg on these rocks.",
+        "Need to find shade soon."
+      ],
       "weather_storm": ["Storm's rolling in.", "Better find shelter.", "Sky looks mean."],
-      "night_fall": ["Sun's going down.", "Need to make camp soon.", "The frontier isn't safe after dark."]
+      "night_fall": [
+        "Sun's going down.",
+        "Need to make camp soon.",
+        "The frontier isn't safe after dark."
+      ]
     },
     "town": {
-      "entering": ["Civilization at last.", "Let's see what this town has to offer.", "Time to resupply."],
+      "entering": [
+        "Civilization at last.",
+        "Let's see what this town has to offer.",
+        "Time to resupply."
+      ],
       "leaving": ["Back to the wild.", "Open road ahead.", "Let's ride."]
     }
   },

@@ -4,9 +4,9 @@
 // positions into 3-D world-space placements suitable for the renderer.
 // Returns arrays of building, NPC, and prop placements.
 
-import Alea from 'alea';
+import Alea from "alea";
 
-import type { Location, SlotInstance, TileDef } from '@/src/game/data/schemas/spatial';
+import type { Location, SlotInstance, TileDef } from "@/src/game/data/schemas/spatial";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -86,32 +86,32 @@ function hexToLocal(q: number, r: number): [number, number] {
 /** Derive the visual structure type from a slot's tiles. */
 function deriveStructureType(slot: SlotInstance): string {
   for (const tile of slot.tiles) {
-    if (tile.structure && tile.structure !== 'none') {
+    if (tile.structure && tile.structure !== "none") {
       return tile.structure;
     }
   }
   // Fallback: map slot type to a default structure
   const slotDefaults: Record<string, string> = {
-    tavern: 'saloon_building',
-    general_store: 'store_building',
-    gunsmith: 'store_building',
-    doctor: 'office_building',
-    bank: 'bank_building',
-    hotel: 'hotel_building',
-    stable: 'stable',
-    law_office: 'office_building',
-    church: 'church_building',
-    telegraph: 'telegraph_building',
-    train_station: 'station_building',
-    workshop: 'workshop_building',
-    mine: 'mine_building',
-    residence: 'house',
-    residence_wealthy: 'mansion',
-    residence_poor: 'cabin',
-    landmark: 'water_tower',
-    waystation: 'cabin',
+    tavern: "saloon_building",
+    general_store: "store_building",
+    gunsmith: "store_building",
+    doctor: "office_building",
+    bank: "bank_building",
+    hotel: "hotel_building",
+    stable: "stable",
+    law_office: "office_building",
+    church: "church_building",
+    telegraph: "telegraph_building",
+    train_station: "station_building",
+    workshop: "workshop_building",
+    mine: "mine_building",
+    residence: "house",
+    residence_wealthy: "mansion",
+    residence_poor: "cabin",
+    landmark: "water_tower",
+    waystation: "cabin",
   };
-  return slotDefaults[slot.type] ?? 'cabin';
+  return slotDefaults[slot.type] ?? "cabin";
 }
 
 // ---------------------------------------------------------------------------
@@ -125,10 +125,7 @@ function deriveStructureType(slot: SlotInstance): string {
  * @param townOrigin - The world-space origin [x, y, z] where the town center sits.
  * @returns Full placement data for the renderer.
  */
-export function placeTown(
-  location: Location,
-  townOrigin: [number, number, number],
-): TownPlacement {
+export function placeTown(location: Location, townOrigin: [number, number, number]): TownPlacement {
   const buildings: BuildingPlacement[] = [];
   const npcs: NPCPlacement[] = [];
   const props: PropPlacement[] = [];
@@ -140,29 +137,22 @@ export function placeTown(
 
   // Process inline slots
   for (const slot of location.slots) {
-    processSlot(
-      slot,
-      townOrigin,
-      centerOffsetX,
-      centerOffsetZ,
-      buildings,
-      npcs,
-    );
+    processSlot(slot, townOrigin, centerOffsetX, centerOffsetZ, buildings, npcs);
   }
 
   // Process assemblage references as simplified slots
   for (const asmRef of location.assemblages) {
     const syntheticSlot: SlotInstance = {
       id: asmRef.instanceId,
-      type: asmRef.slotTypeOverride ?? 'residence',
-      name: asmRef.instanceId.replace(/_/g, ' '),
+      type: asmRef.slotTypeOverride ?? "residence",
+      name: asmRef.instanceId.replace(/_/g, " "),
       anchor: asmRef.anchor,
       rotation: asmRef.rotation,
       tiles: [
         {
           coord: { q: 0, r: 0 },
-          terrain: 'dirt',
-          structure: mapAssemblageToStructure(asmRef.assemblageId) as TileDef['structure'],
+          terrain: "dirt",
+          structure: mapAssemblageToStructure(asmRef.assemblageId) as TileDef["structure"],
         },
       ],
       markers: [],
@@ -170,19 +160,12 @@ export function placeTown(
       tags: asmRef.tags,
       importance: asmRef.importance ?? 3,
     };
-    processSlot(
-      syntheticSlot,
-      townOrigin,
-      centerOffsetX,
-      centerOffsetZ,
-      buildings,
-      npcs,
-    );
+    processSlot(syntheticSlot, townOrigin, centerOffsetX, centerOffsetZ, buildings, npcs);
   }
 
   // Process base tiles for props (features like barrels, benches, etc.)
   for (const tile of location.baseTiles) {
-    if (tile.feature && tile.feature !== 'none') {
+    if (tile.feature && tile.feature !== "none") {
       const [lx, lz] = hexToLocal(tile.coord.q, tile.coord.r);
       const wx = townOrigin[0] + lx - centerOffsetX;
       const wz = townOrigin[2] + lz - centerOffsetZ;
@@ -233,16 +216,11 @@ function processSlot(
 
   // Place NPCs from spawn_point markers
   for (const marker of slot.markers) {
-    if (marker.type === 'spawn_point') {
-      const [mx, mz] = hexToLocal(
-        slot.anchor.q + marker.offset.q,
-        slot.anchor.r + marker.offset.r,
-      );
+    if (marker.type === "spawn_point") {
+      const [mx, mz] = hexToLocal(slot.anchor.q + marker.offset.q, slot.anchor.r + marker.offset.r);
       const npcWx = townOrigin[0] + mx - centerOffsetX;
       const npcWz = townOrigin[2] + mz - centerOffsetZ;
-      const facing = marker.facing !== undefined
-        ? marker.facing * HEX_ROTATION_STEP
-        : rotation;
+      const facing = marker.facing !== undefined ? marker.facing * HEX_ROTATION_STEP : rotation;
 
       npcs.push({
         id: marker.name,
@@ -258,29 +236,29 @@ function processSlot(
 /** Map an assemblage ID prefix to a structure type. */
 function mapAssemblageToStructure(assemblageId: string): string {
   const mapping: Record<string, string> = {
-    asm_saloon: 'saloon_building',
-    asm_general_store: 'store_building',
-    asm_sheriff: 'office_building',
-    asm_well: 'well',
-    asm_gunsmith: 'store_building',
-    asm_church: 'church_building',
-    asm_train_station: 'station_building',
-    asm_telegraph: 'telegraph_building',
-    asm_stable: 'stable',
-    asm_mansion: 'mansion',
-    asm_house: 'house',
-    asm_cabin: 'cabin',
-    asm_hotel: 'hotel_building',
-    asm_bank: 'bank_building',
-    asm_mine: 'mine_building',
-    asm_workshop: 'workshop_building',
-    asm_warehouse: 'warehouse',
-    asm_watch_tower: 'watch_tower',
+    asm_saloon: "saloon_building",
+    asm_general_store: "store_building",
+    asm_sheriff: "office_building",
+    asm_well: "well",
+    asm_gunsmith: "store_building",
+    asm_church: "church_building",
+    asm_train_station: "station_building",
+    asm_telegraph: "telegraph_building",
+    asm_stable: "stable",
+    asm_mansion: "mansion",
+    asm_house: "house",
+    asm_cabin: "cabin",
+    asm_hotel: "hotel_building",
+    asm_bank: "bank_building",
+    asm_mine: "mine_building",
+    asm_workshop: "workshop_building",
+    asm_warehouse: "warehouse",
+    asm_watch_tower: "watch_tower",
   };
 
   // Match by longest prefix
   for (const [prefix, structure] of Object.entries(mapping)) {
     if (assemblageId.startsWith(prefix)) return structure;
   }
-  return 'cabin';
+  return "cabin";
 }

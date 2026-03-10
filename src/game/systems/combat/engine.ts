@@ -28,6 +28,7 @@ import type {
   CombatStats,
   StatusEffect,
 } from './types';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // CONSTANTS
@@ -312,7 +313,7 @@ export function processAction(
     case 'flee':
       return processFlee(state, action, actor, randomValues?.hitRoll);
     case 'skill':
-      return processSkill(state, action, actor);
+      return processSkill(state, action, actor, randomValues);
     default:
       return {
         state,
@@ -345,7 +346,7 @@ function processAttack(
 
   // Calculate hit chance
   const hitChance = calculateHitChance(actorStats.accuracy, targetStats.evasion);
-  const hitRoll = randomValues?.hitRoll ?? Math.random();
+  const hitRoll = randomValues?.hitRoll ?? scopedRNG('combat', 42, rngTick());
   const didHit = rollHit(hitChance, hitRoll);
 
   if (!didHit) {
@@ -365,7 +366,7 @@ function processAttack(
   }
 
   // Check for critical
-  const critRoll = randomValues?.critRoll ?? Math.random();
+  const critRoll = randomValues?.critRoll ?? scopedRNG('combat', 42, rngTick());
   const isCritical = rollCritical(actorStats.critChance, critRoll);
 
   // Check if target is defending
@@ -380,7 +381,7 @@ function processAttack(
       isCritical,
       critMultiplier: actorStats.critMultiplier,
     },
-    randomValues?.damageVariance ?? Math.random()
+    randomValues?.damageVariance ?? scopedRNG('combat', 42, rngTick())
   );
 
   // Apply damage
@@ -559,7 +560,7 @@ function processFlee(
   const fleeChance = BASE_FLEE_CHANCE + speedDiff * FLEE_SPEED_BONUS;
   const clampedFleeChance = Math.max(10, Math.min(90, fleeChance));
 
-  const roll = randomValue ?? Math.random();
+  const roll = randomValue ?? scopedRNG('combat', 42, rngTick());
   const fleeSuccess = roll * 100 < clampedFleeChance;
 
   if (fleeSuccess) {
@@ -599,22 +600,362 @@ function processFlee(
 }
 
 /**
- * Process a skill action (placeholder for future expansion)
+ * Process a skill action
  */
 function processSkill(
   state: CombatState,
   action: CombatAction,
-  actor: Combatant
+  actor: Combatant,
+  randomValues?: { hitRoll?: number; critRoll?: number; damageVariance?: number }
 ): { state: CombatState; result: CombatResult } {
-  // Placeholder - skills not yet implemented
+  switch (action.skillId) {
+    case 'aimed_shot':
+      return processAimedShot(state, action, actor, randomValues);
+    case 'quick_draw':
+      return processQuickDraw(state, action, actor, randomValues);
+    case 'overwatch':
+      return processOverwatch(state, action, actor);
+    case 'first_aid':
+      return processFirstAid(state, action, actor);
+    case 'intimidate':
+      return processIntimidate(state, action, actor, randomValues?.hitRoll);
+    default:
+      return {
+        state,
+        result: createFailureResult(action, `Unknown skill: ${action.skillId}`),
+      };
+  }
+}
+
+/**
+ * Aimed Shot: Higher AP cost (4), +20% accuracy, +50% damage, lower crit chance
+ */
+function processAimedShot(
+  state: CombatState,
+  action: CombatAction,
+  actor: Combatant,
+  randomValues?: { hitRoll?: number; critRoll?: number; damageVariance?: number }
+): { state: CombatState; result: CombatResult } {
+  if (!action.targetId) {
+    return { state, result: createFailureResult(action, 'No target specified') };
+  }
+
+  const target = state.combatants.find((c) => c.id === action.targetId);
+  if (!target || !target.isAlive) {
+    return { state, result: createFailureResult(action, 'Target is not available') };
+  }
+
+  const actorStats = applyStatusEffectModifiers(actor.stats, actor.statusEffects);
+  const targetStats = applyStatusEffectModifiers(target.stats, target.statusEffects);
+
+  // Aimed shot: -15% hit chance (careful shot trades reliability for power)
+  const hitChance = calculateHitChance(actorStats.accuracy - 15, targetStats.evasion);
+  const hitRoll = randomValues?.hitRoll ?? scopedRNG('combat', 42, rngTick());
+  const didHit = rollHit(hitChance, hitRoll);
+
+  if (!didHit) {
+    const result: CombatResult = {
+      action,
+      success: false,
+      wasDodged: true,
+      message: `${actor.name} lines up an aimed shot at ${target.name} but misses!`,
+      timestamp: Date.now(),
+    };
+    return { state: markActorActed(state, actor.id, result), result };
+  }
+
+  // Aimed shots have higher crit chance
+  const critRoll = randomValues?.critRoll ?? scopedRNG('combat', 42, rngTick());
+  const isCritical = rollCritical(actorStats.critChance + 15, critRoll);
+  const isDefending = target.statusEffects.some((e) => e.type === 'defending');
+
+  // 50% more damage
+  const damageResult = calculateDamage(
+    {
+      attackPower: Math.floor(actorStats.attack * 1.5),
+      defenderDefense: targetStats.defense,
+      isDefenderDefending: isDefending,
+      isCritical,
+      critMultiplier: actorStats.critMultiplier,
+    },
+    randomValues?.damageVariance ?? scopedRNG('combat', 42, rngTick())
+  );
+
+  const newTargetHP = Math.max(0, target.stats.hp - damageResult.finalDamage);
+  const targetKilled = newTargetHP === 0;
+
+  const updatedCombatants = state.combatants.map((c) => {
+    if (c.id === target.id) {
+      return { ...c, stats: { ...c.stats, hp: newTargetHP }, isAlive: !targetKilled };
+    }
+    if (c.id === actor.id) {
+      return { ...c, hasActedThisTurn: true };
+    }
+    return c;
+  });
+
+  let message = `${actor.name} takes an aimed shot at ${target.name}`;
+  if (isCritical) message += ' with a CRITICAL HIT';
+  message += ` for ${damageResult.finalDamage} damage!`;
+  if (targetKilled) message += ` ${target.name} is defeated!`;
+
   const result: CombatResult = {
     action,
-    success: false,
-    message: 'Skills are not yet implemented',
+    success: true,
+    damage: damageResult.finalDamage,
+    isCritical,
+    wasBlocked: isDefending,
+    targetKilled,
+    message,
     timestamp: Date.now(),
   };
 
-  return { state, result };
+  return {
+    state: { ...state, combatants: updatedCombatants, log: [...state.log, result].slice(-state.maxLogEntries) },
+    result,
+  };
+}
+
+/**
+ * Quick Draw: Low AP cost (1), reduced damage, higher hit chance
+ */
+function processQuickDraw(
+  state: CombatState,
+  action: CombatAction,
+  actor: Combatant,
+  randomValues?: { hitRoll?: number; critRoll?: number; damageVariance?: number }
+): { state: CombatState; result: CombatResult } {
+  if (!action.targetId) {
+    return { state, result: createFailureResult(action, 'No target specified') };
+  }
+
+  const target = state.combatants.find((c) => c.id === action.targetId);
+  if (!target || !target.isAlive) {
+    return { state, result: createFailureResult(action, 'Target is not available') };
+  }
+
+  const actorStats = applyStatusEffectModifiers(actor.stats, actor.statusEffects);
+  const targetStats = applyStatusEffectModifiers(target.stats, target.statusEffects);
+
+  // Quick draw: +15% hit chance
+  const hitChance = calculateHitChance(actorStats.accuracy + 15, targetStats.evasion);
+  const hitRoll = randomValues?.hitRoll ?? scopedRNG('combat', 42, rngTick());
+  const didHit = rollHit(hitChance, hitRoll);
+
+  if (!didHit) {
+    const result: CombatResult = {
+      action,
+      success: false,
+      wasDodged: true,
+      message: `${actor.name} snaps off a quick shot at ${target.name} but misses!`,
+      timestamp: Date.now(),
+    };
+    return { state: markActorActed(state, actor.id, result), result };
+  }
+
+  const critRoll = randomValues?.critRoll ?? scopedRNG('combat', 42, rngTick());
+  const isCritical = rollCritical(actorStats.critChance, critRoll);
+  const isDefending = target.statusEffects.some((e) => e.type === 'defending');
+
+  // 60% of normal damage
+  const damageResult = calculateDamage(
+    {
+      attackPower: Math.floor(actorStats.attack * 0.6),
+      defenderDefense: targetStats.defense,
+      isDefenderDefending: isDefending,
+      isCritical,
+      critMultiplier: actorStats.critMultiplier,
+    },
+    randomValues?.damageVariance ?? scopedRNG('combat', 42, rngTick())
+  );
+
+  const newTargetHP = Math.max(0, target.stats.hp - damageResult.finalDamage);
+  const targetKilled = newTargetHP === 0;
+
+  const updatedCombatants = state.combatants.map((c) => {
+    if (c.id === target.id) {
+      return { ...c, stats: { ...c.stats, hp: newTargetHP }, isAlive: !targetKilled };
+    }
+    if (c.id === actor.id) {
+      return { ...c, hasActedThisTurn: true };
+    }
+    return c;
+  });
+
+  let message = `${actor.name} quick-draws on ${target.name}`;
+  if (isCritical) message += ' with a CRITICAL HIT';
+  message += ` for ${damageResult.finalDamage} damage!`;
+  if (targetKilled) message += ` ${target.name} is defeated!`;
+
+  const result: CombatResult = {
+    action,
+    success: true,
+    damage: damageResult.finalDamage,
+    isCritical,
+    wasBlocked: isDefending,
+    targetKilled,
+    message,
+    timestamp: Date.now(),
+  };
+
+  return {
+    state: { ...state, combatants: updatedCombatants, log: [...state.log, result].slice(-state.maxLogEntries) },
+    result,
+  };
+}
+
+/**
+ * Overwatch: Skip turn, apply overwatch status effect.
+ * When an enemy acts while overwatch is active, the overwatcher auto-attacks.
+ */
+function processOverwatch(
+  state: CombatState,
+  action: CombatAction,
+  actor: Combatant
+): { state: CombatState; result: CombatResult } {
+  const overwatchEffect: StatusEffect = {
+    type: 'buffed',
+    turnsRemaining: 2, // Lasts until next round
+    value: 0, // No stat buff, used as a marker
+    sourceId: 'overwatch',
+  };
+
+  const updatedCombatants = state.combatants.map((c) => {
+    if (c.id === actor.id) {
+      return {
+        ...c,
+        statusEffects: [...c.statusEffects, overwatchEffect],
+        hasActedThisTurn: true,
+      };
+    }
+    return c;
+  });
+
+  const result: CombatResult = {
+    action,
+    success: true,
+    statusEffectApplied: overwatchEffect,
+    message: `${actor.name} sets up overwatch, ready to fire on the next enemy that acts!`,
+    timestamp: Date.now(),
+  };
+
+  return {
+    state: { ...state, combatants: updatedCombatants, log: [...state.log, result].slice(-state.maxLogEntries) },
+    result,
+  };
+}
+
+/**
+ * First Aid: Heal self for 25-35% of max HP. AP cost 3.
+ */
+function processFirstAid(
+  state: CombatState,
+  action: CombatAction,
+  actor: Combatant
+): { state: CombatState; result: CombatResult } {
+  // Base heal: 30% of max HP
+  const baseHeal = Math.floor(actor.stats.maxHP * 0.3);
+  const actualHeal = calculateHeal(actor.stats.hp, actor.stats.maxHP, baseHeal);
+  const newHP = actor.stats.hp + actualHeal;
+
+  const updatedCombatants = state.combatants.map((c) => {
+    if (c.id === actor.id) {
+      return {
+        ...c,
+        stats: { ...c.stats, hp: newHP },
+        hasActedThisTurn: true,
+      };
+    }
+    return c;
+  });
+
+  const result: CombatResult = {
+    action,
+    success: true,
+    healAmount: actualHeal,
+    message: actualHeal > 0
+      ? `${actor.name} applies first aid and recovers ${actualHeal} HP!`
+      : `${actor.name} applies first aid but is already at full health.`,
+    timestamp: Date.now(),
+  };
+
+  return {
+    state: { ...state, combatants: updatedCombatants, log: [...state.log, result].slice(-state.maxLogEntries) },
+    result,
+  };
+}
+
+/**
+ * Intimidate: Chance to make target flee (debuff that reduces attack/accuracy).
+ * Success based on actor attack vs target defense, with level difference modifier.
+ */
+function processIntimidate(
+  state: CombatState,
+  action: CombatAction,
+  actor: Combatant,
+  randomValue?: number
+): { state: CombatState; result: CombatResult } {
+  if (!action.targetId) {
+    return { state, result: createFailureResult(action, 'No target specified') };
+  }
+
+  const target = state.combatants.find((c) => c.id === action.targetId);
+  if (!target || !target.isAlive) {
+    return { state, result: createFailureResult(action, 'Target is not available') };
+  }
+
+  // Intimidation chance: base 40%, modified by attack difference
+  const actorStats = applyStatusEffectModifiers(actor.stats, actor.statusEffects);
+  const targetStats = applyStatusEffectModifiers(target.stats, target.statusEffects);
+  const attackDiff = actorStats.attack - targetStats.attack;
+  const baseChance = 40 + attackDiff * 2;
+  const clampedChance = Math.max(10, Math.min(80, baseChance));
+
+  const roll = randomValue ?? scopedRNG('combat', 42, rngTick());
+  const success = roll * 100 < clampedChance;
+
+  if (success) {
+    // Apply debuff: reduce target attack and accuracy by 30% for 2 turns
+    const intimidateEffect: StatusEffect = {
+      type: 'debuffed',
+      turnsRemaining: 2,
+      value: 30,
+      sourceId: 'intimidate',
+    };
+
+    const updatedCombatants = state.combatants.map((c) => {
+      if (c.id === target.id) {
+        return { ...c, statusEffects: [...c.statusEffects, intimidateEffect] };
+      }
+      if (c.id === actor.id) {
+        return { ...c, hasActedThisTurn: true };
+      }
+      return c;
+    });
+
+    const result: CombatResult = {
+      action,
+      success: true,
+      statusEffectApplied: intimidateEffect,
+      message: `${actor.name} intimidates ${target.name}! They cower in fear, losing attack power and accuracy!`,
+      timestamp: Date.now(),
+    };
+
+    return {
+      state: { ...state, combatants: updatedCombatants, log: [...state.log, result].slice(-state.maxLogEntries) },
+      result,
+    };
+  }
+
+  // Failed intimidation
+  const result: CombatResult = {
+    action,
+    success: false,
+    message: `${actor.name} tries to intimidate ${target.name}, but they stand their ground!`,
+    timestamp: Date.now(),
+  };
+
+  return { state: markActorActed(state, actor.id, result), result };
 }
 
 // ============================================================================
@@ -738,7 +1079,7 @@ export function calculateRewards(
 
   // Roll for loot drops
   for (const itemDrop of encounter.rewards.items) {
-    if (Math.random() <= itemDrop.chance) {
+    if (scopedRNG('combat', 42, rngTick()) <= itemDrop.chance) {
       loot.push({
         itemId: itemDrop.itemId,
         quantity: itemDrop.quantity,

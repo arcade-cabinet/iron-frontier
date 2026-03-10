@@ -5,8 +5,7 @@
 // raycast (weapons, interact), ground-height sampling, and trigger overlap
 // tests. No rigid-body engine required.
 
-import * as THREE from 'three';
-
+import * as THREE from "three";
 import type {
   BoxCollider,
   Collider,
@@ -14,8 +13,8 @@ import type {
   SphereCollider,
   TriggerCollider,
   TrimeshCollider,
-} from './CollisionShapes';
-import { buildHeightfieldMesh } from './CollisionShapes';
+} from "./CollisionShapes.ts";
+import { buildHeightfieldMesh } from "./CollisionShapes.ts";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -29,7 +28,9 @@ export interface RaycastHit {
   colliderId: string;
 }
 
-export interface RaycastMiss { hit: false }
+export interface RaycastMiss {
+  hit: false;
+}
 
 export type RaycastResult = RaycastHit | RaycastMiss;
 
@@ -39,7 +40,7 @@ export interface MoveResult {
 }
 
 export interface TriggerEvent {
-  type: 'enter' | 'exit';
+  type: "enter" | "exit";
   colliderId: string;
   tag?: string;
 }
@@ -85,22 +86,22 @@ export class PhysicsWorld {
 
   addStaticCollider(collider: Collider): void {
     switch (collider.type) {
-      case 'box':
+      case "box":
         this.boxColliders.set(collider.id, collider);
         break;
-      case 'trimesh':
+      case "trimesh":
         this.trimeshColliders.set(collider.id, collider);
         break;
-      case 'heightfield':
+      case "heightfield":
         if (!collider.mesh) {
           collider.mesh = buildHeightfieldMesh(collider);
         }
         this.heightfieldColliders.set(collider.id, collider);
         break;
-      case 'sphere':
+      case "sphere":
         this.sphereColliders.set(collider.id, collider);
         break;
-      case 'capsule': {
+      case "capsule": {
         // Capsule colliders (NPCs) approximated as box for static collision
         const halfW = collider.radius;
         const halfH = collider.height / 2;
@@ -110,7 +111,7 @@ export class PhysicsWorld {
           new THREE.Vector3(halfW * 2, halfH * 2, halfW * 2),
         );
         this.boxColliders.set(collider.id, {
-          type: 'box',
+          type: "box",
           id: collider.id,
           box,
           center,
@@ -120,7 +121,7 @@ export class PhysicsWorld {
         });
         break;
       }
-      case 'trigger':
+      case "trigger":
         this.triggerColliders.set(collider.id, collider);
         break;
     }
@@ -211,8 +212,7 @@ export class PhysicsWorld {
 
   /** Sample terrain height at world XZ. Returns null if no terrain found. */
   sampleGroundHeight(x: number, z: number): number | null {
-    const hasTerrain =
-      this.trimeshColliders.size > 0 || this.heightfieldColliders.size > 0;
+    const hasTerrain = this.trimeshColliders.size > 0 || this.heightfieldColliders.size > 0;
 
     if (!hasTerrain) return 0;
 
@@ -250,11 +250,7 @@ export class PhysicsWorld {
   // -----------------------------------------------------------------------
 
   /** Cast a ray and return the first intersection with any collider. */
-  raycast(
-    origin: THREE.Vector3,
-    direction: THREE.Vector3,
-    maxDistance: number,
-  ): RaycastResult {
+  raycast(origin: THREE.Vector3, direction: THREE.Vector3, maxDistance: number): RaycastResult {
     _ray.set(origin, direction.clone().normalize());
     _ray.far = maxDistance;
     _ray.near = 0;
@@ -385,12 +381,28 @@ function computeBoxPushOut(playerBox: THREE.Box3, staticBox: THREE.Box3): THREE.
 
   if (ox1 <= 0 || ox2 <= 0 || oy1 <= 0 || oy2 <= 0 || oz1 <= 0 || oz2 <= 0) return null;
 
-  let min = ox1; _pushDir.set(-1, 0, 0);
-  if (ox2 < min) { min = ox2; _pushDir.set(1, 0, 0); }
-  if (oy1 < min) { min = oy1; _pushDir.set(0, -1, 0); }
-  if (oy2 < min) { min = oy2; _pushDir.set(0, 1, 0); }
-  if (oz1 < min) { min = oz1; _pushDir.set(0, 0, -1); }
-  if (oz2 < min) { min = oz2; _pushDir.set(0, 0, 1); }
+  let min = ox1;
+  _pushDir.set(-1, 0, 0);
+  if (ox2 < min) {
+    min = ox2;
+    _pushDir.set(1, 0, 0);
+  }
+  if (oy1 < min) {
+    min = oy1;
+    _pushDir.set(0, -1, 0);
+  }
+  if (oy2 < min) {
+    min = oy2;
+    _pushDir.set(0, 1, 0);
+  }
+  if (oz1 < min) {
+    min = oz1;
+    _pushDir.set(0, 0, -1);
+  }
+  if (oz2 < min) {
+    min = oz2;
+    _pushDir.set(0, 0, 1);
+  }
 
   return _pushDir.clone().multiplyScalar(min + SKIN_WIDTH);
 }

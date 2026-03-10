@@ -20,7 +20,7 @@ export interface BridgeStoreReader {
   playerStats: { level: number; gold: number; reputation: number };
   inventory: { itemId: string; quantity: number }[];
   talkedNPCIds: string[];
-  dialogueState: { conversationFlags: Record<string, boolean> } | null;
+  dialogueState: { npcId: string; conversationFlags: Record<string, boolean> } | null;
 }
 
 /** Minimal store actions needed by the bridge. */
@@ -35,6 +35,9 @@ export interface BridgeStoreActions {
   getActiveQuest: (questId: string) => ActiveQuest | undefined;
   markNPCTalked: (npcId: string) => void;
   setDialogueFlag: (flag: string, value: boolean) => void;
+  updatePlayerStats: (stats: Partial<{ reputation: number }>) => void;
+  openShop: (shopId: string) => void;
+  discoverLocation: (locationId: string) => void;
 }
 
 export type BridgeStore = BridgeStoreReader & BridgeStoreActions;
@@ -47,6 +50,8 @@ export type BridgeStore = BridgeStoreReader & BridgeStoreActions;
 export function evaluateCondition(
   condition: DialogueCondition,
   state: BridgeStoreReader,
+  /** Optional NPC ID context (used for first_meeting / return_visit when target is unset). */
+  contextNpcId?: string,
 ): boolean {
   const target = condition.target ?? '';
   const value = condition.value ?? 0;
@@ -95,11 +100,16 @@ export function evaluateCondition(
     case 'flag_not_set':
       return state.dialogueState?.conversationFlags[target] !== true;
 
-    case 'first_meeting':
-      return !state.talkedNPCIds.includes(target);
+    case 'first_meeting': {
+      // When no explicit target, infer from the active dialogue or context param
+      const fmNpc = target || contextNpcId || state.dialogueState?.npcId || '';
+      return !state.talkedNPCIds.includes(fmNpc);
+    }
 
-    case 'return_visit':
-      return state.talkedNPCIds.includes(target);
+    case 'return_visit': {
+      const rvNpc = target || contextNpcId || state.dialogueState?.npcId || '';
+      return state.talkedNPCIds.includes(rvNpc);
+    }
 
     case 'time_of_day':
       // Time checks require clock state which varies; treat as pass-through
@@ -201,6 +211,7 @@ export function applyDialogueEffect(
       break;
 
     case 'change_reputation':
+      store.updatePlayerStats({ reputation: store.playerStats.reputation + value });
       store.addNotification('info', `Reputation ${value >= 0 ? '+' : ''}${value}`);
       break;
 
@@ -213,6 +224,7 @@ export function applyDialogueEffect(
       break;
 
     case 'unlock_location':
+      store.discoverLocation(target);
       store.addNotification('info', `Discovered: ${effect.stringValue ?? target}`);
       break;
 
@@ -223,6 +235,9 @@ export function applyDialogueEffect(
       break;
 
     case 'open_shop':
+      if (target) {
+        store.openShop(target);
+      }
       break;
 
     default:

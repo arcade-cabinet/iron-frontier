@@ -2,12 +2,13 @@
 //
 // Split from MonsterSupernaturals to stay under 300 lines per file.
 // Ghostly chibi with transparent materials, spectral lantern, and chains.
-// Deterministic via alea. No Math.random().
+// Deterministic via alea. No scopedRNG('render', 42, rngTick()).
 
 import * as THREE from 'three';
 
 import { makePRNG } from '../materials/canvasUtils';
 import { constructChibi, type ChibiConfig, BODY_H, BODY_W } from './ChibiRenderer';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Rail Wraith — ghostly chibi, transparent, lantern, chains

@@ -15,7 +15,7 @@ export const CHUNK_SEGMENTS = 64;
 export const CHUNK_SIZE = 100;
 
 /** Default world seed. */
-export const DEFAULT_SEED = 'iron-frontier-terrain';
+export const DEFAULT_SEED = "iron-frontier-terrain";
 
 // ---------------------------------------------------------------------------
 // Noise parameters
@@ -38,7 +38,7 @@ export interface NoiseParams {
 // Biome definitions
 // ---------------------------------------------------------------------------
 
-export type BiomeId = 'desert' | 'canyon' | 'mountain' | 'grassland';
+export type BiomeId = "desert" | "canyon" | "mountain" | "grassland";
 
 export interface BiomeDefinition {
   id: BiomeId;
@@ -54,7 +54,7 @@ export interface BiomeDefinition {
 
 export const BIOME_DEFINITIONS: Record<BiomeId, BiomeDefinition> = {
   desert: {
-    id: 'desert',
+    id: "desert",
     noise: {
       amplitude: 6,
       frequency: 0.008,
@@ -62,13 +62,13 @@ export const BIOME_DEFINITIONS: Record<BiomeId, BiomeDefinition> = {
       lacunarity: 2.0,
       persistence: 0.45,
     },
-    textureBaseColor: '#D2B48C',
-    textureAccentColor: '#C4A574',
+    textureBaseColor: "#D2B48C",
+    textureAccentColor: "#C4A574",
     roughness: 0.95,
   },
 
   canyon: {
-    id: 'canyon',
+    id: "canyon",
     noise: {
       amplitude: 18,
       frequency: 0.012,
@@ -76,13 +76,13 @@ export const BIOME_DEFINITIONS: Record<BiomeId, BiomeDefinition> = {
       lacunarity: 2.2,
       persistence: 0.5,
     },
-    textureBaseColor: '#8B4513',
-    textureAccentColor: '#A0522D',
+    textureBaseColor: "#8B4513",
+    textureAccentColor: "#A0522D",
     roughness: 0.9,
   },
 
   mountain: {
-    id: 'mountain',
+    id: "mountain",
     noise: {
       amplitude: 30,
       frequency: 0.006,
@@ -90,13 +90,13 @@ export const BIOME_DEFINITIONS: Record<BiomeId, BiomeDefinition> = {
       lacunarity: 2.1,
       persistence: 0.55,
     },
-    textureBaseColor: '#6B5B4B',
-    textureAccentColor: '#7B6B5B',
+    textureBaseColor: "#6B5B4B",
+    textureAccentColor: "#7B6B5B",
     roughness: 0.85,
   },
 
   grassland: {
-    id: 'grassland',
+    id: "grassland",
     noise: {
       amplitude: 3,
       frequency: 0.01,
@@ -104,8 +104,8 @@ export const BIOME_DEFINITIONS: Record<BiomeId, BiomeDefinition> = {
       lacunarity: 2.0,
       persistence: 0.4,
     },
-    textureBaseColor: '#8B9A6B',
-    textureAccentColor: '#A5B57B',
+    textureBaseColor: "#8B9A6B",
+    textureAccentColor: "#A5B57B",
     roughness: 0.92,
   },
 } as const;

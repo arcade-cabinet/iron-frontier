@@ -1,13 +1,8 @@
-import * as React from 'react';
-import { Modal, Pressable, View, Platform } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  SlideInDown,
-  SlideOutDown,
-} from 'react-native-reanimated';
-import { TextClassContext } from '@/components/ui/Text';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { Modal, Platform, Pressable, View } from "react-native";
+import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from "react-native-reanimated";
+import { TextClassContext } from "@/components/ui/Text";
+import { cn } from "@/lib/utils";
 
 type DialogContextValue = {
   open: boolean;
@@ -26,15 +21,10 @@ type DialogProps = {
 };
 
 function Dialog({ open, onOpenChange, children }: DialogProps) {
-  return (
-    <DialogContext.Provider value={{ open, onOpenChange }}>
-      {children}
-    </DialogContext.Provider>
-  );
+  return <DialogContext.Provider value={{ open, onOpenChange }}>{children}</DialogContext.Provider>;
 }
 
-type DialogOverlayProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogOverlayProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogOverlay({ className, ...props }: DialogOverlayProps) {
   const { open, onOpenChange } = React.useContext(DialogContext);
@@ -43,10 +33,7 @@ function DialogOverlay({ className, ...props }: DialogOverlayProps) {
   return (
     <Modal transparent visible={open} onRequestClose={() => onOpenChange(false)}>
       <Pressable
-        className={cn(
-          'absolute inset-0 flex-1 items-center justify-center bg-black/60',
-          className,
-        )}
+        className={cn("absolute inset-0 flex-1 items-center justify-center bg-black/60", className)}
         onPress={() => onOpenChange(false)}
         {...props}
       >
@@ -56,8 +43,7 @@ function DialogOverlay({ className, ...props }: DialogOverlayProps) {
   );
 }
 
-type DialogContentProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogContentProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogContent({ className, children, ...props }: DialogContentProps) {
   const { open, onOpenChange } = React.useContext(DialogContext);
@@ -66,16 +52,13 @@ function DialogContent({ className, children, ...props }: DialogContentProps) {
   return (
     <Modal transparent visible={open} onRequestClose={() => onOpenChange(false)}>
       <View className="absolute inset-0 flex-1 items-center justify-center bg-black/60">
-        <Pressable
-          className="absolute inset-0"
-          onPress={() => onOpenChange(false)}
-        />
+        <Pressable className="absolute inset-0" onPress={() => onOpenChange(false)} />
         <Animated.View
-          entering={Platform.OS !== 'web' ? SlideInDown.duration(250) : FadeIn.duration(200)}
-          exiting={Platform.OS !== 'web' ? SlideOutDown.duration(200) : FadeOut.duration(150)}
+          entering={Platform.OS !== "web" ? SlideInDown.duration(250) : FadeIn.duration(200)}
+          exiting={Platform.OS !== "web" ? SlideOutDown.duration(200) : FadeOut.duration(150)}
           className={cn(
-            'mx-4 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg',
-            'dark:border-frontier-leather/40 dark:bg-card',
+            "mx-4 w-full max-w-lg rounded-lg border border-border bg-card p-6 shadow-lg",
+            "dark:border-frontier-leather/40 dark:bg-card",
             className,
           )}
           {...props}
@@ -87,54 +70,41 @@ function DialogContent({ className, children, ...props }: DialogContentProps) {
   );
 }
 
-type DialogHeaderProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogHeaderProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogHeader({ className, ...props }: DialogHeaderProps) {
-  return (
-    <View
-      className={cn('flex-col gap-1.5 pb-4', className)}
-      {...props}
-    />
-  );
+  return <View className={cn("flex-col gap-1.5 pb-4", className)} {...props} />;
 }
 
-type DialogTitleProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogTitleProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogTitle({ className, ...props }: DialogTitleProps) {
   return (
     <TextClassContext.Provider
-      value={cn('text-lg font-semibold leading-none tracking-tight font-heading text-card-foreground')}
+      value={cn(
+        "text-lg font-semibold leading-none tracking-tight font-heading text-card-foreground",
+      )}
     >
       <View className={cn(className)} {...props} />
     </TextClassContext.Provider>
   );
 }
 
-type DialogDescriptionProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogDescriptionProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogDescription({ className, ...props }: DialogDescriptionProps) {
   return (
-    <TextClassContext.Provider value={cn('text-sm text-muted-foreground font-body')}>
+    <TextClassContext.Provider value={cn("text-sm text-muted-foreground font-body")}>
       <View className={cn(className)} {...props} />
     </TextClassContext.Provider>
   );
 }
 
-type DialogFooterProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type DialogFooterProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function DialogFooter({ className, ...props }: DialogFooterProps) {
   return (
-    <View
-      className={cn(
-        'flex-row items-center justify-end gap-2 pt-4',
-        className,
-      )}
-      {...props}
-    />
+    <View className={cn("flex-row items-center justify-end gap-2 pt-4", className)} {...props} />
   );
 }
 

@@ -2,7 +2,7 @@
  * Tests for store defaults
  */
 
-import { describe, expect, it } from 'vitest';
+// Jest globals (describe, expect, it) are available automatically
 import {
   DEFAULT_CAMERA_STATE,
   DEFAULT_EQUIPMENT,

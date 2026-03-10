@@ -153,7 +153,7 @@ export class Rifle extends WeaponViewModel {
     // Store rest transforms
     this.boltRestZ = this.boltHandle.position.z;
     this.boltRestRotation = this.boltHandle.rotation.y;
-    this.restPositionLocal.copy(root.position);
+    this.restPositionLocal = root.position.clone();
 
     return root;
   }

@@ -19,7 +19,11 @@ import {
   type BiomeId,
   type NoiseParams,
 } from '@/engine/renderers/TerrainConfig';
-import { createDirtTexture, createSandTexture } from '@/src/game/engine/materials';
+import {
+  createPBRGroundDesert,
+  createPBRGroundSandy,
+  createPBRStoneRough,
+} from '@/src/game/engine/materials';
 
 import {
   CHUNK_SEGMENTS,
@@ -159,21 +163,21 @@ function generateChunk256(
   uvAttr.needsUpdate = true;
   geo.computeVertexNormals();
 
-  // Material — reuse existing procedural texture factories
+  // Material — PBR image-based textures from AmbientCG
   let material: THREE.MeshStandardMaterial;
   switch (biome) {
     case 'desert':
-      material = createSandTexture(definition.textureBaseColor);
+      material = createPBRGroundDesert(4);
       break;
     case 'canyon':
     case 'mountain':
-      material = createDirtTexture(definition.textureBaseColor);
+      material = createPBRStoneRough(3);
       break;
     case 'grassland':
-      material = createDirtTexture(definition.textureBaseColor);
+      material = createPBRGroundSandy(4);
       break;
     default:
-      material = createSandTexture(definition.textureBaseColor);
+      material = createPBRGroundDesert(4);
       break;
   }
 
@@ -341,12 +345,8 @@ export class ChunkManager {
 
   private disposeChunk(state: ChunkState): void {
     state.mesh.geometry.dispose();
-    const mat = state.mesh.material;
-    if (Array.isArray(mat)) {
-      for (const m of mat) m.dispose();
-    } else {
-      mat.dispose();
-    }
+    // Materials are shared via globalTextureCache — do NOT dispose them here.
+    // The LRU cache manages material lifetime and GPU resource cleanup.
   }
 
   // -----------------------------------------------------------------------

@@ -9,6 +9,7 @@
  */
 
 import type { EncounterTemplate } from '../../schemas/generation';
+import { scopedRNG, rngTick } from '../../../lib/prng';
 
 // ============================================================================
 // BANDIT ENCOUNTERS
@@ -244,9 +245,9 @@ export const BearEncounter: EncounterTemplate = {
     'A massive grizzly rises on its hind legs, blocking the {{terrain}}. It bellows a thunderous warning.',
   enemies: [
     {
-      enemyIdOrTag: 'mountain_lion',
+      enemyIdOrTag: 'grizzly_bear',
       countRange: [1, 1],
-      levelScale: 1.5,
+      levelScale: 1.0,
     },
   ],
   difficultyRange: [4, 6],
@@ -267,7 +268,7 @@ export const Stampede: EncounterTemplate = {
     'The ground trembles. A herd of {{animal}} charges toward you in blind panic, driven by {{cause}}!',
   enemies: [
     {
-      enemyIdOrTag: 'mountain_lion',
+      enemyIdOrTag: 'desert_wolf',
       countRange: [3, 5],
       levelScale: 0.7,
     },
@@ -290,7 +291,7 @@ export const ScorpionSwarm: EncounterTemplate = {
     'Disturbed from their hiding places, a swarm of {{adjective}} scorpions scuttles toward you.',
   enemies: [
     {
-      enemyIdOrTag: 'rattlesnake',
+      enemyIdOrTag: 'scorpion',
       countRange: [4, 8],
       levelScale: 0.6,
     },
@@ -985,5 +986,5 @@ export function getRandomEncounterTemplate(criteria: {
 }): EncounterTemplate | undefined {
   const matches = getEncountersMatching(criteria);
   if (matches.length === 0) return undefined;
-  return matches[Math.floor(Math.random() * matches.length)];
+  return matches[Math.floor(scopedRNG('encounter', 42, rngTick()) * matches.length)];
 }

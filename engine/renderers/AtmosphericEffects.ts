@@ -3,7 +3,7 @@
 // Provides per-phase config for fog, heat shimmer, dust particles, fireflies,
 // and the player lantern. Used by DayNightCycle.tsx to drive atmospheric rendering.
 
-import type { DayNightPhase } from './DayNightManager';
+import type { DayNightPhase } from "./DayNightManager.ts";
 
 // ============================================================================
 // FOG CONFIG
@@ -19,13 +19,13 @@ export interface FogConfig {
 }
 
 export const FOG_CONFIGS: Record<DayNightPhase, FogConfig> = {
-  dawn:      { color: 0xffccaa, density: 0.006,  description: 'Dense morning haze' },
-  morning:   { color: 0xddeeff, density: 0.002,  description: 'Light clearing haze' },
-  midday:    { color: 0xeeeeff, density: 0.0015, description: 'Minimal clear-sky haze' },
-  afternoon: { color: 0xffeedd, density: 0.002,  description: 'Warm dust haze' },
-  dusk:      { color: 0xff8855, density: 0.005,  description: 'Dense sunset haze' },
-  evening:   { color: 0x443366, density: 0.003,  description: 'Twilight purple mist' },
-  night:     { color: 0x111122, density: 0.002,  description: 'Thin cool night air' },
+  dawn: { color: 0xffccaa, density: 0.006, description: "Dense morning haze" },
+  morning: { color: 0xddeeff, density: 0.002, description: "Light clearing haze" },
+  midday: { color: 0xeeeeff, density: 0.0015, description: "Minimal clear-sky haze" },
+  afternoon: { color: 0xffeedd, density: 0.002, description: "Warm dust haze" },
+  dusk: { color: 0xff8855, density: 0.005, description: "Dense sunset haze" },
+  evening: { color: 0x443366, density: 0.003, description: "Twilight purple mist" },
+  night: { color: 0x111122, density: 0.002, description: "Thin cool night air" },
 };
 
 // ============================================================================

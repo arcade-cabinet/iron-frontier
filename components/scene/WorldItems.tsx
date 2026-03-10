@@ -5,12 +5,13 @@
 // emissive mesh. When the player camera is within PICKUP_RANGE units,
 // the item is collected via store.collectWorldItem().
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
-import * as THREE from 'three';
+import { useFrame, useThree } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
-import { useGameStore, useGameStoreShallow } from '@/hooks/useGameStore';
-import type { WorldItem } from '@/src/game/store/types';
+import { useGameStore, useGameStoreShallow } from "@/hooks/useGameStore";
+import type { WorldItem } from "@/src/game/store/types";
+import { rngTick, scopedRNG } from "../../src/game/lib/prng.ts";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -40,21 +41,35 @@ const EMISSIVE_INTENSITY = 2.0;
 
 function getItemColor(itemId: string): string {
   const id = itemId.toLowerCase();
-  if (id.includes('gold') || id.includes('coin') || id.includes('nugget')) return '#FFD700';
-  if (id.includes('weapon') || id.includes('revolver') || id.includes('rifle') || id.includes('shotgun') || id.includes('knife')) return '#C0C0C0';
-  if (id.includes('potion') || id.includes('tonic') || id.includes('medicine') || id.includes('bandage')) return '#44DD44';
-  if (id.includes('food') || id.includes('jerky') || id.includes('bread') || id.includes('apple')) return '#8B4513';
-  if (id.includes('ammo') || id.includes('bullet')) return '#B87333';
-  if (id.includes('whiskey') || id.includes('drink')) return '#AA6622';
+  if (id.includes("gold") || id.includes("coin") || id.includes("nugget")) return "#FFD700";
+  if (
+    id.includes("weapon") ||
+    id.includes("revolver") ||
+    id.includes("rifle") ||
+    id.includes("shotgun") ||
+    id.includes("knife")
+  )
+    return "#C0C0C0";
+  if (
+    id.includes("potion") ||
+    id.includes("tonic") ||
+    id.includes("medicine") ||
+    id.includes("bandage")
+  )
+    return "#44DD44";
+  if (id.includes("food") || id.includes("jerky") || id.includes("bread") || id.includes("apple"))
+    return "#8B4513";
+  if (id.includes("ammo") || id.includes("bullet")) return "#B87333";
+  if (id.includes("whiskey") || id.includes("drink")) return "#AA6622";
   // Default: pale blue for misc items
-  return '#88AAFF';
+  return "#88AAFF";
 }
 
-function getItemShape(itemId: string): 'sphere' | 'box' {
+function getItemShape(itemId: string): "sphere" | "box" {
   const id = itemId.toLowerCase();
-  if (id.includes('gold') || id.includes('coin') || id.includes('nugget')) return 'sphere';
-  if (id.includes('potion') || id.includes('tonic')) return 'sphere';
-  return 'box';
+  if (id.includes("gold") || id.includes("coin") || id.includes("nugget")) return "sphere";
+  if (id.includes("potion") || id.includes("tonic")) return "sphere";
+  return "box";
 }
 
 // ---------------------------------------------------------------------------
@@ -69,14 +84,14 @@ interface WorldItemMeshProps {
 function WorldItemMesh({ item, onCollect }: WorldItemMeshProps) {
   const { camera } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
-  const elapsedRef = useRef(Math.random() * Math.PI * 2); // Random start phase
+  const elapsedRef = useRef(scopedRNG("world", 42, rngTick()) * Math.PI * 2); // Random start phase
   const collectedRef = useRef(false);
 
   const color = useMemo(() => getItemColor(item.itemId), [item.itemId]);
   const shape = useMemo(() => getItemShape(item.itemId), [item.itemId]);
 
   const geometry = useMemo(() => {
-    if (shape === 'sphere') {
+    if (shape === "sphere") {
       return new THREE.SphereGeometry(ITEM_SIZE, 8, 8);
     }
     return new THREE.BoxGeometry(ITEM_SIZE * 1.6, ITEM_SIZE * 1.6, ITEM_SIZE * 1.6);
@@ -147,11 +162,7 @@ export function WorldItems() {
   return (
     <group name="world-items">
       {itemList.map((item) => (
-        <WorldItemMesh
-          key={item.id}
-          item={item}
-          onCollect={collectWorldItem}
-        />
+        <WorldItemMesh key={item.id} item={item} onCollect={collectWorldItem} />
       ))}
     </group>
   );

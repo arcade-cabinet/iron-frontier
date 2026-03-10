@@ -11,6 +11,7 @@ import type {
   DamageCalculationResult,
   StatusEffect,
 } from './types';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // CONSTANTS
@@ -114,12 +115,12 @@ export function applyTypeEffectiveness(damage: number, effectiveness: number): n
  * Calculate final damage using the complete damage formula
  *
  * @param input - All inputs for damage calculation
- * @param randomValue - A value between 0 and 1 for variance (default: Math.random())
+ * @param randomValue - A value between 0 and 1 for variance (default: scopedRNG('combat', 42, rngTick()))
  * @returns Complete damage calculation result with breakdown
  */
 export function calculateDamage(
   input: DamageCalculationInput,
-  randomValue: number = Math.random()
+  randomValue: number = scopedRNG('combat', 42, rngTick())
 ): DamageCalculationResult {
   const {
     attackPower,
@@ -188,10 +189,10 @@ export function calculateHitChance(
  * Determine if an attack hits
  *
  * @param hitChance - The hit chance (0-100)
- * @param randomValue - A value between 0 and 1 (default: Math.random())
+ * @param randomValue - A value between 0 and 1 (default: scopedRNG('combat', 42, rngTick()))
  * @returns True if the attack hits
  */
-export function rollHit(hitChance: number, randomValue: number = Math.random()): boolean {
+export function rollHit(hitChance: number, randomValue: number = scopedRNG('combat', 42, rngTick())): boolean {
   return randomValue * 100 < hitChance;
 }
 
@@ -203,10 +204,10 @@ export function rollHit(hitChance: number, randomValue: number = Math.random()):
  * Determine if an attack is a critical hit
  *
  * @param critChance - The critical hit chance (0-100)
- * @param randomValue - A value between 0 and 1 (default: Math.random())
+ * @param randomValue - A value between 0 and 1 (default: scopedRNG('combat', 42, rngTick()))
  * @returns True if the attack is a critical hit
  */
-export function rollCritical(critChance: number, randomValue: number = Math.random()): boolean {
+export function rollCritical(critChance: number, randomValue: number = scopedRNG('combat', 42, rngTick())): boolean {
   return randomValue * 100 < critChance;
 }
 

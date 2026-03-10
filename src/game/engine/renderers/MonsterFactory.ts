@@ -2,7 +2,7 @@
 //
 // Extends the chibi humanoid style to enemies with exaggerated, menacing
 // features. Each enemy type is instantly recognizable and visually distinctive.
-// No GLBs, no Math.random() — alea for any variation.
+// No GLBs, no scopedRNG('render', 42, rngTick()) — alea for any variation.
 
 import * as THREE from 'three';
 
@@ -16,6 +16,7 @@ import { paintScarredFace } from './MonsterFaces';
 import { makePRNG } from '../materials/canvasUtils';
 import { createFabricTexture, createMetalTexture } from '../materials/CanvasTextureFactory';
 import { createLeatherTexture } from '../materials/CanvasTextureFactory.organic';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Types

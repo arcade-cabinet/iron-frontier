@@ -1,7 +1,7 @@
 // ChibiRenderer — Constructs chibi humanoid characters from Three.js primitives
 //
 // Oversized head, stubby body, tiny limbs. All materials come from
-// CanvasTextureFactory. No GLBs, no Math.random() — alea for any variation.
+// CanvasTextureFactory. No GLBs, no scopedRNG('render', 42, rngTick()) — alea for any variation.
 
 import * as THREE from 'three';
 
@@ -9,6 +9,7 @@ import { createFabricTexture } from '../materials/CanvasTextureFactory';
 import { createLeatherTexture, createSkinTexture } from '../materials/CanvasTextureFactory.organic';
 import { paintFace, type Expression } from './ChibiFace';
 import { attachAccessory, createHat } from './ChibiParts';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ---------------------------------------------------------------------------
 // Config

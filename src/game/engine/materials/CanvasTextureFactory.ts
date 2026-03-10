@@ -1,5 +1,5 @@
 // CanvasTextureFactory — Procedural painterly materials via Canvas API
-// Seeded PRNG (alea) ensures deterministic output — no Math.random().
+// Seeded PRNG (alea) ensures deterministic output — no scopedRNG('render', 42, rngTick()).
 
 import {
   CanvasTexture,
@@ -18,6 +18,7 @@ import {
   shiftColor,
   type PRNG,
 } from './canvasUtils';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // --- Internal helpers ---
 

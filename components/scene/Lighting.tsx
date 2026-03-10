@@ -3,9 +3,9 @@
 // A directional "sun" light orbits overhead, shifting from warm daylight
 // to cool moonlight. Ambient and hemisphere lights provide fill.
 
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
-import * as THREE from 'three';
+import { useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
 export interface LightingProps {
   /** Time of day as a 0-24 float (12.0 = noon, 0.0 = midnight) */
@@ -32,6 +32,7 @@ const GROUND_HEMISPHERE = new THREE.Color(0x5c4033);
 
 export function Lighting({ timeOfDay }: LightingProps) {
   const sunRef = useRef<THREE.DirectionalLight>(null);
+  const fillRef = useRef<THREE.DirectionalLight>(null);
   const ambientRef = useRef<THREE.AmbientLight>(null);
 
   // Pre-compute shadow camera settings once
@@ -65,15 +66,25 @@ export function Lighting({ timeOfDay }: LightingProps) {
     const dayFactor = computeDayFactor(t);
     const dawnFactor = computeDawnFactor(t);
 
-    _sunColor.copy(DAY_COLOR).lerp(DAWN_COLOR, dawnFactor).lerp(NIGHT_COLOR, 1 - dayFactor);
+    _sunColor
+      .copy(DAY_COLOR)
+      .lerp(DAWN_COLOR, dawnFactor)
+      .lerp(NIGHT_COLOR, 1 - dayFactor);
 
     sunRef.current.color.copy(_sunColor);
-    sunRef.current.intensity = THREE.MathUtils.lerp(0.1, 1.5, dayFactor);
+    sunRef.current.intensity = THREE.MathUtils.lerp(0.1, 2.5, dayFactor);
+
+    // --- Fill light — opposite side of sun, brightens shadows ---
+    if (fillRef.current) {
+      fillRef.current.position.set(-x, Math.max(y * 0.5, 10), -z);
+      fillRef.current.color.copy(_sunColor);
+      fillRef.current.intensity = THREE.MathUtils.lerp(0.05, 0.8, dayFactor);
+    }
 
     // --- Ambient intensity ---
-    _ambientColor.set(0x222233).lerp(new THREE.Color(0x665544), dayFactor);
+    _ambientColor.set(0x222233).lerp(new THREE.Color(0x998877), dayFactor);
     ambientRef.current.color.copy(_ambientColor);
-    ambientRef.current.intensity = THREE.MathUtils.lerp(0.15, 0.4, dayFactor);
+    ambientRef.current.intensity = THREE.MathUtils.lerp(0.2, 1.0, dayFactor);
   });
 
   return (
@@ -91,10 +102,10 @@ export function Lighting({ timeOfDay }: LightingProps) {
         shadow-camera-far={shadowCameraProps.far}
         shadow-bias={-0.001}
       />
+      {/* Fill light — opposite the sun to soften shadows on buildings */}
+      <directionalLight ref={fillRef} />
       <ambientLight ref={ambientRef} />
-      <hemisphereLight
-        args={[SKY_HEMISPHERE, GROUND_HEMISPHERE, 0.3]}
-      />
+      <hemisphereLight args={[SKY_HEMISPHERE, GROUND_HEMISPHERE, 0.8]} />
     </>
   );
 }

@@ -30,8 +30,6 @@
     "experiments": {
       "baseUrl": "/iron-frontier"
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "plugins": ["expo-router", "expo-sqlite"]
   }
 }

@@ -12,8 +12,8 @@
  * @module components/game/InteractionPrompt
  */
 
-import * as React from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import * as React from "react";
+import { Platform, Pressable, View } from "react-native";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -22,40 +22,42 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
-} from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text } from '@/components/ui/Text';
-import { usePlatform } from '@/hooks/usePlatform';
-import type { InteractionTarget, InteractionType } from '@/src/game/systems/InteractionSystem';
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text } from "@/components/ui/Text";
+import { usePlatform } from "@/hooks/usePlatform";
+import type { InteractionTarget, InteractionType } from "@/src/game/systems/InteractionSystem";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const HUD_AMBER = '#D4A855';
-const HUD_TEXT = '#E8D5A8';
-const HUD_BG = 'rgba(20, 15, 10, 0.7)';
+const HUD_AMBER = "#D4A855";
+const HUD_TEXT = "#E8D5A8";
+const HUD_BG = "rgba(20, 15, 10, 0.7)";
 
 const MONO_FONT = Platform.select({
-  ios: 'Menlo',
-  android: 'monospace',
-  default: 'monospace',
+  ios: "Menlo",
+  android: "monospace",
+  default: "monospace",
 });
 
 /** Map interaction type to a verb for the prompt text. */
 const ACTION_VERBS: Record<InteractionType, string> = {
-  talk: 'Talk to',
-  shop: 'Trade with',
-  enter: 'Enter',
-  pickup: 'Pick up',
+  talk: "Talk to",
+  shop: "Trade with",
+  enter: "Enter",
+  pickup: "Pick up",
+  lockpick: "Pick Lock",
 };
 
 /** Map interaction type to a key label for the prompt. */
 const ACTION_KEYS: Record<InteractionType, string> = {
-  talk: 'E',
-  shop: 'E',
-  enter: 'E',
-  pickup: 'E',
+  talk: "E",
+  shop: "E",
+  enter: "E",
+  pickup: "E",
+  lockpick: "E",
 };
 
 // ============================================================================
@@ -79,10 +81,7 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
   React.useEffect(() => {
     if (!target) return;
     pulse.value = withRepeat(
-      withSequence(
-        withTiming(0.6, { duration: 900 }),
-        withTiming(1, { duration: 900 }),
-      ),
+      withSequence(withTiming(0.6, { duration: 900 }), withTiming(1, { duration: 900 })),
       -1,
       true,
     );
@@ -103,8 +102,8 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
       entering={FadeIn.duration(200)}
       exiting={FadeOut.duration(300)}
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         gap: 8,
         // Mobile: add background for tap target; Desktop: clean/transparent
         ...(showMobileButton
@@ -128,20 +127,20 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
             borderRadius: showMobileButton ? 16 : 4,
             borderWidth: 1.5,
             borderColor: HUD_AMBER,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: showMobileButton ? `${HUD_AMBER}30` : 'transparent',
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: showMobileButton ? `${HUD_AMBER}30` : "transparent",
           }}
         >
           <Text
             style={{
               color: HUD_AMBER,
               fontSize: showMobileButton ? 14 : 11,
-              fontWeight: '700',
+              fontWeight: "700",
               fontFamily: MONO_FONT,
             }}
           >
-            {showMobileButton ? '\u25CF' : keyLabel}
+            {showMobileButton ? "\u25CF" : keyLabel}
           </Text>
         </View>
       </Animated.View>
@@ -151,18 +150,18 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
         style={{
           color: HUD_TEXT,
           fontSize: 13,
-          fontWeight: '500',
+          fontWeight: "500",
           // Subtle text shadow for readability on desktop
-          textShadowColor: 'rgba(212, 168, 85, 0.3)',
+          textShadowColor: "rgba(212, 168, 85, 0.3)",
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 6,
         }}
       >
-        {verb}{' '}
+        {verb}{" "}
         <Text
           style={{
             color: HUD_AMBER,
-            fontWeight: '600',
+            fontWeight: "600",
           }}
         >
           {target.name}
@@ -172,11 +171,11 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
   );
 
   const containerStyle = {
-    position: 'absolute' as const,
+    position: "absolute" as const,
     bottom: Math.max(insets.bottom, 16) + 60,
     left: 0,
     right: 0,
-    alignItems: 'center' as const,
+    alignItems: "center" as const,
     zIndex: 40,
   };
 
@@ -184,9 +183,7 @@ export function InteractionPrompt({ target, onTap }: InteractionPromptProps) {
   if (showMobileButton && onTap) {
     return (
       <View style={containerStyle}>
-        <Pressable onPress={onTap}>
-          {content}
-        </Pressable>
+        <Pressable onPress={onTap}>{content}</Pressable>
       </View>
     );
   }

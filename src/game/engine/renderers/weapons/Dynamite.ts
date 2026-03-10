@@ -107,7 +107,7 @@ export class Dynamite extends WeaponViewModel {
     root.add(hand);
 
     // Store rest transforms
-    this.restPositionLocal.copy(root.position);
+    this.restPositionLocal = root.position.clone();
 
     return root;
   }

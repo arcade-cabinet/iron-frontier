@@ -401,6 +401,14 @@ export class GameClock {
     this.state.hour = Math.max(0, Math.min(23, Math.floor(hour)));
     this.state.minute = Math.max(0, Math.min(59, Math.floor(minute)));
 
+    // Recalculate totalMinutes to stay consistent with the new hour/minute.
+    // Without this, totalMinutes diverges from hour/minute, causing survival
+    // tick to compute wildly incorrect elapsed game time.
+    this.state.totalMinutes =
+      (this.state.day - 1) * 24 * 60 +
+      this.state.hour * 60 +
+      this.state.minute;
+
     const newPhase = this.getPhase();
     if (newPhase !== previousPhase) {
       this.emit('phaseChanged', {

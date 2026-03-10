@@ -7,6 +7,7 @@
 
 import { z } from 'zod';
 import { HexCoordSchema } from './spatial';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // ENEMY TYPE
@@ -167,6 +168,10 @@ export const CombatActionTypeSchema = z.enum([
   'defend', // Reduce incoming damage
   'flee', // Attempt to escape
   'end_turn', // End turn early
+  'quick_draw', // Fast attack: low AP, low damage, high hit chance
+  'overwatch', // Skip turn, auto-attack next enemy that acts
+  'first_aid', // Heal self using medical supplies
+  'intimidate', // Chance to make enemy flee
 ]);
 export type CombatActionType = z.infer<typeof CombatActionTypeSchema>;
 
@@ -332,6 +337,10 @@ export const AP_COSTS: Record<CombatActionType, number> = {
   defend: 2,
   flee: 3,
   end_turn: 0,
+  quick_draw: 1,
+  overwatch: 2,
+  first_aid: 3,
+  intimidate: 2,
 };
 
 // ============================================================================
@@ -393,14 +402,14 @@ export function calculateDamage(
  * Roll for critical hit (10% base chance)
  */
 export function rollCritical(): boolean {
-  return Math.random() < 0.1;
+  return scopedRNG('combat', 42, rngTick()) < 0.1;
 }
 
 /**
  * Roll hit/miss based on hit chance
  */
 export function rollHit(hitChance: number): boolean {
-  return Math.random() * 100 < hitChance;
+  return scopedRNG('combat', 42, rngTick()) * 100 < hitChance;
 }
 
 // ============================================================================

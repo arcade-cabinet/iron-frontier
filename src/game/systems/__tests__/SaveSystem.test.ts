@@ -22,16 +22,47 @@ import {
 } from '../SaveSystem';
 
 // ============================================================================
+// LOCALSTORAGE MOCK (not available in Node test environment)
+// ============================================================================
+
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: jest.fn((key: string) => store[key] ?? null),
+    setItem: jest.fn((key: string, value: string) => { store[key] = value; }),
+    removeItem: jest.fn((key: string) => { delete store[key]; }),
+    clear: jest.fn(() => { store = {}; }),
+    get length() { return Object.keys(store).length; },
+    key: jest.fn((i: number) => Object.keys(store)[i] ?? null),
+  };
+})();
+Object.defineProperty(global, 'localStorage', { value: localStorageMock, writable: true });
+
+// ============================================================================
 // MOCK DATA
 // ============================================================================
 
 const mockGameData: GameSaveData = {
+  playerName: 'Test Hero',
+  playTime: 3600,
+  currentLocationId: 'town-1',
   version: 1,
   timestamp: Date.now(),
   gameMode: 'overworld',
   overworldPosition: { x: 10, z: 20 },
   currentTown: null,
   currentRoute: null,
+  playerStats: {
+    level: 3,
+    health: 80,
+    maxHealth: 100,
+  },
+  clockState: {
+    day: 5,
+    hour: 14,
+    minute: 30,
+    totalMinutes: 5 * 24 * 60 + 14 * 60 + 30,
+  },
   party: [
     {
       id: 'player',
@@ -513,9 +544,9 @@ describe('SaveSystem', () => {
   // ==========================================================================
 
   describe('Edge Cases', () => {
-    it('should handle empty party array', async () => {
-      const emptyPartyData = { ...mockGameData, party: [] };
-      const meta = await saveSystem.save('slot-1', emptyPartyData, 'Town');
+    it('should handle missing playerName', async () => {
+      const { playerName: _, ...noNameData } = mockGameData;
+      const meta = await saveSystem.save('slot-1', noNameData as GameSaveData, 'Town');
 
       expect(meta.playerName).toBe('Unknown');
     });
@@ -625,8 +656,13 @@ describe('LocalStorageSaveAdapter', () => {
   let adapter: LocalStorageSaveAdapter;
 
   beforeEach(() => {
-    adapter = new LocalStorageSaveAdapter();
     localStorage.clear();
+    (localStorage.getItem as jest.Mock).mockClear();
+    (localStorage.setItem as jest.Mock).mockClear();
+    (localStorage.removeItem as jest.Mock).mockClear();
+    (localStorage.clear as jest.Mock).mockClear();
+    (localStorage.key as jest.Mock).mockClear();
+    adapter = new LocalStorageSaveAdapter();
   });
 
   afterEach(() => {

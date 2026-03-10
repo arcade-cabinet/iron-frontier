@@ -11,21 +11,21 @@
  * @module components/game/DamageIndicator
  */
 
-import * as React from 'react';
-import { View } from 'react-native';
+import * as React from "react";
+import { View } from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
   Easing,
   runOnJS,
-} from 'react-native-reanimated';
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-const HUD_RED = '#CC4444';
+const HUD_RED = "#CC4444";
 const FADE_DURATION_MS = 1000;
 const MAX_INDICATORS = 4;
 
@@ -55,14 +55,18 @@ function DamageArc({ angle, intensity, onComplete }: ArcProps) {
   const opacity = useSharedValue(intensity);
 
   React.useEffect(() => {
-    opacity.value = withTiming(0, {
-      duration: FADE_DURATION_MS,
-      easing: Easing.out(Easing.quad),
-    }, (finished) => {
-      if (finished) {
-        runOnJS(onComplete)();
-      }
-    });
+    opacity.value = withTiming(
+      0,
+      {
+        duration: FADE_DURATION_MS,
+        easing: Easing.out(Easing.quad),
+      },
+      (finished) => {
+        if (finished) {
+          runOnJS(onComplete)();
+        }
+      },
+    );
   }, [opacity, intensity, onComplete]);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -79,9 +83,9 @@ function DamageArc({ angle, intensity, onComplete }: ArcProps) {
     <Animated.View
       style={[
         {
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           width: arcSize,
           height: arcThickness,
           marginLeft: -arcSize / 2,
@@ -100,8 +104,8 @@ function DamageArc({ angle, intensity, onComplete }: ArcProps) {
       {/* Gradient-like wedge using nested views */}
       <View
         style={{
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
           borderRadius: arcSize / 2,
           backgroundColor: HUD_RED,
           opacity: 0.6,
@@ -148,7 +152,7 @@ export function DamageIndicator() {
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,

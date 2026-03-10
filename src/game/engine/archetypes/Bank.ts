@@ -11,6 +11,7 @@ import {
 
 import {
   createMetalTexture,
+  createPBRStoneRough,
   createStoneTexture,
   createWoodTexture,
 } from '../materials';
@@ -135,10 +136,7 @@ function createTellerCage(width: number): Group {
 
 function buildExterior(slots: BuildingSlots): Group {
   const group = new Group();
-  const palette = slots.colorPalette ?? [];
-  const wallBase = palette[0] ?? '#8B7B6A';
-  const wallGrain = palette[1] ?? '#6B5E4A';
-  const wallMat = createWoodTexture(wallBase, wallGrain);
+  const wallMat = createPBRStoneRough(2);
   const stoneMat = createStoneTexture('#8B8070', '#6B6055');
 
   // Stone foundation

@@ -7,9 +7,10 @@
  *  - Return to Title: resets to title phase
  */
 
-import * as React from 'react';
-import { Modal, ScrollView, View, Pressable } from 'react-native';
+import * as React from "react";
+import { Modal, Pressable, ScrollView, View } from "react-native";
 import Animated, {
+  Easing,
   FadeIn,
   FadeInDown,
   FadeInUp,
@@ -17,13 +18,13 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-  Easing,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Text, Button, Card, CardContent } from '@/components/ui';
-import { gameStore } from '@/src/game/store/webGameStore';
-import type { SaveSlotMeta } from '@/src/game/systems/SaveSystem';
-import { formatPlayTime, formatTimestamp } from '@/src/game/store/saveManager';
+import { Button, Card, CardContent, Text } from "@/components/ui";
+import { formatPlayTime, formatTimestamp } from "@/src/game/store/saveManager";
+import { gameStore } from "@/src/game/store/webGameStore";
+import type { SaveSlotMeta } from "@/src/game/systems/SaveSystem";
+import { rngTick, scopedRNG } from "../../src/game/lib/prng.ts";
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -66,20 +67,20 @@ function DustParticle({
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
-    opacity: 0.15 + Math.random() * 0.15,
+    opacity: 0.15 + scopedRNG("ui", 42, rngTick()) * 0.15,
   }));
 
   return (
     <Animated.View
       style={[
         {
-          position: 'absolute',
+          position: "absolute",
           left: `${left}%`,
           bottom: -20,
           width: 2,
           height: 2,
           borderRadius: 1,
-          backgroundColor: '#dc2626',
+          backgroundColor: "#dc2626",
         },
         animatedStyle,
       ]}
@@ -91,17 +92,11 @@ function DustParticle({
 // Save Slot Row (for load picker)
 // ---------------------------------------------------------------------------
 
-function SaveSlotRow({
-  slot,
-  onPress,
-}: {
-  slot: SaveSlotMeta;
-  onPress: () => void;
-}) {
+function SaveSlotRow({ slot, onPress }: { slot: SaveSlotMeta; onPress: () => void }) {
   const label = slot.isAutoSave
-    ? 'Auto Save'
+    ? "Auto Save"
     : slot.isQuickSave
-      ? 'Quick Save'
+      ? "Quick Save"
       : `Slot: ${slot.slotId}`;
 
   return (
@@ -136,9 +131,9 @@ function SaveSlotRow({
 // ---------------------------------------------------------------------------
 
 const DUST_PARTICLES = Array.from({ length: 20 }, () => ({
-  left: Math.random() * 100,
-  delay: Math.random() * 2,
-  duration: 4 + Math.random() * 3,
+  left: scopedRNG("ui", 42, rngTick()) * 100,
+  delay: scopedRNG("ui", 42, rngTick()) * 2,
+  duration: 4 + scopedRNG("ui", 42, rngTick()) * 3,
 }));
 
 // ---------------------------------------------------------------------------
@@ -161,7 +156,7 @@ export function GameOverScreen() {
   const loadFromSlot = gameStore((s) => s.loadFromSlot);
   const getSaveSlots = gameStore((s) => s.getSaveSlots);
 
-  const isVisible = phase === 'game_over';
+  const isVisible = phase === "game_over";
 
   const [showLoadPicker, setShowLoadPicker] = React.useState(false);
   const [slots, setSlots] = React.useState<SaveSlotMeta[]>([]);
@@ -175,9 +170,9 @@ export function GameOverScreen() {
 
   // Derive town name for respawn notification
   const townName = React.useMemo(() => {
-    if (!currentLocationId || !loadedWorld) return 'the last town';
+    if (!currentLocationId || !loadedWorld) return "the last town";
     const loc = (loadedWorld as any)?.locations?.get?.(currentLocationId);
-    return loc?.ref?.name ?? currentLocationId.replace(/_/g, ' ');
+    return loc?.ref?.name ?? currentLocationId.replace(/_/g, " ");
   }, [currentLocationId, loadedWorld]);
 
   const handleRespawn = React.useCallback(() => {
@@ -192,22 +187,25 @@ export function GameOverScreen() {
     }
 
     // Set phase back to playing (player stays at currentLocationId which is their last town)
-    setPhase('playing');
+    setPhase("playing");
 
     // Notify
-    addNotification('info', `You have been revived at ${townName}. Lost ${goldPenalty} gold.`);
+    addNotification("info", `You have been revived at ${townName}. Lost ${goldPenalty} gold.`);
   }, [heal, playerStats.maxHealth, playerStats.gold, addGold, setPhase, addNotification, townName]);
 
   const handleLoadSave = React.useCallback(() => {
     setShowLoadPicker(true);
   }, []);
 
-  const handleLoadFromSlot = React.useCallback(async (slotId: string) => {
-    const success = await loadFromSlot(slotId);
-    if (success) {
-      setShowLoadPicker(false);
-    }
-  }, [loadFromSlot]);
+  const handleLoadFromSlot = React.useCallback(
+    async (slotId: string) => {
+      const success = await loadFromSlot(slotId);
+      if (success) {
+        setShowLoadPicker(false);
+      }
+    },
+    [loadFromSlot],
+  );
 
   const handleReturnToTitle = React.useCallback(() => {
     resetGame();
@@ -231,7 +229,7 @@ export function GameOverScreen() {
       <Animated.View
         entering={FadeIn.duration(800)}
         className="absolute inset-0 flex-1 items-center justify-center"
-        style={{ backgroundColor: 'rgba(127, 29, 29, 0.85)' }}
+        style={{ backgroundColor: "rgba(127, 29, 29, 0.85)" }}
       >
         {/* Dust particles */}
         {DUST_PARTICLES.map((p, i) => (
@@ -244,7 +242,11 @@ export function GameOverScreen() {
             <Text
               variant="h1"
               className="text-center text-red-100"
-              style={{ textShadowColor: 'rgba(0,0,0,0.8)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 8 }}
+              style={{
+                textShadowColor: "rgba(0,0,0,0.8)",
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 8,
+              }}
             >
               You Have Fallen
             </Text>
@@ -253,19 +255,19 @@ export function GameOverScreen() {
           {/* Death message */}
           <Animated.View entering={FadeInUp.duration(500).delay(600)}>
             <Text variant="body" className="text-center text-red-200/80">
-              The frontier has claimed another soul.{'\n'}
-              {playerName ? `Rest in peace, ${playerName}.` : 'Rest in peace, stranger.'}
+              The frontier has claimed another soul.{"\n"}
+              {playerName ? `Rest in peace, ${playerName}.` : "Rest in peace, stranger."}
             </Text>
           </Animated.View>
 
           {/* Stats */}
-          <Animated.View
-            entering={FadeInUp.duration(500).delay(900)}
-            className="w-full"
-          >
+          <Animated.View entering={FadeInUp.duration(500).delay(900)} className="w-full">
             <Card className="border-red-800/50 bg-red-950/60">
               <CardContent className="gap-1 px-5 py-4">
-                <Text variant="label" className="mb-2 text-center text-red-300/60 uppercase tracking-widest">
+                <Text
+                  variant="label"
+                  className="mb-2 text-center text-red-300/60 uppercase tracking-widest"
+                >
                   Final Record
                 </Text>
                 <StatRow label="Level Reached" value={playerStats.level} />
@@ -277,10 +279,7 @@ export function GameOverScreen() {
           </Animated.View>
 
           {/* Actions */}
-          <Animated.View
-            entering={FadeInUp.duration(500).delay(1200)}
-            className="w-full gap-3"
-          >
+          <Animated.View entering={FadeInUp.duration(500).delay(1200)} className="w-full gap-3">
             {showLoadPicker ? (
               <>
                 <ScrollView style={{ maxHeight: 200 }} className="gap-2">

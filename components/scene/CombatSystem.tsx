@@ -8,22 +8,24 @@
 // Wires enemy death -> rewards (XP, gold, loot drops, quest events),
 // reads armor from equipment for damage reduction, and handles weapon switching.
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { InputManager } from '@/src/game/input';
-import { useGameStore } from '@/hooks/useGameStore';
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
+import { useGameStore } from "@/hooks/useGameStore";
 import {
-  processCombatTick,
-  createWeaponState,
-  getDifficultyConfig,
   type CombatEnemy,
-  type KilledEnemyData,
-  type WeaponRuntimeState,
+  createWeaponState,
   type DamageNumberData,
   type DifficultyLevel,
-} from '@/src/game/engine/combat';
-import { questEvents } from '@/src/game/systems/QuestEvents';
+  getDifficultyConfig,
+  type KilledEnemyData,
+  processCombatTick,
+  type WeaponRuntimeState,
+} from "@/src/game/engine/combat";
+import { InputManager } from "@/src/game/input";
+import { gameAudioBridge } from "@/src/game/services/audio/GameAudioBridge";
+import { questEvents } from "@/src/game/systems/QuestEvents";
+import { rngTick, scopedRNG } from "../../src/game/lib/prng.ts";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -48,6 +50,11 @@ export interface CombatSystemProps {
   onWeaponStateChange?: (state: Readonly<WeaponRuntimeState>) => void;
   /** Callback when player takes damage (for DamageFlash). */
   onPlayerDamage?: (damage: number) => void;
+  /** Callback when player takes damage with direction info (for DamageIndicator). */
+  onPlayerDamageDirectional?: (
+    damage: number,
+    direction: { x: number; y: number; z: number },
+  ) => void;
   /** Callback when weapon switches (for WeaponView sync). */
   onWeaponSwitch?: (weaponId: string) => void;
 }
@@ -57,10 +64,7 @@ export interface CombatSystemProps {
 // ---------------------------------------------------------------------------
 
 /** Roll against an enemy's loot table and return item IDs to drop. */
-function rollLoot(
-  lootTable: KilledEnemyData['lootTable'],
-  difficulty: DifficultyLevel,
-): string[] {
+function rollLoot(lootTable: KilledEnemyData["lootTable"], difficulty: DifficultyLevel): string[] {
   const diffConfig = getDifficultyConfig(difficulty);
   const lootMul = diffConfig.lootMultiplier;
   const items: string[] = [];
@@ -72,21 +76,21 @@ function rollLoot(
 
   // Common: 60% base chance per item
   for (const itemId of lootTable.common) {
-    if (Math.random() < 0.6 * lootMul) {
+    if (scopedRNG("combat", 42, rngTick()) < 0.6 * lootMul) {
       items.push(itemId);
     }
   }
 
   // Uncommon: 25% base chance per item
   for (const itemId of lootTable.uncommon) {
-    if (Math.random() < 0.25 * lootMul) {
+    if (scopedRNG("combat", 42, rngTick()) < 0.25 * lootMul) {
       items.push(itemId);
     }
   }
 
   // Rare: 5% base chance per item
   for (const itemId of lootTable.rare) {
-    if (Math.random() < 0.05 * lootMul) {
+    if (scopedRNG("combat", 42, rngTick()) < 0.05 * lootMul) {
       items.push(itemId);
     }
   }
@@ -103,7 +107,7 @@ function getWeaponSlots(
   inventory: Array<{ id: string; itemId: string; type: string }>,
 ): (string | null)[] {
   // Slots 1-5: first 5 weapons in inventory order
-  const weaponItems = inventory.filter((i) => i.type === 'weapon');
+  const weaponItems = inventory.filter((i) => i.type === "weapon");
   const slots: (string | null)[] = [null, null, null, null, null];
   for (let i = 0; i < Math.min(5, weaponItems.length); i++) {
     slots[i] = weaponItems[i].id; // inventory item id
@@ -122,33 +126,29 @@ function DamageNumber({ data }: { data: DamageNumberData }) {
 
   // Create canvas texture for the damage number
   const texture = useMemo(() => {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = 128;
     canvas.height = 64;
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext("2d")!;
 
     const displayText = data.label ?? String(data.value);
 
     // Text style
     ctx.font = data.label
-      ? 'bold 40px monospace'
+      ? "bold 40px monospace"
       : data.isCritical
-        ? 'bold 48px monospace'
-        : 'bold 36px monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+        ? "bold 48px monospace"
+        : "bold 36px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
     // Outline
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = "#000000";
     ctx.lineWidth = 4;
     ctx.strokeText(displayText, 64, 32);
 
     // Fill color: KILL = gold, critical = yellow, normal = white
-    ctx.fillStyle = data.label
-      ? '#FFD700'
-      : data.isCritical
-        ? '#FFD700'
-        : '#FFFFFF';
+    ctx.fillStyle = data.label ? "#FFD700" : data.isCritical ? "#FFD700" : "#FFFFFF";
     ctx.fillText(displayText, 64, 32);
 
     const tex = new THREE.CanvasTexture(canvas);
@@ -171,10 +171,7 @@ function DamageNumber({ data }: { data: DamageNumberData }) {
     meshRef.current.position.y = startY + elapsed * 1.5;
 
     // Scale pop on critical hits and kill labels
-    const scale =
-      data.label || data.isCritical
-        ? 0.4 + Math.sin(progress * Math.PI) * 0.2
-        : 0.3;
+    const scale = data.label || data.isCritical ? 0.4 + Math.sin(progress * Math.PI) * 0.2 : 0.3;
     meshRef.current.scale.set(scale, scale * 0.5, 1);
 
     // Fade out
@@ -182,10 +179,7 @@ function DamageNumber({ data }: { data: DamageNumberData }) {
   });
 
   return (
-    <sprite
-      ref={meshRef}
-      position={[data.position.x, data.position.y, data.position.z]}
-    >
+    <sprite ref={meshRef} position={[data.position.x, data.position.y, data.position.z]}>
       <spriteMaterial
         ref={materialRef}
         map={texture}
@@ -203,14 +197,15 @@ function DamageNumber({ data }: { data: DamageNumberData }) {
 
 export function CombatSystem({
   weaponId: weaponIdProp,
-  difficulty = 'normal',
+  difficulty = "normal",
   reserveAmmo = 60,
   enemies = [],
-  locationId = 'unknown',
+  locationId = "unknown",
   onCrosshairSpreadChange,
   onHitMarker,
   onWeaponStateChange,
   onPlayerDamage,
+  onPlayerDamageDirectional,
   onWeaponSwitch,
 }: CombatSystemProps) {
   const { camera, scene } = useThree();
@@ -231,17 +226,14 @@ export function CombatSystem({
   // ---------------------------------------------------------------------------
   // Derive active weapon ID from store equipment
   // ---------------------------------------------------------------------------
-  const equippedWeapon = getEquippedItem('weapon');
-  const activeWeaponId =
-    weaponIdProp ?? equippedWeapon?.itemId ?? 'revolver';
+  const equippedWeapon = getEquippedItem("weapon");
+  const activeWeaponId = weaponIdProp ?? equippedWeapon?.itemId ?? "revolver";
 
   // Derive armor from equipment bonuses
   const playerArmor = getEquipmentBonuses().defense;
 
   // Weapon state (mutable ref, not React state to avoid re-renders)
-  const weaponStateRef = useRef<WeaponRuntimeState>(
-    createWeaponState(activeWeaponId, reserveAmmo),
-  );
+  const weaponStateRef = useRef<WeaponRuntimeState>(createWeaponState(activeWeaponId, reserveAmmo));
 
   // Reinitialize weapon state when weapon changes
   const prevWeaponIdRef = useRef(activeWeaponId);
@@ -268,6 +260,9 @@ export function CombatSystem({
   // Track dead enemies to schedule removal
   const deadEnemyTimers = useRef<Map<string, number>>(new Map());
 
+  // Track previous reload phase for audio triggers
+  const prevReloadPhaseRef = useRef<string>("none");
+
   // Per-frame combat processing
   useFrame((_state, delta) => {
     const inputFrame = InputManager.getInstance().getFrame();
@@ -279,11 +274,9 @@ export function CombatSystem({
       const slotIndex = inputFrame.weaponSwitch - 1;
       const targetInventoryId = weaponSlots[slotIndex];
       if (targetInventoryId && targetInventoryId !== equipment.weapon) {
-        equipItem(targetInventoryId, 'weapon');
+        equipItem(targetInventoryId, "weapon");
         // Look up the item to get its itemId for the weapon view
-        const targetItem = inventory.find(
-          (i) => i.id === targetInventoryId,
-        );
+        const targetItem = inventory.find((i) => i.id === targetInventoryId);
         if (targetItem) {
           onWeaponSwitch?.(targetItem.itemId);
         }
@@ -313,11 +306,41 @@ export function CombatSystem({
     );
 
     // -----------------------------------------------------------------------
+    // Audio — weapon fire, hits, kills, reload, player damage
+    // -----------------------------------------------------------------------
+    if (result.playerFired) {
+      gameAudioBridge.playWeaponFire(activeWeaponId);
+    }
+
+    // Reload audio: trigger when reload phase transitions to 'starting'
+    const currentReloadPhase = result.weaponState.reloadPhase;
+    if (currentReloadPhase === "starting" && prevReloadPhaseRef.current === "none") {
+      gameAudioBridge.playWeaponReload(activeWeaponId);
+    }
+    prevReloadPhaseRef.current = currentReloadPhase;
+
+    // Hit marker audio
+    if (result.hitMarker?.hit) {
+      if (result.hitMarker.isKill) {
+        gameAudioBridge.playEnemyDeath();
+      } else {
+        gameAudioBridge.playEnemyHit();
+      }
+    }
+
+    // Impact sparks audio (missed shots hitting environment)
+    if (result.impactSparks.length > 0) {
+      gameAudioBridge.playBulletImpact();
+    }
+
+    // -----------------------------------------------------------------------
     // Handle player damage events
     // -----------------------------------------------------------------------
     for (const dmgEvent of result.playerDamageEvents) {
       takeDamage(dmgEvent.damage);
       onPlayerDamage?.(dmgEvent.damage);
+      onPlayerDamageDirectional?.(dmgEvent.damage, dmgEvent.attackDirection);
+      gameAudioBridge.playPlayerHurt();
     }
 
     // -----------------------------------------------------------------------
@@ -330,9 +353,7 @@ export function CombatSystem({
       if (xp > 0) gainXP(xp);
 
       // Gold reward (scaled by difficulty)
-      const gold = Math.floor(
-        killData.goldReward * diffConfig.goldMultiplier,
-      );
+      const gold = Math.floor(killData.goldReward * diffConfig.goldMultiplier);
       if (gold > 0) addGold(gold);
 
       // Roll loot and add items to player inventory
@@ -342,7 +363,7 @@ export function CombatSystem({
       }
 
       // Emit quest event
-      questEvents.emit('enemyKilled', {
+      questEvents.emit("enemyKilled", {
         enemyType: killData.enemyType,
         enemyId: killData.enemyId,
         locationId,
@@ -371,9 +392,7 @@ export function CombatSystem({
       setDamageNumbers((prev) => {
         // Clean up expired numbers and add new ones
         const ts = performance.now();
-        const active = prev.filter(
-          (d) => (ts - d.createdAt) / 1000 < d.duration,
-        );
+        const active = prev.filter((d) => (ts - d.createdAt) / 1000 < d.duration);
         return [...active, ...result.damageNumbers];
       });
     }
@@ -383,10 +402,7 @@ export function CombatSystem({
 
     // Notify crosshair of hits
     if (result.hitMarker?.hit) {
-      onHitMarker?.(
-        result.hitMarker.isHeadshot,
-        result.hitMarker.isKill,
-      );
+      onHitMarker?.(result.hitMarker.isHeadshot, result.hitMarker.isKill);
     }
 
     // Notify weapon state changes
@@ -397,9 +413,7 @@ export function CombatSystem({
   useFrame(() => {
     const ts = performance.now();
     setDamageNumbers((prev) => {
-      const filtered = prev.filter(
-        (d) => (ts - d.createdAt) / 1000 < d.duration,
-      );
+      const filtered = prev.filter((d) => (ts - d.createdAt) / 1000 < d.duration);
       // Only update if something was removed
       return filtered.length === prev.length ? prev : filtered;
     });

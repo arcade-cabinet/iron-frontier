@@ -153,6 +153,7 @@ export async function preloadLevelDDLs(
         results.set(levelId, ddl);
       } catch (error) {
         console.error(`Failed to preload DDL for ${levelId}:`, error);
+        throw error;
       }
     })
   );

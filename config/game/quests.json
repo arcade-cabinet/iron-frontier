@@ -40,7 +40,11 @@
             "target": "marker_burned_building",
             "count": 1,
             "hint": "Ask the locals about Copper Street. Look for the building with the collapsed roof on the east side of town.",
-            "markerTarget": { "type": "building", "buildingId": "burned_building_01", "locationId": "dusty_springs" },
+            "markerTarget": {
+              "type": "building",
+              "buildingId": "burned_building_01",
+              "locationId": "dusty_springs"
+            },
             "completionRadius": 8
           }
         ],
@@ -60,7 +64,11 @@
             "target": "ruins_search",
             "count": 1,
             "hint": "Walk up to the rubble and sift through it carefully.",
-            "markerTarget": { "type": "building", "buildingId": "burned_building_01", "locationId": "dusty_springs" }
+            "markerTarget": {
+              "type": "building",
+              "buildingId": "burned_building_01",
+              "locationId": "dusty_springs"
+            }
           },
           {
             "id": "obj_find_manifest",
@@ -72,7 +80,11 @@
             "hint": "Check beneath the floorboards."
           }
         ],
-        "rewards": { "xp": 50, "gold": 10, "items": [{ "itemId": "item_partial_manifest", "quantity": 1 }] }
+        "rewards": {
+          "xp": 50,
+          "gold": 10,
+          "items": [{ "itemId": "item_partial_manifest", "quantity": 1 }]
+        }
       },
       {
         "id": "stage_3_sheriff",
@@ -88,7 +100,11 @@
             "target": "dusty_springs_sheriff_office",
             "count": 1,
             "hint": "Look for the wooden building with the star sign hanging out front, down Main Street.",
-            "markerTarget": { "type": "building", "buildingId": "dusty_springs_sheriff_office", "locationId": "dusty_springs" },
+            "markerTarget": {
+              "type": "building",
+              "buildingId": "dusty_springs_sheriff_office",
+              "locationId": "dusty_springs"
+            },
             "completionRadius": 5
           },
           {
@@ -181,7 +197,11 @@
             "target": "marker_west_pasture",
             "count": 1,
             "hint": "Head west from the barn. Look near the broken fence line for disturbed ground.",
-            "markerTarget": { "type": "marker", "markerId": "marker_west_pasture", "locationId": "sunset_ranch" },
+            "markerTarget": {
+              "type": "marker",
+              "markerId": "marker_west_pasture",
+              "locationId": "sunset_ranch"
+            },
             "completionRadius": 8
           },
           {
@@ -191,7 +211,11 @@
             "target": "marker_canyon_entrance",
             "count": 1,
             "hint": "The tracks lead into the rocky badlands to the west. Look for a narrow canyon opening.",
-            "markerTarget": { "type": "marker", "markerId": "marker_canyon_entrance", "locationId": "sunset_ranch" },
+            "markerTarget": {
+              "type": "marker",
+              "markerId": "marker_canyon_entrance",
+              "locationId": "sunset_ranch"
+            },
             "completionRadius": 10
           }
         ],
@@ -292,7 +316,11 @@
             "count": 1
           }
         ],
-        "rewards": { "xp": 15, "gold": 0, "items": [{ "itemId": "item_supply_list", "quantity": 1 }] }
+        "rewards": {
+          "xp": 15,
+          "gold": 0,
+          "items": [{ "itemId": "item_supply_list", "quantity": 1 }]
+        }
       },
       {
         "id": "stage_doc_acquire",
@@ -309,7 +337,11 @@
             "count": 1,
             "optional": true,
             "hint": "Head to Junction City. The pharmacy is the large storefront near the train station. Costs 50 gold.",
-            "markerTarget": { "type": "building", "buildingId": "junction_pharmacy", "locationId": "junction_city" }
+            "markerTarget": {
+              "type": "building",
+              "buildingId": "junction_pharmacy",
+              "locationId": "junction_city"
+            }
           },
           {
             "id": "obj_coppertown_supplies",
@@ -319,10 +351,18 @@
             "count": 1,
             "optional": true,
             "hint": "Head to Coppertown. The company store is on the main drag. Costs 20 gold but you might attract attention.",
-            "markerTarget": { "type": "building", "buildingId": "coppertown_store", "locationId": "coppertown" }
+            "markerTarget": {
+              "type": "building",
+              "buildingId": "coppertown_store",
+              "locationId": "coppertown"
+            }
           }
         ],
-        "rewards": { "xp": 40, "gold": 0, "items": [{ "itemId": "item_medical_supplies", "quantity": 1 }] }
+        "rewards": {
+          "xp": 40,
+          "gold": 0,
+          "items": [{ "itemId": "item_medical_supplies", "quantity": 1 }]
+        }
       },
       {
         "id": "stage_doc_deliver",

@@ -1,4 +1,4 @@
-import type { AbstractMesh } from '@babylonjs/core';
+import type { Object3D } from 'three';
 import {
   ArriveBehavior,
   EntityManager,
@@ -12,8 +12,8 @@ export interface YukaAgentConfig {
   id: string;
   position: { x: number; y: number; z: number };
   maxSpeed: number;
-  renderComponent?: AbstractMesh;
-  onSync?: (entity: Vehicle, renderComponent: AbstractMesh) => void;
+  renderComponent?: Object3D;
+  onSync?: (entity: Vehicle, renderComponent: Object3D) => void;
 }
 
 export interface YukaPathOptions {

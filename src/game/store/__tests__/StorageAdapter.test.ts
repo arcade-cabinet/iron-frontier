@@ -2,7 +2,7 @@
  * Tests for StorageAdapter implementations
  */
 
-import { beforeEach, describe, expect, it } from 'vitest';
+// Jest globals (describe, expect, it, beforeEach) are available automatically
 import { MemoryStorageAdapter, NoopStorageAdapter } from '../StorageAdapter';
 
 describe('MemoryStorageAdapter', () => {

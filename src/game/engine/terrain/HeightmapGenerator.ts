@@ -152,7 +152,8 @@ export class HeightmapGenerator {
         weights[key] /= total;
       }
     } else {
-      weights.desert = 1; // Fallback
+      console.error(`[HeightmapGenerator] All biome weights are zero at (${worldX}, ${worldZ}) — defaulting to desert`);
+      weights.desert = 1;
     }
 
     return weights;

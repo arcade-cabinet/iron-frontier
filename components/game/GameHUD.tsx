@@ -13,18 +13,17 @@
  * @module components/game/GameHUD
  */
 
-import * as React from 'react';
-import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { useGameStoreShallow } from '@/hooks/useGameStore';
-import { useResponsive } from '@/hooks/useResponsive';
-import { Progress } from '@/components/ui/Progress';
-import { Badge } from '@/components/ui/Badge';
-import { Text } from '@/components/ui/Text';
-import { getQuestById } from '@/src/game/data/quests';
-import { DEFAULT_FATIGUE_CONFIG } from '@/src/game/systems/fatigue';
-import { DEFAULT_PROVISIONS_CONFIG } from '@/src/game/systems/provisions';
+import * as React from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Badge } from "@/components/ui/Badge";
+import { Progress } from "@/components/ui/Progress";
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { useResponsive } from "@/hooks/useResponsive";
+import { getQuestById } from "@/src/game/data/quests";
+import { DEFAULT_FATIGUE_CONFIG } from "@/src/game/systems/fatigue";
+import { DEFAULT_PROVISIONS_CONFIG } from "@/src/game/systems/provisions";
 
 // ============================================================================
 // HELPERS
@@ -50,28 +49,28 @@ function xpPercent(xp: number, xpToNext: number): number {
  * Return a frontier brand color class based on health percentage.
  */
 function healthTextColor(pct: number): string {
-  if (pct > 60) return 'text-frontier-sage';
-  if (pct > 30) return 'text-frontier-whiskey';
-  return 'text-frontier-blood';
+  if (pct > 60) return "text-frontier-sage";
+  if (pct > 30) return "text-frontier-whiskey";
+  return "text-frontier-blood";
 }
 
 /**
  * Convert a 24-hour clock into a 12-hour display string.
  */
 function formatTime(hour: number, minute: number): string {
-  const period = hour >= 12 ? 'PM' : 'AM';
+  const period = hour >= 12 ? "PM" : "AM";
   const displayHour = hour % 12 || 12;
-  return `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`;
+  return `${displayHour}:${minute.toString().padStart(2, "0")} ${period}`;
 }
 
 /**
  * Derive a human-readable time-of-day phase label from the hour.
  */
 function timePhaseLabel(hour: number): string {
-  if (hour >= 5 && hour < 7) return 'Dawn';
-  if (hour >= 7 && hour < 17) return 'Day';
-  if (hour >= 17 && hour < 20) return 'Dusk';
-  return 'Night';
+  if (hour >= 5 && hour < 7) return "Dawn";
+  if (hour >= 7 && hour < 17) return "Day";
+  if (hour >= 17 && hour < 20) return "Dusk";
+  return "Night";
 }
 
 /**
@@ -79,26 +78,26 @@ function timePhaseLabel(hour: number): string {
  */
 function fatigueLabel(value: number): string {
   const { tired, weary, exhausted, collapsed } = DEFAULT_FATIGUE_CONFIG.thresholds;
-  if (value >= collapsed) return 'Collapsed';
-  if (value >= exhausted) return 'Exhausted';
-  if (value >= weary) return 'Weary';
-  if (value >= tired) return 'Tired';
-  return 'Rested';
+  if (value >= collapsed) return "Collapsed";
+  if (value >= exhausted) return "Exhausted";
+  if (value >= weary) return "Weary";
+  if (value >= tired) return "Tired";
+  return "Rested";
 }
 
 /**
  * Map fatigue label to a badge variant for visual urgency.
  */
-function fatigueBadgeVariant(label: string): 'success' | 'warning' | 'danger' | 'info' {
+function fatigueBadgeVariant(label: string): "success" | "warning" | "danger" | "info" {
   switch (label) {
-    case 'Collapsed':
-    case 'Exhausted':
-      return 'danger';
-    case 'Weary':
-    case 'Tired':
-      return 'warning';
+    case "Collapsed":
+    case "Exhausted":
+      return "danger";
+    case "Weary":
+    case "Tired":
+      return "warning";
     default:
-      return 'success';
+      return "success";
   }
 }
 
@@ -106,7 +105,11 @@ function fatigueBadgeVariant(label: string): 'success' | 'warning' | 'danger' | 
  * Derive the first active quest summary (title + current objective text).
  */
 function activeQuestSummary(
-  activeQuests: readonly { questId: string; currentStageIndex: number; objectiveProgress: Record<string, number> }[],
+  activeQuests: readonly {
+    questId: string;
+    currentStageIndex: number;
+    objectiveProgress: Record<string, number>;
+  }[],
 ): { title: string; objective: string } | null {
   if (!activeQuests.length) return null;
   const aq = activeQuests[0];
@@ -114,14 +117,16 @@ function activeQuestSummary(
   if (!quest) return null;
 
   const stage = quest.stages[aq.currentStageIndex];
-  const objective = stage?.objectives.find((obj: { id: string; count: number; description: string }) => {
-    const progress = aq.objectiveProgress?.[obj.id] ?? 0;
-    return progress < obj.count;
-  });
+  const objective = stage?.objectives.find(
+    (obj: { id: string; count: number; description: string }) => {
+      const progress = aq.objectiveProgress?.[obj.id] ?? 0;
+      return progress < obj.count;
+    },
+  );
 
   return {
     title: quest.title,
-    objective: objective?.description ?? stage?.title ?? 'Complete quest',
+    objective: objective?.description ?? stage?.title ?? "Complete quest",
   };
 }
 
@@ -160,11 +165,11 @@ const TopLeftPanel = React.memo(function TopLeftPanel() {
   const hp = healthPercent(health, maxHealth);
   const xpp = xpPercent(xp, xpToNext);
 
-  const labelSize = isPhone ? 'text-[9px]' : 'text-[10px]';
-  const valueSize = isPhone ? 'text-[9px]' : isDesktop ? 'text-xs' : 'text-[10px]';
-  const nameSize = isPhone ? 'text-xs' : 'text-sm';
-  const padding = isPhone ? 'px-2 py-1' : 'px-3 py-1.5';
-  const barPadding = isPhone ? 'px-2 py-1.5' : 'px-3 py-2';
+  const labelSize = isPhone ? "text-[9px]" : "text-[10px]";
+  const valueSize = isPhone ? "text-[9px]" : isDesktop ? "text-xs" : "text-[10px]";
+  const nameSize = isPhone ? "text-xs" : "text-sm";
+  const padding = isPhone ? "px-2 py-1" : "px-3 py-1.5";
+  const barPadding = isPhone ? "px-2 py-1.5" : "px-3 py-2";
 
   return (
     <View
@@ -181,7 +186,9 @@ const TopLeftPanel = React.memo(function TopLeftPanel() {
           {playerName}
         </Text>
         <Badge variant="info">
-          <Text className={`${isPhone ? 'text-[10px]' : 'text-xs'} font-bold text-frontier-sky`}>Lv.{level}</Text>
+          <Text className={`${isPhone ? "text-[10px]" : "text-xs"} font-bold text-frontier-sky`}>
+            Lv.{level}
+          </Text>
         </Badge>
       </View>
 
@@ -193,7 +200,7 @@ const TopLeftPanel = React.memo(function TopLeftPanel() {
             {health}/{maxHealth}
           </Text>
         </View>
-        <Progress variant="health" value={hp} className={isPhone ? 'h-1.5' : 'h-2'} />
+        <Progress variant="health" value={hp} className={isPhone ? "h-1.5" : "h-2"} />
       </View>
 
       {/* XP bar */}
@@ -204,7 +211,7 @@ const TopLeftPanel = React.memo(function TopLeftPanel() {
             {xp}/{xpToNext}
           </Text>
         </View>
-        <Progress variant="xp" value={xpp} className={isPhone ? 'h-1' : 'h-1.5'} />
+        <Progress variant="xp" value={xpp} className={isPhone ? "h-1" : "h-1.5"} />
       </View>
     </View>
   );
@@ -226,14 +233,14 @@ const TopRightPanel = React.memo(function TopRightPanel() {
   const currentLocation = currentLocationId
     ? loadedWorld?.locations?.get?.(currentLocationId)
     : null;
-  const locationName = currentLocation?.ref?.name ?? 'Unknown Territory';
+  const locationName = currentLocation?.ref?.name ?? "Unknown Territory";
 
   const timeStr = formatTime(clockHour, clockMinute);
   const phase = timePhaseLabel(clockHour);
 
-  const labelSize = isPhone ? 'text-[9px]' : 'text-[10px]';
-  const valueSize = isPhone ? 'text-[10px]' : 'text-xs';
-  const padding = isPhone ? 'px-2 py-1' : 'px-3 py-1.5';
+  const labelSize = isPhone ? "text-[9px]" : "text-[10px]";
+  const valueSize = isPhone ? "text-[10px]" : "text-xs";
+  const padding = isPhone ? "px-2 py-1" : "px-3 py-1.5";
 
   return (
     <View
@@ -260,7 +267,7 @@ const TopRightPanel = React.memo(function TopRightPanel() {
         <Text className={`text-frontier-dust ${labelSize} font-body`}>TIME</Text>
         <Text className={`text-white ${valueSize} font-mono`}>{timeStr}</Text>
         {!isPhone && (
-          <Badge variant={phase === 'Night' ? 'warning' : 'success'}>
+          <Badge variant={phase === "Night" ? "warning" : "success"}>
             <Text className="text-[9px] font-body">{phase}</Text>
           </Badge>
         )}
@@ -286,8 +293,8 @@ const BottomLeftPanel = React.memo(function BottomLeftPanel() {
 
   if (!quest) return null;
 
-  const labelSize = isPhone ? 'text-[9px]' : 'text-[10px]';
-  const titleSize = isPhone ? 'text-[10px]' : 'text-xs';
+  const labelSize = isPhone ? "text-[9px]" : "text-[10px]";
+  const titleSize = isPhone ? "text-[10px]" : "text-xs";
 
   return (
     <View
@@ -298,7 +305,7 @@ const BottomLeftPanel = React.memo(function BottomLeftPanel() {
         maxWidth: isPhone ? 200 : isDesktop ? 300 : 260,
       }}
     >
-      <View className={`rounded-lg bg-black/50 ${isPhone ? 'px-2 py-1.5' : 'px-3 py-2'} gap-1`}>
+      <View className={`rounded-lg bg-black/50 ${isPhone ? "px-2 py-1.5" : "px-3 py-2"} gap-1`}>
         <View className="flex-row items-center gap-2">
           <View className="h-2 w-2 rounded-full bg-frontier-whiskey" />
           <Text className={`text-frontier-dust ${labelSize} font-body`}>QUEST</Text>
@@ -307,7 +314,10 @@ const BottomLeftPanel = React.memo(function BottomLeftPanel() {
           {quest.title}
         </Text>
         {/* On phone, show only one line of objective to save space */}
-        <Text className={`text-frontier-dust ${labelSize} font-body`} numberOfLines={isPhone ? 1 : 2}>
+        <Text
+          className={`text-frontier-dust ${labelSize} font-body`}
+          numberOfLines={isPhone ? 1 : 2}
+        >
           {quest.objective}
         </Text>
       </View>
@@ -333,9 +343,9 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
   const fFood = foodPercent(food);
   const fWater = waterPercent(water);
 
-  const labelSize = isPhone ? 'text-[9px]' : 'text-[10px]';
-  const padding = isPhone ? 'px-2 py-1' : 'px-3 py-1.5';
-  const barPadding = isPhone ? 'px-2 py-1.5' : 'px-3 py-2';
+  const labelSize = isPhone ? "text-[9px]" : "text-[10px]";
+  const padding = isPhone ? "px-2 py-1" : "px-3 py-1.5";
+  const barPadding = isPhone ? "px-2 py-1.5" : "px-3 py-2";
 
   return (
     <View
@@ -348,7 +358,11 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
       {/* Gold */}
       <View className={`rounded-lg bg-black/50 ${padding} flex-row items-center gap-2`}>
         <Text className={`text-frontier-dust ${labelSize} font-body`}>GOLD</Text>
-        <Text className={`text-frontier-whiskey ${isPhone ? 'text-xs' : 'text-sm'} font-bold font-mono`}>{gold}</Text>
+        <Text
+          className={`text-frontier-whiskey ${isPhone ? "text-xs" : "text-sm"} font-bold font-mono`}
+        >
+          {gold}
+        </Text>
       </View>
 
       {/* Fatigue */}
@@ -362,7 +376,7 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
             <Text className="text-[9px] font-body">{fLabel}</Text>
           </Badge>
         </View>
-        <Progress value={fPct} className={isPhone ? 'h-1' : 'h-1.5'} />
+        <Progress value={fPct} className={isPhone ? "h-1" : "h-1.5"} />
       </View>
 
       {/* Provisions -- show condensed on phones */}
@@ -374,9 +388,11 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
 
         {/* Food bar */}
         <View className="flex-row items-center gap-2">
-          <Text className={`text-frontier-dust text-[9px] font-body ${isPhone ? 'w-8' : 'w-10'}`}>Food</Text>
+          <Text className={`text-frontier-dust text-[9px] font-body ${isPhone ? "w-8" : "w-10"}`}>
+            Food
+          </Text>
           <View className="flex-1">
-            <Progress value={fFood} className={isPhone ? 'h-1' : 'h-1.5'} />
+            <Progress value={fFood} className={isPhone ? "h-1" : "h-1.5"} />
           </View>
           {!isPhone && (
             <Text className="text-white text-[9px] font-mono w-6 text-right">
@@ -387,9 +403,11 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
 
         {/* Water bar */}
         <View className="flex-row items-center gap-2">
-          <Text className={`text-frontier-dust text-[9px] font-body ${isPhone ? 'w-8' : 'w-10'}`}>Water</Text>
+          <Text className={`text-frontier-dust text-[9px] font-body ${isPhone ? "w-8" : "w-10"}`}>
+            Water
+          </Text>
           <View className="flex-1">
-            <Progress value={fWater} className={isPhone ? 'h-1' : 'h-1.5'} />
+            <Progress value={fWater} className={isPhone ? "h-1" : "h-1.5"} />
           </View>
           {!isPhone && (
             <Text className="text-frontier-sky text-[9px] font-mono w-6 text-right">
@@ -415,11 +433,7 @@ const BottomRightPanel = React.memo(function BottomRightPanel() {
  */
 export function GameHUD() {
   return (
-    <View
-      className="absolute inset-0"
-      pointerEvents="box-none"
-      accessibilityRole="none"
-    >
+    <View className="absolute inset-0" pointerEvents="box-none" accessibilityRole="none">
       <TopLeftPanel />
       <TopRightPanel />
       <BottomLeftPanel />

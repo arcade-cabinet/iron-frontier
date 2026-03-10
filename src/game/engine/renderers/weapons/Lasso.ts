@@ -118,8 +118,8 @@ export class Lasso extends WeaponViewModel {
     root.rotation.x = -0.15;
 
     // Store rest transforms
-    this.restPositionLocal.copy(root.position);
-    this.loopRestPosition.copy(this.loopGroup.position);
+    this.restPositionLocal = root.position.clone();
+    this.loopRestPosition = this.loopGroup.position.clone();
     this.loopRestScale = 1;
 
     return root;

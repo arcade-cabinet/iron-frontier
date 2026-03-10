@@ -4,9 +4,9 @@
 // constructors from engine/renderers/Props. Each prop is looked up by
 // type string and converted to a <primitive> for rendering.
 
-import { useThree } from '@react-three/fiber';
-import { useMemo } from 'react';
-import * as THREE from 'three';
+import { useThree } from "@react-three/fiber";
+import { useMemo } from "react";
+import type * as THREE from "three";
 
 import {
   createBarrel,
@@ -16,18 +16,18 @@ import {
   createRailroadTrack,
   createWagonWheel,
   createWaterTrough,
-} from '@/src/game/engine/renderers';
+} from "@/src/game/engine/renderers";
 
 // --- Types ---
 
 export type PropType =
-  | 'hitchingPost'
-  | 'waterTrough'
-  | 'barrel'
-  | 'crate'
-  | 'wagonWheel'
-  | 'mineCart'
-  | 'railroadTrack';
+  | "hitchingPost"
+  | "waterTrough"
+  | "barrel"
+  | "crate"
+  | "wagonWheel"
+  | "mineCart"
+  | "railroadTrack";
 
 export interface PropPlacement {
   type: PropType;
@@ -84,9 +84,7 @@ export function PropCluster({ placements }: PropClusterProps) {
 
   return (
     <group>
-      {propGroups.map((group, i) =>
-        group ? <primitive key={i} object={group} /> : null,
-      )}
+      {propGroups.map((group, i) => (group ? <primitive key={i} object={group} /> : null))}
     </group>
   );
 }

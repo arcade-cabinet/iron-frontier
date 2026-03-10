@@ -98,6 +98,8 @@ export type {
   PersistedGameState,
   // Player types
   PlayerStats,
+  // Stealth types
+  StealthState,
   Structure,
   // Structure types
   StructureType,

@@ -12,10 +12,10 @@
  * @module components/game/Crosshair
  */
 
-import * as React from 'react';
-import { useCallback, useRef, useState } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
+import * as React from "react";
+import { useCallback, useRef, useState } from "react";
+import { Animated, Platform, StyleSheet, View } from "react-native";
+import { Text } from "@/components/ui/Text";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -50,21 +50,21 @@ const SPREAD_TO_PIXELS = 200;
 const HIT_MARKER_SIZE = 10;
 
 const MONO_FONT = Platform.select({
-  ios: 'Menlo',
-  android: 'monospace',
-  default: 'monospace',
+  ios: "Menlo",
+  android: "monospace",
+  default: "monospace",
 });
 
 // ---------------------------------------------------------------------------
 // Colors
 // ---------------------------------------------------------------------------
 
-const COLOR_DEFAULT = '#D4A855'; // Amber
-const COLOR_ENEMY = '#CC4444'; // Red
-const COLOR_INTERACT = '#D4A855'; // Amber (matching HUD)
-const COLOR_HIT = '#FF4444';
-const COLOR_HEADSHOT = '#44FF44';
-const COLOR_KILL = '#FFD700';
+const COLOR_DEFAULT = "#D4A855"; // Amber
+const COLOR_ENEMY = "#CC4444"; // Red
+const COLOR_INTERACT = "#D4A855"; // Amber (matching HUD)
+const COLOR_HIT = "#FF4444";
+const COLOR_HEADSHOT = "#44FF44";
+const COLOR_KILL = "#FFD700";
 
 // ---------------------------------------------------------------------------
 // Component
@@ -137,9 +137,9 @@ export function Crosshair({
       <View style={styles.container} pointerEvents="none">
         <View
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
             transform: [{ translateX: -10 }, { translateY: -8 }],
           }}
         >
@@ -147,9 +147,9 @@ export function Crosshair({
             style={{
               color: COLOR_INTERACT,
               fontSize: 14,
-              fontWeight: '700',
+              fontWeight: "700",
               fontFamily: MONO_FONT,
-              textShadowColor: 'rgba(212, 168, 85, 0.4)',
+              textShadowColor: "rgba(212, 168, 85, 0.4)",
               textShadowOffset: { width: 0, height: 0 },
               textShadowRadius: 4,
             }}
@@ -167,31 +167,31 @@ export function Crosshair({
       {/* Top arm of left bracket (going up-right) */}
       <View
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           width: ARM_LENGTH,
           height: ARM_THICKNESS,
           backgroundColor: crosshairColor,
           opacity: 0.85,
           marginLeft: -(effectiveGap + ARM_LENGTH),
           marginTop: -ARM_LENGTH / 2,
-          transform: [{ rotate: '30deg' }],
+          transform: [{ rotate: "30deg" }],
         }}
       />
       {/* Bottom arm of left bracket */}
       <View
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           width: ARM_LENGTH,
           height: ARM_THICKNESS,
           backgroundColor: crosshairColor,
           opacity: 0.85,
           marginLeft: -(effectiveGap + ARM_LENGTH),
           marginTop: ARM_LENGTH / 2 - ARM_THICKNESS,
-          transform: [{ rotate: '-30deg' }],
+          transform: [{ rotate: "-30deg" }],
         }}
       />
 
@@ -199,31 +199,31 @@ export function Crosshair({
       {/* Top arm of right bracket */}
       <View
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           width: ARM_LENGTH,
           height: ARM_THICKNESS,
           backgroundColor: crosshairColor,
           opacity: 0.85,
           marginLeft: effectiveGap,
           marginTop: -ARM_LENGTH / 2,
-          transform: [{ rotate: '-30deg' }],
+          transform: [{ rotate: "-30deg" }],
         }}
       />
       {/* Bottom arm of right bracket */}
       <View
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: "absolute",
+          top: "50%",
+          left: "50%",
           width: ARM_LENGTH,
           height: ARM_THICKNESS,
           backgroundColor: crosshairColor,
           opacity: 0.85,
           marginLeft: effectiveGap,
           marginTop: ARM_LENGTH / 2 - ARM_THICKNESS,
-          transform: [{ rotate: '30deg' }],
+          transform: [{ rotate: "30deg" }],
         }}
       />
 
@@ -239,12 +239,7 @@ export function Crosshair({
       />
 
       {/* Hit marker (X shape) */}
-      <Animated.View
-        style={[
-          styles.hitMarkerContainer,
-          { opacity: hitOpacity },
-        ]}
-      >
+      <Animated.View style={[styles.hitMarkerContainer, { opacity: hitOpacity }]}>
         <View
           style={[
             styles.hitMarkerLine,
@@ -252,10 +247,10 @@ export function Crosshair({
               backgroundColor: hitColor,
               width: HIT_MARKER_SIZE,
               height: ARM_THICKNESS,
-              transform: [{ rotate: '45deg' }],
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
+              transform: [{ rotate: "45deg" }],
+              position: "absolute",
+              top: "50%",
+              left: "50%",
               marginTop: -ARM_THICKNESS / 2,
               marginLeft: -HIT_MARKER_SIZE / 2,
             },
@@ -268,10 +263,10 @@ export function Crosshair({
               backgroundColor: hitColor,
               width: HIT_MARKER_SIZE,
               height: ARM_THICKNESS,
-              transform: [{ rotate: '-45deg' }],
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
+              transform: [{ rotate: "-45deg" }],
+              position: "absolute",
+              top: "50%",
+              left: "50%",
               marginTop: -ARM_THICKNESS / 2,
               marginLeft: -HIT_MARKER_SIZE / 2,
             },
@@ -295,16 +290,16 @@ Crosshair.flash = (isHeadshot: boolean, isKill: boolean) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   centerDot: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     width: 2,
     height: 2,
     borderRadius: 1,
@@ -312,7 +307,7 @@ const styles = StyleSheet.create({
     marginLeft: -1,
   },
   hitMarkerContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,

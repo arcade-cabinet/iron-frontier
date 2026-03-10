@@ -5,11 +5,11 @@
 // step-up for small obstacles (0.3 unit threshold), trigger volume enter/exit
 // callbacks, and head bob driven by actual displacement.
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import type { InputFrame } from '@/src/game/input/InputFrame';
+import type { InputFrame } from "@/src/game/input/InputFrame";
 
-import type { PhysicsWorld, TriggerEvent, TriggerOverlapInfo } from './PhysicsWorld';
+import type { PhysicsWorld, TriggerEvent, TriggerOverlapInfo } from "./PhysicsWorld.ts";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -17,6 +17,7 @@ import type { PhysicsWorld, TriggerEvent, TriggerOverlapInfo } from './PhysicsWo
 
 const WALK_SPEED = 5; // m/s
 const SPRINT_SPEED = 9; // m/s
+const CROUCH_SPEED = 2.5; // m/s
 const JUMP_VELOCITY = 8; // m/s initial upward velocity
 const PLAYER_HEIGHT = 1.7; // Full capsule height
 const PLAYER_RADIUS = 0.3; // Capsule horizontal radius
@@ -96,10 +97,7 @@ export class PlayerController {
 
   private readonly physics: PhysicsWorld;
 
-  constructor(
-    physics: PhysicsWorld,
-    initialPosition?: THREE.Vector3,
-  ) {
+  constructor(physics: PhysicsWorld, initialPosition?: THREE.Vector3) {
     this.physics = physics;
     this.position = initialPosition?.clone() ?? new THREE.Vector3(0, 0, 5);
   }
@@ -149,7 +147,8 @@ export class PlayerController {
 
     // --- Speed ---
     this.sprinting = frame.sprint && isMoving;
-    const speed = this.sprinting ? SPRINT_SPEED : WALK_SPEED;
+    const crouching = frame.crouch && !this.sprinting; // sprint overrides crouch
+    const speed = this.sprinting ? SPRINT_SPEED : crouching ? CROUCH_SPEED : WALK_SPEED;
 
     // Set horizontal velocity from wish direction
     this.velocity.x = isMoving ? _wishDir.x * speed : 0;
@@ -220,7 +219,11 @@ export class PlayerController {
 
     // --- Head bob ---
     if (this.grounded && this.lastHorizontalSpeed > 0.5) {
-      const bobSpeed = this.sprinting ? BOB_FREQUENCY * 1.3 : BOB_FREQUENCY;
+      const bobSpeed = this.sprinting
+        ? BOB_FREQUENCY * 1.3
+        : crouching
+          ? BOB_FREQUENCY * 0.7
+          : BOB_FREQUENCY;
       this.bobPhase += delta * bobSpeed;
     } else {
       // Ease bob back to zero
@@ -238,11 +241,7 @@ export class PlayerController {
   /** Eye-level position (feet + eye offset + head bob). */
   getEyePosition(out: THREE.Vector3): THREE.Vector3 {
     const bob = Math.sin(this.bobPhase) * BOB_AMPLITUDE;
-    return out.set(
-      this.position.x,
-      this.position.y + EYE_OFFSET + bob,
-      this.position.z,
-    );
+    return out.set(this.position.x, this.position.y + EYE_OFFSET + bob, this.position.z);
   }
 
   /** Build the camera quaternion from current yaw and pitch. */
@@ -291,10 +290,18 @@ export class PlayerController {
   // Static accessors
   // -----------------------------------------------------------------------
 
-  static get PLAYER_HEIGHT(): number { return PLAYER_HEIGHT; }
-  static get PLAYER_RADIUS(): number { return PLAYER_RADIUS; }
-  static get EYE_OFFSET(): number { return EYE_OFFSET; }
-  static get STEP_UP_THRESHOLD(): number { return STEP_UP_THRESHOLD; }
+  static get PLAYER_HEIGHT(): number {
+    return PLAYER_HEIGHT;
+  }
+  static get PLAYER_RADIUS(): number {
+    return PLAYER_RADIUS;
+  }
+  static get EYE_OFFSET(): number {
+    return EYE_OFFSET;
+  }
+  static get STEP_UP_THRESHOLD(): number {
+    return STEP_UP_THRESHOLD;
+  }
 
   // -----------------------------------------------------------------------
   // Private helpers
@@ -327,7 +334,7 @@ export class PlayerController {
     // Fire enter events
     for (const trigger of currentOverlaps) {
       if (!this.activeTriggers.has(trigger.id)) {
-        const event: TriggerEvent = { type: 'enter', colliderId: trigger.id, tag: trigger.tag };
+        const event: TriggerEvent = { type: "enter", colliderId: trigger.id, tag: trigger.tag };
         for (const cb of this.triggerCallbacks) cb(event);
       }
     }
@@ -335,7 +342,7 @@ export class PlayerController {
     // Fire exit events
     for (const prevId of this.activeTriggers) {
       if (!currentIds.has(prevId)) {
-        const event: TriggerEvent = { type: 'exit', colliderId: prevId };
+        const event: TriggerEvent = { type: "exit", colliderId: prevId };
         for (const cb of this.triggerCallbacks) cb(event);
       }
     }

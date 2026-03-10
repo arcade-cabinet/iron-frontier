@@ -90,7 +90,7 @@ class AudioService {
         this.soundManager.playGunshot();
         break;
       default:
-        // Fallback for unmapped sounds
+        console.warn(`[AudioService] Unmapped sound ID "${sfxId}" — playing click as placeholder`);
         this.soundManager.playClick();
         break;
     }

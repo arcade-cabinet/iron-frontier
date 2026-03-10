@@ -125,3 +125,33 @@ export {
   type SettingsSlice,
   type SettingsState,
 } from './settingsSlice';
+
+// Audio slice - music playback
+export {
+  createAudioSlice,
+  DEFAULT_AUDIO_STATE,
+  DEFAULT_CAMERA_STATE,
+  type AudioActions,
+  type AudioSlice,
+  type AudioSliceState,
+} from './audioSlice';
+
+// Save slice - save/load operations
+export {
+  createSaveSlice,
+  DEFAULT_SAVE_STATE,
+  type SaveActions,
+  type SaveSlice,
+  type SaveSliceDeps,
+  type SaveState,
+} from './saveSlice';
+
+// Game flow slice - lifecycle and cross-cutting actions
+export {
+  createGameFlowSlice,
+  DEFAULT_GAME_FLOW_STATE,
+  type GameFlowActions,
+  type GameFlowSlice,
+  type GameFlowSliceDeps,
+  type GameFlowState,
+} from './gameFlowSlice';

@@ -19,6 +19,7 @@ import {
     type EncounterTrigger,
     type EncounterZone,
 } from '../EncounterSystem';
+import * as prng from '../../lib/prng';
 
 // Helper: move the player in 10m increments along the X axis
 function movePlayer(system: EncounterSystem, meters: number, startX = 0): number {
@@ -33,6 +34,7 @@ function movePlayer(system: EncounterSystem, meters: number, startX = 0): number
 
 describe('EncounterSystem', () => {
   let system: EncounterSystem;
+  let mathRandomSpy: jest.SpyInstance;
 
   beforeEach(() => {
     system = new EncounterSystem();
@@ -40,6 +42,9 @@ describe('EncounterSystem', () => {
 
   afterEach(() => {
     system.dispose?.();
+    if (mathRandomSpy) {
+      mathRandomSpy.mockRestore();
+    }
   });
 
   describe('initialization', () => {
@@ -137,6 +142,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should affect encounter chance calculation', () => {
+      // Suppress encounters so distance state is predictable
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.1,
@@ -181,6 +189,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should track position updates', () => {
+      // Suppress encounters so distance counter is not reset
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       system.updatePosition(0, 0);
       system.updatePosition(10, 0);
       system.updatePosition(20, 0);
@@ -190,6 +201,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should accumulate distance in meters', () => {
+      // Suppress encounters so distance counter is not reset
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       // Move 10m at a time (check interval is 10m)
       movePlayer(system, 100);
 
@@ -217,6 +231,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should calculate diagonal movement correctly', () => {
+      // Suppress encounters so distance counter is not reset
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       // Move diagonally (sqrt(2) distance per step)
       for (let i = 0; i < 20; i++) {
         system.updatePosition(i * 10, i * 10);
@@ -279,15 +296,18 @@ describe('EncounterSystem', () => {
     });
 
     it('should reset distance counter after encounter', () => {
+      // Force encounters to always trigger once past minDistance
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0);
+
       const encounters: EncounterTrigger[] = [];
       system.onEncounter((trigger) => encounters.push(trigger));
 
       movePlayer(system, 200);
 
-      if (encounters.length > 0) {
-        const distAfterEncounter = system.getDebugInfo().steps;
-        expect(distAfterEncounter).toBeLessThan(100);
-      }
+      expect(encounters.length).toBeGreaterThan(0);
+      const distAfterEncounter = system.getDebugInfo().steps;
+      // Distance resets after each encounter, so it should be small
+      expect(distAfterEncounter).toBeLessThan(100);
     });
 
     it('should select random encounter from pool', () => {
@@ -583,6 +603,9 @@ describe('EncounterSystem', () => {
 
   describe('terrain modifiers', () => {
     it('should apply terrain modifiers to encounter rate', () => {
+      // Suppress encounters so distance state is predictable
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       const roadZone: EncounterZone = {
         id: 'road_zone',
         baseRate: 0.1,
@@ -621,6 +644,9 @@ describe('EncounterSystem', () => {
 
   describe('distance bonus', () => {
     it('should increase chance with more distance since last encounter', () => {
+      // Suppress encounters so distance keeps accumulating
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.01, // Very low base rate
@@ -646,6 +672,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should cap encounter chance at maximum', () => {
+      // Suppress encounters so distance keeps accumulating
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 0.5,
@@ -745,6 +774,9 @@ describe('EncounterSystem', () => {
     });
 
     it('should handle very small movements', () => {
+      // Suppress encounters so distance counter is not reset
+      mathRandomSpy = jest.spyOn(prng, 'scopedRNG').mockReturnValue(0.99);
+
       const zone: EncounterZone = {
         id: 'test_zone',
         baseRate: 1.0,

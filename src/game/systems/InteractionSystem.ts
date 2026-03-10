@@ -17,7 +17,7 @@ import type { InputFrame } from '../input/InputFrame';
 // ============================================================================
 
 /** The kind of interaction available. */
-export type InteractionType = 'talk' | 'shop' | 'enter' | 'pickup';
+export type InteractionType = 'talk' | 'shop' | 'enter' | 'pickup' | 'lockpick';
 
 /** A 3D position vector. */
 export interface Vec3 {
@@ -45,6 +45,8 @@ export interface InteractableEntity {
   archetypeId?: string;
   /** For items: the item ID. */
   itemId?: string;
+  /** For locked containers/doors: the lock difficulty level (1-5). */
+  lockLevel?: number;
   /** Whether this entity is currently interactable. */
   enabled?: boolean;
 }
@@ -66,6 +68,8 @@ export interface InteractionTarget {
   archetypeId?: string;
   /** Item ID when type is 'pickup'. */
   itemId?: string;
+  /** Lock level when type is 'lockpick'. */
+  lockLevel?: number;
 }
 
 /** An action the game loop should execute in response to interaction. */
@@ -82,6 +86,8 @@ export interface InteractionAction {
   archetypeId?: string;
   /** Item ID for 'pickup' action. */
   itemId?: string;
+  /** Lock level for 'lockpick' action. */
+  lockLevel?: number;
 }
 
 /** Full result returned by processInteraction. */
@@ -102,6 +108,7 @@ export const DEFAULT_RANGES: Record<InteractionType, number> = {
   shop: 3.0,
   enter: 2.5,
   pickup: 2.0,
+  lockpick: 2.0,
 };
 
 /** Minimum dot product between player forward and entity direction for facing check. */
@@ -194,6 +201,7 @@ export function processInteraction(
         buildingId: entity.buildingId,
         archetypeId: entity.archetypeId,
         itemId: entity.itemId,
+        lockLevel: entity.lockLevel,
       };
     }
   }
@@ -209,6 +217,7 @@ export function processInteraction(
       buildingId: bestTarget.buildingId,
       archetypeId: bestTarget.archetypeId,
       itemId: bestTarget.itemId,
+      lockLevel: bestTarget.lockLevel,
     };
   }
 
@@ -269,6 +278,30 @@ export function createBuildingInteractable(
     interactionRange: options?.range ?? DEFAULT_RANGES.enter,
     buildingId,
     archetypeId,
+    enabled: options?.enabled ?? true,
+  };
+}
+
+/**
+ * Create an InteractableEntity for a locked container or door.
+ */
+export function createLockpickInteractable(
+  id: string,
+  name: string,
+  position: Vec3,
+  lockLevel: number,
+  options?: {
+    range?: number;
+    enabled?: boolean;
+  },
+): InteractableEntity {
+  return {
+    id,
+    name,
+    position,
+    interactionType: 'lockpick',
+    interactionRange: options?.range ?? DEFAULT_RANGES.lockpick,
+    lockLevel,
     enabled: options?.enabled ?? true,
   };
 }

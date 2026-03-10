@@ -14,6 +14,7 @@ import type {
   Notification,
   PanelType,
 } from '../types';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // TYPES
@@ -150,7 +151,7 @@ export const createUISlice: StateCreator<UISlice & UISliceDeps, [], [], UISlice>
   setDialogue: (dialogue: DialogueState | null) => set({ dialogueState: dialogue }),
 
   addNotification: (type: Notification['type'], message: string) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = scopedRNG('store', 42, rngTick()).toString(36).substr(2, 9);
     const notification: Notification = {
       id,
       type,

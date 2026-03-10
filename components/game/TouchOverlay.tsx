@@ -18,23 +18,20 @@
 //
 // Frontier-themed styling: amber, leather, brass tones from the project palette.
 
-import * as React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import * as React from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
-  View,
-  Platform,
-  PanResponder,
-  Pressable,
   type GestureResponderEvent,
+  PanResponder,
   type PanResponderGestureState,
-} from 'react-native';
-import { Text } from '@/components/ui/Text';
-import {
-  overlayTouchState,
-  clearOverlayState,
-} from '@/src/game/input/TouchOverlayState';
-import { InputManager } from '@/src/game/input/InputManager';
-import type { TouchProvider } from '@/src/game/input/providers/TouchProvider';
+  Platform,
+  Pressable,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/Text";
+import { InputManager } from "@/src/game/input/InputManager";
+import type { TouchProvider } from "@/src/game/input/providers/TouchProvider";
+import { clearOverlayState, overlayTouchState } from "@/src/game/input/TouchOverlayState";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -50,23 +47,23 @@ const FIRE_BUTTON_SIZE = 70;
 
 /** Frontier palette — Old West punk. */
 const FRONTIER = {
-  baseBg: 'rgba(26, 15, 10, 0.35)', // night
-  baseBorder: 'rgba(196, 168, 130, 0.45)', // dust
-  knobBg: 'rgba(181, 166, 66, 0.55)', // brass
-  knobBorder: 'rgba(212, 160, 23, 0.8)', // whiskey
-  fireBtn: 'rgba(139, 0, 0, 0.55)', // blood
-  fireBorder: 'rgba(139, 0, 0, 0.85)',
-  reloadBtn: 'rgba(212, 160, 23, 0.45)', // whiskey
-  reloadBorder: 'rgba(212, 160, 23, 0.7)',
-  jumpBtn: 'rgba(135, 206, 235, 0.35)', // sky
-  jumpBorder: 'rgba(135, 206, 235, 0.6)',
-  interactBtn: 'rgba(157, 193, 131, 0.4)', // sage
-  interactBorder: 'rgba(157, 193, 131, 0.65)',
-  menuBtn: 'rgba(67, 67, 67, 0.45)', // iron
-  menuBorder: 'rgba(196, 168, 130, 0.5)',
-  weaponBtn: 'rgba(92, 64, 51, 0.45)', // leather
-  weaponBorder: 'rgba(184, 115, 51, 0.55)', // copper
-  text: 'rgba(196, 168, 130, 0.9)', // dust
+  baseBg: "rgba(26, 15, 10, 0.35)", // night
+  baseBorder: "rgba(196, 168, 130, 0.45)", // dust
+  knobBg: "rgba(181, 166, 66, 0.55)", // brass
+  knobBorder: "rgba(212, 160, 23, 0.8)", // whiskey
+  fireBtn: "rgba(139, 0, 0, 0.55)", // blood
+  fireBorder: "rgba(139, 0, 0, 0.85)",
+  reloadBtn: "rgba(212, 160, 23, 0.45)", // whiskey
+  reloadBorder: "rgba(212, 160, 23, 0.7)",
+  jumpBtn: "rgba(135, 206, 235, 0.35)", // sky
+  jumpBorder: "rgba(135, 206, 235, 0.6)",
+  interactBtn: "rgba(157, 193, 131, 0.4)", // sage
+  interactBorder: "rgba(157, 193, 131, 0.65)",
+  menuBtn: "rgba(67, 67, 67, 0.45)", // iron
+  menuBorder: "rgba(196, 168, 130, 0.5)",
+  weaponBtn: "rgba(92, 64, 51, 0.45)", // leather
+  weaponBorder: "rgba(184, 115, 51, 0.55)", // copper
+  text: "rgba(196, 168, 130, 0.9)", // dust
 };
 
 // ---------------------------------------------------------------------------
@@ -83,7 +80,7 @@ export interface TouchOverlayProps {
 // ---------------------------------------------------------------------------
 
 export function TouchOverlay({ interactionNearby = false }: TouchOverlayProps) {
-  if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  if (Platform.OS === "web" && typeof document !== "undefined") {
     return <TouchOverlayWeb interactionNearby={interactionNearby} />;
   }
   return <TouchOverlayNative interactionNearby={interactionNearby} />;
@@ -104,7 +101,7 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
   useEffect(() => {
     overlayTouchState.overlayActive = true;
     const manager = InputManager.getInstance();
-    const tp = manager.getProvider('touch') as TouchProvider | undefined;
+    const tp = manager.getProvider("touch") as TouchProvider | undefined;
     tp?.disable();
     return () => {
       clearOverlayState();
@@ -124,7 +121,7 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
     joystickCenter.current = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
     overlayTouchState.moveX = 0;
     overlayTouchState.moveZ = 0;
-    if (joystickKnobRef.current) joystickKnobRef.current.style.transform = 'translate(-50%, -50%)';
+    if (joystickKnobRef.current) joystickKnobRef.current.style.transform = "translate(-50%, -50%)";
   }, []);
 
   const onJoystickMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
@@ -139,11 +136,14 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
       if (dist < JOYSTICK_DEADZONE) {
         overlayTouchState.moveX = 0;
         overlayTouchState.moveZ = 0;
-        if (joystickKnobRef.current) joystickKnobRef.current.style.transform = 'translate(-50%, -50%)';
+        if (joystickKnobRef.current)
+          joystickKnobRef.current.style.transform = "translate(-50%, -50%)";
       } else {
         const clamped = Math.min(dist, MAX_JOYSTICK_RADIUS);
-        const nX = ((dx / dist) * (clamped - JOYSTICK_DEADZONE)) / (MAX_JOYSTICK_RADIUS - JOYSTICK_DEADZONE);
-        const nY = ((dy / dist) * (clamped - JOYSTICK_DEADZONE)) / (MAX_JOYSTICK_RADIUS - JOYSTICK_DEADZONE);
+        const nX =
+          ((dx / dist) * (clamped - JOYSTICK_DEADZONE)) / (MAX_JOYSTICK_RADIUS - JOYSTICK_DEADZONE);
+        const nY =
+          ((dy / dist) * (clamped - JOYSTICK_DEADZONE)) / (MAX_JOYSTICK_RADIUS - JOYSTICK_DEADZONE);
         overlayTouchState.moveX = Math.max(-1, Math.min(1, nX));
         overlayTouchState.moveZ = Math.max(-1, Math.min(1, -nY));
         if (joystickKnobRef.current) {
@@ -161,7 +161,8 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
         joystickTouchId.current = null;
         overlayTouchState.moveX = 0;
         overlayTouchState.moveZ = 0;
-        if (joystickKnobRef.current) joystickKnobRef.current.style.transform = 'translate(-50%, -50%)';
+        if (joystickKnobRef.current)
+          joystickKnobRef.current.style.transform = "translate(-50%, -50%)";
         break;
       }
     }
@@ -201,14 +202,22 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
 
   // -- Button helpers -----------------------------------------------------------
 
-  const onFireStart = useCallback((e: React.TouchEvent) => { e.preventDefault(); overlayTouchState.fire = true; }, []);
-  const onFireEnd = useCallback((e: React.TouchEvent) => { e.preventDefault(); overlayTouchState.fire = false; }, []);
+  const onFireStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    overlayTouchState.fire = true;
+  }, []);
+  const onFireEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    overlayTouchState.fire = false;
+  }, []);
 
   const pulse = useCallback(
-    (key: 'reload' | 'jump' | 'interact' | 'menu') => (e: React.TouchEvent) => {
+    (key: "reload" | "jump" | "interact" | "menu") => (e: React.TouchEvent) => {
       e.preventDefault();
       overlayTouchState[key] = true;
-      setTimeout(() => { overlayTouchState[key] = false; }, 100);
+      setTimeout(() => {
+        overlayTouchState[key] = false;
+      }, 100);
     },
     [],
   );
@@ -217,7 +226,9 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
     (dir: number) => (e: React.TouchEvent) => {
       e.preventDefault();
       overlayTouchState.weaponSwitch = dir;
-      setTimeout(() => { overlayTouchState.weaponSwitch = 0; }, 100);
+      setTimeout(() => {
+        overlayTouchState.weaponSwitch = 0;
+      }, 100);
     },
     [],
   );
@@ -247,23 +258,55 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
       />
 
       {/* Fire (large, bottom-right) */}
-      <div onTouchStart={onFireStart} onTouchEnd={onFireEnd} onTouchCancel={onFireEnd} style={webFireBtn}>
+      <div
+        onTouchStart={onFireStart}
+        onTouchEnd={onFireEnd}
+        onTouchCancel={onFireEnd}
+        style={webFireBtn}
+      >
         <span style={webBtnLabel}>FIRE</span>
       </div>
 
       {/* Reload (above fire) */}
-      <div onTouchStart={pulse('reload')} style={{ ...webSmallBtn, right: 35, bottom: 150, backgroundColor: FRONTIER.reloadBtn, borderColor: FRONTIER.reloadBorder }}>
+      <div
+        onTouchStart={pulse("reload")}
+        style={{
+          ...webSmallBtn,
+          right: 35,
+          bottom: 150,
+          backgroundColor: FRONTIER.reloadBtn,
+          borderColor: FRONTIER.reloadBorder,
+        }}
+      >
         <span style={webBtnLabelSm}>RLD</span>
       </div>
 
       {/* Jump (left of fire) */}
-      <div onTouchStart={pulse('jump')} style={{ ...webSmallBtn, right: 110, bottom: 60, backgroundColor: FRONTIER.jumpBtn, borderColor: FRONTIER.jumpBorder }}>
+      <div
+        onTouchStart={pulse("jump")}
+        style={{
+          ...webSmallBtn,
+          right: 110,
+          bottom: 60,
+          backgroundColor: FRONTIER.jumpBtn,
+          borderColor: FRONTIER.jumpBorder,
+        }}
+      >
         <span style={webBtnLabelSm}>JMP</span>
       </div>
 
       {/* Interact (conditional) */}
       {interactionNearby && (
-        <div onTouchStart={pulse('interact')} style={{ ...webSmallBtn, right: 110, bottom: 120, backgroundColor: FRONTIER.interactBtn, borderColor: FRONTIER.interactBorder }}>
+        <div
+          onTouchStart={pulse("interact")}
+          style={{
+            ...webSmallBtn,
+            right: 110,
+            bottom: 120,
+            backgroundColor: FRONTIER.interactBtn,
+            borderColor: FRONTIER.interactBorder,
+          }}
+        >
           <span style={webBtnLabelSm}>USE</span>
         </div>
       )}
@@ -277,7 +320,7 @@ function TouchOverlayWeb({ interactionNearby }: { interactionNearby: boolean }) 
       </div>
 
       {/* Menu (top-left) */}
-      <div onTouchStart={pulse('menu')} style={webMenuBtn}>
+      <div onTouchStart={pulse("menu")} style={webMenuBtn}>
         <span style={{ ...webBtnLabel, fontSize: 18, letterSpacing: 2 }}>| |</span>
       </div>
     </div>
@@ -295,7 +338,7 @@ function TouchOverlayNative({ interactionNearby }: { interactionNearby: boolean 
   useEffect(() => {
     overlayTouchState.overlayActive = true;
     const manager = InputManager.getInstance();
-    const tp = manager.getProvider('touch') as TouchProvider | undefined;
+    const tp = manager.getProvider("touch") as TouchProvider | undefined;
     tp?.disable();
     return () => {
       clearOverlayState();
@@ -345,10 +388,12 @@ function TouchOverlayNative({ interactionNearby }: { interactionNearby: boolean 
   // -- Action callback ---------------------------------------------------------
 
   const setAction = useCallback(
-    (key: 'fire' | 'interact' | 'jump' | 'reload' | 'menu', value: boolean) => {
+    (key: "fire" | "interact" | "jump" | "reload" | "menu", value: boolean) => {
       overlayTouchState[key] = value;
-      if (value && key !== 'fire') {
-        setTimeout(() => { overlayTouchState[key] = false; }, 100);
+      if (value && key !== "fire") {
+        setTimeout(() => {
+          overlayTouchState[key] = false;
+        }, 100);
       }
     },
     [],
@@ -357,44 +402,76 @@ function TouchOverlayNative({ interactionNearby }: { interactionNearby: boolean 
   // -- Render ------------------------------------------------------------------
 
   return (
-    <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, top: 0 }} pointerEvents="box-none">
+    <View
+      style={{ position: "absolute", left: 0, right: 0, bottom: 0, top: 0 }}
+      pointerEvents="box-none"
+    >
       {/* Joystick */}
-      <View style={{ position: 'absolute', left: 30, bottom: 40 }} pointerEvents="box-none">
+      <View style={{ position: "absolute", left: 30, bottom: 40 }} pointerEvents="box-none">
         <View style={rnJoystickBase}>
           <View
             {...panResponder.panHandlers}
-            style={[rnJoystickKnob, { transform: [{ translateX: knobOffset.x }, { translateY: knobOffset.y }] }]}
+            style={[
+              rnJoystickKnob,
+              { transform: [{ translateX: knobOffset.x }, { translateY: knobOffset.y }] },
+            ]}
           />
         </View>
       </View>
 
       {/* Look zone */}
-      <View style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%' }} pointerEvents="box-none">
-        <View {...lookResponder.panHandlers} style={{ flex: 1, backgroundColor: 'transparent' }} />
+      <View
+        style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "50%" }}
+        pointerEvents="box-none"
+      >
+        <View {...lookResponder.panHandlers} style={{ flex: 1, backgroundColor: "transparent" }} />
       </View>
 
       {/* Buttons (bottom-right) */}
-      <View style={{ position: 'absolute', right: 20, bottom: 40, gap: 12, alignItems: 'center' }} pointerEvents="box-none">
+      <View
+        style={{ position: "absolute", right: 20, bottom: 40, gap: 12, alignItems: "center" }}
+        pointerEvents="box-none"
+      >
         <NativeButton
           label="Fire"
           size={FIRE_BUTTON_SIZE}
           bg={FRONTIER.fireBtn}
           border={FRONTIER.fireBorder}
-          onPressIn={() => setAction('fire', true)}
-          onPressOut={() => setAction('fire', false)}
+          onPressIn={() => setAction("fire", true)}
+          onPressOut={() => setAction("fire", false)}
         />
-        <View style={{ flexDirection: 'row', gap: 12 }}>
+        <View style={{ flexDirection: "row", gap: 12 }}>
           {interactionNearby && (
-            <NativeButton label="Use" bg={FRONTIER.interactBtn} border={FRONTIER.interactBorder} onPressIn={() => setAction('interact', true)} />
+            <NativeButton
+              label="Use"
+              bg={FRONTIER.interactBtn}
+              border={FRONTIER.interactBorder}
+              onPressIn={() => setAction("interact", true)}
+            />
           )}
-          <NativeButton label="Jump" bg={FRONTIER.jumpBtn} border={FRONTIER.jumpBorder} onPressIn={() => setAction('jump', true)} />
+          <NativeButton
+            label="Jump"
+            bg={FRONTIER.jumpBtn}
+            border={FRONTIER.jumpBorder}
+            onPressIn={() => setAction("jump", true)}
+          />
         </View>
-        <NativeButton label="Rld" bg={FRONTIER.reloadBtn} border={FRONTIER.reloadBorder} onPressIn={() => setAction('reload', true)} />
+        <NativeButton
+          label="Rld"
+          bg={FRONTIER.reloadBtn}
+          border={FRONTIER.reloadBorder}
+          onPressIn={() => setAction("reload", true)}
+        />
       </View>
 
       {/* Menu (top-left) */}
-      <View style={{ position: 'absolute', left: 10, top: 10 }} pointerEvents="box-none">
-        <NativeButton label="| |" bg={FRONTIER.menuBtn} border={FRONTIER.menuBorder} onPressIn={() => setAction('menu', true)} />
+      <View style={{ position: "absolute", left: 10, top: 10 }} pointerEvents="box-none">
+        <NativeButton
+          label="| |"
+          bg={FRONTIER.menuBtn}
+          border={FRONTIER.menuBorder}
+          onPressIn={() => setAction("menu", true)}
+        />
       </View>
     </View>
   );
@@ -413,7 +490,14 @@ interface NativeButtonProps {
   onPressOut?: () => void;
 }
 
-function NativeButton({ label, size = BUTTON_SIZE, bg, border, onPressIn, onPressOut }: NativeButtonProps) {
+function NativeButton({
+  label,
+  size = BUTTON_SIZE,
+  bg,
+  border,
+  onPressIn,
+  onPressOut,
+}: NativeButtonProps) {
   return (
     <Pressable
       onPressIn={onPressIn}
@@ -425,11 +509,11 @@ function NativeButton({ label, size = BUTTON_SIZE, bg, border, onPressIn, onPres
         backgroundColor: bg,
         borderWidth: 2,
         borderColor: border,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Text style={{ color: FRONTIER.text, fontSize: size > 60 ? 14 : 11, fontWeight: '700' }}>
+      <Text style={{ color: FRONTIER.text, fontSize: size > 60 ? 14 : 11, fontWeight: "700" }}>
         {label}
       </Text>
     </Pressable>
@@ -441,67 +525,67 @@ function NativeButton({ label, size = BUTTON_SIZE, bg, border, onPressIn, onPres
 // ===========================================================================
 
 const webContainer: React.CSSProperties = {
-  position: 'absolute',
+  position: "absolute",
   top: 0,
   left: 0,
-  width: '100%',
-  height: '100%',
-  pointerEvents: 'none',
+  width: "100%",
+  height: "100%",
+  pointerEvents: "none",
   zIndex: 15,
-  touchAction: 'none',
-  userSelect: 'none',
-  WebkitUserSelect: 'none',
+  touchAction: "none",
+  userSelect: "none",
+  WebkitUserSelect: "none",
 };
 
 const webJoystickBase: React.CSSProperties = {
-  position: 'absolute',
+  position: "absolute",
   left: 30,
   bottom: 40,
   width: JOYSTICK_SIZE,
   height: JOYSTICK_SIZE,
-  borderRadius: '50%',
+  borderRadius: "50%",
   backgroundColor: FRONTIER.baseBg,
   border: `2px solid ${FRONTIER.baseBorder}`,
-  touchAction: 'none',
-  pointerEvents: 'auto',
+  touchAction: "none",
+  pointerEvents: "auto",
 };
 
 const webJoystickKnob: React.CSSProperties = {
-  position: 'absolute',
-  left: '50%',
-  top: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  left: "50%",
+  top: "50%",
+  transform: "translate(-50%, -50%)",
   width: KNOB_SIZE,
   height: KNOB_SIZE,
-  borderRadius: '50%',
+  borderRadius: "50%",
   backgroundColor: FRONTIER.knobBg,
   border: `2px solid ${FRONTIER.knobBorder}`,
-  pointerEvents: 'none',
+  pointerEvents: "none",
   boxShadow: `0 0 8px ${FRONTIER.knobBorder}`,
 };
 
 const webLookZone: React.CSSProperties = {
-  position: 'absolute',
+  position: "absolute",
   right: 0,
   top: 0,
-  width: '50%',
-  height: '100%',
-  touchAction: 'none',
-  pointerEvents: 'auto',
+  width: "50%",
+  height: "100%",
+  touchAction: "none",
+  pointerEvents: "auto",
 };
 
 const webBtnBase: React.CSSProperties = {
-  position: 'absolute',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  border: '2px solid',
-  borderRadius: '50%',
-  userSelect: 'none',
-  WebkitUserSelect: 'none',
-  touchAction: 'none',
-  pointerEvents: 'auto',
-  cursor: 'default',
+  position: "absolute",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "2px solid",
+  borderRadius: "50%",
+  userSelect: "none",
+  WebkitUserSelect: "none",
+  touchAction: "none",
+  pointerEvents: "auto",
+  cursor: "default",
 };
 
 const webFireBtn: React.CSSProperties = {
@@ -512,7 +596,7 @@ const webFireBtn: React.CSSProperties = {
   height: FIRE_BUTTON_SIZE,
   backgroundColor: FRONTIER.fireBtn,
   borderColor: FRONTIER.fireBorder,
-  boxShadow: '0 0 12px rgba(139,0,0,0.4), inset 0 0 8px rgba(139,0,0,0.3)',
+  boxShadow: "0 0 12px rgba(139,0,0,0.4), inset 0 0 8px rgba(139,0,0,0.3)",
 };
 
 const webSmallBtn: React.CSSProperties = {
@@ -544,12 +628,12 @@ const webMenuBtn: React.CSSProperties = {
 const webBtnLabel: React.CSSProperties = {
   color: FRONTIER.text,
   fontSize: 13,
-  fontWeight: 'bold',
+  fontWeight: "bold",
   fontFamily: "'Cabin', sans-serif",
-  textTransform: 'uppercase',
+  textTransform: "uppercase",
   letterSpacing: 1,
-  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-  pointerEvents: 'none',
+  textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+  pointerEvents: "none",
 };
 
 const webBtnLabelSm: React.CSSProperties = { ...webBtnLabel, fontSize: 11 };
@@ -566,8 +650,8 @@ const rnJoystickBase = {
   backgroundColor: FRONTIER.baseBg,
   borderWidth: 2,
   borderColor: FRONTIER.baseBorder,
-  justifyContent: 'center' as const,
-  alignItems: 'center' as const,
+  justifyContent: "center" as const,
+  alignItems: "center" as const,
 };
 
 const rnJoystickKnob = {

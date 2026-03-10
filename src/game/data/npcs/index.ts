@@ -17,6 +17,9 @@ export type { DialogueTree, NPCDefinition } from '../schemas/npc';
 
 import { DiamondbackDialogues } from './dialogues/diamondback';
 import { DocChenDialogues } from './dialogues/doc_chen';
+import { FatherMiguelDialogues } from './dialogues/father_miguel';
+import { MayorHoltDialogues } from './dialogues/mayor_holt';
+import { SamuelIronpickDialogues } from './dialogues/samuel_ironpick';
 // Import dialogue trees
 import { SheriffColeDialogues } from './dialogues/sheriff_cole';
 
@@ -114,7 +117,7 @@ export const DocChenWei: NPCDefinition = {
   primaryDialogueId: 'doc_chen_main',
   essential: true,
   questGiver: true,
-  questIds: ['underground_railroad'],
+  questIds: ['underground_railroad', 'side_docs_dilemma'],
   shopId: 'doc_chen_shop',
   backstory:
     'Came to America seeking opportunity, found discrimination. Built a practice serving those others ignored. Quietly runs an underground network helping workers escape IVRC debt bondage.',
@@ -220,7 +223,7 @@ export const OldSamuelIronpick: NPCDefinition = {
   primaryDialogueId: 'samuel_ironpick_main',
   essential: true,
   questGiver: true,
-  questIds: ['freeminer_trust', 'find_documents'],
+  questIds: ['freeminer_trust', 'find_documents', 'main_the_reclamation'],
   backstory:
     'Lost his son to a preventable mine collapse. Became leader of the Freeminer resistance, advocating peaceful resistance. Holds the key to documents that could destroy IVRC - if he can be convinced to use them.',
   relationships: [
@@ -271,6 +274,9 @@ export const ALL_DIALOGUE_TREES: DialogueTree[] = [
   ...SheriffColeDialogues,
   ...DocChenDialogues,
   ...DiamondbackDialogues,
+  ...MayorHoltDialogues,
+  ...FatherMiguelDialogues,
+  ...SamuelIronpickDialogues,
 ];
 
 export const DIALOGUE_TREES_BY_ID: Record<string, DialogueTree> = Object.fromEntries(

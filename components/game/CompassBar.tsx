@@ -11,42 +11,38 @@
  * @module components/game/CompassBar
  */
 
-import * as React from 'react';
-import { Platform, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import * as React from "react";
+import { Platform, View } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from '@/components/ui/Text';
-import { useGameStoreShallow } from '@/hooks/useGameStore';
-import { useResponsive } from '@/hooks/useResponsive';
-import { getActiveQuestMarkers, type QuestMarker } from '@/src/game/systems/QuestMarkerSystem';
-import { gameStore } from '@/src/game/store/webGameStore';
+import { Text } from "@/components/ui/Text";
+import { useGameStoreShallow } from "@/hooks/useGameStore";
+import { useResponsive } from "@/hooks/useResponsive";
+import { gameStore } from "@/src/game/store/webGameStore";
+import { getActiveQuestMarkers, type QuestMarker } from "@/src/game/systems/QuestMarkerSystem";
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
 /** HUD amber color palette */
-const HUD_AMBER = '#D4A855';
-const HUD_AMBER_DIM = '#C4963F';
-const HUD_TEXT = '#E8D5A8';
-const HUD_BG = 'rgba(20, 15, 10, 0.6)';
-const HUD_RED = '#CC4444';
+const HUD_AMBER = "#D4A855";
+const HUD_AMBER_DIM = "#C4963F";
+const HUD_TEXT = "#E8D5A8";
+const HUD_BG = "rgba(20, 15, 10, 0.6)";
+const HUD_RED = "#CC4444";
 
 /** Cardinal directions with their bearings in degrees. */
 const DIRECTIONS: { label: string; bearing: number; major: boolean }[] = [
-  { label: 'N', bearing: 0, major: true },
-  { label: 'NE', bearing: 45, major: false },
-  { label: 'E', bearing: 90, major: true },
-  { label: 'SE', bearing: 135, major: false },
-  { label: 'S', bearing: 180, major: true },
-  { label: 'SW', bearing: 225, major: false },
-  { label: 'W', bearing: 270, major: true },
-  { label: 'NW', bearing: 315, major: false },
+  { label: "N", bearing: 0, major: true },
+  { label: "NE", bearing: 45, major: false },
+  { label: "E", bearing: 90, major: true },
+  { label: "SE", bearing: 135, major: false },
+  { label: "S", bearing: 180, major: true },
+  { label: "SW", bearing: 225, major: false },
+  { label: "W", bearing: 270, major: true },
+  { label: "NW", bearing: 315, major: false },
 ];
 
 /** Tick marks every 15 degrees */
@@ -87,10 +83,7 @@ function yawToBearing(yaw: number): number {
  * Calculate the compass-relative X position of a bearing given the player bearing.
  * Returns a value in [-0.5, 0.5] (fraction of compass width), or null if out of FOV.
  */
-function bearingToCompassX(
-  targetBearing: number,
-  playerBearing: number,
-): number | null {
+function bearingToCompassX(targetBearing: number, playerBearing: number): number | null {
   const diff = normalizeAngle(targetBearing - playerBearing);
   const halfFov = COMPASS_FOV / 2;
   if (Math.abs(diff) > halfFov) return null;
@@ -100,12 +93,7 @@ function bearingToCompassX(
 /**
  * Compute bearing from player to a world position.
  */
-function bearingToTarget(
-  px: number,
-  pz: number,
-  tx: number,
-  tz: number,
-): number {
+function bearingToTarget(px: number, pz: number, tx: number, tz: number): number {
   const dx = tx - px;
   const dz = tz - pz;
   const rad = Math.atan2(dx, dz); // atan2(x,z) gives bearing from north
@@ -130,10 +118,10 @@ const Tick = React.memo(function Tick({ xFraction, label, major, compassWidth }:
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: x,
         top: 0,
-        alignItems: 'center',
+        alignItems: "center",
         transform: [{ translateX: -0.5 }],
       }}
     >
@@ -152,11 +140,11 @@ const Tick = React.memo(function Tick({ xFraction, label, major, compassWidth }:
           style={{
             color: HUD_AMBER,
             fontSize: major ? 10 : 8,
-            fontWeight: major ? '700' : '400',
+            fontWeight: major ? "700" : "400",
             fontFamily: Platform.select({
-              ios: 'Menlo',
-              android: 'monospace',
-              default: 'monospace',
+              ios: "Menlo",
+              android: "monospace",
+              default: "monospace",
             }),
             marginTop: 1,
             opacity: major ? 1 : 0.6,
@@ -191,10 +179,10 @@ const MarkerDiamond = React.memo(function MarkerDiamond({
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: x,
         bottom: -2,
-        alignItems: 'center',
+        alignItems: "center",
         transform: [{ translateX: -4 }],
       }}
     >
@@ -204,7 +192,7 @@ const MarkerDiamond = React.memo(function MarkerDiamond({
           width: 8,
           height: 8,
           backgroundColor: color,
-          transform: [{ rotate: '45deg' }],
+          transform: [{ rotate: "45deg" }],
           opacity: 0.9,
         }}
       />
@@ -214,7 +202,7 @@ const MarkerDiamond = React.memo(function MarkerDiamond({
             color: HUD_TEXT,
             fontSize: 8,
             marginTop: 4,
-            textAlign: 'center',
+            textAlign: "center",
             maxWidth: 60,
           }}
           numberOfLines={1}
@@ -241,7 +229,7 @@ const EnemyDot = React.memo(function EnemyDot({ xFraction, compassWidth }: Enemy
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: x,
         top: 2,
         width: 5,
@@ -287,7 +275,7 @@ export function CompassBar() {
       .map((enemy) => {
         // Enemy positions in combat are hex-grid, approximate to world positions
         // For now, distribute them evenly in a 30-degree arc in front
-        const offset = (enemy.position.q * 15) - 15;
+        const offset = enemy.position.q * 15 - 15;
         return (playerBearing + offset + 360) % 360;
       });
   }, [combatState, playerBearing]);
@@ -314,7 +302,7 @@ export function CompassBar() {
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: Math.max(insets.top, 8) + 4,
         left: (screenWidth - compassWidth) / 2,
         width: compassWidth,
@@ -323,14 +311,14 @@ export function CompassBar() {
         borderRadius: 4,
         borderWidth: 1,
         borderColor: `${HUD_AMBER}33`,
-        overflow: 'hidden',
+        overflow: "hidden",
       }}
       pointerEvents="none"
     >
       {/* Center line indicator */}
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           left: compassWidth / 2,
           top: 0,
           bottom: 0,
@@ -357,8 +345,9 @@ export function CompassBar() {
 
       {/* Quest markers */}
       {questMarkers
-        .filter((m): m is QuestMarker & { worldPosition: NonNullable<QuestMarker['worldPosition']> } =>
-          !m.isComplete && m.worldPosition !== null,
+        .filter(
+          (m): m is QuestMarker & { worldPosition: NonNullable<QuestMarker["worldPosition"]> } =>
+            !m.isComplete && m.worldPosition !== null,
         )
         .map((marker) => {
           const state = gameStore.getState();
@@ -371,8 +360,7 @@ export function CompassBar() {
           const x = bearingToCompassX(bearing, playerBearing);
           if (x === null) return null;
 
-          const showLabel =
-            marker.distance !== null && marker.distance < LOCATION_LABEL_DISTANCE;
+          const showLabel = marker.distance !== null && marker.distance < LOCATION_LABEL_DISTANCE;
 
           return (
             <MarkerDiamond
@@ -388,13 +376,7 @@ export function CompassBar() {
       {enemyBearings.map((bearing, i) => {
         const x = bearingToCompassX(bearing, playerBearing);
         if (x === null) return null;
-        return (
-          <EnemyDot
-            key={`enemy-${i}`}
-            xFraction={x}
-            compassWidth={compassWidth}
-          />
-        );
+        return <EnemyDot key={`enemy-${i}`} xFraction={x} compassWidth={compassWidth} />;
       })}
     </View>
   );

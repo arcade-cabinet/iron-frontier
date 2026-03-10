@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Pressable, View, Platform } from 'react-native';
-import { TextClassContext } from '@/components/ui/Text';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { Platform, Pressable, View } from "react-native";
+import { TextClassContext } from "@/components/ui/Text";
+import { cn } from "@/lib/utils";
 
 type TabsContextValue = {
   value: string;
@@ -9,7 +9,7 @@ type TabsContextValue = {
 };
 
 const TabsContext = React.createContext<TabsContextValue>({
-  value: '',
+  value: "",
   onValueChange: () => {},
 });
 
@@ -22,21 +22,17 @@ type TabsProps = React.ComponentProps<typeof View> &
 function Tabs({ value, onValueChange, className, ...props }: TabsProps) {
   return (
     <TabsContext.Provider value={{ value, onValueChange }}>
-      <View className={cn('flex-1', className)} {...props} />
+      <View className={cn("flex-1", className)} {...props} />
     </TabsContext.Provider>
   );
 }
 
-type TabsListProps = React.ComponentProps<typeof View> &
-  React.RefAttributes<View>;
+type TabsListProps = React.ComponentProps<typeof View> & React.RefAttributes<View>;
 
 function TabsList({ className, ...props }: TabsListProps) {
   return (
     <View
-      className={cn(
-        'flex-row items-center rounded-lg bg-muted p-1',
-        className,
-      )}
+      className={cn("flex-row items-center rounded-lg bg-muted p-1", className)}
       role="tablist"
       {...props}
     />
@@ -55,19 +51,16 @@ function TabsTrigger({ value, className, ...props }: TabsTriggerProps) {
   return (
     <TextClassContext.Provider
       value={cn(
-        'text-sm font-medium font-body',
-        isActive ? 'text-foreground' : 'text-muted-foreground',
+        "text-sm font-medium font-body",
+        isActive ? "text-foreground" : "text-muted-foreground",
       )}
     >
       <Pressable
         className={cn(
-          'min-h-[44px] flex-1 items-center justify-center rounded-md px-3 py-1.5',
-          isActive && 'bg-background shadow-sm',
+          "min-h-[44px] flex-1 items-center justify-center rounded-md px-3 py-1.5",
+          isActive && "bg-background shadow-sm",
           !isActive &&
-            cn(
-              'active:bg-background/50',
-              Platform.select({ web: 'hover:bg-background/50' }),
-            ),
+            cn("active:bg-background/50", Platform.select({ web: "hover:bg-background/50" })),
           className,
         )}
         role="tab"
@@ -89,13 +82,7 @@ function TabsContent({ value, className, ...props }: TabsContentProps) {
 
   if (selectedValue !== value) return null;
 
-  return (
-    <View
-      className={cn('flex-1', className)}
-      role="tabpanel"
-      {...props}
-    />
-  );
+  return <View className={cn("flex-1", className)} role="tabpanel" {...props} />;
 }
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };

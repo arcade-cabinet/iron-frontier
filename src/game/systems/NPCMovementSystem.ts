@@ -22,6 +22,7 @@ import type {
   ResolvedScheduleTarget,
 } from './NPCScheduleResolver';
 import { resolveScheduleTarget } from './NPCScheduleResolver';
+import { scopedRNG, rngTick } from '../lib/prng';
 
 // ============================================================================
 // TYPES
@@ -375,10 +376,75 @@ export class NPCMovementSystem {
 
   /**
    * Updates idle behavior: small random movements at the destination.
+   * NPCs will occasionally take a few steps in a random direction,
+   * then return to their target position. This prevents them from
+   * looking like statues.
    */
   private updateIdle(state: NPCMovementState, dt: number): void {
-    state.speed = 0;
     state.idleTimer += dt;
+
+    // Every idleChangePeriod seconds, pick a new wander target
+    if (state.idleTimer >= this.config.idleChangePeriod) {
+      state.idleTimer = 0;
+
+      // 60% chance to wander, 40% chance to stay put
+      if (scopedRNG('npc', 42, rngTick()) < 0.6) {
+        const angle = scopedRNG('npc', 42, rngTick()) * Math.PI * 2;
+        const dist = scopedRNG('npc', 42, rngTick()) * this.config.idleWanderRadius;
+        const wanderTarget: Vec3 = {
+          x: state.targetPosition.x + Math.cos(angle) * dist,
+          y: state.targetPosition.y,
+          z: state.targetPosition.z + Math.sin(angle) * dist,
+        };
+
+        // Move toward the wander point
+        const dx = wanderTarget.x - state.currentPosition.x;
+        const dz = wanderTarget.z - state.currentPosition.z;
+        const wanderDistSq = dx * dx + dz * dz;
+
+        if (wanderDistSq > 0.25) {
+          const wanderDist = Math.sqrt(wanderDistSq);
+          const dirX = dx / wanderDist;
+          const dirZ = dz / wanderDist;
+
+          // Set a slow wander speed (half of walk speed)
+          const wanderSpeed = this.config.walkSpeed * 0.4;
+          const step = wanderSpeed * dt;
+          const clampedStep = Math.min(step, wanderDist);
+          state.currentPosition.x += dirX * clampedStep;
+          state.currentPosition.z += dirZ * clampedStep;
+          state.speed = wanderSpeed;
+
+          // Face wander direction
+          const targetYaw = Math.atan2(dirX, dirZ);
+          state.facingYaw = lerpAngle(state.facingYaw, targetYaw, this.config.turnSpeed * dt);
+          return;
+        }
+      }
+    }
+
+    // Between wander moves, slowly drift back toward target position
+    const dxBack = state.targetPosition.x - state.currentPosition.x;
+    const dzBack = state.targetPosition.z - state.currentPosition.z;
+    const backDistSq = dxBack * dxBack + dzBack * dzBack;
+
+    if (backDistSq > 0.5 * 0.5) {
+      // Drift back slowly
+      const backDist = Math.sqrt(backDistSq);
+      const dirX = dxBack / backDist;
+      const dirZ = dzBack / backDist;
+      const driftSpeed = this.config.walkSpeed * 0.3;
+      const step = driftSpeed * dt;
+      const clampedStep = Math.min(step, backDist);
+      state.currentPosition.x += dirX * clampedStep;
+      state.currentPosition.z += dirZ * clampedStep;
+      state.speed = driftSpeed;
+
+      const targetYaw = Math.atan2(dirX, dirZ);
+      state.facingYaw = lerpAngle(state.facingYaw, targetYaw, this.config.turnSpeed * dt);
+    } else {
+      state.speed = 0;
+    }
   }
 
   /**

@@ -6,9 +6,9 @@
 // the camera. This component configures the camera projection on mount
 // and renders nothing into the scene graph.
 
-import { useThree } from '@react-three/fiber';
-import { useEffect } from 'react';
-import * as THREE from 'three';
+import { useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import * as THREE from "three";
 
 export function FPSCamera() {
   const { camera } = useThree();

@@ -1,11 +1,12 @@
 // Props — Procedural Western prop geometry constructors.
 //
 // Each function returns a THREE.Group of primitives. Materials come from
-// CanvasTextureFactory. No Math.random() — alea PRNG for all variation.
+// CanvasTextureFactory. No scopedRNG('render', 42, rngTick()) — alea PRNG for all variation.
 
 import * as THREE from 'three';
 
 import { createMetalTexture, createRustTexture, createWoodTexture } from '../materials';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 function shadow(mesh: THREE.Mesh): void {
   mesh.castShadow = true;

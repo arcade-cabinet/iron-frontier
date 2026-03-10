@@ -1,38 +1,36 @@
 // engine/physics — Barrel export for the raycasting physics layer.
 
-export { PhysicsWorld } from './PhysicsWorld';
-export type {
-  RaycastHit,
-  RaycastMiss,
-  RaycastResult,
-  MoveResult,
-  TriggerEvent,
-  TriggerOverlapInfo,
-} from './PhysicsWorld';
-
-export { PlayerController } from './PlayerController';
-export type { PlayerState, TriggerCallback } from './PlayerController';
-
-export {
-  createBoxCollider,
-  createCapsuleCollider,
-  createNpcCapsule,
-  createProjectileSphere,
-  createHeightfieldCollider,
-  createTerrainCollider,
-  createTriggerVolume,
-  extractBuildingColliders,
-  buildHeightfieldMesh,
-  resetColliderIds,
-} from './CollisionShapes';
 export type {
   BoxCollider,
   CapsuleCollider,
-  SphereCollider,
-  HeightfieldCollider,
-  TrimeshCollider,
-  TriggerCollider,
   Collider,
-  SolidCollider,
   ColliderType,
-} from './CollisionShapes';
+  HeightfieldCollider,
+  SolidCollider,
+  SphereCollider,
+  TriggerCollider,
+  TrimeshCollider,
+} from "./CollisionShapes.ts";
+export {
+  buildHeightfieldMesh,
+  createBoxCollider,
+  createCapsuleCollider,
+  createHeightfieldCollider,
+  createNpcCapsule,
+  createProjectileSphere,
+  createTerrainCollider,
+  createTriggerVolume,
+  extractBuildingColliders,
+  resetColliderIds,
+} from "./CollisionShapes.ts";
+export type {
+  MoveResult,
+  RaycastHit,
+  RaycastMiss,
+  RaycastResult,
+  TriggerEvent,
+  TriggerOverlapInfo,
+} from "./PhysicsWorld.ts";
+export { PhysicsWorld } from "./PhysicsWorld.ts";
+export type { PlayerState, TriggerCallback } from "./PlayerController.ts";
+export { PlayerController } from "./PlayerController.ts";

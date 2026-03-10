@@ -138,8 +138,8 @@ describe('SurvivalStore', () => {
     });
 
     it('should apply provision multiplier to travel fatigue', () => {
-      // Deplete provisions
-      store.getState().consumeProvisions(20);
+      // Deplete provisions (food=2/hr, water=2.5/hr; need 40h to drain 75+ food)
+      store.getState().consumeProvisions(40);
       const initialFatigue = store.getState().fatigueState.current;
       store.getState().applyTravelFatigue(2);
       const fatigueGained = store.getState().fatigueState.current - initialFatigue;
@@ -274,7 +274,8 @@ describe('SurvivalStore', () => {
     });
 
     it('should increase multiplier when out of provisions', () => {
-      store.getState().consumeProvisions(20);
+      // Need enough hours to fully deplete food (75 / 2 = 37.5h) and water (75 / 2.5 = 30h)
+      store.getState().consumeProvisions(40);
       const multiplier = store.getState().getFatigueMultiplier();
       expect(multiplier).toBeGreaterThan(1.0);
     });

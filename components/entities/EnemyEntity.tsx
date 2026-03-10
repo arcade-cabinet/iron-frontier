@@ -4,21 +4,17 @@
 // plays idle animations via useFrame, and shows a floating health bar
 // with an optional name label above.
 
-import { Text } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import Alea from 'alea';
-import { useMemo, useRef } from 'react';
-import * as THREE from 'three';
-
-import {
-  constructEnemy,
-  type EnemyType,
-} from '@/src/game/engine/renderers/MonsterFactory';
+import { Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import Alea from "alea";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 import {
   createAnimState,
-  tickIdleAnimation,
   type EnemyAnimState,
-} from '@/src/game/engine/renderers/EnemyAnimations';
+  tickIdleAnimation,
+} from "@/src/game/engine/renderers/EnemyAnimations";
+import { constructEnemy, type EnemyType } from "@/src/game/engine/renderers/MonsterFactory";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -37,6 +33,8 @@ export interface EnemyEntityProps {
   healthPercent?: number;
   /** Facing rotation in radians around Y. */
   rotation?: number;
+  /** Whether this enemy is dead (plays death animation). */
+  isDead?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -59,38 +57,71 @@ export function EnemyEntity({
   name,
   healthPercent = 1,
   rotation = 0,
+  isDead = false,
 }: EnemyEntityProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const healthBarRef = useRef<THREE.Group>(null);
   const animState = useRef<EnemyAnimState>(createAnimState());
+
+  // Death animation state
+  const deathProgress = useRef(0);
+  const wasDeadRef = useRef(false);
 
   // Per-instance PRNG for animation timing variety
   const rng = useMemo(() => Alea(seed), [seed]);
   const phaseOffset = useMemo(() => rng() * Math.PI * 2, [rng]);
 
   // Construct enemy geometry — only rebuilds if type/seed change
-  const enemyGroup = useMemo(
-    () => constructEnemy(enemyType, seed),
-    [enemyType, seed],
-  );
+  const enemyGroup = useMemo(() => constructEnemy(enemyType, seed), [enemyType, seed]);
 
   // Animate every frame
-  useFrame((_state, delta) => {
+  useFrame((state, delta) => {
     const group = groupRef.current;
     if (!group) return;
 
-    tickIdleAnimation(
-      enemyType,
-      enemyGroup,
-      animState.current,
-      delta,
-      phaseOffset,
-    );
+    // Death animation: sink into ground and fade out
+    if (isDead) {
+      if (!wasDeadRef.current) {
+        wasDeadRef.current = true;
+        deathProgress.current = 0;
+      }
+      deathProgress.current = Math.min(1, deathProgress.current + delta * 1.5);
+      const t = deathProgress.current;
+
+      // Sink into ground
+      group.position.y = position[1] - t * 1.5;
+
+      // Tilt over
+      group.rotation.x = t * (Math.PI / 4);
+
+      // Fade out all meshes
+      group.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          const mat = child.material as THREE.Material;
+          if (!mat.transparent) {
+            mat.transparent = true;
+          }
+          (mat as any).opacity = Math.max(0, 1 - t);
+        }
+      });
+
+      return;
+    }
+
+    // Normal idle animation
+    tickIdleAnimation(enemyType, enemyGroup, animState.current, delta, phaseOffset);
+
+    // Billboard the health bar to face camera
+    const hb = healthBarRef.current;
+    if (hb) {
+      hb.quaternion.copy(state.camera.quaternion);
+    }
   });
 
   // Health bar geometry (built once, fill controlled via scale)
   const healthBar = useMemo(() => {
     const group = new THREE.Group();
-    group.name = 'healthBar';
+    group.name = "healthBar";
 
     // Background (dark)
     const bgGeo = new THREE.PlaneGeometry(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
@@ -107,14 +138,11 @@ export function EnemyEntity({
     const fillMat = new THREE.MeshBasicMaterial({ color: 0xcc2222 });
     const fill = new THREE.Mesh(fillGeo, fillMat);
     fill.position.z = 0.001;
-    fill.name = 'healthFill';
+    fill.name = "healthFill";
     group.add(fill);
 
     // Border outline
-    const borderGeo = new THREE.PlaneGeometry(
-      HEALTH_BAR_WIDTH + 0.02,
-      HEALTH_BAR_HEIGHT + 0.02,
-    );
+    const borderGeo = new THREE.PlaneGeometry(HEALTH_BAR_WIDTH + 0.02, HEALTH_BAR_HEIGHT + 0.02);
     const borderMat = new THREE.MeshBasicMaterial({
       color: 0x000000,
       transparent: true,
@@ -129,7 +157,7 @@ export function EnemyEntity({
 
   // Update health fill scale and position each render
   const pct = Math.max(0, Math.min(1, healthPercent));
-  const fill = healthBar.getObjectByName('healthFill');
+  const fill = healthBar.getObjectByName("healthFill");
   if (fill) {
     fill.scale.x = pct;
     fill.position.x = -(1 - pct) * HEALTH_BAR_WIDTH * 0.5;
@@ -155,8 +183,10 @@ export function EnemyEntity({
     >
       <primitive object={enemyGroup} />
 
-      {/* Floating health bar */}
-      <primitive object={healthBar} position={[0, HEALTH_BAR_Y, 0]} />
+      {/* Floating health bar (billboards toward camera) */}
+      <group ref={healthBarRef} position={[0, HEALTH_BAR_Y, 0]}>
+        <primitive object={healthBar} />
+      </group>
 
       {/* Floating name label */}
       {name && (

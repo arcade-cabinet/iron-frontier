@@ -8,17 +8,17 @@ Iron Frontier is a **cross-platform 3D open-world RPG** set in a Steampunk Ameri
 2. **First-Person Open World**: The player explores a vast 3D landscape from a first-person perspective, immersed in the frontier environment.
 3. **Touch-First Design**: Controls are designed for thumbs, not mouse cursors. Virtual joystick movement and FPS touch aiming.
 4. **"One More Minute" Loop**: Gameplay is designed for short bursts (30s to 5m) with frequent rewards and clear objectives.
-5. **Cross-Platform Architecture**: Single shared codebase with platform-optimized 3D engines.
+5. **Cross-Platform Architecture**: Single Expo codebase targeting web, Android, and iOS with React Three Fiber for 3D.
 
 ## Goals
 
 - Create a visually distinct mobile 3D RPG that feels "premium" and "hand-crafted" despite procedural elements.
 - Ensure 60fps performance on mobile devices.
-- Implement a robust persistence layer (SQLite) for complex world state.
-- Share game logic, schemas, and data across web and native mobile platforms.
+- Implement robust persistence (expo-sqlite) for complex world state.
+- Share game logic, schemas, and data across all platforms via a single codebase.
 
-## Current Status: v0.1 Release Candidate
+## Current Status
 
-- **Migration in progress** to a single Ionic Angular + Capacitor app (web/android/ios/electron)
-- **Babylon.js 8** used directly in Angular (no Reactylon)
-- **Shared**: Zod v4 schemas and procedural generation preserved for port
+- **Branch**: `feature/comprehensive-modularization-and-ddl`
+- **Stack**: Expo 55 + React Three Fiber + NativeWind + Zustand
+- **State**: 3D scene renders, HUD implemented, game systems exist but need integration into a playable loop

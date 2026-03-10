@@ -7,19 +7,19 @@
 // Each chunk mesh is registered as a trimesh collider with PhysicsProvider
 // so the player can walk on the terrain surface.
 
-import { useFrame, useThree } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { useFrame, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type * as THREE from "three";
 
-import { generateChunk } from '@/engine/renderers/TerrainChunk';
+import { generateChunk } from "@/engine/renderers/TerrainChunk";
 import {
   type BiomeId,
   CHUNK_SIZE,
   DEFAULT_SEED,
   VIEW_RADIUS,
-} from '@/engine/renderers/TerrainConfig';
+} from "@/engine/renderers/TerrainConfig";
 
-import { usePhysics } from './PhysicsProvider';
+import { usePhysics } from "./PhysicsProvider.tsx";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -50,10 +50,7 @@ function chunkKey(cx: number, cz: number): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export function Terrain({
-  seed = DEFAULT_SEED,
-  biome = 'desert',
-}: TerrainProps) {
+export function Terrain({ seed = DEFAULT_SEED, biome = "desert" }: TerrainProps) {
   const { camera } = useThree();
   const { registerTerrain, unregister } = usePhysics();
 

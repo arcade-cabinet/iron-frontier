@@ -245,6 +245,14 @@ export class GameAudioBridge {
     this.sfxCache?.play('bullet_whiz');
   }
 
+  /**
+   * Play any SFX by catalog ID. Useful for UI components that need
+   * direct access to a specific sound effect.
+   */
+  public playSFX(sfxId: string): void {
+    this.sfxCache?.play(sfxId);
+  }
+
   // -----------------------------------------------------------------------
   // PUBLIC - AMBIENT
   // -----------------------------------------------------------------------

@@ -7,7 +7,7 @@
 
 import type { ActiveQuest, DialogueCondition, DialogueEffect, NPCDefinition, Quest } from '../data';
 import type { DangerLevel, TravelMethod } from '../data/schemas/world';
-import type { PipePuzzleState } from '../puzzles/pipe-fitter';
+import type { LockLevel, PipePuzzleState } from '../puzzles/pipe-fitter';
 import type { SurvivalSlice } from '../systems/survivalStore';
 
 // Re-export dialogue types for use by consumers
@@ -145,6 +145,35 @@ export interface EquipmentState {
 // ============================================================================
 
 /**
+ * Primary SPECIAL-style attributes (Western RPG).
+ * Each ranges 1–10, default 5.
+ */
+export interface PlayerAttributes {
+  grit: number;
+  perception: number;
+  endurance: number;
+  charisma: number;
+  intelligence: number;
+  agility: number;
+  luck: number;
+}
+
+/**
+ * Derived skills (Western RPG).
+ * Each ranges 0–100, starting values 15–25.
+ */
+export interface PlayerSkills {
+  guns: number;
+  melee: number;
+  lockpick: number;
+  speech: number;
+  repair: number;
+  medicine: number;
+  survival: number;
+  barter: number;
+}
+
+/**
  * Player statistics
  */
 export interface PlayerStats {
@@ -158,6 +187,8 @@ export interface PlayerStats {
   gold: number;
   ivrcScript: number;
   reputation: number;
+  attributes: PlayerAttributes;
+  skills: PlayerSkills;
 }
 
 // ============================================================================
@@ -167,6 +198,7 @@ export interface PlayerStats {
 export type NPCRole =
   | 'sheriff'
   | 'deputy'
+  | 'mayor'
   | 'merchant'
   | 'bartender'
   | 'blacksmith'
@@ -174,12 +206,17 @@ export type NPCRole =
   | 'banker'
   | 'rancher'
   | 'miner'
+  | 'farmer'
   | 'prospector'
   | 'outlaw'
+  | 'gang_leader'
+  | 'bounty_hunter'
   | 'drifter'
   | 'preacher'
   | 'gambler'
-  | 'undertaker';
+  | 'undertaker'
+  | 'innkeeper'
+  | 'townsfolk';
 
 export interface NPCPersonality {
   aggression: number;
@@ -351,7 +388,17 @@ export interface DialogueState {
 // COMBAT TYPES
 // ============================================================================
 
-export type CombatActionType = 'attack' | 'aimed_shot' | 'defend' | 'reload' | 'use_item' | 'flee';
+export type CombatActionType =
+  | 'attack'
+  | 'aimed_shot'
+  | 'defend'
+  | 'reload'
+  | 'use_item'
+  | 'flee'
+  | 'quick_draw'
+  | 'overwatch'
+  | 'first_aid'
+  | 'intimidate';
 
 export interface Combatant {
   definitionId: string;
@@ -429,14 +476,34 @@ export interface TravelState {
 // ============================================================================
 
 export interface GameSettings {
+  masterVolume: number;
   musicVolume: number;
   sfxVolume: number;
+  muted: boolean;
   haptics: boolean;
   controlMode: 'tap' | 'joystick';
   reducedMotion: boolean;
   showMinimap: boolean;
   lowPowerMode: boolean;
   cameraDistance: number;
+}
+
+// ============================================================================
+// STEALTH TYPES
+// ============================================================================
+
+/**
+ * Stealth/detection state for the player
+ */
+export interface StealthState {
+  /** Current detection level (0 = hidden, 100 = fully detected) */
+  detectionLevel: number;
+  /** Whether the player is currently hidden (detection < 30) */
+  isHidden: boolean;
+  /** Whether the player is crouching */
+  isCrouching: boolean;
+  /** Distance to nearest hostile entity (in world units, -1 if none) */
+  nearestHostileDistance: number;
 }
 
 // ============================================================================
@@ -515,6 +582,9 @@ export interface GameStateData {
 
   // Travel
   travelState: TravelState | null;
+
+  // Stealth
+  stealthState: StealthState;
 
   // Settings
   settings: GameSettings;
@@ -629,14 +699,22 @@ export interface GameStateActions {
 
   // Puzzles
   startPuzzle: (width: number, height: number) => void;
+  startLockpickPuzzle: (targetEntityId: string, targetName: string, lockLevel: LockLevel) => void;
   updatePuzzle: (newGrid: PipePuzzleState['grid']) => void;
   closePuzzle: (success: boolean) => void;
+  forceLock: () => void;
+  abandonPuzzle: () => void;
 
   // Shop
   openShop: (shopId: string) => void;
   closeShop: () => void;
   buyItem: (itemId: string) => void;
   sellItem: (inventoryId: string) => void;
+
+  // Stealth
+  setCrouching: (crouching: boolean) => void;
+  toggleCrouch: () => void;
+  updateStealthDetection: (detectionLevel: number, nearestDistance: number) => void;
 
   // Lifecycle
   /** Clean up timers and resources. Call before discarding the store. */

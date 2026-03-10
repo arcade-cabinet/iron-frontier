@@ -13,6 +13,7 @@ import type {
   TargetSelectionStrategy,
 } from './types';
 import { applyStatusEffectModifiers } from './damage';
+import { scopedRNG, rngTick } from '../../lib/prng';
 
 // ============================================================================
 // TARGET SELECTION
@@ -25,7 +26,7 @@ export function selectTarget(
   state: CombatState,
   actorId: string,
   strategy: TargetSelectionStrategy,
-  randomValue: number = Math.random()
+  randomValue: number = scopedRNG('combat', 42, rngTick())
 ): Combatant | null {
   const actor = state.combatants.find((c) => c.id === actorId);
   if (!actor) return null;
@@ -112,8 +113,8 @@ export function decideAction(
   }
 
   const behavior = actor.behavior || 'aggressive';
-  const actionRoll = randomValues?.actionRoll ?? Math.random();
-  const targetRoll = randomValues?.targetRoll ?? Math.random();
+  const actionRoll = randomValues?.actionRoll ?? scopedRNG('combat', 42, rngTick());
+  const targetRoll = randomValues?.targetRoll ?? scopedRNG('combat', 42, rngTick());
 
   switch (behavior) {
     case 'aggressive':
@@ -200,15 +201,59 @@ function decideDefensive(
 }
 
 /**
- * Support AI: Prioritize helping allies (placeholder - not fully implemented)
+ * Support AI: Heal wounded allies when below 30% HP, otherwise focus fire
+ * on the enemy attacking an ally.
  */
 function decideSupport(
   state: CombatState,
   actor: Combatant,
   targetRoll: number,
-  actionRoll: number
+  _actionRoll: number
 ): AIDecision {
-  // For now, support AI just attacks the highest threat
+  // Check if any ally (same team) is below 30% HP and needs healing
+  const alliesOnTeam = state.combatants.filter((c) => {
+    if (!c.isAlive || c.id === actor.id) return false;
+    // Support enemies heal other enemies; support allies heal player/allies
+    if (actor.type === 'enemy') return c.type === 'enemy';
+    return c.isPlayer || c.type === 'ally';
+  });
+
+  const woundedAlly = alliesOnTeam.find(
+    (c) => c.stats.hp / c.stats.maxHP < 0.3
+  );
+
+  if (woundedAlly) {
+    // Use first_aid skill targeting self (support AI heals itself or would need
+    // target healing - for simplicity use defend to reduce damage on the team)
+    // Since the engine skill system targets self for first_aid, the support AI
+    // defends to absorb damage for the team when an ally is hurt
+    return {
+      action: {
+        type: 'skill',
+        actorId: actor.id,
+        skillId: 'first_aid',
+      },
+      priority: 90,
+      reasoning: 'Support behavior: Healing self to stay alive and protect wounded ally',
+    };
+  }
+
+  // Check own health - heal self if below 30%
+  const selfHpPercent = actor.stats.hp / actor.stats.maxHP;
+  if (selfHpPercent < 0.3) {
+    return {
+      action: {
+        type: 'skill',
+        actorId: actor.id,
+        skillId: 'first_aid',
+      },
+      priority: 95,
+      reasoning: 'Support behavior: Self-healing when critically wounded',
+    };
+  }
+
+  // Focus fire: find the enemy that most recently attacked an ally
+  // (approximation: target whoever has the highest attack stat among enemies)
   const target = selectTarget(state, actor.id, 'highest_threat', targetRoll);
 
   if (!target) {
@@ -222,7 +267,7 @@ function decideSupport(
       targetId: target.id,
     },
     priority: 70,
-    reasoning: 'Support behavior: Target highest threat',
+    reasoning: 'Support behavior: Focus fire on highest threat to protect allies',
   };
 }
 

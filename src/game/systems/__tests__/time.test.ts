@@ -208,6 +208,19 @@ describe('GameClock', () => {
       expect(clock.getMinute()).toBe(45);
     });
 
+    it('should update totalMinutes when setting time', () => {
+      // Day 1, setTime(8, 30) → totalMinutes = 0*24*60 + 8*60 + 30 = 510
+      clock.setTime(8, 30);
+      expect(clock.getTotalMinutes()).toBe(510);
+
+      // Advance to day 2, then set time to 6:00
+      clock.advanceHours(24);
+      expect(clock.getDay()).toBe(2);
+      clock.setTime(6, 0);
+      // Day 2 = (2-1)*24*60 + 6*60 = 1440 + 360 = 1800
+      expect(clock.getTotalMinutes()).toBe(1800);
+    });
+
     it('should clamp hour to valid range', () => {
       clock.setTime(25, 0);
       expect(clock.getHour()).toBe(23);
@@ -487,22 +500,25 @@ describe('utility functions', () => {
 
   describe('time conversion', () => {
     it('should convert real ms to game minutes', () => {
-      const gameMinutes = realMsToGameMinutes(2000);
+      // msPerGameMinute = 4000, so 4000ms = 1 game minute
+      const gameMinutes = realMsToGameMinutes(4000);
       expect(gameMinutes).toBe(1);
     });
 
     it('should convert game minutes to real ms', () => {
       const realMs = gameMinutesToRealMs(1);
-      expect(realMs).toBe(2000);
+      expect(realMs).toBe(4000);
     });
 
     it('should convert real ms to game hours', () => {
-      const gameHours = realMsToGameHours(120000);
+      // 1 game hour = 60 game minutes = 60 * 4000ms = 240000ms
+      const gameHours = realMsToGameHours(240000);
       expect(gameHours).toBe(1);
     });
 
     it('should handle fractional conversions', () => {
-      const gameMinutes = realMsToGameMinutes(1000);
+      // 2000ms = 0.5 game minutes at 4000ms per game minute
+      const gameMinutes = realMsToGameMinutes(2000);
       expect(gameMinutes).toBe(0.5);
     });
   });

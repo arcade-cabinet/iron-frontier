@@ -25,8 +25,9 @@
 
 import { gameStore } from './store/webGameStore';
 import { initQuestSystem, type QuestSystemHandle } from './systems/QuestWiring';
-import { gameAudioBridge } from './services/audio/GameAudioBridge';
-import { autosave, loadAutosave } from './store/saveManager';
+import { questEvents, type QuestEventMap } from './systems/QuestEvents';
+import { getSaveSystem } from './systems/SaveSystem';
+import { QuestNotification } from '@/components/game/QuestNotification';
 
 // ============================================================================
 // TYPES
@@ -78,12 +79,15 @@ const MORNING_HOUR = 8;
 
 class GameOrchestrator {
   private questHandle: QuestSystemHandle | null = null;
+  private questNotifyTeardown: (() => void) | null = null;
   private autosaveTimer: ReturnType<typeof setInterval> | null = null;
   private gameLoopTimer: ReturnType<typeof setInterval> | null = null;
   private lastTickTime = 0;
   private lastLowHealthWarning = 0;
   private lastSurvivalTick = 0;
   private lastClockTotalMinutes = 0;
+  /** Accumulated game-minutes since last auto-save for 5-game-minute trigger */
+  private gameMinutesSinceAutoSave = 0;
   private systemsStarted = false;
 
   // --------------------------------------------------------------------------
@@ -151,9 +155,8 @@ class GameOrchestrator {
     // Start the tutorial quest if available
     try {
       postInitState.startQuest(TUTORIAL_QUEST_ID);
-    } catch {
-      // Quest might not exist yet - that's OK
-      console.warn('[GameOrchestrator] Tutorial quest not found:', TUTORIAL_QUEST_ID);
+    } catch (error) {
+      console.error('[GameOrchestrator] Tutorial quest not found:', TUTORIAL_QUEST_ID, error);
     }
 
     // Set game phase to playing (initGame already does this, but be explicit)
@@ -178,36 +181,31 @@ class GameOrchestrator {
     // If systems were running from a previous game, tear them down first
     this.teardown();
 
-    const savedState = await loadAutosave();
-    if (!savedState) {
+    // Find the most recent save slot via SaveSystem
+    const saveSystem = getSaveSystem();
+    const mostRecent = await saveSystem.getMostRecentSlot();
+    if (!mostRecent) {
       console.warn('[GameOrchestrator] No saved game found');
       return false;
     }
 
-    // The Zustand persist middleware handles rehydration automatically.
-    // If there is saved state, the store should already have it from the
-    // persist middleware on creation. We just need to verify it's valid.
+    // Load via the store's loadFromSlot (handles hydration + world init)
     const state = gameStore.getState();
-
-    if (!state.initialized) {
-      console.warn('[GameOrchestrator] Saved state is not initialized');
+    const loaded = await state.loadFromSlot(mostRecent.slotId);
+    if (!loaded) {
+      console.warn('[GameOrchestrator] Failed to load save slot:', mostRecent.slotId);
       return false;
     }
 
-    // Re-initialize the world data (runtime-only, not persisted)
-    if (state.currentWorldId) {
-      state.initWorld(state.currentWorldId);
-    }
-
     // Restart survival systems
-    state.startClock();
-
-    // Set phase to playing
-    state.setPhase('playing');
+    const freshState = gameStore.getState();
+    // Sync clock baseline to prevent first-tick elapsed-time spike
+    this.lastClockTotalMinutes = freshState.clockState.totalMinutes;
+    freshState.startClock();
 
     console.log(
-      `[GameOrchestrator] Game resumed — player: "${state.playerName}", ` +
-      `location: ${state.currentLocationId}`
+      `[GameOrchestrator] Game resumed — player: "${freshState.playerName}", ` +
+      `location: ${freshState.currentLocationId}`
     );
 
     return true;
@@ -237,14 +235,13 @@ class GameOrchestrator {
     // Wire quest event system
     this.questHandle = initQuestSystem(store);
 
-    // Wire audio bridge
-    try {
-      gameAudioBridge.init({ store: store as any });
-    } catch (error) {
-      // Audio init can fail if Tone.js context isn't ready yet.
-      // That's fine - it will be initialized on first user interaction.
-      console.warn('[GameOrchestrator] Audio bridge init deferred:', error);
-    }
+    // Wire quest events to QuestNotification toast UI
+    this.questNotifyTeardown = this.wireQuestNotifications();
+
+    // Audio bridge initialization is handled by AudioProvider (mounted in the
+    // game page). It waits for a user gesture to call Tone.start() and then
+    // inits the bridge with the MusicManager. We do NOT init it here to avoid
+    // double-initialization. The AudioProvider's teardown handles cleanup.
 
     // Start the game loop
     this.lastTickTime = performance.now();
@@ -262,6 +259,10 @@ class GameOrchestrator {
 
     // Resume the clock
     const state = store.getState();
+    // Sync lastClockTotalMinutes BEFORE starting the clock to prevent
+    // a huge elapsed-time spike on the first tick (e.g., clock at 8:00 AM
+    // = 480 totalMinutes, but lastClockTotalMinutes was 0 → 480 min spike).
+    this.lastClockTotalMinutes = state.clockState.totalMinutes;
     if (!state.isClockRunning && state.phase === 'playing') {
       state.startClock();
     }
@@ -299,6 +300,7 @@ class GameOrchestrator {
     const postState = store.getState();
     const elapsedGameMinutes = postState.clockState.totalMinutes - prevTotalMinutes;
 
+
     // Track real play time (in ms) — dt is already in seconds
     if (dt > 0) {
       store.setState({ playTime: postState.playTime + dt * 1000 } as any);
@@ -309,6 +311,15 @@ class GameOrchestrator {
     if (now - this.lastSurvivalTick >= SURVIVAL_TICK_INTERVAL_MS && elapsedGameMinutes > 0) {
       this.lastSurvivalTick = now;
       this.tickSurvival(elapsedGameMinutes);
+    }
+
+    // --- Auto-save every 5 game-minutes ---
+    if (elapsedGameMinutes > 0) {
+      this.gameMinutesSinceAutoSave += elapsedGameMinutes;
+      if (this.gameMinutesSinceAutoSave >= 5) {
+        this.gameMinutesSinceAutoSave = 0;
+        this.performAutosave();
+      }
     }
 
     // Check for low-health warnings (throttled to once per 30 seconds)
@@ -384,26 +395,43 @@ class GameOrchestrator {
       const foodAfter = afterState.provisionsState.food;
       const waterAfter = afterState.provisionsState.water;
 
-      // --- Food warnings ---
+      // --- Food warnings (graduated at 50%, 25%, and 0%) ---
       if (consumption.ranOutOfFood) {
         state.addNotification('warning', "You're starving! Find food immediately.");
+      } else if (foodBefore / maxFood > 0.50 && foodAfter / maxFood <= 0.50) {
+        state.addNotification('warning', 'Food supplies are getting low.');
       } else if (foodBefore / maxFood > 0.25 && foodAfter / maxFood <= 0.25) {
-        state.addNotification('warning', 'Supplies running low.');
+        state.addNotification('warning', 'Food is critically low. Resupply soon!');
+      } else if (foodBefore / maxFood > 0.10 && foodAfter / maxFood <= 0.10) {
+        state.addNotification('warning', 'Almost out of food! Hunt or forage now.');
       }
 
-      // --- Water warnings ---
+      // --- Water warnings (graduated at 50%, 25%, and 0%) ---
       if (consumption.ranOutOfWater) {
         state.addNotification('warning', "You're dehydrated! Find water immediately.");
+      } else if (waterBefore / maxWater > 0.50 && waterAfter / maxWater <= 0.50) {
+        state.addNotification('warning', 'Water is getting low.');
       } else if (waterBefore / maxWater > 0.25 && waterAfter / maxWater <= 0.25) {
-        state.addNotification('warning', 'Water is running low. Find a source soon.');
+        state.addNotification('warning', 'Water is critically low. Find a source soon!');
+      } else if (waterBefore / maxWater > 0.10 && waterAfter / maxWater <= 0.10) {
+        state.addNotification('warning', 'Almost out of water! Find a source now.');
+      }
+    }
+
+    // --- Starvation damage (3 HP per game hour without food) ---
+    const freshState = gameStore.getState();
+    if (freshState.provisionsState.food <= 0) {
+      const starvationDamage = Math.floor(3 * elapsedHours);
+      if (starvationDamage > 0 && freshState.playerStats.health > 0) {
+        state.takeDamage(starvationDamage);
       }
     }
 
     // --- Dehydration damage (5 HP per game hour without water) ---
-    const freshState = gameStore.getState();
-    if (freshState.provisionsState.water <= 0) {
+    const freshState2 = gameStore.getState();
+    if (freshState2.provisionsState.water <= 0) {
       const dehydrationDamage = Math.floor(5 * elapsedHours);
-      if (dehydrationDamage > 0 && freshState.playerStats.health > 0) {
+      if (dehydrationDamage > 0 && freshState2.playerStats.health > 0) {
         state.takeDamage(dehydrationDamage);
       }
     }
@@ -421,7 +449,7 @@ class GameOrchestrator {
   // --------------------------------------------------------------------------
 
   /**
-   * Perform an autosave of the current game state.
+   * Perform an autosave of the current game state via SaveSystem.
    */
   private async performAutosave(): Promise<void> {
     const state = gameStore.getState();
@@ -430,42 +458,7 @@ class GameOrchestrator {
     if (!state.initialized || state.phase === 'title') return;
 
     try {
-      // Mark the save timestamp via the store's saveGame action
-      state.saveGame();
-
-      // Re-read state after saveGame updated lastSaved
-      const freshState = gameStore.getState();
-
-      // Extract serializable state for autosave
-      const saveData = {
-        initialized: freshState.initialized,
-        worldSeed: freshState.worldSeed,
-        playerName: freshState.playerName,
-        playerAppearance: freshState.playerAppearance,
-        playerPosition: freshState.playerPosition,
-        playerStats: freshState.playerStats,
-        equipment: freshState.equipment,
-        inventory: freshState.inventory,
-        activeQuests: freshState.activeQuests,
-        completedQuests: freshState.completedQuests,
-        completedQuestIds: freshState.completedQuestIds,
-        collectedItemIds: freshState.collectedItemIds,
-        talkedNPCIds: freshState.talkedNPCIds,
-        settings: freshState.settings,
-        time: freshState.time,
-        saveVersion: freshState.saveVersion,
-        lastSaved: freshState.lastSaved,
-        playTime: freshState.playTime,
-        currentWorldId: freshState.currentWorldId,
-        currentLocationId: freshState.currentLocationId,
-        discoveredLocationIds: freshState.discoveredLocationIds,
-        // Survival state
-        clockState: freshState.clockState,
-        fatigueState: freshState.fatigueState,
-        provisionsState: freshState.provisionsState,
-      };
-
-      await autosave(saveData);
+      await state.saveToSlot('autosave');
       console.log('[GameOrchestrator] Autosaved');
     } catch (error) {
       console.error('[GameOrchestrator] Autosave failed:', error);
@@ -487,12 +480,14 @@ class GameOrchestrator {
       this.questHandle = null;
     }
 
-    // Tear down audio bridge
-    try {
-      gameAudioBridge.teardown();
-    } catch {
-      // Ignore errors during audio teardown
+    // Tear down quest notification bridge
+    if (this.questNotifyTeardown) {
+      this.questNotifyTeardown();
+      this.questNotifyTeardown = null;
     }
+
+    // Audio bridge teardown is handled by AudioProvider (which owns the
+    // Tone.js context and MusicManager lifecycle).
 
     // Stop game loop
     if (this.gameLoopTimer) {
@@ -512,8 +507,8 @@ class GameOrchestrator {
       if (state.isClockRunning) {
         state.pauseClock();
       }
-    } catch {
-      // Ignore if store is not available
+    } catch (error) {
+      console.error('[GameOrchestrator] Failed to pause clock during teardown:', error);
     }
 
     this.systemsStarted = false;
@@ -521,8 +516,56 @@ class GameOrchestrator {
     this.lastLowHealthWarning = 0;
     this.lastSurvivalTick = 0;
     this.lastClockTotalMinutes = 0;
+    this.gameMinutesSinceAutoSave = 0;
 
     console.log('[GameOrchestrator] Torn down');
+  }
+
+  // --------------------------------------------------------------------------
+  // QUEST NOTIFICATION BRIDGE
+  // --------------------------------------------------------------------------
+
+  /**
+   * Subscribe to quest events and forward them to the QuestNotification toast UI.
+   * Returns a teardown function that removes all listeners.
+   */
+  private wireQuestNotifications(): () => void {
+    const onQuestStarted = (d: QuestEventMap['questStarted']) => {
+      const def = gameStore.getState().getQuestDefinition(d.questId);
+      QuestNotification.show(
+        'quest_started',
+        def?.title ?? d.questId,
+        def?.description,
+      );
+    };
+
+    const onQuestCompleted = (d: QuestEventMap['questCompleted']) => {
+      const def = gameStore.getState().getQuestDefinition(d.questId);
+      QuestNotification.show(
+        'quest_completed',
+        def?.title ?? d.questId,
+      );
+    };
+
+    const onStageAdvanced = (d: QuestEventMap['stageAdvanced']) => {
+      const def = gameStore.getState().getQuestDefinition(d.questId);
+      const stage = def?.stages[d.stageIndex];
+      QuestNotification.show(
+        'quest_updated',
+        def?.title ?? d.questId,
+        stage?.title,
+      );
+    };
+
+    questEvents.on('questStarted', onQuestStarted);
+    questEvents.on('questCompleted', onQuestCompleted);
+    questEvents.on('stageAdvanced', onStageAdvanced);
+
+    return () => {
+      questEvents.off('questStarted', onQuestStarted);
+      questEvents.off('questCompleted', onQuestCompleted);
+      questEvents.off('stageAdvanced', onStageAdvanced);
+    };
   }
 
   // --------------------------------------------------------------------------
@@ -545,8 +588,9 @@ class GameOrchestrator {
    * Check whether a saved game exists.
    */
   async hasSavedGame(): Promise<boolean> {
-    const saved = await loadAutosave();
-    return saved != null && saved.initialized === true;
+    const saveSystem = getSaveSystem();
+    const mostRecent = await saveSystem.getMostRecentSlot();
+    return mostRecent != null;
   }
 }
 

@@ -3,10 +3,10 @@
 // A large inverted sphere whose vertex colors are driven by timeOfDay.
 // Stars are generated deterministically via alea PRNG.
 
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
-import Alea from 'alea';
-import * as THREE from 'three';
+import { useFrame, useThree } from "@react-three/fiber";
+import Alea from "alea";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
 export interface SkyProps {
   /** Time of day as a 0-24 float */
@@ -36,14 +36,16 @@ const _bottomColor = new THREE.Color();
 const _vertColor = new THREE.Color();
 
 export function Sky({ timeOfDay }: SkyProps) {
+  const groupRef = useRef<THREE.Group>(null);
   const domeRef = useRef<THREE.Mesh>(null);
   const sunRef = useRef<THREE.Mesh>(null);
   const moonRef = useRef<THREE.Mesh>(null);
   const starsRef = useRef<THREE.Points>(null);
+  const camera = useThree((s) => s.camera);
 
   // Generate deterministic star positions
   const starGeometry = useMemo(() => {
-    const prng = Alea('iron-frontier-stars');
+    const prng = Alea("iron-frontier-stars");
     const positions = new Float32Array(STAR_COUNT * 3);
 
     for (let i = 0; i < STAR_COUNT; i++) {
@@ -58,7 +60,7 @@ export function Sky({ timeOfDay }: SkyProps) {
     }
 
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     return geo;
   }, []);
 
@@ -67,11 +69,16 @@ export function Sky({ timeOfDay }: SkyProps) {
     const geo = new THREE.SphereGeometry(SKY_RADIUS, SKY_SEGMENTS, SKY_SEGMENTS);
     const count = geo.attributes.position.count;
     const colors = new Float32Array(count * 3);
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     return geo;
   }, []);
 
   useFrame(() => {
+    // Keep sky dome centered on camera
+    if (groupRef.current) {
+      groupRef.current.position.set(camera.position.x, 0, camera.position.z);
+    }
+
     const t = timeOfDay % 24;
 
     // --- Update dome vertex colors ---
@@ -120,7 +127,7 @@ export function Sky({ timeOfDay }: SkyProps) {
   });
 
   return (
-    <group>
+    <group ref={groupRef}>
       {/* Sky dome */}
       <mesh ref={domeRef} geometry={domeGeometry}>
         <meshBasicMaterial vertexColors side={THREE.BackSide} depthWrite={false} />
@@ -156,11 +163,7 @@ export function Sky({ timeOfDay }: SkyProps) {
 // --- Helpers ---
 
 /** Compute top/bottom gradient colors based on time of day. */
-function computeGradientColors(
-  t: number,
-  outTop: THREE.Color,
-  outBottom: THREE.Color,
-): void {
+function computeGradientColors(t: number, outTop: THREE.Color, outBottom: THREE.Color): void {
   if (t >= 7 && t <= 17) {
     // Day
     outTop.copy(DAY_TOP);
@@ -176,7 +179,7 @@ function computeGradientColors(
     outBottom.copy(NIGHT_BOTTOM).lerp(DAWN_BOTTOM, f);
     // Then blend dawn -> day in latter half
     if (t > 6) {
-      const f2 = smoothstep((t - 6));
+      const f2 = smoothstep(t - 6);
       outTop.lerp(DAY_TOP, f2);
       outBottom.lerp(DAY_BOTTOM, f2);
     }
@@ -187,7 +190,7 @@ function computeGradientColors(
     outBottom.copy(DAY_BOTTOM).lerp(DUSK_BOTTOM, f);
     // Then blend dusk -> night in latter half
     if (t > 18) {
-      const f2 = smoothstep((t - 18));
+      const f2 = smoothstep(t - 18);
       outTop.lerp(NIGHT_TOP, f2);
       outBottom.lerp(NIGHT_BOTTOM, f2);
     }

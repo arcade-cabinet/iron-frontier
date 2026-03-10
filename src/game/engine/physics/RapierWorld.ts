@@ -1,4 +1,4 @@
-import type { Vector3 as BabylonVector3 } from '@babylonjs/core';
+import type { Vector3 } from 'three';
 import RAPIER from '@dimforge/rapier3d-compat';
 import type { HexGrid } from '../hex/HexGridRenderer';
 import {
@@ -23,7 +23,7 @@ export class RapierWorld {
     this.initialized = true;
   }
 
-  createPlayerBody(position: BabylonVector3): void {
+  createPlayerBody(position: Vector3): void {
     if (!this.world) return;
     if (this.playerBody) return;
 
@@ -40,7 +40,7 @@ export class RapierWorld {
     this.playerBody = body;
   }
 
-  setPlayerPosition(position: BabylonVector3): void {
+  setPlayerPosition(position: Vector3): void {
     if (!this.playerBody) return;
     this.playerBody.setNextKinematicTranslation({
       x: position.x,

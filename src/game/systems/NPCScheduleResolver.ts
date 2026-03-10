@@ -64,8 +64,8 @@ const INDOOR_ACTIVITIES = new Set(['sleep', 'work', 'eat', 'pray']);
 /** Activities where NPCs are not available for interaction */
 const UNAVAILABLE_ACTIVITIES = new Set(['sleep']);
 
-/** Default fallback position if nothing resolves */
-const FALLBACK_POSITION: Vec3 = { x: 0, y: 0, z: 0 };
+/** Unresolved position — returned when no positions can be averaged */
+const UNRESOLVED_POSITION: Vec3 = { x: 0, y: 0, z: 0 };
 
 // ============================================================================
 // LOCATION MARKER INDEX
@@ -440,7 +440,10 @@ function isMarkerKeyMatch(key: string, assignmentId: string): boolean {
  * Calculates the average position of a list of Vec3 points.
  */
 function averagePosition(positions: Vec3[]): Vec3 {
-  if (positions.length === 0) return { ...FALLBACK_POSITION };
+  if (positions.length === 0) {
+    console.error(`[NPCScheduleResolver] Could not resolve any position — returning origin`);
+    return { ...UNRESOLVED_POSITION };
+  }
 
   let sumX = 0;
   let sumY = 0;

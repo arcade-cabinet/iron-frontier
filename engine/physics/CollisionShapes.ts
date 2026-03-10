@@ -12,13 +12,13 @@
 //   - Trimesh    — arbitrary terrain mesh geometry (fallback)
 //   - Trigger    — non-blocking volumes for quest zones, town boundaries
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
 // ---------------------------------------------------------------------------
 // Collider types
 // ---------------------------------------------------------------------------
 
-export type ColliderType = 'box' | 'capsule' | 'sphere' | 'heightfield' | 'trimesh' | 'trigger';
+export type ColliderType = "box" | "capsule" | "sphere" | "heightfield" | "trimesh" | "trigger";
 
 // ---------------------------------------------------------------------------
 // Base collider fields
@@ -33,14 +33,14 @@ interface ColliderBase {
 }
 
 export interface BoxCollider extends ColliderBase {
-  readonly type: 'box';
+  readonly type: "box";
   readonly box: THREE.Box3;
   readonly center: THREE.Vector3;
   readonly halfExtents: THREE.Vector3;
 }
 
 export interface CapsuleCollider extends ColliderBase {
-  readonly type: 'capsule';
+  readonly type: "capsule";
   readonly radius: number;
   readonly height: number;
   /** Center of the capsule (midpoint between the two hemisphere centers). */
@@ -48,13 +48,13 @@ export interface CapsuleCollider extends ColliderBase {
 }
 
 export interface SphereCollider extends ColliderBase {
-  readonly type: 'sphere';
+  readonly type: "sphere";
   readonly radius: number;
   readonly center: THREE.Vector3;
 }
 
 export interface HeightfieldCollider extends ColliderBase {
-  readonly type: 'heightfield';
+  readonly type: "heightfield";
   /** Number of samples along X. */
   readonly xSegments: number;
   /** Number of samples along Z. */
@@ -72,12 +72,12 @@ export interface HeightfieldCollider extends ColliderBase {
 }
 
 export interface TrimeshCollider extends ColliderBase {
-  readonly type: 'trimesh';
+  readonly type: "trimesh";
   readonly mesh: THREE.Mesh;
 }
 
 export interface TriggerCollider extends ColliderBase {
-  readonly type: 'trigger';
+  readonly type: "trigger";
   readonly isTrigger: true;
   /** Axis-aligned bounding box for the trigger volume. */
   readonly box: THREE.Box3;
@@ -138,7 +138,7 @@ export function createBoxCollider(
     center,
     new THREE.Vector3(width, height, depth),
   );
-  return { type: 'box', id: generateId('box'), box, center, halfExtents, isTrigger: false, tag };
+  return { type: "box", id: generateId("box"), box, center, halfExtents, isTrigger: false, tag };
 }
 
 /**
@@ -153,8 +153,8 @@ export function createCapsuleCollider(
   const center = position.clone();
   center.y += height / 2;
   return {
-    type: 'capsule',
-    id: generateId('capsule'),
+    type: "capsule",
+    id: generateId("capsule"),
     radius,
     height,
     center,
@@ -175,8 +175,8 @@ export function createNpcCapsule(
   const center = position.clone();
   center.y += height / 2;
   return {
-    type: 'capsule',
-    id: generateId('npc'),
+    type: "capsule",
+    id: generateId("npc"),
     radius,
     height,
     center,
@@ -194,8 +194,8 @@ export function createProjectileSphere(
   tag?: string,
 ): SphereCollider {
   return {
-    type: 'sphere',
-    id: generateId('projectile'),
+    type: "sphere",
+    id: generateId("projectile"),
     radius,
     center: position.clone(),
     isTrigger: false,
@@ -228,8 +228,8 @@ export function createHeightfieldCollider(
     );
   }
   return {
-    type: 'heightfield',
-    id: generateId('terrain'),
+    type: "heightfield",
+    id: generateId("terrain"),
     xSegments,
     zSegments,
     width,
@@ -251,8 +251,8 @@ export function createHeightfieldCollider(
 export function createTerrainCollider(heightmapMesh: THREE.Mesh, tag?: string): TrimeshCollider {
   heightmapMesh.updateMatrixWorld(true);
   return {
-    type: 'trimesh',
-    id: generateId('terrain'),
+    type: "trimesh",
+    id: generateId("terrain"),
     mesh: heightmapMesh,
     isTrigger: false,
     tag,
@@ -280,8 +280,8 @@ export function createTriggerVolume(
     new THREE.Vector3(width, height, depth),
   );
   return {
-    type: 'trigger',
-    id: generateId('trigger'),
+    type: "trigger",
+    id: generateId("trigger"),
     box,
     center,
     halfExtents,
@@ -309,8 +309,8 @@ export function extractBuildingColliders(
     _box3.getSize(_size);
     _box3.getCenter(_center);
     colliders.push({
-      type: 'box',
-      id: generateId('building'),
+      type: "box",
+      id: generateId("building"),
       box: _box3.clone(),
       center: _center.clone(),
       halfExtents: _size.clone().multiplyScalar(0.5),
@@ -329,8 +329,8 @@ export function extractBuildingColliders(
     _box3.getCenter(_center);
 
     colliders.push({
-      type: 'box',
-      id: generateId('building'),
+      type: "box",
+      id: generateId("building"),
       box: _box3.clone(),
       center: _center.clone(),
       halfExtents: _size.clone().multiplyScalar(0.5),
@@ -346,15 +346,10 @@ export function extractBuildingColliders(
  * Build a THREE.Mesh from a HeightfieldCollider for raycasting.
  */
 export function buildHeightfieldMesh(hf: HeightfieldCollider): THREE.Mesh {
-  const geometry = new THREE.PlaneGeometry(
-    hf.width,
-    hf.depth,
-    hf.xSegments - 1,
-    hf.zSegments - 1,
-  );
+  const geometry = new THREE.PlaneGeometry(hf.width, hf.depth, hf.xSegments - 1, hf.zSegments - 1);
   geometry.rotateX(-Math.PI / 2);
 
-  const posAttr = geometry.getAttribute('position');
+  const posAttr = geometry.getAttribute("position");
   for (let iz = 0; iz < hf.zSegments; iz++) {
     for (let ix = 0; ix < hf.xSegments; ix++) {
       const vertexIndex = iz * hf.xSegments + ix;
