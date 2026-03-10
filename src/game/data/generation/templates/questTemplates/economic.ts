@@ -1,0 +1,445 @@
+/**
+ * Economic Quest Templates
+ */
+
+import type { QuestTemplate } from '../../../schemas/generation.ts';
+
+export const ECONOMIC_QUEST_TEMPLATES: QuestTemplate[] = [
+  {
+    id: 'collect_debt',
+    name: 'Debt Collection',
+    archetype: 'debt_collection',
+    questType: 'side',
+    titleTemplates: ['Collect from {{target}}', 'Outstanding Debt', 'Payment Due'],
+    descriptionTemplates: [
+      '{{target}} owes {{giver}} money. Collect it.',
+      'That debt has been outstanding for too long.',
+      '{{giver}} needs you to convince {{target}} to pay up.',
+    ],
+    stages: [
+      {
+        titleTemplate: 'Find the Debtor',
+        descriptionTemplate: 'Locate {{target}}.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Find {{target}}',
+            targetType: 'npc',
+            targetTags: ['debtor'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Collect the Debt',
+        descriptionTemplate: 'Get the money.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Collect payment from {{target}}',
+            targetType: 'npc',
+            targetTags: ['debtor'],
+            countRange: [1, 1],
+            optional: false,
+            hintTemplate: 'Persuasion or intimidation - your choice.',
+          },
+        ],
+        onCompleteTextTemplate: 'You collected the debt.',
+      },
+    ],
+    rewards: {
+      xpRange: [20, 40],
+      goldRange: [20, 45],
+      itemTags: [],
+      itemChance: 0.1,
+      reputationImpact: {},
+    },
+    levelRange: [1, 4],
+    giverRoles: ['banker', 'shopkeeper', 'merchant'],
+    giverFactions: ['townfolk', 'ivrc'],
+    validLocationTypes: ['town'],
+    tags: ['economic', 'collection'],
+    repeatable: true,
+    cooldownHours: 48,
+  },
+  {
+    id: 'collect_company_debt',
+    name: 'IVRC Debt Collection',
+    archetype: 'debt_collection',
+    questType: 'side',
+    titleTemplates: ['Company Debts', 'IVRC Collection', 'Corporate Recovery'],
+    descriptionTemplates: [
+      'IVRC has outstanding debts from miners at {{destination}}. Collect.',
+      '{{giver}} needs company money recovered from workers who skipped payments.',
+      'Some folks owe IVRC. Time to settle accounts.',
+    ],
+    stages: [
+      {
+        titleTemplate: 'Collect Debts',
+        descriptionTemplate: 'Visit the debtors and collect payment.',
+        objectives: [
+          {
+            type: 'visit',
+            descriptionTemplate: 'Go to {{destination}}',
+            targetType: 'location',
+            targetTags: ['town', 'mine'],
+            countRange: [1, 1],
+            optional: false,
+          },
+          {
+            type: 'talk',
+            descriptionTemplate: 'Collect from debtors',
+            targetType: 'npc',
+            targetTags: ['debtor', 'worker'],
+            countRange: [2, 4],
+            optional: false,
+          },
+        ],
+        onCompleteTextTemplate: 'Debts collected.',
+      },
+    ],
+    rewards: {
+      xpRange: [30, 55],
+      goldRange: [35, 70],
+      itemTags: [],
+      itemChance: 0.1,
+      reputationImpact: {
+        ivrc: [5, 12],
+        freeminers: [-5, -12],
+      },
+    },
+    levelRange: [2, 5],
+    giverRoles: ['company_agent', 'accountant', 'foreman'],
+    giverFactions: ['ivrc'],
+    validLocationTypes: ['town', 'mine'],
+    tags: ['economic', 'collection', 'ivrc'],
+    repeatable: true,
+    cooldownHours: 36,
+  },
+  {
+    id: 'investment_prospect',
+    name: 'Prospecting Investment',
+    archetype: 'investment',
+    questType: 'side',
+    titleTemplates: ['Investment Opportunity', 'Fund the Prospect', 'Mining Venture'],
+    descriptionTemplates: [
+      '{{giver}} has found a promising site but needs funding.',
+      'A mining claim at {{destination}} needs capital. High risk, high reward.',
+      "Fund {{giver}}'s operation for a cut of the profits.",
+    ],
+    stages: [
+      {
+        titleTemplate: 'Meet the Prospector',
+        descriptionTemplate: 'Learn about the opportunity.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Meet {{giver}}',
+            targetType: 'npc',
+            targetTags: ['prospector', 'miner'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Verify the Claim',
+        descriptionTemplate: 'Check if the claim is legitimate.',
+        objectives: [
+          {
+            type: 'visit',
+            descriptionTemplate: 'Inspect the claim at {{destination}}',
+            targetType: 'location',
+            targetTags: ['mine', 'deposit'],
+            countRange: [1, 1],
+            optional: false,
+          },
+          {
+            type: 'interact',
+            descriptionTemplate: 'Evaluate the potential',
+            targetType: 'any',
+            targetTags: ['ore_sample'],
+            countRange: [1, 2],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Make the Investment',
+        descriptionTemplate: 'Decide whether to invest.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Finalize terms',
+            targetType: 'npc',
+            targetTags: ['prospector'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+        onCompleteTextTemplate: 'Investment made. Now we wait.',
+      },
+    ],
+    rewards: {
+      xpRange: [35, 60],
+      goldRange: [40, 100],
+      itemTags: ['ore', 'mineral'],
+      itemChance: 0.4,
+      reputationImpact: {
+        freeminers: [5, 12],
+      },
+    },
+    levelRange: [2, 6],
+    giverRoles: ['prospector', 'miner', 'investor'],
+    giverFactions: ['freeminers', 'townfolk'],
+    validLocationTypes: ['town', 'mine'],
+    tags: ['economic', 'investment', 'mining'],
+    repeatable: true,
+    cooldownHours: 72,
+  },
+  {
+    id: 'investment_business',
+    name: 'Business Investment',
+    archetype: 'investment',
+    questType: 'side',
+    titleTemplates: ['Business Opportunity', 'Back the Venture', 'Startup Funding'],
+    descriptionTemplates: [
+      '{{giver}} wants to start a business but needs capital.',
+      'An entrepreneur needs investment for a new venture.',
+      "Fund {{giver}}'s idea for a share of the profits.",
+    ],
+    stages: [
+      {
+        titleTemplate: 'Hear the Pitch',
+        descriptionTemplate: 'Learn about the business opportunity.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Meet {{giver}}',
+            targetType: 'npc',
+            targetTags: ['entrepreneur', 'merchant'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Due Diligence',
+        descriptionTemplate: 'Investigate the viability.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Research the market',
+            targetType: 'npc',
+            targetTags: ['merchant', 'local'],
+            countRange: [1, 2],
+            optional: false,
+          },
+          {
+            type: 'visit',
+            descriptionTemplate: 'Check the proposed location',
+            targetType: 'location',
+            targetTags: ['building', 'shop'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Invest',
+        descriptionTemplate: 'Commit your funds.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Make the investment',
+            targetType: 'npc',
+            targetTags: ['entrepreneur'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+        onCompleteTextTemplate: "You're now a business partner.",
+      },
+    ],
+    rewards: {
+      xpRange: [40, 70],
+      goldRange: [50, 120],
+      itemTags: ['trade_goods'],
+      itemChance: 0.3,
+      reputationImpact: {
+        townfolk: [5, 12],
+      },
+    },
+    levelRange: [3, 6],
+    giverRoles: ['entrepreneur', 'merchant', 'inventor'],
+    giverFactions: ['townfolk'],
+    validLocationTypes: ['town'],
+    tags: ['economic', 'investment', 'business'],
+    repeatable: true,
+    cooldownHours: 96,
+  },
+  {
+    id: 'trade_route_establish',
+    name: 'Establish Trade Route',
+    archetype: 'trade_route',
+    questType: 'side',
+    titleTemplates: ['New Trade Route', 'Commerce to {{destination}}', 'Open the Markets'],
+    descriptionTemplates: [
+      '{{giver}} wants to establish trade with {{destination}}.',
+      'Open a trade route between here and {{destination}}.',
+      'Negotiate a trade agreement with merchants at {{destination}}.',
+    ],
+    stages: [
+      {
+        titleTemplate: 'Meet the Traders',
+        descriptionTemplate: 'Contact merchants at {{destination}}.',
+        objectives: [
+          {
+            type: 'visit',
+            descriptionTemplate: 'Travel to {{destination}}',
+            targetType: 'location',
+            targetTags: ['town', 'trading_post'],
+            countRange: [1, 1],
+            optional: false,
+          },
+          {
+            type: 'talk',
+            descriptionTemplate: 'Speak with local merchants',
+            targetType: 'npc',
+            targetTags: ['merchant', 'trader'],
+            countRange: [1, 2],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Prove Viability',
+        descriptionTemplate: 'Show the trade route is profitable.',
+        objectives: [
+          {
+            type: 'deliver',
+            descriptionTemplate: 'Deliver sample goods',
+            targetType: 'item',
+            targetTags: ['trade_goods'],
+            countRange: [1, 1],
+            optional: false,
+          },
+          {
+            type: 'collect',
+            descriptionTemplate: 'Bring back return goods',
+            targetType: 'item',
+            targetTags: ['trade_goods'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Finalize the Route',
+        descriptionTemplate: 'Complete the agreement.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Sign the agreement',
+            targetType: 'npc',
+            targetTags: ['merchant', 'official'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+        onCompleteTextTemplate: 'Trade route established!',
+      },
+    ],
+    rewards: {
+      xpRange: [50, 90],
+      goldRange: [45, 90],
+      itemTags: ['trade_goods'],
+      itemChance: 0.35,
+      reputationImpact: {
+        townfolk: [10, 20],
+      },
+    },
+    levelRange: [3, 6],
+    giverRoles: ['merchant', 'mayor', 'guild_master'],
+    giverFactions: ['townfolk', 'ivrc'],
+    validLocationTypes: ['town'],
+    tags: ['economic', 'trade', 'commerce'],
+    repeatable: true,
+    cooldownHours: 96,
+  },
+  {
+    id: 'trade_route_protect',
+    name: 'Secure Trade Route',
+    archetype: 'trade_route',
+    questType: 'side',
+    titleTemplates: ['Protect the Trade Route', 'Secure Commerce', 'Clear the Trading Path'],
+    descriptionTemplates: [
+      'The trade route to {{destination}} is threatened. Secure it.',
+      'Bandits are disrupting trade. Make the route safe.',
+      '{{giver}} needs the path to {{destination}} protected.',
+    ],
+    stages: [
+      {
+        titleTemplate: 'Assess Threats',
+        descriptionTemplate: 'Scout the route for dangers.',
+        objectives: [
+          {
+            type: 'visit',
+            descriptionTemplate: 'Patrol the route',
+            targetType: 'location',
+            targetTags: ['road', 'pass'],
+            countRange: [2, 3],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Eliminate Threats',
+        descriptionTemplate: 'Deal with anyone threatening trade.',
+        objectives: [
+          {
+            type: 'kill',
+            descriptionTemplate: 'Defeat bandits',
+            targetType: 'enemy',
+            targetTags: ['bandit', 'raider'],
+            countRange: [4, 8],
+            optional: false,
+          },
+        ],
+      },
+      {
+        titleTemplate: 'Confirm Security',
+        descriptionTemplate: 'Report that the route is secure.',
+        objectives: [
+          {
+            type: 'talk',
+            descriptionTemplate: 'Report to {{giver}}',
+            targetType: 'npc',
+            targetTags: ['merchant'],
+            countRange: [1, 1],
+            optional: false,
+          },
+        ],
+        onCompleteTextTemplate: 'The trade route is secure.',
+      },
+    ],
+    rewards: {
+      xpRange: [55, 95],
+      goldRange: [40, 80],
+      itemTags: [],
+      itemChance: 0.2,
+      reputationImpact: {
+        townfolk: [8, 15],
+        law: [5, 10],
+      },
+    },
+    levelRange: [3, 7],
+    giverRoles: ['merchant', 'caravan_master', 'mayor'],
+    giverFactions: ['townfolk'],
+    validLocationTypes: ['town'],
+    tags: ['economic', 'trade', 'combat'],
+    repeatable: true,
+    cooldownHours: 72,
+  }
+];

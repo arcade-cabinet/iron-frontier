@@ -8,67 +8,27 @@
 
 import { z } from 'zod';
 
-// ============================================================================
-// CORE SCHEMAS
-// ============================================================================
+// Re-export enums and positions from schemaEnums for backwards compatibility
+export {
+  EnvironmentModeSchema,
+  BiomeTypeSchema,
+  TimeOfDaySchema,
+  WeatherTypeSchema,
+  ObjectiveTypeSchema,
+  Position3DSchema,
+  HexPositionSchema,
+  type Position3D,
+  type HexPosition,
+} from './schemaEnums';
 
-export const EnvironmentModeSchema = z.enum([
-  'town',
-  'wilderness',
-  'cave',
-  'interior',
-  'camp',
-]);
-
-export const BiomeTypeSchema = z.enum([
-  'desert',
-  'grassland',
-  'badlands',
-  'riverside',
-  'forest',
-  'mountain',
-  'swamp',
-]);
-
-export const TimeOfDaySchema = z.enum([
-  'dawn',
-  'morning',
-  'noon',
-  'afternoon',
-  'dusk',
-  'night',
-]);
-
-export const WeatherTypeSchema = z.enum([
-  'clear',
-  'cloudy',
-  'dusty',
-  'rainy',
-  'stormy',
-  'foggy',
-]);
-
-export const ObjectiveTypeSchema = z.enum([
-  'reach',
-  'collect',
-  'kill',
-  'interact',
-  'survive',
-  'escort',
-  'defend',
-  'stealth',
-]);
-
-// ============================================================================
-// POSITION SCHEMAS
-// ============================================================================
-
-export const Position3DSchema = z.tuple([z.number(), z.number(), z.number()]);
-
-export const HexPositionSchema = z.object({
-  q: z.number().int(),
-  r: z.number().int(),
-});
+import {
+  EnvironmentModeSchema,
+  ObjectiveTypeSchema,
+  Position3DSchema,
+  TimeOfDaySchema,
+  WeatherTypeSchema,
+  BiomeTypeSchema,
+} from './schemaEnums';
 
 // ============================================================================
 // SPAWN POINTS SCHEMA
@@ -294,8 +254,6 @@ export const CampaignDDLSchema = z.object({
 // TYPE INFERENCE
 // ============================================================================
 
-export type Position3D = z.infer<typeof Position3DSchema>;
-export type HexPosition = z.infer<typeof HexPositionSchema>;
 export type SpawnPointsDDL = z.infer<typeof SpawnPointsDDLSchema>;
 export type ObjectiveDDL = z.infer<typeof ObjectiveDDLSchema>;
 export type PointLightDDL = z.infer<typeof PointLightDDLSchema>;

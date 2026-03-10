@@ -16,6 +16,15 @@ import {
   consumeOverlayLookDeltas,
   consumeOverlayWeaponSwitch,
 } from '../TouchOverlayState';
+import {
+  type ActionButton,
+  type TrackedTouch,
+  hasZoneTouch,
+  hitTestAction,
+  makeTracked,
+  screenH,
+  screenW,
+} from './touchHandlers';
 
 export interface TouchConfig {
   /** Look sensitivity multiplier (default 0.004) */
@@ -34,30 +43,6 @@ const DEFAULT_CONFIG: TouchConfig = {
   deadzone: 10,
   maxDrag: 80,
 };
-
-interface TrackedTouch {
-  zone: 'joystick' | 'look' | 'action';
-  anchorX: number;
-  anchorY: number;
-  currentX: number;
-  currentY: number;
-  prevX: number;
-  prevY: number;
-}
-
-type ActionButton = 'fire' | 'reload' | 'interact' | 'jump';
-
-function makeTracked(zone: TrackedTouch['zone'], x: number, y: number): TrackedTouch {
-  return { zone, anchorX: x, anchorY: y, currentX: x, currentY: y, prevX: x, prevY: y };
-}
-
-function screenW(): number {
-  return typeof globalThis.innerWidth === 'number' ? globalThis.innerWidth : 800;
-}
-
-function screenH(): number {
-  return typeof globalThis.innerHeight === 'number' ? globalThis.innerHeight : 600;
-}
 
 export class TouchProvider implements IInputProvider {
   readonly name = 'touch';
@@ -84,8 +69,6 @@ export class TouchProvider implements IInputProvider {
   }
 
   poll(): Partial<InputFrame> {
-    // When the TouchOverlay component is mounted, it writes to shared state
-    // and disables our document-level handlers. Read from overlay state instead.
     if (overlayTouchState.overlayActive) {
       return this.pollFromOverlay();
     }
@@ -98,7 +81,6 @@ export class TouchProvider implements IInputProvider {
       pitch: this.lookDeltaY * this.config.sensitivity * pitchSign,
     };
 
-    // Reset look deltas after reading (same pattern as mouse)
     this.lookDeltaX = 0;
     this.lookDeltaY = 0;
 
@@ -112,10 +94,6 @@ export class TouchProvider implements IInputProvider {
     };
   }
 
-  /**
-   * Read input from the TouchOverlay's shared state.
-   * The overlay handles touch event routing via its visual elements.
-   */
   private pollFromOverlay(): Partial<InputFrame> {
     const lookDeltas = consumeOverlayLookDeltas();
     const pitchSign = this.config.invertY ? -1 : 1;
@@ -123,10 +101,7 @@ export class TouchProvider implements IInputProvider {
 
     return {
       move: { x: overlayTouchState.moveX, z: overlayTouchState.moveZ },
-      look: {
-        yaw: lookDeltas.x,
-        pitch: lookDeltas.y * pitchSign,
-      },
+      look: { yaw: lookDeltas.x, pitch: lookDeltas.y * pitchSign },
       fire: overlayTouchState.fire,
       reload: overlayTouchState.reload,
       interact: overlayTouchState.interact,
@@ -156,21 +131,10 @@ export class TouchProvider implements IInputProvider {
     this.clearState();
   }
 
-  dispose(): void {
-    this.disable();
-  }
-
-  setSensitivity(value: number): void {
-    this.config.sensitivity = value;
-  }
-
-  setInvertY(value: boolean): void {
-    this.config.invertY = value;
-  }
-
-  setDeadzone(value: number): void {
-    this.config.deadzone = value;
-  }
+  dispose(): void { this.disable(); }
+  setSensitivity(value: number): void { this.config.sensitivity = value; }
+  setInvertY(value: boolean): void { this.config.invertY = value; }
+  setDeadzone(value: number): void { this.config.deadzone = value; }
 
   // -- Event handlers --------------------------------------------------------
 
@@ -185,13 +149,11 @@ export class TouchProvider implements IInputProvider {
       const { identifier: id, clientX: x, clientY: y } = touch;
 
       if (x < halfW) {
-        // Left half: virtual joystick (only one joystick touch at a time)
-        if (!this.hasZoneTouch('joystick')) {
+        if (!hasZoneTouch(this.touches, 'joystick')) {
           this.touches.set(id, makeTracked('joystick', x, y));
         }
       } else {
-        // Right half: action zone check first, then look zone
-        const action = this.hitTestAction(x, y, sw, sh);
+        const action = hitTestAction(x, y, sw, sh);
         if (action !== null) {
           this.touches.set(id, makeTracked('action', x, y));
           this.activeActions.add(action);
@@ -236,15 +198,13 @@ export class TouchProvider implements IInputProvider {
         this.moveX = 0;
         this.moveZ = 0;
       } else if (tracked.zone === 'action') {
-        const action = this.hitTestAction(tracked.anchorX, tracked.anchorY, screenW(), screenH());
+        const action = hitTestAction(tracked.anchorX, tracked.anchorY, screenW(), screenH());
         if (action !== null) this.activeActions.delete(action);
       }
 
       this.touches.delete(touch.identifier);
     }
   }
-
-  // -- Joystick math ---------------------------------------------------------
 
   private updateJoystick(tracked: TrackedTouch): void {
     const dx = tracked.currentX - tracked.anchorX;
@@ -258,43 +218,8 @@ export class TouchProvider implements IInputProvider {
     }
 
     const scale = Math.min(dist, this.config.maxDrag) / this.config.maxDrag;
-    const nx = dx / dist;
-    const ny = dy / dist;
-
-    // Screen X -> strafe, Screen Y (inverted) -> forward/back
-    this.moveX = nx * scale;
-    this.moveZ = -ny * scale;
-  }
-
-  // -- Action button hit testing ---------------------------------------------
-
-  /**
-   * Hit-test action zones in the bottom-right quadrant:
-   *   +----------+----------+
-   *   | interact |  reload  |   upper half
-   *   +----------+----------+
-   *   |   jump   |   fire   |   lower half
-   *   +----------+----------+
-   */
-  private hitTestAction(x: number, y: number, sw: number, sh: number): ActionButton | null {
-    const halfW = sw * 0.5;
-    const halfH = sh * 0.5;
-    if (x < halfW || y < halfH) return null;
-
-    const midX = (sw + halfW) * 0.5; // 75% of screen width
-    const midY = (sh + halfH) * 0.5; // 75% of screen height
-
-    if (y < midY) return x < midX ? 'interact' : 'reload';
-    return x < midX ? 'jump' : 'fire';
-  }
-
-  // -- Helpers ---------------------------------------------------------------
-
-  private hasZoneTouch(zone: TrackedTouch['zone']): boolean {
-    for (const tracked of this.touches.values()) {
-      if (tracked.zone === zone) return true;
-    }
-    return false;
+    this.moveX = (dx / dist) * scale;
+    this.moveZ = -(dy / dist) * scale;
   }
 
   private clearState(): void {
